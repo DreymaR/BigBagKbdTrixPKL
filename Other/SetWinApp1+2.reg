@@ -1,0 +1,11 @@
+REGEDIT4 
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\17]
+"ShellExecute"="wordpad.exe"
+"ShellExecuteOld"="::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\AppKey\18]
+"ShellExecute"="calc.exe"
+"ShellExecuteOld"="calc.exe"
+
+; Make the ShellExecute key a path to what you wish to run with your App1/2 key
