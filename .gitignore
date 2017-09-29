@@ -1,1 +1,6 @@
-
+*_bak
+*_backup
+*_bak.*
+*_backup.*
+*_test.*
+pkl.ini
