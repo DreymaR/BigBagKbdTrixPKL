@@ -1,0 +1,7 @@
+Portable Keyboard Layout by Farkas Máté
+
+Version: 0.3(r85)
+Compiled: 2008.09.01.
+Compiler: AutoHotKey v1.0.48.3
+
+(c) FARKAS, Máté, 2007-2009

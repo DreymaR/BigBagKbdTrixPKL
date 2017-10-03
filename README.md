@@ -1,27 +1,27 @@
 DreymaR's Big Bag Of Keyboard Tricks
 ====================================
 
-### For [PortableKeyboardLayout][PKLS] on Windows
-#### (Written By Farkas Máté [(2008)][PKLA] using [AutoHotKey][AHKP])
+### For [PortableKeyboardLayout][PKLSFo] on Windows
+#### (Written By Farkas Máté [(2008)][PKLAHK] using [AutoHotkey][AHKHom])
 
 Documentation
 -------------
 
 The info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 
-* The [main Big Bag topic][CXKB] with better explanations and files for Linux using [XKB][XKBA].
-* A [daughter topic][CPKL] with files for PKL/Windows.
+* The [Big Bag main topic][CmkBBT] with better explanations and links.
+* Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
 
 
 Some Know-How-To
 ----------------
 
-* PKL is easily run by putting its folder in a C:\PortableApps folder and using the [PortableApps.com][PORT] menu
+* PKL is easily run by putting its folder in a C:\PortableApps folder and using the [PortableApps.com][PrtApp] menu
 * Also, I usually put a shortcut to pkl.exe in my Start Menu "Startup" folder so it starts on logon
 * Alternatively, if the PortableApps menu is started on logon it can start up PKL for you too
 * Such a shortcut works per user; otherwise you could also set PKL to start suspended by editing the pkl.ini file
 * If you don't want any of that, just put the folder somewhere and run pkl.exe any way you like!
-* **NOTE:** Running PKL with other AutoHotKey key mapping scripts may get confusing if there is "hook competition".
+* **NOTE:** Running PKL with other AutoHotkey key mapping scripts may get confusing if there is "hook competition".
 
 These PKL files may take a little tweaking to get what you want. Remember, there are several parameters:
 
@@ -46,7 +46,7 @@ Setup:
 2. In this pkl.ini file, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
     * The format is: layout = <1st layout folder name>:<name you want in menu>,<2nd layout folder>:<2nd menu entry> etc
 3. If you need to tweak some Extend mappings, they're below in this file.
-    * For [Scan Codes (SC###)][SCMS] and [Virtual Key names (VK##)][VKAH] see below.
+    * For [Scan Codes (SC###)][SCMSDN] and [Virtual Key names (VK##)][VKCAHK] see below.
 4. In the layout folder(s) you've chosen, you may edit further if required.
     * Locale variants are available in the colemak-eD_ISO folder at least, by renaming and editing a layout_#.ini file.
     * ISO/ANSI OEM_# key numbers are different. So check out that they're right for your needs in your layout.ini file.
@@ -60,7 +60,7 @@ SC    = VK      SS  L0  L1  L2  L3      L4  ; comments
 ```
 Where:
 
-* SC & VK: [Scan code ("hard code")][SCMS] & [Virtual Key Code ("key name")][VKAH]
+* SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
 * SS: Shift state (0 by default; +1 if L0/L1 are non-/shifted versions of the same letter; +4 for L3/L4)
 * L0-L4: Standard modifier levels for the key: Unmodified, Shift, Ctrl (not often used), AltGr, Shift+AltGr
 
@@ -93,12 +93,12 @@ _Best of luck!_
 _Øystein "DreymaR" Gadmar, 2017-08_
 
 
-[PKLS]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)
-[PKLA]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (PKL on the AutoHotKey forums)
-[AHKP]: https://autohotkey.com/ (AutoHotKey main page)
-[CXKB]: http://forum.colemak.com/viewtopic.php?id=1438 (BigBagXKB on the Colemak forums)
-[CPKL]: http://forum.colemak.com/viewtopic.php?id=1467 (BigBagPKL on the Colemak forums)
-[XKBA]: https://wiki.archlinux.org/index.php/X_KeyBoard_extension (XKB info on the ArchLinux site)
-[PORT]: https://portableapps.com/ (PortableApps.com)
-[SCMS]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
-[VKAH]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
+[PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)
+[PKLAHK]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (PKL on the AutoHotkey forums)
+[AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
+[CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
+[CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
+[PrtApp]: https://portableapps.com/ (PortableApps.com)
+[SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
+[VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
+[KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
