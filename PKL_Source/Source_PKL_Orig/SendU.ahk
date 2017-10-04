@@ -91,7 +91,7 @@ SendU( UC )
 	else if ( mode = "c" ) ; clipboard
 		_SendU_Clipboard(UC)
 	else if ( mode = "a" ) { ; {ASC nnnn}
-		if ( UC < 256 ) 
+		if ( UC < 256 )
 			UC := "0" . UC
 		Send {ASC %UC%}
 	} else { ; input
@@ -114,7 +114,7 @@ SendU_utf8_string( str )
 		Loop, parse, codes, _
 		{
 			UC := A_LoopField
-			if ( UC < 256 ) 
+			if ( UC < 256 )
 				UC := "0" . UC
 			Send {ASC %UC%}
 		}
@@ -153,7 +153,7 @@ SendU_Try_Dynamic_Mode()
 		mode = c
 	else if ( mode == "c" )
 		mode = a
-	else 
+	else
 		mode = i
 	_SendU_Dynamic_Mode_Tooltip( processName, mode )
 	SendU_SetMode( processName, mode )
@@ -383,7 +383,7 @@ _SendU_GetLocale( sKey, sVal = "", set = 0 )
 	}
 	if ( set == 1 )
 		HashTable_Set( pdic, sKey, sVal )
-	else 
+	else
 		return HashTable_Get( pdic, sKey )
 }
 

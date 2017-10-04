@@ -8,8 +8,8 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-setPklInfo( "version", "0.3r85-eD" ) ; eD: PKL[edition DreymaR]
-setPklInfo( "compiled", "2015-03-11" )
+setPklInfo( "version", "0.4pre-eD" ) ; eD: PKL[edition DreymaR]
+setPklInfo( "compiled", "ed. DreymaR beta" )
 
 SendMode Event
 SetBatchLines, -1
@@ -153,7 +153,6 @@ afterSuspend:
 		Menu, tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
 	}
 return
-
 
 ; ####################### functions #######################
 

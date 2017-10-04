@@ -16,28 +16,30 @@ Tested AutoHotkey Version: 1.0.47.04
 ------------------------------------------------------------------------
 
 Why? In hungarian keyboard layout ^ is a dead key: 
-	Send ^o ; is o with ^ accent
-	Send ^ ; is nothing
-	Send ^{Space} ; is ^ character
-So... If I would like send ^, I must send ^{Space}.
+	Send ^o         ; is o with ^ accent
+	Send ^          ; is nothing
+	Send ^{Space}   ; is the ^ character
+So... If I want to send ^, I must send ^{Space}.
 
 ------------------------------------------------------------------------
 */
 
 getDeadKeysOfSystemsActiveLayout()
 {
-	l1033 = -1 ; USA
-	l1038 = ^ ; Hungarian
-	l1036 = ~^` ; French AZERTY
+	l1033 = -1		; USA
+	l1038 = ^		; Hungarian
+	l1036 = ^`~		; French AZERTY
+	11044 = ¨´^`~	; Norwegian
 
 	WinGet, WinID,, A
 	ThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
-	Layout := DllCall("GetKeyboardLayout", "Int", ThreadID) 
+	Layout := DllCall("GetKeyboardLayout", "Int", ThreadID)
 	Layout := ( Layout & 0xFFFFFFFF )>>16
+
 	if ( l%Layout% == "-1" )
 		return ""
 	else if ( l%Layout% == "" )
-		return "^"
+		return ""
 	else
 		return l%Layout%
 }

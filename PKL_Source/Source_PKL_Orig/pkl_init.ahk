@@ -159,14 +159,14 @@ pkl_init( layoutFromCommandLine = "" )
 			parts2 = -1
 		else if ( parts2 == "modifier" )
 			parts2 = -2
-		setLayoutItem( key . "v", virtualKeyCodeFromName(parts1) ) ; virtual key
+		setLayoutItem( key . "v", getVirtualKeyCodeFromName(parts1) ) ; virtual key
 		setLayoutItem( key . "c", parts2 ) ; caps state
 		if ( parts2 == -2 ) {
 			Hotkey, *%key%, modifierDown
 			Hotkey, *%key% Up, modifierUp
 			if ( getLayoutInfo( "hasAltGr" ) && parts1 == "RAlt" )
 				setLayoutItem( key . "v", "AltGr" )
-			else 
+			else
 				setLayoutItem( key . "v", parts1 )
 		} else if ( key == extendKey ) {
 			Hotkey, *%key% Up, upToDownKeyPress
@@ -250,7 +250,7 @@ pkl_init( layoutFromCommandLine = "" )
 		setTrayIconInfo( "FileOn", A_ScriptName )
 		setTrayIconInfo( "NumOn", 6 )
 	} else {
-		setTrayIconInfo( "FileOn", "source\on.ico" )
+		setTrayIconInfo( "FileOn", "Resources\on.ico" )
 		setTrayIconInfo( "NumOn", 1 )
 	}
 	if ( FileExist( getLayoutInfo( "dir" ) . "\off.ico") ) {
@@ -260,7 +260,7 @@ pkl_init( layoutFromCommandLine = "" )
 		setTrayIconInfo( "FileOff", A_ScriptName )
 		setTrayIconInfo( "NumOff", 3 )
 	} else {
-		setTrayIconInfo( "FileOff", "source\off.ico" )
+		setTrayIconInfo( "FileOff", "Resources\off.ico" )
 		setTrayIconInfo( "NumOff", 1 )
 	}
 	pkl_set_tray_menu()
@@ -284,7 +284,7 @@ pkl_activate()
 	if ( IniReadBoolean( "pkl.ini", "pkl", "displayHelpImage", true ) )
 		pkl_displayHelpImage( 1 )
 
-	Sleep, 200 ; I don't want kill myself...
+	Sleep, 200 ; I don't want to kill myself...
 	OnMessage(0x398, "MessageFromNewInstance")
 
 	activity_ping(1)
@@ -317,6 +317,6 @@ changeLayout( nextLayout )
 	
 	if ( A_IsCompiled )
 		Run %A_ScriptName% /f %nextLayout%
-	else 
+	else
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }

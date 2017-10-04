@@ -9,7 +9,7 @@ DeadKeyValue( dk, base )
 	
 	res := HashTable_Get( pdic, dk . "_" . base )
 	if ( res ) {
-		if ( res == -1 ) 
+		if ( res == -1 )
 			res = 0
 		return res
 	}
@@ -17,32 +17,32 @@ DeadKeyValue( dk, base )
 	t := InStr( res, A_Tab )
 	res := subStr( res, 1, t - 1 )
 	HashTable_Set( pdic, dk . "_" . base, res)
-	if ( res == -1 ) 
+	if ( res == -1 )
 		res = 0
 	return res
 }
 
 DeadKey(DK)
 {
-	global CurrentDeadKeys 
-	global CurrentBaseKey  
-	global CurrentDeadKeyNum
+	global CurrentDeadKeys
+	global CurrentBaseKey
+	global CurrentDeadKeyName
 	static PVDK := "" ; Pressed dead keys
-	DeadKeyChar := DeadKeyValue( DK, 0)
-	
+	DeadKeyChar := DeadKeyValue( DK, 0 )
+
 	; Pressed a deadkey twice
-	if ( CurrentDeadKeys > 0 && DK == CurrentDeadKeyNum )
+	if ( CurrentDeadKeys > 0 && DK == CurrentDeadKeyName )
 	{
 		pkl_Send( DeadKeyChar )
 		return
 	}
 
-	CurrentDeadKeyNum := DK
+	CurrentDeadKeyName := DK
 	CurrentDeadKeys++
 	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}
 	IfInString, ErrorLevel, EndKey
 	{
-		endk := "{" . Substr(ErrorLevel,8) . "}" 
+		endk := "{" . Substr(ErrorLevel,8) . "}"
 		CurrentDeadKeys = 0
 		CurrentBaseKey = 0
 		pkl_Send( DeadKeyChar )
@@ -62,7 +62,7 @@ DeadKey(DK)
 	}
 	CurrentDeadKeys--
 	CurrentBaseKey = 0
-	newkey := DeadKeyValue( DK, hx)
+	newkey := DeadKeyValue( DK, hx )
 
 	if ( newkey && (newkey + 0) == "" ) {
 		; New key (value) is a special string, like {Home}+{End}
@@ -108,7 +108,7 @@ getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
 			deadkeys := newDeadkeys
 		return
 	}
-	if ( deadkeys == 0 ) 
+	if ( deadkeys == 0 )
 		return getDeadKeysOfSystemsActiveLayout()
 	else
 		return deadkeys

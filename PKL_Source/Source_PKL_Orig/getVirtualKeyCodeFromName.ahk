@@ -20,7 +20,7 @@ TODO: This version is safe, but not optimized.
 ------------------------------------------------------------------------
 */
 
-virtualKeyCodeFromName( name )
+getVirtualKeyCodeFromName( name ) ; eD: renamed VirtualKeyCodeFromName for consistency
 {
 	if ( name == "0")
 		return "30"

@@ -10,7 +10,7 @@ setGlobal( var, value )
 	global
 	%var% := value
 }
-; <--eD (vVv)
+; <--eD
 
 setLayoutItem( key, value )
 {

@@ -44,17 +44,22 @@ pkl_Send( ch, modif = "" )
 		sendU(ch)
 		return
 	}
-	pkl_SendThis( modif . char )
+	pkl_SendThis( modif, char )
 }
 
-pkl_SendThis( toSend )
+pkl_SendThis( modif, toSend )
 {
-	if ( getAltGrState() ) {
-		setAltGrState( 0 )
-		Send, %toSend%
-		setAltGrState( 1 )
-	} else {
-		Send, %toSend%
-	}
-}
+	toggleAltgr := getAltGrState()
+	prefix := ""
 
+	if ( toggleAltgr )
+		setAltGrState( 0 )
+
+	if ( inStr( modif, "!" ) && getKeyState("Alt") )
+		prefix = {Blind}
+
+	Send, %prefix%%modif%%toSend%
+
+	if ( toggleAltgr )
+		setAltGrState( 1 )
+}

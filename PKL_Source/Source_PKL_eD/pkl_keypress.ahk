@@ -4,6 +4,7 @@ keyPressed( HK )
 	static extendKey := "--"
 	modif = ; modifiers to send
 	state = 0
+
 	if ( extendKey == "--" )
 		extendKey := getLayoutInfo( "extendKey" )
 	cap := getLayoutItem( HK . "c" )
@@ -57,7 +58,7 @@ keyPressed( HK )
 	if ( ch == "" ) {
 		return
 	} else if ( state == "v" ) { ; VirtualKey
-		pkl_SendThis( modif . "{VK" . ch . "}" )
+		pkl_SendThis( modif, "{VK" . ch . "}" )
 	} else if ( ch == 32 && HK == "SC039" ) {
 		Send, {Blind}{Space}
 	} else if ( ( ch + 0 ) > 0 ) {
@@ -81,7 +82,7 @@ keyPressed( HK )
 				if ( ch != "" )
 					toSend = %modif%%ch%
 			}
-			pkl_SendThis( toSend )
+			pkl_SendThis( "", toSend )
 		}
 	} else if ( ch == "%" ) {
 		SendU_utf8_string( getLayoutItem( HK . state . "s" ) )

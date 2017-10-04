@@ -41,18 +41,18 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 	if pSection !=
 	{
 		Loop, %pIniFile%, 0								; Expand relative paths, since GetPrivateProfileSection only searches %A_WinDir%. 
-			pIniFile := A_LoopFileLongPath 
+			pIniFile := A_LoopFileLongPath
 		
-  
+		
 		VarSetCapacity(res, 0x7FFF, 0),  s := DllCall("GetPrivateProfileSection" , "str", pSection, "str", res, "uint", 0x7FFF, "str", pIniFile)
-    
-		Loop, % s-1								
+		
+		Loop, % s-1
 			if !NumGet(res, A_Index-1, "UChar")			; Each line within the section is terminated with a null character.  Replace each delimiting null char with a newline
 				NumPut(10, res, A_Index-1, "UChar")		; \0 -> \n 
-    
+		
 		if A_OSVersion in WIN_ME,WIN_98,WIN_95										; Windows Me/98/95: The returned string includes comments.
 			res := RegExReplace(res, "m`n)^[ `t]*(?:;.*`n?|`n)|^[ `t]+|[ `t]+$")	; This removes comments. Also, I'm not sure if leading/trailing space is automatically removed on Win9x, so the regex removes that too. 
-    
+		
 		return res
 	}
 	
@@ -69,7 +69,7 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 		if !j
 			break
 
-		if v1 contains %x% 
+		if v1 contains %x%
 		{
 			 v1 := RegExReplace(v1, "[" x "]")
 			 ifEqual, v1, , continue
@@ -92,16 +92,16 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 ; Returns:	
 ;			List of section names, each on new line
 ;
-Ini_GetSectionNames(pIniFile) { 
+Ini_GetSectionNames(pIniFile) {
 	Loop, %pIniFile%, 0								; Expand relative paths, since GetPrivateProfileSectionNames only searches %A_WinDir%. 
-        pIniFile := A_LoopFileLongPath  
+        pIniFile := A_LoopFileLongPath
     
-    VarSetCapacity(text, 0x1000), len := DllCall("GetPrivateProfileSectionNames", "str", text, "uint", 0x1000, "str", pIniFile)   
-    Loop, % len-1								
+    VarSetCapacity(text, 0x1000), len := DllCall("GetPrivateProfileSectionNames", "str", text, "uint", 0x1000, "str", pIniFile)
+    Loop, % len-1
         if (NumGet(text, A_Index-1, "UChar") = 0)	; Replace each delimiting null char with a newline
             NumPut(10, text, A_Index-1, "UChar")	; \0 -> \n 
     
-    return text 
+    return text
 }
 
 ;---------------------------------------------------------------------------------------------
@@ -144,8 +144,8 @@ Ini_GetSectionNames(pIniFile) {
 Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = false){
 	local s, p, v1, v2, res, at, l, re, f, fl
 	static x = ",,, ,	,``,¬,¦,!,"",£,%,^,&,*,(,),=,+,{,},;,:,',~,,,<,.,>,/,\,|,-"
-	at = %A_AutoTrim% 
-	AutoTrim, On 
+	at = %A_AutoTrim%
+	AutoTrim, On
 
 	if pInfo is not Integer
 	   pInfo := pInfo = "vals" ? 2 : pinfo="keys" ? 1 : 0
@@ -169,19 +169,19 @@ Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = 
 
 
 	Loop, parse, pIniFile, `n, `r`n
-	{ 							   
+	{
   		l = %A_LoopField%
 		If InStr(l, "[") = 1 {
 			StringMid, s, l, 2, InStr(l, "]") - 2
-			If s contains %x% 
+			If s contains %x%
  				s := RegExReplace(s, "[" x "]")				;next section name
-		} 
+		}
 		Else If p := InStr(l, "=")
-		{ 
+		{
 			StringLeft, v1, l, p-1
 			v1 = %v1%
 
-			if f 
+			if f
 				if re {
 					if !RegExMatch( v1, filter ) {
 						  IfEqual, reverse, 0, continue
@@ -201,8 +201,8 @@ Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = 
 			if !pInfo
 				%prefix%%s%_%v1% := v2,  res++
 			else res .= (pInfo=1 ? v1 : v2) prefix
-		} 
-   } 
+		}
+   }
    AutoTrim, %at%
    Return, pInfo ? SubStr(res, 1, -StrLen(prefix)) : res
 }
@@ -233,32 +233,32 @@ Ini_MakeSection( prefix ) {
     static hwndEdit, pSFW, pSW, bkpSFW, bkpSW
 	static header="Global Variables (alphabetical)`r`n--------------------------------------------------`r`n"
 
-    if !hwndEdit 
-    { 
-        dhw := A_DetectHiddenWindows 
-        DetectHiddenWindows, On 
-        Process, Exist 
-        ControlGet, hwndEdit, Hwnd,, Edit1, ahk_class AutoHotkey ahk_pid %ErrorLevel% 
-        DetectHiddenWindows, %dhw% 
-
-        hmod := DllCall("GetModuleHandle", "str", "user32.dll") 
-        pSFW := DllCall("GetProcAddress", "uint", hmod, "str", "SetForegroundWindow") 
-        pSW := DllCall("GetProcAddress", "uint", hmod, "str", "ShowWindow") 
-        DllCall("VirtualProtect", "uint", pSFW, "uint", 8, "uint", 0x40, "uint*", 0) 
-        DllCall("VirtualProtect", "uint", pSW, "uint", 8, "uint", 0x40, "uint*", 0) 
-        bkpSFW := NumGet(pSFW+0, 0, "int64") 
-        bkpSW := NumGet(pSW+0, 0, "int64") 
-    } 
+    if !hwndEdit
+    {
+        dhw := A_DetectHiddenWindows
+        DetectHiddenWindows, On
+        Process, Exist
+        ControlGet, hwndEdit, Hwnd,, Edit1, ahk_class AutoHotkey ahk_pid %ErrorLevel%
+        DetectHiddenWindows, %dhw%
+		
+        hmod := DllCall("GetModuleHandle", "str", "user32.dll")
+        pSFW := DllCall("GetProcAddress", "uint", hmod, "str", "SetForegroundWindow")
+        pSW := DllCall("GetProcAddress", "uint", hmod, "str", "ShowWindow")
+        DllCall("VirtualProtect", "uint", pSFW, "uint", 8, "uint", 0x40, "uint*", 0)
+        DllCall("VirtualProtect", "uint", pSW, "uint", 8, "uint", 0x40, "uint*", 0)
+        bkpSFW := NumGet(pSFW+0, 0, "int64")
+        bkpSW := NumGet(pSW+0, 0, "int64")
+    }
 
 
 	critical 1000000000
 		NumPut(0x0004C200000001B8, pSFW+0, 0, "int64")  ; return TRUE 
 		NumPut(0x0008C200000001B8, pSW+0, 0, "int64")   ; return TRUE 
-		ListVars 
-		NumPut(bkpSFW, pSFW+0, 0, "int64"),  NumPut(bkpSW, pSW+0, 0, "int64") 
+		ListVars
+		NumPut(bkpSFW, pSFW+0, 0, "int64"),  NumPut(bkpSW, pSW+0, 0, "int64")
 	critical off
 	
-    ControlGetText, text,, ahk_id %hwndEdit% 
+    ControlGetText, text,, ahk_id %hwndEdit%
 	text := SubStr( text, InStr(text, header)+85 )
 
 
@@ -311,7 +311,7 @@ Ini_ReplaceSection( pIniFile, section, ByRef data=""){
 ; Returns:
 ;				Updated section string
 ;
-Ini_UpdateSection( ByRef sSection, ByRef data){   
+Ini_UpdateSection( ByRef sSection, ByRef data){
 	return, data (data !="" ? "`n" :) Ini_DelKeys(sSection, Ini_LoadKeys("", data, 2, ","))
 }
 
@@ -357,7 +357,7 @@ Ini_SetVal(ByRef sSection, name, val="") {
 ; Returns:
 ;				Key name if value is found or empty string
 ;
-Ini_GetKeyName(ByRef sSection, val){				
+Ini_GetKeyName(ByRef sSection, val){
 	return RegExMatch(sSection, "`aim)^\s*(.+?)\s*=\Q" val "\E$", out) ? out1 : ""
 }
 
@@ -375,8 +375,8 @@ Ini_GetKeyName(ByRef sSection, val){
 ;				New section string
 ;
 Ini_DelKeys( ByRef sSection, keys, rev=false, sep=",") {
-	at = %A_AutoTrim% 
-	AutoTrim, On 
+	at = %A_AutoTrim%
+	AutoTrim, On
 
 	keys := sep keys sep
 	loop, parse, sSection, `n, `n`r
@@ -454,9 +454,9 @@ Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 			break
 
 		if (A_LoopField = "m" A_Index "=" pLine) {
-			if A_Index = 1 
+			if A_Index = 1
 				return 0
-			j:=0, pMax++, ret := A_Index 
+			j:=0, pMax++, ret := A_Index
 			continue
 		}
 		else res .= "`n" prefix (A_Index+j) "=" SubStr(A_LoopField, InStr(A_LoopField, "=")+1)

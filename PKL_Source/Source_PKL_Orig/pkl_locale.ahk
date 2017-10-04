@@ -11,7 +11,7 @@ pkl_locale_strings( msg, newValue = "", set = 0 )
 	static m9 := "About..."
 	static m10 := "Suspend"
 	static m11 := "Exit"
-	static m12 := "Detect deadkeys"
+	static m12 := "Detect deadkeys..."
 	static m13 := "License: GPL v3"
 	static m14 := "This program comes with`nABSOLUTELY NO WARRANTY`nThis is free software, and you`nare welcome to redistribute it`nunder certain conditions."
 	static m15 := "Display help image"
@@ -26,12 +26,11 @@ pkl_locale_strings( msg, newValue = "", set = 0 )
 	return m%msg%
 }
 
-
 pkl_locale_load( lang, compact = 0 )
 {
 	if ( compact )
 		file = %lang%.ini
-	else 
+	else
 		file = languages\%lang%.ini
 
 	line := Ini_LoadSection( file, "pkl" )
@@ -42,7 +41,7 @@ pkl_locale_load( lang, compact = 0 )
 		val := subStr(A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
-		if ( val != "" ) 
+		if ( val != "" )
 			pkl_locale_strings( key, val, 1)
 	}
 
@@ -105,7 +104,7 @@ getHotkeyLocale( hk, localehk = "", set = 0 )
 	{
 		pdic := HashTable_New()
 	}
-	if ( set == 1 ) { 
+	if ( set == 1 ) {
 		HashTable_Set( pdic, hk, localehk )
 		localizedHotkeys .= " " . hk
 	} else {
@@ -146,10 +145,10 @@ getHotkeyStringInLocale( str )
 	StringReplace, str, str, ~,, 1
 
 	str := RegExReplace( str, "(\w+)", "#[$1]" )
-	hotkeys := getHotkeyLocale( "all" ) 
+	hotkeys := getHotkeyLocale( "all" )
 	Loop, Parse, hotkeys, %A_Space%
 	{
-		lhk := getHotkeyLocale( A_LoopField ) 
+		lhk := getHotkeyLocale( A_LoopField )
 		StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )

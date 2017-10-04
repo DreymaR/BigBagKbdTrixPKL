@@ -64,7 +64,7 @@ pkl_set_tray_menu()
 	Menu, tray, add, %deadk%, detectDeadKeysInCurrentLayout
 	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 25, 16)
 	if ( getLayoutInfo( "countOfLayouts" ) > 1 ) {
-		Menu, tray, add, 
+		Menu, tray, add,
 		++iconNum
 		Menu, tray, add, %layoutsMenu%, :changeLayout
 		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 44, 16)
@@ -73,7 +73,7 @@ pkl_set_tray_menu()
 	}
 	Menu, tray, add, %susp%, toggleSuspend
 	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 110, 16)
-	Menu, tray, add, 
+	Menu, tray, add,
 	++iconNum
 	Menu, tray, add, %exit%, exitApp
 	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 28, 16)
@@ -129,7 +129,7 @@ pkl_about()
 	Gui, Add, Text, , Portable Keyboard Layout v%pklVersion% (%compiledAt%)
 	Gui, Add, Edit, , http://pkl.sourceforge.net/
 	Gui, Add, Text, , ......................................................................
-	Gui, Add, Text, , (c) FARKAS, Mate, 2007-2009
+	Gui, Add, Text, , (c) FARKAS, Mate, 2007-2010
 	Gui, Add, Text, , %license%
 	Gui, Add, Text, , %infos%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
@@ -164,8 +164,8 @@ pkl_displayHelpImage( activate = 0 )
 	; 3 = suspend on
 	; 4 = suspend off
 
-	global CurrentDeadKeys 
-	global CurrentDeadKeyNum
+	global CurrentDeadKeys
+	global CurrentDeadKeyName
 
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
@@ -187,23 +187,23 @@ pkl_displayHelpImage( activate = 0 )
 		extendKey := getLayoutInfo( "extendKey" )
 	}
 	
-	if ( activate == 2 )
+	if ( activate == 2 ) ; toggle
 		activate := 1 - 2 * guiActive
-	if ( activate == 1 ) {
+	if ( activate == 1 ) { ; activate
 		guiActive = 1
-	} else if ( activate == -1 ) {
+	} else if ( activate == -1 ) { ; deactivate
 		guiActive = 0
-	} else if ( activate == 3 ) {
+	} else if ( activate == 3 ) { ; suspend on
 		guiActiveBeforeSuspend := guiActive
 		activate = -1
 		guiActive = 0
-	} else if ( activate == 4 ) {
+	} else if ( activate == 4 ) { ; suspend off
 		if ( guiActiveBeforeSuspend == 1 && guiActive != 1) {
 			activate = 1
 			guiActive = 1
 		}
 	}
-		
+	
 	if ( activate == 1 ) {
 		Menu, tray, Check, % getPklInfo( "DisplayHelpImageMenuName" )
 		if ( yPosition == -1 ) {
@@ -239,11 +239,11 @@ pkl_displayHelpImage( activate = 0 )
 	
 	if ( CurrentDeadKeys ) {
 		if ( not getKeyState( "Shift" ) ) {
-			fileName = deadkey%CurrentDeadKeyNum%
+			fileName = deadkey%CurrentDeadKeyName%
 		} else {
-			fileName = deadkey%CurrentDeadKeyNum%sh
+			fileName = deadkey%CurrentDeadKeyName%sh
 			if ( not FileExist( layoutDir . "\" . filename . ".png" ) )
-				fileName = deadkey%CurrentDeadKeyNum%
+				fileName = deadkey%CurrentDeadKeyName%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		fileName = extend
@@ -259,7 +259,7 @@ pkl_displayHelpImage( activate = 0 )
 	if ( prevFile == fileName )
 		return
 		
-	prevFile := fileName 
+	prevFile := fileName
 	GuiControl,2:, HelperImage, *w%imgWidth% *h%imgHeight% %layoutDir%\%fileName%.png
 }
 
@@ -268,7 +268,6 @@ AddAtForMenu( menuItem )
 	StringReplace, menuItem, menuItem, & , &&, 1
 	return menuItem
 }
-
 
 pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 {
@@ -288,4 +287,3 @@ AHK_NOTIFYICON(wParam, lParam)
 		gosub ToggleSuspend
 	}
 }
-

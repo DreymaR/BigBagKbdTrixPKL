@@ -1,3 +1,4 @@
+; <COMPILER: v1.0.48.5>
 #NoEnv
 #Persistent
 #NoTrayIcon
@@ -8,8 +9,8 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-setPklInfo( "version", "0.3" )
-setPklInfo( "compiled", "2008.09.01." )
+setPklInfo( "version", "0.4 preview recompiled" )
+setPklInfo( "compiled", "not released yet" )
 
 SendMode Event
 SetBatchLines, -1
@@ -18,7 +19,7 @@ Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables
-CurrentDeadKeys = 0 ; How many dead key were pressed
+CurrentDeadKeys = 0 ; How many dead keys were pressed
 CurrentBaseKey  = 0 ; Current base key :)
 
 t = %1% ; Layout from command line parameter
@@ -148,7 +149,6 @@ afterSuspend:
 	}
 return
 
-
 ; ####################### functions #######################
 
 #Include pkl_deadkey.ahk
@@ -171,6 +171,6 @@ return
 #Include HashTable.ahk
 #Include iniReadBoolean.ahk
 #Include detectDeadKeysInCurrentLayout.ahk
-#Include virtualKeyCodeFromName.ahk
+#Include getVirtualKeyCodeFromName.ahk
 #Include getDeadKeysOfSystemsActiveLayout.ahk
 #Include getLanguageStringFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm
