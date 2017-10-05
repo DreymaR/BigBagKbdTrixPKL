@@ -124,12 +124,12 @@ pkl_init( layoutFromCommandLine = "" )
 		LayoutFile = layout.ini
 		setLayoutInfo( "dir", "." )
 	} else {
-		LayoutFile := "layouts\" . Layout . "\layout.ini"
+		LayoutFile := "Layouts\" . Layout . "\layout.ini"
 		if (not FileExist(LayoutFile)) {
 			pkl_MsgBox( 2, LayoutFile )
 			ExitApp
 		}
-		setLayoutInfo( "dir", "layouts\" . Layout )
+		setLayoutInfo( "dir", "Layouts\" . Layout )
 	}
 	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
 	ShiftStates = %ShiftStates%:8:9 ; SgCap, SgCap + Shift

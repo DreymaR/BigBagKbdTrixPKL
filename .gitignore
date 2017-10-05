@@ -3,4 +3,6 @@
 *_bak.*
 *_backup.*
 *_test.*
+*_test/*
+*/*_test/*
 pkl.ini

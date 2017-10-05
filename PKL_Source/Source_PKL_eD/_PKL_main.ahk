@@ -8,8 +8,8 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-setPklInfo( "version", "0.4pre-eD" ) ; eD: PKL[edition DreymaR]
-setPklInfo( "compiled", "ed. DreymaR beta" )
+setPklInfo( "version", "0.4beta-eD" ) ; eD: PKL[edition DreymaR]
+setPklInfo( "compiled", "ed. DreymaR" )
 
 SendMode Event
 SetBatchLines, -1

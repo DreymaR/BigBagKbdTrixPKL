@@ -31,7 +31,7 @@ pkl_set_tray_menu()
 			LayoutName := l
 		}
 		
-		icon = layouts\%c%\on.ico
+		icon = Layouts\%c%\on.ico
 		if ( not FileExist( icon ) )
 			icon = on.ico
 		MI_SetMenuItemIcon("changeLayout", A_Index, icon, 1, 16)
@@ -129,7 +129,7 @@ pkl_about()
 	Gui, Add, Text, , Portable Keyboard Layout v%pklVersion% (%compiledAt%)
 	Gui, Add, Edit, , http://pkl.sourceforge.net/
 	Gui, Add, Text, , ......................................................................
-	Gui, Add, Text, , (c) FARKAS, Mate, 2007-2010
+	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010
 	Gui, Add, Text, , %license%
 	Gui, Add, Text, , %infos%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
@@ -186,13 +186,13 @@ pkl_displayHelpImage( activate = 0 )
 	static imgLowTab
 	static imgTransp
 	
-	static layoutDir = 0
+	static LayoutDir = 0
 	static hasAltGr
 	static extendKey
 	
-	if ( layoutDir == 0 )
+	if ( LayoutDir == 0 )
 	{
-		layoutDir := getLayoutInfo( "dir" )
+		LayoutDir := getLayoutInfo( "dir" )
 		hasAltGr  := getLayoutInfo( "hasAltGr" )
 		extendKey := getLayoutInfo( "extendKey" )
 	}
@@ -216,7 +216,7 @@ pkl_displayHelpImage( activate = 0 )
 	
 	if ( activate == 1 ) {
 		Menu, tray, Check, % getPklInfo( "DisplayHelpImageMenuName" )
-		IniRead, imgBgImage, %LayoutDir%\DreymaR_layout.ini, hlpimg, hlpimg_bgimage, %layoutDir%\backgr.png
+		IniRead, imgBgImage, %LayoutDir%\DreymaR_layout.ini, hlpimg, hlpimg_bgimage, %LayoutDir%\backgr.png
 		IniRead, imgBgColor, %LayoutDir%\DreymaR_layout.ini, hlpimg, hlpimg_bgcolor, fefeff
 		IniRead, imgLowTab, %LayoutDir%\DreymaR_layout.ini, hlpimg, img_low_margin, 60
 		IniRead, imgTopTab, %LayoutDir%\DreymaR_layout.ini, hlpimg, img_top_margin, 10
@@ -241,7 +241,7 @@ pkl_displayHelpImage( activate = 0 )
 		GuiControl,2:, BackgrImage, *w%imgWidth_% *h%imgHeight% %imgBgImage%
 		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklBackgrImage
 		Gui, 2:Add, Pic, xm +BackgroundTrans vHelperImage
-		GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %layoutDir%\state0.png
+		GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %LayoutDir%\state0.png
 		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
 		setTimer, displayHelpImage, 200
 	} else if ( activate == -1 ) {
@@ -270,7 +270,7 @@ pkl_displayHelpImage( activate = 0 )
 			fileName = deadkey%CurrentDeadKeyName%
 		} else {
 			fileName = deadkey%CurrentDeadKeyName%sh
-			if ( not FileExist( layoutDir . "\" . filename . ".png" ) )
+			if ( not FileExist( LayoutDir . "\" . filename . ".png" ) )
 				fileName = deadkey%CurrentDeadKeyName%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
@@ -281,14 +281,14 @@ pkl_displayHelpImage( activate = 0 )
 		state += 6 * ( hasAltGr * AltGrIsPressed() )
 		fileName = state%state%
 	}
-	if ( not FileExist( layoutDir . "\" . fileName . ".png" ) )
+	if ( not FileExist( LayoutDir . "\" . fileName . ".png" ) )
 		fileName = state0
 	
 	if ( prevFile == fileName )
 		return
 		
 	prevFile := fileName
-	GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %layoutDir%\%fileName%.png
+	GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %LayoutDir%\%fileName%.png
 }
 
 AddAtForMenu( menuItem )

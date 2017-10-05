@@ -99,6 +99,8 @@ TODO: From DreymaR_layout.ini.
 ; * Ligature output from deadkeys (dead strings - necessary for, e.g., Cmk[eD]-Jp which uses digraphs)
 ;     - Could do all DK and ligature tables with literals!?
 ; * Allow non-Tab whitespace in layout entries?! (Strip whitespace; to preserve it use {# } or }{# }{ in entries)
+;     - Today, tab+; comments are stripped in layout.ini but not in pkl.ini? Make this consistent!
+;     - Important: Leave escaped semicolon (`;) alone, even after whitespace! And document the need for escaping it!
 
 
 INFO: Some documentation notes.
@@ -107,16 +109,16 @@ INFO: Some documentation notes.
     https://msdn.microsoft.com/en-us/library/ms927178.aspx
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 - "Anti-madness tips" for PKL (by user Eraicos and me):
-    - AHK script files (AHK v1.0) need to be ANSI encoded? What to do with special letters then?
+    - AHK script files (AHK v1.0) need to be ANSI encoded?! What to do with special letters then?
         - Seems that AHK v1.1 ("Unicode AHK") supports UTF-8 with BOM (not without!?) scripts.
     - PKL .ini files may be UTF-8 encoded. With or without BOM?
+        - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab separator?).
     - In layout.ini:
         - Always use tabs as separators in layout.ini
-        - After 'VirtualKey' always include a tab
+        - After 'VirtualKey' always include a tab.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
     - In the pkl.ini Extend section:
-        - Don't put comments at the end of the line
-        - Don't have empty mappings in the Extend section; comment these out
+        - Don't have empty mappings in the Extend section; comment these out.
 
 
 INFO: From Farkas' sample.ini layout file.

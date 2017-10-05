@@ -31,7 +31,7 @@ pkl_locale_load( lang, compact = 0 )
 	if ( compact )
 		file = %lang%.ini
 	else
-		file = languages\%lang%.ini
+		file = Languages\%lang%.ini
 
 	line := Ini_LoadSection( file, "pkl" )
 	Loop, parse, line, `r`n

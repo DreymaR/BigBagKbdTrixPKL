@@ -1,6 +1,6 @@
 Portable Keyboard Layout by Farkas Máté
 
-Version: 0.4-eD beta
+Version: 0.4beta-eD
 Compiled: not released
 Compiler: AutoHotKey v1.0.48.5
 
