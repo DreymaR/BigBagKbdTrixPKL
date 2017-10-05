@@ -1,4 +1,4 @@
-; eD: Renamed this file from Ini.ahk to IniRead.ahk
+; eD: Renamed this file from Ini.ahk to ext_IniRead.ahk, and renamed all functions to the iniSomething syntax for consistency with iniReadBoolean (as vVv did).
 
 ; Title:		Ini
 ;				*Set of functions for ini-like handling of strings*
@@ -16,8 +16,8 @@
 ;				so you can have values starting with white space. The other one is that module generally doesn't consider position of key
 ;				in the section string as important or position of section in the ini file, and will not retain to change the position for 
 ;				the sake of speed.
-;
-;-------------------------------------------------------------------------------------------------------------------------------------------
+
+;-------------------------------------------------------------------------------------
 ; 
 ; Function: LoadSection
 ;			Load one or all sections from the ini file.
@@ -34,7 +34,7 @@
 ; Returns: 
 ;			If section = "" list of sections separated by new lines otherwise requested section
 ;
-Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
+iniReadSection( pIniFile, pSection="", pPrefix="inis_") {
 	local sIni,v,v1,v2,j,s,res
 	static x = ",,, ,	,``,¬,¦,!,"",£,%,^,&,*,(,),=,+,{,},;,:,',~,,,<,.,>,/,\,|,-"
 	
@@ -46,11 +46,11 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 			pIniFile := A_LoopFileLongPath
 		
 		
-		VarSetCapacity(res, 0x7FFF, 0),  s := DllCall("GetPrivateProfileSection" , "str", pSection, "str", res, "uint", 0x7FFF, "str", pIniFile)
+		VarSetCapacity( res, 0x7FFF, 0 ),  s := DllCall( "GetPrivateProfileSection" , "str", pSection, "str", res, "uint", 0x7FFF, "str", pIniFile )
 		
 		Loop, % s-1
-			if !NumGet(res, A_Index-1, "UChar")			; Each line within the section is terminated with a null character.  Replace each delimiting null char with a newline
-				NumPut(10, res, A_Index-1, "UChar")		; \0 -> \n 
+			if !NumGet( res, A_Index-1, "UChar" )			; Each line within the section is terminated with a null character.  Replace each delimiting null char with a newline
+				NumPut( 10, res, A_Index-1, "UChar" )		; \0 -> \n 
 		
 		if A_OSVersion in WIN_ME,WIN_98,WIN_95										; Windows Me/98/95: The returned string includes comments.
 			res := RegExReplace(res, "m`n)^[ `t]*(?:;.*`n?|`n)|^[ `t]+|[ `t]+$")	; This removes comments. Also, I'm not sure if leading/trailing space is automatically removed on Win9x, so the regex removes that too. 
@@ -62,18 +62,18 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 	FileRead, sIni, *t %pIniFile%
 	
 	;remove comments & empty Lines
-	sIni := RegExReplace(RegExReplace(sIni, "`nm)^;.+\R" ), "`nm)^\n" )	"`n["
+	sIni := RegExReplace( RegExReplace( sIni, "`nm)^;.+\R" ), "`nm)^\n" )	"`n["
 
 	j := 0
 	if pSection=
 	Loop{
-		j := RegExMatch( sIni, "(?<=^|\n)\s*\[([^\n]+?)\]\n\s*([^[].*?)(?=\n\s*\[)", v, j+StrLen(v)+1)
+		j := RegExMatch( sIni, "(?<=^|\n)\s*\[([^\n]+?)\]\n\s*([^[].*?)(?=\n\s*\[)", v, j+StrLen(v)+1 )
 		if !j
 			break
 
 		if v1 contains %x%
 		{
-			 v1 := RegExReplace(v1, "[" x "]")
+			 v1 := RegExReplace( v1, "[" x "]" )
 			 ifEqual, v1, , continue
 		}
 
@@ -81,7 +81,7 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 		%pPrefix%%v1% := v2
 		res .= v1 "`n"
 	}
-	return SubStr(res, 1, -1)
+	return SubStr( res, 1, -1 )
 }
 
 ;-------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ Ini_LoadSection( pIniFile, pSection="", pPrefix="inis_") {
 ; Returns:	
 ;			List of section names, each on new line
 ;
-Ini_GetSectionNames(pIniFile) {
+iniGetSectionNames(pIniFile) {
 	Loop, %pIniFile%, 0								; Expand relative paths, since GetPrivateProfileSectionNames only searches %A_WinDir%. 
         pIniFile := A_LoopFileLongPath
     
@@ -132,18 +132,18 @@ Ini_GetSectionNames(pIniFile) {
 ;				pInfo>1 or pInfo="vals" -	function returns key values separated by prefix string (by default `n)
 ;    
 ;	Examples:
-;>      Ini_LoadKeys("settings.ini")					; load all keys from all sections, return number of vars
-;>      Ini_LoadKeys("application.ini", "window")		; load all keys under 'window' section, return number of vars
-;>      Ini_LoadKeys("test.ini", "", "", "cfg_")		; load all keys, use "cfg_" prefix
-;>		Ini_LoadKeys("test.ini, "Config", 1)			; return key names from "Config" section
-;>		Ini_LoadKeys("test.ini, "Config", "keys")		; the same as above
-;>		Ini_LoadKeys("test.ini, "Config", "vals")		; return key values from "Config" section 
-;>		Ini_LoadKeys("", section, "", "cfg_")			; load section from string, use "cfg_" as base name
-;>		Ini_LoadKeys("", Presets, 2, "", "name")		; get only key values of keys that start with "name" word from Presets section string.
-;>		Ini_LoadKeys("", Presets, 2, "", "name", true)	; the same as above, but reverse filter.
-;>		Ini_LoadKeys("", Presets, 2, "", "`ni)^k")		; regular expression filter - get all keys starting with character "k" or "K"
+;>      iniLoadKeys("settings.ini")					; load all keys from all sections, return number of vars
+;>      iniLoadKeys("application.ini", "window")		; load all keys under 'window' section, return number of vars
+;>      iniLoadKeys("test.ini", "", "", "cfg_")		; load all keys, use "cfg_" prefix
+;>		iniLoadKeys("test.ini, "Config", 1)			; return key names from "Config" section
+;>		iniLoadKeys("test.ini, "Config", "keys")		; the same as above
+;>		iniLoadKeys("test.ini, "Config", "vals")		; return key values from "Config" section 
+;>		iniLoadKeys("", section, "", "cfg_")			; load section from string, use "cfg_" as base name
+;>		iniLoadKeys("", Presets, 2, "", "name")		; get only key values of keys that start with "name" word from Presets section string.
+;>		iniLoadKeys("", Presets, 2, "", "name", true)	; the same as above, but reverse filter.
+;>		iniLoadKeys("", Presets, 2, "", "`ni)^k")		; regular expression filter - get all keys starting with character "k" or "K"
 ;
-Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = false){
+iniLoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = false){
 	local s, p, v1, v2, res, at, l, re, f, fl
 	static x = ",,, ,	,``,¬,¦,!,"",£,%,^,&,*,(,),=,+,{,},;,:,',~,,,<,.,>,/,\,|,-"
 	at = %A_AutoTrim%
@@ -155,7 +155,7 @@ Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = 
 	if (pIniFile = "")
 			pIniFile := section
 	else if section !=
-		 pIniFile := "[" section "]`n" Ini_LoadSection(pIniFile, section)
+		 pIniFile := "[" section "]`n" iniReadSection(pIniFile, section)
 	else  {
 		FileRead, pIniFile, *t %pIniFile%
 		pIniFile := RegExReplace(RegExReplace(pIniFile, "`nm)^;.+\R" ), "`nm)^\n" )	"`n["	   ;remove comments and empty lines
@@ -228,10 +228,10 @@ Ini_LoadKeys(pIniFile, section = "", pInfo=0, prefix = "", filter="", reverse = 
 ;>				a_configuration = bla bla
 ;>				somevar         = dumy
 ;>
-;>				s := Ini_MakeSection("a_")
-;>				Ini_ReplaceSection("test.ini", "config", s)
+;>				s := iniMakeSection("a_")
+;>				iniReplaceSection("test.ini", "config", s)
 ;
-Ini_MakeSection( prefix ) {
+iniMakeSection( prefix ) {
     static hwndEdit, pSFW, pSW, bkpSFW, bkpSW
 	static header="Global Variables (alphabetical)`r`n--------------------------------------------------`r`n"
 
@@ -297,7 +297,7 @@ Ini_MakeSection( prefix ) {
 ;				section		- Section name
 ;				data		- Reference to the section data
 ;
-Ini_ReplaceSection( pIniFile, section, ByRef data=""){
+iniReplaceSection( pIniFile, section, ByRef data=""){
 	IniDelete, %pIniFile%, %section%					;this way much faster then using System API, the only side effect is that changed section will be moved to the end of file
 	FileAppend, [%section%]`n%data%, %pIniFile%
 }
@@ -313,8 +313,8 @@ Ini_ReplaceSection( pIniFile, section, ByRef data=""){
 ; Returns:
 ;				Updated section string
 ;
-Ini_UpdateSection( ByRef sSection, ByRef data){
-	return, data (data !="" ? "`n" :) Ini_DelKeys(sSection, Ini_LoadKeys("", data, 2, ","))
+iniUpdateSection( ByRef sSection, ByRef data){
+	return, data (data !="" ? "`n" :) iniDelKeys(sSection, iniLoadKeys("", data, 2, ","))
 }
 
 
@@ -330,7 +330,7 @@ Ini_UpdateSection( ByRef sSection, ByRef data){
 ; Returns:
 ;				Key value if key is found or def 
 ;
-Ini_GetVal(ByRef sSection, name, def="") {
+iniGetVal(ByRef sSection, name, def="") {
 	return RegExMatch(sSection, "`aim)^\s*\Q" name "\E\s*=(.+)$", out) ? out1 : def
 }
 
@@ -343,7 +343,7 @@ Ini_GetVal(ByRef sSection, name, def="") {
 ;				name		- Name of the key
 ;				val			- Value. New line char ("`n") is not removed from the value.
 ;
-Ini_SetVal(ByRef sSection, name, val="") {
+iniSetVal(ByRef sSection, name, val="") {
 	sSection := RegExReplace(sSection, "`aim)^\s*\Q" name "\E\s*=(.+)$", name "=" val )
 }
 
@@ -359,7 +359,7 @@ Ini_SetVal(ByRef sSection, name, val="") {
 ; Returns:
 ;				Key name if value is found or empty string
 ;
-Ini_GetKeyName(ByRef sSection, val){
+iniGetKeyName(ByRef sSection, val){
 	return RegExMatch(sSection, "`aim)^\s*(.+?)\s*=\Q" val "\E$", out) ? out1 : ""
 }
 
@@ -376,7 +376,7 @@ Ini_GetKeyName(ByRef sSection, val){
 ; Returns:
 ;				New section string
 ;
-Ini_DelKeys( ByRef sSection, keys, rev=false, sep=",") {
+iniDelKeys( ByRef sSection, keys, rev=false, sep=",") {
 	at = %A_AutoTrim%
 	AutoTrim, On
 
@@ -418,14 +418,14 @@ Ini_DelKeys( ByRef sSection, keys, rev=false, sep=",") {
 ;>				somekey=blah
 ;>				)
 ;>				
-;>				Ini_DelKeysRe( s, "i)^ev")		;remove only "Evocation" key
+;>				iniDelKeysRe( s, "i)^ev")		;remove only "Evocation" key
 ;>
-Ini_DelKeysRe( ByRef sSection, re) {
+iniDelKeysRe( ByRef sSection, re) {
 	k := InStr(re, ")"), j := InStr(re, "(")
 	re := "m" ( k && (!j || j>k) ? "" : ")") re						;add m option among user options
 
-	k := RegExReplace( Ini_LoadKeys("", sSection, "keys"), re )
-	return Ini_DelKeys( sSection, k, true, "`n")
+	k := RegExReplace( iniLoadKeys("", sSection, "keys"), re )
+	return iniDelKeys( sSection, k, true, "`n")
 
 }
 
@@ -447,7 +447,7 @@ Ini_DelKeysRe( ByRef sSection, re) {
 ;				"Line" will be added to the top of the MRU list. If it is already in the list, it will first 
 ;				be moved to top and its old position will be returned.
 ;
-Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
+iniAddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 
 	res := prefix "1=" pLine, j:=1, ret:=1
 	loop, parse, sSection, `n, `r
@@ -461,7 +461,7 @@ Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 			j:=0, pMax++, ret := A_Index
 			continue
 		}
-		else res .= "`n" prefix (A_Index+j) "=" SubStr(A_LoopField, InStr(A_LoopField, "=")+1)
+		else res .= "`n" prefix (A_Index+j) "=" SubStr( A_LoopField, InStr(A_LoopField, "=")+1)
 	}
 
 	sSection := res
@@ -473,13 +473,35 @@ Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 ;		- Version 1.0 b2 by majkinetor. See: <http://www.autohotkey.com/forum/topic22495.html>
 ;		- Creative Commons Attribution 3.0 Unported <http://creativecommons.org/licenses/by/3.0/>
 
-; eD--> Moved iniReadBoolean.ahk into IniRead.ahk (formerly Ini.ahk)
+;-------------------------------------------------------------------------------------
+;
+; eD--> Moved iniReadBoolean.ahk into this file
 iniReadBoolean( file, group, key, default = "" )
 {
-	IniRead, t, %file%, %group%, %key%, %default%
-	if ( t == "1" || t == "yes" || t == "y" || t == "true" )
+	IniRead, val, %file%, %group%, %key%, %default%
+	if ( val == "1" || val == "yes" || val == "y" || val == "true" )
 		return true
 	else
 		return false
 }
 ; <--eD
+
+/*
+; eD--> TODO: Add a function for handling .ini keys (as this was repeated in the code)
+;		TODO: Make a function that reads a section and returns a pdic of (key,value) pairs!
+;		TODO: Remove end-of-line comments. That is, any [%A_Space%|%A_Tab%];.*$ RegEx.
+;			In compensation, add 'StringReplace, val, val, \;, `;, A' below?
+;			How to "save" existing layout.ini files?! Answer: Exclude `t;`t sequences!
+;			That way, the only problem would be any ligatures starting with ; (rare!)
+;			However, these should properly be preceded by a % in layout.ini anyway!?
+iniGetKeyVal( line, ByRef key, ByRef val, escapes = 0 )
+{
+	pos := InStr( line, "=" )
+	key := Trim( SubStr( line, 1, pos-1 ))
+	val := Trim( SubStr( line, pos+1 ))
+	if ( escapes != 0 ) {
+		StringReplace, val, val, \n, `n, A
+		StringReplace, val, val, \\, \, A
+	}
+} ; <--eD
+*/

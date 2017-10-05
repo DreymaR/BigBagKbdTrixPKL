@@ -1,5 +1,5 @@
-DreymaR's Big Bag Of Keyboard Tricks
-====================================
+DreymaR's Big Bag Of Keyboard Tricks - PKL[eD]
+==============================================
 
 ### For [PortableKeyboardLayout][PKLSFo] on Windows
 #### (Written By Farkas Máté [(2008)][PKLAHK] using [AutoHotkey][AHKHom])
@@ -7,15 +7,19 @@ DreymaR's Big Bag Of Keyboard Tricks
 Documentation
 -------------
 
-The info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
+Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
 
+* This repo implements most of my Big Bag for PKL, as layout and pkl.ini files.
+* It also adds my own PKL - edition DreymaR (PKL[eD]) with some improvements (hopefully!).
+* Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors.
 
 Some Know-How-To
 ----------------
 
+* The repo contains executables for the original PKL as well as PKL[eD], and source code for both.
 * PKL is easily run by putting its folder in a C:\PortableApps folder and using the [PortableApps.com][PrtApp] menu
 * Also, I usually put a shortcut to pkl.exe in my Start Menu "Startup" folder so it starts on logon
 * Alternatively, if the PortableApps menu is started on logon it can start up PKL for you too
@@ -81,16 +85,25 @@ Do you have a traditional layout without a Wide/Angle modification and get the w
 * In the [extend] section of pkl.ini there are some places you can paste code snippets copied from further down in the file
 * Use/edit those snippets if you wish to use for instance an Angle mod but not a Wide mod or vice versa
 
+DONE:
+-----
+These changes are now implemented in PKL[eD]:
+
+* Help image opacity, background color and gutter size settings
+* Separate help image background, so the keys/fingering can be in one image and the glyphs in another (saves file space, adds options)
+* Menu improvements and additions. DebugInfo setting that shows the AHK Key History menu item and OS layout/deadkey info.
+* File mergings, function additions and variable name changes for clearer source code
+
 TODO:
 -----
-I have several changes to PKL on my wishlist, but they require tweaking/recompiling the program. See 'PKL_DreymaR'.
+I have several changes to PKL[eD] on my wishlist, but they require tweaking/recompiling the program. See 'PKL_eD'.
 
-* Next up: Multilayered help images, so the fingering can be in one image and the keys in another (saves file space, adds options)
+* Unicode mode, like PKL-Vortex by vVv
 * Scan and virtual code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/locale/etc variant is murder!
-  
+* A timer that checks whether the underlaying Windows layout has changed (affects dead keys)
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2017-08_
+_Øystein "DreymaR" Gadmar, 2017-10_
 
 
 [PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)

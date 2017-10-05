@@ -8,8 +8,13 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-setPklInfo( "version", "0.4beta-eD" ) ; eD: PKL[edition DreymaR]
-setPklInfo( "compiled", "ed. DreymaR" )
+setPklInfo( "pklName", "Portable Keyboard Layout" )
+setPklInfo( "pklVers", "0.4p-eD" ) ; eD: PKL[edition DreymaR]
+setPklInfo( "pklComp", "ed. DreymaR" )
+setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) ; http://pkl.sourceforge.net/
+setPklInfo( "DreyLay", "Dreymar_Layout.ini" ) ; eD: My layout.ini file for special additions
+setPklInfo( "DreyPkl", "PKL_eD\PKL_eD.ini" ) ; eD: My pkl.ini file for special additions
+;setPklInfo( "DebugMe", "no" ) ; eD: Activates extra About and menu info items. Read from DreyPkl.
 
 SendMode Event
 SetBatchLines, -1
@@ -19,7 +24,7 @@ SetWorkingDir, %A_ScriptDir%
 
 ; Global variables
 CurrentDeadKeys = 0 ; How many dead keys were pressed
-CurrentBaseKey  = 0 ; Current base key :)
+CurrentBaseKey  = 0 ; Current base key
 ; eD--> Moved A_OSVersion.ahk into this file
 ;     - Get OS version as integer. AHK needs at least WIN_VISTA.
 ;     - See http://www.autohotkey.com/forum/viewtopic.php?p=254663#254663
@@ -27,15 +32,19 @@ A_OSMajorVersion := DllCall("GetVersion") & 0xff
 ;A_OSMinorVersion := DllCall("GetVersion") >> 8 & 0xff
 ; <--eD
 
-t = %1% ; Layout from command line parameter
-pkl_init( t )
+arg = %1% ; Layout from command line parameter
+pkl_init( arg )
 pkl_activate()
 return
 
 ; ####################### labels #######################
 
 exitApp:
-	exitApp
+	ExitApp
+return
+
+keyHistory:
+	KeyHistory
 return
 
 detectDeadKeysInCurrentLayout:
@@ -85,7 +94,7 @@ return
 keyPressed: ; *SC025
 	activity_ping()
 	Critical
-	ThisHotkey := substr( A_ThisHotkey, 2 )
+	ThisHotkey := SubStr( A_ThisHotkey, 2 )
 	processKeyPress( ThisHotkey )
 return
 
@@ -93,15 +102,15 @@ upToDownKeyPress: ; *SC025 UP
 	activity_ping()
 	Critical
 	ThisHotkey := A_ThisHotkey
-	ThisHotkey := substr( ThisHotkey, 2 )
-	ThisHotkey := substr( ThisHotkey, 1, -3 )
+	ThisHotkey := SubStr( ThisHotkey, 2 )
+	ThisHotkey := SubStr( ThisHotkey, 1, -3 )
 	processKeyPress( ThisHotkey )
 return
 
 modifierDown:  ; *SC025
 	activity_ping()
 	Critical
-	ThisHotkey := substr( A_ThisHotkey, 2 )
+	ThisHotkey := SubStr( A_ThisHotkey, 2 )
 	setModifierState( getLayoutItem( ThisHotkey . "v" ), 1 )
 return
 
@@ -109,12 +118,12 @@ modifierUp: ; *SC025 UP
 	activity_ping()
 	Critical
 	ThisHotkey := A_ThisHotkey
-	ThisHotkey := substr( ThisHotkey, 2 )
-	ThisHotkey := substr( ThisHotkey, 1, -3 )
+	ThisHotkey := SubStr( ThisHotkey, 2 )
+	ThisHotkey := SubStr( ThisHotkey, 1, -3 )
 	setModifierState( getLayoutItem( ThisHotkey . "v" ), 0 )
 return
 
-ShowAbout:
+showAbout:
 	pkl_about()
 return
 
@@ -145,12 +154,12 @@ return
 afterSuspend:
 	if ( A_IsSuspended ) {
 		pkl_displayHelpImage( 3 )
-		Menu, tray, Icon, % getTrayIconInfo( "FileOff" ), % getTrayIconInfo( "NumOff" )
+		Menu, Tray, Icon, % getTrayIconInfo( "FileOff" ), % getTrayIconInfo( "NumOff" )
 	} else {
 		activity_ping( 1 )
 		activity_ping( 2 )
 		pkl_displayHelpImage( 4 )
-		Menu, tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
+		Menu, Tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
 	}
 return
 
@@ -167,15 +176,15 @@ return
 
 ; ####################### (external) modules #######################
 
-; eD: #include A_OSVersion.ahk ; A_OSMajorVersion - moved into this file
-#Include HexUC.ahk ; Written by Laszlo Hars
-#Include MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
-#Include IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk ; eD: Renamed from Ini.ahk
-#Include SendU.ahk
-; eD: #Include getGlobal.ahk - moved into ahk_getset
-#Include HashTable.ahk
-; eD: #Include iniReadBoolean.ahk - moved into IniRead.ahk
-#Include detectDeadKeysInCurrentLayout.ahk
-#Include getVirtualKeyCodeFromName.ahk  ; eD: renamed VirtualKeyCodeFromName for consistency
-#Include getDeadKeysOfSystemsActiveLayout.ahk
+#Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk ; eD: Renamed from Ini.ahk
+#Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars ; eD: Renamed from HexUC.ahk
+#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
+#Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK (v1.1+) will obviate this!
+#Include ext_HashTable.ahk ; eD: Moved all HashTable files into this one to reduce clutter
+#Include getDeadKeysOfCurrentLayout.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
+#Include getVirtualKeyCodeFromName.ahk ; eD: Renamed VirtualKeyCodeFromName for consistency
 #Include getLanguageStringFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm
+; eD: #Include getDeadKeysOfSystemsActiveLayout.ahk - moved into getDeadKeysOfCurrentLayout.ahk
+; eD: #Include A_OSVersion.ahk - moved into this file
+; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk
+; eD: #Include iniReadBoolean.ahk - moved into IniRead.ahk

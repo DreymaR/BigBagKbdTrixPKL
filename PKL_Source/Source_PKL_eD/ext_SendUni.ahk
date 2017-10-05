@@ -30,9 +30,9 @@ Contributors:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; You ca localize the messages, see the
-; SendU_SetLocale( variable, value ) and
-;  _SendU_GetLocale( variable, value, 1 ) functions!
+; You can localize the messages, see the
+; SendU_SetLocaleTxt( variable, value ) and
+;  _SendU_GetLocaleTxt( variable, value, 1 ) functions!
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -160,9 +160,9 @@ SendU_Try_Dynamic_Mode()
 	_SendU_Dynamic_Mode( "", 1 ) ; Clears the PrevProcess variable
 }
 
-SendU_SetLocale( variable, value )
+SendU_SetLocaleTxt( variable, value )
 {
-	_SendU_GetLocale( variable, value, 1 )
+	_SendU_GetLocaleTxt( variable, value, 1 )
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -285,9 +285,9 @@ _SendU_Get_Mode_Name( mode )
 {
 	if ( mode == "c" && SendU_Clipboard_Restore_Mode() )
 		mode = r
-	m := _SendU_GetLocale( "Mode_Name_" . mode )
+	m := _SendU_GetLocaleTxt( "Mode_Name_" . mode )
 	if ( m == "" )
-		m := _SendU_GetLocale( "Mode_Name_0" )
+		m := _SendU_GetLocaleTxt( "Mode_Name_0" )
 	return m
 }
 
@@ -295,15 +295,15 @@ _SendU_Get_Mode_Type( mode )
 {
 	if ( mode == "c" && SendU_Clipboard_Restore_Mode() )
 		mode = r
-	m := _SendU_GetLocale( "Mode_Type_" . mode )
+	m := _SendU_GetLocaleTxt( "Mode_Type_" . mode )
 	if ( m == "" )
-		m := _SendU_GetLocale( "Mode_Type_0" )
+		m := _SendU_GetLocaleTxt( "Mode_Type_0" )
 	return m
 }
 
 _SendU_Dynamic_Mode_Tooltip( processName = -1, mode = -1 )
 {
-	tt := _SendU_GetLocale("DYNAMIC_MODE_TOOLTIP")
+	tt := _SendU_GetLocaleTxt("DYNAMIC_MODE_TOOLTIP")
 	if not tt
 		return
 	if ( processName = -1 || mode == -1 ) {
@@ -360,7 +360,7 @@ _SendU_GetMode( processName, mode = "", set = 0 )
 	}
 }
 
-_SendU_GetLocale( sKey, sVal = "", set = 0 )
+_SendU_GetLocaleTxt( sKey, sVal = "", set = 0 )
 {
 	static pdic := 0
 	if ( pdic == 0 ) {
@@ -426,8 +426,8 @@ __SendU_Labels_And_Includes__This_Is_Not_A_Function()
 
 }
 
-#include CoHelper.ahk
-#include HashTable.ahk
+#include ext_CoHelper.ahk ; eD: Renamed from CoHelper.ahk
+#include ext_HashTable.ahk ; eD: Renamed from HashTable.ahk
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; END OF SENDU MODULE

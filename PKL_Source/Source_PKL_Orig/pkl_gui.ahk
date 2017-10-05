@@ -163,10 +163,10 @@ pkl_displayHelpImage( activate = 0 )
 	; 2 = toggle
 	; 3 = suspend on
 	; 4 = suspend off
-
+	
 	global CurrentDeadKeys
 	global CurrentDeadKeyName
-
+	
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
 	static prevFile
@@ -175,14 +175,13 @@ pkl_displayHelpImage( activate = 0 )
 	static yPosition := -1
 	static imgWidth
 	static imgHeight
-	
-	static layoutDir = 0
+	static LayoutDir := 0
 	static hasAltGr
 	static extendKey
 	
-	if ( layoutDir == 0 )
+	if ( LayoutDir == 0 )
 	{
-		layoutDir := getLayoutInfo( "dir" )
+		LayoutDir := getLayoutInfo( "dir" )
 		hasAltGr  := getLayoutInfo( "hasAltGr" )
 		extendKey := getLayoutInfo( "extendKey" )
 	}
@@ -214,7 +213,7 @@ pkl_displayHelpImage( activate = 0 )
 		Gui, 2:+AlwaysOnTop -Border +ToolWindow
 		Gui, 2:margin, 0, 0
 		Gui, 2:Add, Pic, xm vHelperImage
-		GuiControl,2:, HelperImage, *w%imgWidth% *h%imgHeight% %layoutDir%\state0.png
+		GuiControl,2:, HelperImage, *w%imgWidth% *h%imgHeight% %LayoutDir%\state0.png
 		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
 		setTimer, displayHelpImage, 200
 	} else if ( activate == -1 ) {
@@ -242,7 +241,7 @@ pkl_displayHelpImage( activate = 0 )
 			fileName = deadkey%CurrentDeadKeyName%
 		} else {
 			fileName = deadkey%CurrentDeadKeyName%sh
-			if ( not FileExist( layoutDir . "\" . filename . ".png" ) )
+			if ( not FileExist( LayoutDir . "\" . filename . ".png" ) )
 				fileName = deadkey%CurrentDeadKeyName%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
@@ -253,14 +252,14 @@ pkl_displayHelpImage( activate = 0 )
 		state += 6 * ( hasAltGr * AltGrIsPressed() )
 		fileName = state%state%
 	}
-	if ( not FileExist( layoutDir . "\" . fileName . ".png" ) )
+	if ( not FileExist( LayoutDir . "\" . fileName . ".png" ) )
 		fileName = state0
 	
 	if ( prevFile == fileName )
 		return
 		
 	prevFile := fileName
-	GuiControl,2:, HelperImage, *w%imgWidth% *h%imgHeight% %layoutDir%\%fileName%.png
+	GuiControl,2:, HelperImage, *w%imgWidth% *h%imgHeight% %LayoutDir%\%fileName%.png
 }
 
 AddAtForMenu( menuItem )

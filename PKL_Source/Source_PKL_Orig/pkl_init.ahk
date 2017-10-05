@@ -147,8 +147,8 @@ pkl_init( layoutFromCommandLine = "" )
 	Loop, parse, remap, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		parts := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		parts := SubStr( A_LoopField, pos+1 )
 		StringSplit, parts, parts, %A_Tab%
 		if ( parts0 < 2 ) {
 			Hotkey, *%key%, doNothing
@@ -229,16 +229,16 @@ pkl_init( layoutFromCommandLine = "" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
 		remap := Ini_LoadSection( LayoutFile, "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
 	}

@@ -1,3 +1,6 @@
+; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
+;     (From vVv, likely necessary for AHK v1.1 compatibility.)
+;     NOTE: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashes b/c var. m%msg% is too long!?
 pkl_locale_strings( msg, newValue = "", set = 0 )
 {
 	static m1 := "You must set the layout file in pkl.ini!"
@@ -33,47 +36,47 @@ pkl_locale_load( lang, compact = 0 )
 	else
 		file = Languages\%lang%.ini
 
-	line := Ini_LoadSection( file, "pkl" )
+	line := iniReadSection( file, "pkl" )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
+		val := Trim( SubStr( A_LoopField, pos+1 ))
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		if ( val != "" )
-			pkl_locale_strings( key, val, 1)
+			pkl_locale_strings( key, val, 1 )
 	}
 
-	line := Ini_LoadSection( file, "SendU" )
+	line := iniReadSection( file, "SendU" )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
+		val := Trim( SubStr( A_LoopField, pos+1 ))
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
-		SendU_SetLocale( key, val )
+		SendU_SetLocaleTxt( key, val )
 	}
 
-	line := Ini_LoadSection( file, "detectDeadKeys" )
+	line := iniReadSection( file, "detectDeadKeys" )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
+		val := Trim( SubStr( A_LoopField, pos+1 ))
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \,
-			detectDeadKeysInCurrentLayout_SetLocale( key, val )
+			detectDeadKeys_SetLocaleTxt( key, val )
 	}
 	
-	line := Ini_LoadSection( file, "keyNames" )
+	line := iniReadSection( file, "keyNames" )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
-		setHotkeyLocale( key, val )
+		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
+		val := Trim( SubStr( A_LoopField, pos+1 ))
+		setHotkeyText( key, val )
 	}
 }
 
@@ -91,12 +94,12 @@ pkl_locale_string( msg, s = "", p = "", q = "", r = "" )
 	return m
 }
 
-setHotkeyLocale( hk, localehk )
+setHotkeyText( hk, localehk )
 {
-	getHotkeyLocale( hk, localehk, 1 )
+	getHotkeyText( hk, localehk, 1 )
 }
 
-getHotkeyLocale( hk, localehk = "", set = 0 )
+getHotkeyText( hk, localehk = "", set = 0 )
 {
 	static localizedHotkeys := ""
 	static pdic := 0
@@ -114,16 +117,10 @@ getHotkeyLocale( hk, localehk = "", set = 0 )
 	}
 }
 
-getHotkeyStringInLocale( str )
+getReadableHotkeyString( str )
 {
-	StringReplace, str, str, Return, Enter, 1
-	StringReplace, str, str, Escape, Esc, 1
-	StringReplace, str, str, BackSpace, BS, 1
-	StringReplace, str, str, Delete, Del, 1
-	StringReplace, str, str, Insert, Ins, 1
-	StringReplace, str, str, Control, Ctrl, 1
-	
-	StringReplace, str, str, <^>!, RAlt &%A_Space%, 1
+	StringReplace, str, str, <^>!, AltGr &%A_Space%, 1
+	StringReplace, str, str, SC029, Tilde, 1
 	
 	StringReplace, str, str, <+, LShift &%A_Space%, 1
 	StringReplace, str, str, <^, LCtrl &%A_Space%, 1
@@ -145,13 +142,22 @@ getHotkeyStringInLocale( str )
 	StringReplace, str, str, ~,, 1
 
 	str := RegExReplace( str, "(\w+)", "#[$1]" )
-	hotkeys := getHotkeyLocale( "all" )
+	hotkeys := getHotkeyText( "all" )
 	Loop, Parse, hotkeys, %A_Space%
 	{
-		lhk := getHotkeyLocale( A_LoopField )
+		lhk := getHotkeyText( A_LoopField )
 		StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )
+	
+	; eD: Moved the shorter key names down so they'll work on the Languages file.
+	StringReplace, str, str, Return, Enter, 1
+	StringReplace, str, str, Escape, Esc, 1
+	StringReplace, str, str, BackSpace, Back, 1
+	StringReplace, str, str, Backspace, Back, 1
+	StringReplace, str, str, Delete, Del, 1
+	StringReplace, str, str, Insert, Ins, 1
+	StringReplace, str, str, Control, Ctrl, 1
+	
 	return str
 }
-

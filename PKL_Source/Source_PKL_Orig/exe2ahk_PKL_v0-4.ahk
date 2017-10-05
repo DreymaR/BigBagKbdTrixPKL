@@ -170,7 +170,7 @@ DeadKeyValue( dk, base )
 	}
 	IniRead, res, %file%, deadkey%dk%, %base%, -1`t;
 	t := InStr( res, A_Tab )
-	res := subStr( res, 1, t - 1 )
+	res := SubStr( res, 1, t - 1 )
 	HashTable_Set( pdic, dk . "_" . base, res)
 	if ( res == -1 )
 		res = 0
@@ -784,8 +784,8 @@ pkl_init( layoutFromCommandLine = "" )
 	Loop, parse, remap, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		parts := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		parts := SubStr( A_LoopField, pos+1 )
 		StringSplit, parts, parts, %A_Tab%
 		if ( parts0 < 2 ) {
 			Hotkey, *%key%, doNothing
@@ -866,16 +866,16 @@ pkl_init( layoutFromCommandLine = "" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
 		remap := Ini_LoadSection( LayoutFile, "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
 	}
@@ -1297,8 +1297,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		if ( val != "" )
@@ -1309,8 +1309,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		SendU_SetLocale( key, val )
@@ -1320,8 +1320,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \,
 			detectDeadKeysInCurrentLayout_SetLocale( key, val )
@@ -1331,8 +1331,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		setHotkeyLocale( key, val )
 	}
 }
@@ -2445,7 +2445,7 @@ Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 			j:=0, pMax++, ret := A_Index
 			continue
 		}
-		else res .= "`n" prefix (A_Index+j) "=" SubStr(A_LoopField, InStr(A_LoopField, "=")+1)
+		else res .= "`n" prefix (A_Index+j) "=" SubStr( A_LoopField, InStr(A_LoopField, "=")+1)
 	}
 
 	sSection := res

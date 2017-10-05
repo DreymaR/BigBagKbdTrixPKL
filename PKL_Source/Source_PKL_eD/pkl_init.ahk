@@ -1,23 +1,37 @@
+; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
+;     (From vVv, AHK v1.1 function. Not in AHK v1.0, so make a version here.)
+if ( A_AhkVersion < "1.0.90" ) {
+	Trim( str )
+	{
+		str := RegExReplace( str, "(^\s*|\s*$)")
+		return str
+	}
+}
+
 pkl_init( layoutFromCommandLine = "" )
 {
 	if ( not FileExist("pkl.ini") ) {
-		msgBox, pkl.ini file NOT FOUND`nSorry. The program will exit.
+		MsgBox, pkl.ini file NOT FOUND`nSorry. The program will exit.
 		ExitApp
 	}
 	
-	compact_mode := IniReadBoolean( "pkl.ini", "pkl", "compactMode", false )
+	debugMe := iniReadBoolean( getPklInfo( "DreyPkl" ), "pkl", "eD_DebugInfo", false )
+	debugMe ? setPklInfo( "DebugMe", "yes" ) :  setPklInfo( "DebugMe", "no" )
+	
+	compactMode := iniReadBoolean( "pkl.ini", "pkl", "compactMode", false )
 	
 	IniRead, t, pkl.ini, pkl, language, auto
 	if ( t == "auto" )
 		t := getLanguageStringFromDigits( A_Language )
-	pkl_locale_load( t, compact_mode )
-
+	pkl_locale_load( t, compactMode )
+	
 	IniRead, t, pkl.ini, pkl, exitAppHotkey, %A_Space%
-	if ( t <> "" )
-	{
+	if ( t <> "" ) {
 		Loop, parse, t, `,
 		{
 			Hotkey, %A_LoopField%, ExitApp
+			if ( A_Index == 1 )
+				setPklInfo( "ExitAppHotkey", A_LoopField )
 		}
 	}
 	
@@ -28,7 +42,7 @@ pkl_init( layoutFromCommandLine = "" )
 		if ( A_Index == 1 )
 			setpklInfo( "SuspendHotkey", A_LoopField )
 	}
-
+	
 	IniRead, t, pkl.ini, pkl, changeLayoutHotkey, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
@@ -38,7 +52,7 @@ pkl_init( layoutFromCommandLine = "" )
 				setPklInfo( "ChangeLayoutHotkey", A_LoopField )
 		}
 	}
-
+	
 	IniRead, t, pkl.ini, pkl, displayHelpImageHotkey, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
@@ -48,11 +62,11 @@ pkl_init( layoutFromCommandLine = "" )
 				setPklInfo( "DisplayHelpImageHotkey", A_LoopField )
 		}
 	}
-
+	
 	IniRead, t, pkl.ini, pkl, systemsDeadkeys, %A_Space%
 	setDeadKeysInCurrentLayout( t )
-	setPklInfo( "altGrEqualsAltCtrl", IniReadBoolean( "pkl.ini", "pkl", "altGrEqualsAltCtrl", false ) )
-
+	setPklInfo( "altGrEqualsAltCtrl", iniReadBoolean( "pkl.ini", "pkl", "altGrEqualsAltCtrl", false ) )
+	
 	IniRead, t, pkl.ini, pkl, changeNonASCIIMode, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
@@ -120,7 +134,7 @@ pkl_init( layoutFromCommandLine = "" )
 			nextLayoutIndex := 1
 	setLayoutInfo( "nextLayout", getLayoutInfo( "layout" . nextLayoutIndex . "code" ) )
 	
-	if ( compact_mode ) {
+	if ( compactMode ) {
 		LayoutFile = layout.ini
 		setLayoutInfo( "dir", "." )
 	} else {
@@ -142,13 +156,15 @@ pkl_init( layoutFromCommandLine = "" )
 	if ( extendKey <> "" ) {
 		setLayoutInfo( "extendKey", extendKey )
 	}
-
-	remap := Ini_LoadSection( LayoutFile, "layout" )
+	
+	remap := iniReadSection( LayoutFile, "layout" )
 	Loop, parse, remap, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		parts := subStr(A_LoopField, pos+1 )
+		If (pos == 0)
+			Continue
+		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
+		parts := Trim( SubStr( A_LoopField, pos+1 ))
 		StringSplit, parts, parts, %A_Tab%
 		if ( parts0 < 2 ) {
 			Hotkey, *%key%, doNothing
@@ -180,24 +196,25 @@ pkl_init( layoutFromCommandLine = "" )
 			v := A_Index + 2
 			v = parts%v%
 			v := %v%
+;			v := Trim( v )
 			if ( StrLen( v ) == 0 ) {
 				v = -- ; Disabled
 			} else if ( StrLen( v ) == 1 ) {
 				v := asc( v )
 			} else {
-				if ( SubStr(v,1,1) == "*" ) { ; Special chars
-					setLayoutItem( key . k . "s", SubStr(v,2) )
+				if ( SubStr( v, 1, 1 ) == "*" ) { ; Special chars
+					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
 					v := "*"
-				} else if ( SubStr(v,1,1) == "=" ) { ; Special chars with {Blind}
-					setLayoutItem( key . k . "s", SubStr(v,2) )
+				} else if ( SubStr( v, 1, 1 ) == "=" ) { ; Special chars with {Blind}
+					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
 					v := "="
-				} else if ( SubStr(v,1,1) == "%" ) { ; Ligature (with unicode chars, too)
-					setLayoutItem( key . k . "s", SubStr(v,2) )
+				} else if ( SubStr( v, 1, 1 ) == "%" ) { ; Ligature (with unicode chars, too)
+					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
 					v := "%"
 				} else if ( v == "--" ) {
 					v = -- ;) Disabled
-				} else if ( substr(v,1,2) == "dk" ) {
-					v := "-" . substr(v,3)
+				} else if ( SubStr( v, 1, 2 ) == "dk" ) {
+					v := "-" . SubStr( v, 3 )
 					v += 0
 				} else {
 					Loop, parse, v
@@ -222,23 +239,23 @@ pkl_init( layoutFromCommandLine = "" )
 				setLayoutItem( key . k , v )
 		}
 	}
-
+	
 	if ( extendKey )
 	{
-		remap := Ini_LoadSection( "pkl.ini", "extend" )
+		remap := iniReadSection( "pkl.ini", "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
-		remap := Ini_LoadSection( LayoutFile, "extend" )
+		remap := iniReadSection( LayoutFile, "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
-			key := subStr( A_LoopField, 1, pos-1 )
-			parts := subStr(A_LoopField, pos+1 )
+			key := SubStr( A_LoopField, 1, pos-1 )
+			parts := SubStr( A_LoopField, pos+1 )
 			setLayoutItem( key . "e", parts )
 		}
 	}
@@ -266,7 +283,6 @@ pkl_init( layoutFromCommandLine = "" )
 	pkl_set_tray_menu()
 }
 
-
 pkl_activate()
 {
 	SetTitleMatchMode 2
@@ -280,18 +296,18 @@ pkl_activate()
 	}
 	Sleep, 10
 	pkl_show_tray_menu()
-
-	if ( IniReadBoolean( "pkl.ini", "pkl", "displayHelpImage", true ) )
+	
+	if ( iniReadBoolean( "pkl.ini", "pkl", "displayHelpImage", true ) )
 		pkl_displayHelpImage( 1 )
 
 	Sleep, 200 ; I don't want to kill myself...
-	OnMessage(0x398, "MessageFromNewInstance")
-
+	OnMessage( 0x398, "MessageFromNewInstance" )
+	
 	activity_ping(1)
 	activity_ping(2)
 	SetTimer, activityTimer, 20000
 	
-	if ( IniReadBoolean( "pkl.ini", "pkl", "startsInSuspendMode", false ) ) {
+	if ( iniReadBoolean( "pkl.ini", "pkl", "startsInSuspendMode", false ) ) {
 		Suspend
 		gosub afterSuspend
 	}
@@ -299,7 +315,7 @@ pkl_activate()
 
 pkl_show_tray_menu()
 {
-	Menu, tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
+	Menu, Tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
 	Menu, Tray, Icon,,, 1 ; Freeze the icon
 }
 
@@ -307,7 +323,7 @@ MessageFromNewInstance(lparam)
 {
 	; The second instance send this message
 	if ( lparam == 422 )
-		exitApp
+		ExitApp
 }
 
 changeLayout( nextLayout )

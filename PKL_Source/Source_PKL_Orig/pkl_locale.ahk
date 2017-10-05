@@ -37,8 +37,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		if ( val != "" )
@@ -49,8 +49,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		SendU_SetLocale( key, val )
@@ -60,8 +60,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \,
 			detectDeadKeysInCurrentLayout_SetLocale( key, val )
@@ -71,8 +71,8 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
-		key := subStr( A_LoopField, 1, pos-1 )
-		val := subStr(A_LoopField, pos+1 )
+		key := SubStr( A_LoopField, 1, pos-1 )
+		val := SubStr( A_LoopField, pos+1 )
 		setHotkeyLocale( key, val )
 	}
 }

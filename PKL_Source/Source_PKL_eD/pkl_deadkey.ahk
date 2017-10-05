@@ -14,8 +14,8 @@ DeadKeyValue( dk, base )
 		return res
 	}
 	IniRead, res, %file%, deadkey%dk%, %base%, -1`t;
-	t := InStr( res, A_Tab )
-	res := subStr( res, 1, t - 1 )
+	tmp := InStr( res, A_Tab )
+	res := SubStr( res, 1, tmp - 1 )
 	HashTable_Set( pdic, dk . "_" . base, res)
 	if ( res == -1 )
 		res = 0
@@ -98,6 +98,7 @@ setDeadKeysInCurrentLayout( deadkeys )
 
 getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
 {
+	; eD: TODO: Make PKL sensitive to a change of underlying Windows LocaleID?!
 	static deadkeys := 0
 	if ( set == 1 ) {
 		if ( newDeadkeys == "auto" )
@@ -113,4 +114,3 @@ getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
 	else
 		return deadkeys
 }
-

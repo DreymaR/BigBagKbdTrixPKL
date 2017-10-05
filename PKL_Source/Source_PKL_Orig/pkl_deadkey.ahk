@@ -15,7 +15,7 @@ DeadKeyValue( dk, base )
 	}
 	IniRead, res, %file%, deadkey%dk%, %base%, -1`t;
 	t := InStr( res, A_Tab )
-	res := subStr( res, 1, t - 1 )
+	res := SubStr( res, 1, t - 1 )
 	HashTable_Set( pdic, dk . "_" . base, res)
 	if ( res == -1 )
 		res = 0

@@ -459,7 +459,7 @@ Ini_AddMRU(ByRef sSection, pLine, pMax=10, prefix="m") {
 			j:=0, pMax++, ret := A_Index
 			continue
 		}
-		else res .= "`n" prefix (A_Index+j) "=" SubStr(A_LoopField, InStr(A_LoopField, "=")+1)
+		else res .= "`n" prefix (A_Index+j) "=" SubStr( A_LoopField, InStr(A_LoopField, "=")+1)
 	}
 
 	sSection := res

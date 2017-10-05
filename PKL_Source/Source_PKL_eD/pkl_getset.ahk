@@ -56,8 +56,8 @@ getLayoutInfo( key, value = "", set = 0 )
 	/*
 	active    := "" ; The active layout
 	dir       := "" ; The directory of the active layout
-	hasAltGr  := 0  ; Did work Right alt as altGr in the layout?
-	extendKey := "" ; With this you can use qwerty's ijkl as arrows, etc.
+	hasAltGr  := 0  ; Should Right Alt work as AltGr in the layout?
+	extendKey := "" ; Extend modifier for navigation, editing, etc.
 	
 	nextLayout := "" ; If you set multiple layouts, this is the next one.
 	                 ; see the "changeTheActiveLayout:" label!
@@ -66,6 +66,7 @@ getLayoutInfo( key, value = "", set = 0 )
 	LayoutsXcode = layout code
 	LayoutsXname = layout name
 	*/
+	
 	static pdic := 0
 	if ( pdic == 0 )
 	{
