@@ -9,12 +9,9 @@
 #MaxThreads 20
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
-setPklInfo( "pklVers", "0.4p-eD" ) ; eD: PKL[edition DreymaR]
+setPklInfo( "pklVers", "0.4-eD" ) ; eD: PKL[edition DreymaR]
 setPklInfo( "pklComp", "ed. DreymaR" )
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) ; http://pkl.sourceforge.net/
-setPklInfo( "DreyLay", "Dreymar_Layout.ini" ) ; eD: My layout.ini file for special additions
-setPklInfo( "DreyPkl", "PKL_eD\PKL_eD.ini" ) ; eD: My pkl.ini file for special additions
-;setPklInfo( "DebugMe", "no" ) ; eD: Activates extra About and menu info items. Read from DreyPkl.
 
 SendMode Event
 SetBatchLines, -1
@@ -23,14 +20,20 @@ Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables
-CurrentDeadKeys = 0 ; How many dead keys were pressed
-CurrentBaseKey  = 0 ; Current base key
-; eD--> Moved A_OSVersion.ahk into this file
-;     - Get OS version as integer. AHK needs at least WIN_VISTA.
-;     - See http://www.autohotkey.com/forum/viewtopic.php?p=254663#254663
-A_OSMajorVersion := DllCall("GetVersion") & 0xff
-;A_OSMinorVersion := DllCall("GetVersion") >> 8 & 0xff
-; <--eD
+; eD TODO: Make global "personal" dictionaries (requires AHK 1.1+): gdicPklVar, gdicLayVar (& gdicKeyVar?)
+; eD TODO:     - Eventually, want something like gPv[Lay_eDFil] := "Dreymar_Layout.ini".
+; eD TODO:     - For now, declare the globals below separately in functions as needed.
+gPv_CurDKsNum := 0						; eD: How many dead keys were pressed	(was 'CurrentDeadKeys')
+gPv_CurDKName := 0						; eD: Current dead key's name			(was 'CurrentDeadKeyName')
+gPv_CurBasKey := 0						; eD: Current base key					(was 'CurrentBaseKey')
+;gPv_HotKeyBuf := 0						; eD: Hotkey buffer						(was 'HotkeysBuffer')
+gPv_PklIniFil := "pkl.ini"				; eD: Defined this globally. Declare in needed functions.
+gPv_LayIniFil := "layout.ini" 			; eD: --"--
+gPv_Pkl_eDFil := "PKL_eD\PKL_eD.ini"	; eD: My extra pkl.ini file
+gPv_Lay_eDFil := "Dreymar_Layout.ini"	; eD: My extra layout.ini file
+gPv_DebugInfo := iniReadBoolean( gPv_Pkl_eDFil, "pkl", "eD_DebugInfo", false )
+;gPv_DebugInfo ? setPklInfo( "DebugMode", "yes" ) :  setPklInfo( "DebugMode", "no" )
+	
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )
@@ -139,6 +142,10 @@ changeTheActiveLayout:
 	changeLayout( getLayoutInfo( "nextLayout" ) )
 return
 
+rerunWithSameLayout:
+	changeLayout( getLayoutInfo( "active" ) )
+return
+
 changeLayoutMenu:
 	changeLayout( getLayoutInfo( "layout" . A_ThisMenuItemPos . "code" ) )
 return
@@ -185,6 +192,6 @@ return
 #Include getVirtualKeyCodeFromName.ahk ; eD: Renamed VirtualKeyCodeFromName for consistency
 #Include getLanguageStringFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm
 ; eD: #Include getDeadKeysOfSystemsActiveLayout.ahk - moved into getDeadKeysOfCurrentLayout.ahk
-; eD: #Include A_OSVersion.ahk - moved into this file
-; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk
+; eD: #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
+; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one global var.
 ; eD: #Include iniReadBoolean.ahk - moved into IniRead.ahk

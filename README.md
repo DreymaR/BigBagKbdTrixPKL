@@ -62,8 +62,8 @@ Here are the columns of a full key mapping together with a sample key – semico
 SC01a = OEM_3   0   ;   :   --  dk13    …   ; QWERTY pP - dk_umlaut
 SC    = VK      SS  L0  L1  L2  L3      L4  ; comments
 ```
-Where:
 
+Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
 * SS: Shift state (0 by default; +1 if L0/L1 are non-/shifted versions of the same letter; +4 for L3/L4)
 * L0-L4: Standard modifier levels for the key: Unmodified, Shift, Ctrl (not often used), AltGr, Shift+AltGr
@@ -71,36 +71,42 @@ Where:
 Look in the pkl.ini file if you're interested! Much is explained there.
 
 The hotkeys I've set in my pkl.ini file are:
-
 * Ctrl+Shift+` – suspend PKL
 * Ctrl+Shift+1 – display/hide help image (these may not be updated for all layouts!)
 * Ctrl+Shift+2 – switch layout between the ones specified in the pkl.ini file
 
-**NOTE:**
+**NOTES:**
 ---------
 Do you have a traditional layout without a Wide/Angle modification and get the wrong Extend mappings on the right hand?
-
 * If so, you should use a renamed copy of a pkl_###-NoErgoMods.ini as your pkl.ini
 * If on the other hand you _do_ use a (Curl)AngleWide mod, base your pkl.ini file on a pkl_###-AngleWide.ini file
 * In the [extend] section of pkl.ini there are some places you can paste code snippets copied from further down in the file
 * Use/edit those snippets if you wish to use for instance an Angle mod but not a Wide mod or vice versa
 
+Anti-madness tips for PKL file editing:
+* Don't use end-of-line comments in the .ini files. It's OK in layout.ini only [for now].
+* In layout.ini:
+    - Always use tabs as separators.
+    - After 'VirtualKey' always include a tab.
+    - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
+* In the pkl.ini Extend section: Don't have empty mappings in the Extend section; comment these out.
+* PKL uses .ini files that may be UTF-8 encoded, unlike the source code files which must be ANSI encoded [for now].
+
 DONE:
 -----
 These changes are now implemented in PKL[eD]:
-
 * Help image opacity, background color and gutter size settings
 * Separate help image background, so the keys/fingering can be in one image and the glyphs in another (saves file space, adds options)
-* Menu improvements and additions. DebugInfo setting that shows the AHK Key History menu item and OS layout/deadkey info.
-* File mergings, function additions and variable name changes for clearer source code
+* Various menu and language file improvements and additions.
+* A Refresh menu option with a hotkey (default Ctrl & Shift & 5) in case the program hangs up in some way (stuck modifiers etc).
+* DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
 
 TODO:
 -----
 I have several changes to PKL[eD] on my wishlist, but they require tweaking/recompiling the program. See 'PKL_eD'.
-
 * Unicode mode, like PKL-Vortex by vVv
 * Scan and virtual code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/locale/etc variant is murder!
-* A timer that checks whether the underlaying Windows layout has changed (affects dead keys)
+* A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
   
 _Best of luck!_
 _Øystein "DreymaR" Gadmar, 2017-10_

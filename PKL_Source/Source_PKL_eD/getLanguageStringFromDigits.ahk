@@ -131,7 +131,7 @@ getLanguageStringFromDigits( langc )
 	languageCode_0843 = Uzbek_Cyrillic
 	languageCode_042a = Vietnamese
 	
-	; eD: TODO: Read a [languageCodes] section from PKL_eD.ini, optionally overwriting these defaults!
+	; eD TODO: Read a [languageCodes] section from PKL_eD.ini, optionally overwriting these defaults!
 	langc := SubStr( langc, -3 )
 	return languageCode_%langc%  ; Get the name of the system's default language.
 }

@@ -8,24 +8,43 @@ if ( A_AhkVersion < "1.0.90" ) {
 	}
 }
 
+; eD WIP: A setHotkeyFromIni() function avoids code repetition in pkl_init
+; eD TODO: Not working yet. Something about variable expansion?
+/*
+setHotkeyFromIni( iniFile, section, keyName, default, routine, pklInfoTag )
+{
+	( default ) ? %default% : "A_Space"
+	IniRead, val, %iniFile%, %section%, %keyName%, %default%
+	if ( val <> "" ) {
+		Loop, parse, val, `,
+		{
+			Hotkey, %A_LoopField%, %routine%
+			if ( A_Index == 1 )
+				setPklInfo( %pklInfoTag%, A_LoopField )
+		}
+	}
+}
+*/
+
 pkl_init( layoutFromCommandLine = "" )
 {
-	if ( not FileExist("pkl.ini") ) {
-		MsgBox, pkl.ini file NOT FOUND`nSorry. The program will exit.
+	global gPv_PklIniFil	; eD: "pkl.ini" -- will eventually be stored in a pdic
+	global gPv_LayIniFil	; eD: "layout.ini" --"--
+	global gPv_Pkl_eDFil	; eD: My "pkl.ini" --"--
+	
+	if ( not FileExist( gPv_PklIniFil ) ) {
+		MsgBox, %gPv_PklIniFil% file NOT FOUND`nSorry. The program will exit.
 		ExitApp
 	}
 	
-	debugMe := iniReadBoolean( getPklInfo( "DreyPkl" ), "pkl", "eD_DebugInfo", false )
-	debugMe ? setPklInfo( "DebugMe", "yes" ) :  setPklInfo( "DebugMe", "no" )
+	compactMode := iniReadBoolean( gPv_PklIniFil, "pkl", "compactMode", false )
 	
-	compactMode := iniReadBoolean( "pkl.ini", "pkl", "compactMode", false )
-	
-	IniRead, t, pkl.ini, pkl, language, auto
+	IniRead, t, %gPv_PklIniFil%, pkl, language, auto
 	if ( t == "auto" )
 		t := getLanguageStringFromDigits( A_Language )
 	pkl_locale_load( t, compactMode )
 	
-	IniRead, t, pkl.ini, pkl, exitAppHotkey, %A_Space%
+	IniRead, t, %gPv_PklIniFil%, pkl, exitAppHotkey, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
 		{
@@ -35,15 +54,38 @@ pkl_init( layoutFromCommandLine = "" )
 		}
 	}
 	
-	IniRead, t, pkl.ini, pkl, suspendHotkey, LAlt & RCtrl
-	Loop, parse, t, `,
-	{
-		Hotkey, %A_LoopField%, ToggleSuspend
-		if ( A_Index == 1 )
-			setpklInfo( "SuspendHotkey", A_LoopField )
+	IniRead, t, %gPv_PklIniFil%, pkl, suspendHotkey, %A_Space% ; eD: Was LAlt & RCtrl
+	if ( t <> "" ) {
+		Loop, parse, t, `,
+		{
+			Hotkey, %A_LoopField%, ToggleSuspend
+			if ( A_Index == 1 )
+				setPklInfo( "SuspendHotkey", A_LoopField )
+		}
 	}
 	
-	IniRead, t, pkl.ini, pkl, changeLayoutHotkey, %A_Space%
+;	setHotkeyFromIni( gPv_Pkl_eDFil, "pkl", "refreshHotkey",, "rerunWithSameLayout", "RefreshHotkey" )	; eD WIP: Set Refresh hotkey by function
+	IniRead, t, %gPv_Pkl_eDFil%, pkl, refreshHotkey, %A_Space%
+	if ( t <> "" ) {
+		Loop, parse, t, `,
+		{
+			Hotkey, %A_LoopField%, rerunWithSameLayout
+			if ( A_Index == 1 )
+				setPklInfo( "RefreshHotkey", A_LoopField )
+		}
+	}
+	
+	IniRead, menuItem, %gPv_Pkl_eDFil%, pkl, refreshMenuText, Refresh
+	if ( menuItem <> "" ) {
+		setLayoutInfo( "refreshMenuItem", menuItem )
+	}
+	
+	IniRead, menuItem, %gPv_Pkl_eDFil%, pkl, keyhistMenuText, Keyhistory...
+	if ( menuItem <> "" ) {
+		setLayoutInfo( "keyhistMenuItem", menuItem )
+	}
+	
+	IniRead, t, %gPv_PklIniFil%, pkl, changeLayoutHotkey, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
 		{
@@ -53,7 +95,7 @@ pkl_init( layoutFromCommandLine = "" )
 		}
 	}
 	
-	IniRead, t, pkl.ini, pkl, displayHelpImageHotkey, %A_Space%
+	IniRead, t, %gPv_PklIniFil%, pkl, displayHelpImageHotkey, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
 		{
@@ -63,11 +105,11 @@ pkl_init( layoutFromCommandLine = "" )
 		}
 	}
 	
-	IniRead, t, pkl.ini, pkl, systemsDeadkeys, %A_Space%
+	IniRead, t, %gPv_PklIniFil%, pkl, systemsDeadkeys, %A_Space%
 	setDeadKeysInCurrentLayout( t )
-	setPklInfo( "altGrEqualsAltCtrl", iniReadBoolean( "pkl.ini", "pkl", "altGrEqualsAltCtrl", false ) )
+	setPklInfo( "altGrEqualsAltCtrl", iniReadBoolean( gPv_PklIniFil, "pkl", "altGrEqualsAltCtrl", false ) )
 	
-	IniRead, t, pkl.ini, pkl, changeNonASCIIMode, %A_Space%
+	IniRead, t, %gPv_PklIniFil%, pkl, changeNonASCIIMode, %A_Space%
 	if ( t <> "" ) {
 		Loop, parse, t, `,
 		{
@@ -93,13 +135,13 @@ pkl_init( layoutFromCommandLine = "" )
 		SendU_SetMode( a1, a2 )
 	}
 	
-	IniRead, t, pkl.ini, pkl, suspendTimeOut, 0
+	IniRead, t, %gPv_PklIniFil%, pkl, suspendTimeOut, 0
 	activity_setTimeout( 1, t )
-	IniRead, t, pkl.ini, pkl, exitTimeOut, 0
+	IniRead, t, %gPv_PklIniFil%, pkl, exitTimeOut, 0
 	activity_setTimeout( 2, t )
 	
 	
-	IniRead, Layout, pkl.ini, pkl, layout, %A_Space%
+	IniRead, Layout, %gPv_PklIniFil%, pkl, layout, %A_Space%
 	StringSplit, layouts, Layout, `,
 	setLayoutInfo( "countOfLayouts", layouts0 )
 	Loop, % layouts0 {
@@ -135,10 +177,10 @@ pkl_init( layoutFromCommandLine = "" )
 	setLayoutInfo( "nextLayout", getLayoutInfo( "layout" . nextLayoutIndex . "code" ) )
 	
 	if ( compactMode ) {
-		LayoutFile = layout.ini
+		LayoutFile := gPv_LayIniFil
 		setLayoutInfo( "dir", "." )
 	} else {
-		LayoutFile := "Layouts\" . Layout . "\layout.ini"
+		LayoutFile := "Layouts\" . Layout . "\". gPv_LayIniFil
 		if (not FileExist(LayoutFile)) {
 			pkl_MsgBox( 2, LayoutFile )
 			ExitApp
@@ -242,7 +284,7 @@ pkl_init( layoutFromCommandLine = "" )
 	
 	if ( extendKey )
 	{
-		remap := iniReadSection( "pkl.ini", "extend" )
+		remap := iniReadSection( gPv_PklIniFil, "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pos := InStr( A_LoopField, "=" )
@@ -297,7 +339,7 @@ pkl_activate()
 	Sleep, 10
 	pkl_show_tray_menu()
 	
-	if ( iniReadBoolean( "pkl.ini", "pkl", "displayHelpImage", true ) )
+	if ( iniReadBoolean( gPv_PklIniFil, "pkl", "displayHelpImage", true ) )
 		pkl_displayHelpImage( 1 )
 
 	Sleep, 200 ; I don't want to kill myself...
@@ -307,7 +349,7 @@ pkl_activate()
 	activity_ping(2)
 	SetTimer, activityTimer, 20000
 	
-	if ( iniReadBoolean( "pkl.ini", "pkl", "startsInSuspendMode", false ) ) {
+	if ( iniReadBoolean( gPv_PklIniFil, "pkl", "startsInSuspendMode", false ) ) {
 		Suspend
 		gosub afterSuspend
 	}

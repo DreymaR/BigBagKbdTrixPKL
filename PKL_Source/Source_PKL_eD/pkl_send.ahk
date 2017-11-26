@@ -10,18 +10,21 @@ toggleCapsLock()
 
 pkl_Send( ch, modif = "" )
 {
+	global gPv_CurDKsNum	; eD: Current # of dead keys active
+	global gPv_CurBasKey	; eD: Current base key
+	
 	static SpaceWasSentForDeadkeys = 0
-
-	if ( getGlobal( "CurrentDeadKeys" ) = 0 ) {
+	
+	if ( gPv_CurDKsNum = 0 ) {
 		SpaceWasSentForDeadkeys = 0
 	} else {
-		setGlobal( "CurrentBaseKey", ch )
+			gPv_CurBasKey := ch
 		if ( SpaceWasSentForDeadkeys = 0 )
 			Send {Space}
 		SpaceWasSentForDeadkeys = 1
 		return
 	}
-
+	
 	if ( 32 < ch && ch < 128 ) {
 		char := "{" . chr(ch) . "}"
 		if ( inStr( getDeadKeysInCurrentLayout(), chr(ch) ) )

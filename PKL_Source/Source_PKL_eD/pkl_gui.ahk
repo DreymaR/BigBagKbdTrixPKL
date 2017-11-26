@@ -1,30 +1,37 @@
 pkl_set_tray_menu()
 {
+	global gPv_DebugInfo	; eD: Show extra technical info and the Reset hotkey
+	
 	ExitAppHotkey := getReadableHotkeyString( getPklInfo( "ExitAppHotkey" ) )
 	ChangeLayoutHotkey := getReadableHotkeyString( getPklInfo( "ChangeLayoutHotkey" ) )
 	SuspendHotkey := getReadableHotkeyString( getPklInfo( "SuspendHotkey" ) )
+	RefreshHotkey := getReadableHotkeyString( getPklInfo( "RefreshHotkey" ) )
 	HelpImageHotkey := getReadableHotkeyString( getPklInfo( "DisplayHelpImageHotkey" ) )
 	
 	Layout := getLayoutInfo( "active" )
 	activeLayoutName := ""
 	countOfLayouts := getLayoutInfo( "countOfLayouts" )
 	
-	aboutmeMenuItem := pkl_locale_string(9)
-	suspendMenuItem := pkl_locale_string(10)
-	exitappMenuItem := pkl_locale_string(11)
-	deadkeyMenuItem := pkl_locale_string(12)
-	helpimgMenuItem := pkl_locale_string(15)
-	chnglayMenuItem := pkl_locale_string(18)
+	aboutmeMenuItem := pklLocaleString(9)
+	keyhistMenuItem := getLayoutInfo( "keyhistMenuItem" )
+	refreshMenuItem := getLayoutInfo( "refreshMenuItem" )
+	suspendMenuItem := pklLocaleString(10)
+	exitappMenuItem := pklLocaleString(11)
+	deadkeyMenuItem := pklLocaleString(12)
+	helpimgMenuItem := pklLocaleString(15)
+	chnglayMenuItem := pklLocaleString(18)
 	if ( SuspendHotkey != "" )
-		suspendMenuItem .= " (" . AddAtForMenu( SuspendHotkey ) . ")"
+		suspendMenuItem .= " (" . FixAtForMenu( SuspendHotkey ) . ")"
+	if ( RefreshHotkey != "" )
+		refreshMenuItem .= " (" . FixAtForMenu( RefreshHotkey ) . ")"
 	if ( ExitAppHotkey != "" )
-		exitappMenuItem .= " (" . AddAtForMenu( ExitAppHotkey ) . ")"
+		exitappMenuItem .= " (" . FixAtForMenu( ExitAppHotkey ) . ")"
 	if ( HelpImageHotkey != "" )
-		helpimgMenuItem .= " (" . AddAtForMenu( HelpImageHotkey ) . ")"
+		helpimgMenuItem .= " (" . FixAtForMenu( HelpImageHotkey ) . ")"
 	if ( ChangeLayoutHotkey != "" )
-		chnglayMenuItem .= " (" . AddAtForMenu( ChangeLayoutHotkey ) . ")"
+		chnglayMenuItem .= " (" . FixAtForMenu( ChangeLayoutHotkey ) . ")"
 	setPklInfo( "DisplayHelpImageMenuName", helpimgMenuItem )
-	layoutsMenu := pkl_locale_string(19)
+	layoutsMenu := pklLocaleString(19)
 	
 	Loop, % countOfLayouts
 	{
@@ -62,12 +69,14 @@ pkl_set_tray_menu()
 		iconNum = 0
 	}
 	
+	; eD: Icon list found at http://help4windows.com/ - but the numbers there are 1 lower.
 	Menu, Tray, add, %aboutmeMenuItem%, showAbout
 	tr := MI_GetMenuHandle("Tray")
 	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 24, 16) ; about/question icon
-	if ( getPklInfo( "DebugMe" ) == "yes" ) {
-		Menu, Tray, add, AHK Key History..., keyHistory
+	if ( gPv_DebugInfo ) {
+		Menu, Tray, add, %keyhistMenuItem%, keyHistory
 		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 222, 16) ; info icon
+;		Menu, Tray, Icon, %keyhistMenuItem%, SHELL32.dll, 222, 16 ; eD: TEST
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout
 		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 25, 16) ; "speed" icon
 	}
@@ -80,6 +89,10 @@ pkl_set_tray_menu()
 		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 44, 16) ; star icon
 		Menu, Tray, add, %chnglayMenuItem%, changeTheActiveLayout
 		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 138, 16) ; forward arrow icon
+	}
+	if ( gPv_DebugInfo ) {
+		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout ; eD: Refresh option
+		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 239, 16) ; refresh arrows icon
 	}
 	Menu, Tray, add, %suspendMenuItem%, toggleSuspend
 	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 110, 16) ; crossed circle icon
@@ -110,27 +123,30 @@ pkl_set_tray_menu()
 
 pkl_about()
 {
+	global gPv_LayIniFil	; eD: "layout.ini"
+	global gPv_DebugInfo	; eD: Show extra technical info and the Reset hotkey
+	
 	mslid := getWinLocaleID() ; eD: Get the Windows locale ID
 	dkstr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
 	dkstr := dkstr ? dkstr : "<none found>"
-	lfile := getLayoutInfo( "dir" ) . "\layout.ini"
+	lfile := getLayoutInfo( "dir" ) . "\" . gPv_LayIniFil
 	pklAppName := getPklInfo( "pklName" )
 	pklMainURL := "http://pkl.sourceforge.net"
 	pklProgURL := getPklInfo( "pkl_URL" )
 	pklVersion := getPklInfo( "pklVers" )
 	compiledAt := getPklInfo( "pklComp" )
 
-	unknown := pkl_locale_string(3)
-	active_layout := pkl_locale_string(4)
-	locVersion := pkl_locale_string(5)
-	locLanguage := pkl_locale_string(6)
-	locCopyright := pkl_locale_string(7)
-	locCompany := pkl_locale_string(8)
-	license := pkl_locale_string(13)
-	infos := pkl_locale_string(14)
-	contributors := pkl_locale_string(20)
-	translationName := pkl_locale_string(21)
-	translatorName := pkl_locale_string(22)
+	unknown := pklLocaleString(3)
+	active_layout := pklLocaleString(4)
+	locVersion := pklLocaleString(5)
+	locLanguage := pklLocaleString(6)
+	locCopyright := pklLocaleString(7)
+	locCompany := pklLocaleString(8)
+	license := pklLocaleString(13)
+	infos := pklLocaleString(14)
+	contributors := pklLocaleString(20)
+	translationName := pklLocaleString(21)
+	translatorName := pklLocaleString(22)
 	
 	IniRead, lname, %lfile%, informations, layoutname, %unknown%
 	IniRead, lver, %lfile%, informations, version, %unknown%
@@ -155,15 +171,15 @@ pkl_about()
 	Gui, Add, Text, , ......................................................................
 	text = ;
 	text = %text%%contributors%:
-	text = %text%`nOEystein "DreymaR" Gadmar (PKL[eD])	; edition DreymaR
+	text = %text%`nOEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
 	text = %text%`nAutoHotkey authors && contributors
-	text = %text%`n- Chris Mallet (AHK)
-	text = %text%`n- The AutoHotkey Foundation (AHK v1.1)
-	text = %text%`n- Steve Gray alias Lexicos (AHK v1.1, MI.ahk)
-	text = %text%`n- majkinetor (Ini.ahk)
-	text = %text%`n- Shimanov && Laszlo Hars (SendU.ahk)
+	text = %text%`n- Chris Mallet: AHK
+	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
+	text = %text%`n- Steve Gray alias Lexikos: AHK v1.1, MI.ahk,...
+	text = %text%`n- majkinetor: Ini.ahk
+	text = %text%`n- Shimanov && Laszlo Hars: SendU.ahk
 	if ( translatorName != "[[Translator name]]" )
-		text = %text%`n`n%translatorName% (%translationName%)
+		text = %text%`n`n%translatorName%: %translationName%
 	Gui, Add, Text, , %text%
 	Gui, Add, Text, , ......................................................................
 	text = ;
@@ -175,7 +191,7 @@ pkl_about()
 	Gui, Add, Text, , %text%
 	Gui, Add, Edit, , %lwebsite%
 	Gui, Add, Text, , ......................................................................
-	if ( getPklInfo( "DebugMe" ) == "yes" ) {
+	if ( gPv_DebugInfo ) {
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
 		text = %text%Current Microsoft Windows Locale ID: %mslid%
 		text = %text%`nDead keys in current Windows layout: %dkstr%
@@ -194,8 +210,9 @@ pkl_displayHelpImage( activate = 0 )
 	; 3 = suspend on
 	; 4 = suspend off
 	
-	global CurrentDeadKeys
-	global CurrentDeadKeyName
+	global gPv_CurDKsNum	; eD: Current # of dead keys active
+	global gPv_CurDKName	; eD: Current dead key's name
+	global gPv_Lay_eDFil	; eD: My extra "layout.ini" file
 	
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
@@ -227,7 +244,7 @@ pkl_displayHelpImage( activate = 0 )
 		layoutDir := getLayoutInfo( "dir" )
 		hasAltGr  := getLayoutInfo( "hasAltGr" )
 		extendKey := getLayoutInfo( "extendKey" )
-		DreyLayIni := layoutDir . "\" . getPklInfo( "DreyLay" ) ; eD: My DreymaR_layout.ini file
+		DreyLayIni := layoutDir . "\" . gPv_Lay_eDFil
 	}
 	
 	if ( activate == 2 ) ; toggle
@@ -314,13 +331,13 @@ pkl_displayHelpImage( activate = 0 )
 		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
 	}
 	
-	if ( CurrentDeadKeys ) {
+	if ( gPv_CurDKsNum ) {
 		if ( not getKeyState( "Shift" ) ) {
-			fileName = deadkey%CurrentDeadKeyName%
+			fileName = deadkey%gPv_CurDKName%
 		} else {
-			fileName = deadkey%CurrentDeadKeyName%sh
+			fileName = deadkey%gPv_CurDKName%sh
 			if ( not FileExist( layoutDir . "\" . filename . ".png" ) )
-				fileName = deadkey%CurrentDeadKeyName%
+				fileName = deadkey%gPv_CurDKName%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		fileName = extend
@@ -340,15 +357,15 @@ pkl_displayHelpImage( activate = 0 )
 	GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %layoutDir%\%fileName%.png
 }
 
-AddAtForMenu( menuItem )
+FixAtForMenu( menuItem )
 {
-	StringReplace, menuItem, menuItem, & , &&, 1
+	StringReplace, menuItem, menuItem, %A_Space%&%A_Space%, +, 1	; eD: Used to be '& , &&,' to display the ampersand.
 	return menuItem
 }
 
 pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 {
-	message := pkl_locale_string( msg, s, p, q, r )
+	message := pklLocaleString( msg, s, p, q, r )
 	msgbox %message%
 }
 

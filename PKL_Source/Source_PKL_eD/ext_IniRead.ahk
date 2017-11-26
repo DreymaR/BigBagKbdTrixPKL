@@ -487,13 +487,13 @@ iniReadBoolean( file, group, key, default = "" )
 ; <--eD
 
 /*
-; eD--> TODO: Add a function for handling .ini keys (as this was repeated in the code)
-;		TODO: Make a function that reads a section and returns a pdic of (key,value) pairs!
-;		TODO: Remove end-of-line comments. That is, any [%A_Space%|%A_Tab%];.*$ RegEx.
+; eD--> eD TODO: Add a function for handling .ini keys (as this was repeated in the code)
+;		eD TODO: Make a function that reads a section and returns a pdic of (key,value) pairs!
+;		eD TODO: Remove end-of-line comments. That is, any [%A_Space%|%A_Tab%];.*$ RegEx.
 ;			In compensation, add 'StringReplace, val, val, \;, `;, A' below?
-;			How to "save" existing layout.ini files?! Answer: Exclude `t;`t sequences!
+;			How to "save" existing layout files?! Answer: Exclude `t;`t sequences!
 ;			That way, the only problem would be any ligatures starting with ; (rare!)
-;			However, these should properly be preceded by a % in layout.ini anyway!?
+;			However, these should properly be preceded by a % anyway!?
 iniGetKeyVal( line, ByRef key, ByRef val, escapes = 0 )
 {
 	pos := InStr( line, "=" )

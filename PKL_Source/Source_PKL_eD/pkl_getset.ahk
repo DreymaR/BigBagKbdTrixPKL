@@ -1,16 +1,4 @@
-; eD--> Moved getGlobal.ahk into pkl_getset.ahk (idea from vVv)
-getGlobal( var )
-{
-	global
-	return %var% . ""
-}
-
-setGlobal( var, value )
-{
-	global
-	%var% := value
-}
-; <--eD
+; eD TODO: Replace the get and set global info functions with pdic lookup tables, e.g., PklVar[key] (req. AHK 1.1+).
 
 setLayoutItem( key, value )
 {

@@ -42,11 +42,11 @@ getDeadKeysOfSystemsActiveLayout()
 	lid2068 = ¨´^`~     ; Norwegian Nn
 	
 /*
-; eD: TODO: Overwrite the hardcoded localeID values with a [osdeadkeys] section in my PKL_eD.ini
-; eD: TODO: Remove end-of-line comments (general concern for readIni!)
-; eD: TODO: Figure out encoding for non-ANSI accents (see vVv's iniReadUtf8!)
+; eD TODO: Overwrite the hardcoded localeID values with a [osdeadkeys] section in my PKL_eD.ini
+; eD TODO: Figure out encoding for non-ANSI accents (see vVv's iniReadUtf8!)
 ;lid := {} ; eD: Use an associative AHK array for (key,value) pairs?
-	inisec := iniReadSection( getPklInfo( "DreyPkl" ), "osdeadkeys" )
+	global gPv_Pkl_eDFil	; eD: My "pkl.ini"
+	inisec := iniReadSection( gPv_Pkl_eDFil, "osdeadkeys" )
 	Loop, parse, inisec, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )
@@ -105,7 +105,7 @@ detectDeadKeysInCurrentLayout()
 	}
 	
 	ord = 33
-	; eD: TODO: Detect AltGr+key hotkeys as well?! But then we'd have to send keys and not just characters.
+	; eD TODO: Detect AltGr+key hotkeys as well?! But then we'd have to send keys and not just characters.
 	Loop
 	{
 		clipboard = ;

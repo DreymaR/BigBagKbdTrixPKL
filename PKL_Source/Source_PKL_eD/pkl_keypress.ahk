@@ -24,6 +24,7 @@ keyPressed( HK )
 		return
 	}
 	extendKeyStroke = 0
+	; eD TODO: Remove hasAltGr & altGrEqualsAltCtrl from pkl.ini and here? Enforce <^>! (if a laptop hasn't got >!, they'll have to remap something)
 	if ( getLayoutInfo("hasAltGr") ) {
 		if ( AltGrIsPressed() ) {
 			sh := getKeyState("Shift")
@@ -148,29 +149,7 @@ extendKeyPressed( HK )
 		Send {LAlt Down}
 		altPressed = RAlt
 	}
-	if ( A_OSMajorVersion < 6 ) { ; Before Windows Vista
-		if ( ch == "WheelLeft" ) {
-			ControlGetFocus, control, A
-			Loop 5  ; Scroll Speed
-				SendMessage, 0x114, 0, 0,  %control%, A ; 0x114 is WM_HSCROLL
-			return
-		} else if ( ch == "WheelRight" ) {
-			ControlGetFocus, control, A
-			Loop 5  ; Scroll Speed
-				SendMessage, 0x114, 1, 0,  %control%, A ; 0x114 is WM_HSCROLL
-			return
-		}
-	}
-	if ( ch == "Cut" ) {
-		ch = +{Del}
-	} else if ( ch == "Copy" ) {
-		ch = ^{Ins}
-	} else if ( ch == "Paste" ) {
-		ch = +{Ins}
-	} else {
-		ch = {Blind}{%ch%}
-	}
-	Send %ch%
+	Send {Blind}{%ch%}
 }
 
 pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
@@ -274,8 +253,8 @@ AltGrIsPressed()
 processKeyPress( ThisHotkey )
 {
 	Critical
-	global HotkeysBuffer
-	HotkeysBuffer .= ThisHotkey . "¤"
+	global gPv_HotKeyBuf	; eD: Was 'HotkeysBuffer'
+	gPv_HotKeyBuf .= ThisHotkey . "¤"
 	
 	static timerCount = 0
 	++timerCount
@@ -287,12 +266,12 @@ processKeyPress( ThisHotkey )
 runKeyPress()
 {
 	Critical
-	global HotkeysBuffer
-	pos := InStr( HotkeysBuffer, "¤" )
+	global gPv_HotKeyBuf	; eD: Was 'HotkeysBuffer'
+	pos := InStr( gPv_HotKeyBuf, "¤" )
 	if ( pos <= 0 )
 		return
-	ThisHotkey := SubStr( HotkeysBuffer, 1, pos - 1 )
-	StringTrimLeft, HotkeysBuffer, HotkeysBuffer, %pos%
+	ThisHotkey := SubStr( gPv_HotKeyBuf, 1, pos - 1 )
+	StringTrimLeft, gPv_HotKeyBuf, gPv_HotKeyBuf, %pos%
 	Critical, Off
 
 	keyPressed( ThisHotkey )

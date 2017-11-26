@@ -1,9 +1,10 @@
-; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
-;     (From vVv, likely necessary for AHK v1.1 compatibility.)
-;     NOTE: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashes b/c var. m%msg% is too long!?
-pkl_locale_strings( msg, newValue = "", set = 0 )
+; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries (from vVv, AHK v1.1+ so I use my own for now)
+; eD TODO: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashes b/c var. m%msg% is too long!?
+pklLocaleStrings( msg, newValue = "", set = 0 )
 {
-	static m1 := "You must set the layout file in pkl.ini!"
+	global gPv_PklIniFil
+	
+	static m1 := "You must set the layout file in " . gPv_PklIniFil . "!"
 	static m2 := "#s# file NOT FOUND`nSorry. The program will exit."
 	static m3 := "unknown"
 	static m4 := "ACTIVE LAYOUT"
@@ -45,7 +46,7 @@ pkl_locale_load( lang, compact = 0 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		if ( val != "" )
-			pkl_locale_strings( key, val, 1 )
+			pklLocaleStrings( key, val, 1 )
 	}
 
 	line := iniReadSection( file, "SendU" )
@@ -80,9 +81,9 @@ pkl_locale_load( lang, compact = 0 )
 	}
 }
 
-pkl_locale_string( msg, s = "", p = "", q = "", r = "" )
+pklLocaleString( msg, s = "", p = "", q = "", r = "" )
 {
-	m := pkl_locale_strings( msg )
+	m := pklLocaleStrings( msg )
 	if ( s <> "" )
 		StringReplace, m, m, #s#, %s%, A
 	if ( p <> "" )
