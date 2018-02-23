@@ -64,8 +64,7 @@ keyPressed( HK )
 		Send, {Blind}{Space}
 	} else if ( ( ch + 0 ) > 0 ) {
 		pkl_Send( ch, modif )
-	} else if ( ch == "*" || ch == "="  ) {
-		; Special
+	} else if ( ch == "*" || ch == "="  ) {		; Special
 		if ( ch == "=" )
 			modif = {Blind}
 		else
@@ -87,9 +86,12 @@ keyPressed( HK )
 		}
 	} else if ( ch == "%" ) {
 		SendU_utf8_string( getLayoutItem( HK . state . "s" ) )
-	} else if ( ch < 0 ) {
-		DeadKey( -1 * ch )
+	} else if ( ch == "dk" ) {	; < 0 ) {
+		DeadKey( getLayoutItem( HK . state . "s" ) )	; -1 * ch )
+;	} else {
+;		MsgBox, Trapped input: '%ch%'
 	}
+	
 }
 
 extendKeyPressed( HK )
@@ -253,8 +255,8 @@ AltGrIsPressed()
 processKeyPress( ThisHotkey )
 {
 	Critical
-	global gPv_HotKeyBuf	; eD: Was 'HotkeysBuffer'
-	gPv_HotKeyBuf .= ThisHotkey . "¤"
+	global gP_HotKeyBuffer	; eD: Was 'HotkeysBuffer'
+	gP_HotKeyBuffer .= ThisHotkey . "¤"
 	
 	static timerCount = 0
 	++timerCount
@@ -266,12 +268,12 @@ processKeyPress( ThisHotkey )
 runKeyPress()
 {
 	Critical
-	global gPv_HotKeyBuf	; eD: Was 'HotkeysBuffer'
-	pos := InStr( gPv_HotKeyBuf, "¤" )
+	global gP_HotKeyBuffer	; eD: Was 'HotkeysBuffer'
+	pos := InStr( gP_HotKeyBuffer, "¤" )
 	if ( pos <= 0 )
 		return
-	ThisHotkey := SubStr( gPv_HotKeyBuf, 1, pos - 1 )
-	StringTrimLeft, gPv_HotKeyBuf, gPv_HotKeyBuf, %pos%
+	ThisHotkey := SubStr( gP_HotKeyBuffer, 1, pos - 1 )
+	StringTrimLeft, gP_HotKeyBuffer, gP_HotKeyBuffer, %pos%
 	Critical, Off
 
 	keyPressed( ThisHotkey )

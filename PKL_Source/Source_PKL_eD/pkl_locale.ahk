@@ -2,9 +2,9 @@
 ; eD TODO: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashes b/c var. m%msg% is too long!?
 pklLocaleStrings( msg, newValue = "", set = 0 )
 {
-	global gPv_PklIniFil
+	global gP_Pkl_Ini_File
 	
-	static m1 := "You must set the layout file in " . gPv_PklIniFil . "!"
+	static m1 := "You must set the layout file in " . gP_Pkl_Ini_File . "!"
 	static m2 := "#s# file NOT FOUND`nSorry. The program will exit."
 	static m3 := "unknown"
 	static m4 := "ACTIVE LAYOUT"

@@ -45,8 +45,8 @@ getDeadKeysOfSystemsActiveLayout()
 ; eD TODO: Overwrite the hardcoded localeID values with a [osdeadkeys] section in my PKL_eD.ini
 ; eD TODO: Figure out encoding for non-ANSI accents (see vVv's iniReadUtf8!)
 ;lid := {} ; eD: Use an associative AHK array for (key,value) pairs?
-	global gPv_Pkl_eDFil	; eD: My "pkl.ini"
-	inisec := iniReadSection( gPv_Pkl_eDFil, "osdeadkeys" )
+	global gP_Pkl_eD__File	; eD: My "pkl.ini"
+	inisec := iniReadSection( gP_Pkl_eD__File, "osdeadkeys" )
 	Loop, parse, inisec, `r`n
 	{
 		pos := InStr( A_LoopField, "=" )

@@ -16,11 +16,12 @@ Tested AutoHotkey Version: 1.0.47.04
 ------------------------------------------------------------------------
 
 TODO: This version is safe, but not optimized.
+; eD TODO: Rewrite using a lookup table! (AHK 1.1+ pdic?)
 
 ------------------------------------------------------------------------
 */
 
-getVirtualKeyCodeFromName( name ) ; eD: renamed VirtualKeyCodeFromName for consistency
+getVKeyCodeFromName( name ) ; eD: renamed VirtualKeyCodeFromName for consistency
 {
 	if ( name == "0")
 		return "30"

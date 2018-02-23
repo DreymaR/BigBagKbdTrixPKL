@@ -27,7 +27,7 @@ activity_main(mode = 1, ping = 1, value = 0) {
 		}
 	}
 	if ( mode2timeout > 0 && A_TickCount - mode2ping > mode2timeout * 60000 ) {
-		gosub exitApp
+		gosub ExitPKL
 		return
 	}
 	return

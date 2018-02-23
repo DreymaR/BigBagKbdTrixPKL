@@ -1,5 +1,5 @@
 ; http://www.autohotkey.com/docs/misc/Languages.htm
-getLanguageStringFromDigits( langc )
+getLangStrFromDigits( langc )
 {
 	languageCode_0436 = Afrikaans
 	languageCode_041c = Albanian

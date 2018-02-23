@@ -48,7 +48,7 @@ getLayoutInfo( key, value = "", set = 0 )
 	extendKey := "" ; Extend modifier for navigation, editing, etc.
 	
 	nextLayout := "" ; If you set multiple layouts, this is the next one.
-	                 ; see the "changeTheActiveLayout:" label!
+	                 ; see the "changeActiveLayout:" label!
 	countOfLayouts := 0 ; Array size
 	; See the layout setting in the ini file
 	LayoutsXcode = layout code

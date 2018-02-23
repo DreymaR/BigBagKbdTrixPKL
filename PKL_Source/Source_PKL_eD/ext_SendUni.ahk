@@ -414,8 +414,8 @@ __SendU_Labels_And_Includes__This_Is_Not_A_Function()
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	; LABELS for public use
 	
-	_SendU_Try_Dynamic_Mode:
-	_SendU_Change_Dynamic_Mode:
+;	_SendU_Change_Dynamic_Mode:
+	_SendU_Try_Dyn_Mode:
 		SendU_Try_Dynamic_Mode()
 	return
 
