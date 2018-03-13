@@ -155,7 +155,7 @@ pkl_about()
 	IniRead, lcomp   , %lfile%, informations, company   , %unknown%
 	IniRead, llocale , %lfile%, informations, localeid  , 0409
 	IniRead, lwebsite, %lfile%, informations, homepage  , %A_Space%
-	llang := getLangStrFromDigits( llocale )
+	llang := pklIniRead( SubStr( llocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )	; eD: Replaced getLangStrFromDigits( llocale )
 
 	text = ;
 	text = %text%

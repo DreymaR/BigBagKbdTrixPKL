@@ -17,15 +17,29 @@ DONE:
     - Also, the ability to set background color, overall transparency and top/bottom gutter distance.
 * Removed OSVersion < VISTA fix for WheelLeft/WheelRight, as even Win Vista is no longer supported by MS.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
+* Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+* Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
+    - Dead key list and file path in DreymaR_layout (but use dk## in the layout itself, for compatibility!)
+    - If no lookup is specified, PKL defaults to the local file as before
+    - This way, one change in a DK will affect all layouts using that DK
+    - DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
+    - DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
+    - DeadKey_Acute_CdhAisoWsl_s1.png [for Curl-DH Angle-ISO Wide-Slash]?
 
 TODO:
 -----
 
-* Alternative mapping format, like TMK? But keep backwards compatibility.
-	- Overmuch for layouts?! Besides, there are conversion tools like the one by Aldo Gunsing.
+* Alternative mapping format, like TMK or my own KLD? But keep backwards compatibility.
+    - Overmuch for layouts?! Besides, there are conversion tools like the one by Aldo Gunsing.
     - Neat idea for scancode and virtual key remapping! Make it possible to leave entries open.
 
+* Would it be possible to make single-key images so that they may be remapped?
+    - But that'd require some sort of position map, maybe KLD-based.
+    - Also, not sure whether rendering would be smooth enough?
+
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
+    - Transparent foreground images for all states and dead keys.
+    - Also for dead key state 6/7
 
 * Generate key mapping images from layout files and my .svg by scripting InkScape?
 
@@ -49,11 +63,6 @@ TODO:
 	- Wanted: NumPad layer, coding layer (brackets/templates), hotstring layer...
 	- Extend layers defined in a separate file; possibility of separate scan code remaps for these (e.g., AngleWide but mostly not Curl)
 	- Extend "hold": Any of the keys involved in selecting an extend layer could be held to keep that layer?
-
-* Generic dead key names for images (dk_tilde instead of, e.g., dk13)
-	- Also generic definitions in a central doc! Many layouts can point to the same ones.
-	- lookup table and dir spec in layout_eD (may use proper names or dk## in the layout itself, for compatibility!)
-    - Make PKL code so that if no other lookup is specified, it defaults to local file (backwards compatible)
 
 * More generic dead key output: Ligatures (important for my Jap layout! Also for combining accents and hotstrings)
 	- Selectable mode per key: By Unicode characters, hex or dec (default today).
@@ -83,10 +92,6 @@ TODO:
 
 
 **TODO: From DreymaR_layout.ini.**
-* Dead key lists (deadkey# = dk_sensiblename) in the layouts, with a central deadkey.ini
-    - This way, one change in the acute dk will affect all layouts using that dk which is desirable for me!
-    - DK images should still be kept in the layout dirs, as they are layout dependent!
-    - But keep DK and Extend images in subdirs to avoid clutter?
 * Extend layer lists (extend# = ext_sensiblename) in my layout file
     - Keep all extend layers in ..\..\PKL_DreymaR\extend.ini ?
     - Also keep Extend help images centrally!? One folder for each scanmap "model".
@@ -99,8 +104,6 @@ TODO:
     - The main use for vkmaps could be ISO-ANSI conversion! A worthy cause!
     - Could in theory use a scanmap/vkmap to rearrange one layout to another (Colemak-QWERTY-whatever)!?
     - So, just by changing maps I could convert my Colemak[eD] to Angle, CurlAngleWide, QWERTY...
-* DK imgs named deadkey_####_s# for state # (add s6/7 where applicable?)? Sensible dk names.
-    - DeadKey_Acute_CdhAisoWsl_s1.png [for Curl-DH Angle-ISO Wide-Slash]?
 * Ligature tables for longer strings etc, using, e.g., &### layout entries and a table (link) in DreymaR_layout
 * Literal AHK output? The {Raw} send mode is on by default.
     - PKL already supports multi-codepoint output by default! But not modified stuff.

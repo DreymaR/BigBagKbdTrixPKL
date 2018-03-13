@@ -11,10 +11,8 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
-  
-* In an earlier commit in this repo, I started with source code for PKL v0.3r85.
-* Then I switched to PKL v0.4preview, decompiled with Exe2Ahk to get the source code.
-* The source code was then split into files, commented and a PKL[eD] version created.
+
+* The [PKL_eD] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).
 
 Compiling
 ---------
@@ -37,7 +35,7 @@ Setup:
   
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2017-10_
+_Øystein "DreymaR" Gadmar, 2018-03_
 
 
 [PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)
@@ -46,3 +44,4 @@ _Øystein "DreymaR" Gadmar, 2017-10_
 [AHKDld]: https://autohotkey.com/download/ (AutoHotkey download page)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
+[PKL_eD]: ./PKL_eD/ (PKL[eD] folder/README)

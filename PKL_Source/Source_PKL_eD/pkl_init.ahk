@@ -25,9 +25,10 @@ pklSetHotkey( val, HKlabel, pklInfoTag, default = "" )						; eD: Set a PKL hotk
 pkl_init( layoutFromCommandLine = "" )
 {
 	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
-;	global gP_Pkl_eD__File				; eD: My "pkl.ini" 		--"--
 	global gP_Lay_Ini_File				; eD:    "layout.ini" 	--"--
+;	global gP_Pkl_eD__File				; eD: My "pkl.ini" 		--"--
 	global gP_Lay_eD__File				; eD: My "layout.ini" 	--"--
+;	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
 	
 	if ( not FileExist( gP_Pkl_Ini_File ) ) {
 		MsgBox, %gP_Pkl_Ini_File% file NOT FOUND`nSorry. The program will exit.
@@ -38,7 +39,7 @@ pkl_init( layoutFromCommandLine = "" )
 	
 	it := pklIniRead( "language", "auto" )
 	if ( it == "auto" )
-		it := getLangStrFromDigits( A_Language )
+		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )	; eD: Replaced getLangStrFromDigits( A_Language )
 	pkl_locale_load( it, compactMode )
 	
 	pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; eD: Was LAlt & RCtrl
@@ -94,7 +95,7 @@ pkl_init( layoutFromCommandLine = "" )
 	else
 		Layout := getLayoutInfo( "layout1code" )
 	if ( Layout == "" ) {
-		pkl_MsgBox( 1 )
+		pkl_MsgBox( 1, gP_Pkl_Ini_File )	; eD
 		ExitApp
 	}
 	setLayoutInfo( "active", Layout )
@@ -155,8 +156,9 @@ pkl_init( layoutFromCommandLine = "" )
 			parts2 = -1
 		else if ( parts2 == "modifier" )
 			parts2 = -2
-		setLayoutItem( key . "v", getVKeyCodeFromName(parts1) ) ; virtual key
-		setLayoutItem( key . "c", parts2 ) ; caps state
+;		setLayoutItem( key . "v", getVKeyCodeFromName(parts1) ) 	; virtual key
+		setLayoutItem( key . "v", pklIniRead( "VK_" . parts1, "00", "Pkl_Dic", "VKeyCodeFromName" ) ) ; eD: replaced getVKeyCodeFromName(parts1) )
+		setLayoutItem( key . "c", parts2 ) 							; caps state
 		if ( parts2 == -2 ) {
 			Hotkey, *%key%, modifierDown
 			Hotkey, *%key% Up, modifierUp

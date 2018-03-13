@@ -1,5 +1,6 @@
 ; eD: Renamed this file from Ini.ahk to ext_IniRead.ahk, and renamed all functions to the iniSomething syntax.
 ; eD: Removed unused functions in this file (all except iniReadSection!) in preparation for moving on to new iniRead functions.
+; eD TODO: Figure out encoding for non-ANSI accents (see vVv's iniReadUtf8!)
 
 ;---------------------------------------------------------------------------------------
 ;		- About Ini.ahk:
@@ -90,16 +91,19 @@ iniReadSection( pIniFile, pSection="", pPrefix="inis_") {
 ;
 ; eD: Read a (pkl).ini value
 ;     Usage: val := pklIniRead( <key>, [default], [inifile(shortstr)], [section] )
+;     Note: IniRead trims off white space and one pair of quotes if present.
 pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl")
 {
 	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
-	global gP_Pkl_eD__File				; eD: My "pkl.ini" 		--"--
 	global gP_Lay_Ini_File				; eD:    "layout.ini" 	--"--
+	global gP_Pkl_eD__File				; eD: My "pkl.ini" 		--"--
 	global gP_Lay_eD__File				; eD: My "layout.ini" 	--"--
+	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
 	if ( ( not inStr( inifile, "." ) ) and FileExist( gP_%inifile%_File ) )
 		inifile := gP_%inifile%_File
-	default := ( default == "" ) ? default : A_Space	; IniRead requires A_Space for a blank default
+	default := ( default == "" ) ? A_Space : default	; IniRead requires A_Space for a blank default
 	IniRead, val, %inifile%, %section%, %key%, %default%
+	val := RegExReplace( val, "[ `t]+;.*$", "" )	; Remove any end-of-line comments (white space, then semicolon)
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val
 }

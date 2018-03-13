@@ -23,6 +23,7 @@
 ;			- Separate deadkey tables (but a fallback for backwards compatibility)
 ;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
+; eD WIP:	- Move several internal tables to an .ini file so they may be edited by users
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
 setPklInfo( "pklVers", "0.4-eD" ) ; eD: PKL[edition DreymaR]
@@ -46,7 +47,8 @@ gP_CurrBaseKey_ := 0						; eD: Current base key					(was 'CurrentBaseKey')
 gP_Pkl_Ini_File := "pkl.ini"				; eD: Defined this globally. Declare in needed functions.
 gP_Lay_Ini_File := "layout.ini" 			; eD: --"--
 gP_Pkl_eD__File := "PKL_eD\PKL_eD.ini"		; eD: My extra pkl.ini file
-gP_Lay_eD__File := "Dreymar_Layout.ini"		; eD: My extra layout.ini file
+gP_Lay_eD__File := "DreymaR_Layout.ini"		; eD: My extra layout.ini file
+gP_Pkl_Dic_File := "PKL_eD\PKL_Tables.ini"	; eD: My extra info dictionary file (from internal tables)
 gP_ShowMoreInfo := pklIniBool( "eD_DebugInfo", false, "Pkl_eD_", "pkl" )
 ;gP_ShowMoreInfo ? setPklInfo( "DebugMode", "yes" ) :  setPklInfo( "DebugMode", "no" )
 	
@@ -205,10 +207,10 @@ return
 #Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK (v1.1+) will obviate this!
 #Include ext_HashTable.ahk ; eD: Moved all HashTable files into this one to reduce clutter
 #Include getWindowsDeadKeys.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
-#Include getVKeyCodeFromName.ahk ; eD: Renamed VirtualKeyCodeFromName for consistency
-#Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm
-; eD: #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead.ahk
-; eD: #Include getDeadKeysOfSystemsActiveLayout.ahk - moved into getWindowsDeadKeys.ahk
+; eD: #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
+; eD: #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
+; eD: #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead
+; eD: #Include getDeadKeysOfSystemsActiveLayout.ahk - replaced w/ read from tables .ini file
 ; eD: #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
 ; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one global var.
-; eD: #Include iniReadBoolean.ahk - moved into IniRead.ahk and tweaked
+; eD: #Include iniReadBoolean.ahk - moved into pkl_iniRead and tweaked

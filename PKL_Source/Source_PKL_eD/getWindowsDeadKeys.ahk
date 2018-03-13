@@ -1,4 +1,4 @@
-; eD: Renamed this file from detectDeadKeysInCurrentLayout.ahk, and moved getDeadKeysOfSystemsActiveLayout.ahk into it.
+; eD: Renamed this file from detectDeadKeysInCurrentLayout.ahk
 
 /*
 ------------------------------------------------------------------------
@@ -31,39 +31,6 @@ getWinLocaleID() ; eD: This was in the detect/get functions
 	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16
 	return WinLocaleID
 }
-
-getDeadKeysOfSystemsActiveLayout()
-{
-	; Some default locale dead key strings are defined here
-	lid1033 = -1        ; USA
-	lid1038 = ^         ; Hungarian
-	lid1036 = ^`~       ; French AZERTY
-	lid1044 = ¨´^`~     ; Norwegian Bm
-	lid2068 = ¨´^`~     ; Norwegian Nn
-	
-/*
-; eD TODO: Overwrite the hardcoded localeID values with a [osdeadkeys] section in my PKL_eD.ini
-; eD TODO: Figure out encoding for non-ANSI accents (see vVv's iniReadUtf8!)
-;lid := {} ; eD: Use an associative AHK array for (key,value) pairs?
-	global gP_Pkl_eD__File	; eD: My "pkl.ini"
-	inisec := iniReadSection( gP_Pkl_eD__File, "osdeadkeys" )
-	Loop, parse, inisec, `r`n
-	{
-		pos := InStr( A_LoopField, "=" )
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := Trim( SubStr( A_LoopField, pos+1 ))
-		lid%key% = %val%
-	}
-MsgBox, DebugTest: US='%lid1033% No(Nn)='%lid2068%'
-*/
-	
-	WinLayoutID := getWinLocaleID() ; eD
-	if ( lid%WinLayoutID% == "-1" || lid%WinLayoutID% == "" )
-		return ""
-	else
-		return lid%WinLayoutID%
-}
-
 
 /*
 ------------------------------------------------------------------------

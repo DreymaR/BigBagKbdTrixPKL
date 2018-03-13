@@ -1,37 +1,23 @@
 ; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries (from vVv, AHK v1.1+ so I use my own for now)
-; eD TODO: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashes b/c var. m%msg% is too long!?
-pklLocaleStrings( msg, newValue = "", set = 0 )
-{
-	global gP_Pkl_Ini_File
-	
-	static m1 := "You must set the layout file in " . gP_Pkl_Ini_File . "!"
-	static m2 := "#s# file NOT FOUND`nSorry. The program will exit."
-	static m3 := "unknown"
-	static m4 := "ACTIVE LAYOUT"
-	static m5 := "Version"
-	static m6 := "Language"
-	static m7 := "Copyright"
-	static m8 := "Company"
-	static m9 := "About..."
-	static m10 := "Suspend"
-	static m11 := "Exit"
-	static m12 := "Detect deadkeys..."
-	static m13 := "License: GPL v3"
-	static m14 := "This program comes with`nABSOLUTELY NO WARRANTY`nThis is free software, and you`nare welcome to redistribute it`nunder certain conditions."
-	static m15 := "Display help image"
-	static m18 := "Change layout"
-	static m19 := "Layouts"
-	static m20 := "Contributors"
-	static m21 := "Translation"
-	static m22 := "[[Translator Name]]"
-	if ( set == 1 ) {
-		m%msg% := newValue
-	}
-	return m%msg%
-}
+; eD TODO: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashed b/c var. m%msg% was too long!? But check now.
 
 pkl_locale_load( lang, compact = 0 )
 {
+	; eD: Read/set default locale string list
+	static defLocStrInit	; eD: Ensure the defaults are initialized only once (as this function is run on layout change too)
+	if ( defLocStrInit != -1 )
+	{
+		Loop, 22
+		{
+			str := pklIniRead( "defLocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
+			StringReplace, str, str, \n, `n, A
+			StringReplace, str, str, \\, \, A
+			setPklInfo( "locMsg_" . A_Index , str )
+;			teststr := teststr . "`n" . A_Index . "  " . str
+		}
+		defLocStrInit := -1
+	}
+
 	if ( compact )
 		file = %lang%.ini
 	else
@@ -46,7 +32,7 @@ pkl_locale_load( lang, compact = 0 )
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \, A
 		if ( val != "" )
-			pklLocaleStrings( key, val, 1 )
+			setPklInfo( "locMsg_" . key , val )		; pklLocaleStrings( key, val, 1 )
 	}
 
 	line := iniReadSection( file, "SendU" )
@@ -68,7 +54,7 @@ pkl_locale_load( lang, compact = 0 )
 		val := Trim( SubStr( A_LoopField, pos+1 ))
 		StringReplace, val, val, \n, `n, A
 		StringReplace, val, val, \\, \,
-			detectDeadKeys_SetLocaleTxt( key, val )
+		detectDeadKeys_SetLocaleTxt( key, val )
 	}
 	
 	line := iniReadSection( file, "keyNames" )
@@ -83,7 +69,7 @@ pkl_locale_load( lang, compact = 0 )
 
 pklLocaleString( msg, s = "", p = "", q = "", r = "" )
 {
-	m := pklLocaleStrings( msg )
+	m := getPklInfo( "locMsg_" . msg ) 		; pklLocaleStrings( msg )
 	if ( s <> "" )
 		StringReplace, m, m, #s#, %s%, A
 	if ( p <> "" )

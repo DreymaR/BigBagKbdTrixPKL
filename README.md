@@ -94,22 +94,25 @@ Anti-madness tips for PKL file editing:
 
 DONE:
 -----
-These changes are now implemented in PKL[eD]:
+These changes are now implemented in [PKL_eD]:
 * Help image opacity, background color and gutter size settings
 * Separate help image background, so the keys/fingering can be in one image and the glyphs in another (saves file space, adds options)
 * Various menu and language file improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl & Shift & 5) in case the program hangs up in some way (stuck modifiers etc).
 * DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
+* A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+* Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
 
 TODO:
 -----
-I have several changes to PKL[eD] on my wishlist, but they require tweaking/recompiling the program. See 'PKL_eD'.
+I have several [PKL_eD] changes on my wishlist, including:
 * Unicode mode, like PKL-Vortex by vVv
 * Scan and virtual code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/locale/etc variant is murder!
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
+* Multiple Extend layers
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2017-10_
+_Øystein "DreymaR" Gadmar, 2018-03_
 
 
 [PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)
@@ -121,3 +124,4 @@ _Øystein "DreymaR" Gadmar, 2017-10_
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
 [KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
+[PKL_eD]: ./PKL_eD/ (PKL[eD] folder/README)
