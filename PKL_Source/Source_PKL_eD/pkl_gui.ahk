@@ -2,6 +2,8 @@ pkl_set_tray_menu()
 {
 	global gP_ShowMoreInfo	; eD: Show extra technical info and the Reset hotkey
 	
+	ahk11 := ( A_AhkVersion < "1.1" ) ? false : true
+	
 	ExitAppHotkey      := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
 	ChangeLayoutHotkey := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
 	SuspendHotkey      := getReadableHotkeyString( getPklInfo( "HK_Suspend"      ) )
@@ -12,14 +14,15 @@ pkl_set_tray_menu()
 	activeLayoutName := ""
 	countOfLayouts := getLayoutInfo( "countOfLayouts" )
 	
-	aboutmeMenuItem := pklLocaleString(9)
-	keyhistMenuItem := getLayoutInfo( "keyhistMenuItem" )
-	refreshMenuItem := getLayoutInfo( "refreshMenuItem" )
-	suspendMenuItem := pklLocaleString(10)
-	exitappMenuItem := pklLocaleString(11)
-	deadkeyMenuItem := pklLocaleString(12)
-	helpimgMenuItem := pklLocaleString(15)
-	chnglayMenuItem := pklLocaleString(18)
+	aboutmeMenuItem := getPklInfo( "LocStr_9"  )			; pklLocaleString()
+	suspendMenuItem := getPklInfo( "LocStr_10" )
+	exitappMenuItem := getPklInfo( "LocStr_11" )
+	deadkeyMenuItem := getPklInfo( "LocStr_12" )
+	helpimgMenuItem := getPklInfo( "LocStr_15" )
+	chnglayMenuItem := getPklInfo( "LocStr_18" )
+	layoutsMenu     := getPklInfo( "LocStr_19" )
+	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )
+	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
 	if ( SuspendHotkey      != "" )
 		suspendMenuItem .= " (" . FixAmpInMenu( SuspendHotkey      ) . ")"
 	if ( RefreshHotkey      != "" )
@@ -30,13 +33,12 @@ pkl_set_tray_menu()
 		helpimgMenuItem .= " (" . FixAmpInMenu( HelpImageHotkey    ) . ")"
 	if ( ChangeLayoutHotkey != "" )
 		chnglayMenuItem .= " (" . FixAmpInMenu( ChangeLayoutHotkey ) . ")"
-	setPklInfo( "DisplayHelpImageMenuName", helpimgMenuItem )
-	layoutsMenu := pklLocaleString(19)
+	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
 	Loop, % countOfLayouts
 	{
-		layName := getLayoutInfo( "layout" . A_Index . "name" )
-		layCode := getLayoutInfo( "layout" . A_Index . "code" )
+		layName := getLayoutInfo( "layout" . A_Index . "name" )	; Layout menu name
+		layCode := getLayoutInfo( "layout" . A_Index . "code" )	; Layout dir name
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
 		if ( layCode == Layout ) {
 			Menu, changeLayout, Default, %layName%
@@ -44,81 +46,114 @@ pkl_set_tray_menu()
 			activeLayoutName := layName
 		}
 		
-		icon = Layouts\%layCode%\on.ico
-		if ( not FileExist( icon ) )
-			icon = on.ico
-		MI_SetMenuItemIcon("changeLayout", A_Index, icon, 1, 16)
+		layIcon = Layouts\%layCode%\on.ico
+		if ( not FileExist( layIcon ) )
+			layIcon := A_ScriptName								; icon = on.ico
+		if ( ahk11 ) {
+			Menu, changeLayout, Icon,        %layName%, %layIcon%, 1
+		} else {
+			MI_SetMenuItemIcon("changeLayout", A_Index,  layIcon , 1, 16)
+		}
 	}
 
 	if ( not A_IsCompiled ) {
-		tr := MI_GetMenuHandle("Tray")
-		MI_SetMenuItemIcon(tr, 1, A_AhkPath, 1, 16) ; open
-		MI_SetMenuItemIcon(tr, 2, A_WinDir "\hh.exe", 1, 16) ; help
 		SplitPath, A_AhkPath,, SpyPath
 		SpyPath = %SpyPath%\AU3_Spy.exe
-		MI_SetMenuItemIcon(tr, 4, SpyPath,   1, 16) ; spy
-		MI_SetMenuItemIcon(tr, 5, "SHELL32.dll", 147, 16) ; reload
-		MI_SetMenuItemIcon(tr, 6, A_AhkPath, 2, 16) ; edit
-		MI_SetMenuItemIcon(tr, 8, A_AhkPath, 3, 16) ; suspend
-		MI_SetMenuItemIcon(tr, 9, A_AhkPath, 4, 16) ; pause
-		MI_SetMenuItemIcon(tr, 10, "SHELL32.dll", 28, 16) ; exit
-		Menu, Tray, add,
-		iconNum = 11
+		if ( ahk11 ) {
+			; eD WIP TODO: Can I assign icons without the menu titles? Or find the default AHK titles?
+		} else {
+			tr := MI_GetMenuHandle("Tray")							; eD: Are these icons necessary?
+			MI_SetMenuItemIcon(tr, 1, A_AhkPath, 1, 16) 			; open
+			MI_SetMenuItemIcon(tr, 2, A_WinDir "\hh.exe", 1, 16) 	; help
+			MI_SetMenuItemIcon(tr, 4, SpyPath,   1, 16) 			; spy
+			MI_SetMenuItemIcon(tr, 5, "shell32.dll", 147, 16) 		; reload
+			MI_SetMenuItemIcon(tr, 6, A_AhkPath, 2, 16) 			; edit
+			MI_SetMenuItemIcon(tr, 8, A_AhkPath, 3, 16) 			; suspend
+			MI_SetMenuItemIcon(tr, 9, A_AhkPath, 4, 16) 			; pause
+			MI_SetMenuItemIcon(tr, 10, "shell32.dll", 28, 16) 		; exit
+			iconNum = 11
+		}
+		Menu, Tray, add,											; (separator)
 	} else {
-		Menu, Tray, NoStandard
+		Menu, Tray, NoStandard										; no standard AHK tray menu items
 		iconNum = 0
 	}
 	
-	; eD: Icon list found at http://help4windows.com/ - but the numbers there are 1 lower.
-	Menu, Tray, add, %aboutmeMenuItem%, showAbout
-	tr := MI_GetMenuHandle("Tray")
-	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 24, 16) ; about/question icon
+	Menu, Tray, add, %aboutmeMenuItem%, showAbout							; About
 	if ( gP_ShowMoreInfo ) {
-		Menu, Tray, add, %keyhistMenuItem%, keyHistory
-		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 222, 16) ; info icon
-;		Menu, Tray, Icon, %keyhistMenuItem%, SHELL32.dll, 222, 16 ; eD WIP TEST: Make menu icons work with AHK 1.1+
-		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout
-		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 25, 16) ; "speed" icon
+		Menu, Tray, add, %keyhistMenuItem%, keyHistory						; Key history
+		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
 	}
-	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle
-	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 174, 16) ; keyboard icon, was 116 - film icon
+	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle					; Show image
 	if ( countOfLayouts > 1 ) {
-		Menu, Tray, add,
-		++iconNum
-		Menu, Tray, add, %layoutsMenu%, :changeLayout
-		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 44, 16) ; star icon
-		Menu, Tray, add, %chnglayMenuItem%, changeActiveLayout
-		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 138, 16) ; forward arrow icon
+		Menu, Tray, add,													; (separator)
+		Menu, Tray, add, %layoutsMenu%, :changeLayout						; Layouts
+		Menu, Tray, add, %chnglayMenuItem%, changeActiveLayout				; Change layout
 	}
-	if ( gP_ShowMoreInfo ) {
-		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout ; eD: Refresh option
-		MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 239, 16) ; refresh arrows icon
-	}
-	Menu, Tray, add, %suspendMenuItem%, toggleSuspend
-	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 110, 16) ; crossed circle icon
 	Menu, Tray, add,
-	++iconNum
-	Menu, Tray, add, %exitappMenuItem%, ExitPKL
-	MI_SetMenuItemIcon(tr, ++iconNum, "SHELL32.dll", 28, 16) ; power off icon
+	if ( gP_ShowMoreInfo ) {
+		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; eD: Refresh
+	}
+	Menu, Tray, add, %suspendMenuItem%, toggleSuspend						; Suspend
+	Menu, Tray, add, %exitappMenuItem%, ExitPKL								; Exit
+	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )
 	Menu, Tray, Tip, %pklAppName% v%pklVersion%`n(%activeLayoutName%)
 
 	Menu, Tray, Click, 2
-	if ( countOfLayouts > 1 ) {
-		Menu, Tray, Default, %chnglayMenuItem%
-	} else {
-		Menu, Tray, Default, %suspendMenuItem%
-	}
+	Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_eD_" )
+;	if ( countOfLayouts > 1 ) {
+;		Menu, Tray, Default, %chnglayMenuItem%
+;	} else {
+;		Menu, Tray, Default, %suspendMenuItem%
+;	}
 	
-	if (A_OSVersion == "WIN_XP")
-	{
-		; It is necessary to hook the tray icon for owner-drawing to work.
-		; (Owner-drawing is not used on Windows Vista.)
-		MI_SetMenuStyle( tr, 0x4000000 ) ; MNS_CHECKORBMP (optional)
-		setPklInfo( "trayMenuHandler", tr )
+	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
+	if ( ahk11 ) {		; eD: Menu icons, using the new or old (Lexicos MenuIcons) way
+	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; %aboutmeMenuItem% ico - about/question
+	if ( gP_ShowMoreInfo ) {
+		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
+		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; %deadkeyMenuItem% ico - search (25: "speed")
+		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
 	}
-	OnMessage( 0x404, "AHK_NOTIFYICON" )
+	Menu, Tray, Icon,      %helpimgMenuItem%,  shell32.dll , 174		; %helpimgMenuItem% ico - keyboard (116: film)
+	if ( countOfLayouts > 1 ) {
+		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; %layoutsMenu%     ico - star
+		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; %chnglayMenuItem% ico - forward arrow
+	}
+	if ( gP_ShowMoreInfo ) {
+	}
+	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; %suspendMenuItem% ico - crossed circle
+	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; %exitappMenuItem% ico - power off
+	} else {
+		tr := MI_GetMenuHandle("Tray")
+		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll",  24, 16)	; %aboutmeMenuItem% ico - about/question
+		if ( gP_ShowMoreInfo ) {
+			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 222, 16)	; %keyhistMenuItem% ico - info
+			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 172, 16)	; %deadkeyMenuItem% ico - search (25: "speed")
+		}
+		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll", 174, 16)	; %helpimgMenuItem% ico - keyboard (116: film)
+		if ( countOfLayouts > 1 ) {
+			++iconNum													; *** separator bar *** - (skip icon count)
+			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll",  44, 16)	; %layoutsMenu%     ico - star
+			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 138, 16)	; %chnglayMenuItem% ico - forward arrow
+		}
+		++iconNum														; *** separator bar *** - (skip icon count)
+		if ( gP_ShowMoreInfo ) {
+			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 239, 16)	; %refreshMenuItem% ico - refresh arrows
+		}
+		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll", 110, 16)	; %suspendMenuItem% ico - crossed circle
+		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll",  28, 16)	; %exitappMenuItem% ico - power off
+		
+		if (A_OSVersion == "WIN_XP")
+		{
+			; It is necessary to hook the tray icon for owner-drawing to work. Owner-drawing is not used on Windows Vista.
+			MI_SetMenuStyle( tr, 0x4000000 ) ; MNS_CHECKORBMP (optional)
+			setPklInfo( "trayMenuHandler", tr )
+		}
+		OnMessage( 0x404, "AHK_NOTIFYICON" )
+	}
 }
 
 pkl_about()
@@ -136,17 +171,17 @@ pkl_about()
 	pklVersion := getPklInfo( "pklVers" )
 	compiledAt := getPklInfo( "pklComp" )
 
-	unknown         := pklLocaleString(3)
-	active_layout   := pklLocaleString(4)
-	locVersion      := pklLocaleString(5)
-	locLanguage     := pklLocaleString(6)
-	locCopyright    := pklLocaleString(7)
-	locCompany      := pklLocaleString(8)
-	license         := pklLocaleString(13)
-	infos           := pklLocaleString(14)
-	contributors    := pklLocaleString(20)
-	translationName := pklLocaleString(21)
-	translatorName  := pklLocaleString(22)
+	unknown         := getPklInfo( "LocStr_3"  )
+	active_layout   := getPklInfo( "LocStr_4"  )
+	locVersion      := getPklInfo( "LocStr_5"  )
+	locLanguage     := getPklInfo( "LocStr_6"  )
+	locCopyright    := getPklInfo( "LocStr_7"  )
+	locCompany      := getPklInfo( "LocStr_8"  )
+	license         := getPklInfo( "LocStr_13" )
+	infos           := getPklInfo( "LocStr_14" )
+	contributors    := getPklInfo( "LocStr_20" )
+	translationName := getPklInfo( "LocStr_21" )
+	translatorName  := getPklInfo( "LocStr_22" )
 	
 	IniRead, lname   , %lfile%, informations, layoutname, %unknown%
 	IniRead, lver    , %lfile%, informations, version   , %unknown%
@@ -200,7 +235,7 @@ pkl_about()
 	Gui, Show
 }
 
-pkl_displayHelpImage( activate = 0 )
+pkl_showHelpImage( activate = 0 )
 {
 	; Parameter:
 	; 0 = display, if activated
@@ -265,7 +300,7 @@ pkl_displayHelpImage( activate = 0 )
 	}
 	
 	if ( activate == 1 ) {
-		Menu, Tray, Check, % getPklInfo( "DisplayHelpImageMenuName" )
+		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		IniRead, imgBgImage, %Lay_eD_%, hlpimg, img_bgimage, %layoutDir%\backgr.png
 		; eD: The default imgBgImage may not be robust if there's no backgr.png nor DreymaR_layout.ini entry?
 		;     Therefore, replace the above default by an if statement checking whether the file exists?!
@@ -308,10 +343,10 @@ pkl_displayHelpImage( activate = 0 )
 		GuiControl, 2:, HelperImage, *w%imgWidth_% *h%imgHeight% %layoutDir%\state0.png
 		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
 		
-		setTimer, displayHelpImage, 200
+		setTimer, showHelpImage, 200
 	} else if ( activate == -1 ) {
-		Menu, Tray, UnCheck, % getPklInfo( "DisplayHelpImageMenuName" )
-		setTimer, displayHelpImage, Off
+		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
+		setTimer, showHelpImage, Off
 		Gui, 2:Destroy
 ;		Gui, 3:Destroy
 		return
@@ -373,19 +408,33 @@ FixAmpInMenu( menuItem )
 
 pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 {
-	message := pklLocaleString( msg, s, p, q, r )
+	message := getPklInfo( "LocStr_" . msg ) 		; pklLocaleString( msg, s, p, q, r )
+	if ( s <> "" )
+		StringReplace, m, m, #s#, %s%, A
+	if ( p <> "" )
+		StringReplace, m, m, #p#, %p%, A
+	if ( q <> "" )
+		StringReplace, m, m, #q#, %q%, A
+	if ( r <> "" )
+		StringReplace, m, m, #r#, %r%, A
 	msgbox %message%
 }
 
-AHK_NOTIFYICON(wParam, lParam)
-{
-	if ( lParam == 0x205 ) { ; WM_RBUTTONUP
-		if ( A_OSVersion != "WIN_XP" ) ; HOOK for Windows XP
-			return
-		; Show menu to allow owner-drawing.
-		MI_ShowMenu( getPklInfo( "trayMenuHandler" ) )
-		return 0 ; Withouth this double right click is without icons
-	} else if ( lParam == 0x201 ) { ; WM_LBUTTONDOWN
-		gosub ToggleSuspend
+if ( ! ahk11 ) {							; eD: Phase this out as WinXP is now obsolete?!
+	AHK_NOTIFYICON(wParam, lParam)
+	{
+		if ( lParam == 0x205 ) { ; WM_RBUTTONUP
+			if ( A_OSVersion != "WIN_XP" ) ; HOOK for Windows XP
+				return
+			; Show menu to allow owner-drawing.
+			MI_ShowMenu( getPklInfo( "trayMenuHandler" ) )
+			return 0 ; Withouth this double right click is without icons
+		} else if ( lParam == 0x201 ) { ; WM_LBUTTONDOWN
+			gosub ToggleSuspend
+		}
 	}
 }
+
+; eD: In preparation of using AHK v1.1 to render icons without the old Lexicos MenuIcons (which doesn't work with this version?):
+;if ( ! A_AhkVersion < "1.1" )	{
+	#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk

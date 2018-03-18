@@ -25,6 +25,8 @@ DONE:
     - DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
     - DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
     - DeadKey_Acute_CdhAisoWsl_s1.png [for Curl-DH Angle-ISO Wide-Slash]?
+* You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
+
 
 TODO:
 -----

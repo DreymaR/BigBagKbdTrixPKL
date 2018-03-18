@@ -49,9 +49,6 @@ pkl_init( layoutFromCommandLine = "" )
 	pklSetHotkey( pklIniRead( "refreshHotkey","","Pkl_eD_" ), "rerunWithSameLayout" , "HK_Refresh"      )
 	pklSetHotkey( pklIniRead( "changeNonASCIIMode"         ), "_SendU_Try_Dyn_Mode" , "HK_SendUMode"    )	; eD TODO: To be deprecated?
 	
-	setLayoutInfo( "refreshMenuItem", pklIniRead( "refreshMenuText", "Refresh"      , "Pkl_eD_", "pkl"  ) )
-	setLayoutInfo( "keyhistMenuItem", pklIniRead( "keyhistMenuText", "Keyhistory...", "Pkl_eD_", "pkl"  ) )
-	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
 	
@@ -227,7 +224,7 @@ pkl_init( layoutFromCommandLine = "" )
 	; eD: Read/set deadkey name list
 	Loop, 32										; Default dead key table
 	{
-		; eD: In AHK 1.1.17+, you can use Format("{:02}",num) to pad with zeros. Better in any way?
+		; eD: In AHK v1.1.17+, you can use Format("{:02}",num) to pad with zeros. Better in any way?
 		key := "dk" . SubStr( "00" . A_Index, -1 )	; Pad with zero if index < 10
 		ky2 := "dk" .                A_Index      	; e.g., "dk1" or "dk14"
 		val := "deadkey" . A_Index
@@ -237,6 +234,8 @@ pkl_init( layoutFromCommandLine = "" )
 	}
 	file := pklIniRead( "dk_tables", "", "Lay_eD_", "global" )
 	file := ( FileExist( file ) ) ? file : LayoutFile	; eD: If no dedicated DK file, try the layout file
+	setLayoutInfo( "dkfile", file )						; This file should contain the actual dk tables
+	file := ( pklIniRead( "dk01", -1, "Lay_eD_", "deadkeys" ) != -1 ) ? gP_Lay_eD__File : file
 	remap := iniReadSection( file, "deadkeys" )
 	Loop, parse, remap, `r`n
 	{
@@ -247,7 +246,6 @@ pkl_init( layoutFromCommandLine = "" )
 		if ( not val = "" )
 			setLayoutItem( key, val )				; e.g., "dk01" = "dk_dotbelow"
 	}
-	setLayoutInfo( "dkfile", file )
 	
 	; eD: Read/set deadkey image data
 	dir := pklIniRead( "dk_imgDir", "", "Lay_eD_", "global" )
@@ -312,7 +310,7 @@ pkl_activate()
 	pkl_show_tray_menu()
 	
 	if ( pklIniBool( "displayHelpImage", true ) )
-		pkl_displayHelpImage( 1 )
+		pkl_showHelpImage( 1 )
 
 	Sleep, 200 ; I don't want to kill myself...
 	OnMessage( 0x398, "MessageFromNewInstance" )

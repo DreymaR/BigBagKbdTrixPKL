@@ -1,5 +1,5 @@
-; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries (from vVv, AHK v1.1+ so I use my own for now)
-; eD TODO: Even using Trim(), AHK v1.1 UniCode (but not ANSI) compiled PKL-eD crashed b/c var. m%msg% was too long!? But check now.
+; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries (from vVv, AHK v1.1 so I use my own for now)
+; eD TODO: Better iniReadSection() for the below, able to parse into a pdic (AHK v1.1).
 
 pkl_locale_load( lang, compact = 0 )
 {
@@ -9,10 +9,9 @@ pkl_locale_load( lang, compact = 0 )
 	{
 		Loop, 22
 		{
-			str := pklIniRead( "defLocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
-			StringReplace, str, str, \n, `n, A
-			StringReplace, str, str, \\, \, A
-			setPklInfo( "locMsg_" . A_Index , str )
+			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
+			str := strEsc( str )
+			setPklInfo( "LocStr_" . A_Index , str )
 ;			teststr := teststr . "`n" . A_Index . "  " . str
 		}
 		defLocStrInit := -1
@@ -23,62 +22,42 @@ pkl_locale_load( lang, compact = 0 )
 	else
 		file = Languages\%lang%.ini
 
+	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"       , "Pkl_eD_", "pkl"  ) )
+	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history...", "Pkl_eD_", "pkl"  ) )
+	
 	line := iniReadSection( file, "pkl" )
 	Loop, parse, line, `r`n
 	{
+	/*
 		pos := InStr( A_LoopField, "=" )
 		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := Trim( SubStr( A_LoopField, pos+1 ))
-		StringReplace, val, val, \n, `n, A
-		StringReplace, val, val, \\, \, A
+		val := strEsc( SubStr( A_LoopField, pos+1 ))
+	*/
+		pklIniKeyVal( A_Loopfield, key, val )	; eD: A more compact way (but still in a loop)
 		if ( val != "" )
-			setPklInfo( "locMsg_" . key , val )		; pklLocaleStrings( key, val, 1 )
+			setPklInfo( "LocStr_" . key , val )		; pklLocaleStrings( key, val, 1 )
 	}
 
 	line := iniReadSection( file, "SendU" )
 	Loop, parse, line, `r`n
 	{
-		pos := InStr( A_LoopField, "=" )
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := Trim( SubStr( A_LoopField, pos+1 ))
-		StringReplace, val, val, \n, `n, A
-		StringReplace, val, val, \\, \, A
+		pklIniKeyVal( A_Loopfield, key, val )
 		SendU_SetLocaleTxt( key, val )
 	}
 
 	line := iniReadSection( file, "detectDeadKeys" )
 	Loop, parse, line, `r`n
 	{
-		pos := InStr( A_LoopField, "=" )
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := Trim( SubStr( A_LoopField, pos+1 ))
-		StringReplace, val, val, \n, `n, A
-		StringReplace, val, val, \\, \,
+		pklIniKeyVal( A_Loopfield, key, val )
 		detectDeadKeys_SetLocaleTxt( key, val )
 	}
 	
 	line := iniReadSection( file, "keyNames" )
 	Loop, parse, line, `r`n
 	{
-		pos := InStr( A_LoopField, "=" )
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := Trim( SubStr( A_LoopField, pos+1 ))
+		pklIniKeyVal( A_Loopfield, key, val, 0 )
 		setHotkeyText( key, val )
 	}
-}
-
-pklLocaleString( msg, s = "", p = "", q = "", r = "" )
-{
-	m := getPklInfo( "locMsg_" . msg ) 		; pklLocaleStrings( msg )
-	if ( s <> "" )
-		StringReplace, m, m, #s#, %s%, A
-	if ( p <> "" )
-		StringReplace, m, m, #p#, %p%, A
-	if ( q <> "" )
-		StringReplace, m, m, #q#, %q%, A
-	if ( r <> "" )
-		StringReplace, m, m, #r#, %r%, A
-	return m
 }
 
 setHotkeyText( hk, localehk )

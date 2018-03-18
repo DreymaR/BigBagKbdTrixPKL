@@ -2,7 +2,7 @@ Portable Keyboard Layout by Farkas Máté
 
 Version: 0.4beta-eD
 Compiled: not released
-Compiler: AutoHotKey v1.0.48.5
+Compiler: AutoHotKey v1.1.26.1
 
 (c) FARKAS, Máté, 2007-2010
 (c) Øystein Bech "DreymaR" Gadmar, 2015-

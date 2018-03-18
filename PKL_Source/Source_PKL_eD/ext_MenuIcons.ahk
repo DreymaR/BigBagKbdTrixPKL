@@ -1,4 +1,4 @@
-; eD: Renamed this file from MI.ahk to MenuIcons.ahk
+; eD: Renamed this file from MI.ahk to MenuIcons.ahk; removed MI_SetMenuItemBitmap() as PKL didn't use it
 
 ;
 ;  Menu Icons v2
@@ -111,34 +111,6 @@ MI_SetMenuItemIcon(MenuNameOrHandle, ItemPos, FilenameOrHICON, IconNumber=1, Ico
         DllCall("DestroyIcon","uint",h_icon), h_icon:=0
     return false
 }
-
-; Set a menu item's associated bitmap.
-; hBitmap can be a handle to a bitmap, or a HBMMENU value (see below.)
-MI_SetMenuItemBitmap(MenuNameOrHandle, ItemPos, hBitmap)
-{
-    if MenuNameOrHandle is integer
-        h_menu := MenuNameOrHandle
-    else
-        h_menu := MI_GetMenuHandle(MenuNameOrHandle)
-    
-    if !h_menu
-        return false
-    
-    VarSetCapacity(mii,48,0), NumPut(48,mii), NumPut(0x80,mii,4), NumPut(hBitmap,mii,44)
-    return DllCall("SetMenuItemInfo","uint",h_menu,"uint",ItemPos-1,"uint",1,"uint",&mii)
-}
-/*
-HBMMENU_SYSTEM              =  1
-HBMMENU_MBAR_RESTORE        =  2
-HBMMENU_MBAR_MINIMIZE       =  3
-HBMMENU_MBAR_CLOSE          =  5
-HBMMENU_MBAR_CLOSE_D        =  6
-HBMMENU_MBAR_MINIMIZE_D     =  7
-HBMMENU_POPUP_CLOSE         =  8
-HBMMENU_POPUP_RESTORE       =  9
-HBMMENU_POPUP_MAXIMIZE      = 10
-HBMMENU_POPUP_MINIMIZE      = 11
-*/
 
 ;
 ; General Functions
@@ -321,6 +293,7 @@ MI_ShowMenu(MenuNameOrHandle, x="", y="")
     
     return ret
 }
+
 MI_OwnerDrawnMenuItemWndProc(hwnd, Msg, wParam, lParam)
 {
     static WM_DRAWITEM = 0x002B, WM_MEASUREITEM = 0x002C, WM_COMMAND = 0x111

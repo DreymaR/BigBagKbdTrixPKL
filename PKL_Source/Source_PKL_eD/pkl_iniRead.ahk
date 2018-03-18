@@ -103,7 +103,7 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl")
 		inifile := gP_%inifile%_File
 	default := ( default == "" ) ? A_Space : default	; IniRead requires A_Space for a blank default
 	IniRead, val, %inifile%, %section%, %key%, %default%
-	val := RegExReplace( val, "[ `t]+;.*$", "" )	; Remove any end-of-line comments (white space, then semicolon)
+	val := strEsc( val, 0 )
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val
 }
@@ -118,22 +118,32 @@ pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )
 		return false
 }
 
+pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=1 )			; Because PKL doesn't always use IniRead? Why though?
+{
+	pos := InStr( iniLine, "=" )
+	key :=         Trim( SubStr( iniLine, 1, pos-1 ))
+	val := strEsc( Trim( SubStr( iniLine,    pos+1 )), esc )
+}
+
+strEsc( str, esc=1 )											; eD TODO: Check whether comment stripping works
+{
+	RegExReplace( str, "[ `t]+;.*$", "" )	; Remove any end-of-line comments (white space, then semicolon)
+	if ( esc )
+	{
+		StringReplace, str, str, \n, `n, A
+		StringReplace, str, str, \\, \, A
+	}
+	return str
+}
+
 /*
 ; eD--> eD TODO: Add a function for handling .ini keys (as this was repeated in the code)
 ;		eD TODO: Make a function that reads a section and returns a pdic of (key,value) pairs!
+;				- Better than it is today in, say, locale.ahk!
 ;		eD TODO: Remove end-of-line comments. That is, any [%A_Space%|%A_Tab%];.*$ RegEx.
-;			In compensation, add 'StringReplace, val, val, \;, `;, A' below?
-;			How to "save" existing layout files?! Answer: Exclude `t;`t sequences!
+;			In compensation, add 'StringReplace, val, val, \;, `;, A' below? Nah...?
+;			How to "save" existing layout files?! Answer: Exclude `t;`t sequences?
 ;			That way, the only problem would be any ligatures starting with ; (rare!)
 ;			However, these should properly be preceded by a % anyway!?
-iniGetKeyVal( line, ByRef key, ByRef val, escapes = 0 )
-{
-	pos := InStr( line, "=" )
-	key := Trim( SubStr( line, 1, pos-1 ))
-	val := Trim( SubStr( line, pos+1 ))
-	if ( escapes != 0 ) {
-		StringReplace, val, val, \n, `n, A
-		StringReplace, val, val, \\, \, A
-	}
-} ; <--eD
+;			Today's solution of parsing layout.ini by column may be sufficient though!
 */

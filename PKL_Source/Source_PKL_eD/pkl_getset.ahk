@@ -1,4 +1,4 @@
-; eD TODO: Replace the get and set global info functions with pdic lookup tables, e.g., PklVar[key] (req. AHK 1.1+).
+; eD TODO: Replace the get and set global info functions with pdic lookup tables, e.g., PklVar[key] (req. AHK v1.1).
 
 setLayoutItem( key, value )
 {

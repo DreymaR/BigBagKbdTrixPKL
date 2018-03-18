@@ -8,10 +8,16 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-; eD TODO: 	- Transition to AHK1.1+ like PKL-vVv. 
-;				- Need to make menu icons work first!
+;
+; Portable Keyboard Layout by Farkas Máté   [http://pkl.sourceforge.net]
+; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
+;
+
+; eD TODO: 	- Transition to AHK1.1 like PKL-vVv.
 ;				- Make iniRead functions similar to the vVv ones, able to read keys robustly from UTF-8 files
-;				- Transition to AHK 1.1+ Unicode Send (re vVv)
+;				- Transition th AHK v1.1 pdic arrays instead of Farkas' HashTable implementations.
+;				- Instead of VKeyCodeFromName, use the AHK 1.1+ GetKeyVK() - if it works with VK names...?
+;				- Transition to AHK v1.1 Unicode Send (re vVv): Need to fix some variable%ref% problems (see vVv?)
 ;			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;				- As LayoutInfo dics?
 ;				- The best way may be to define them as swap loops? Should these be compoundable?
@@ -20,10 +26,10 @@
 ;				- vk_ for "virtual" movements like the ISO/ANSI OEM_ switches?
 ;				- lk_ for "layout" movements like the Curl(DH) mod (or can these simply be vk_ switches?)
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary
-;			- Separate deadkey tables (but a fallback for backwards compatibility)
 ;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
-; eD WIP:	- Move several internal tables to an .ini file so they may be edited by users
+;			- Remove the Layouts submenu? Make it optional by .ini?
+; eD DONE:	- Menu icons now work with AHK v1.1
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
 setPklInfo( "pklVers", "0.4-eD" ) ; eD: PKL[edition DreymaR]
@@ -148,12 +154,12 @@ showAbout:
 	pkl_about()
 return
 
-displayHelpImage:
-	pkl_displayHelpImage()
+showHelpImage:
+	pkl_showHelpImage()
 return
 
 showHelpImageToggle:
-	pkl_displayHelpImage( 2 )
+	pkl_showHelpImage( 2 )
 return
 
 changeActiveLayout:
@@ -178,12 +184,12 @@ return
 
 afterSuspend:
 	if ( A_IsSuspended ) {
-		pkl_displayHelpImage( 3 )
+		pkl_showHelpImage( 3 )
 		Menu, Tray, Icon, % getTrayIconInfo( "FileOff" ), % getTrayIconInfo( "NumOff" )
 	} else {
 		activity_ping( 1 )
 		activity_ping( 2 )
-		pkl_displayHelpImage( 4 )
+		pkl_showHelpImage( 4 )
 		Menu, Tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
 	}
 return
@@ -203,7 +209,7 @@ return
 ; ####################### (external) modules #######################
 
 #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars ; eD: Renamed from HexUC.ahk
-#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
+;#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
 #Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK (v1.1+) will obviate this!
 #Include ext_HashTable.ahk ; eD: Moved all HashTable files into this one to reduce clutter
 #Include getWindowsDeadKeys.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
