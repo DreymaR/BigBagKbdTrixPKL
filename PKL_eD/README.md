@@ -1,7 +1,7 @@
 WARNING: HARD HAT AREA!
 =======================
 
-PKL[edition DreymaR] is a Work-In-Progress, so don't expect all of it to be working ... yet. ;-)
+PKL[edition DreymaR] is a Work-In-Progress, so don't expect all of it to be working perfectly ... yet. ;-)
 
 ~ Øystein B "DreymaR" Gadmar, 2017
 
@@ -24,7 +24,6 @@ DONE:
     - This way, one change in a DK will affect all layouts using that DK
     - DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
     - DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
-    - DeadKey_Acute_CdhAisoWsl_s1.png [for Curl-DH Angle-ISO Wide-Slash]?
 * You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
 
 

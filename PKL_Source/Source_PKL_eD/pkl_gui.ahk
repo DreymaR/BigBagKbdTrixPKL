@@ -1,49 +1,43 @@
 pkl_set_tray_menu()
 {
-	global gP_ShowMoreInfo	; eD: Show extra technical info and the Reset hotkey
-	
+	eD_ShowMoreInfo := getPklInfo( "eD_ShowMoreInfo" )	; eD: Show extra technical info and the Reset hotkey
 	ahk11 := ( A_AhkVersion < "1.1" ) ? false : true
 	
-	ExitAppHotkey      := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
-	ChangeLayoutHotkey := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
-	SuspendHotkey      := getReadableHotkeyString( getPklInfo( "HK_Suspend"      ) )
-	RefreshHotkey      := getReadableHotkeyString( getPklInfo( "HK_Refresh"      ) )
-	HelpImageHotkey    := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
+	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
+	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
+	SuspendHotkey   := getReadableHotkeyString( getPklInfo( "HK_Suspend"      ) )
+	RefreshHotkey   := getReadableHotkeyString( getPklInfo( "HK_Refresh"      ) )
+	HelpImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
 	
-	Layout := getLayoutInfo( "active" )
-	activeLayoutName := ""
-	countOfLayouts := getLayoutInfo( "countOfLayouts" )
+	activeLayout    := getLayInfo( "active" )
+	activeLayName   := ""
+	countOfLayouts  := getLayInfo( "countOfLayouts" )
 	
 	aboutmeMenuItem := getPklInfo( "LocStr_9"  )			; pklLocaleString()
-	suspendMenuItem := getPklInfo( "LocStr_10" )
-	exitappMenuItem := getPklInfo( "LocStr_11" )
+	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )
 	deadkeyMenuItem := getPklInfo( "LocStr_12" )
 	helpimgMenuItem := getPklInfo( "LocStr_15" )
-	chnglayMenuItem := getPklInfo( "LocStr_18" )
 	layoutsMenu     := getPklInfo( "LocStr_19" )
-	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )
+	chnglayMenuItem := getPklInfo( "LocStr_18" )
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
-	if ( SuspendHotkey      != "" )
-		suspendMenuItem .= " (" . FixAmpInMenu( SuspendHotkey      ) . ")"
-	if ( RefreshHotkey      != "" )
-		refreshMenuItem .= " (" . FixAmpInMenu( RefreshHotkey      ) . ")"
-	if ( ExitAppHotkey      != "" )
-		exitappMenuItem .= " (" . FixAmpInMenu( ExitAppHotkey      ) . ")"
-	if ( HelpImageHotkey    != "" )
-		helpimgMenuItem .= " (" . FixAmpInMenu( HelpImageHotkey    ) . ")"
-	if ( ChangeLayoutHotkey != "" )
-		chnglayMenuItem .= " (" . FixAmpInMenu( ChangeLayoutHotkey ) . ")"
+	suspendMenuItem := getPklInfo( "LocStr_10" )
+	exitappMenuItem := getPklInfo( "LocStr_11" )
+	helpimgMenuItem .= ( HelpImgHotkey ) ? FixAmpInMenu( HelpImgHotkey ) : ""
+	chnglayMenuItem .= ( ChngLayHotkey ) ? FixAmpInMenu( ChngLayHotkey ) : ""
+	refreshMenuItem .= ( RefreshHotkey ) ? FixAmpInMenu( RefreshHotkey ) : ""
+	suspendMenuItem .= ( SuspendHotkey ) ? FixAmpInMenu( SuspendHotkey ) : ""
+	exitappMenuItem .= ( ExitAppHotkey ) ? FixAmpInMenu( ExitAppHotkey ) : ""
 	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
 	Loop, % countOfLayouts
 	{
-		layName := getLayoutInfo( "layout" . A_Index . "name" )	; Layout menu name
-		layCode := getLayoutInfo( "layout" . A_Index . "code" )	; Layout dir name
+		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
+		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
-		if ( layCode == Layout ) {
+		if ( layCode == activeLayout ) {
 			Menu, changeLayout, Default, %layName%
 			Menu, changeLayout, Check, %layName%
-			activeLayoutName := layName
+			activeLayName := layName
 		}
 		
 		layIcon = Layouts\%layCode%\on.ico
@@ -80,7 +74,7 @@ pkl_set_tray_menu()
 	}
 	
 	Menu, Tray, add, %aboutmeMenuItem%, showAbout							; About
-	if ( gP_ShowMoreInfo ) {
+	if ( eD_ShowMoreInfo ) {
 		Menu, Tray, add, %keyhistMenuItem%, keyHistory						; Key history
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
 	}
@@ -91,7 +85,7 @@ pkl_set_tray_menu()
 		Menu, Tray, add, %chnglayMenuItem%, changeActiveLayout				; Change layout
 	}
 	Menu, Tray, add,
-	if ( gP_ShowMoreInfo ) {
+	if ( eD_ShowMoreInfo ) {
 		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; eD: Refresh
 	}
 	Menu, Tray, add, %suspendMenuItem%, toggleSuspend						; Suspend
@@ -99,7 +93,7 @@ pkl_set_tray_menu()
 	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )
-	Menu, Tray, Tip, %pklAppName% v%pklVersion%`n(%activeLayoutName%)
+	Menu, Tray, Tip, %pklAppName% v%pklVersion%`n(%activeLayName%)
 
 	Menu, Tray, Click, 2
 	Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_eD_" )
@@ -112,7 +106,7 @@ pkl_set_tray_menu()
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
 	if ( ahk11 ) {		; eD: Menu icons, using the new or old (Lexicos MenuIcons) way
 	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; %aboutmeMenuItem% ico - about/question
-	if ( gP_ShowMoreInfo ) {
+	if ( eD_ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
 		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; %deadkeyMenuItem% ico - search (25: "speed")
 		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
@@ -122,14 +116,14 @@ pkl_set_tray_menu()
 		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; %layoutsMenu%     ico - star
 		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; %chnglayMenuItem% ico - forward arrow
 	}
-	if ( gP_ShowMoreInfo ) {
+	if ( eD_ShowMoreInfo ) {
 	}
 	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; %suspendMenuItem% ico - crossed circle
 	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; %exitappMenuItem% ico - power off
 	} else {
 		tr := MI_GetMenuHandle("Tray")
 		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll",  24, 16)	; %aboutmeMenuItem% ico - about/question
-		if ( gP_ShowMoreInfo ) {
+		if ( eD_ShowMoreInfo ) {
 			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 222, 16)	; %keyhistMenuItem% ico - info
 			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 172, 16)	; %deadkeyMenuItem% ico - search (25: "speed")
 		}
@@ -140,7 +134,7 @@ pkl_set_tray_menu()
 			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 138, 16)	; %chnglayMenuItem% ico - forward arrow
 		}
 		++iconNum														; *** separator bar *** - (skip icon count)
-		if ( gP_ShowMoreInfo ) {
+		if ( eD_ShowMoreInfo ) {
 			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 239, 16)	; %refreshMenuItem% ico - refresh arrows
 		}
 		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll", 110, 16)	; %suspendMenuItem% ico - crossed circle
@@ -159,7 +153,6 @@ pkl_set_tray_menu()
 pkl_about()
 {
 	global gP_Lay_Ini_File	; eD: "layout.ini"
-	global gP_ShowMoreInfo	; eD: Show extra technical info and the Reset hotkey
 	
 	mslid := getWinLocaleID() ; eD: Get the Windows locale ID
 	dkstr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
@@ -225,8 +218,8 @@ pkl_about()
 	text = %text%`n%locCompany%: %lcomp%
 	Gui, Add, Text, , %text%
 	Gui, Add, Edit, , %lwebsite%
-	Gui, Add, Text, , ......................................................................
-	if ( gP_ShowMoreInfo ) {
+	if ( getPklInfo( "eD_ShowMoreInfo" ) ) {
+		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
 		text = %text%Current Microsoft Windows Locale ID: %mslid%
 		text = %text%`nDead keys in current Windows layout: %dkstr%
@@ -276,9 +269,9 @@ pkl_showHelpImage( activate = 0 )
 	
 	if ( layoutDir == 0 )
 	{
-		layoutDir := getLayoutInfo( "layDir" )
-		hasAltGr  := getLayoutInfo( "hasAltGr" )
-		extendKey := getLayoutInfo( "extendKey" )
+		layoutDir := getLayInfo( "layDir" )
+		hasAltGr  := getLayInfo( "hasAltGr" )
+		extendKey := getLayInfo( "extendKey" )
 		Lay_eD_   := gP_Lay_eD__File	;layoutDir . "\" . gP_Lay_eD__File
 	}
 	
@@ -368,8 +361,8 @@ pkl_showHelpImage( activate = 0 )
 	
 	imgDir := LayoutDir
 	if ( gP_CurrNumOfDKs ) {
-		imgDir := getLayoutInfo( "dkImgDir" )	; eD
-		ssuf := getLayoutInfo( "dkImgSuf" )
+		imgDir := getLayInfo( "dkImgDir" )	; eD
+		ssuf := getLayInfo( "dkImgSuf" )
 		dkS1 := ( ssuf ) ? ssuf . "1" : ""  	; eD: Img file state 1 suffix
 		dkS2 := ( ssuf ) ? ssuf . "2" : "sh"	; eD: Img file state 2 suffix
 		dkS6 := ssuf . "6"
@@ -403,6 +396,7 @@ pkl_showHelpImage( activate = 0 )
 FixAmpInMenu( menuItem )
 {
 	StringReplace, menuItem, menuItem, %A_Space%&%A_Space%, +, 1	; eD: Used to be '& , &&,' to display the ampersand.
+	menuItem := " (" . menuItem . ")"
 	return menuItem
 }
 

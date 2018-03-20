@@ -3,18 +3,25 @@
 
 pkl_locale_load( lang, compact = 0 )
 {
-	; eD: Read/set default locale string list
-	static defLocStrInit	; eD: Ensure the defaults are initialized only once (as this function is run on layout change too)
-	if ( defLocStrInit != -1 )
-	{
-		Loop, 22
+	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
+
+	static defLocStrInit := 0	; Ensure the defaults are initialized only once (as this function is run on layout change too)
+	if ( defLocStrInit == 0 )
+	{																	; eD: Read/set default locale string list
+		Loop, 22														; Read default locale strings (numbered)
 		{
 			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
 			str := strEsc( str )
 			setPklInfo( "LocStr_" . A_Index , str )
 ;			teststr := teststr . "`n" . A_Index . "  " . str
 		}
-		defLocStrInit := -1
+		line := iniReadSection( gP_Pkl_Dic_File, "DefaultLocaleTxt" )	; Read default locale strings (key/value)
+		Loop, parse, line, `r`n
+		{
+			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
+			setPklInfo( key, val )
+		}
+		defLocStrInit := 1
 	}
 
 	if ( compact )
@@ -28,12 +35,7 @@ pkl_locale_load( lang, compact = 0 )
 	line := iniReadSection( file, "pkl" )
 	Loop, parse, line, `r`n
 	{
-	/*
-		pos := InStr( A_LoopField, "=" )
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		val := strEsc( SubStr( A_LoopField, pos+1 ))
-	*/
-		pklIniKeyVal( A_Loopfield, key, val )	; eD: A more compact way (but still in a loop)
+		pklIniKeyVal( A_Loopfield, key, val, 1 )	; eD: A more compact way than before (but still in a loop)
 		if ( val != "" )
 			setPklInfo( "LocStr_" . key , val )		; pklLocaleStrings( key, val, 1 )
 	}
@@ -41,15 +43,15 @@ pkl_locale_load( lang, compact = 0 )
 	line := iniReadSection( file, "SendU" )
 	Loop, parse, line, `r`n
 	{
-		pklIniKeyVal( A_Loopfield, key, val )
-		SendU_SetLocaleTxt( key, val )
+		pklIniKeyVal( A_Loopfield, key, val, 1 )
+		setPklInfo( "SendUni_" . key, val )			; SendU_SetLocaleTxt(
 	}
 
 	line := iniReadSection( file, "detectDeadKeys" )
 	Loop, parse, line, `r`n
 	{
-		pklIniKeyVal( A_Loopfield, key, val )
-		detectDeadKeys_SetLocaleTxt( key, val )
+		pklIniKeyVal( A_Loopfield, key, val, 1 )
+		setPklInfo( "DetecDK_" . key, val )			; detectDeadKeys_SetLocaleTxt(
 	}
 	
 	line := iniReadSection( file, "keyNames" )
@@ -68,18 +70,14 @@ setHotkeyText( hk, localehk )
 getHotkeyText( hk, localehk = "", set = 0 )
 {
 	static localizedHotkeys := ""
-	static pdic := 0
-	if ( pdic == 0 )
-	{
-		pdic := HashTable_New()
-	}
+	
 	if ( set == 1 ) {
-		HashTable_Set( pdic, hk, localehk )
+		setKeyInfo( "HKtxt_" . hk, localehk )	; HashTable_Set( pdic,
 		localizedHotkeys .= " " . hk
 	} else {
 		if ( hk == "all" )
 			return localizedHotkeys
-		return HashTable_Get( pdic, hk )
+		return getKeyInfo( "HKtxt_" . hk )
 	}
 }
 

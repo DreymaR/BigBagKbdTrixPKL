@@ -1,24 +1,18 @@
 DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a full DK name.
 {
-	static dkFile := ""
-	static pdic := 0
-	if ( dkFile == "" ) {
-		dkFile := getLayoutInfo( "dkFile" )	; eD
-		pdic := HashTable_New()
-	}
+	static dkFile := ""	; eD
+	dkFile := ( dkFile ) ? dkFile : getLayInfo( "dkFile" )
 	
-	res := HashTable_Get( pdic, dkName . "_" . base )
+	res := getKeyInfo( "DKval_" . dkName . "_" . base )	; HashTable_Get( pdic, 
 	if ( res ) {
-		if ( res == -1 )
-			res = 0
+		res := ( res == -1 ) ? 0 : res
 		return res
 	}
 	IniRead, res, %dkFile%, dk_%dkName%, %base%, -1`t;	; deadkey%dk%, %base%, -1`t;
 	tmp := InStr( res, A_Tab )
 	res := SubStr( res, 1, tmp - 1 )
-	HashTable_Set( pdic, dkName . "_" . base, res)
-	if ( res == -1 )
-		res = 0
+	setKeyInfo( "DKval_" . dkName . "_" . base, res)
+	res := ( res == -1 ) ? 0 : res
 	return res
 }
 
@@ -28,7 +22,7 @@ DeadKey(DK)
 	global gP_CurrBaseKey_	; eD: Current base key
 	global gP_CurrNameOfDK	; eD: Current dead key's name
 	static PVDK := "" ; Pressed dead keys
-	DK := getLayoutItem( "dk" . DK )	; eD
+	DK := getKeyInfo( "dk" . DK )	; eD
 	DeadKeyChar := DeadKeyValue( DK, 0 )
 	
 	; Pressed a deadkey twice

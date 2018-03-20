@@ -92,7 +92,7 @@ iniReadSection( pIniFile, pSection="", pPrefix="inis_") {
 ; eD: Read a (pkl).ini value
 ;     Usage: val := pklIniRead( <key>, [default], [inifile(shortstr)], [section] )
 ;     Note: IniRead trims off white space and one pair of quotes if present.
-pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl")
+pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", esc=0 )
 {
 	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
 	global gP_Lay_Ini_File				; eD:    "layout.ini" 	--"--
@@ -103,31 +103,29 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl")
 		inifile := gP_%inifile%_File
 	default := ( default == "" ) ? A_Space : default	; IniRead requires A_Space for a blank default
 	IniRead, val, %inifile%, %section%, %key%, %default%
-	val := strEsc( val, 0 )
+	val := strEsc( val, esc )
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val
 }
 
 pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )
 {
-	val := pklIniRead( key, default, inifile, section )
-	;IniRead, val, %inifile%, %section%, %key%, %default%
-	if ( val == "1" || val == "yes" || val == "y" || val == "true" )
-		return true
-	else
-		return false
+	val := pklIniRead( key, default, inifile, section )			;IniRead, val, %inifile%, %section%, %key%, %default%
+	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
+	return val
 }
 
-pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=1 )			; Because PKL doesn't always use IniRead? Why though?
+pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0 )			; Because PKL doesn't always use IniRead? Why though?
 {
 	pos := InStr( iniLine, "=" )
 	key :=         Trim( SubStr( iniLine, 1, pos-1 ))
 	val := strEsc( Trim( SubStr( iniLine,    pos+1 )), esc )
+	key := ( pos == 0 ) ? "<NoKey>" : key
 }
 
-strEsc( str, esc=1 )											; eD TODO: Check whether comment stripping works
+strEsc( str, esc=1 )
 {
-	RegExReplace( str, "[ `t]+;.*$", "" )	; Remove any end-of-line comments (white space, then semicolon)
+	str := RegExReplace( str, "[ `t]+;.*`n" )			; Remove end-of-line comments (whitespace then semicolon)
 	if ( esc )
 	{
 		StringReplace, str, str, \n, `n, A
@@ -137,13 +135,9 @@ strEsc( str, esc=1 )											; eD TODO: Check whether comment stripping works
 }
 
 /*
-; eD--> eD TODO: Add a function for handling .ini keys (as this was repeated in the code)
-;		eD TODO: Make a function that reads a section and returns a pdic of (key,value) pairs!
-;				- Better than it is today in, say, locale.ahk!
-;		eD TODO: Remove end-of-line comments. That is, any [%A_Space%|%A_Tab%];.*$ RegEx.
-;			In compensation, add 'StringReplace, val, val, \;, `;, A' below? Nah...?
-;			How to "save" existing layout files?! Answer: Exclude `t;`t sequences?
-;			That way, the only problem would be any ligatures starting with ; (rare!)
-;			However, these should properly be preceded by a % anyway!?
-;			Today's solution of parsing layout.ini by column may be sufficient though!
+; eD TODO: Make a function that reads a section and returns a pdic of (key,value) pairs?
+;			- Better than it is today in, say, locale.ahk!
+;			- How to "save" existing layout files?! Exclude `t;`t sequences?
+;			- Today's solution of parsing layout.ini by column should be sufficient though!
+;			- Alternatively, may the v1.1 IniRead() work well for PKL now? Or only for UTF16?
 */

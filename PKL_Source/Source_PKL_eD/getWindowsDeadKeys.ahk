@@ -54,8 +54,8 @@ detectDeadKeysInCurrentLayout()
 	DeadKeysInCurrentLayout = ;
 	
 	notepadMode = 0
-	txt := _detectDeadKeys_GetLocaleTxt( "MSGBOX_TITLE" )
-	tx2 := _detectDeadKeys_GetLocaleTxt( "MSGBOX" )
+	txt := getPklInfo( "DetecDK_" .  "MSGBOX_TITLE" )
+	tx2 := getPklInfo( "DetecDK_" .  "MSGBOX" )
 	MsgBox 51, %txt%, %tx2%
 	IfMsgBox Cancel
 		return
@@ -64,7 +64,7 @@ detectDeadKeysInCurrentLayout()
 		notepadMode = 1
 		Run Notepad
 		Sleep 2000
-		txt := _detectDeadKeys_GetLocaleTxt( "EDITOR" )
+		txt := getPklInfo( "DetecDK_" .  "EDITOR" )
 		SendInput {Raw}%txt%
 		Send {Enter}
 	} else {
@@ -87,12 +87,12 @@ detectDeadKeysInCurrentLayout()
 	}
 	Send {Ctrl Up}{Shift Up}
 	Send +{Home}{Del}
-	txt := _detectDeadKeys_GetLocaleTxt("DEADKEYS")
+	txt := getPklInfo( "DetecDK_" . "DEADKEYS" )
 	Send {RAW}%txt%:%A_Space%
 	Send {RAW}%DeadKeysInCurrentLayout%
 	Send {Enter}
 	
-	txt := _detectDeadKeys_GetLocaleTxt("LAYOUT_CODE")
+	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
 	Send {Raw}%txt%:%A_Space%
 	WinLayoutID := getWinLocaleID() ; eD
 	Send %WinLayoutID%
@@ -100,24 +100,7 @@ detectDeadKeysInCurrentLayout()
 	
 	If ( notepadMode )
 		Send !{F4}
+		Send {Right}				; Select "Don't save"
 	
 	return DeadKeysInCurrentLayout
-}
-
-detectDeadKeys_SetLocaleTxt( variable, value )
-{
-	_detectDeadKeys_GetLocaleTxt( variable, value, 1 )
-}
-
-_detectDeadKeys_GetLocaleTxt( variable, value = "", set = 0 )
-{
-	static locMSGBOX_TITLE := "Open Notepad?"
-	static locMSGBOX := "To detect the deadkeys in the current default OS keyboard layout,`nPKL needs an editor.`n`nClick Yes to open Notepad`nClick No if you are already in an editor`nClick Cancel if you KNOW your system doesn't have dead keys"
-	static locEDITOR := "Detecting deadkeys... Do not interrupt!"
-	static locDEADKEYS := "ASCII deadkeys"
-	static locLAYOUT_CODE := "Layout code"
-	
-	if ( set == 1 )
-		loc%variable% := value
-	return loc%variable%
 }

@@ -70,10 +70,12 @@ Where:
 
 Look in the pkl.ini file if you're interested! Much is explained there.
 
-The hotkeys I've set in my pkl.ini file are:
+Some of the hotkeys I've set in my pkl.ini file are:
 * Ctrl+Shift+` – suspend PKL
 * Ctrl+Shift+1 – display/hide help image (these may not be updated for all layouts!)
 * Ctrl+Shift+2 – switch layout between the ones specified in the pkl.ini file
+* Ctrl+Shift+4 – exit PKL
+
 
 **NOTES:**
 ---------
@@ -98,7 +100,7 @@ These changes are now implemented in [PKL_eD]:
 * Help image opacity, background color and gutter size settings
 * Separate help image background, so the keys/fingering can be in one image and the glyphs in another (saves file space, adds options)
 * Various menu and language file improvements and additions.
-* A Refresh menu option with a hotkey (default Ctrl & Shift & 5) in case the program hangs up in some way (stuck modifiers etc).
+* A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 * DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.

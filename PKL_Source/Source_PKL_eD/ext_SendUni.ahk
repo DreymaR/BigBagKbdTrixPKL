@@ -25,18 +25,11 @@ Contributors:
 		http://www.autohotkey.com/forum/viewtopic.php?p=182218#182218
 
 ------------------------------------------------------------------------
-
 */
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; You can localize the messages, see the
-; SendU_SetLocaleTxt( variable, value ) and
-;  _SendU_GetLocaleTxt( variable, value, 1 ) functions!
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ; PUBLIC FUNCTIONS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 SendCh( Ch ) ; Character number code, for example 97 (or 0x61) for 'a'
 {
@@ -160,15 +153,9 @@ SendU_Try_Dynamic_Mode()
 	_SendU_Dynamic_Mode( "", 1 ) ; Clears the PrevProcess variable
 }
 
-SendU_SetLocaleTxt( variable, value )
-{
-	_SendU_GetLocaleTxt( variable, value, 1 )
-}
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ; PRIVATE FUNCTIONS
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 _SendU_Input( UC )
 {
@@ -285,9 +272,8 @@ _SendU_Get_Mode_Name( mode )
 {
 	if ( mode == "c" && SendU_Clipboard_Restore_Mode() )
 		mode = r
-	m := _SendU_GetLocaleTxt( "Mode_Name_" . mode )
-	if ( m == "" )
-		m := _SendU_GetLocaleTxt( "Mode_Name_0" )
+	m := getPklInfo( "SendUni_" . "Mode_Name_" . mode )	; _SendU_GetLocaleTxt(
+	m := ( m ) ? m : getPklInfo( "SendUni_" . "Mode_Name_0" )
 	return m
 }
 
@@ -295,15 +281,14 @@ _SendU_Get_Mode_Type( mode )
 {
 	if ( mode == "c" && SendU_Clipboard_Restore_Mode() )
 		mode = r
-	m := _SendU_GetLocaleTxt( "Mode_Type_" . mode )
-	if ( m == "" )
-		m := _SendU_GetLocaleTxt( "Mode_Type_0" )
+	m := getPklInfo( "SendUni_" . "Mode_Type_" . mode )
+	m := ( m ) ? m : getPklInfo( "SendUni_" . "Mode_Type_0" )
 	return m
 }
 
 _SendU_Dynamic_Mode_Tooltip( processName = -1, mode = -1 )
 {
-	tt := _SendU_GetLocaleTxt("DYNAMIC_MODE_TOOLTIP")
+	tt := getPklInfo( "SendUni_" . "DYNAMIC_MODE_TOOLTIP" )
 	if not tt
 		return
 	if ( processName = -1 || mode == -1 ) {
@@ -325,7 +310,7 @@ _SendU_Dynamic_Mode( processName, clearPrevProcess = -1 )
 	static prevProcess := "fOyj9b4f79YmA7sZRBrnDbp75dGhiauj" ; Nothing
 	static mode := ""
 	if ( clearPrevProcess == 1 )
-		prevProcess := "fOyj9b4f79YmA7sZRBrnDbp75dGhiauj" ; Nothing
+		prevProcess := "fOyj9b4f79YmA7sZRBrnDbp75dGhiauj"    ; Nothing
 	if ( processName == prevProcess )
 		return mode
 	prevProcess := processName
@@ -343,48 +328,19 @@ SendU_SetMode( processName, mode )
 
 _SendU_GetMode( processName, mode = "", set = 0 )
 {
-	static pdic := 0
-
-	if ( pdic == 0 ) {
-		pdic := HashTable_New()
-		HashTable_Set( pdic,  "default", "i" )
+	static init := 0
+	if ( init == 0 ) {
+		setPklInfo( "UniMode_" . "default", "i" )	; HashTable_Set( pdic,
+		init := 1
 	}
 
 	if ( set == 1 ) {
-		HashTable_Set( pdic, processName, mode )
+		setPklInfo( "UniMode_" . processName, mode )
 	} else {
-		result := HashTable_Get( pdic, processName )
-		if ( result == "" )
-			result := HashTable_Get( pdic, "default" )
+		result := getPklInfo( "UniMode_" . processName )
+		result := ( result ) ? result : getPklInfo( "UniMode_" . "default" )
 		return result
 	}
-}
-
-_SendU_GetLocaleTxt( sKey, sVal = "", set = 0 )
-{
-	static pdic := 0
-	if ( pdic == 0 ) {
-		pdic := HashTable_New()
-		HashTable_Set( pdic, "DYNAMIC_MODE_TOOLTIP", "New mode for $processName$`n($title$)`nis ""$mode$"" ($modeName$ - $modeType$)")
-		
-		HashTable_Set( pdic, "Mode_Name_i", "SendInput")
-		HashTable_Set( pdic, "Mode_Name_c", "Clipboard")
-		HashTable_Set( pdic, "Mode_Name_r", "Restore Clipboard")
-		HashTable_Set( pdic, "Mode_Name_a", "Alt+Numbers")
-		HashTable_Set( pdic, "Mode_Name_d", "Dynamic")
-		HashTable_Set( pdic, "Mode_Name_0", "Unknown")
-		
-		HashTable_Set( pdic, "Mode_Type_i", "the best, if works")
-		HashTable_Set( pdic, "Mode_Type_c", "clears the clipboard")
-		HashTable_Set( pdic, "Mode_Type_r", "maybe slow")
-		HashTable_Set( pdic, "Mode_Type_a", "maybe not work")
-		HashTable_Set( pdic, "Mode_Type_d", "dynamic mode for the programs")
-		HashTable_Set( pdic, "Mode_Type_0", "unknown mode")
-	}
-	if ( set == 1 )
-		HashTable_Set( pdic, sKey, sVal )
-	else
-		return HashTable_Get( pdic, sKey )
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -425,9 +381,6 @@ __SendU_Labels_And_Includes__This_Is_Not_A_Function()
 	return
 
 }
-
-#include ext_CoHelper.ahk ; eD: Renamed from CoHelper.ahk
-#include ext_HashTable.ahk ; eD: Renamed from HashTable.ahk
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; END OF SENDU MODULE

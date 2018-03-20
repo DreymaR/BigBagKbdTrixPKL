@@ -15,8 +15,8 @@
 
 ; eD TODO: 	- Transition to AHK1.1 like PKL-vVv.
 ;				- Make iniRead functions similar to the vVv ones, able to read keys robustly from UTF-8 files
-;				- Transition th AHK v1.1 pdic arrays instead of Farkas' HashTable implementations.
-;				- Instead of VKeyCodeFromName, use the AHK 1.1+ GetKeyVK() - if it works with VK names...?
+;				- Transition to AHK v1.1 pdic arrays instead of Farkas' HashTable implementations.
+;				- Instead of VKeyCodeFromName, use the AHK v1.1 GetKeyVK() - if it works with VK names...?
 ;				- Transition to AHK v1.1 Unicode Send (re vVv): Need to fix some variable%ref% problems (see vVv?)
 ;			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;				- As LayoutInfo dics?
@@ -25,11 +25,14 @@
 ;				- pk_ for "physical" key movements like the AngleWide mod
 ;				- vk_ for "virtual" movements like the ISO/ANSI OEM_ switches?
 ;				- lk_ for "layout" movements like the Curl(DH) mod (or can these simply be vk_ switches?)
+;				- Make sure they are case insensitive (so both SC### and sc### work, both ways)
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary
 ;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
+;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing).
 ; eD DONE:	- Menu icons now work with AHK v1.1
+; eD DONE:	- Test out whether tray menu shortcuts would work? E.g., &About. Answer: The menu shows it, but unselectable by key.
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
 setPklInfo( "pklVers", "0.4-eD" ) ; eD: PKL[edition DreymaR]
@@ -43,8 +46,8 @@ Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables
-; eD TODO: Make global "personal" dictionaries (requires AHK 1.1+): gdicPklVar, gdicLayVar (& gdicKeyVar?)
-; eD TODO:     - Eventually, want something like gPv[Lay_eD__File] := "Dreymar_Layout.ini".
+; eD TODO: Make global "personal" associative array dictionaries (AHK v1.1): gDicPkl, gDicLay (& gDicKey?)?
+; eD TODO:     - Eventually, want something like gPkl[Lay_eD__File] := "Dreymar_Layout.ini".
 ; eD TODO:     - For now, declare the globals below separately in functions as needed.
 gP_CurrNumOfDKs := 0						; eD: How many dead keys were pressed	(was 'CurrentDeadKeys')
 gP_CurrNameOfDK := 0						; eD: Current dead key's name			(was 'CurrentDeadKeyName')
@@ -55,8 +58,7 @@ gP_Lay_Ini_File := "layout.ini" 			; eD: --"--
 gP_Pkl_eD__File := "PKL_eD\PKL_eD.ini"		; eD: My extra pkl.ini file
 gP_Lay_eD__File := "DreymaR_Layout.ini"		; eD: My extra layout.ini file
 gP_Pkl_Dic_File := "PKL_eD\PKL_Tables.ini"	; eD: My extra info dictionary file (from internal tables)
-gP_ShowMoreInfo := pklIniBool( "eD_DebugInfo", false, "Pkl_eD_", "pkl" )
-;gP_ShowMoreInfo ? setPklInfo( "DebugMode", "yes" ) :  setPklInfo( "DebugMode", "no" )
+setPklInfo( "eD_ShowMoreInfo", pklIniBool( "eD_DebugInfo", false, "Pkl_eD_", "pkl" ) )
 	
 
 arg = %1% ; Layout from command line parameter
@@ -138,7 +140,7 @@ modifierDown:  ; *SC025
 	activity_ping()
 	Critical
 	ThisHotkey := SubStr( A_ThisHotkey, 2 )
-	setModifierState( getLayoutItem( ThisHotkey . "v" ), 1 )
+	setModifierState( getKeyInfo( ThisHotkey . "v" ), 1 )
 return
 
 modifierUp: ; *SC025 UP
@@ -147,7 +149,7 @@ modifierUp: ; *SC025 UP
 	ThisHotkey := A_ThisHotkey
 	ThisHotkey := SubStr( ThisHotkey, 2 )
 	ThisHotkey := SubStr( ThisHotkey, 1, -3 )
-	setModifierState( getLayoutItem( ThisHotkey . "v" ), 0 )
+	setModifierState( getKeyInfo( ThisHotkey . "v" ), 0 )
 return
 
 showAbout:
@@ -163,15 +165,15 @@ showHelpImageToggle:
 return
 
 changeActiveLayout:
-	changeLayout( getLayoutInfo( "nextLayout" ) )
+	changeLayout( getLayInfo( "nextLayout" ) )
 return
 
 rerunWithSameLayout:
-	changeLayout( getLayoutInfo( "active" ) )
+	changeLayout( getLayInfo( "active" ) )
 return
 
 changeLayoutMenu:
-	changeLayout( getLayoutInfo( "layout" . A_ThisMenuItemPos . "code" ) )
+	changeLayout( getLayInfo( "layout" . A_ThisMenuItemPos . "code" ) )
 return
 
 doNothing:
@@ -185,12 +187,12 @@ return
 afterSuspend:
 	if ( A_IsSuspended ) {
 		pkl_showHelpImage( 3 )
-		Menu, Tray, Icon, % getTrayIconInfo( "FileOff" ), % getTrayIconInfo( "NumOff" )
+		Menu, Tray, Icon, % getLayInfo( "Ico_OffFile" ), % getLayInfo( "Ico_OffNum_" )
 	} else {
 		activity_ping( 1 )
 		activity_ping( 2 )
 		pkl_showHelpImage( 4 )
-		Menu, Tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
+		Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	}
 return
 
@@ -208,10 +210,10 @@ return
 
 ; ####################### (external) modules #######################
 
-#Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars ; eD: Renamed from HexUC.ahk
-;#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
-#Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK (v1.1+) will obviate this!
-#Include ext_HashTable.ahk ; eD: Moved all HashTable files into this one to reduce clutter
+; eD: #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
+; eD: #Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 - Renamed from MI.ahk
+#Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK v1.1 will obviate this!
+#Include ext_HashTable.ahk ; eD: Moved CoHelper into this file and removed unused sections
 #Include getWindowsDeadKeys.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
 ; eD: #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
 ; eD: #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini

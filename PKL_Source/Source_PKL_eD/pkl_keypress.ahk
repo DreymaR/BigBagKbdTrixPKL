@@ -6,8 +6,8 @@ keyPressed( HK )
 	state = 0
 
 	if ( extendKey == "--" )
-		extendKey := getLayoutInfo( "extendKey" )
-	cap := getLayoutItem( HK . "c" )
+		extendKey := getLayInfo( "extendKey" )
+	cap := getKeyInfo( HK . "c" )
 	
 	if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		extendKeyStroke = 1
@@ -18,14 +18,14 @@ keyPressed( HK )
 		Send {RShift Up}{LCtrl Up}{LAlt Up}{LWin Up}
 		return
 	} else if ( cap == -1 ) {
-		t := getLayoutItem( HK . "v" )
+		t := getKeyInfo( HK . "v" )
 		t = {VK%t%}
 		Send {Blind}%t%
 		return
 	}
 	extendKeyStroke = 0
 	; eD TODO: Remove hasAltGr & altGrEqualsAltCtrl from pkl.ini and here? Enforce <^>! (if a laptop hasn't got >!, they'll have to remap something)
-	if ( getLayoutInfo("hasAltGr") ) {
+	if ( getLayInfo("hasAltGr") ) {
 		if ( AltGrIsPressed() ) {
 			sh := getKeyState("Shift")
 			if ( (cap & 4) && getKeyState("CapsLock", "T") )
@@ -55,7 +55,7 @@ keyPressed( HK )
 		modif .= "#"
 
 
-	ch := getLayoutItem( HK . state )
+	ch := getKeyInfo( HK . state )
 	if ( ch == "" ) {
 		return
 	} else if ( state == "v" ) { ; VirtualKey
@@ -70,7 +70,7 @@ keyPressed( HK )
 		else
 			modif := ""
 		
-		ch := getLayoutItem( HK . state . "s" )
+		ch := getKeyInfo( HK . state . "s" )
 		if ( ch == "{CapsLock}" ) {
 			toggleCapsLock()
 		} else {
@@ -78,16 +78,16 @@ keyPressed( HK )
 			if ( ch != "" ) {
 				toSend = %modif%%ch%
 			} else {
-				ch := getLayoutItem( HK . "0s" )
+				ch := getKeyInfo( HK . "0s" )
 				if ( ch != "" )
 					toSend = %modif%%ch%
 			}
 			pkl_SendThis( "", toSend )
 		}
 	} else if ( ch == "%" ) {
-		SendU_utf8_string( getLayoutItem( HK . state . "s" ) )
+		SendU_utf8_string( getKeyInfo( HK . state . "s" ) )
 	} else if ( ch == "dk" ) {	; < 0 ) {
-		DeadKey( getLayoutItem( HK . state . "s" ) )	; -1 * ch )
+		DeadKey( getKeyInfo( HK . state . "s" ) )	; -1 * ch )
 ;	} else {
 ;		MsgBox, Trapped input: '%ch%'
 	}
@@ -101,7 +101,7 @@ extendKeyPressed( HK )
 	static altPressed := ""
 	static winPressed := ""
 
-	ch := getLayoutItem( HK . "e" )
+	ch := getKeyInfo( HK . "e" )
 	if ( ch == "") {
 		return
 	} else if ( ch == "Shift" ) {
@@ -160,15 +160,15 @@ pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
 		state = 2
 		if ( getKeyState("Shift") ) {
 			state++
-			if ( !getLayoutItem( HK . state ) ) {
+			if ( !getKeyInfo( HK . state ) ) {
 				state--
 				modif .= "+"
-				if ( !getLayoutItem( HK . state ) ) {
+				if ( !getKeyInfo( HK . state ) ) {
 					state := "v" ; VirtualKey
 					modif .= "^"
 				}
 			}
-		} else if ( !getLayoutItem( HK . state ) ) {
+		} else if ( !getKeyInfo( HK . state ) ) {
 			state := "v" ; VirtualKey
 			modif .= "^"
 		}
@@ -221,25 +221,19 @@ setModifierState( modifier, isdown )
 
 getModifierState( modifier, isdown = 0, set = 0 )
 {
-	static pdic := 0
-	
 	if ( modifier == "AltGr" )
 		return getAltGrState( isdown, set ) ; For better performance
 	
-	if ( pdic == 0 )
-	{
-		pdic := HashTable_New()
-	}
 	if ( set == 1 ) {
 		if ( isdown == 1 ) {
-			HashTable_Set( pdic, modifier, 1 )
+			setKeyInfo( "ModSt_" . modifier, 1 )	; HashTable_Set( pdic,
 			Send {%modifier% Down}
 		} else {
-			HashTable_Set( pdic, modifier, 0 )
+			setKeyInfo( "ModSt_" . modifier, 0 )
 			Send {%modifier% Up}
 		}
 	} else {
-		return HashTable_Get( pdic, modifier )
+		return getKeyInfo( "ModSt_" . modifier )
 	}
 }
 

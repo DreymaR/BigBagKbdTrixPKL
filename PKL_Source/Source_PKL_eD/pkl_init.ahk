@@ -1,10 +1,8 @@
 ; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
 ;     (From vVv, AHK v1.1 function. Not in AHK v1.0, so make a version here.)
 if ( A_AhkVersion < "1.0.90" ) {
-	Trim( str )
-	{
-		str := RegExReplace( str, "(^\s*|\s*$)")
-		return str
+	Trim( str )	{
+		return % RegExReplace( str, "(^\s*|\s*$)")
 	}
 }
 
@@ -75,7 +73,7 @@ pkl_init( layoutFromCommandLine = "" )
 	
 	Layout := pklIniRead( "layout" )
 	StringSplit, layouts, Layout, `,
-	setLayoutInfo( "countOfLayouts", layouts0 )
+	setLayInfo( "countOfLayouts", layouts0 )
 	Loop, % layouts0 {
 		StringSplit, parts, layouts%A_Index%, :
 		A_Layout := parts1
@@ -83,30 +81,30 @@ pkl_init( layoutFromCommandLine = "" )
 			A_Name := parts2
 		else
 			A_Name := parts1
-		setLayoutInfo( "layout" . A_Index . "code", A_Layout )
-		setLayoutInfo( "layout" . A_Index . "name", A_Name )
+		setLayInfo( "layout" . A_Index . "code", A_Layout )
+		setLayInfo( "layout" . A_Index . "name", A_Name )
 	}
 	
 	if ( layoutFromCommandLine )
 		Layout := layoutFromCommandLine
 	else
-		Layout := getLayoutInfo( "layout1code" )
+		Layout := getLayInfo( "layout1code" )
 	if ( Layout == "" ) {
 		pkl_MsgBox( 1, gP_Pkl_Ini_File )	; eD
 		ExitApp
 	}
-	setLayoutInfo( "active", Layout )
+	setLayInfo( "active", Layout )
 	
 	nextLayoutIndex := 1
 	Loop, % layouts0 {
-		if ( Layout == getLayoutInfo( "layout" . A_Index . "code") ) {
+		if ( Layout == getLayInfo( "layout" . A_Index . "code") ) {
 			nextLayoutIndex := A_Index + 1
 			break
 		}
 	}
 	if ( nextLayoutIndex > layouts0 )
 			nextLayoutIndex := 1
-	setLayoutInfo( "nextLayout", getLayoutInfo( "layout" . nextLayoutIndex . "code" ) )
+	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
 	
 	if ( compactMode ) {
 		LayoutDir := "."
@@ -120,29 +118,27 @@ pkl_init( layoutFromCommandLine = "" )
 	}
 	gP_Lay_Ini_File := LayoutFile							; eD: Update global as file path
 	gP_Lay_eD__File := LayoutDir . "\" . gP_Lay_eD__File	; eD: Update global as file path
-	setLayoutInfo( "layDir", LayoutDir )
+	setLayInfo( "layDir", LayoutDir )
 	
 	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
 	ShiftStates = %ShiftStates%:8:9 ; SgCap, SgCap + Shift
 	StringSplit, ShiftStates, ShiftStates, :
 	IfInString, ShiftStates, 6
-		setLayoutInfo( "hasAltGr", 1)
+		setLayInfo( "hasAltGr", 1)
 	else
-		setLayoutInfo( "hasAltGr", 0)
+		setLayInfo( "hasAltGr", 0)
 	;IniRead, extendKey, %LayoutFile%, global, extend_key, %A_Space%
 	extendKey := pklIniRead( "extend_key", "", LayoutFile, "global" )
 	if ( extendKey <> "" ) {
-		setLayoutInfo( "extendKey", extendKey )
+		setLayInfo( "extendKey", extendKey )
 	}
 	
 	remap := iniReadSection( LayoutFile, "layout" )
 	Loop, parse, remap, `r`n
 	{
-		pos := InStr( A_LoopField, "=" )
-		If (pos == 0)
+		pklIniKeyVal( A_LoopField, key, parts )
+		If ( key == "<NoKey>" )
 			Continue
-		key := Trim( SubStr( A_LoopField, 1, pos-1 ))
-		parts := Trim( SubStr( A_LoopField, pos+1 ))
 		StringSplit, parts, parts, %A_Tab%
 		if ( parts0 < 2 ) {
 			Hotkey, *%key%, doNothing
@@ -153,16 +149,16 @@ pkl_init( layoutFromCommandLine = "" )
 			parts2 = -1
 		else if ( parts2 == "modifier" )
 			parts2 = -2
-;		setLayoutItem( key . "v", getVKeyCodeFromName(parts1) ) 	; virtual key
-		setLayoutItem( key . "v", pklIniRead( "VK_" . parts1, "00", "Pkl_Dic", "VKeyCodeFromName" ) ) ; eD: replaced getVKeyCodeFromName(parts1) )
-		setLayoutItem( key . "c", parts2 ) 							; caps state
+;		setKeyInfo( key . "v", getVKeyCodeFromName(parts1) ) 	; virtual key
+		setKeyInfo( key . "v", pklIniRead( "VK_" . parts1, "00", "Pkl_Dic", "VKeyCodeFromName" ) ) ; eD: replaced getVKeyCodeFromName(parts1) )
+		setKeyInfo( key . "c", parts2 ) 							; caps state
 		if ( parts2 == -2 ) {
 			Hotkey, *%key%, modifierDown
 			Hotkey, *%key% Up, modifierUp
-			if ( getLayoutInfo( "hasAltGr" ) && parts1 == "RAlt" )
-				setLayoutItem( key . "v", "AltGr" )
+			if ( getLayInfo( "hasAltGr" ) && parts1 == "RAlt" )
+				setKeyInfo( key . "v", "AltGr" )
 			else
-				setLayoutItem( key . "v", parts1 )
+				setKeyInfo( key . "v", parts1 )
 		} else if ( key == extendKey ) {
 			Hotkey, *%key% Up, upToDownKeyPress
 		} else {
@@ -182,18 +178,18 @@ pkl_init( layoutFromCommandLine = "" )
 				v := asc( v )
 			} else {
 				if ( SubStr( v, 1, 1 ) == "*" ) { ; Special chars
-					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
+					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "*"
 				} else if ( SubStr( v, 1, 1 ) == "=" ) { ; Special chars with {Blind}
-					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
+					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "="
 				} else if ( SubStr( v, 1, 1 ) == "%" ) { ; Ligature (with unicode chars, too)
-					setLayoutItem( key . k . "s", SubStr( v, 2 ) )
+					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "%"
 				} else if ( v == "--" ) {
 					v = -- ;) Disabled
 				} else if ( SubStr( v, 1, 2 ) == "dk" ) { ; dead key
-					setLayoutItem( key . k . "s", SubStr( v, 3 ) )
+					setKeyInfo( key . k . "s", SubStr( v, 3 ) )
 					v := "dk"
 ;					v := "-" . SubStr( v, 3 )
 ;					v += 0	; eD: Makes v numeric (need to avoid this!)
@@ -208,7 +204,7 @@ pkl_init( layoutFromCommandLine = "" )
 						}
 					}
 					if ( ligature ) { ; Ligature
-						setLayoutItem( key . k . "s", v )
+						setKeyInfo( key . k . "s", v )
 						v := "%"
 					} else { ; One character
 						v := "0x" . HexUC( v )
@@ -217,80 +213,73 @@ pkl_init( layoutFromCommandLine = "" )
 				}
 			}
 			if ( v != "--" )
-				setLayoutItem( key . k , v )
+				setKeyInfo( key . k , v )
 		}
 	}
 	
 	; eD: Read/set deadkey name list
-	Loop, 32										; Default dead key table
+	Loop, 32											; Default dead key table
 	{
 		; eD: In AHK v1.1.17+, you can use Format("{:02}",num) to pad with zeros. Better in any way?
-		key := "dk" . SubStr( "00" . A_Index, -1 )	; Pad with zero if index < 10
-		ky2 := "dk" .                A_Index      	; e.g., "dk1" or "dk14"
+		key := "dk" . SubStr( "00" . A_Index, -1 )		; Pad with zero if index < 10
+		ky2 := "dk" .                A_Index      		; e.g., "dk1" or "dk14"
 		val := "deadkey" . A_Index
-		setLayoutItem( key, val )					; e.g., "dk01" = "deadkey1"
+		setKeyInfo( key, val )							; e.g., "dk01" = "deadkey1"
 		if ( ky2 != key )
-			setLayoutItem( ky2, val )					; e.g., "dk1" = "deadkey1"; backwards compatible
+			setKeyInfo( ky2, val )						; e.g., "dk1" = "deadkey1"; backwards compatible
 	}
 	file := pklIniRead( "dk_tables", "", "Lay_eD_", "global" )
 	file := ( FileExist( file ) ) ? file : LayoutFile	; eD: If no dedicated DK file, try the layout file
-	setLayoutInfo( "dkfile", file )						; This file should contain the actual dk tables
+	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
 	file := ( pklIniRead( "dk01", -1, "Lay_eD_", "deadkeys" ) != -1 ) ? gP_Lay_eD__File : file
 	remap := iniReadSection( file, "deadkeys" )
 	Loop, parse, remap, `r`n
 	{
-		; eD TODO: Replace .ini key parsings with a iniGetKey() that also removes comments etc
-		pos := InStr( A_LoopField, "=" )
-		key := SubStr( A_LoopField, 1, pos-1 )
-		val := SubStr( A_LoopField, pos+1 )
-		if ( not val = "" )
-			setLayoutItem( key, val )				; e.g., "dk01" = "dk_dotbelow"
+		pklIniKeyVal( A_LoopField, key, val )
+		if ( val )
+			setKeyInfo( key, val )						; e.g., "dk01" = "dk_dotbelow"
 	}
 	
 	; eD: Read/set deadkey image data
 	dir := pklIniRead( "dk_imgDir", "", "Lay_eD_", "global" )
 	dir := ( FileExist( dir ) ) ? dir : LayoutDir	; eD: If no dedicated DK image dir, try the layout dir
-	setLayoutInfo( "dkImgDir", dir )
-	setLayoutInfo( "dkImgSuf", pklIniRead( "dk_imgSuf", "", "Lay_eD_", "global" ) )
+	setLayInfo( "dkImgDir", dir )
+	setLayInfo( "dkImgSuf", pklIniRead( "dk_imgSuf", "", "Lay_eD_", "global" ) )
 	
 	if ( extendKey ) {
 		remap := iniReadSection( gP_Pkl_Ini_File, "extend" )
 		Loop, parse, remap, `r`n
 		{
-			pos := InStr( A_LoopField, "=" )
-			key := SubStr( A_LoopField, 1, pos-1 )
-			parts := SubStr( A_LoopField, pos+1 )
-			setLayoutItem( key . "e", parts )
+			pklIniKeyVal( A_LoopField, key, parts )
+			setKeyInfo( key . "e", parts )
 		}
 		remap := iniReadSection( LayoutFile, "extend" )
 		Loop, parse, remap, `r`n
 		{
-			pos := InStr( A_LoopField, "=" )
-			key := SubStr( A_LoopField, 1, pos-1 )
-			parts := SubStr( A_LoopField, pos+1 )
-			setLayoutItem( key . "e", parts )
+			pklIniKeyVal( A_LoopField, key, parts )
+			setKeyInfo( key . "e", parts )
 		}
 	}
 	
-	if ( FileExist( getLayoutInfo("layDir") . "\on.ico") ) {
-		setTrayIconInfo( "FileOn", getLayoutInfo( "layDir" ) . "\on.ico" )
-		setTrayIconInfo( "NumOn", 1 )
+	if ( FileExist( getLayInfo("layDir") . "\on.ico") ) {
+		setLayInfo( "Ico_On_File", getLayInfo( "layDir" ) . "\on.ico" )
+		setLayInfo( "Ico_On_Num_", 1 )
 	} else if ( A_IsCompiled ) {
-		setTrayIconInfo( "FileOn", A_ScriptName )
-		setTrayIconInfo( "NumOn", 6 )
+		setLayInfo( "Ico_On_File", A_ScriptName )
+		setLayInfo( "Ico_On_Num_", 6 )
 	} else {
-		setTrayIconInfo( "FileOn", "Resources\on.ico" )
-		setTrayIconInfo( "NumOn", 1 )
+		setLayInfo( "Ico_On_File", "Resources\on.ico" )
+		setLayInfo( "Ico_On_Num_", 1 )
 	}
-	if ( FileExist( getLayoutInfo( "layDir" ) . "\off.ico") ) {
-		setTrayIconInfo( "FileOff", getLayoutInfo( "layDir" ) . "\off.ico" )
-		setTrayIconInfo( "NumOff", 1 )
+	if ( FileExist( getLayInfo( "layDir" ) . "\off.ico") ) {
+		setLayInfo( "Ico_OffFile", getLayInfo( "layDir" ) . "\off.ico" )
+		setLayInfo( "Ico_OffNum_", 1 )
 	} else if ( A_IsCompiled ) {
-		setTrayIconInfo( "FileOff", A_ScriptName )
-		setTrayIconInfo( "NumOff", 3 )
+		setLayInfo( "Ico_OffFile", A_ScriptName )
+		setLayInfo( "Ico_OffNum_", 3 )
 	} else {
-		setTrayIconInfo( "FileOff", "Resources\off.ico" )
-		setTrayIconInfo( "NumOff", 1 )
+		setLayInfo( "Ico_OffFile", "Resources\off.ico" )
+		setLayInfo( "Ico_OffNum_", 1 )
 	}
 	pkl_set_tray_menu()
 }
@@ -327,7 +316,7 @@ pkl_activate()
 
 pkl_show_tray_menu()
 {
-	Menu, Tray, Icon, % getTrayIconInfo( "FileOn" ), % getTrayIconInfo( "NumOn" )
+	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	Menu, Tray, Icon,,, 1 ; Freeze the icon
 }
 
@@ -347,4 +336,16 @@ changeLayout( nextLayout )
 		Run %A_ScriptName% /f %nextLayout%
 	else
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
+}
+
+; eD: Moved this here from ext_Uni2Hex.ahk. eD TODO: In AHK v1.1, can it be replaced?
+HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input CHAR
+   format = %A_FormatInteger%   ; save original integer format
+   SetFormat Integer, Hex       ; for converting bytes to hex
+   VarSetCapacity(U, 2)        ; from CoHelper.ahk
+   DllCall("MultiByteToWideChar", UInt,65001, UInt,0, Str,utf8, Int,-1, UInt,&U, Int,1)
+   h := 0x10000 + (*(&U+1)<<8) + *(&U)
+   StringTrimLeft h, h, 3
+   SetFormat Integer, %format%  ; restore original format
+   Return h
 }
