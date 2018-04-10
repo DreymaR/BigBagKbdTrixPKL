@@ -91,8 +91,8 @@ iniReadSection( pIniFile, pSection="", pPrefix="inis_") {
 ;
 ; eD: Read a (pkl).ini value
 ;     Usage: val := pklIniRead( <key>, [default], [inifile(shortstr)], [section] )
-;     Note: IniRead trims off white space and one pair of quotes if present.
-pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", esc=0 )
+;     Note: IniRead trims off white space and one pair of quotes if present, but not comments.
+pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 {
 	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
 	global gP_Lay_Ini_File				; eD:    "layout.ini" 	--"--
@@ -101,36 +101,39 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", esc=0 )
 	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
 	if ( ( not inStr( inifile, "." ) ) and FileExist( gP_%inifile%_File ) )
 		inifile := gP_%inifile%_File
-	default := ( default == "" ) ? A_Space : default	; IniRead requires A_Space for a blank default
+	default := ( default == "" ) ? A_Space : default		; IniRead requires A_Space for a blank default
 	IniRead, val, %inifile%, %section%, %key%, %default%
-	val := strEsc( val, esc )
+	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val
 }
 
 pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )
 {
-	val := pklIniRead( key, default, inifile, section )			;IniRead, val, %inifile%, %section%, %key%, %default%
+	val := pklIniRead( key, default, inifile, section )		;IniRead, val, %inifile%, %section%, %key%, %default%
 	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
 	return val
 }
 
-pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0 )			; Because PKL doesn't always use IniRead? Why though?
+pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0 )		; Because PKL doesn't always use IniRead? Why though?
 {
 	pos := InStr( iniLine, "=" )
 	key :=         Trim( SubStr( iniLine, 1, pos-1 ))
-	val := strEsc( Trim( SubStr( iniLine,    pos+1 )), esc )
+	val := strCom( Trim( SubStr( iniLine,    pos+1 )) )
+	val := ( esc ) ? strEsc( val ) : val
 	key := ( pos == 0 ) ? "<NoKey>" : key
 }
 
-strEsc( str, esc=1 )
+strCom( str )												; Remove end-of-line comments (whitespace then semicolon)
 {
-	str := RegExReplace( str, "[ `t]+;.*`n" )			; Remove end-of-line comments (whitespace then semicolon)
-	if ( esc )
-	{
-		StringReplace, str, str, \n, `n, A
-		StringReplace, str, str, \\, \, A
-	}
+	str := RegExReplace( str, "[ `t]+;.*`n" )
+	return str
+}
+
+strEsc( str )												; Replace \n and \\ escapes
+{
+	StringReplace, str, str, \n, `n, A
+	StringReplace, str, str, \\, \, A
 	return str
 }
 

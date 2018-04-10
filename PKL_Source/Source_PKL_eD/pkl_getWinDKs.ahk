@@ -35,7 +35,7 @@ getWinLocaleID() ; eD: This was in the detect/get functions
 /*
 ------------------------------------------------------------------------
 
-SendU module for detecting the deadkeys in current keyboard layout
+Module for detecting the deadkeys in current keyboard layout
 
 Version: 0.0.3 2008-05
 License: GNU General Public License

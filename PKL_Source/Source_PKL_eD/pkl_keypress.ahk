@@ -11,7 +11,7 @@ keyPressed( HK )
 	
 	if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		extendKeyStroke = 1
-		extendKeyPressed( HK )
+		_extendKeyPressed( HK )
 		return
 	} else if ( HK == extendKey && extendKeyStroke ) {
 		extendKeyStroke = 0
@@ -36,9 +36,9 @@ keyPressed( HK )
 				modif .= "!"
 				if ( getKeyState("RCtrl"))
 					modif .= "^"
-				state := pkl_ShiftState( cap )
+				state := _pkl_ShiftState( cap )
 			} else { ; not Alt
-				pkl_CtrlState( HK, cap, state, modif )
+				_pkl_CtrlState( HK, cap, state, modif )
 			}
 		}
 	} else {
@@ -46,9 +46,9 @@ keyPressed( HK )
 			modif .= "!"
 			if ( getKeyState("RCtrl") || ( getKeyState("LCtrl") && !getKeyState("RAlt") ) )
 				modif .= "^"
-			state := pkl_ShiftState( cap )
+			state := _pkl_ShiftState( cap )
 		} else { ; not Alt
-			pkl_CtrlState( HK, cap, state, modif )
+			_pkl_CtrlState( HK, cap, state, modif )
 		}
 	}
 	if ( getKeyState("LWin") || getKeyState("RWin") )
@@ -94,7 +94,7 @@ keyPressed( HK )
 	
 }
 
-extendKeyPressed( HK )
+_extendKeyPressed( HK )
 {
 	static shiftPressed := ""
 	static ctrlPressed := ""
@@ -154,7 +154,7 @@ extendKeyPressed( HK )
 	Send {Blind}{%ch%}
 }
 
-pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
+_pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
 {
 	if ( getKeyState("Ctrl") ) {
 		state = 2
@@ -173,11 +173,11 @@ pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
 			modif .= "^"
 		}
 	} else {
-		state := pkl_ShiftState( capState )
+		state := _pkl_ShiftState( capState )
 	}
 }
 
-pkl_ShiftState( capState )
+_pkl_ShiftState( capState )
 {
 	res = 0
 	if ( capState == 8 ) {

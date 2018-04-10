@@ -1,25 +1,3 @@
-; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
-;     (From vVv, AHK v1.1 function. Not in AHK v1.0, so make a version here.)
-if ( A_AhkVersion < "1.0.90" ) {
-	Trim( str )	{
-		return % RegExReplace( str, "(^\s*|\s*$)")
-	}
-}
-
-; eD: Set a PKL hotkey. 
-;     Usage: pklSetHotkey( <HKstring>, <goto label>, <PKLinfo tag> )
-pklSetHotkey( val, HKlabel, pklInfoTag, default = "" )						; eD: Set a PKL hotkey
-{
-	if ( val <> "" ) {
-		Loop, parse, val, `,
-		{
-			Hotkey, %A_LoopField%, %HKlabel%
-			if ( A_Index == 1 )
-				setPklInfo( pklInfoTag, A_LoopField )
-		}
-	}
-}
-
 pkl_init( layoutFromCommandLine = "" )
 {
 	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
@@ -28,6 +6,8 @@ pkl_init( layoutFromCommandLine = "" )
 	global gP_Lay_eD__File				; eD: My "layout.ini" 	--"--
 ;	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
 	
+;   ####################### pkl.ini #######################
+
 	if ( not FileExist( gP_Pkl_Ini_File ) ) {
 		MsgBox, %gP_Pkl_Ini_File% file NOT FOUND`nSorry. The program will exit.
 		ExitApp
@@ -40,12 +20,12 @@ pkl_init( layoutFromCommandLine = "" )
 		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )	; eD: Replaced getLangStrFromDigits( A_Language )
 	pkl_locale_load( it, compactMode )
 	
-	pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; eD: Was LAlt & RCtrl
-	pklSetHotkey( pklIniRead( "displayHelpImageHotkey"     ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
-	pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
-	pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
-	pklSetHotkey( pklIniRead( "refreshHotkey","","Pkl_eD_" ), "rerunWithSameLayout" , "HK_Refresh"      )
-	pklSetHotkey( pklIniRead( "changeNonASCIIMode"         ), "_SendU_Try_Dyn_Mode" , "HK_SendUMode"    )	; eD TODO: To be deprecated?
+	_pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; eD: Was LAlt & RCtrl
+	_pklSetHotkey( pklIniRead( "displayHelpImageHotkey"     ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
+	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
+	_pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
+	_pklSetHotkey( pklIniRead( "refreshHotkey","","Pkl_eD_" ), "rerunWithSameLayout" , "HK_Refresh"      )
+	_pklSetHotkey( pklIniRead( "changeNonASCIIMode"         ), "_SendU_Try_Dyn_Mode" , "HK_SendUMode"    )	; eD TODO: To be deprecated?
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
@@ -106,6 +86,8 @@ pkl_init( layoutFromCommandLine = "" )
 			nextLayoutIndex := 1
 	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
 	
+;   ####################### layout.ini #######################
+
 	if ( compactMode ) {
 		LayoutDir := "."
 	} else {
@@ -120,23 +102,44 @@ pkl_init( layoutFromCommandLine = "" )
 	gP_Lay_eD__File := LayoutDir . "\" . gP_Lay_eD__File	; eD: Update global as file path
 	setLayInfo( "layDir", LayoutDir )
 	
-	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
-	ShiftStates = %ShiftStates%:8:9 ; SgCap, SgCap + Shift
+	static initalized := 0	; Ensure the tables are read only once (as this function is run on layout change too?)
+	if ( initialized == 0 )
+	{																	; eD: Read/set remap dictionary
+		initialized := 1
+	}
+	
+	ShiftStates := pklIniRead( "shiftstates", "0:1", LayoutFile, "global" )		;	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
+	ShiftStates := ShiftStates . ":8:9"	; SgCap, SgCap + Shift
 	StringSplit, ShiftStates, ShiftStates, :
-	IfInString, ShiftStates, 6
-		setLayInfo( "hasAltGr", 1)
-	else
-		setLayInfo( "hasAltGr", 0)
-	;IniRead, extendKey, %LayoutFile%, global, extend_key, %A_Space%
-	extendKey := pklIniRead( "extend_key", "", LayoutFile, "global" )
+	setLayInfo( "hasAltGr", ( InStr( ShiftStates, 6 ) ) ? 1 : 0 )
+	extendKey   := pklIniRead( "extend_key", "", LayoutFile, "global" )			; eD TODO: If this is set, look for multi-Extend in Lay_eD_ .ini
 	if ( extendKey <> "" ) {
 		setLayInfo( "extendKey", extendKey )
 	}
 	
+	; eD WIP: Layout remapping for ergo mods, ANSI/ISO conversion etc. Read in remap tables.
+	; Read in section, then process each line? Replace outer "" (unless using IniRead), || -> |, final |.
+	; Start using AHK v1.1 arrays!? Otherwise, silly.
+	RemapFile := pklIniRead( "remapFile", "", "Lay_eD_", "global" )
+	if ( FileExist(RemapFile) ) {
+		scMapLay := pklIniRead( "scmap_layouts", "", "Lay_eD_", "global" )
+		scMapExt := pklIniRead( "scmap_extend_", "", "Lay_eD_", "global" )
+		vkMapKbd := pklIniRead( "vkmap_kbdType", "", "Lay_eD_", "global" )
+		;iniReadSection()
+		;StrSplit( str, ",", " `t" )
+	}
+
 	remap := iniReadSection( LayoutFile, "layout" )
 	Loop, parse, remap, `r`n
 	{
 		pklIniKeyVal( A_LoopField, key, parts )
+		; eD TODO/WIP: Remap the key according to _Remap_eD.ini here!
+		; _pklInitReadRemap() - Splits by comma, calls itself in case of *, then ...
+		; _pklInitReadCycle() - Splits by plus, calls itself if many parts, returns a string of pipe-delimited scan codes? Input: cycle name.
+;			StringSplit, RemapCycle, RemapStr, |, %A_Space%%A_Tab%
+;			Loop, RemapCycle0	; The number of string elements found
+;				;StringSplit, RemapElement, RemapCycle%A_Index%, +, %A_Space%%A_Tab%
+;				Loop, Parse, RemapCycle%A_Index%, +, %A_Space%%A_Tab%
 		If ( key == "<NoKey>" )
 			Continue
 		StringSplit, parts, parts, %A_Tab%
@@ -149,7 +152,6 @@ pkl_init( layoutFromCommandLine = "" )
 			parts2 = -1
 		else if ( parts2 == "modifier" )
 			parts2 = -2
-;		setKeyInfo( key . "v", getVKeyCodeFromName(parts1) ) 	; virtual key
 		setKeyInfo( key . "v", pklIniRead( "VK_" . parts1, "00", "Pkl_Dic", "VKeyCodeFromName" ) ) ; eD: replaced getVKeyCodeFromName(parts1) )
 		setKeyInfo( key . "c", parts2 ) 							; caps state
 		if ( parts2 == -2 ) {
@@ -207,7 +209,7 @@ pkl_init( layoutFromCommandLine = "" )
 						setKeyInfo( key . k . "s", v )
 						v := "%"
 					} else { ; One character
-						v := "0x" . HexUC( v )
+						v := "0x" . _HexUC( v )
 						v += 0
 					}
 				}
@@ -296,13 +298,15 @@ pkl_activate()
 		PostMessage, 0x398, 422,,, ahk_id %id%
 	}
 	Sleep, 10
-	pkl_show_tray_menu()
+	
+	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )	; _pkl_show_tray_menu()
+	Menu, Tray, Icon,,, 1 ; Freeze the icon
 	
 	if ( pklIniBool( "displayHelpImage", true ) )
 		pkl_showHelpImage( 1 )
 
 	Sleep, 200 ; I don't want to kill myself...
-	OnMessage( 0x398, "MessageFromNewInstance" )
+	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
 	activity_ping(1)
 	activity_ping(2)
@@ -314,15 +318,8 @@ pkl_activate()
 	}
 }
 
-pkl_show_tray_menu()
-{
-	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
-	Menu, Tray, Icon,,, 1 ; Freeze the icon
-}
-
-MessageFromNewInstance(lparam)
-{
-	; The second instance send this message
+_MessageFromNewInstance(lparam)	; Called by OnMessage( 0x0398 )
+{	; If running a second instance, this message is sent
 	if ( lparam == 422 )
 		ExitApp
 }
@@ -338,8 +335,16 @@ changeLayout( nextLayout )
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
+; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
+;     (From vVv, AHK v1.1 function. Not in AHK v1.0, so make a version here.)
+if ( A_AhkVersion < "1.0.90" ) {
+	Trim( str )	{
+		return % RegExReplace( str, "(^\s*|\s*$)")
+	}
+}
+
 ; eD: Moved this here from ext_Uni2Hex.ahk. eD TODO: In AHK v1.1, can it be replaced?
-HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input CHAR
+_HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input CHAR
    format = %A_FormatInteger%   ; save original integer format
    SetFormat Integer, Hex       ; for converting bytes to hex
    VarSetCapacity(U, 2)        ; from CoHelper.ahk
@@ -348,4 +353,16 @@ HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input C
    StringTrimLeft h, h, 3
    SetFormat Integer, %format%  ; restore original format
    Return h
+}
+
+_pklSetHotkey( hkStr, gotoLabel, pklInfoTag )						; eD: Set a PKL hotkey
+{
+	if ( hkStr <> "" ) {
+		Loop, parse, hkStr, `,
+		{
+			Hotkey, %A_LoopField%, %gotoLabel%
+			if ( A_Index == 1 )
+				setPklInfo( pklInfoTag, A_LoopField )
+		}
+	}
 }

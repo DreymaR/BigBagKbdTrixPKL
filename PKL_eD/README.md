@@ -9,7 +9,7 @@ PKL[edition DreymaR] is a Work-In-Progress, so don't expect all of it to be work
 DONE:
 -----
 
-* Renamings and file mergings to make the code more compact and streamlined. Removed set/getGlobal as it was used only once.
+* Renamings and file mergings to make the code more compact and streamlined.
 * Edited menus and the About... dialog.
 * Add a KeyHistory shortcut for debugging etc. Make it configurable in pkl_eD.ini (eD_DebugInfo).
 * Add a Refresh hotkey. Reruns PKL in case something got stuck or similar.
@@ -30,6 +30,18 @@ DONE:
 TODO:
 -----
 
+* Underlying layout
+	- Specify in layout_eD.ini a file that's the basis (layout section only?).
+	- Now, the layout.ini only has to specify any changes from that.
+	- This makes locale variants etc really easy!
+
+* Add to unmapped dead key functionality
+	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
+	- That way, one could for instance use the Vietnamese Telex method with aou dead keys (aw ow uw make â ô ư) etc.
+	- One catch would be that the dead key wouldn't release until next key press, but that may be acceptable.
+	- Specify, e.g., the entry for 1 similar to today's 0 entry. U+0000–U+001F are just <control> chars.
+	- That'd be backwards compatible with existing PKL tables, and one can choose behavior.
+	
 * Alternative mapping format, like TMK or my own KLD? But keep backwards compatibility.
     - Overmuch for layouts?! Besides, there are conversion tools like the one by Aldo Gunsing.
     - Neat idea for scancode and virtual key remapping! Make it possible to leave entries open.

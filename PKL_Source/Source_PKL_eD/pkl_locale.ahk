@@ -5,13 +5,13 @@ pkl_locale_load( lang, compact = 0 )
 {
 	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
 
-	static defLocStrInit := 0	; Ensure the defaults are initialized only once (as this function is run on layout change too)
-	if ( defLocStrInit == 0 )
+	static initalized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)
+	if ( initialized == 0 )
 	{																	; eD: Read/set default locale string list
 		Loop, 22														; Read default locale strings (numbered)
 		{
 			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
-			str := strEsc( str )
+			str := strEsc( str )										; Replace \n and \\ escapes
 			setPklInfo( "LocStr_" . A_Index , str )
 ;			teststr := teststr . "`n" . A_Index . "  " . str
 		}
@@ -21,7 +21,7 @@ pkl_locale_load( lang, compact = 0 )
 			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
 			setPklInfo( key, val )
 		}
-		defLocStrInit := 1
+		initialized := 1
 	}
 
 	if ( compact )
@@ -58,16 +58,16 @@ pkl_locale_load( lang, compact = 0 )
 	Loop, parse, line, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 0 )
-		setHotkeyText( key, val )
+		_setHotkeyText( key, val )
 	}
 }
 
-setHotkeyText( hk, localehk )
+_setHotkeyText( hk, localehk )
 {
-	getHotkeyText( hk, localehk, 1 )
+	_getHotkeyText( hk, localehk, 1 )
 }
 
-getHotkeyText( hk, localehk = "", set = 0 )
+_getHotkeyText( hk, localehk = "", set = 0 )
 {
 	static localizedHotkeys := ""
 	
@@ -106,10 +106,10 @@ getReadableHotkeyString( str )
 	StringReplace, str, str, ~,, 1
 
 	str := RegExReplace( str, "(\w+)", "#[$1]" )
-	hotkeys := getHotkeyText( "all" )
+	hotkeys := _getHotkeyText( "all" )
 	Loop, Parse, hotkeys, %A_Space%
 	{
-		lhk := getHotkeyText( A_LoopField )
+		lhk := _getHotkeyText( A_LoopField )
 		StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )

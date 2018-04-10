@@ -22,11 +22,11 @@ pkl_set_tray_menu()
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
 	suspendMenuItem := getPklInfo( "LocStr_10" )
 	exitappMenuItem := getPklInfo( "LocStr_11" )
-	helpimgMenuItem .= ( HelpImgHotkey ) ? FixAmpInMenu( HelpImgHotkey ) : ""
-	chnglayMenuItem .= ( ChngLayHotkey ) ? FixAmpInMenu( ChngLayHotkey ) : ""
-	refreshMenuItem .= ( RefreshHotkey ) ? FixAmpInMenu( RefreshHotkey ) : ""
-	suspendMenuItem .= ( SuspendHotkey ) ? FixAmpInMenu( SuspendHotkey ) : ""
-	exitappMenuItem .= ( ExitAppHotkey ) ? FixAmpInMenu( ExitAppHotkey ) : ""
+	helpimgMenuItem .= ( HelpImgHotkey ) ? _FixAmpInMenu( HelpImgHotkey ) : ""
+	chnglayMenuItem .= ( ChngLayHotkey ) ? _FixAmpInMenu( ChngLayHotkey ) : ""
+	refreshMenuItem .= ( RefreshHotkey ) ? _FixAmpInMenu( RefreshHotkey ) : ""
+	suspendMenuItem .= ( SuspendHotkey ) ? _FixAmpInMenu( SuspendHotkey ) : ""
+	exitappMenuItem .= ( ExitAppHotkey ) ? _FixAmpInMenu( ExitAppHotkey ) : ""
 	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
 	Loop, % countOfLayouts
@@ -116,8 +116,6 @@ pkl_set_tray_menu()
 		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; %layoutsMenu%     ico - star
 		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; %chnglayMenuItem% ico - forward arrow
 	}
-	if ( eD_ShowMoreInfo ) {
-	}
 	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; %suspendMenuItem% ico - crossed circle
 	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; %exitappMenuItem% ico - power off
 	} else {
@@ -146,44 +144,42 @@ pkl_set_tray_menu()
 			MI_SetMenuStyle( tr, 0x4000000 ) ; MNS_CHECKORBMP (optional)
 			setPklInfo( "trayMenuHandler", tr )
 		}
-		OnMessage( 0x404, "AHK_NOTIFYICON" )
+		OnMessage( 0x404, "_AHK_NOTIFYICON" )
 	}
 }
 
 pkl_about()
 {
-	global gP_Lay_Ini_File	; eD: "layout.ini"
-	
-	mslid := getWinLocaleID() ; eD: Get the Windows locale ID
-	dkstr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
-	dkstr := dkstr ? dkstr : "<none found>"
-	lfile := gP_Lay_Ini_File
-	pklAppName := getPklInfo( "pklName" )
-	pklMainURL := "http://pkl.sourceforge.net"
-	pklProgURL := getPklInfo( "pkl_URL" )
-	pklVersion := getPklInfo( "pklVers" )
-	compiledAt := getPklInfo( "pklComp" )
+	msLID := getWinLocaleID() ; eD: Get the Windows locale ID
+	dkStr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
+	dkStr := dkStr ? dkStr : "<none found>"
 
-	unknown         := getPklInfo( "LocStr_3"  )
-	active_layout   := getPklInfo( "LocStr_4"  )
+	pklAppName      := getPklInfo( "pklName" )
+	pklMainURL      := "http://pkl.sourceforge.net"
+	pklProgURL      := getPklInfo( "pkl_URL" )
+	pklVersion      := getPklInfo( "pklVers" )
+	compiledAt      := getPklInfo( "pklComp" )
+
+	locUnknown      := getPklInfo( "LocStr_3"  )
+	activeLayout    := getPklInfo( "LocStr_4"  )
 	locVersion      := getPklInfo( "LocStr_5"  )
 	locLanguage     := getPklInfo( "LocStr_6"  )
 	locCopyright    := getPklInfo( "LocStr_7"  )
 	locCompany      := getPklInfo( "LocStr_8"  )
-	license         := getPklInfo( "LocStr_13" )
-	infos           := getPklInfo( "LocStr_14" )
-	contributors    := getPklInfo( "LocStr_20" )
+	locLicense      := getPklInfo( "LocStr_13" )
+	locInfos        := getPklInfo( "LocStr_14" )
+	locContributors := getPklInfo( "LocStr_20" )
 	translationName := getPklInfo( "LocStr_21" )
 	translatorName  := getPklInfo( "LocStr_22" )
 	
-	IniRead, lname   , %lfile%, informations, layoutname, %unknown%
-	IniRead, lver    , %lfile%, informations, version   , %unknown%
-	IniRead, lcode   , %lfile%, informations, layoutcode, %unknown%
-	IniRead, lcopy   , %lfile%, informations, copyright , %unknown%
-	IniRead, lcomp   , %lfile%, informations, company   , %unknown%
-	IniRead, llocale , %lfile%, informations, localeid  , 0409
-	IniRead, lwebsite, %lfile%, informations, homepage  , %A_Space%
-	llang := pklIniRead( SubStr( llocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )	; eD: Replaced getLangStrFromDigits( llocale )
+	layName  := pklIniRead( "layoutname", locUnknown, "Lay_Ini", "informations" )
+	layVers  := pklIniRead( "version"   , locUnknown, "Lay_Ini", "informations" )
+	layCode  := pklIniRead( "layoutcode", locUnknown, "Lay_Ini", "informations" )
+	layCopy  := pklIniRead( "copyright" , locUnknown, "Lay_Ini", "informations" )
+	layComp  := pklIniRead( "company"   , locUnknown, "Lay_Ini", "informations" )
+	layPage  := pklIniRead( "homepage"  , ""        , "Lay_Ini", "informations" )
+	lLocale  := pklIniRead( "localeid"  , "0409"    , "Lay_Ini", "informations" )
+	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
 
 	text = ;
 	text = %text%
@@ -193,36 +189,37 @@ pkl_about()
 		Gui, Add, Edit, , %pklProgURL%
 	Gui, Add, Text, , ......................................................................
 	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010
-	Gui, Add, Text, , %infos%
-	Gui, Add, Text, , %license%
+	Gui, Add, Text, , %locInfos%
+	Gui, Add, Text, , %locLicense%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
 	Gui, Add, Text, , ......................................................................
 	text = ;
-	text = %text%%contributors%:
-	text = %text%`nOEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
-	text = %text%`nAutoHotkey authors && contributors
-	text = %text%`n- Chris Mallet: AHK
-	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
-	text = %text%`n- Steve Gray alias Lexikos: AHK v1.1, MI.ahk,...
-	text = %text%`n- majkinetor: Ini.ahk
-	text = %text%`n- Shimanov && Laszlo Hars: SendU.ahk
+	text = %text%%locContributors%:
+	text = %text%`n- OEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
+;	text = %text%`nAutoHotkey authors && contributors
+	text = %text%`n- Chris Mallet && The AutoHotkey Foundation:
+;	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
+	text = %text%`n  (Lexikos, Majkinetor, Shimanov, L. Hars...)
+;	text = %text%`n- Steve Gray alias Lexikos: AHK v1.1++	;, MI.ahk,...
+;	text = %text%`n- majkinetor: Ini.ahk
+;	text = %text%`n- Shimanov && Laszlo Hars: SendU.ahk
 	if ( translatorName != "[[Translator name]]" )
 		text = %text%`n`n%translatorName%: %translationName%
 	Gui, Add, Text, , %text%
 	Gui, Add, Text, , ......................................................................
 	text = ;
-	text = %text%%ACTIVE_LAYOUT%:`n  %lname%
-	text = %text%`n%locVersion%: %lver%
-	text = %text%`n%locLanguage%: %llang%
-	text = %text%`n%locCopyright%: %lcopy%
-	text = %text%`n%locCompany%: %lcomp%
+	text = %text%%activeLayout%:`n  %layName%
+	text = %text%`n%locVersion%: %layVers%
+	text = %text%`n%locLanguage%: %layLang%
+	text = %text%`n%locCopyright%: %layCopy%
+	text = %text%`n%locCompany%: %layComp%
 	Gui, Add, Text, , %text%
-	Gui, Add, Edit, , %lwebsite%
+	Gui, Add, Edit, , %layPage%
 	if ( getPklInfo( "eD_ShowMoreInfo" ) ) {
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
-		text = %text%Current Microsoft Windows Locale ID: %mslid%
-		text = %text%`nDead keys in current Windows layout: %dkstr%
+		text = %text%Current Microsoft Windows Locale ID: %msLID%
+		text = %text%`nDead keys in current Windows layout: %dkStr%
 		Gui, Add, Text, , %text%
 	}
 	Gui, Show
@@ -240,7 +237,6 @@ pkl_showHelpImage( activate = 0 )
 	
 	global gP_CurrNumOfDKs	; eD: Current # of dead keys active
 	global gP_CurrNameOfDK	; eD: Current dead key's name
-	global gP_Lay_eD__File	; eD: My extra "layout.ini" file
 	
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
@@ -259,7 +255,6 @@ pkl_showHelpImage( activate = 0 )
 ;     - Transparent color for images (not yet working - need to use separate GUIs for Bg and key imgs!?)
 ;     - Overall image opacity
 ;     - Adjustable top/bottom screen gutters
-	static Lay_eD_
 	static HelperBgImg
 	static imgBgImage
 	static imgBgColor
@@ -272,7 +267,6 @@ pkl_showHelpImage( activate = 0 )
 		layoutDir := getLayInfo( "layDir" )
 		hasAltGr  := getLayInfo( "hasAltGr" )
 		extendKey := getLayInfo( "extendKey" )
-		Lay_eD_   := gP_Lay_eD__File	;layoutDir . "\" . gP_Lay_eD__File
 	}
 	
 	if ( activate == 2 ) ; toggle
@@ -294,16 +288,16 @@ pkl_showHelpImage( activate = 0 )
 	
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		IniRead, imgBgImage, %Lay_eD_%, hlpimg, img_bgimage, %layoutDir%\backgr.png
-		; eD: The default imgBgImage may not be robust if there's no backgr.png nor DreymaR_layout.ini entry?
-		;     Therefore, replace the above default by an if statement checking whether the file exists?!
-		IniRead, imgBgColor, %Lay_eD_%, hlpimg, img_bgcolor, fefeff
-		IniRead, imgLowGutr, %Lay_eD_%, hlpimg, img_low_margin, 60
-		IniRead, imgTopGutr, %Lay_eD_%, hlpimg, img_top_margin, 10
-		IniRead, imgOpacity, %Lay_eD_%, hlpimg, img_opacity, 255
+		imgBgImage := pklIniRead( "img_bgimage"  , layoutDir . "\backgr.png", "Lay_eD_", "helpImg" )
+		if( not FileExist ( imgBgImage ) )
+			imgBgImage := ""	; eD: Default isn't robust if there's no backgr.png nor DreymaR_layout.ini entry?
+		imgBgColor := pklIniRead( "img_bgcolor"  , "fefeff"                 , "Lay_eD_", "helpImg" )
+		imgLowGutr := pklIniRead( "img_low_mrg"  , 60                       , "Lay_eD_", "helpImg" )
+		imgTopGutr := pklIniRead( "img_top_mrg"  , 10                       , "Lay_eD_", "helpImg" )
+		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Lay_eD_", "helpImg" )
 		if ( yPosition == -1 ) {
-			IniRead, imgWidth_, %Lay_eD_%, hlpimg, img_width_, 300
-			IniRead, imgHeight, %Lay_eD_%, hlpimg, img_height, 100
+			imgWidth_ := pklIniRead( "img_width_", 300                      , "Lay_eD_", "helpImg" )
+			imgHeight := pklIniRead( "img_height", 100                      , "Lay_eD_", "helpImg" )
 			yPosition := A_ScreenHeight - imgHeight - imgLowGutr ; eD: Low margin used to be 60, 40 is no margin
 		}
 		
@@ -366,8 +360,7 @@ pkl_showHelpImage( activate = 0 )
 		dkS1 := ( ssuf ) ? ssuf . "1" : ""  	; eD: Img file state 1 suffix
 		dkS2 := ( ssuf ) ? ssuf . "2" : "sh"	; eD: Img file state 2 suffix
 		dkS6 := ssuf . "6"
-		dkS7 := ssuf . "7"
-		; eD TODO: Add shift states 6-7 to images!
+		dkS7 := ssuf . "7"						; eD TODO: Add shift states 6-7 to images!
 		if ( getKeyState( "Shift" ) ) {
 			fileName = %gP_CurrNameOfDK%%dkS2%	; sh
 			if ( not FileExist( imgDir . "\" . filename . ".png" ) )
@@ -393,7 +386,7 @@ pkl_showHelpImage( activate = 0 )
 	GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %imgDir%\%fileName%.png
 }
 
-FixAmpInMenu( menuItem )
+_FixAmpInMenu( menuItem )
 {
 	StringReplace, menuItem, menuItem, %A_Space%&%A_Space%, +, 1	; eD: Used to be '& , &&,' to display the ampersand.
 	menuItem := " (" . menuItem . ")"
@@ -414,8 +407,8 @@ pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 	msgbox %message%
 }
 
-if ( ! ahk11 ) {							; eD: Phase this out as WinXP is now obsolete?!
-	AHK_NOTIFYICON(wParam, lParam)
+; eD: Phase this out as WinXP is now obsolete?!
+	_AHK_NOTIFYICON(wParam, lParam)			; Called by OnMessage( 0x404 )
 	{
 		if ( lParam == 0x205 ) { ; WM_RBUTTONUP
 			if ( A_OSVersion != "WIN_XP" ) ; HOOK for Windows XP
@@ -427,8 +420,6 @@ if ( ! ahk11 ) {							; eD: Phase this out as WinXP is now obsolete?!
 			gosub ToggleSuspend
 		}
 	}
-}
 
-; eD: In preparation of using AHK v1.1 to render icons without the old Lexicos MenuIcons (which doesn't work with this version?):
-;if ( ! A_AhkVersion < "1.1" )	{
+; eD: Now using AHK v1.1 to render icons without the old Lexicos MenuIcons (which doesn't work with this version?):
 	#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk

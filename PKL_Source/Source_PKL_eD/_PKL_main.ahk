@@ -116,40 +116,31 @@ return
 keyPressedwoStar: ; SC025
 	activity_ping()
 	Critical
-	ThisHotkey := A_ThisHotkey
-	processKeyPress( ThisHotkey )
+	processKeyPress( A_ThisHotkey )
 return
 
 keyPressed: ; *SC025
 	activity_ping()
 	Critical
-	ThisHotkey := SubStr( A_ThisHotkey, 2 )
-	processKeyPress( ThisHotkey )
+	processKeyPress( SubStr( A_ThisHotkey, 2 ) )
 return
 
 upToDownKeyPress: ; *SC025 UP
 	activity_ping()
 	Critical
-	ThisHotkey := A_ThisHotkey
-	ThisHotkey := SubStr( ThisHotkey, 2 )
-	ThisHotkey := SubStr( ThisHotkey, 1, -3 )
-	processKeyPress( ThisHotkey )
+	processKeyPress( SubStr( A_ThisHotkey, 2, -3 ) )
 return
 
 modifierDown:  ; *SC025
 	activity_ping()
 	Critical
-	ThisHotkey := SubStr( A_ThisHotkey, 2 )
-	setModifierState( getKeyInfo( ThisHotkey . "v" ), 1 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "v" ), 1 )
 return
 
 modifierUp: ; *SC025 UP
 	activity_ping()
 	Critical
-	ThisHotkey := A_ThisHotkey
-	ThisHotkey := SubStr( ThisHotkey, 2 )
-	ThisHotkey := SubStr( ThisHotkey, 1, -3 )
-	setModifierState( getKeyInfo( ThisHotkey . "v" ), 0 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "v" ), 0 )
 return
 
 showAbout:
@@ -207,6 +198,7 @@ return
 #Include pkl_send.ahk
 #Include pkl_activity.ahk
 #Include pkl_iniRead.ahk
+#Include pkl_getWinDKs.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
 
 ; ####################### (external) modules #######################
 
@@ -214,7 +206,6 @@ return
 ; eD: #Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 - Renamed from MI.ahk
 #Include ext_SendUni.ahk ; eD: SendU by Farkas et al - using Unicode AHK v1.1 will obviate this!
 #Include ext_HashTable.ahk ; eD: Moved CoHelper into this file and removed unused sections
-#Include getWindowsDeadKeys.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
 ; eD: #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
 ; eD: #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
 ; eD: #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead
