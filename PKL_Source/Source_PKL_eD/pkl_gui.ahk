@@ -152,7 +152,7 @@ pkl_about()
 {
 	msLID := getWinLocaleID() ; eD: Get the Windows locale ID
 	dkStr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
-	dkStr := dkStr ? dkStr : "<none found>"
+	dkStr := dkStr ? dkStr : "<none>"
 
 	pklAppName      := getPklInfo( "pklName" )
 	pklMainURL      := "http://pkl.sourceforge.net"
@@ -219,7 +219,7 @@ pkl_about()
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
 		text = %text%Current Microsoft Windows Locale ID: %msLID%
-		text = %text%`nDead keys in current Windows layout: %dkStr%
+		text = %text%`nDead keys set for this Windows layout: %dkStr%
 		Gui, Add, Text, , %text%
 	}
 	Gui, Show

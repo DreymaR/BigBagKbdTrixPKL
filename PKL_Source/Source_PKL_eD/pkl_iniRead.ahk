@@ -115,18 +115,19 @@ pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )
 	return val
 }
 
-pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0 )		; Because PKL doesn't always use IniRead? Why though?
+pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0, com=1 )		; Because PKL doesn't always use IniRead? Why though?
 {
 	pos := InStr( iniLine, "=" )
-	key :=         Trim( SubStr( iniLine, 1, pos-1 ))
-	val := strCom( Trim( SubStr( iniLine,    pos+1 )) )
+	key := Trim( SubStr( iniLine, 1, pos-1 ))
+	val := Trim( SubStr( iniLine,    pos+1 ))
+	val := ( com ) ? strCom( val ) : val
 	val := ( esc ) ? strEsc( val ) : val
 	key := ( pos == 0 ) ? "<NoKey>" : key
 }
 
 strCom( str )												; Remove end-of-line comments (whitespace then semicolon)
 {
-	str := RegExReplace( str, "[ `t]+;.*`n" )
+	str := RegExReplace( str, "[ `t]+;.*`n?$" )
 	return str
 }
 

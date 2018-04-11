@@ -25,6 +25,8 @@ Some Know-How-To
 * Alternatively, if the PortableApps menu is started on logon it can start up PKL for you too
 * Such a shortcut works per user; otherwise you could also set PKL to start suspended by editing the pkl.ini file
 * If you don't want any of that, just put the folder somewhere and run pkl.exe any way you like!
+* **NOTE:** To get the PKL_eD changes working, your layout folder must contain a DreymaR_layout.ini file.
+    * A copy of this file should be visible from the PKL_eD folder, but it may actually reside in a layout folder.
 * **NOTE:** Running PKL with other AutoHotkey key mapping scripts may get confusing if there is "hook competition".
 
 These PKL files may take a little tweaking to get what you want. Remember, there are several parameters:

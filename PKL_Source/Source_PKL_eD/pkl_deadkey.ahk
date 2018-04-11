@@ -24,9 +24,9 @@ DeadKey(DK)
 	static PVDK := "" ; Pressed dead keys
 	DK := getKeyInfo( "dk" . DK )	; eD
 	DeadKeyChar := DeadKeyValue( DK, 0 )
+	DeadKeyChr1 := DeadKeyValue( DK, 1 )	; eD WIP
 	
-	; Pressed a deadkey twice
-	if ( gP_CurrNumOfDKs > 0 && DK == gP_CurrNameOfDK )
+	if ( gP_CurrNumOfDKs > 0 && DK == gP_CurrNameOfDK )		; Pressed the deadkey twice - release DK entry 0
 	{
 		pkl_Send( DeadKeyChar )
 		return
@@ -57,10 +57,9 @@ DeadKey(DK)
 	}
 	gP_CurrNumOfDKs--
 	gP_CurrBaseKey_ = 0
-	newkey := DeadKeyValue( DK, hx )	; eD TODO: Here's where it sets the DK based on number
+	newkey := DeadKeyValue( DK, hx )						; eD TODO: Here's where it sets the DK based on number
 
-	if ( newkey && (newkey + 0) == "" ) {
-		; New key (value) is a special string, like {Home}+{End}
+	if ( newkey && (newkey + 0) == "" ) {					; New key (value) is a special string, like {Home}+{End}
 		if ( PVDK ) {
 			PVDK := ""
 			gP_CurrNumOfDKs = 0

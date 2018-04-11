@@ -132,7 +132,7 @@ pkl_init( layoutFromCommandLine = "" )
 	remap := iniReadSection( LayoutFile, "layout" )
 	Loop, parse, remap, `r`n
 	{
-		pklIniKeyVal( A_LoopField, key, parts )
+		pklIniKeyVal( A_LoopField, key, parts, 0, 0 )	; No comment stripping here to avoid nuking the semicolon entry!
 		; eD TODO/WIP: Remap the key according to _Remap_eD.ini here!
 		; _pklInitReadRemap() - Splits by comma, calls itself in case of *, then ...
 		; _pklInitReadCycle() - Splits by plus, calls itself if many parts, returns a string of pipe-delimited scan codes? Input: cycle name.
