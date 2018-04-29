@@ -95,7 +95,9 @@ getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
 	; eD TODO: Make PKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static deadkeys := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "Pkl_Dic", "DeadKeysFromLocID" ) ; eD
-	DKsOfSysLayout := ( DKsOfSysLayout == "-1" ) ? "" : DKsOfSysLayout	; eD
+	if ( DKsOfSysLayout == "-2" )
+		setPklInfo( "RAltAsAltGrLocale", true )
+	DKsOfSysLayout := ( SubStr(DKsOfSysLayout,1,1) == "-" ) ? "" : DKsOfSysLayout	; eD
 	if ( set == 1 ) {
 		if ( newDeadkeys == "auto" )
 			deadkeys := DKsOfSysLayout 	; eD: replaced getDeadKeysOfSystemsActiveLayout()

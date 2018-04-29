@@ -106,6 +106,7 @@ These changes are now implemented in [PKL_eD]:
 * DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
+* Base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
 
 TODO:
 -----

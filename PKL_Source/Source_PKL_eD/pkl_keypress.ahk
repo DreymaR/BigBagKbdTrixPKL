@@ -4,27 +4,27 @@ keyPressed( HK )
 	static extendKey := "--"
 	modif = ; modifiers to send
 	state = 0
-
+	
 	if ( extendKey == "--" )
 		extendKey := getLayInfo( "extendKey" )
-	cap := getKeyInfo( HK . "c" )
+	cap := getKeyInfo( HK . "cap" )						; Caps state (0-5 for states; -1 for vk; -2 for mod)
 	
-	if ( extendKey && getKeyState( extendKey, "P" ) ) {
+	if ( extendKey && getKeyState( extendKey, "P" ) ) {	; If there is an Extend modifier and it's pressed...
 		extendKeyStroke = 1
-		_extendKeyPressed( HK )
+		_extendKeyPressed( HK )							; ...process the Extend key press.
 		return
-	} else if ( HK == extendKey && extendKeyStroke ) {
+	} else if ( HK == extendKey && extendKeyStroke ) {	; If the Extend is alone...
 		extendKeyStroke = 0
-		Send {RShift Up}{LCtrl Up}{LAlt Up}{LWin Up}
+		Send {RShift Up}{LCtrl Up}{LAlt Up}{LWin Up}	; ...remove mods to clean up.
 		return
-	} else if ( cap == -1 ) {
-		t := getKeyInfo( HK . "v" )
+	} else if ( cap == -1 ) {							; The key is VK mapped, so just send its VK code
+		t := getKeyInfo( HK . "vkey" )
 		t = {VK%t%}
 		Send {Blind}%t%
 		return
 	}
 	extendKeyStroke = 0
-	; eD TODO: Remove hasAltGr & altGrEqualsAltCtrl from pkl.ini and here? Enforce <^>! (if a laptop hasn't got >!, they'll have to remap something)
+	; eD TODO: Remove hasAltGr & altGrEqualsAltCtrl from pkl.ini and here, enforcing <^>! (if a laptop hasn't got >!, they'll have to remap something)?
 	if ( getLayInfo("hasAltGr") ) {
 		if ( AltGrIsPressed() ) {
 			sh := getKeyState("Shift")
@@ -47,24 +47,23 @@ keyPressed( HK )
 			if ( getKeyState("RCtrl") || ( getKeyState("LCtrl") && !getKeyState("RAlt") ) )
 				modif .= "^"
 			state := _pkl_ShiftState( cap )
-		} else { ; not Alt
+		} else { 												; not Alt
 			_pkl_CtrlState( HK, cap, state, modif )
 		}
 	}
 	if ( getKeyState("LWin") || getKeyState("RWin") )
 		modif .= "#"
-
-
+	
 	ch := getKeyInfo( HK . state )
 	if ( ch == "" ) {
 		return
-	} else if ( state == "v" ) { ; VirtualKey
+	} else if ( state == "vkey" ) { 							; VirtualKey
 		pkl_SendThis( modif, "{VK" . ch . "}" )
 	} else if ( ch == 32 && HK == "SC039" ) {
 		Send, {Blind}{Space}
 	} else if ( ( ch + 0 ) > 0 ) {
 		pkl_Send( ch, modif )
-	} else if ( ch == "*" || ch == "="  ) {		; Special
+	} else if ( ch == "*" || ch == "="  ) {						; Special
 		if ( ch == "=" )
 			modif = {Blind}
 		else
@@ -101,7 +100,7 @@ _extendKeyPressed( HK )
 	static altPressed := ""
 	static winPressed := ""
 
-	ch := getKeyInfo( HK . "e" )
+	ch := getKeyInfo( HK . "ext" )
 	if ( ch == "") {
 		return
 	} else if ( ch == "Shift" ) {
@@ -164,12 +163,12 @@ _pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
 				state--
 				modif .= "+"
 				if ( !getKeyInfo( HK . state ) ) {
-					state := "v" ; VirtualKey
+					state := "vkey" 							; VirtualKey
 					modif .= "^"
 				}
 			}
 		} else if ( !getKeyInfo( HK . state ) ) {
-			state := "v" ; VirtualKey
+			state := "vkey"										; VirtualKey
 			modif .= "^"
 		}
 	} else {
@@ -240,8 +239,9 @@ getModifierState( modifier, isdown = 0, set = 0 )
 AltGrIsPressed()
 {
 	static altGrEqualsAltCtrl := -1
-	if ( altGrEqualsAltCtrl == -1 )
-		altGrEqualsAltCtrl := getPklInfo( "AltGrEqualsAltCtrl" )
+	if ( altGrEqualsAltCtrl == -1 ) {
+		altGrEqualsAltCtrl := getPklInfo( "altGrEqualsAltCtrl" ) || getPklInfo( "RAltAsAltGrLocale" )	; eD
+	}
 	return getKeyState( "RAlt" ) || ( altGrEqualsAltCtrl && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 

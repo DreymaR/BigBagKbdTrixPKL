@@ -25,15 +25,12 @@ DONE:
     - DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
     - DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
 * You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
+* In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
+* Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 
 
 TODO:
 -----
-
-* Underlying layout
-	- Specify in layout_eD.ini a file that's the basis (layout section only?).
-	- Now, the layout.ini only has to specify any changes from that.
-	- This makes locale variants etc really easy!
 
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
@@ -79,12 +76,13 @@ TODO:
 
 * More generic dead key output: Ligatures (important for my Jap layout! Also for combining accents and hotstrings)
 	- Selectable mode per key: By Unicode characters, hex or dec (default today).
-	- Prefixes: Nothing – decimal; x – hex (or U+/u for standard Unicode Point notation?); '-' - Unicode glyph (or use '•', '.', 'α', '//' ?)
-	- Quotes '' enclose a ligature (so -'hello' is a Unicode string, and so is x'00d4 00d5'); a literal '' would be -''''-?
+	- Prefixes: Nothing – decimal; x – hex (or U+/u for standard Unicode Point notation?); '-' - Unicode glyph (or '•', '.', 'α', '%' ?)
+	- Quotes '' or {} enclose a ligature (so -'hello' is a Unicode string, and so is x{00d4 00d5}); a literal '' would be -''''-?
 	- Example:	"102  =  402	; f -> ƒ" – could become "-f = -ƒ"
-	- Example:	"77   = 11374	; M -> ?" – Meng not shown properly; to avoid trouble, use for instance "-M = x2C6E"
-	- Keep it easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (here, simply use "u$1 = u$2 ; $3")
-    - Simplest and best: Allow for AHK literals?!
+	- Example:	"77   = 11374	; M -> ?" – Meng not shown properly; to avoid trouble, use for instance "-M = u2C6E"
+	- Keep it easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (here, simply regexp "u$1 = u$2 ; $3")
+    - Simplest and best: Allow for AHK literals?! Use maybe * to initiate one (as in layout.ini "special").
+	- Simplest for literals and ligatures/hotstrings: % initiates, then the rest of the line is directly sent (as in layout.ini ligatures).
 
 * Ligature/hotstrings:
     - In addition to ligatures/strings in dead keys, we need direct ligatures. For Jap etc. and for string layers.

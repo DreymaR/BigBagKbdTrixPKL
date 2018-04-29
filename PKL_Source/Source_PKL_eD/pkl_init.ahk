@@ -93,29 +93,37 @@ pkl_init( layoutFromCommandLine = "" )
 	} else {
 		LayoutDir := "Layouts\" . Layout
 	}
-	LayoutFile := LayoutDir . "\" . gP_Lay_Ini_File
-	if (not FileExist(LayoutFile) ) {
-		pkl_MsgBox( 2, LayoutFile )
+	LayoutFile1 := LayoutDir . "\" . gP_Lay_Ini_File
+	if ( not FileExist(LayoutFile1) ) {
+		pkl_MsgBox( 2, LayoutFile1 )
 		ExitApp
 	}
-	gP_Lay_Ini_File := LayoutFile							; eD: Update global as file path
+	gP_Lay_Ini_File := LayoutFile1							; eD: Update global as file path
 	gP_Lay_eD__File := LayoutDir . "\" . gP_Lay_eD__File	; eD: Update global as file path
 	setLayInfo( "layDir", LayoutDir )
 	
-	static initalized := 0	; Ensure the tables are read only once (as this function is run on layout change too?)
+	static initalized := 0	; eD WIP: Ensure the tables are read only once (as this function is run on layout change too? But we'll need re-remap then?!?)
 	if ( initialized == 0 )
-	{																	; eD: Read/set remap dictionary
+	{																			; eD: Read/set remap dictionary
 		initialized := 1
 	}
+	
+	extendKey   := pklIniRead( "extend_key", "", LayoutFile1, "global" )		; eD TODO: If this is set, look for multi-Extend in Lay_eD_ .ini
+	if ( extendKey <> "" ) {
+		setLayInfo( "extendKey", extendKey )
+	}
+	
+	LayoutFile0 := pklIniRead( "baseLayout", "", "Lay_eD_", "global" )			; eD: Read a base layout then augment/replace it with the main layout
+	LayoutFile0 := ( LayoutFile0 == "" ) ? pklIniRead( "baseLayout", "", LayoutFile1, "eD_info" ) : LayoutFile0
+	LayoutFiles := ( FileExist(LayoutFile0) ) ? LayoutFile0 . "," . LayoutFile1 : LayoutFile1
+	Loop, Parse, LayoutFiles, CSV
+	{
+	LayoutFile := A_LoopField
 	
 	ShiftStates := pklIniRead( "shiftstates", "0:1", LayoutFile, "global" )		;	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
 	ShiftStates := ShiftStates . ":8:9"	; SgCap, SgCap + Shift
 	StringSplit, ShiftStates, ShiftStates, :
 	setLayInfo( "hasAltGr", ( InStr( ShiftStates, 6 ) ) ? 1 : 0 )
-	extendKey   := pklIniRead( "extend_key", "", LayoutFile, "global" )			; eD TODO: If this is set, look for multi-Extend in Lay_eD_ .ini
-	if ( extendKey <> "" ) {
-		setLayInfo( "extendKey", extendKey )
-	}
 	
 	; eD WIP: Layout remapping for ergo mods, ANSI/ISO conversion etc. Read in remap tables.
 	; Read in section, then process each line? Replace outer "" (unless using IniRead), || -> |, final |.
@@ -128,12 +136,12 @@ pkl_init( layoutFromCommandLine = "" )
 		;iniReadSection()
 		;StrSplit( str, ",", " `t" )
 	}
-
+	
 	remap := iniReadSection( LayoutFile, "layout" )
 	Loop, parse, remap, `r`n
 	{
-		pklIniKeyVal( A_LoopField, key, parts, 0, 0 )	; No comment stripping here to avoid nuking the semicolon entry!
-		; eD TODO/WIP: Remap the key according to _Remap_eD.ini here!
+		pklIniKeyVal( A_LoopField, key, entries, 0, 0 )	; No comment stripping here to avoid nuking the semicolon entry!
+		; eD TODO/WIP: Remap the key according to _Remap_eD.ini here?!? Use A_Index = 2 in the LayoutFiles loop, to avoid remapping twice?
 		; _pklInitReadRemap() - Splits by comma, calls itself in case of *, then ...
 		; _pklInitReadCycle() - Splits by plus, calls itself if many parts, returns a string of pipe-delimited scan codes? Input: cycle name.
 ;			StringSplit, RemapCycle, RemapStr, |, %A_Space%%A_Tab%
@@ -142,59 +150,56 @@ pkl_init( layoutFromCommandLine = "" )
 ;				Loop, Parse, RemapCycle%A_Index%, +, %A_Space%%A_Tab%
 		If ( key == "<NoKey>" )
 			Continue
-		StringSplit, parts, parts, %A_Tab%
-		if ( parts0 < 2 ) {
+		StringSplit, entry, entries, %A_Tab%	; eD TODO: Use StrSplit() instead.
+		if ( entry0 < 2 ) {
 			Hotkey, *%key%, doNothing
 			Continue
 		}
-		StringLower, parts2, parts2
-		if ( parts2 == "virtualkey" || parts2 == "vk")
-			parts2 = -1
-		else if ( parts2 == "modifier" )
-			parts2 = -2
-		setKeyInfo( key . "v", pklIniRead( "VK_" . parts1, "00", "Pkl_Dic", "VKeyCodeFromName" ) ) ; eD: replaced getVKeyCodeFromName(parts1) )
-		setKeyInfo( key . "c", parts2 ) 							; caps state
-		if ( parts2 == -2 ) {
+		StringLower, entry2, entry2
+		if ( entry2 == "virtualkey" || entry2 == "vk")
+			entry2 = -1
+		else if ( entry2 == "modifier" )
+			entry2 = -2
+		setKeyInfo( key . "vkey", pklIniRead( "VK_" . entry1, "00", "Pkl_Dic", "VKeyCodeFromName" ) )	; eD: replaced getVKeyCodeFromName(entry1) )
+		setKeyInfo( key . "cap", entry2 ) 							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
+		if ( entry2 == -2 ) {										; The key is a modifier
 			Hotkey, *%key%, modifierDown
 			Hotkey, *%key% Up, modifierUp
-			if ( getLayInfo( "hasAltGr" ) && parts1 == "RAlt" )
-				setKeyInfo( key . "v", "AltGr" )
+			if ( getLayInfo( "hasAltGr" ) && entry1 == "RAlt" )		; Set RAlt as AltGr
+				setKeyInfo( key . "vkey", "AltGr" )
 			else
-				setKeyInfo( key . "v", parts1 )
-		} else if ( key == extendKey ) {
+				setKeyInfo( key . "vkey", entry1 )					; Set VK code for key
+		} else if ( key == extendKey ) {							; Set the Extend key
 			Hotkey, *%key% Up, upToDownKeyPress
 		} else {
 			Hotkey, *%key%, keyPressed
 		}
-		Loop, % parts0 - 3 {
+		Loop, % entry0 - 3 {
 			k = ShiftStates%A_Index%
 			k := %k%
 			
 			v := A_Index + 2
-			v = parts%v%
-			v := %v%	; eD: Trims v
-;			v := Trim( v )
+			v = entry%v%
+			v := %v%	; eD: Trims v. Could use v := Trim( v ) instead?
 			if ( StrLen( v ) == 0 ) {
 				v = -- ; Disabled
 			} else if ( StrLen( v ) == 1 ) {
 				v := asc( v )
 			} else {
-				if ( SubStr( v, 1, 1 ) == "*" ) { ; Special chars
+				if ( SubStr( v, 1, 1 ) == "*" ) { 					; * : Special chars
 					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "*"
-				} else if ( SubStr( v, 1, 1 ) == "=" ) { ; Special chars with {Blind}
+				} else if ( SubStr( v, 1, 1 ) == "=" ) { 			; = : Special chars with {Blind}
 					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "="
-				} else if ( SubStr( v, 1, 1 ) == "%" ) { ; Ligature (with unicode chars, too)
+				} else if ( SubStr( v, 1, 1 ) == "%" ) { 			; % : Ligature (with unicode chars, too)
 					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
 					v := "%"
 				} else if ( v == "--" ) {
 					v = -- ;) Disabled
-				} else if ( SubStr( v, 1, 2 ) == "dk" ) { ; dead key
+				} else if ( SubStr( v, 1, 2 ) == "dk" ) { 			; dk: Dead key
 					setKeyInfo( key . k . "s", SubStr( v, 3 ) )
-					v := "dk"
-;					v := "-" . SubStr( v, 3 )
-;					v += 0	; eD: Makes v numeric (need to avoid this!)
+					v := "dk"	; v := "-" . SubStr( v, 3 ), v += 0	; eD: This made v numeric. Need to avoid that now.
 				} else {
 					Loop, parse, v
 					{
@@ -205,10 +210,10 @@ pkl_init( layoutFromCommandLine = "" )
 							break
 						}
 					}
-					if ( ligature ) { ; Ligature
+					if ( ligature ) { 								; Ligature
 						setKeyInfo( key . k . "s", v )
 						v := "%"
-					} else { ; One character
+					} else { 										; One character
 						v := "0x" . _HexUC( v )
 						v += 0
 					}
@@ -216,6 +221,24 @@ pkl_init( layoutFromCommandLine = "" )
 			}
 			if ( v != "--" )
 				setKeyInfo( key . k , v )
+		}	; end loop entry
+	}	; end loop parse remap
+	
+	}	; end Loop parse LayoutFiles
+	
+	; Set the extend key mappings
+	if ( extendKey ) {
+		remap := iniReadSection( gP_Pkl_Ini_File, "extend" )
+		Loop, parse, remap, `r`n
+		{
+			pklIniKeyVal( A_LoopField, key, entry )
+			setKeyInfo( key . "ext", entry )
+		}
+		remap := iniReadSection( LayoutFile, "extend" )	; An [extend] section in layout.ini overrides the pkl.ini one
+		Loop, parse, remap, `r`n
+		{
+			pklIniKeyVal( A_LoopField, key, entry )
+			setKeyInfo( key . "ext", entry )
 		}
 	}
 	
@@ -231,10 +254,14 @@ pkl_init( layoutFromCommandLine = "" )
 			setKeyInfo( ky2, val )						; e.g., "dk1" = "deadkey1"; backwards compatible
 	}
 	file := pklIniRead( "dk_tables", "", "Lay_eD_", "global" )
-	file := ( FileExist( file ) ) ? file : LayoutFile	; eD: If no dedicated DK file, try the layout file
+	file := ( file != "" ) ? file : pklIniRead( "dk_tables", "", LayoutFile1, "eD_info" )
+	file := ( FileExist( file ) ) ? file : LayoutFile1	; eD: If no dedicated DK file, try the layout file
 	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
-	file := ( pklIniRead( "dk01", -1, "Lay_eD_", "deadkeys" ) != -1 ) ? gP_Lay_eD__File : file
-	remap := iniReadSection( file, "deadkeys" )
+	dknames := "DeadKeyNames"							; The .ini section that holds dk names
+	file := ( InStr( pklIniRead( -1, -1, LayoutFile1 )  , dknames ) ) ? Layoutfile1     : file
+	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? gP_Lay_eD__File : file
+;	file := ( pklIniRead( "dk01", -1, "Lay_eD_", dknames ) != -1 ) ? gP_Lay_eD__File : file
+	remap := iniReadSection( file, dknames )			; Make the dead key name lookup table
 	Loop, parse, remap, `r`n
 	{
 		pklIniKeyVal( A_LoopField, key, val )
@@ -244,25 +271,11 @@ pkl_init( layoutFromCommandLine = "" )
 	
 	; eD: Read/set deadkey image data
 	dir := pklIniRead( "dk_imgDir", "", "Lay_eD_", "global" )
-	dir := ( FileExist( dir ) ) ? dir : LayoutDir	; eD: If no dedicated DK image dir, try the layout dir
+	dir := ( FileExist( dir ) ) ? dir : LayoutDir		; eD: If no dedicated DK image dir, try the layout dir
 	setLayInfo( "dkImgDir", dir )
 	setLayInfo( "dkImgSuf", pklIniRead( "dk_imgSuf", "", "Lay_eD_", "global" ) )
 	
-	if ( extendKey ) {
-		remap := iniReadSection( gP_Pkl_Ini_File, "extend" )
-		Loop, parse, remap, `r`n
-		{
-			pklIniKeyVal( A_LoopField, key, parts )
-			setKeyInfo( key . "e", parts )
-		}
-		remap := iniReadSection( LayoutFile, "extend" )
-		Loop, parse, remap, `r`n
-		{
-			pklIniKeyVal( A_LoopField, key, parts )
-			setKeyInfo( key . "e", parts )
-		}
-	}
-	
+	; Set layout on/off icons
 	if ( FileExist( getLayInfo("layDir") . "\on.ico") ) {
 		setLayInfo( "Ico_On_File", getLayInfo( "layDir" ) . "\on.ico" )
 		setLayInfo( "Ico_On_Num_", 1 )
@@ -355,7 +368,7 @@ _HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input 
    Return h
 }
 
-_pklSetHotkey( hkStr, gotoLabel, pklInfoTag )						; eD: Set a PKL hotkey
+_pklSetHotkey( hkStr, gotoLabel, pklInfoTag )						; eD: Set a PKL menu hotkey
 {
 	if ( hkStr <> "" ) {
 		Loop, parse, hkStr, `,

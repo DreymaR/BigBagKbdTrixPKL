@@ -102,7 +102,11 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 	if ( ( not inStr( inifile, "." ) ) and FileExist( gP_%inifile%_File ) )
 		inifile := gP_%inifile%_File
 	default := ( default == "" ) ? A_Space : default		; IniRead requires A_Space for a blank default
-	IniRead, val, %inifile%, %section%, %key%, %default%
+	if ( key == -1 ) {													; Specify key = -1 for section list
+		IniRead, val, %inifile%											; (AHK v1.0.90+)
+	} else {
+		IniRead, val, %inifile%, %section%, %key%, %default%
+	}
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val

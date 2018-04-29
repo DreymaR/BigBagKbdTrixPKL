@@ -134,13 +134,13 @@ return
 modifierDown:  ; *SC025
 	activity_ping()
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "v" ), 1 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "vkey" ), 1 )
 return
 
 modifierUp: ; *SC025 UP
 	activity_ping()
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "v" ), 0 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ), 0 )
 return
 
 showAbout:
