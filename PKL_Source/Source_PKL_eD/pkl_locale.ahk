@@ -13,7 +13,6 @@ pkl_locale_load( lang, compact = 0 )
 			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
 			str := strEsc( str )										; Replace \n and \\ escapes
 			setPklInfo( "LocStr_" . A_Index , str )
-;			teststr := teststr . "`n" . A_Index . "  " . str
 		}
 		line := iniReadSection( gP_Pkl_Dic_File, "DefaultLocaleTxt" )	; Read default locale strings (key/value)
 		Loop, parse, line, `r`n
@@ -72,7 +71,7 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 	static localizedHotkeys := ""
 	
 	if ( set == 1 ) {
-		setKeyInfo( "HKtxt_" . hk, localehk )	; HashTable_Set( pdic,
+		setKeyInfo( "HKtxt_" . hk, localehk )
 		localizedHotkeys .= " " . hk
 	} else {
 		if ( hk == "all" )

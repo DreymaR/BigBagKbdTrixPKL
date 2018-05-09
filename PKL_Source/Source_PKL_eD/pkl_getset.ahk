@@ -1,7 +1,3 @@
-; eD TODO: Replace the get and set global info functions with pdic lookup tables, e.g., PklVar[key] (req. AHK v1.1).
-;			- Instead of the different functions below, could have one pair of setInfo( pdic, key, val )/getInfo( pdic, key ) functions?
-;			- Then it'd be easier to make one ( A_AhkVersion < "1.1" ) w/ HashTable and one with pdic := {}
-
 /*
 	LayoutInfo entries:
 	-------------------
@@ -38,39 +34,27 @@ setPklInfo( key, value )
 
 getKeyInfo( key, value = "", set = 0 )
 {
-	static pdic := 0
-	if ( pdic == 0 )
-	{
-		pdic := HashTable_New()
-	}
+	static pdic     := {}
 	if ( set == 1 )
-		HashTable_Set( pdic, key, value )
+		pdic[key]   := value
 	else
-		return HashTable_Get( pdic, key )
+		return pdic[key]
 }
 
 getLayInfo( key, value = "", set = 0 )
 {
-	static pdic := 0
-	if ( pdic == 0 )
-	{
-		pdic := HashTable_New()
-	}
+	static pdic     := {}
 	if ( set == 1 )
-		HashTable_Set( pdic, key, value )
+		pdic[key]   := value
 	else
-		return HashTable_Get( pdic, key )
+		return pdic[key]
 }
 
 getPklInfo( key, value = "", set = 0 )
 {
-	static pdic := 0
-	if ( pdic == 0 )
-	{
-		pdic := HashTable_New()
-	}
+	static pdic     := {}
 	if ( set == 1 )
-		HashTable_Set( pdic, key, value )
+		pdic[key]   := value
 	else
-		return HashTable_Get( pdic, key )
+		return pdic[key]
 }

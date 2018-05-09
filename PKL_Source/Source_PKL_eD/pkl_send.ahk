@@ -10,16 +10,13 @@ toggleCapsLock()
 
 pkl_Send( ch, modif = "" )
 {
-	global gP_CurrNumOfDKs	; eD: Current # of dead keys active
-	global gP_CurrBaseKey_	; eD: Current base key
-	
 	static SpaceWasSentForDeadkeys = 0
 	
-	if ( gP_CurrNumOfDKs = 0 ) {
+	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {
 		SpaceWasSentForDeadkeys = 0
 	} else {
-			gP_CurrBaseKey_ := ch
-		if ( SpaceWasSentForDeadkeys = 0 )
+		setKeyInfo( "CurrBaseKey_", ch )
+		if ( SpaceWasSentForDeadkeys == 0 )
 			Send {Space}
 		SpaceWasSentForDeadkeys = 1
 		return

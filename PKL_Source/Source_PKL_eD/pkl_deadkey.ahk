@@ -3,7 +3,7 @@ DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a ful
 	static dkFile := ""	; eD
 	dkFile := ( dkFile ) ? dkFile : getLayInfo( "dkFile" )
 	
-	res := getKeyInfo( "DKval_" . dkName . "_" . base )	; HashTable_Get( pdic, 
+	res := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( res ) {
 		res := ( res == -1 ) ? 0 : res
 		return res
@@ -18,57 +18,58 @@ DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a ful
 
 DeadKey(DK)
 {
-	global gP_CurrNumOfDKs	; eD: Current # of dead keys active
-	global gP_CurrBaseKey_	; eD: Current base key
-	global gP_CurrNameOfDK	; eD: Current dead key's name
-	static PVDK := "" ; Pressed dead keys
-	DK := getKeyInfo( "dk" . DK )	; eD
+	CurrNumOfDKs := getKeyInfo( "CurrNumOfDKs" )			; eD: Current # of dead keys active
+	; CurrNameOfDK := getKeyInfo( "CurrNameOfDK" )			; eD: Current dead key's name
+	; CurrBaseKey_ := getKeyInfo( "CurrBaseKey_" )			; eD: Current base key
+	DK          := getKeyInfo( "dk" . DK )					; eD: Find the dk's name
+	static PVDK := "" 										; Pressed dead keys
 	DeadKeyChar := DeadKeyValue( DK, 0 )
-	DeadKeyChr1 := DeadKeyValue( DK, 1 )	; eD WIP
+	DeadKeyChr1 := DeadKeyValue( DK, 1 )					; eD WIP: The "1" entry gives alternative release char
 	
-	if ( gP_CurrNumOfDKs > 0 && DK == gP_CurrNameOfDK )		; Pressed the deadkey twice - release DK entry 0
+	if ( CurrNumOfDKs > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK entry 0
 	{
 		pkl_Send( DeadKeyChar )
 		return
 	}
 
-	gP_CurrNameOfDK := DK
-	gP_CurrNumOfDKs++
+	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs )			; CurrNumOfDKs++
+	setKeyInfo( "CurrNameOfDK", DK )
 	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}
 	IfInString, ErrorLevel, EndKey
 	{
 		endk := "{" . Substr(ErrorLevel,8) . "}"
-		gP_CurrNumOfDKs = 0
-		gP_CurrBaseKey_ = 0
+		setKeyInfo( "CurrNumOfDKs", 0 )
+		setKeyInfo( "CurrBaseKey_", 0 )
 		pkl_Send( DeadKeyChar )
 		Send %endk%
 		return
 	}
 
-	if ( gP_CurrNumOfDKs == 0 ) {
+	if ( CurrNumOfDKs == 0 ) {
 		pkl_Send( DeadKeyChar )
 		return
 	}
-	if ( gP_CurrBaseKey_ != 0 ) {
-		hx := gP_CurrBaseKey_
+	if ( getKeyInfo( "CurrBaseKey_" ) != 0 ) {
+		hx := getKeyInfo( "CurrBaseKey_" )
 		nk := chr(hx)
 	} else {
 		hx := asc(nk)
 	}
-	gP_CurrNumOfDKs--
-	gP_CurrBaseKey_ = 0
-	newkey := DeadKeyValue( DK, hx )						; eD TODO: Here's where it sets the DK based on number
+	
+	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs )			; CurrNumOfDKs--
+	setKeyInfo( "CurrBaseKey_", 0 )
+	newkey := DeadKeyValue( DK, hx )						; Set the DK (based on number)
 
 	if ( newkey && (newkey + 0) == "" ) {					; New key (value) is a special string, like {Home}+{End}
 		if ( PVDK ) {
 			PVDK := ""
-			gP_CurrNumOfDKs = 0
+			setKeyInfo( "CurrNumOfDKs", 0 )
 		}
 		SendInput %newkey%
 	} else if ( newkey && PVDK == "" ) {
 		pkl_Send( newkey )
 	} else {
-		if ( gP_CurrNumOfDKs == 0 ) {
+		if ( CurrNumOfDKs == 0 ) {
 			pkl_Send( DeadKeyChar )
 			if ( PVDK ) {
 				StringTrimRight, PVDK, PVDK, 1

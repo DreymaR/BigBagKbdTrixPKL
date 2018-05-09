@@ -330,7 +330,7 @@ _SendU_GetMode( processName, mode = "", set = 0 )
 {
 	static init := 0
 	if ( init == 0 ) {
-		setPklInfo( "UniMode_" . "default", "i" )	; HashTable_Set( pdic,
+		setPklInfo( "UniMode_" . "default", "i" )
 		init := 1
 	}
 

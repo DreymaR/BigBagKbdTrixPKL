@@ -1,7 +1,6 @@
 pkl_set_tray_menu()
 {
 	eD_ShowMoreInfo := getPklInfo( "eD_ShowMoreInfo" )	; eD: Show extra technical info and the Reset hotkey
-	ahk11 := ( A_AhkVersion < "1.1" ) ? false : true
 	
 	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
 	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
@@ -43,34 +42,22 @@ pkl_set_tray_menu()
 		layIcon = Layouts\%layCode%\on.ico
 		if ( not FileExist( layIcon ) )
 			layIcon := A_ScriptName								; icon = on.ico
-		if ( ahk11 ) {
-			Menu, changeLayout, Icon,        %layName%, %layIcon%, 1
-		} else {
-			MI_SetMenuItemIcon("changeLayout", A_Index,  layIcon , 1, 16)
-		}
+		Menu, changeLayout, Icon,        %layName%, %layIcon%, 1
 	}
 
-	if ( not A_IsCompiled ) {
-		SplitPath, A_AhkPath,, SpyPath
-		SpyPath = %SpyPath%\AU3_Spy.exe
-		if ( ahk11 ) {
-			; eD WIP TODO: Can I assign icons without the menu titles? Or find the default AHK titles?
-		} else {
-			tr := MI_GetMenuHandle("Tray")							; eD: Are these icons necessary?
-			MI_SetMenuItemIcon(tr, 1, A_AhkPath, 1, 16) 			; open
-			MI_SetMenuItemIcon(tr, 2, A_WinDir "\hh.exe", 1, 16) 	; help
-			MI_SetMenuItemIcon(tr, 4, SpyPath,   1, 16) 			; spy
-			MI_SetMenuItemIcon(tr, 5, "shell32.dll", 147, 16) 		; reload
-			MI_SetMenuItemIcon(tr, 6, A_AhkPath, 2, 16) 			; edit
-			MI_SetMenuItemIcon(tr, 8, A_AhkPath, 3, 16) 			; suspend
-			MI_SetMenuItemIcon(tr, 9, A_AhkPath, 4, 16) 			; pause
-			MI_SetMenuItemIcon(tr, 10, "shell32.dll", 28, 16) 		; exit
-			iconNum = 11
-		}
-		Menu, Tray, add,											; (separator)
+	if ( A_IsCompiled ) {
+		Menu, Tray, NoStandard									; No standard AHK tray menu items
 	} else {
-		Menu, Tray, NoStandard										; no standard AHK tray menu items
-		iconNum = 0
+		SplitPath, A_AhkPath,, AhkDir
+		Menu, Tray, Icon,  1&, %A_AhkPath%			,   1		; Open
+		Menu, Tray, Icon,  2&, %A_WinDir%\hh.exe	,   1 		; Help
+		Menu, Tray, Icon,  4&, %AhkDir%\AU3_Spy.exe	,   1 		; Spy
+		Menu, Tray, Icon,  5&, shell32.dll			, 147		; Reload
+		Menu, Tray, Icon,  6&, %A_AhkPath%			,   2 		; Edit
+		Menu, Tray, Icon,  8&, %A_AhkPath%			,   3 		; Suspend
+		Menu, Tray, Icon,  9&, %A_AhkPath%			,   4 		; Pause
+		Menu, Tray, Icon, 10&, shell32.dll			,  28 		; Exit
+		Menu, Tray, add,										; (separator)
 	}
 	
 	Menu, Tray, add, %aboutmeMenuItem%, showAbout							; About
@@ -104,7 +91,6 @@ pkl_set_tray_menu()
 ;	}
 	
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
-	if ( ahk11 ) {		; eD: Menu icons, using the new or old (Lexicos MenuIcons) way
 	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; %aboutmeMenuItem% ico - about/question
 	if ( eD_ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
@@ -118,40 +104,13 @@ pkl_set_tray_menu()
 	}
 	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; %suspendMenuItem% ico - crossed circle
 	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; %exitappMenuItem% ico - power off
-	} else {
-		tr := MI_GetMenuHandle("Tray")
-		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll",  24, 16)	; %aboutmeMenuItem% ico - about/question
-		if ( eD_ShowMoreInfo ) {
-			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 222, 16)	; %keyhistMenuItem% ico - info
-			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 172, 16)	; %deadkeyMenuItem% ico - search (25: "speed")
-		}
-		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll", 174, 16)	; %helpimgMenuItem% ico - keyboard (116: film)
-		if ( countOfLayouts > 1 ) {
-			++iconNum													; *** separator bar *** - (skip icon count)
-			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll",  44, 16)	; %layoutsMenu%     ico - star
-			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 138, 16)	; %chnglayMenuItem% ico - forward arrow
-		}
-		++iconNum														; *** separator bar *** - (skip icon count)
-		if ( eD_ShowMoreInfo ) {
-			MI_SetMenuItemIcon(tr, ++iconNum, "shell32.dll", 239, 16)	; %refreshMenuItem% ico - refresh arrows
-		}
-		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll", 110, 16)	; %suspendMenuItem% ico - crossed circle
-		MI_SetMenuItemIcon(    tr, ++iconNum, "shell32.dll",  28, 16)	; %exitappMenuItem% ico - power off
-		
-		if (A_OSVersion == "WIN_XP")
-		{
-			; It is necessary to hook the tray icon for owner-drawing to work. Owner-drawing is not used on Windows Vista.
-			MI_SetMenuStyle( tr, 0x4000000 ) ; MNS_CHECKORBMP (optional)
-			setPklInfo( "trayMenuHandler", tr )
-		}
-		OnMessage( 0x404, "_AHK_NOTIFYICON" )
-	}
+;	OnMessage( 0x404, "_AHK_NOTIFYICON" )								; Handle tray icon clicks. Using AHK defaults now.
 }
 
 pkl_about()
 {
-	msLID := getWinLocaleID() ; eD: Get the Windows locale ID
-	dkStr := getDeadKeysInCurrentLayout() ; eD: Show the current Windows layout's dead key string
+	msLID := getWinLocaleID() 					; Get the Windows locale ID
+	dkStr := getDeadKeysInCurrentLayout() 		; Show the current Windows layout's dead key string
 	dkStr := dkStr ? dkStr : "<none>"
 
 	pklAppName      := getPklInfo( "pklName" )
@@ -197,9 +156,9 @@ pkl_about()
 	text = %text%%locContributors%:
 	text = %text%`n- OEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
 ;	text = %text%`nAutoHotkey authors && contributors
-	text = %text%`n- Chris Mallet && The AutoHotkey Foundation:
+	text = %text%`n- Chris Mallet && The AutoHotkey Foundation
 ;	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
-	text = %text%`n  (Lexikos, Majkinetor, Shimanov, L. Hars...)
+;	text = %text%`n  (Lexikos, Majkinetor, Shimanov, L. Hars...)
 ;	text = %text%`n- Steve Gray alias Lexikos: AHK v1.1++	;, MI.ahk,...
 ;	text = %text%`n- majkinetor: Ini.ahk
 ;	text = %text%`n- Shimanov && Laszlo Hars: SendU.ahk
@@ -234,9 +193,6 @@ pkl_showHelpImage( activate = 0 )
 	; 2 = toggle
 	; 3 = suspend on
 	; 4 = suspend off
-	
-	global gP_CurrNumOfDKs	; eD: Current # of dead keys active
-	global gP_CurrNameOfDK	; eD: Current dead key's name
 	
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
@@ -354,19 +310,20 @@ pkl_showHelpImage( activate = 0 )
 	}
 	
 	imgDir := LayoutDir
-	if ( gP_CurrNumOfDKs ) {
-		imgDir := getLayInfo( "dkImgDir" )	; eD
-		ssuf := getLayInfo( "dkImgSuf" )
+	if ( getKeyInfo( "CurrNumOfDKs" ) ) {
+		imgDir := getLayInfo( "dkImgDir" )
+		ssuf   := getLayInfo( "dkImgSuf" )
+		thisDK := getKeyInfo( "CurrNameOfDK" )
 		dkS1 := ( ssuf ) ? ssuf . "1" : ""  	; eD: Img file state 1 suffix
 		dkS2 := ( ssuf ) ? ssuf . "2" : "sh"	; eD: Img file state 2 suffix
 		dkS6 := ssuf . "6"
 		dkS7 := ssuf . "7"						; eD TODO: Add shift states 6-7 to images!
 		if ( getKeyState( "Shift" ) ) {
-			fileName = %gP_CurrNameOfDK%%dkS2%	; sh
+			fileName = %thisDK%%dkS2%			; sh
 			if ( not FileExist( imgDir . "\" . filename . ".png" ) )
-				fileName = %gP_CurrNameOfDK%%dkS1%
+				fileName = %thisDK%%dkS1%
 		} else {
-			fileName = %gP_CurrNameOfDK%%dkS1%	; deadkey%gP_CurrNameOfDK%
+			fileName = %thisDK%%dkS1%			; was deadkey%thisDK%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		fileName = extend
@@ -407,19 +364,13 @@ pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 	msgbox %message%
 }
 
-; eD: Phase this out as WinXP is now obsolete?!
-	_AHK_NOTIFYICON(wParam, lParam)			; Called by OnMessage( 0x404 )
+/*
+	_AHK_NOTIFYICON(wParam, lParam)			; Called by tray icon clicks w/ OnMessage( 0x404 ). Now disabled.
 	{
-		if ( lParam == 0x205 ) { ; WM_RBUTTONUP
-			if ( A_OSVersion != "WIN_XP" ) ; HOOK for Windows XP
-				return
-			; Show menu to allow owner-drawing.
-			MI_ShowMenu( getPklInfo( "trayMenuHandler" ) )
-			return 0 ; Withouth this double right click is without icons
-		} else if ( lParam == 0x201 ) { ; WM_LBUTTONDOWN
-			gosub ToggleSuspend
+		if ( lParam == 0x205 ) { 			; WM_RBUTTONUP
+			return
+		} else if ( lParam == 0x201 ) { 	; WM_LBUTTONDOWN
+			gosub ToggleSuspend				; This suspends PKL on tray icon single-click
 		}
 	}
-
-; eD: Now using AHK v1.1 to render icons without the old Lexicos MenuIcons (which doesn't work with this version?):
-	#Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 ; eD: Renamed from MI.ahk
+*/

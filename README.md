@@ -88,13 +88,13 @@ Do you have a traditional layout without a Wide/Angle modification and get the w
 * Use/edit those snippets if you wish to use for instance an Angle mod but not a Wide mod or vice versa
 
 Anti-madness tips for PKL file editing:
-* Don't use end-of-line comments in the .ini files. It's OK in layout.ini only [for now].
 * In layout.ini:
     - Always use tabs as separators.
     - After 'VirtualKey' always include a tab.
     - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
 * In the pkl.ini Extend section: Don't have empty mappings in the Extend section; comment these out.
-* PKL uses .ini files that may be UTF-8 encoded, unlike the source code files which must be ANSI encoded [for now].
+* PKL uses .ini files that may be UTF-8 (or UTF-16) encoded, unlike the source code files which must be ANSI encoded [for now].
+* Don't use end-of-line comments in the original PKL's .ini files, except layout.ini. PKL_eD allows them in all .ini files.
 
 DONE:
 -----
@@ -115,6 +115,7 @@ I have several [PKL_eD] changes on my wishlist, including:
 * Scan and virtual code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/locale/etc variant is murder!
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers
+* Automatic help image generation based on layouts
   
 _Best of luck!_
 _Øystein "DreymaR" Gadmar, 2018-03_

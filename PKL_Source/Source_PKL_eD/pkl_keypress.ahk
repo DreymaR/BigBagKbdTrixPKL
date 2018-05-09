@@ -225,14 +225,14 @@ getModifierState( modifier, isdown = 0, set = 0 )
 	
 	if ( set == 1 ) {
 		if ( isdown == 1 ) {
-			setKeyInfo( "ModSt_" . modifier, 1 )	; HashTable_Set( pdic,
+			setKeyInfo( "ModState_" . modifier, 1 )
 			Send {%modifier% Down}
 		} else {
-			setKeyInfo( "ModSt_" . modifier, 0 )
+			setKeyInfo( "ModState_" . modifier, 0 )
 			Send {%modifier% Up}
 		}
 	} else {
-		return getKeyInfo( "ModSt_" . modifier )
+		return getKeyInfo( "ModState_" . modifier )
 	}
 }
 

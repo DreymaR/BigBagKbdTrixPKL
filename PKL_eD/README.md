@@ -3,7 +3,7 @@ WARNING: HARD HAT AREA!
 
 PKL[edition DreymaR] is a Work-In-Progress, so don't expect all of it to be working perfectly ... yet. ;-)
 
-~ Øystein B "DreymaR" Gadmar, 2017
+~ Øystein B "DreymaR" Gadmar, 2018
 
 
 DONE:
@@ -27,10 +27,15 @@ DONE:
 * You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
+* Removed MenuIcons and HashTables code, replacing them with AHK v1.1+ native code.
 
 
 TODO:
 -----
+
+* Allow path pseudovariables like $layout in DreymaR_layout.ini?
+
+* Make it so Ralt (SC138 without LCtrl) will be AltGr in layouts with state 7-8.
 
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
@@ -41,17 +46,19 @@ TODO:
 	
 * Alternative mapping format, like TMK or my own KLD? But keep backwards compatibility.
     - Overmuch for layouts?! Besides, there are conversion tools like the one by Aldo Gunsing.
-    - Neat idea for scancode and virtual key remapping! Make it possible to leave entries open.
+    - Neat idea for scancode and virtual key remapping! Make it possible to leave entries open?
+
+* Generate key mapping images from layout files and my .svg by scripting InkScape?
+    - They should work from a KLD-type template/remap setup.
 
 * Would it be possible to make single-key images so that they may be remapped?
     - But that'd require some sort of position map, maybe KLD-based.
     - Also, not sure whether rendering would be smooth enough?
+	- It'd help, especially for dead key images, but we'd need single-key images of a _lot_ of glyphs then.
 
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
     - Transparent foreground images for all states and dead keys.
     - Also for dead key state 6/7
-
-* Generate key mapping images from layout files and my .svg by scripting InkScape?
 
 * Scan code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/etc variant is murder!
 	- Unfortunately though, I don't think I can make that work for the help images?
@@ -99,7 +106,7 @@ TODO:
     - For Shift only, or Shift+Ctrl? (Alt and Win shouldn't be sticky, as they already have semi-sticky mappings.)
     - Probably best w/ one for Shift and one for Ctrl then. Or config it.
 
-* Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini).
+* Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini)?
 
 
 **TODO: From DreymaR_layout.ini.**
