@@ -111,7 +111,6 @@ These changes are now implemented in [PKL_eD]:
 TODO:
 -----
 I have several [PKL_eD] changes on my wishlist, including:
-* Unicode mode, like PKL-Vortex by vVv
 * Scan and virtual code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/locale/etc variant is murder!
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers

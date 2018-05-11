@@ -22,7 +22,7 @@ pkl_Send( ch, modif = "" )
 		return
 	}
 	
-	if ( 32 < ch && ch < 128 ) {
+	if ( 32 < ch ) {			;&& ch < 128 ) {
 		char := "{" . chr(ch) . "}"
 		if ( inStr( getDeadKeysInCurrentLayout(), chr(ch) ) )
 			char .= "{Space}"
@@ -39,10 +39,10 @@ pkl_Send( ch, modif = "" )
 		char = ^{VKDC}
 	} else if ( ch == 29 ) {
 		char = ^{VKDD}
-	} else {
+	; } else {
 		; Unicode
-		sendU(ch)
-		return
+		; sendU(ch)
+		; return
 	}
 	pkl_SendThis( modif, char )
 }

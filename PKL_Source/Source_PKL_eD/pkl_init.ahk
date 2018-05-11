@@ -1,15 +1,10 @@
 pkl_init( layoutFromCommandLine = "" )
 {
-	global gP_Pkl_Ini_File				; eD:    "pkl.ini" -	will eventually be stored in a pdic
-	global gP_Lay_Ini_File				; eD:    "layout.ini" 	--"--
-;	global gP_Pkl_eD__File				; eD: My "pkl.ini" 		--"--
-	global gP_Lay_eD__File				; eD: My "layout.ini" 	--"--
-;	global gP_Pkl_Dic_File				; eD: My "tables.ini" 	--"--
-	
 ;   ####################### pkl.ini #######################
 
-	if ( not FileExist( gP_Pkl_Ini_File ) ) {
-		MsgBox, %gP_Pkl_Ini_File% file NOT FOUND`nSorry. The program will exit.
+	PklIniFile := getPklInfo( "File_Pkl_Ini" )
+	if ( not FileExist( PklIniFile ) ) {
+		MsgBox, %PklIniFile% file NOT FOUND`nSorry. The program will exit.
 		ExitApp
 	}
 	
@@ -25,28 +20,9 @@ pkl_init( layoutFromCommandLine = "" )
 	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
 	_pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
 	_pklSetHotkey( pklIniRead( "refreshHotkey","","Pkl_eD_" ), "rerunWithSameLayout" , "HK_Refresh"      )
-	_pklSetHotkey( pklIniRead( "changeNonASCIIMode"         ), "_SendU_Try_Dyn_Mode" , "HK_SendUMode"    )	; eD TODO: To be deprecated?
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
-	
-	SendU_Clipboard_Restore_Mode( pklIniBool( "restoreClipboard", 1, "nonASCII.ini", "global" ) )
-	Loop, read, nonASCII.ini
-	{
-		t := RegExReplace(A_LoopReadLine, "^\s+")
-		if ( SubStr( t, 1, 1 ) == ";" )
-			Continue
-		StringSplit, a, t, =
-		if ( a0 != 2 )
-			Continue
-		a1 := RegExReplace(a1, "^\s+")
-		a2 := RegExReplace(a2, "^\s+")
-		a1 := RegExReplace(a1, "\s+$")
-		a2 := RegExReplace(a2, "\s+$")
-		if ( a1 == "restoreClipboard" )
-			Continue
-		SendU_SetMode( a1, a2 )
-	}
 	
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
@@ -70,7 +46,7 @@ pkl_init( layoutFromCommandLine = "" )
 	else
 		Layout := getLayInfo( "layout1code" )
 	if ( Layout == "" ) {
-		pkl_MsgBox( 1, gP_Pkl_Ini_File )	; eD
+		pkl_MsgBox( 1, getPklInfo( "File_Pkl_Ini" ) )	; "You must set the layout file in pkl.ini!"
 		ExitApp
 	}
 	setLayInfo( "active", Layout )
@@ -93,13 +69,13 @@ pkl_init( layoutFromCommandLine = "" )
 	} else {
 		LayoutDir := "Layouts\" . Layout
 	}
-	LayoutFile1 := LayoutDir . "\" . gP_Lay_Ini_File
+	LayoutFile1 := LayoutDir . "\" . getPklInfo( "File_Lay_Ini" )
 	if ( not FileExist(LayoutFile1) ) {
-		pkl_MsgBox( 2, LayoutFile1 )
+		pkl_MsgBox( 2, LayoutFile1 )	; "File not found"
 		ExitApp
 	}
-	gP_Lay_Ini_File := LayoutFile1							; eD: Update global as file path
-	gP_Lay_eD__File := LayoutDir . "\" . gP_Lay_eD__File	; eD: Update global as file path
+	setPklInfo( "File_Lay_Ini", LayoutFile1                                    )	; eD: Update as file path
+	setPklInfo( "File_Lay_eD_", LayoutDir . "\" . getPklInfo( "File_Lay_eD_" ) ) 	; eD: Update as file path
 	setLayInfo( "layDir", LayoutDir )
 	
 	static initalized := 0	; eD WIP: Ensure the tables are read only once (as this function is run on layout change too? But we'll need re-remap then?!?)
@@ -228,7 +204,7 @@ pkl_init( layoutFromCommandLine = "" )
 	
 	; Set the extend key mappings
 	if ( extendKey ) {
-		remap := iniReadSection( gP_Pkl_Ini_File, "extend" )
+		remap := iniReadSection( getPklInfo( "File_Pkl_Ini" ), "extend" )
 		Loop, parse, remap, `r`n
 		{
 			pklIniKeyVal( A_LoopField, key, entry )
@@ -258,9 +234,8 @@ pkl_init( layoutFromCommandLine = "" )
 	file := ( FileExist( file ) ) ? file : LayoutFile1	; eD: If no dedicated DK file, try the layout file
 	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
 	dknames := "DeadKeyNames"							; The .ini section that holds dk names
-	file := ( InStr( pklIniRead( -1, -1, LayoutFile1 )  , dknames ) ) ? Layoutfile1     : file
-	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? gP_Lay_eD__File : file
-;	file := ( pklIniRead( "dk01", -1, "Lay_eD_", dknames ) != -1 ) ? gP_Lay_eD__File : file
+	file := ( InStr( pklIniRead( -1, -1, LayoutFile1 )  , dknames ) ) ? Layoutfile1                  : file
+	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? getPklInfo( "File_Lay_eD_" ) : file
 	remap := iniReadSection( file, dknames )			; Make the dead key name lookup table
 	Loop, parse, remap, `r`n
 	{

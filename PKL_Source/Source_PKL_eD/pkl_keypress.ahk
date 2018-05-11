@@ -84,7 +84,7 @@ keyPressed( HK )
 			pkl_SendThis( "", toSend )
 		}
 	} else if ( ch == "%" ) {
-		SendU_utf8_string( getKeyInfo( HK . state . "s" ) )
+		SendInput, getKeyInfo( HK . state . "s" )
 	} else if ( ch == "dk" ) {	; < 0 ) {
 		DeadKey( getKeyInfo( HK . state . "s" ) )	; -1 * ch )
 ;	} else {
@@ -249,8 +249,8 @@ AltGrIsPressed()
 processKeyPress( ThisHotkey )
 {
 	Critical
-	global gP_HotKeyBuffer	; eD: Was 'HotkeysBuffer'
-	gP_HotKeyBuffer .= ThisHotkey . "¤"
+	global PklHotKeyBuffer	; eD: Was 'HotkeysBuffer'
+	PklHotKeyBuffer .= ThisHotkey . "¤"
 	
 	static timerCount = 0
 	++timerCount
@@ -262,12 +262,12 @@ processKeyPress( ThisHotkey )
 runKeyPress()
 {
 	Critical
-	global gP_HotKeyBuffer	; eD: Was 'HotkeysBuffer'
-	pos := InStr( gP_HotKeyBuffer, "¤" )
+	global PklHotKeyBuffer
+	pos := InStr( PklHotKeyBuffer, "¤" )
 	if ( pos <= 0 )
 		return
-	ThisHotkey := SubStr( gP_HotKeyBuffer, 1, pos - 1 )
-	StringTrimLeft, gP_HotKeyBuffer, gP_HotKeyBuffer, %pos%
+	ThisHotkey := SubStr( PklHotKeyBuffer, 1, pos - 1 )
+	StringTrimLeft, PklHotKeyBuffer, PklHotKeyBuffer, %pos%
 	Critical, Off
 
 	keyPressed( ThisHotkey )

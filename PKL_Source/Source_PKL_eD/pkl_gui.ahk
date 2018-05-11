@@ -83,7 +83,11 @@ pkl_set_tray_menu()
 	Menu, Tray, Tip, %pklAppName% v%pklVersion%`n(%activeLayName%)
 
 	Menu, Tray, Click, 2
-	Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_eD_" )
+	try {
+		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_eD_" )
+	} catch {
+		MsgBox, PKL_eD.ini:`nNon-existent menu item specified as default!?
+	}
 ;	if ( countOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chnglayMenuItem%
 ;	} else {
@@ -159,9 +163,6 @@ pkl_about()
 	text = %text%`n- Chris Mallet && The AutoHotkey Foundation
 ;	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
 ;	text = %text%`n  (Lexikos, Majkinetor, Shimanov, L. Hars...)
-;	text = %text%`n- Steve Gray alias Lexikos: AHK v1.1++	;, MI.ahk,...
-;	text = %text%`n- majkinetor: Ini.ahk
-;	text = %text%`n- Shimanov && Laszlo Hars: SendU.ahk
 	if ( translatorName != "[[Translator name]]" )
 		text = %text%`n`n%translatorName%: %translationName%
 	Gui, Add, Text, , %text%
@@ -361,7 +362,7 @@ pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 		StringReplace, m, m, #q#, %q%, A
 	if ( r <> "" )
 		StringReplace, m, m, #r#, %r%, A
-	msgbox %message%
+	MsgBox %message%
 }
 
 /*

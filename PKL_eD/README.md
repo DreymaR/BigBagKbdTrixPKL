@@ -28,6 +28,7 @@ DONE:
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Removed MenuIcons and HashTables code, replacing them with AHK v1.1+ native code.
+* Unicode native AHK now works. SendU and changeNonASCIIMode removed.
 
 
 TODO:
