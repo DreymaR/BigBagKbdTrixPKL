@@ -1,4 +1,4 @@
-activity_ping(mode = 1) {
+﻿activity_ping(mode = 1) {
 	activity_main(mode, 1)
 }
 

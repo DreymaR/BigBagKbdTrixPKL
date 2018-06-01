@@ -1,4 +1,4 @@
-; eD: Renamed this file from detectDeadKeysInCurrentLayout.ahk
+ï»¿; eD: Renamed this file from detectDeadKeysInCurrentLayout.ahk
 
 /*
 ------------------------------------------------------------------------
@@ -7,7 +7,7 @@ Get the deadkeys of the active layout
 
 Version: 0.0.2 2008-06
 License: GNU General Public License
-Author: FARKAS Máté <http://fmate14.try.hu> (My given name is Máté)
+Author: FARKAS MÃ¡tÃ© <http://fmate14.try.hu> (My given name is MÃ¡tÃ©)
 
 Tested Platform:  Windows XP/Vista
 Tested AutoHotkey Version: 1.0.47.04
@@ -39,7 +39,7 @@ Module for detecting the deadkeys in current keyboard layout
 
 Version: 0.0.3 2008-05
 License: GNU General Public License
-Author: FARKAS Máté <http://fmate14.try.hu> (My given name is Máté)
+Author: FARKAS MÃ¡tÃ© <http://fmate14.try.hu> (My given name is MÃ¡tÃ©)
 
 Tested Platform:  Windows XP/Vista
 Tested AutoHotkey Version: 1.0.47.04

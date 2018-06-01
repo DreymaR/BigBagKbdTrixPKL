@@ -115,6 +115,7 @@ I have several [PKL_eD] changes on my wishlist, including:
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers
 * Automatic help image generation based on layouts
+* A settings panel instead of editing .ini files.
   
 _Best of luck!_
 _Øystein "DreymaR" Gadmar, 2018-03_

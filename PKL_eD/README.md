@@ -29,6 +29,8 @@ DONE:
 * Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Removed MenuIcons and HashTables code, replacing them with AHK v1.1+ native code.
 * Unicode native AHK now works. SendU and changeNonASCIIMode removed.
+* Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images
+* Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
 
 
 TODO:

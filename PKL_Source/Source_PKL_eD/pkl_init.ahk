@@ -1,4 +1,4 @@
-pkl_init( layoutFromCommandLine = "" )
+﻿pkl_init( layoutFromCommandLine = "" )
 {
 ;   ####################### pkl.ini #######################
 

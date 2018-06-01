@@ -1,4 +1,4 @@
-pkl_locale_load( lang, compact = 0 )
+﻿pkl_locale_load( lang, compact = 0 )
 {
 	static initialized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)
 	if ( initialized == 0 )

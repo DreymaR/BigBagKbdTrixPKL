@@ -1,4 +1,4 @@
-DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a full DK name.
+﻿DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a full DK name.
 {
 	static dkFile := ""	; eD
 	dkFile := ( dkFile ) ? dkFile : getLayInfo( "dkFile" )

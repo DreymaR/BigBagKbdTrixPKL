@@ -1,6 +1,6 @@
-pkl_set_tray_menu()
+ï»¿pkl_set_tray_menu()
 {
-	eD_ShowMoreInfo := getPklInfo( "eD_ShowMoreInfo" )	; eD: Show extra technical info and the Reset hotkey
+	ShowMoreInfo := getPklInfo( "ShowMoreInfo" )	; eD: Show extra technical info and the Reset hotkey
 	
 	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
 	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
@@ -61,7 +61,7 @@ pkl_set_tray_menu()
 	}
 	
 	Menu, Tray, add, %aboutmeMenuItem%, showAbout							; About
-	if ( eD_ShowMoreInfo ) {
+	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyhistMenuItem%, keyHistory						; Key history
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
 	}
@@ -72,7 +72,7 @@ pkl_set_tray_menu()
 		Menu, Tray, add, %chnglayMenuItem%, changeActiveLayout				; Change layout
 	}
 	Menu, Tray, add,
-	if ( eD_ShowMoreInfo ) {
+	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; eD: Refresh
 	}
 	Menu, Tray, add, %suspendMenuItem%, toggleSuspend						; Suspend
@@ -96,7 +96,7 @@ pkl_set_tray_menu()
 	
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
 	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; %aboutmeMenuItem% ico - about/question
-	if ( eD_ShowMoreInfo ) {
+	if ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
 		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; %deadkeyMenuItem% ico - search (25: "speed")
 		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
@@ -151,7 +151,7 @@ pkl_about()
 	if ( pklProgURL != pklMainURL )
 		Gui, Add, Edit, , %pklProgURL%
 	Gui, Add, Text, , ......................................................................
-	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010
+	Gui, Add, Text, , (c) FARKAS, MÃ¡tÃ©, 2007-2010
 	Gui, Add, Text, , %locInfos%
 	Gui, Add, Text, , %locLicense%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
@@ -175,7 +175,7 @@ pkl_about()
 	text = %text%`n%locCompany%: %layComp%
 	Gui, Add, Text, , %text%
 	Gui, Add, Edit, , %layPage%
-	if ( getPklInfo( "eD_ShowMoreInfo" ) ) {
+	if ( getPklInfo( "ShowMoreInfo" ) ) {
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
 		text = %text%Current Microsoft Windows Locale ID: %msLID%
@@ -198,31 +198,33 @@ pkl_showHelpImage( activate = 0 )
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
 	static prevFile
-	static HelperImage
-	static displayOnTop := 0
-	static yPosition := -1
-	static imgWidth_
+	static imgPosX   := []
+	static imgPosY   := []
+	static imgPosNr  := 0
+	static xPos
+	static yPos
+	static img_Width
 	static imgHeight
 	static layoutDir := 0
-	static hasAltGr
 	static extendKey
+	static HelpImage
+	static HelpBgImg
+	static HelpShImg
+	static imgBgImage
+	static imgShftDir
+	static imgBgColor
+	static imgOpacity
+	static imgHorZone
 	
 ; eD: Added and reworked help image functionality
-;     - Separate background image
-;     - Transparent color for images (not yet working - need to use separate GUIs for Bg and key imgs!?)
+;     - Separate background image and Shift/AltGr indicator overlay
+;     - Transparent color for images (works for top vs bottom image, but not for the GUI window vs underlying windows?)
 ;     - Overall image opacity
-;     - Adjustable top/bottom screen gutters
-	static HelperBgImg
-	static imgBgImage
-	static imgBgColor
-	static imgTopGutr
-	static imgLowGutr
-	static imgOpacity
+;     - Six positions with adjustable screen gutters and right/left push in addition to up/down
 	
 	if ( layoutDir == 0 )
 	{
 		layoutDir := getLayInfo( "layDir" )
-		hasAltGr  := getLayInfo( "hasAltGr" )
 		extendKey := getLayInfo( "extendKey" )
 	}
 	
@@ -242,50 +244,58 @@ pkl_showHelpImage( activate = 0 )
 			guiActive = 1
 		}
 	}
-	
+	state := _GetState()
+
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		imgBgImage := pklIniRead( "img_bgimage"  , layoutDir . "\backgr.png", "Lay_eD_", "helpImg" )
-		if( not FileExist ( imgBgImage ) )
-			imgBgImage := ""	; eD: Default isn't robust if there's no backgr.png nor DreymaR_layout.ini entry?
-		imgBgColor := pklIniRead( "img_bgcolor"  , "fefeff"                 , "Lay_eD_", "helpImg" )
-		imgLowGutr := pklIniRead( "img_low_mrg"  , 60                       , "Lay_eD_", "helpImg" )
-		imgTopGutr := pklIniRead( "img_top_mrg"  , 10                       , "Lay_eD_", "helpImg" )
+		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_eD_", "helpImg" )
+		if ( not FileExist ( imgBgImage ) )
+			imgBgImage := ""	; eD: Is default robust if there's no .png nor DreymaR_layout.ini entry?
+		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_eD_", "helpImg" )
+		if ( not FileExist ( imgShftDir . "\state?.png" ) )
+			imgShftDir := ""
+		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_eD_", "helpImg" )
 		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Lay_eD_", "helpImg" )
-		if ( yPosition == -1 ) {
-			imgWidth_ := pklIniRead( "img_width_", 300                      , "Lay_eD_", "helpImg" )
-			imgHeight := pklIniRead( "img_height", 100                      , "Lay_eD_", "helpImg" )
-			yPosition := A_ScreenHeight - imgHeight - imgLowGutr ; eD: Low margin used to be 60, 40 is no margin
+		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Lay_eD_", "helpImg" )
+		if ( not imgPosNr ) {
+			img_Width := pklIniRead( "img_width_"   , 460                      , "Lay_eD_", "helpImg" )
+			imgHeight := pklIniRead( "img_height"   , 160                      , "Lay_eD_", "helpImg" )
+			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                       , "Lay_eD_", "helpImg" )
+			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                       , "Lay_eD_", "helpImg" )
+			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                       , "Lay_eD_", "helpImg" )
+			imgHorPos := [ imgHorMrg, ( A_ScreenWidth - img_Width )/2, A_ScreenWidth  - img_Width - imgHorMrg ]	; Left/Mid/Right
+			imgVerPos := [ imgTopMrg,                                  A_ScreenHeight - imgHeight - imgLowMrg ]	; Top/bottom
+			Loop, 6 {
+				imgPosX[ A_Index ] := imgHorPos[ 1 + Mod( ( A_Index - 1 ) , 3 ) ]
+				imgPosY[ A_Index ] := imgVerPos[ Ceil( A_Index / 3 ) ]
+			}
+			imgPosNr := 5							; Default image position is bottom center (used to be "xCenter")
+			xPos := imgPosX[ imgPosNr ]
+			yPos := imgPosY[ imgPosNr ]
 		}
-		
-/*
-		; eD: Seems that vVv got transparent color to work with separate GUIs for front/back. I'll try that then?
-		;     NOTE: This isn't working yet.
-		Gui, 3:+AlwaysOnTop -Border -Caption +ToolWindow ; eD: +LastFound not needed?
-		Gui, 3:margin, 0, 0
-		Gui, 3:Color, %imgBgColor%
-		Gui, 3:Add, Pic, xm vHelperBgImg ; eD: +BackgroundTrans not needed?
-		GuiControl, 3:, HelperBgImg, *w%imgWidth_% *h%imgHeight% %imgBgImage%
-		if ( imgBgImage <> "" )
-			Gui, 3:Show, xCenter y%yPosition% AutoSize NA, pklHelperBgImg
-		
-*/
+		imgHorZone := Floor( img_Width * imgHorZone / 100 )		; Convert from percent to pixels
 		Gui, 2:+AlwaysOnTop -Border -Caption +ToolWindow +LastFound
 		Gui, 2:margin, 0, 0
 		Gui, 2:Color, %imgBgColor%
-		if ( imgOpacity == -1 ) {
-			WinSet, TransColor, %imgBgColor%, pklHelperBgImg
-			WinSet, TransColor, %imgBgColor%, pklHelperImage
-		} else if ( imgOpacity < 255 )
+		if ( imgOpacity > 0 && imgOpacity < 255 )
 			WinSet, Transparent, %imgOpacity%
-		if ( imgBgImage <> "" )
-			Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperBgImg
-		Gui, 2:Add, Pic, xm +BackgroundTrans vHelperBgImg AltSubmit ; eD: +BackgroundTrans?
-		GuiControl, 2:, HelperBgImg, *w%imgWidth_% *h%imgHeight% %imgBgImage%
-		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperBgImg
-		Gui, 2:Add, Pic, xm +BackgroundTrans vHelperImage AltSubmit ; eD: +BackgroundTrans not needed/working? With AltSubmit?
-		GuiControl, 2:, HelperImage, *w%imgWidth_% *h%imgHeight% %layoutDir%\state0.png
-		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
+;		if ( imgBgImage <> "" )
+;			Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpBgImg
+		Gui, 2:Add, Pic, xm +BackgroundTrans vHelpBgImg AltSubmit
+		GuiControl, 2:, HelpBgImg, *w%img_Width% *h%imgHeight% %imgBgImage%
+		Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpBgImg
+		Gui, 2:Add, Pic, xm +BackgroundTrans vHelpImage AltSubmit
+		GuiControl, 2:, HelpImage, *w%img_Width% *h%imgHeight% %layoutDir%\state%state%.png
+		Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpImage
+		Gui, 2: Add, Pic, xm +BackgroundTrans vHelpShImg AltSubmit
+		GuiControl, 2:, HelpShImg, *w%img_Width% *h%imgHeight% %imgShftDir%\state%state%.png
+		Gui, 2: Show, x%xPos% y%yPos% AutoSize NA, pklHelpShImg
+		if ( imgOpacity == -1 ) {
+			WinSet, TransColor, %imgBgColor%, pklHelpBgImg
+			WinSet, TransColor, %imgBgColor%, pklHelpImage
+			WinSet, TransColor, %imgBgColor%, pklHelpShImg
+		}	; eD: Seems that vVv got transparent color to work with separate GUIs for front/back?
+
 		
 		setTimer, showHelpImage, 200
 	} else if ( activate == -1 ) {
@@ -297,17 +307,22 @@ pkl_showHelpImage( activate = 0 )
 	}
 	if ( guiActive == 0 )
 		return
-
-	MouseGetPos, , , id
+	
+	CoordMode, Mouse, Screen
+	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
-	if ( title == "pklHelperImage" ) { ; eD:  || title == "pklHelperBgImg"
-		displayOnTop := 1 - displayOnTop
-		if ( displayOnTop )
-			yPosition := imgTopGutr ; eD: Top margin used to be fixed = 5
-		else
-			yPosition := A_ScreenHeight - imgHeight - imgLowGutr ; eD: Low margin was fixed = 60
-;		Gui, 3:Show, xCenter y%yPosition% AutoSize NA, pklHelperBgImg
-		Gui, 2:Show, xCenter y%yPosition% AutoSize NA, pklHelperImage
+	if ( title == "pklHelpImage" ) || ( title == "pklHelpShImg" ) {
+		if ( mouseX - xPos < imgHorZone ) {
+			imgPosNr := ( imgPosNr = 6 ) ? 1 : imgPosNr + 1				; Right (with wrap)
+		} else if ( mouseX - xPos > img_Width - imgHorZone ) {
+			imgPosNr := ( imgPosNr = 1 ) ? 6 : imgPosNr - 1				; Left   --"--
+		} else {
+			imgPosNr := ( imgPosNr > 3 ) ? imgPosNr - 3 : imgPosNr + 3	; Top/Bottom
+		}
+		xPos := imgPosX[ imgPosNr ]
+		yPos := imgPosY[ imgPosNr ]
+		Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpImage
+		Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpShImg
 	}
 	
 	imgDir := LayoutDir
@@ -315,33 +330,40 @@ pkl_showHelpImage( activate = 0 )
 		imgDir := getLayInfo( "dkImgDir" )
 		ssuf   := getLayInfo( "dkImgSuf" )
 		thisDK := getKeyInfo( "CurrNameOfDK" )
-		dkS1 := ( ssuf ) ? ssuf . "1" : ""  	; eD: Img file state 1 suffix
-		dkS2 := ( ssuf ) ? ssuf . "2" : "sh"	; eD: Img file state 2 suffix
-		dkS6 := ssuf . "6"
-		dkS7 := ssuf . "7"						; eD TODO: Add shift states 6-7 to images!
-		if ( getKeyState( "Shift" ) ) {
-			fileName = %thisDK%%dkS2%			; sh
-			if ( not FileExist( imgDir . "\" . filename . ".png" ) )
-				fileName = %thisDK%%dkS1%
+		dkS    := []
+		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; eD: Img file state 0 suffix
+		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; eD: Img file state 1 suffix
+		dkS[6] := ssuf . "6"
+		dkS[7] := ssuf . "7"					; eD TODO: Add shift states 6-7 to images!
+		if ( state ) {
+			fileName := thisDK . dkS[state] . ".png"
+			if ( not FileExist( imgDir . "\" . filename ) )
+				fileName := thisDK . dkS0 . ".png"
 		} else {
-			fileName = %thisDK%%dkS1%			; was deadkey%thisDK%
+			fileName := thisDK . dkS0 . ".png"	; was deadkey%thisDK%
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
-		fileName = extend
+		fileName = extend.png
 	} else {
-		state = 0
-		state += 1 * getKeyState( "Shift" )
-		state += 6 * ( hasAltGr * AltGrIsPressed() )
-		fileName = state%state%
+		fileName = state%state%.png
 	}
-	if ( not FileExist( imgDir . "\" . fileName . ".png" ) )
-		fileName = state0
+	if ( not FileExist( imgDir . "\" . fileName ) )
+		fileName = state0.png
 	
 	if ( prevFile == fileName )
 		return
-		
 	prevFile := fileName
-	GuiControl,2:, HelperImage, *w%imgWidth_% *h%imgHeight% %imgDir%\%fileName%.png
+	
+	GuiControl, 2:, HelpImage, *w%img_Width% *h%imgHeight% %imgDir%\%fileName%
+	GuiControl, 2:, HelpShImg, *w%img_Width% *h%imgHeight% %imgShftDir%\state%state%.png
+}
+
+_GetState()	; The shift state 0:1:6:7 as in layout.ini and image names
+{
+	state = 0
+	state += 1 * getKeyState( "Shift" )
+	state += 6 * getLayInfo( "hasAltGr" ) * AltGrIsPressed()
+	return state
 }
 
 _FixAmpInMenu( menuItem )

@@ -1,4 +1,4 @@
-keyPressed( HK )
+ï»¿keyPressed( HK )
 {
 	static extendKeyStroke := 0
 	static extendKey := "--"
@@ -250,7 +250,7 @@ processKeyPress( ThisHotkey )
 {
 	Critical
 	global PklHotKeyBuffer	; eD: Was 'HotkeysBuffer'
-	PklHotKeyBuffer .= ThisHotkey . "¤"
+	PklHotKeyBuffer .= ThisHotkey . "Â¤"
 	
 	static timerCount = 0
 	++timerCount
@@ -263,7 +263,7 @@ runKeyPress()
 {
 	Critical
 	global PklHotKeyBuffer
-	pos := InStr( PklHotKeyBuffer, "¤" )
+	pos := InStr( PklHotKeyBuffer, "Â¤" )
 	if ( pos <= 0 )
 		return
 	ThisHotkey := SubStr( PklHotKeyBuffer, 1, pos - 1 )

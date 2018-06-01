@@ -1,4 +1,4 @@
-toggleCapsLock()
+﻿toggleCapsLock()
 {
 	if ( getKeyState("CapsLock", "T") )
 	{

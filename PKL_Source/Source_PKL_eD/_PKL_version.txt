@@ -1,8 +1,8 @@
 Portable Keyboard Layout by Farkas Máté
 
-Version: 0.4.1-eD
+Version: 0.4.2-eD
 Compiled: not released
-Compiler: AutoHotKey v1.1.26.1
+Compiler: AutoHotKey v1.1.26.1 Unicode 32 bit
 
 (c) FARKAS, Máté, 2007-2010
 (c) Øystein Bech "DreymaR" Gadmar, 2015-

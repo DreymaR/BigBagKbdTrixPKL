@@ -1,4 +1,4 @@
-#NoEnv
+ï»¿#NoEnv
 #Persistent
 #NoTrayIcon
 #InstallKeybdHook
@@ -9,16 +9,14 @@
 #MaxThreads 20
 
 ;
-; Portable Keyboard Layout by Farkas Máté   [http://pkl.sourceforge.net]
-; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
+; Portable Keyboard Layout by Farkas MÃ¡tÃ©   [http://pkl.sourceforge.net]
+; edition DreymaR (Ã˜ystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
 ; eD TODO: 	- Transition to AHK1.1 like PKL-vVv.
 ;				- Make iniRead functions similar to the vVv ones, able to read keys robustly from UTF-8 files
 ;				- Instead of VKeyCodeFromName, use the AHK v1.1 GetKeyVK() - if it works with VK names...?
-;				- Transition to AHK v1.1 Unicode Send (re vVv): Need to fix some variable%ref% problems (see vVv?)
-;					- Example: Menu items apart from Refresh only contain their hotkey strings not their names.
-;					- Is it an iniRead problem? UTF-8 IniRead?!?
+;				- UTF-8 IniRead
 ;			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;				- As LayoutInfo dics?
 ;				- The best way may be to define them as swap loops? Should these be compoundable?
@@ -32,11 +30,11 @@
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing).
-; eD DONE:	- Menu icons now work with AHK v1.1
-; eD DONE:	- Test out whether tray menu shortcuts would work? E.g., &About. Answer: The menu shows it, but unselectable by key.
+; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send.
+; eD DONE:	- Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key.
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
-setPklInfo( "pklVers", "0.4.1-eD" ) 		; eD: PKL[edition DreymaR]
+setPklInfo( "pklVers", "0.4.2-eD" ) 		; eD: PKL[edition DreymaR]
 setPklInfo( "pklComp", "ed. DreymaR" )
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) ; http://pkl.sourceforge.net/
 
@@ -57,7 +55,7 @@ setPklInfo( "File_Lay_Ini", "layout.ini"			)	; eD: --"--
 setPklInfo( "File_Pkl_eD_", "PKL_eD\PKL_eD.ini"  	)	; eD: My extra pkl.ini file
 setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD: My extra layout.ini file
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
-setPklInfo( "eD_ShowMoreInfo", pklIniBool( "eD_DebugInfo", false, "Pkl_eD_", "pkl" ) )	; eD: Extra debug info
+setPklInfo( "ShowMoreInfo", pklIniBool( "showExtraInfo", false, "Pkl_eD_", "pkl" ) )	; eD: Extra debug info
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )

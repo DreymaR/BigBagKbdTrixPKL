@@ -1,4 +1,4 @@
-/*
+﻿/*
 	LayoutInfo entries:
 	-------------------
 	active         := "" ; The active layout
