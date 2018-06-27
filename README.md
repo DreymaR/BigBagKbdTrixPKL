@@ -82,31 +82,32 @@ Some of the hotkeys I've set in my pkl.ini file are:
 **NOTES:**
 ---------
 Do you have a traditional layout without a Wide/Angle modification and get the wrong Extend mappings on the right hand?
-* If so, you should use a renamed copy of a pkl_###-NoErgoMods.ini as your pkl.ini
-* If on the other hand you _do_ use a (Curl)AngleWide mod, base your pkl.ini file on a pkl_###-AngleWide.ini file
-* In the [extend] section of pkl.ini there are some places you can paste code snippets copied from further down in the file
-* Use/edit those snippets if you wish to use for instance an Angle mod but not a Wide mod or vice versa
+* If so, you should use a pkl.ini layout that fits your preferred mod or lack of it.
+* Maybe all the layout files aren't quite updated with remaps yet. Check out a base one like Colemak-eD_ISO.
 
 Anti-madness tips for PKL file editing:
 * In layout.ini:
     - Always use tabs as separators.
     - After 'VirtualKey' always include a tab.
     - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
-* In the pkl.ini Extend section: Don't have empty mappings in the Extend section; comment these out.
-* PKL uses .ini files that may be UTF-8 (or UTF-16) encoded, unlike the source code files which must be ANSI encoded [for now].
+* In Extend sections: Don't have empty mappings; comment these out.
+* PKL uses .ini and source files that may be UTF-8 encoded to support Unicode.
 * Don't use end-of-line comments in the original PKL's .ini files, except layout.ini. PKL_eD allows them in all .ini files.
 
 DONE:
 -----
 These changes are now implemented in [PKL_eD]:
-* Help image opacity, background color and gutter size settings
-* Separate help image background, so the keys/fingering can be in one image and the glyphs in another (saves file space, adds options)
+* Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
+* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr indicators can be in different images.
 * Various menu and language file improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 * DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
 * Base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
+* Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much easier.
+* The settings, layout and Extend parts of pkl.ini are now split into separate files.
+
 
 TODO:
 -----

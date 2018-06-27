@@ -73,9 +73,9 @@ DeadKey(DK)
 			pkl_Send( DeadKeyChar )
 			if ( PVDK ) {
 				StringTrimRight, PVDK, PVDK, 1
-				StringSplit, DKS, PVDK, " "
-				Loop %DKS0% {
-					pkl_Send( DKS%A_Index% )
+				Loop, Parse, PVDK, %A_Space%
+				{
+					pkl_Send( A_LoopField )
 				}
 				PVDK := ""
 			}

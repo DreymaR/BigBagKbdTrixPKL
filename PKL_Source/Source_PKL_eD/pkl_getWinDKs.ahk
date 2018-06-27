@@ -98,7 +98,7 @@ detectDeadKeysInCurrentLayout()
 	Send %WinLayoutID%
 	Send {Enter}
 	
-	If ( notepadMode )
+	if ( notepadMode )
 		Send !{F4}
 		Send {Right}				; Select "Don't save"
 	

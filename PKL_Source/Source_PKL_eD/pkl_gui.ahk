@@ -10,7 +10,7 @@
 	
 	activeLayout    := getLayInfo( "active" )
 	activeLayName   := ""
-	countOfLayouts  := getLayInfo( "countOfLayouts" )
+	numOfLayouts  := getLayInfo( "numOfLayouts" )
 	
 	aboutmeMenuItem := getPklInfo( "LocStr_9"  )			; pklLocaleString()
 	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )
@@ -28,7 +28,7 @@
 	exitappMenuItem .= ( ExitAppHotkey ) ? _FixAmpInMenu( ExitAppHotkey ) : ""
 	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
-	Loop, % countOfLayouts
+	Loop, % numOfLayouts
 	{
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
@@ -66,7 +66,7 @@
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
 	}
 	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle					; Show image
-	if ( countOfLayouts > 1 ) {
+	if ( numOfLayouts > 1 ) {
 		Menu, Tray, add,													; (separator)
 		Menu, Tray, add, %layoutsMenu%, :changeLayout						; Layouts
 		Menu, Tray, add, %chnglayMenuItem%, changeActiveLayout				; Change layout
@@ -84,11 +84,11 @@
 
 	Menu, Tray, Click, 2
 	try {
-		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_eD_" )
+		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_Ini" )
 	} catch {
 		MsgBox, PKL_eD.ini:`nNon-existent menu item specified as default!?
 	}
-;	if ( countOfLayouts > 1 ) {
+;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chnglayMenuItem%
 ;	} else {
 ;		Menu, Tray, Default, %suspendMenuItem%
@@ -102,7 +102,7 @@
 		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
 	}
 	Menu, Tray, Icon,      %helpimgMenuItem%,  shell32.dll , 174		; %helpimgMenuItem% ico - keyboard (116: film)
-	if ( countOfLayouts > 1 ) {
+	if ( numOfLayouts > 1 ) {
 		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; %layoutsMenu%     ico - star
 		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; %chnglayMenuItem% ico - forward arrow
 	}
@@ -248,21 +248,26 @@ pkl_showHelpImage( activate = 0 )
 
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_eD_", "helpImg" )
+		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "helpImg" )
 		if ( not FileExist ( imgBgImage ) )
 			imgBgImage := ""	; eD: Is default robust if there's no .png nor DreymaR_layout.ini entry?
-		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_eD_", "helpImg" )
+		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "helpImg" )
 		if ( not FileExist ( imgShftDir . "\state?.png" ) )
 			imgShftDir := ""
-		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_eD_", "helpImg" )
-		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Lay_eD_", "helpImg" )
-		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Lay_eD_", "helpImg" )
+		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "helpImg" )
+		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Lay_Ini", "helpImg" )
+		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Lay_Ini", "helpImg" )
 		if ( not imgPosNr ) {
-			img_Width := pklIniRead( "img_width_"   , 460                      , "Lay_eD_", "helpImg" )
-			imgHeight := pklIniRead( "img_height"   , 160                      , "Lay_eD_", "helpImg" )
-			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                       , "Lay_eD_", "helpImg" )
-			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                       , "Lay_eD_", "helpImg" )
-			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                       , "Lay_eD_", "helpImg" )
+			img_Width := pklIniRead( "img_width"    , 0                        , "Lay_Ini", "global"  )	; [global] is old default
+			img_Width := ( img_Width ) ? img_Width : pklIniRead( "img_width"   , 460      , "Lay_Ini", "helpImg" )
+			imgHeight := pklIniRead( "img_height"   , 0                        , "Lay_Ini", "global"  )	; --"--
+			imgHeight := ( imgHeight ) ? imgHeight : pklIniRead( "img_height"  , 160      , "Lay_Ini", "helpImg" )
+			img_Scale := pklIniRead( "img_scale"    , 100.0                    , "Lay_Ini", "helpImg" )	; Scale factor, in % (float)
+			img_Width := Ceil( img_Scale * img_Width / 100.0 )
+			imgHeight := Ceil( img_Scale * imgHeight / 100.0 )
+			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                       , "Lay_Ini", "helpImg" )
+			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                       , "Lay_Ini", "helpImg" )
+			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                       , "Lay_Ini", "helpImg" )
 			imgHorPos := [ imgHorMrg, ( A_ScreenWidth - img_Width )/2, A_ScreenWidth  - img_Width - imgHorMrg ]	; Left/Mid/Right
 			imgVerPos := [ imgTopMrg,                                  A_ScreenHeight - imgHeight - imgLowMrg ]	; Top/bottom
 			Loop, 6 {
@@ -328,7 +333,7 @@ pkl_showHelpImage( activate = 0 )
 	imgDir := LayoutDir
 	if ( getKeyInfo( "CurrNumOfDKs" ) ) {
 		imgDir := getLayInfo( "dkImgDir" )
-		ssuf   := getLayInfo( "dkImgSuf" )
+		ssuf   := getLayInfo( "dkImgSuf" )		; Image state suffix
 		thisDK := getKeyInfo( "CurrNameOfDK" )
 		dkS    := []
 		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; eD: Img file state 0 suffix

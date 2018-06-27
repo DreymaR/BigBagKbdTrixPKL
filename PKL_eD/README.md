@@ -11,11 +11,12 @@ DONE:
 
 * Renamings and file mergings to make the code more compact and streamlined.
 * Edited menus and the About... dialog.
-* Add a KeyHistory shortcut for debugging etc. Make it configurable in pkl_eD.ini (eD_DebugInfo).
-* Add a Refresh hotkey. Reruns PKL in case something got stuck or similar.
-* Multilayered help images, so the fingering can be in one image and the keys in another (saves file space, adds options).
-    - Also, the ability to set background color, overall transparency and top/bottom gutter distance.
-* Removed OSVersion < VISTA fix for WheelLeft/WheelRight, as even Win Vista is no longer supported by MS.
+* Added a KeyHistory shortcut for debugging etc. Make it configurable in pkl_eD.ini (eD_DebugInfo).
+* Added a Refresh hotkey. Reruns PKL in case something got stuck or similar.
+* Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
+    - Also, settings for image scaling, background color, overall transparency and top/bottom gutter distance.
+	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images
+	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
 * Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
@@ -29,16 +30,31 @@ DONE:
 * Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Removed MenuIcons and HashTables code, replacing them with AHK v1.1+ native code.
 * Unicode native AHK now works. SendU and changeNonASCIIMode removed.
-* Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images
-* Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
+* New iniRead functions that support the UTF-8 Unicode file format.
+* Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key(?).
+* Scan code modular remapping, making ergo and other variants much easier. Separate key permutation cycles, and remaps combining/translating them.
+	- Uses my KeyLayoutDefinition (KLD) mapping format.
+	- This is good for remaps, but too compact for main layout or Extend definitions. (Besides, Aldo Gunsing has a conversion tool for those.)
+	- Unfortunately though, so far I can't make that work for the help images.
+	- Should I have a cycle merge syntax, e.g., "Angle_ISO105 = TC<  |L0LG  | ^Angle_ANSI-Z"? Probably unnecessary.
+* Virtual Key remapping, similarly to SC. I'd like to make only ANSI or ISO layouts, and leave the ISO-ANSI VK issue to a simple remap routine.
+* Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
+* Split pkl.ini into PKL_Settings.ini, PKL_Layouts.ini and _eD_Extend.ini.
 
 
 TODO:
 -----
 
-* Allow path pseudovariables like $layout in DreymaR_layout.ini?
+* So many variants in PKL_Layouts.ini and remaps! Make a KeyboardType setting, and order all layouts and stuff under it?
+	- Also an _Ergo_ setting under _Model_, further organizing the variants?
+	- But this leads to a plethora of subfolders, not all of which are currently populated!
+	- Could PKL look for the specified subfolder but if not found, default to something using relevant remaps?
+	- Alternative: Each layout has ISO/ANSI and ergo subfolders? Which way to organize? E.g., Extend will be common for ISO-ANSI/Ergo.
+	- ISO-ANSI/Ergo folders could have a Common resource folder, for Extend maps etc? Maybe keep Extend images in common folders?!
 
-* Make it so Ralt (SC138 without LCtrl) will be AltGr in layouts with state 7-8.
+* Allow path pseudovariables like $layout in DreymaR_layout.ini? Don't think so?
+
+* Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
 
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
@@ -47,10 +63,6 @@ TODO:
 	- Specify, e.g., the entry for 1 similar to today's 0 entry. U+0000–U+001F are just <control> chars.
 	- That'd be backwards compatible with existing PKL tables, and one can choose behavior.
 	
-* Alternative mapping format, like TMK or my own KLD? But keep backwards compatibility.
-    - Overmuch for layouts?! Besides, there are conversion tools like the one by Aldo Gunsing.
-    - Neat idea for scancode and virtual key remapping! Make it possible to leave entries open?
-
 * Generate key mapping images from layout files and my .svg by scripting InkScape?
     - They should work from a KLD-type template/remap setup.
 
@@ -62,21 +74,6 @@ TODO:
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
     - Transparent foreground images for all states and dead keys.
     - Also for dead key state 6/7
-
-* Scan code remapping, adding modularity. Making one layout for every ISO-ANSI/Angle/Curl/Wide/etc variant is murder!
-	- Unfortunately though, I don't think I can make that work for the help images?
-	- Separate for instance Curl, Angle and Wide. Even Wide-main and Wide-specific(Slash/brackets/backslash/apostrophe)?
-    - VK are better documented than SC on the net? BUT: Problem with VK_OEM_# for different keyboard types! So we're using SC.
-	- ANSI/ISO is actually VK remapping, not SC! So that needs to be addressed. Use separate, similar tables for SC and VK.
-	- Curl is somewhat VK (affects letters and AltGr only), while (Curl)AngleWide is SC (affects Extend too; Ctrl+V for Curl)
-	- Remap AltGr modularly too? E.g., only rewrite the necessary keys for a Locale layout. Maybe overmuch, as it'd take a new format.
-    - For both Extend and layout.ini, SC### will get translated in the code before actual mapping.
-    - Allow modular mapping of ZXCVB_, upper left side, right side and mods/etc.
-
-* Virtual Key remapping.
-    - I'd like to make only ISO layouts, and leave the ISO-ANSI VK issue to a simple remap routine.
-    - In pkl-eD.ini there's the variable 'eD_KbdType'. Maybe a KbdType in layout-eD.ini to compare with this?
-    - If remapping between layout and keyboard is needed, use an array of VK translations.
 
 * Multi-Extend! E.g., LAlt+Caps triggers NumPad Extend layer; Caps (or LAlt?) holds it. (LAlt+Shift+Caps locks/unlocks it?)
 	- Others: Ctrl+Caps(only good w/ RCtrl), AltGr+Caps(good!)..., Alt+AltGr+Caps (fancy)
@@ -116,15 +113,6 @@ TODO:
 * Extend layer lists (extend# = ext_sensiblename) in my layout file
     - Keep all extend layers in ..\..\PKL_DreymaR\extend.ini ?
     - Also keep Extend help images centrally!? One folder for each scanmap "model".
-* Keyboard "models", that is, modular key-to-key remappings
-    - They could be selected in my layout file, and kept in PKL_Dreymar\scanmaps.ini
-    - Example: 'scanmap_layout = pc105 angle-iso wide-sl curl-dh' produces CurlAngleWide
-    - A scanmap may be TMK-style, mapping one intuitive map layout (including blanks) to another
-    - Separate scanmap for layout and extends!? E.g., layout has CurlAngleWide, extends AngleWide.
-    - And/or virtualmap in addition, for remapping Curl etc without affecting Extend?
-    - The main use for vkmaps could be ISO-ANSI conversion! A worthy cause!
-    - Could in theory use a scanmap/vkmap to rearrange one layout to another (Colemak-QWERTY-whatever)!?
-    - So, just by changing maps I could convert my Colemak[eD] to Angle, CurlAngleWide, QWERTY...
 * Ligature tables for longer strings etc, using, e.g., &### layout entries and a table (link) in DreymaR_layout
 * Literal AHK output? The {Raw} send mode is on by default.
     - PKL already supports multi-codepoint output by default! But not modified stuff.

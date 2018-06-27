@@ -8,7 +8,7 @@
 	
 	nextLayout     := "" ; If you set multiple layouts, this is the next one.
 	                     ; see the "changeActiveLayout:" label!
-	countOfLayouts := 0  ; Array size
+	numOfLayouts := 0  ; Array size
 	LayoutsXcode         ; layout code
 	LayoutsXname         ; layout name
 	Ico_On_File          ; Icon for On  (file)

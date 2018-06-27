@@ -13,28 +13,17 @@
 ; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
-; eD TODO: 	- Transition to AHK1.1 like PKL-vVv.
-;				- Make iniRead functions similar to the vVv ones, able to read keys robustly from UTF-8 files
-;				- Instead of VKeyCodeFromName, use the AHK v1.1 GetKeyVK() - if it works with VK names...?
-;				- UTF-8 IniRead
-;			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
-;				- As LayoutInfo dics?
-;				- The best way may be to define them as swap loops? Should these be compoundable?
-;				- Likely, several types:
-;				- pk_ for "physical" key movements like the AngleWide mod
-;				- vk_ for "virtual" movements like the ISO/ANSI OEM_ switches?
-;				- lk_ for "layout" movements like the Curl(DH) mod (or can these simply be vk_ switches?)
-;				- Make sure they are case insensitive (so both SC### and sc### work, both ways)
-;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary
+; eD WIP: 	- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
+; eD TODO: 	- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
+;			- Multi-Extend, allowing one Extend key with modifiers to select up to 4 different layers.
 ;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing).
-; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send.
-; eD DONE:	- Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key.
+; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )
-setPklInfo( "pklVers", "0.4.2-eD" ) 		; eD: PKL[edition DreymaR]
+setPklInfo( "pklVers", "0.4.3-eD" ) 		; eD: PKL[edition DreymaR]
 setPklInfo( "pklComp", "ed. DreymaR" )
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) ; http://pkl.sourceforge.net/
 
@@ -44,18 +33,17 @@ Process, Priority, , H
 Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
-; Global variables
-; eD TODO:     - Eventually, want something like gPkl[Lay_eD__File] := "Dreymar_Layout.ini"? But must declare then.
+; Global variables		; eD TODO: Use set/get()? Or, e.g., gPkl[<key>] := "<val>" ? Must declare global then.
 setKeyInfo( "CurrNumOfDKs", 0 )				; eD: How many dead keys were pressed	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
 ;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
-setPklInfo( "File_Pkl_Ini", "pkl.ini"				)	; eD: Defined this globally.
+setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Defined this globally (was 'pkl.ini')
 setPklInfo( "File_Lay_Ini", "layout.ini"			)	; eD: --"--
-setPklInfo( "File_Pkl_eD_", "PKL_eD\PKL_eD.ini"  	)	; eD: My extra pkl.ini file
-setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD: My extra layout.ini file
+setPklInfo( "File_Pkl_Lay", "PKL_Layouts.ini"  		)	; eD: My extra pkl.ini file
+;setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD WIP: Phase this out!?
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
-setPklInfo( "ShowMoreInfo", pklIniBool( "showExtraInfo", false, "Pkl_eD_", "pkl" ) )	; eD: Extra debug info
+setPklInfo( "ShowMoreInfo", pklIniBool( "showExtraInfo", false ) )	; eD: Extra debug info
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )

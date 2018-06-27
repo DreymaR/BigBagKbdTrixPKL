@@ -1,7 +1,7 @@
 Portable Keyboard Layout by Farkas Máté
 
-Version: 0.4.2-eD
-Compiled: not released
+Version: 0.4.3-eD
+Compiled: 2018-06 for GitHub/DreymaR
 Compiler: AutoHotKey v1.1.26.1 Unicode 32 bit
 
 (c) FARKAS, Máté, 2007-2010

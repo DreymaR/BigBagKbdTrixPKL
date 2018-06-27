@@ -1,287 +1,17 @@
 ﻿pkl_init( layoutFromCommandLine = "" )
 {
-;   ####################### pkl.ini #######################
-
-	PklIniFile := getPklInfo( "File_Pkl_Ini" )
-	if ( not FileExist( PklIniFile ) ) {
-		MsgBox, %PklIniFile% file NOT FOUND`nSorry. The program will exit.
-		ExitApp
-	}
-	
-	compactMode := pklIniBool( "compactMode", false )
-	
-	it := pklIniRead( "language", "auto" )
-	if ( it == "auto" )
-		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )	; eD: Replaced getLangStrFromDigits( A_Language )
-	pkl_locale_load( it, compactMode )
-	
-	_pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; eD: Was LAlt & RCtrl
-	_pklSetHotkey( pklIniRead( "displayHelpImageHotkey"     ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
-	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
-	_pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
-	_pklSetHotkey( pklIniRead( "refreshHotkey","","Pkl_eD_" ), "rerunWithSameLayout" , "HK_Refresh"      )
-	
-	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
-	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
-	
-	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
-	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
-	
-	Layout := pklIniRead( "layout" )
-	StringSplit, layouts, Layout, `,
-	setLayInfo( "countOfLayouts", layouts0 )
-	Loop, % layouts0 {
-		StringSplit, parts, layouts%A_Index%, :
-		A_Layout := parts1
-		if ( parts0 > 1 )
-			A_Name := parts2
-		else
-			A_Name := parts1
-		setLayInfo( "layout" . A_Index . "code", A_Layout )
-		setLayInfo( "layout" . A_Index . "name", A_Name )
-	}
-	
-	if ( layoutFromCommandLine )
-		Layout := layoutFromCommandLine
-	else
-		Layout := getLayInfo( "layout1code" )
-	if ( Layout == "" ) {
-		pkl_MsgBox( 1, getPklInfo( "File_Pkl_Ini" ) )	; "You must set the layout file in pkl.ini!"
-		ExitApp
-	}
-	setLayInfo( "active", Layout )
-	
-	nextLayoutIndex := 1
-	Loop, % layouts0 {
-		if ( Layout == getLayInfo( "layout" . A_Index . "code") ) {
-			nextLayoutIndex := A_Index + 1
-			break
-		}
-	}
-	if ( nextLayoutIndex > layouts0 )
-			nextLayoutIndex := 1
-	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
-	
-;   ####################### layout.ini #######################
-
-	if ( compactMode ) {
-		LayoutDir := "."
-	} else {
-		LayoutDir := "Layouts\" . Layout
-	}
-	LayoutFile1 := LayoutDir . "\" . getPklInfo( "File_Lay_Ini" )
-	if ( not FileExist(LayoutFile1) ) {
-		pkl_MsgBox( 2, LayoutFile1 )	; "File not found"
-		ExitApp
-	}
-	setPklInfo( "File_Lay_Ini", LayoutFile1                                    )	; eD: Update as file path
-	setPklInfo( "File_Lay_eD_", LayoutDir . "\" . getPklInfo( "File_Lay_eD_" ) ) 	; eD: Update as file path
-	setLayInfo( "layDir", LayoutDir )
-	
-	static initalized := 0	; eD WIP: Ensure the tables are read only once (as this function is run on layout change too? But we'll need re-remap then?!?)
-	if ( initialized == 0 )
-	{																			; eD: Read/set remap dictionary
-		initialized := 1
-	}
-	
-	extendKey   := pklIniRead( "extend_key", "", LayoutFile1, "global" )		; eD TODO: If this is set, look for multi-Extend in Lay_eD_ .ini
-	if ( extendKey <> "" ) {
-		setLayInfo( "extendKey", extendKey )
-	}
-	
-	LayoutFile0 := pklIniRead( "baseLayout", "", "Lay_eD_", "global" )			; eD: Read a base layout then augment/replace it with the main layout
-	LayoutFile0 := ( LayoutFile0 == "" ) ? pklIniRead( "baseLayout", "", LayoutFile1, "eD_info" ) : LayoutFile0
-	LayoutFiles := ( FileExist(LayoutFile0) ) ? LayoutFile0 . "," . LayoutFile1 : LayoutFile1
-	Loop, Parse, LayoutFiles, CSV
-	{
-	LayoutFile := A_LoopField
-	
-	ShiftStates := pklIniRead( "shiftstates", "0:1", LayoutFile, "global" )		;	IniRead, ShiftStates, %LayoutFile%, global, shiftstates, 0:1
-	ShiftStates := ShiftStates . ":8:9"	; SgCap, SgCap + Shift
-	StringSplit, ShiftStates, ShiftStates, :
-	setLayInfo( "hasAltGr", ( InStr( ShiftStates, 6 ) ) ? 1 : 0 )
-	
-	; eD WIP: Layout remapping for ergo mods, ANSI/ISO conversion etc. Read in remap tables.
-	; Read in section, then process each line? Replace outer "" (unless using IniRead), || -> |, final |.
-	; Start using AHK v1.1 arrays!? Otherwise, silly.
-	RemapFile := pklIniRead( "remapFile", "", "Lay_eD_", "global" )
-	if ( FileExist(RemapFile) ) {
-		scMapLay := pklIniRead( "scmap_layouts", "", "Lay_eD_", "global" )
-		scMapExt := pklIniRead( "scmap_extend_", "", "Lay_eD_", "global" )
-		vkMapKbd := pklIniRead( "vkmap_kbdType", "", "Lay_eD_", "global" )
-		;iniReadSection()
-		;StrSplit( str, ",", " `t" )
-	}
-	
-	remap := iniReadSection( LayoutFile, "layout" )
-	Loop, parse, remap, `r`n
-	{
-		pklIniKeyVal( A_LoopField, key, entries, 0, 0 )	; No comment stripping here to avoid nuking the semicolon entry!
-		; eD TODO/WIP: Remap the key according to _Remap_eD.ini here?!? Use A_Index = 2 in the LayoutFiles loop, to avoid remapping twice?
-		; _pklInitReadRemap() - Splits by comma, calls itself in case of *, then ...
-		; _pklInitReadCycle() - Splits by plus, calls itself if many parts, returns a string of pipe-delimited scan codes? Input: cycle name.
-;			StringSplit, RemapCycle, RemapStr, |, %A_Space%%A_Tab%
-;			Loop, RemapCycle0	; The number of string elements found
-;				;StringSplit, RemapElement, RemapCycle%A_Index%, +, %A_Space%%A_Tab%
-;				Loop, Parse, RemapCycle%A_Index%, +, %A_Space%%A_Tab%
-		If ( key == "<NoKey>" )
-			Continue
-		StringSplit, entry, entries, %A_Tab%	; eD TODO: Use StrSplit() instead.
-		if ( entry0 < 2 ) {
-			Hotkey, *%key%, doNothing
-			Continue
-		}
-		StringLower, entry2, entry2
-		if ( entry2 == "virtualkey" || entry2 == "vk")
-			entry2 = -1
-		else if ( entry2 == "modifier" )
-			entry2 = -2
-		setKeyInfo( key . "vkey", pklIniRead( "VK_" . entry1, "00", "Pkl_Dic", "VKeyCodeFromName" ) )	; eD: replaced getVKeyCodeFromName(entry1) )
-		setKeyInfo( key . "cap", entry2 ) 							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
-		if ( entry2 == -2 ) {										; The key is a modifier
-			Hotkey, *%key%, modifierDown
-			Hotkey, *%key% Up, modifierUp
-			if ( getLayInfo( "hasAltGr" ) && entry1 == "RAlt" )		; Set RAlt as AltGr
-				setKeyInfo( key . "vkey", "AltGr" )
-			else
-				setKeyInfo( key . "vkey", entry1 )					; Set VK code for key
-		} else if ( key == extendKey ) {							; Set the Extend key
-			Hotkey, *%key% Up, upToDownKeyPress
-		} else {
-			Hotkey, *%key%, keyPressed
-		}
-		Loop, % entry0 - 3 {
-			k = ShiftStates%A_Index%
-			k := %k%
-			
-			v := A_Index + 2
-			v = entry%v%
-			v := %v%	; eD: Trims v. Could use v := Trim( v ) instead?
-			if ( StrLen( v ) == 0 ) {
-				v = -- ; Disabled
-			} else if ( StrLen( v ) == 1 ) {
-				v := asc( v )
-			} else {
-				if ( SubStr( v, 1, 1 ) == "*" ) { 					; * : Special chars
-					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
-					v := "*"
-				} else if ( SubStr( v, 1, 1 ) == "=" ) { 			; = : Special chars with {Blind}
-					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
-					v := "="
-				} else if ( SubStr( v, 1, 1 ) == "%" ) { 			; % : Ligature (with unicode chars, too)
-					setKeyInfo( key . k . "s", SubStr( v, 2 ) )
-					v := "%"
-				} else if ( v == "--" ) {
-					v = -- ;) Disabled
-				} else if ( SubStr( v, 1, 2 ) == "dk" ) { 			; dk: Dead key
-					setKeyInfo( key . k . "s", SubStr( v, 3 ) )
-					v := "dk"	; v := "-" . SubStr( v, 3 ), v += 0	; eD: This made v numeric. Need to avoid that now.
-				} else {
-					Loop, parse, v
-					{
-						if ( A_Index == 1 ) {
-							ligature = 0
-						} else if ( asc( A_LoopField ) < 128 ) {
-							ligature = 1
-							break
-						}
-					}
-					if ( ligature ) { 								; Ligature
-						setKeyInfo( key . k . "s", v )
-						v := "%"
-					} else { 										; One character
-						v := "0x" . _HexUC( v )
-						v += 0
-					}
-				}
-			}
-			if ( v != "--" )
-				setKeyInfo( key . k , v )
-		}	; end loop entry
-	}	; end loop parse remap
-	
-	}	; end Loop parse LayoutFiles
-	
-	; Set the extend key mappings
-	if ( extendKey ) {
-		remap := iniReadSection( getPklInfo( "File_Pkl_Ini" ), "extend" )
-		Loop, parse, remap, `r`n
-		{
-			pklIniKeyVal( A_LoopField, key, entry )
-			setKeyInfo( key . "ext", entry )
-		}
-		remap := iniReadSection( LayoutFile, "extend" )	; An [extend] section in layout.ini overrides the pkl.ini one
-		Loop, parse, remap, `r`n
-		{
-			pklIniKeyVal( A_LoopField, key, entry )
-			setKeyInfo( key . "ext", entry )
-		}
-	}
-	
-	; eD: Read/set deadkey name list
-	Loop, 32											; Default dead key table
-	{
-		; eD: In AHK v1.1.17+, you can use Format("{:02}",num) to pad with zeros. Better in any way?
-		key := "dk" . SubStr( "00" . A_Index, -1 )		; Pad with zero if index < 10
-		ky2 := "dk" .                A_Index      		; e.g., "dk1" or "dk14"
-		val := "deadkey" . A_Index
-		setKeyInfo( key, val )							; e.g., "dk01" = "deadkey1"
-		if ( ky2 != key )
-			setKeyInfo( ky2, val )						; e.g., "dk1" = "deadkey1"; backwards compatible
-	}
-	file := pklIniRead( "dk_tables", "", "Lay_eD_", "global" )
-	file := ( file != "" ) ? file : pklIniRead( "dk_tables", "", LayoutFile1, "eD_info" )
-	file := ( FileExist( file ) ) ? file : LayoutFile1	; eD: If no dedicated DK file, try the layout file
-	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
-	dknames := "DeadKeyNames"							; The .ini section that holds dk names
-	file := ( InStr( pklIniRead( -1, -1, LayoutFile1 )  , dknames ) ) ? Layoutfile1                  : file
-	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? getPklInfo( "File_Lay_eD_" ) : file
-	remap := iniReadSection( file, dknames )			; Make the dead key name lookup table
-	Loop, parse, remap, `r`n
-	{
-		pklIniKeyVal( A_LoopField, key, val )
-		if ( val )
-			setKeyInfo( key, val )						; e.g., "dk01" = "dk_dotbelow"
-	}
-	
-	; eD: Read/set deadkey image data
-	dir := pklIniRead( "dk_imgDir", "", "Lay_eD_", "global" )
-	dir := ( FileExist( dir ) ) ? dir : LayoutDir		; eD: If no dedicated DK image dir, try the layout dir
-	setLayInfo( "dkImgDir", dir )
-	setLayInfo( "dkImgSuf", pklIniRead( "dk_imgSuf", "", "Lay_eD_", "global" ) )
-	
-	; Set layout on/off icons
-	if ( FileExist( getLayInfo("layDir") . "\on.ico") ) {
-		setLayInfo( "Ico_On_File", getLayInfo( "layDir" ) . "\on.ico" )
-		setLayInfo( "Ico_On_Num_", 1 )
-	} else if ( A_IsCompiled ) {
-		setLayInfo( "Ico_On_File", A_ScriptName )
-		setLayInfo( "Ico_On_Num_", 6 )
-	} else {
-		setLayInfo( "Ico_On_File", "Resources\on.ico" )
-		setLayInfo( "Ico_On_Num_", 1 )
-	}
-	if ( FileExist( getLayInfo( "layDir" ) . "\off.ico") ) {
-		setLayInfo( "Ico_OffFile", getLayInfo( "layDir" ) . "\off.ico" )
-		setLayInfo( "Ico_OffNum_", 1 )
-	} else if ( A_IsCompiled ) {
-		setLayInfo( "Ico_OffFile", A_ScriptName )
-		setLayInfo( "Ico_OffNum_", 3 )
-	} else {
-		setLayInfo( "Ico_OffFile", "Resources\off.ico" )
-		setLayInfo( "Ico_OffNum_", 1 )
-	}
-	pkl_set_tray_menu()
-}
+	_initReadPklIni( layoutFromCommandLine )			; Read settings from pkl.ini
+	_initReadLayIni()									; Read settings from layout.ini
+	_initReadAndSetOtherInfo()							; Other layout settings (dead key images, icons)
+}	; end fn
 
 pkl_activate()
 {
 	SetTitleMatchMode 2
 	DetectHiddenWindows on
 	WinGet, id, list, %A_ScriptName%
-	Loop, %id%
+	Loop, %id%				; This isn't the first instance. Send "kill yourself" message to all instances.
 	{
-		; This isn't the first instance. Send "kill yourself" message to all instances
 		id := id%A_Index%
 		PostMessage, 0x398, 422,,, ahk_id %id%
 	}
@@ -306,12 +36,6 @@ pkl_activate()
 	}
 }
 
-_MessageFromNewInstance(lparam)	; Called by OnMessage( 0x0398 )
-{	; If running a second instance, this message is sent
-	if ( lparam == 422 )
-		ExitApp
-}
-
 changeLayout( nextLayout )
 {
 	Menu, Tray, Icon,,, 1 ; Freeze the icon
@@ -323,12 +47,397 @@ changeLayout( nextLayout )
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
-; eD: Added Trim() around any 'SubStr( A_LoopField, 1, pos-1 )' entries
-;     (From vVv, AHK v1.1 function. Not in AHK v1.0, so make a version here.)
-if ( A_AhkVersion < "1.0.90" ) {
-	Trim( str )	{
-		return % RegExReplace( str, "(^\s*|\s*$)")
+_initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #######################
+{
+	PklIniFile := getPklInfo( "File_Pkl_Lay" )		; (was "File_Pkl_Ini")
+	if ( not FileExist( PklIniFile ) ) {
+		MsgBox, %PklIniFile% file NOT FOUND`nSorry. The program will exit.
+		ExitApp
 	}
+	
+	it := pklIniRead( "language", "auto" )				; Load locale strings
+	if ( it == "auto" )
+		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
+	pkl_locale_load( it, pklIniBool( "compactMode", false ) )
+
+	_pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; Was LAlt & RCtrl
+	_pklSetHotkey( pklIniRead( "displayHelpImageHotkey"     ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
+	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
+	_pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
+	_pklSetHotkey( pklIniRead( "refreshHotkey"              ), "rerunWithSameLayout" , "HK_Refresh"      )
+	
+	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
+	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
+	
+	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
+	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
+	
+	theLayout := pklIniRead( "layout", "", "Pkl_Lay" )
+	layouts := StrSplit( theLayout, ",", " " )			; Split the CSV layout list
+	numLayouts := layouts.MaxIndex()
+	setLayInfo( "numOfLayouts", numLayouts )
+	Loop, % numLayouts {								; Store the layout dir names and menu names
+		nameParts := StrSplit( layouts[ A_Index ], ":" )
+		theCode := nameParts[1]
+		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : nameParts[1]
+		setLayInfo( "layout" . A_Index . "code", theCode )
+		setLayInfo( "layout" . A_Index . "name", theName )
+	}
+	
+	if ( layoutFromCommandLine )
+		theLayout := layoutFromCommandLine
+	else
+		theLayout := getLayInfo( "layout1code" )
+	if ( theLayout == "" ) {
+		pkl_MsgBox( 1, getPklInfo( "File_Pkl_Lay" ) )	; "You must set the layout file in pkl.ini!"
+		ExitApp
+	}
+	setLayInfo( "active", theLayout )
+	
+	nextLayoutIndex := 1								; Determine the next layout's index
+	Loop, % numLayouts {
+		if ( theLayout == getLayInfo( "layout" . A_Index . "code") ) {
+			nextLayoutIndex := A_Index + 1
+			break
+		}
+	}
+	nextLayoutIndex := ( nextLayoutIndex > numLayouts ) ? 1 : nextLayoutIndex
+	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
+}	; end fn
+	
+_initReadLayIni()									;   ####################### layout.ini #######################
+{
+	theLayout := getLayInfo( "active" )
+	if ( pklIniBool( "compactMode", false )	) {
+		layoutDir := "."
+	} else {
+		layoutDir := "Layouts\" . theLayout
+	}
+	layoutFile1 := layoutDir . "\" . getPklInfo( "File_Lay_Ini" )
+	if ( not FileExist(layoutFile1) ) {
+		pkl_MsgBox( 2, layoutFile1 )	; "File not found"
+		ExitApp
+	}
+	setPklInfo( "File_Lay_Ini", layoutFile1                                    )	; eD: Update as file path
+;	setPklInfo( "File_Lay_eD_", layoutDir . "\" . getPklInfo( "File_Lay_eD_" ) ) 	; eD WIP: Phase this file out?!
+	setLayInfo( "layDir", layoutDir )
+	
+	extendKey   := pklIniRead( "extend_key", "", layoutFile1, "global" )		; eD TODO: If this is set, look for multi-Extend in Lay_ .ini
+	if ( extendKey <> "" ) {
+		setLayInfo( "extendKey", extendKey )
+	}
+	
+	static initiated := 0	; Ensure the tables are read only once (eD TODO: Is this the right way? Necessary?)
+	mapFile     := pklIniRead( "remapsFile", "", "Lay_Ini", "eD_info" )			; Layout remapping for ergo mods, ANSI/ISO conversion etc. 
+	if ( not initiated ) && ( FileExist( mapFile ) )
+	{																			; Read/set remap dictionaries
+		mapTypes  := "  scMapLay     ,  scMapExt     ,  vkMapMec    "
+		mapSects  := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ]
+		Loop, Parse, mapTypes, CSV, %A_Space%%A_Tab%
+		{
+			mapType := A_LoopField
+			mapList := pklIniRead( mapSects[ A_Index ], "", "Lay_Ini", "eD_info" )	; First, get the name of the map list
+;			Loop, Parse, mapList, CSV, %A_Space%%A_Tab%							; eD TODO: Allow the map list to be a CSV, or only singular maps?
+			%mapType% := _ReadRemaps( mapList, mapFile )						; Parse the map list into a list of base cycles
+			%mapType% := _ReadCycles( mapType, %mapType%, mapFile )				; Parse the cycle list into a pdic of mappings
+		}
+	initiated := 1
+	}
+	
+;	layoutFile0 :=                       pklIniRead( "baseLayout", "", "Lay_eD_", "global"  )	; eD: Read a base layout then augment/replace it
+	layoutFile0 := ( not layoutFile0 ) ? pklIniRead( "baseLayout", "", "Lay_Ini", "eD_info" ) : layoutFile0	; If not in Lay_eD_, look in Lay_Ini
+	layoutFiles := ( FileExist(layoutFile0) ) ? layoutFile0 . "," . layoutFile1 : layoutFile1
+	Loop, Parse, layoutFiles, CSV
+	{																			; Loop to parse the layout file(s)
+	layoutFile := A_LoopField
+	
+	shiftStates := pklIniRead( "shiftstates", "0:1", layoutFile, "global" )
+	shiftStates := shiftStates . ":8:9"					; SgCap, SgCap + Shift	(eD TODO: Utilize these somewhere?)
+	setLayInfo( "hasAltGr", ( InStr( shiftStates, 6 ) ) ? 1 : 0 )
+	shiftState := StrSplit( shiftStates, ":" )
+	
+	remap := iniReadSection( layoutFile, "layout" )
+	Loop, Parse, remap, `r`n
+	{
+		pklIniKeyVal( A_LoopField, key, entries, 0, 0 )	; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
+		if ( key == "<NoKey>" )
+			Continue
+		key := scMapLay[ key ] ? scMapLay[ key ] : key				; If there is a SC remapping, apply it
+		entry := StrSplit( entries, "`t" )
+		numEntries := entry.MaxIndex()
+		if ( numEntries < 2 ) {
+			Hotkey, *%key%, doNothing
+			Continue
+		}
+		entry[2] := Format( "{:L}", entry[2] )						; Check the 2nd entry (in lower case) for 'VK' or 'Modifier'
+		if ( entry[2] == "virtualkey" || entry[2] == "vk")
+			entry[2] := -1
+		else if ( entry[2] == "modifier" )
+			entry[2] := -2
+		vkcode := _getVKeyCodeFromName( entry[1] )
+		vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode	; Remap the VK here before assignment. eD WIP: Check this!
+		setKeyInfo( key . "vkey", vkcode )							; Set VK code (hex ##) for key
+		setKeyInfo( key . "capSt", entry[2] )						; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
+		if ( entry[2] == -2 ) {										; The key is a modifier
+			Hotkey, *%key%, modifierDown
+			Hotkey, *%key% Up, modifierUp
+			if ( getLayInfo( "hasAltGr" ) && entry[1] == "RAlt" )
+				setKeyInfo( key . "vkey", "AltGr" )					; Set RAlt as AltGr
+			else
+				setKeyInfo( key . "vkey", entry[1] )				; Set VK modifier name, e.g., "rshift"
+		} else if ( key == extendKey ) {							; Set the Extend key
+			Hotkey, *%key% Up, upToDownKeyPress
+		} else {
+			Hotkey, *%key%, keyPressed
+		}
+		Loop, % numEntries - 3 {									; Loop through all entries for the key
+			ks := shiftState[ A_Index ]								; ks is the shift state being processed
+			sv := entry[ A_Index + 2 ]								; sv is the value for that state
+			if ( StrLen( sv ) == 0 ) {
+				sv = -- ; Disabled
+			} else if ( StrLen( sv ) == 1 ) {
+				sv := asc( sv )
+			} else {
+				if ( SubStr( sv, 1, 1 ) == "*" ) { 					; * : Special chars
+					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
+					sv := "*"
+				} else if ( SubStr( sv, 1, 1 ) == "=" ) { 			; = : Special chars with {Blind}
+					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
+					sv := "="
+				} else if ( SubStr( sv, 1, 1 ) == "%" ) { 			; % : Ligature (with unicode chars, too)
+					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
+					sv := "%"
+				} else if ( sv == "--" ) {
+					sv = -- ;) Disabled
+				} else if ( SubStr( sv, 1, 2 ) == "dk" ) { 			; dk: Dead key
+					setKeyInfo( key . ks . "s", SubStr( sv, 3 ) )
+					sv := "dk"
+				} else {
+					Loop, Parse, sv
+					{
+						if ( A_Index == 1 ) {
+							ligature = 0
+						} else if ( asc( A_LoopField ) < 128 ) {	; eD TODO: Does this mean ligatures can't be Unicode? Fix that?
+							ligature = 1
+							break
+						}
+					}
+					if ( ligature ) { 								; Ligature
+						setKeyInfo( key . ks . "s", sv )
+						sv := "%"
+					} else { 										; One character
+						sv := "0x" . _HexUC( sv )
+						sv += 0
+					}
+				}
+			}
+			if ( sv != "--" )
+				setKeyInfo( key . ks , sv )
+		}	; end loop entries
+	}	; end loop (parse remap)
+	
+	}	; end loop (parse layoutFiles)
+	
+	if ( extendKey ) {												; Set the Extend key mappings.
+		extendFile  := pklIniRead( "extendFile", "", "Lay_Ini", "eD_info" )
+		extendFile  := ( FileExist( extendFile ) ) ? extendFile : getPklInfo( "File_Pkl_Ini" )	; default: pkl.ini
+		extndFiles  := extendFile . "," . layoutFile	; An [extend] section in layout.ini overrides pkl.ini maps
+		Loop, Parse, extndFiles, CSV
+		{															; Loop to parse the Extend files
+			thisFile := A_LoopField
+			Loop, 4													; eD WIP: Multi-Extend
+			{
+				thisExt  := A_Index
+				thisSect := pklIniRead( "ext" . thisExt, "", thisFile, "ExtendMaps" )
+				thisSect := ( thisFile == getPklInfo( "File_Pkl_Ini" ) ) ? "extend" : thisSect
+				remap := iniReadSection( thisFile, thisSect )
+				If ( not remap )									; If this remap is empty, continue to the next
+					Continue
+				Loop, Parse, remap, `r`n
+				{
+					pklIniKeyVal( A_LoopField , key, extMapping )	; Read the Extend mapping for this SC
+					key := Format( "{:U}", key )
+					key := scMapExt[ key ] ? scMapExt[ key ] : key	; If applicable, remap Extend entries
+					setKeyInfo( key . "ext" . thisExt, extMapping )
+				}
+			}
+		}	; end loop (parse extendFiles)
+	}	; end if ( extendKey )
+}	; end fn
+
+_initReadAndSetOtherInfo()							;   ####################### other settings #######################
+{
+	layoutFile1 := getPklInfo( "File_Lay_Ini" )
+	layoutDir   := getLayInfo( "layDir" )
+	
+	; eD TODO: List both a base DK table file and an optional local one adding/overriding it?
+	;          Or, always use a local deadkey.ini in addition if it exists?
+	;          An overriding file could add a -1 entry to remove a dk entry found in the base file
+	Loop, 32											; Read/set deadkey name list
+	{													; Start with the default dead key table
+		key := "dk" . Format( "{:02}", A_Index )		; Pad with zero if index < 10
+		ky2 := "dk" .                  A_Index     		; e.g., "dk1" or "dk14"
+		val := "deadkey" . A_Index
+		setKeyInfo( key, val )							; e.g., "dk01" = "deadkey1"
+		if ( ky2 != key )
+			setKeyInfo( ky2, val )						; e.g., "dk1" = "deadkey1"; backwards compatible
+	}
+	file := pklIniRead( "dk_tables", "", "Lay_Ini", "eD_info" )
+	file := ( file ) ? file : pklIniRead( "dk_tables", "", layoutFile1, "eD_info" )
+	file := ( FileExist( file ) ) ? file : layoutFile1	; If no dedicated DK file, try the layout file
+	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
+	dknames := "deadKeyNames"							; The .ini section that holds dk names
+;	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? getPklInfo( "File_Lay_eD_" ) : file
+	file := ( InStr( pklIniRead( -1, -1, layoutFile1 )  , dknames ) ) ? Layoutfile1                  : file
+	remap := iniReadSection( file, dknames )			; Make the dead key name lookup table
+	Loop, Parse, remap, `r`n
+	{
+		pklIniKeyVal( A_LoopField, key, val )
+		if ( val )
+			setKeyInfo( key, val )						; e.g., "dk01" = "dk_dotbelow"
+	}
+	
+	; eD TODO: Allow some code for layoutDir; just .\ maybe ?!? Could have a readDir function that does this and also ..\?
+	dir := pklIniRead( "dk_imgDir", "", "Lay_Ini", "eD_info" )			; Read/set dead key image data
+;	dir := ( SubStr( dir, 1, 2 ) == ".\" ) ? ( layoutDir . SubStr( dir, 2 ) ) : dir
+	dir := ( FileExist( dir ) ) ? dir : layoutDir		; If no dedicated DK image dir, try the layout dir (old default)
+	setLayInfo( "dkImgDir", dir )
+	setLayInfo( "dkImgSuf", pklIniRead( "dk_imgSuf", "", dir . "\_dkImg.ini", "info" ) )	; A special dk image info file
+	
+	if ( FileExist( layoutDir . "\on.ico") ) {							; Read/set layout on/off icons
+		setLayInfo( "Ico_On_File", layoutDir . "\on.ico" )
+		setLayInfo( "Ico_On_Num_", 1 )
+	} else if ( A_IsCompiled ) {
+		setLayInfo( "Ico_On_File", A_ScriptName )
+		setLayInfo( "Ico_On_Num_", 6 )
+	} else {
+		setLayInfo( "Ico_On_File", "Resources\on.ico" )
+		setLayInfo( "Ico_On_Num_", 1 )
+	}
+	if ( FileExist( layoutDir . "\off.ico") ) {
+		setLayInfo( "Ico_OffFile", layoutDir . "\off.ico" )
+		setLayInfo( "Ico_OffNum_", 1 )
+	} else if ( A_IsCompiled ) {
+		setLayInfo( "Ico_OffFile", A_ScriptName )
+		setLayInfo( "Ico_OffNum_", 3 )
+	} else {
+		setLayInfo( "Ico_OffFile", "Resources\off.ico" )
+		setLayInfo( "Ico_OffNum_", 1 )
+	}
+	pkl_set_tray_menu()
+}	; end fn
+
+_ReadRemaps( mapList, mapFile )					; Parse a remap string to a CSV list of cycles
+{
+	mapList     := pklIniRead( mapList, "", mapFile, "remaps" )		; List name -> actual list
+	mapCycList  := ;
+	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%						; Parse CSV by comma
+	{
+		tmpCycle    := ;
+		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%				; Parse by plus sign
+		{
+			theMap  := A_LoopField
+			if ( SubStr( A_LoopField , 1, 1 ) == "^" )	; Ref. to another map -> Self recursion
+				theMap := _ReadRemaps( SubStr( A_LoopField , 2 ), mapFile )
+			tmpCycle := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap		; re-attach +
+		}	; end loop
+		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle	; re-attach CSV
+	}	; end loop
+	return mapCycList
+}	; end fn
+
+_ReadCycles( mapType, mapList, mapFile )					; Parse a remap string to a dictionary of remaps
+{
+	test0 := mapType										; eD DEBUG
+	mapType := Format( "{:U}", SubStr( mapType, 1, 2 ) )	; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
+	pdic    := {}
+	if ( mapType == "SC" )									; Create a fresh SC pdic from mapFile KeyLayMap
+		pdic := _ReadKeyLayMap( "SC", "SC", mapFile )
+	rdic    := pdic.Clone()									; Reverse dictionary (instead of if loop)?
+	tdic	:= {}											; Temporary dictionary used while mapping loops
+	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%				; Parse cycle list by comma
+	{
+		fullCycle := ;
+		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%		; Parse and merge composite cycles by plus sign
+		{
+			thisCycle := pklIniRead( A_LoopField , "", mapFile, "RemapCycles" )
+			thisType  := SubStr( thisCycle, 1, 2 )			; KLM map type, such as TC for TMK-like Colemak
+;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
+			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and extra pipes
+			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
+		}	; end loop
+		if ( mapType == "SC" )								; Remap pdic from thisType to SC
+			mapDic := _ReadKeyLayMap( thisType, "SC", mapFile )
+		thisCycle := StrSplit( fullCycle, "|", " `t" )		; Parse cycle by pipe, and create mapping pdic
+		numSteps  := thisCycle.MaxIndex()
+		Loop, % numSteps
+		{													; Loop to get proper key codes
+			this := thisCycle[ A_Index ]
+			if ( mapType == "SC" ) {						; Remap from thisType to SC
+				thisCycle[ A_Index ] := mapDic[ this ]
+			} else if ( mapType == "VK" )  {				; Remap from VK name/code to VK code (upper case)
+				this := Format( "{:U}", this )
+				this := ( InStr( this, "VK" ) == 1 ) ? ( SubStr( this, 3 ) ) : ( _getVKeyCodeFromName( this ) )	; "VK" . 
+				thisCycle[ A_Index ] := this
+			}	; end if
+		}	; end loop
+		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; eD DEBUG
+		Loop, % numSteps
+		{													; Loop to (re)write remap pdic
+			this := thisCycle[ A_Index ]					; This key's code gets remapped to...
+			this := ( mapType == "SC" ) ? rdic[ this ] : this	; When chaining maps, map the remapped key ( a→b→c )
+			that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
+			pdic[ this ] := that							; Map the (remapped?) code to the next one
+			tdic[ that ] := this							; Keep the reverse mapping for later cycles
+		}	; end loop (remap one full cycle)
+		for key, val in tdic 
+			rdic[ key ] := val								; Activate the lookup dict for the next cycle
+	}	; end loop (parse CSV)
+;; eD remapping cycle notes:
+;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
+;; With rdic: 1<:[ b:a, c:b, a:c, d:d ] => 2>:[ r[b]:d, r[d]:b ] => 2>:[ a:d  , b:c, c:a, d:b   ]
+;; Note that:    ( b | d , a | b | c )                           => 2>:[ a:b  , b:d, c:a, d:b:c ] - so order matters!
+;; Lay(CAW): 022(Cmk-D) -> 02E(Cmk-C); 023(Cmk-H) -> 033(Cmk-,); 024(Cmk-N) -> 025(Cmk-E)
+;; Ext(AWi): 022(Cmk-D) -> 022(Cmk-D); 023(Cmk-H) -> 024(Cmk-N); 030(Cmk-B) -> 02F(Cmk-V) -> 02E(Cmk-C) -> 02D(Cmk-X)
+;	if ( test0 == "" . "scMapLay" ) {						; eD DEBUG
+;	test1 := pdic[ "SC012" ] . " " . pdic[ "SC022" ] . " " . pdic[ "SC02F" ] . " " . pdic[ "SC02E" ] . " " . pdic[ "SC023" ] . " " . pdic[ "SC032" ]
+;	test2 := rdic[ "SC012" ] . " " . rdic[ "SC022" ] . " " . rdic[ "SC02F" ] . " " . rdic[ "SC02E" ] . " " . rdic[ "SC023" ] . " " . rdic[ "SC032" ]
+;	MsgBox, Debug %test0%:`n SC012 SC022 SC02F SC02E SC023 SC032 `n __E/F___G/D____V_____C_____H_____M___ `n %test1% `n %test2% `n`n%test3%
+;	}	; end eD DEBUG
+	return pdic
+}	; end fn
+
+_ReadKeyLayMap( keyType, valType, mapFile )	; Create a pdic from a pair of KLMaps in a remap.ini file
+{
+	pdic := {}
+	Loop, 5											; Loop through KLM rows 0-4
+	{
+		keyRow := pklIniRead( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
+		valRow := pklIniRead( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
+		valRow := StrSplit( valRow, "|", " `t" )
+		Loop, Parse, keyRow, |, %A_Space%%A_Tab%
+		{
+			if ( not A_LoopField )
+				Continue
+			key := A_LoopField
+			val := valRow[ A_Index ]
+			if ( keyType == "SC" )					; ensure upper case for SC###
+				key := Format( "{:U}", key )
+			pdic[ key ] := Format( "{:U}", val )	; e.g., pdic[ "SC001" ] := "SC001"
+		}	; end loop
+	}	; end loop
+	return pdic
+}	; end fn
+
+_getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
+{
+	return pklIniRead( "VK_" . Format( "{:U}", name ), "00", "Pkl_Dic", "VKeyCodeFromName" )
+}
+
+_MessageFromNewInstance( lparam )	; Called by OnMessage( 0x0398 )
+{	; If running a second instance, this message is sent
+	if ( lparam == 422 )
+		ExitApp
 }
 
 ; eD: Moved this here from ext_Uni2Hex.ahk. eD TODO: In AHK v1.1, can it be replaced?
@@ -340,17 +449,17 @@ _HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input 
    h := 0x10000 + (*(&U+1)<<8) + *(&U)
    StringTrimLeft h, h, 3
    SetFormat Integer, %format%  ; restore original format
-   Return h
+   return h
 }
 
-_pklSetHotkey( hkStr, gotoLabel, pklInfoTag )						; eD: Set a PKL menu hotkey
+_pklSetHotkey( hkStr, gotoLabel, pklInfoTag )						; Set a PKL menu hotkey
 {
 	if ( hkStr <> "" ) {
-		Loop, parse, hkStr, `,
+		Loop, Parse, hkStr, `,
 		{
 			Hotkey, %A_LoopField%, %gotoLabel%
 			if ( A_Index == 1 )
 				setPklInfo( pklInfoTag, A_LoopField )
-		}
-	}
-}
+		}	; end loop
+	}	; end if
+}	; end fn

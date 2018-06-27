@@ -11,7 +11,7 @@
 		}
 		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
 ;		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
-		Loop, parse, sect, `r`n
+		Loop, Parse, sect, `r`n
 		{
 			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
 			setPklInfo( key, val )
@@ -24,11 +24,11 @@
 	else
 		file = Languages\%lang%.ini
 
-	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"       , "Pkl_eD_", "pkl"  ) )
-	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history...", "Pkl_eD_", "pkl"  ) )
+	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) )
+	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history..." ) )
 	
 	sect := iniReadSection( file, "pkl" )
-	Loop, parse, sect, `r`n
+	Loop, Parse, sect, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 1 )	; eD: A more compact way than before (but still in a loop)
 		if ( val != "" )
@@ -36,14 +36,14 @@
 	}
 
 	sect := iniReadSection( file, "detectDeadKeys" )
-	Loop, parse, sect, `r`n
+	Loop, Parse, sect, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 1 )
 		setPklInfo( "DetecDK_" . key, val )			; detectDeadKeys_SetLocaleTxt(
 	}
 	
 	sect := iniReadSection( file, "keyNames" )
-	Loop, parse, sect, `r`n
+	Loop, Parse, sect, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 0 )
 		_setHotkeyText( key, val )

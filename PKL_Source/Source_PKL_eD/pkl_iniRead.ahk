@@ -28,6 +28,8 @@ iniReadSection( file, section )
 ;
 pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 {
+	if ( not key )
+		return
 	if ( ( not inStr( inifile, "." ) ) and FileExist( getPklInfo( "File_" . inifile ) ) )	; special files
 		inifile := getPklInfo( "File_" . inifile )
 	default := ( default == "" ) ? A_Space : default					; IniRead uses a Space for blank defaults

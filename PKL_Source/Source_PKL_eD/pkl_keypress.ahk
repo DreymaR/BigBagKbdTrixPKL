@@ -7,7 +7,7 @@
 	
 	if ( extendKey == "--" )
 		extendKey := getLayInfo( "extendKey" )
-	cap := getKeyInfo( HK . "cap" )						; Caps state (0-5 for states; -1 for vk; -2 for mod)
+	cap := getKeyInfo( HK . "capSt" )					; Caps state (0-5 for states; -1 for vk; -2 for mod)
 	
 	if ( extendKey && getKeyState( extendKey, "P" ) ) {	; If there is an Extend modifier and it's pressed...
 		extendKeyStroke = 1
@@ -100,7 +100,7 @@ _extendKeyPressed( HK )
 	static altPressed := ""
 	static winPressed := ""
 
-	ch := getKeyInfo( HK . "ext" )
+	ch := getKeyInfo( HK . "ext1" )
 	if ( ch == "") {
 		return
 	} else if ( ch == "Shift" ) {
