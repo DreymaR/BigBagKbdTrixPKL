@@ -38,12 +38,12 @@ setKeyInfo( "CurrNumOfDKs", 0 )				; eD: How many dead keys were pressed	(was 'C
 setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
 ;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
-setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Defined this globally (was 'pkl.ini')
+setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Define this globally  (was 'pkl.ini')
 setPklInfo( "File_Lay_Ini", "layout.ini"			)	; eD: --"--
-setPklInfo( "File_Pkl_Lay", "PKL_Layouts.ini"  		)	; eD: My extra pkl.ini file
-;setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD WIP: Phase this out!?
+;setPklInfo( "File_Pkl_eD_", "PKL_Layouts.ini"  	)	; eD WIP: Phase this out and return to one PKL.ini
+;setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD WIP: Phase this out
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
-setPklInfo( "ShowMoreInfo", pklIniBool( "showExtraInfo", false ) )	; eD: Extra debug info
+setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ,, "eD" ) )	; eD: Extra debug info etc
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )

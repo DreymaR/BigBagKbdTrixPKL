@@ -1,7 +1,7 @@
 WARNING: HARD HAT AREA!
 =======================
 
-PKL[edition DreymaR] is a Work-In-Progress, so don't expect all of it to be working perfectly ... yet. ;-)
+PKL[edition DreymaR] is a Work-In-Progress, so all of it may not be working perfectly ... yet. ;-)
 
 ~ Øystein B "DreymaR" Gadmar, 2018
 
@@ -19,15 +19,16 @@ DONE:
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
 * Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+* Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or layout.ini). The old way should still work though.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.
-    - Dead key list and file path in DreymaR_layout (but use dk## in the layout itself, for compatibility!)
+    - Dead key list and file path in layout (but use dk## in the layout itself, for compatibility!)
     - If no lookup is specified, PKL defaults to the local file as before
     - This way, one change in a DK will affect all layouts using that DK
     - DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
     - DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
 * You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
-* Base layout: Specify in DreymaR_layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
+* Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Removed MenuIcons and HashTables code, replacing them with AHK v1.1+ native code.
 * Unicode native AHK now works. SendU and changeNonASCIIMode removed.
 * New iniRead functions that support the UTF-8 Unicode file format.
@@ -39,22 +40,48 @@ DONE:
 	- Should I have a cycle merge syntax, e.g., "Angle_ISO105 = TC<  |L0LG  | ^Angle_ANSI-Z"? Probably unnecessary.
 * Virtual Key remapping, similarly to SC. I'd like to make only ANSI or ISO layouts, and leave the ISO-ANSI VK issue to a simple remap routine.
 * Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
-* Split pkl.ini into PKL_Settings.ini, PKL_Layouts.ini and _eD_Extend.ini.
+* Shorthand notation in PKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@E resp. (@T for all at once).
+	- Alternative idea: Each layout has ISO/ANSI and ergo subfolders? Which way to organize? E.g., Extend will be common for ISO-ANSI/Ergo.
+	- But this leads to a plethora of subfolders, not all of which are currently populated!
+	- Could PKL look for the specified subfolder but if not found, default to something using relevant remaps?
+	- ISO-ANSI/Ergo folders could have a Common resource folder, for Extend maps etc? Maybe keep Extend images in common folders?!
 
 
 TODO:
 -----
 
-* So many variants in PKL_Layouts.ini and remaps! Make a KeyboardType setting, and order all layouts and stuff under it?
-	- Also an _Ergo_ setting under _Model_, further organizing the variants?
-	- But this leads to a plethora of subfolders, not all of which are currently populated!
-	- Could PKL look for the specified subfolder but if not found, default to something using relevant remaps?
-	- Alternative: Each layout has ISO/ANSI and ergo subfolders? Which way to organize? E.g., Extend will be common for ISO-ANSI/Ergo.
-	- ISO-ANSI/Ergo folders could have a Common resource folder, for Extend maps etc? Maybe keep Extend images in common folders?!
+* Generate key mapping images from layout files and my .svg by scripting InkScape!
+    - Use the KLD CO codes in an Inkscape .SVG Cmk template.
+	- A KLD dictionary between the img layout and SC. Remaps should already be applied then?
+	- Loops for each state, each key. RegExReplace ##</tspan></text>.
+	- Also loop for each dead key and state, determining the output of that key state then show the DK release for it (if present)
+	- One .SVG layer for the DK markings; set each entry to blank if not a DK.
+	- Search/replace DK only from 'KLD_CO template DK' to next 'inkscape:groupmode="layer"'.
+	- Call InkScape with command-line options to generate .png
+	- Make images from two areas: ANSI - pos (100, 340) / ISO – pos (100,940). Both have size (812,226).
+	- Put images as state#.png in a time-marked subfolder of the layout folder? The DK images in a separate subfolder.
 
-* Allow path pseudovariables like $layout in DreymaR_layout.ini? Don't think so?
+* Multi-Extend! E.g., LAlt+Caps triggers NumPad Extend layer; Caps (or LAlt?) holds it. (LAlt+Shift+Caps locks/unlocks it?)
+	- Others: Ctrl+Caps(only good w/ RCtrl), AltGr+Caps(good!)..., Alt+AltGr+Caps (fancy)
+	- Wanted: NumPad layer, coding layer (brackets/templates), hotstring layer...
+	- Extend layers defined in a separate file; possibility of separate scan code remaps for these (e.g., AngleWide but mostly not Curl)
+	- Extend "hold": Any of the keys involved in selecting an extend layer could be held to keep that layer?
+
+* Ligature/literals/hotstrings:
+    - In addition to ligatures/strings in dead keys, we need direct ligatures. For Jap etc. and for string layers.
+    - Specify a loc/filename, then use, e.g., §### or &### in the layout, where ### can be any 1–3 glyphs (a number or tag)?
+    - Example: §g01, §g02... for greetings; §MHd for default mail header etc.
+    - Could these simply be AHK literals? Then, you could send anything AHK can send!
+
+* Sticky/latch Shift (faster and better?). Windows Sticky Keys don't work with PKL as it is.
+    - Windows way: Shift×5 turns it on/off (use ×6 for PKL?!). When turned on, Modifier×2 locks.
+    - Should have a deactivation timer, e.g., 0.5 s (config adjustable).
+    - For Shift only, or Shift+Ctrl? (Alt and Win shouldn't be sticky, as they already have semi-sticky mappings.)
+    - Probably best w/ one for Shift and one for Ctrl then. Or config it.
 
 * Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
+
+* Allow path pseudovariables like $layout in layout.ini? Don't think so?
 
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
@@ -63,9 +90,6 @@ TODO:
 	- Specify, e.g., the entry for 1 similar to today's 0 entry. U+0000–U+001F are just <control> chars.
 	- That'd be backwards compatible with existing PKL tables, and one can choose behavior.
 	
-* Generate key mapping images from layout files and my .svg by scripting InkScape?
-    - They should work from a KLD-type template/remap setup.
-
 * Would it be possible to make single-key images so that they may be remapped?
     - But that'd require some sort of position map, maybe KLD-based.
     - Also, not sure whether rendering would be smooth enough?
@@ -74,12 +98,6 @@ TODO:
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
     - Transparent foreground images for all states and dead keys.
     - Also for dead key state 6/7
-
-* Multi-Extend! E.g., LAlt+Caps triggers NumPad Extend layer; Caps (or LAlt?) holds it. (LAlt+Shift+Caps locks/unlocks it?)
-	- Others: Ctrl+Caps(only good w/ RCtrl), AltGr+Caps(good!)..., Alt+AltGr+Caps (fancy)
-	- Wanted: NumPad layer, coding layer (brackets/templates), hotstring layer...
-	- Extend layers defined in a separate file; possibility of separate scan code remaps for these (e.g., AngleWide but mostly not Curl)
-	- Extend "hold": Any of the keys involved in selecting an extend layer could be held to keep that layer?
 
 * More generic dead key output: Ligatures (important for my Jap layout! Also for combining accents and hotstrings)
 	- Selectable mode per key: By Unicode characters, hex or dec (default today).
@@ -90,41 +108,27 @@ TODO:
 	- Keep it easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (here, simply regexp "u$1 = u$2 ; $3")
     - Simplest and best: Allow for AHK literals?! Use maybe * to initiate one (as in layout.ini "special").
 	- Simplest for literals and ligatures/hotstrings: % initiates, then the rest of the line is directly sent (as in layout.ini ligatures).
-
-* Ligature/hotstrings:
-    - In addition to ligatures/strings in dead keys, we need direct ligatures. For Jap etc. and for string layers.
-    - Specify a loc/filename, then use §### or &### in the layout, where ### can be any 1–3 glyphs (a number or tag)?
-    - Example: §g01, §g02... for greetings; §MHd for default mail header etc.
-    - Could these simply be AHK literals? Then, you could send anything AHK can send!
+	- Chainable dead keys: Allow entries of the form dk##, meaning another DK is activated instead?
 
 * Some more dead key mappings: Greek with accents; ?
-	- Need chainable accents, e.g., iota with diaeresis and tonos
+	- Need nestable accents, e.g., iota with diaeresis and tonos
 
-* Sticky/latch Shift (faster and better?). Windows Sticky Keys don't work with PKL as it is.
-    - Windows way: Shift×5 turns it on/off (use ×6 for PKL?!). When turned on, Modifier×2 locks.
-    - Should have a deactivation timer, e.g., 0.5 s (config adjustable).
-    - For Shift only, or Shift+Ctrl? (Alt and Win shouldn't be sticky, as they already have semi-sticky mappings.)
-    - Probably best w/ one for Shift and one for Ctrl then. Or config it.
+* Define Mirror layouts as remap cycles
+	- Should be able to mirror any layout then?
+	- Make sure to apply mirroring last
 
 * Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini)?
 
-
-**TODO: From DreymaR_layout.ini.**
-* Extend layer lists (extend# = ext_sensiblename) in my layout file
-    - Keep all extend layers in ..\..\PKL_DreymaR\extend.ini ?
-    - Also keep Extend help images centrally!? One folder for each scanmap "model".
-* Ligature tables for longer strings etc, using, e.g., &### layout entries and a table (link) in DreymaR_layout
-* Literal AHK output? The {Raw} send mode is on by default.
-    - PKL already supports multi-codepoint output by default! But not modified stuff.
-    - A ## entry will become Send {Raw}{##}?
+* How literal is AHK output? The {Raw} send mode is on by default.
+    - PKL already supports multi-codepoint output by default! But not modified stuff?
+    - A ## entry will become Send {Raw}{##} I think
     - A *{##} should be sent without {Raw}? If so, utilize this! And document the possibilities!
     - Might treat any entries starting/ending with {} as Send {##} instead of Send {Raw}{##} (literal mode)?
     - Or is it better to just keep today's style in which }^{z for instance sends Ctrl+Z ? For compatibility.
     - We don't really need the %#### 'utf ligature' notation then, do we? It's a leftover from MS-KLC.
-* Ligature output from deadkeys (dead strings - necessary for, e.g., Cmk[eD]-Jp which uses digraphs)
-    - Could do all DK and ligature tables with literals!?
-* Allow non-Tab whitespace in layout entries?! (Strip whitespace. To preserve it use {# } or }{# }{ in entries)
-    - Today, tab+; comments are stripped in layout.ini but not in pkl.ini? Make this consistent!
+
+* Allow non-Tab whitespace in layout entries? (Strip whitespace. To preserve it use {# } or }{# }{ in entries?)
+    - Today, tab+; comments are stripped in layout.ini but not in PKL .ini. Make this consistent?
     - Important: Leave escaped semicolon (`;) alone, even after whitespace! And document the need for escaping it!
 
 
@@ -137,15 +141,17 @@ INFO: Some documentation notes
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 * "Anti-madness tips" for PKL (by user Eraicos and me):
     - AHK script files (AHK v1.0) need to be ANSI encoded?! What to do with special letters then?
-        - Seems that AHK v1.1 ("Unicode AHK") supports UTF-8 with BOM (not without!?) scripts.
+        - The current PKL_eD AHK v1.1 ("Unicode AHK") supports scripts in UTF-8 w/ BOM (but not without!?).
     - PKL .ini files may be UTF-8 encoded. With or without BOM?
-        - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab separator?).
+        - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab parsing).
+		- With PKL_eD end-of-line comments should be safe now!
     - In layout.ini:
         - Always use tabs as separators in layout.ini
         - After 'VirtualKey' always include a tab.
-        - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
-    - In the pkl.ini Extend section:
-        - Don't have empty mappings in the Extend section. Comment these out.
+        - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
+    - In the Extend section:
+        - Don't use empty mappings in the Extend section. Comment these out.
+		- The default format includes {} to send keys by name. To escape these, use my }<any string>{ trick.
 
 
 **INFO: From Farkas' sample.ini layout file**

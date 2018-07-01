@@ -20,7 +20,7 @@ pkl_activate()
 	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )	; _pkl_show_tray_menu()
 	Menu, Tray, Icon,,, 1 ; Freeze the icon
 	
-	if ( pklIniBool( "displayHelpImage", true ) )
+	if ( pklIniBool( "showHelpImage", true ) )
 		pkl_showHelpImage( 1 )
 
 	Sleep, 200 ; I don't want to kill myself...
@@ -49,7 +49,7 @@ changeLayout( nextLayout )
 
 _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #######################
 {
-	PklIniFile := getPklInfo( "File_Pkl_Lay" )		; (was "File_Pkl_Ini")
+	PklIniFile := getPklInfo( "File_Pkl_Ini" )
 	if ( not FileExist( PklIniFile ) ) {
 		MsgBox, %PklIniFile% file NOT FOUND`nSorry. The program will exit.
 		ExitApp
@@ -60,11 +60,11 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
 	pkl_locale_load( it, pklIniBool( "compactMode", false ) )
 
-	_pklSetHotkey( pklIniRead( "suspendHotkey"              ), "ToggleSuspend"       , "HK_Suspend"      )	; Was LAlt & RCtrl
-	_pklSetHotkey( pklIniRead( "displayHelpImageHotkey"     ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
-	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"         ), "changeActiveLayout"  , "HK_ChangeLayout" )
-	_pklSetHotkey( pklIniRead( "exitAppHotkey"              ), "ExitPKL"             , "HK_ExitApp"      )
-	_pklSetHotkey( pklIniRead( "refreshHotkey"              ), "rerunWithSameLayout" , "HK_Refresh"      )
+	_pklSetHotkey( pklIniRead( "suspendHotkey"         ), "ToggleSuspend"       , "HK_Suspend"      )
+	_pklSetHotkey( pklIniRead( "showHelpImageHotkey"   ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
+	_pklSetHotkey( pklIniRead( "changeLayoutHotkey"    ), "changeActiveLayout"  , "HK_ChangeLayout" )
+	_pklSetHotkey( pklIniRead( "exitAppHotkey"         ), "ExitPKL"             , "HK_ExitApp"      )
+	_pklSetHotkey( pklIniRead( "refreshHotkey",,, "eD" ), "rerunWithSameLayout" , "HK_Refresh"      )
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
@@ -72,11 +72,15 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
 	
-	theLayout := pklIniRead( "layout", "", "Pkl_Lay" )
-	layouts := StrSplit( theLayout, ",", " " )			; Split the CSV layout list
+	theLayout := pklIniRead( "layout", "", "Pkl_Ini" )
+	theLayout := StrReplace( theLayout, "@T", "@K_@C@E" )	; eD: Shorthand .ini notation for kbd/mod types
+	theLayout := StrReplace( theLayout, "@K", _pklLayRead( "KbdType", "<KbdType N/A>" ) )	; ISO/ANSI/etc
+	theLayout := StrReplace( theLayout, "@C", _pklLayRead( "CurlMod", "<CurlMod N/A>" ) )	; Curl/--
+	theLayout := StrReplace( theLayout, "@E", _pklLayRead( "ErgoMod", "<ErgoMod N/A>" ) )	; Plain, Angle, AWide etc
+	layouts := StrSplit( theLayout, ",", " " )				; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "numOfLayouts", numLayouts )
-	Loop, % numLayouts {								; Store the layout dir names and menu names
+	Loop, % numLayouts {									; Store the layout dir names and menu names
 		nameParts := StrSplit( layouts[ A_Index ], ":" )
 		theCode := nameParts[1]
 		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : nameParts[1]
@@ -89,7 +93,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	else
 		theLayout := getLayInfo( "layout1code" )
 	if ( theLayout == "" ) {
-		pkl_MsgBox( 1, getPklInfo( "File_Pkl_Lay" ) )	; "You must set the layout file in pkl.ini!"
+		pkl_MsgBox( 1, getPklInfo( "File_Pkl_Ini" ) )	; "You must set the layout file in PKL .ini!"
 		ExitApp
 	}
 	setLayInfo( "active", theLayout )
@@ -115,14 +119,13 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	}
 	layoutFile1 := layoutDir . "\" . getPklInfo( "File_Lay_Ini" )
 	if ( not FileExist(layoutFile1) ) {
-		pkl_MsgBox( 2, layoutFile1 )	; "File not found"
+		pkl_MsgBox( 2, layoutFile1 )											; "File not found, exiting"
 		ExitApp
 	}
 	setPklInfo( "File_Lay_Ini", layoutFile1                                    )	; eD: Update as file path
-;	setPklInfo( "File_Lay_eD_", layoutDir . "\" . getPklInfo( "File_Lay_eD_" ) ) 	; eD WIP: Phase this file out?!
 	setLayInfo( "layDir", layoutDir )
 	
-	extendKey   := pklIniRead( "extend_key", "", layoutFile1, "global" )		; eD TODO: If this is set, look for multi-Extend in Lay_ .ini
+	extendKey   := pklIniRead( "extend_key", "", layoutFile1, "global" )		; eD TODO: If this is set, look for multi-Extend in layout.ini
 	if ( extendKey <> "" ) {
 		setLayInfo( "extendKey", extendKey )
 	}
@@ -144,8 +147,9 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	initiated := 1
 	}
 	
-;	layoutFile0 :=                       pklIniRead( "baseLayout", "", "Lay_eD_", "global"  )	; eD: Read a base layout then augment/replace it
-	layoutFile0 := ( not layoutFile0 ) ? pklIniRead( "baseLayout", "", "Lay_Ini", "eD_info" ) : layoutFile0	; If not in Lay_eD_, look in Lay_Ini
+	layoutFile0 := pklIniRead( "baseLayout", "", "Lay_Ini", "eD_info" )			; eD: Read a base layout then augment/replace it
+	if ( not layoutFile0 == "" ) && ( not FileExist(layoutFile0) )
+		MsgBox, Warning: File '%layoutFile0%' not found!						; "File not found"
 	layoutFiles := ( FileExist(layoutFile0) ) ? layoutFile0 . "," . layoutFile1 : layoutFile1
 	Loop, Parse, layoutFiles, CSV
 	{																			; Loop to parse the layout file(s)
@@ -282,13 +286,11 @@ _initReadAndSetOtherInfo()							;   ####################### other settings ####
 		if ( ky2 != key )
 			setKeyInfo( ky2, val )						; e.g., "dk1" = "deadkey1"; backwards compatible
 	}
-	file := pklIniRead( "dk_tables", "", "Lay_Ini", "eD_info" )
-	file := ( file ) ? file : pklIniRead( "dk_tables", "", layoutFile1, "eD_info" )
+	file := pklIniRead( "dkListFile", "", "Lay_Ini", "eD_info" )
 	file := ( FileExist( file ) ) ? file : layoutFile1	; If no dedicated DK file, try the layout file
 	setLayInfo( "dkfile", file )						; This file should contain the actual dk tables
 	dknames := "deadKeyNames"							; The .ini section that holds dk names
-;	file := ( InStr( pklIniRead( -1, -1, "Lay_eD_" )    , dknames ) ) ? getPklInfo( "File_Lay_eD_" ) : file
-	file := ( InStr( pklIniRead( -1, -1, layoutFile1 )  , dknames ) ) ? Layoutfile1                  : file
+	file := ( InStr( pklIniRead( -1, -1, layoutFile1 ) , dknames ) ) ? Layoutfile1 : file	; again, try the layout file
 	remap := iniReadSection( file, dknames )			; Make the dead key name lookup table
 	Loop, Parse, remap, `r`n
 	{
@@ -298,7 +300,7 @@ _initReadAndSetOtherInfo()							;   ####################### other settings ####
 	}
 	
 	; eD TODO: Allow some code for layoutDir; just .\ maybe ?!? Could have a readDir function that does this and also ..\?
-	dir := pklIniRead( "dk_imgDir", "", "Lay_Ini", "eD_info" )			; Read/set dead key image data
+	dir := pklIniRead( "img_DKeyDir", "", "Lay_Ini", "eD_info" )		; Read/set dead key image data
 ;	dir := ( SubStr( dir, 1, 2 ) == ".\" ) ? ( layoutDir . SubStr( dir, 2 ) ) : dir
 	dir := ( FileExist( dir ) ) ? dir : layoutDir		; If no dedicated DK image dir, try the layout dir (old default)
 	setLayInfo( "dkImgDir", dir )
@@ -309,17 +311,18 @@ _initReadAndSetOtherInfo()							;   ####################### other settings ####
 		setLayInfo( "Ico_On_Num_", 1 )
 	} else if ( A_IsCompiled ) {
 		setLayInfo( "Ico_On_File", A_ScriptName )
-		setLayInfo( "Ico_On_Num_", 6 )
+		setLayInfo( "Ico_On_Num_", 2 )	; was 6 in original PKL.exe - green 'H' icon
 	} else {
 		setLayInfo( "Ico_On_File", "Resources\on.ico" )
 		setLayInfo( "Ico_On_Num_", 1 )
 	}
 	if ( FileExist( layoutDir . "\off.ico") ) {
 		setLayInfo( "Ico_OffFile", layoutDir . "\off.ico" )
+		
 		setLayInfo( "Ico_OffNum_", 1 )
 	} else if ( A_IsCompiled ) {
 		setLayInfo( "Ico_OffFile", A_ScriptName )
-		setLayInfo( "Ico_OffNum_", 3 )
+		setLayInfo( "Ico_OffNum_", 4 )	;was 3 in original PKL.exe - keyboard icon
 	} else {
 		setLayInfo( "Ico_OffFile", "Resources\off.ico" )
 		setLayInfo( "Ico_OffNum_", 1 )
@@ -432,6 +435,14 @@ _ReadKeyLayMap( keyType, valType, mapFile )	; Create a pdic from a pair of KLMap
 _getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 {
 	return pklIniRead( "VK_" . Format( "{:U}", name ), "00", "Pkl_Dic", "VKeyCodeFromName" )
+}
+
+_pklLayRead( type, default )						; Read kbd type/mods from PKL.ini
+{
+	val := pklIniRead( type, default, "Pkl_Ini" )
+	setLayInfo( type, val )							; For display
+	val := ( val == "--" ) ? "" : val				; Replace "--" with nothing
+	return val
 }
 
 _MessageFromNewInstance( lparam )	; Called by OnMessage( 0x0398 )

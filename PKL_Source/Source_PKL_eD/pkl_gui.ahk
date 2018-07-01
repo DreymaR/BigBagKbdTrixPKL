@@ -1,6 +1,6 @@
 ﻿pkl_set_tray_menu()
 {
-	ShowMoreInfo := getPklInfo( "ShowMoreInfo" )	; eD: Show extra technical info and the Reset hotkey
+	ShowMoreInfo := getPklInfo( "AdvancedMode" )	; eD: Show extra technical info and the Reset hotkey
 	
 	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
 	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
@@ -84,7 +84,7 @@
 
 	Menu, Tray, Click, 2
 	try {
-		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_Ini" )
+		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_Ini", "eD" )
 	} catch {
 		MsgBox, PKL_eD.ini:`nNon-existent menu item specified as default!?
 	}
@@ -143,6 +143,8 @@ pkl_about()
 	layPage  := pklIniRead( "homepage"  , ""        , "Lay_Ini", "informations" )
 	lLocale  := pklIniRead( "localeid"  , "0409"    , "Lay_Ini", "informations" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
+	kbdType  := getLayInfo( "KbdType" )
+	ergoMod  := getLayInfo( "CurlMod" ) . " / " . getLayInfo( "ErgoMod" )
 
 	text = ;
 	text = %text%
@@ -175,10 +177,12 @@ pkl_about()
 	text = %text%`n%locCompany%: %layComp%
 	Gui, Add, Text, , %text%
 	Gui, Add, Edit, , %layPage%
-	if ( getPklInfo( "ShowMoreInfo" ) ) {
+	if ( getPklInfo( "AdvancedMode" ) ) {
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
-		text = %text%Current Microsoft Windows Locale ID: %msLID%
+		text = %text%Keyboard type (from PKL.ini): %kbdType%
+		text = %text%`nCurl/Ergo mod type: %ergoMod%
+		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
 		text = %text%`nDead keys set for this Windows layout: %dkStr%
 		Gui, Add, Text, , %text%
 	}
@@ -248,26 +252,26 @@ pkl_showHelpImage( activate = 0 )
 
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "helpImg" )
+		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "eD_info" )	; BG image
 		if ( not FileExist ( imgBgImage ) )
-			imgBgImage := ""	; eD: Is default robust if there's no .png nor DreymaR_layout.ini entry?
-		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "helpImg" )
+			imgBgImage := ""	; eD: Is default robust if there's no .png nor layout.ini entry?
+		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "eD_info" )	; Shift images
 		if ( not FileExist ( imgShftDir . "\state?.png" ) )
 			imgShftDir := ""
-		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "helpImg" )
-		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Lay_Ini", "helpImg" )
-		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Lay_Ini", "helpImg" )
+		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "eD_info" )	; BG color
+		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Pkl_Ini", "eD" )
+		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Pkl_Ini", "eD" )
 		if ( not imgPosNr ) {
-			img_Width := pklIniRead( "img_width"    , 0                        , "Lay_Ini", "global"  )	; [global] is old default
-			img_Width := ( img_Width ) ? img_Width : pklIniRead( "img_width"   , 460      , "Lay_Ini", "helpImg" )
-			imgHeight := pklIniRead( "img_height"   , 0                        , "Lay_Ini", "global"  )	; --"--
-			imgHeight := ( imgHeight ) ? imgHeight : pklIniRead( "img_height"  , 160      , "Lay_Ini", "helpImg" )
-			img_Scale := pklIniRead( "img_scale"    , 100.0                    , "Lay_Ini", "helpImg" )	; Scale factor, in % (float)
+			img_Width := pklIniRead( "img_width"    , 0                     , "Lay_Ini", "eD_info"  )	; [global] is old default
+			img_Width := ( img_Width ) ? img_Width : pklIniRead( "img_width" , 460, "Lay_Ini", "global" )
+			imgHeight := pklIniRead( "img_height"   , 0                     , "Lay_Ini", "eD_info"  )	; --"--
+			imgHeight := ( imgHeight ) ? imgHeight : pklIniRead( "img_height", 160, "Lay_Ini", "global" )
+			img_Scale := pklIniRead( "img_scale"    , 100.0                 , "Lay_Ini", "eD_info" )	; Scale factor, in % (float)
 			img_Width := Ceil( img_Scale * img_Width / 100.0 )
 			imgHeight := Ceil( img_Scale * imgHeight / 100.0 )
-			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                       , "Lay_Ini", "helpImg" )
-			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                       , "Lay_Ini", "helpImg" )
-			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                       , "Lay_Ini", "helpImg" )
+			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                    , "Pkl_Ini", "eD" )
+			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                    , "Pkl_Ini", "eD" )
+			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                    , "Pkl_Ini", "eD" )
 			imgHorPos := [ imgHorMrg, ( A_ScreenWidth - img_Width )/2, A_ScreenWidth  - img_Width - imgHorMrg ]	; Left/Mid/Right
 			imgVerPos := [ imgTopMrg,                                  A_ScreenHeight - imgHeight - imgLowMrg ]	; Top/bottom
 			Loop, 6 {
@@ -336,8 +340,8 @@ pkl_showHelpImage( activate = 0 )
 		ssuf   := getLayInfo( "dkImgSuf" )		; Image state suffix
 		thisDK := getKeyInfo( "CurrNameOfDK" )
 		dkS    := []
-		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; eD: Img file state 0 suffix
-		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; eD: Img file state 1 suffix
+		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; Img file state 0 suffix
+		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; Img file state 1 suffix
 		dkS[6] := ssuf . "6"
 		dkS[7] := ssuf . "7"					; eD TODO: Add shift states 6-7 to images!
 		if ( state ) {
@@ -345,7 +349,7 @@ pkl_showHelpImage( activate = 0 )
 			if ( not FileExist( imgDir . "\" . filename ) )
 				fileName := thisDK . dkS0 . ".png"
 		} else {
-			fileName := thisDK . dkS0 . ".png"	; was deadkey%thisDK%
+			fileName := thisDK . dkS0 . ".png"
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		fileName = extend.png
@@ -373,23 +377,20 @@ _GetState()	; The shift state 0:1:6:7 as in layout.ini and image names
 
 _FixAmpInMenu( menuItem )
 {
-	StringReplace, menuItem, menuItem, %A_Space%&%A_Space%, +, 1	; eD: Used to be '& , &&,' to display the ampersand.
+	menuItem := StrReplace( menuItem, " & ", "+" )		; Used to be '& , &&,' to display the ampersand.
 	menuItem := " (" . menuItem . ")"
 	return menuItem
 }
 
 pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 {
-	message := getPklInfo( "LocStr_" . msg ) 		; pklLocaleString( msg, s, p, q, r )
-	if ( s <> "" )
-		StringReplace, m, m, #s#, %s%, A
-	if ( p <> "" )
-		StringReplace, m, m, #p#, %p%, A
-	if ( q <> "" )
-		StringReplace, m, m, #q#, %q%, A
-	if ( r <> "" )
-		StringReplace, m, m, #r#, %r%, A
-	MsgBox %message%
+	msg := getPklInfo( "LocStr_" . msg )
+	Loop, Parse, % "spqr"
+	{
+		it := A_LoopField
+		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
+	}
+	MsgBox %msg%
 }
 
 /*
