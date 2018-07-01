@@ -18,8 +18,8 @@ Compiling
 ---------
 
 * For standard non-Unicode PKL versions, use the Ahk2Exe compiler from the [AHK download page][AHKDld].
-* Both the AHK compiler v1.0 and v1.1 in ANSI mode work; v1.1 Unicode mode is still WIP.
-* There's a folder in PKL_Source that contains the AHK compiler (only).
+* AHK compiler v1.1 Unicode is needed for PKL_eD now; v1.0 and v1.1 in ANSI mode work for original PKL.
+* There's a folder in PKL_Source that contains the v1.1 AHK compiler.
 * Choose the right PKL_Source\PKL_#.ahk file, eD or orig.
 * Choose to compile into your main PKL folder.
 * You may choose any name for the .exe and run it afterwards.
@@ -29,9 +29,9 @@ Setup:
 ------
 
 1. Just compile right into your main PKL folder, or move the resulting .exe file there.
-2. For PKL[eD], adjust any extra settings in the DreymaR_layout.ini file in your layout folder.
-   There's a sample DreymaR_layout.ini file in the Colemak-eD_ISO_CurlAWide-Sl layout folder.
-3. For generic PKL[eD] settings, look in the PKL_eD folder, especially the PKL_eD.ini file.
+2. For PKL[eD], adjust any extra settings in the layout.ini file in your layout folder.
+   There's a sample [eD] layout.ini file in the Colemak-eD_ISO_CurlAWide layout folder.
+3. For generic PKL[eD] settings, look in the PKL_eD folder, and the PKL.ini file.
   
   
 _Best of luck!_

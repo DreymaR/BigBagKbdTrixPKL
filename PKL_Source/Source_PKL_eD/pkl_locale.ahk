@@ -69,47 +69,30 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 	}
 }
 
-getReadableHotkeyString( str )
+getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of hotkey names
 {
-	StringReplace, str, str, <^>!, AltGr &%A_Space%, 1
-	StringReplace, str, str, SC029, Tilde, 1
-	
-	StringReplace, str, str, <+, LShift &%A_Space%, 1
-	StringReplace, str, str, <^, LCtrl &%A_Space%, 1
-	StringReplace, str, str, <!, LAlt &%A_Space%, 1
-	StringReplace, str, str, <#, LWin &%A_Space%, 1
-
-	StringReplace, str, str, >+, RShift &%A_Space%, 1
-	StringReplace, str, str, >^, RCtrl &%A_Space%, 1
-	StringReplace, str, str, >!, RAlt &%A_Space%, 1
-	StringReplace, str, str, >#, RWin &%A_Space%, 1
-	
-	StringReplace, str, str, +, Shift &%A_Space%, 1
-	StringReplace, str, str, ^, Ctrl &%A_Space%, 1
-	StringReplace, str, str, !, Alt &%A_Space%, 1
-	StringReplace, str, str, #, Win &%A_Space%, 1
-	
-	StringReplace, str, str, *,, 1
-	StringReplace, str, str, $,, 1
-	StringReplace, str, str, ~,, 1
+	strDic := {                   "<^>!"  : "AltGr & "
+		, "<+"    : "LShift & " , "<^"    : "LCtrl & " , "<!"    : "LAlt & " , "<#"    : "LWin & "
+		, ">+"    : "RShift & " , ">^"    : "RCtrl & " , ">!"    : "RAlt & " , ">#"    : "RWin & "
+		,  "+"    :  "Shift & " ,  "^"    :  "Ctrl & " ,  "!"    :  "Alt & " ,  "#"    :  "Win & "
+		, "SC029" : "Tilde"     ,  "*"    : ""         ,  "$"    : ""        ,  "~"    : "" }
+	for key, val in strDic
+		str := StrReplace( str, key, val )
 
 	str := RegExReplace( str, "(\w+)", "#[$1]" )
 	hotkeys := _getHotkeyText( "all" )
 	Loop, Parse, hotkeys, %A_Space%
 	{
-		lhk := _getHotkeyText( A_LoopField )
-		StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
+;		lhk := _getHotkeyText( A_LoopField )
+		str := StrReplace( str, "#[" . A_LoopField . "]", _getHotkeyText( A_LoopField ) )	;StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )
 	
 	; eD: Moved the shorter key names down so they'll work on the Languages file.
-	StringReplace, str, str, Return, Enter, 1
-	StringReplace, str, str, Escape, Esc, 1
-	StringReplace, str, str, BackSpace, Back, 1
-	StringReplace, str, str, Backspace, Back, 1
-	StringReplace, str, str, Delete, Del, 1
-	StringReplace, str, str, Insert, Ins, 1
-	StringReplace, str, str, Control, Ctrl, 1
+	strDic := {                      "Delete" : "Del"   ,    "Insert" : "Ins"   ,   "Control" : "Ctrl"
+		,    "Return" : "Enter" ,    "Escape" : "Esc"   , "BackSpace" : "Back"  , "Backspace" : "Back" }
+	for key, val in strDic
+		str := StrReplace( str, key, val )
 	
 	return str
 }

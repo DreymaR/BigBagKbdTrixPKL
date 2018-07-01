@@ -143,6 +143,8 @@ pkl_about()
 	layPage  := pklIniRead( "homepage"  , ""        , "Lay_Ini", "informations" )
 	lLocale  := pklIniRead( "localeid"  , "0409"    , "Lay_Ini", "informations" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
+	kbdType  := getLayInfo( "KbdType" )
+	ergoMod  := getLayInfo( "CurlMod" ) . " / " . getLayInfo( "ErgoMod" )
 
 	text = ;
 	text = %text%
@@ -178,7 +180,9 @@ pkl_about()
 	if ( getPklInfo( "ShowMoreInfo" ) ) {
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
-		text = %text%Current Microsoft Windows Locale ID: %msLID%
+		text = %text%Keyboard type (from PKL.ini): %kbdType%
+		text = %text%`nCurl/Ergo mod type: %ergoMod%
+		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
 		text = %text%`nDead keys set for this Windows layout: %dkStr%
 		Gui, Add, Text, , %text%
 	}
@@ -250,7 +254,7 @@ pkl_showHelpImage( activate = 0 )
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "helpImg" )
 		if ( not FileExist ( imgBgImage ) )
-			imgBgImage := ""	; eD: Is default robust if there's no .png nor DreymaR_layout.ini entry?
+			imgBgImage := ""	; eD: Is default robust if there's no .png nor layout.ini entry?
 		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "helpImg" )
 		if ( not FileExist ( imgShftDir . "\state?.png" ) )
 			imgShftDir := ""
@@ -336,8 +340,8 @@ pkl_showHelpImage( activate = 0 )
 		ssuf   := getLayInfo( "dkImgSuf" )		; Image state suffix
 		thisDK := getKeyInfo( "CurrNameOfDK" )
 		dkS    := []
-		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; eD: Img file state 0 suffix
-		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; eD: Img file state 1 suffix
+		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; Img file state 0 suffix
+		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; Img file state 1 suffix
 		dkS[6] := ssuf . "6"
 		dkS[7] := ssuf . "7"					; eD TODO: Add shift states 6-7 to images!
 		if ( state ) {
@@ -345,7 +349,7 @@ pkl_showHelpImage( activate = 0 )
 			if ( not FileExist( imgDir . "\" . filename ) )
 				fileName := thisDK . dkS0 . ".png"
 		} else {
-			fileName := thisDK . dkS0 . ".png"	; was deadkey%thisDK%
+			fileName := thisDK . dkS0 . ".png"
 		}
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
 		fileName = extend.png
@@ -373,23 +377,20 @@ _GetState()	; The shift state 0:1:6:7 as in layout.ini and image names
 
 _FixAmpInMenu( menuItem )
 {
-	StringReplace, menuItem, menuItem, %A_Space%&%A_Space%, +, 1	; eD: Used to be '& , &&,' to display the ampersand.
+	menuItem := StrReplace( menuItem, " & ", "+" )		; Used to be '& , &&,' to display the ampersand.
 	menuItem := " (" . menuItem . ")"
 	return menuItem
 }
 
 pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 {
-	message := getPklInfo( "LocStr_" . msg ) 		; pklLocaleString( msg, s, p, q, r )
-	if ( s <> "" )
-		StringReplace, m, m, #s#, %s%, A
-	if ( p <> "" )
-		StringReplace, m, m, #p#, %p%, A
-	if ( q <> "" )
-		StringReplace, m, m, #q#, %q%, A
-	if ( r <> "" )
-		StringReplace, m, m, #r#, %r%, A
-	MsgBox %message%
+	msg := getPklInfo( "LocStr_" . msg )
+	Loop, Parse, % "spqr"
+	{
+		it := A_LoopField
+		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
+	}
+	MsgBox %msg%
 }
 
 /*

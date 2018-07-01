@@ -72,8 +72,8 @@ strCom( str )												; Remove end-of-line comments (whitespace then semicolo
 
 strEsc( str )												; Replace \n and \\ escapes
 {
-	StringReplace, str, str, \n, `n, A
-	StringReplace, str, str, \\, \, A
+	str := StrReplace( str, "\n", "`n" )
+	str := StrReplace( str, "\\", "\"  )
 	return str
 }
 
