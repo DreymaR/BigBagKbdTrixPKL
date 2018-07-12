@@ -15,7 +15,7 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="CmkKbdFig_PKL_template.svg"
+   sodipodi:docname="CmkKbdFig_KLD_template.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
    style="display:inline;enable-background:new"
@@ -105,15 +105,15 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.671406"
-     inkscape:cx="506"
+     inkscape:cx="245.35294"
      inkscape:cy="633"
      inkscape:document-units="px"
-     inkscape:current-layer="g2263"
+     inkscape:current-layer="layer18"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
-     inkscape:window-y="110"
+     inkscape:window-y="-8"
      showguides="false"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1"
@@ -272,9 +272,8 @@
      inkscape:groupmode="layer"
      id="layer18"
      inkscape:label="EZ-PrintMask"
-     style="display:inline;opacity:0.005"
-     transform="translate(38,-206.36212)"
-     sodipodi:insensitive="true">
+     style="display:none;opacity:0.00499998"
+     transform="translate(38,-206.36212)">
     <use
        style="display:inline;opacity:1;enable-background:new"
        x="0"
@@ -293,7 +292,7 @@
        y="306.36218"
        rx="4"
        ry="4"
-       inkscape:export-filename="../Colemak-BoardFigs/CmkIBM_temp.png"
+       inkscape:export-filename=".\bitmap.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect

@@ -71,7 +71,7 @@
 		
 		ch := getKeyInfo( HK . state . "s" )
 		if ( ch == "{CapsLock}" ) {
-			toggleCapsLock()
+			_toggleCapsLock()
 		} else {
 			toSend = ;
 			if ( ch != "" ) {
@@ -192,47 +192,13 @@ _pkl_ShiftState( capState )
 	return res
 }
 
-setAltGrState( isdown )
+_toggleCapsLock()
 {
-	getAltGrState( isdown, 1 )
-}
-
-getAltGrState( isdown = 0, set = 0 )
-{
-	static AltGr := 0
-	if ( set == 1 ) {
-		if ( isdown == 1 ) {
-			AltGr = 1
-			Send {LCtrl Down}{RAlt Down}
-		} else {
-			AltGr = 0
-			Send {RAlt Up}{LCtrl Up}
-		}
+	if ( getKeyState("CapsLock", "T") )
+	{
+		SetCapsLockState, Off
 	} else {
-		return AltGr
-	}
-}
-
-setModifierState( modifier, isdown )
-{
-	getModifierState( modifier, isdown, 1 )
-}
-
-getModifierState( modifier, isdown = 0, set = 0 )
-{
-	if ( modifier == "AltGr" )
-		return getAltGrState( isdown, set ) ; For better performance
-	
-	if ( set == 1 ) {
-		if ( isdown == 1 ) {
-			setKeyInfo( "ModState_" . modifier, 1 )
-			Send {%modifier% Down}
-		} else {
-			setKeyInfo( "ModState_" . modifier, 0 )
-			Send {%modifier% Up}
-		}
-	} else {
-		return getKeyInfo( "ModState_" . modifier )
+		SetCapsLockState, on
 	}
 }
 
@@ -244,7 +210,6 @@ AltGrIsPressed()
 	}
 	return getKeyState( "RAlt" ) || ( altGrEqualsAltCtrl && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
-
 
 processKeyPress( ThisHotkey )
 {

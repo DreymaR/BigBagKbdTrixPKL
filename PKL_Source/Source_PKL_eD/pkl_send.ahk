@@ -1,14 +1,4 @@
-﻿toggleCapsLock()
-{
-	if ( getKeyState("CapsLock", "T") )
-	{
-		SetCapsLockState, Off
-	} else {
-		SetCapsLockState, on
-	}
-}
-
-pkl_Send( ch, modif = "" )
+﻿pkl_Send( ch, modif = "" )
 {
 	static SpaceWasSentForDeadkeys = 0
 	
@@ -49,11 +39,11 @@ pkl_Send( ch, modif = "" )
 
 pkl_SendThis( modif, toSend )
 {
-	toggleAltgr := getAltGrState()
+	toggleAltgr := _getAltGrState()
 	prefix := ""
 
 	if ( toggleAltgr )
-		setAltGrState( 0 )
+		_setAltGrState( 0 )
 
 	if ( inStr( modif, "!" ) && getKeyState("Alt") )
 		prefix = {Blind}
@@ -61,5 +51,55 @@ pkl_SendThis( modif, toSend )
 	Send, %prefix%%modif%%toSend%
 
 	if ( toggleAltgr )
-		setAltGrState( 1 )
+		_setAltGrState( 1 )
+}
+
+;-------------------------------------------------------------------------------------
+;
+; Set/get key states 
+;     Process states of modifiers. Used by Send, and in PKL_main.
+;
+
+setModifierState( modifier, isdown )
+{
+	getModifierState( modifier, isdown, 1 )
+}
+
+getModifierState( modifier, isdown = 0, set = 0 )
+{
+	if ( modifier == "AltGr" )
+		return _getAltGrState( isdown, set ) ; For better performance
+	
+	if ( set == 1 ) {
+		if ( isdown == 1 ) {
+			setKeyInfo( "ModState_" . modifier, 1 )
+			Send {%modifier% Down}
+		} else {
+			setKeyInfo( "ModState_" . modifier, 0 )
+			Send {%modifier% Up}
+		}
+	} else {
+		return getKeyInfo( "ModState_" . modifier )
+	}
+}
+
+_setAltGrState( isdown )
+{
+	_getAltGrState( isdown, 1 )
+}
+
+_getAltGrState( isdown = 0, set = 0 )
+{
+	static AltGr := 0
+	if ( set == 1 ) {
+		if ( isdown == 1 ) {
+			AltGr = 1
+			Send {LCtrl Down}{RAlt Down}
+		} else {
+			AltGr = 0
+			Send {RAlt Up}{LCtrl Up}
+		}
+	} else {
+		return AltGr
+	}
 }

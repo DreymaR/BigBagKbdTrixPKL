@@ -51,15 +51,6 @@ TODO:
 -----
 
 * Generate key mapping images from layout files and my .svg by scripting InkScape!
-    - Use the KLD CO codes in an Inkscape .SVG Cmk template.
-	- A KLD dictionary between the img layout and SC. Remaps should already be applied then?
-	- Loops for each state, each key. RegExReplace ##</tspan></text>.
-	- Also loop for each dead key and state, determining the output of that key state then show the DK release for it (if present)
-	- One .SVG layer for the DK markings; set each entry to blank if not a DK.
-	- Search/replace DK only from 'KLD_CO template DK' to next 'inkscape:groupmode="layer"'.
-	- Call InkScape with command-line options to generate .png
-	- Make images from two areas: ANSI - pos (100, 340) / ISO – pos (100,940). Both have size (812,226).
-	- Put images as state#.png in a time-marked subfolder of the layout folder? The DK images in a separate subfolder.
 
 * Multi-Extend! E.g., LAlt+Caps triggers NumPad Extend layer; Caps (or LAlt?) holds it. (LAlt+Shift+Caps locks/unlocks it?)
 	- Others: Ctrl+Caps(only good w/ RCtrl), AltGr+Caps(good!)..., Alt+AltGr+Caps (fancy)

@@ -1,0 +1,192 @@
+﻿;-------------------------------------------------------------------------------------
+;
+; Remap module (PKL_eD)
+;     Functions to read and parse remap cycles for ergo mods and suchlike
+;     Used primarily in pkl_init.ahk
+;
+ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles (used in pkl_init)
+{
+	mapList     := pklIniRead( mapList, "", mapFile, "remaps" )		; List name -> actual list
+	mapCycList  := ;
+	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%						; Parse CSV by comma
+	{
+		tmpCycle    := ;
+		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%				; Parse by plus sign
+		{
+			theMap  := A_LoopField
+			if ( SubStr( A_LoopField , 1, 1 ) == "^" )		; Ref. to another map -> Self recursion
+				theMap := ReadRemaps( SubStr( A_LoopField , 2 ), mapFile )
+			tmpCycle := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap		; re-attach +
+		}	; end loop
+		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle	; re-attach CSV
+	}	; end loop
+	return mapCycList
+}	; end fn
+
+ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary of remaps (used in pkl_init)
+{
+	test0 := mapType										; eD DEBUG
+	mapType := Format( "{:U}", SubStr( mapType, 1, 2 ) )	; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
+	pdic    := {}
+	if ( mapType == "SC" )									; Create a fresh SC pdic from mapFile KeyLayMap
+		pdic := ReadKeyLayMapPDic( "SC", "SC", mapFile )
+	rdic    := pdic.Clone()									; Reverse dictionary (instead of if loop)?
+	tdic	:= {}											; Temporary dictionary used while mapping loops
+	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%				; Parse cycle list by comma
+	{
+		fullCycle := ;
+		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%		; Parse and merge composite cycles by plus sign
+		{
+			thisCycle := pklIniRead( A_LoopField , "", mapFile, "RemapCycles" )
+			thisType  := SubStr( thisCycle, 1, 2 )			; KLM map type, such as TC for TMK-like Colemak
+;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
+			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and extra pipes
+			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
+		}	; end loop
+		if ( mapType == "SC" )								; Remap pdic from thisType to SC
+			mapDic := ReadKeyLayMapPDic( thisType, "SC", mapFile )
+		thisCycle := StrSplit( fullCycle, "|", " `t" )		; Parse cycle by pipe, and create mapping pdic
+		numSteps  := thisCycle.MaxIndex()
+		Loop, % numSteps
+		{													; Loop to get proper key codes
+			this := thisCycle[ A_Index ]
+			if ( mapType == "SC" ) {						; Remap from thisType to SC
+				thisCycle[ A_Index ] := mapDic[ this ]
+			} else if ( mapType == "VK" )  {				; Remap from VK name/code to VK code (upper case)
+				this := Format( "{:U}", this )
+				this := ( InStr( this, "VK" ) == 1 ) ? ( SubStr( this, 3 ) ) : ( getVKeyCodeFromName( this ) )	; "VK" . 
+				thisCycle[ A_Index ] := this
+			}	; end if
+		}	; end loop
+		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; eD DEBUG
+		Loop, % numSteps
+		{													; Loop to (re)write remap pdic
+			this := thisCycle[ A_Index ]					; This key's code gets remapped to...
+			this := ( mapType == "SC" ) ? rdic[ this ] : this	; When chaining maps, map the remapped key ( a→b→c )
+			that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
+			pdic[ this ] := that							; Map the (remapped?) code to the next one
+			tdic[ that ] := this							; Keep the reverse mapping for later cycles
+		}	; end loop (remap one full cycle)
+		for key, val in tdic 
+			rdic[ key ] := val								; Activate the lookup dict for the next cycle
+	}	; end loop (parse CSV)
+;; eD remapping cycle notes:
+;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
+;; With rdic: 1<:[ b:a, c:b, a:c, d:d ] => 2>:[ r[b]:d, r[d]:b ] => 2>:[ a:d  , b:c, c:a, d:b   ]
+;; Note that:    ( b | d , a | b | c )                           => 2>:[ a:b  , b:d, c:a, d:b:c ] - so order matters!
+;; Lay(CAW): 022(Cmk-D) -> 02E(Cmk-C); 023(Cmk-H) -> 033(Cmk-,); 024(Cmk-N) -> 025(Cmk-E)
+;; Ext(AWi): 022(Cmk-D) -> 022(Cmk-D); 023(Cmk-H) -> 024(Cmk-N); 030(Cmk-B) -> 02F(Cmk-V) -> 02E(Cmk-C) -> 02D(Cmk-X)
+;	if ( test0 == "" . "scMapLay" ) {						; eD DEBUG
+;	test1 := pdic[ "SC012" ] . " " . pdic[ "SC022" ] . " " . pdic[ "SC02F" ] . " " . pdic[ "SC02E" ] . " " . pdic[ "SC023" ] . " " . pdic[ "SC032" ]
+;	test2 := rdic[ "SC012" ] . " " . rdic[ "SC022" ] . " " . rdic[ "SC02F" ] . " " . rdic[ "SC02E" ] . " " . rdic[ "SC023" ] . " " . rdic[ "SC032" ]
+;	MsgBox, Debug %test0%:`n SC012 SC022 SC02F SC02E SC023 SC032 `n __E/F___G/D____V_____C_____H_____M___ `n %test1% `n %test2% `n`n%test3%
+;	}	; end eD DEBUG
+	return pdic
+}	; end fn
+
+ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KLMaps in a remap.ini file
+{
+	pdic := {}
+	Loop, 5											; Loop through KLM rows 0-4
+	{
+		keyRow := pklIniRead( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
+		valRow := pklIniRead( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
+		valRow := StrSplit( valRow, "|", " `t" )
+		Loop, Parse, keyRow, |, %A_Space%%A_Tab%	; (Robust against keyRow shorter than valRow)
+		{
+			if ( A_Index > valRow.MaxIndex() )		; End of val row
+				Break
+			if ( not A_LoopField )					; Empty key entry (e.g., double pipes)
+				Continue
+			key := A_LoopField
+			val := valRow[ A_Index ]
+			if ( keyType == "SC" )					; ensure upper case for SC###
+				key := Format( "{:U}", key )
+			pdic[ key ] := Format( "{:U}", val )	; e.g., pdic[ "SC001" ] := "SC001"
+		}	; end loop
+	}	; end loop
+	return pdic
+}	; end fn
+
+;-------------------------------------------------------------------------------------
+;
+; PKL activity module
+;     Check for inactivity (no clicks/keypresses) in a given period
+;
+activity_ping(mode = 1) {
+	activity_main(mode, 1)
+}
+
+activity_setTimeout(mode, timeout) {
+	activity_main(mode, 2, timeout)
+}
+
+activity_main(mode = 1, ping = 1, value = 0) {
+	static mode1ping := 0
+	static mode2ping := 0
+	static mode1timeout := 0
+	static mode2timeout := 0
+	if ( ping == 1 ) {
+		mode%mode%ping := A_TickCount
+	} else if ( ping == 2 ) {
+		mode%mode%timeout := value
+	}
+	return
+
+	activityTimer:
+	if ( mode1timeout > 0 && A_TickCount - mode1ping > mode1timeout * 60000 ) {
+		if ( not A_IsSuspended ) {
+			gosub toggleSuspend
+			activity_ping( 2 )
+			return
+		}
+	}
+	if ( mode2timeout > 0 && A_TickCount - mode2ping > mode2timeout * 60000 ) {
+		gosub ExitPKL
+		return
+	}
+	return
+}
+
+;-------------------------------------------------------------------------------------
+;
+; Utility functions
+;     These are minor utility functions used by other parts of PKL
+;
+
+pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
+{
+	msg := getPklInfo( "LocStr_" . msg )
+	Loop, Parse, % "spqr"
+	{
+		it := A_LoopField
+		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
+	}
+	MsgBox %msg%
+}
+
+pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)
+{
+	if ( hkStr <> "" ) {
+		Loop, Parse, hkStr, `,
+		{
+			Hotkey, %A_LoopField%, %gotoLabel%
+			if ( A_Index == 1 )
+				setPklInfo( pklInfoTag, A_LoopField )
+		}	; end loop
+	}	; end if
+}	; end fn
+
+getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
+{
+	return pklIniRead( "VK_" . Format( "{:U}", name ), "00", "Pkl_Dic", "VKeyCodeFromName" )
+}
+
+getWinLocaleID()			; This was in the detect/get functions
+{
+	WinGet, WinID,, A
+	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
+	WinLocaleID := DllCall("GetKeyboardLayout", "Int", WinThreadID)
+	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16
+	return WinLocaleID
+}

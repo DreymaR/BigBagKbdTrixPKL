@@ -173,16 +173,15 @@ return
 
 ; ####################### functions #######################
 
-#Include pkl_deadkey.ahk
-#Include pkl_getset.ahk
-#Include pkl_gui.ahk
 #Include pkl_init.ahk
+#Include pkl_gui_image.ahk	; eD: pkl_gui was very long; split into a help image and a menu/about part
+#Include pkl_gui_menu.ahk
 #Include pkl_keypress.ahk
-#Include pkl_locale.ahk
 #Include pkl_send.ahk
-#Include pkl_activity.ahk
-#Include pkl_iniRead.ahk
-#Include pkl_getWinDKs.ahk ; eD: Renamed from detectDeadKeysInCurrentLayout.ahk
+#Include pkl_deadkey.ahk
+#Include pkl_utility.ahk	; eD: Various functions such as pkl_activity.ahk were merged into this file
+#Include pkl_get_set.ahk
+#Include pkl_ini_read.ahk
 
 ; ####################### (external) modules #######################
 
@@ -197,3 +196,5 @@ return
 ; eD: #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
 ; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one variable
 ; eD: #Include iniReadBoolean.ahk - moved into pkl_iniRead and tweaked
+; eD: #Include detectDeadKeysInCurrentLayout.ahk - moved into pkl_deadkey.ahk
+; eD: #Include pkl_locale.ahk - moved into pkl_get_set.ahk
