@@ -22,17 +22,17 @@
 		char = {Tab}
 	} else if ( ch > 0 && ch <= 26 ) {
 		; http://en.wikipedia.org/wiki/Control_character#How_control_characters_map_to_keyboards
-		char := "^" . chr( ch + 64 )
+		char := "^" . chr( ch + 64 )	; Send Ctrl char
 	} else if ( ch == 27 ) {
-		char = ^{VKDB}
+		char = ^{VKDB}	; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
 	} else if ( ch == 28 ) {
-		char = ^{VKDC}
+		char = ^{VKDC}	; Ctrl + \ (OEM_5) alias File Separator(?)
 	} else if ( ch == 29 ) {
-		char = ^{VKDD}
-	; } else {
-		; Unicode
-		; sendU(ch)
-		; return
+		char = ^{VKDD}	; Ctrl + ] (OEM_6) alias Group Separator(?)
+;	} else {
+;		Unicode
+;		sendU(ch)
+;		return
 	}
 	pkl_SendThis( modif, char )
 }

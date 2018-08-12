@@ -1,64 +1,61 @@
-﻿DeadKeyValue( dkName, base )	; eD: 'dk' was just a number; translate it to a full DK name.
+﻿DeadKeyValue( dkName, base )								; eD: 'dk' was just a number, but in PKL_eD it's a name
 {
-	static dkFile := ""	; eD
-	dkFile := ( dkFile ) ? dkFile : getLayInfo( "dkFile" )
-	
+	base := ( base < 32 ) ? "s" . base : base				; Entries 0-31 are special (and pklIniRead can't read a "0" key)	; eD TODO: Specify "s#" in entries instead?
 	res := getKeyInfo( "DKval_" . dkName . "_" . base )
-	if ( res ) {
-		res := ( res == -1 ) ? 0 : res
-		return res
+	if ( not res ) {
+		res := pklIniRead( base, -1, getLayInfo( "dkFile" ), "dk_" . dkName )
+;		MsgBox,,, DKey: %dkName%`nBase: %base%`nChar: %res%, 1	; DEBUG
+		setKeyInfo( "DKval_" . dkName . "_" . base, res)	; The DK info pdic is filled in gradually with use
 	}
-	IniRead, res, %dkFile%, dk_%dkName%, %base%, -1`t;	; deadkey%dk%, %base%, -1`t;
-	tmp := InStr( res, A_Tab )
-	res := SubStr( res, 1, tmp - 1 )
-	setKeyInfo( "DKval_" . dkName . "_" . base, res)
 	res := ( res == -1 ) ? 0 : res
 	return res
 }
 
 DeadKey(DK)
 {
-	CurrNumOfDKs := getKeyInfo( "CurrNumOfDKs" )			; eD: Current # of dead keys active
-	; CurrNameOfDK := getKeyInfo( "CurrNameOfDK" )			; eD: Current dead key's name
-	; CurrBaseKey_ := getKeyInfo( "CurrBaseKey_" )			; eD: Current base key
-	DK          := getKeyInfo( "dk" . DK )					; eD: Find the dk's name
-	static PVDK := "" 										; Pressed dead keys
-	DeadKeyChar := DeadKeyValue( DK, 0 )
-	DeadKeyChr1 := DeadKeyValue( DK, 1 )					; eD WIP: The "1" entry gives alternative release char
+	;CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" )		; Current # of dead keys active	; eD TODO: Revert to global? No, because it's used in many files?
+	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
+	CurrBaseKey_    := getKeyInfo( "CurrBaseKey_" )			; Current base key	eD TODO: Is this definition used/needed?
+	DK              := getKeyInfo( "dk" . DK )				; Find the dk's full name
+	static PVDK     := "" 									; Pressed Dead Key Values?
+	DeadKeyChar     := DeadKeyValue( DK, 0 )
+	DeadKeyChr1     := DeadKeyValue( DK, 1 )				; eD WIP: The "1" entry gives alternative release char, if defined
+	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
-	if ( CurrNumOfDKs > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK entry 0
+	if ( getKeyInfo( "CurrNumOfDKs" ) > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK base char
 	{
-		pkl_Send( DeadKeyChar )
+		pkl_Send( DeadKeyChr1 )								; eD WIP: Pressing the dead key twice now releases entry 1
 		return
 	}
 
-	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs )			; CurrNumOfDKs++
+	setKeyInfo( "CurrNumOfDKs", getKeyInfo( "CurrNumOfDKs" ) + 1 )	;++CurrNumOfDKs )	; CurrNumOfDKs++
 	setKeyInfo( "CurrNameOfDK", DK )
-	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}
-	IfInString, ErrorLevel, EndKey
+	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Esc}	; eD: Added {Esc}
+	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys
 	{
-		endk := "{" . Substr(ErrorLevel,8) . "}"
 		setKeyInfo( "CurrNumOfDKs", 0 )
 		setKeyInfo( "CurrBaseKey_", 0 )
-		pkl_Send( DeadKeyChar )
-		Send %endk%
+;		endk := "{" . Substr(ErrorLevel,8) . "}"			; eD: I found it strange that Esc and others shouldn't just cancel the dead key.
+;		pkl_Send( DeadKeyChar )								; Forbidden keys release entry 0 and...
+;		if ( not InStr( "{Backspace}{Delete}{Escape}{F", endk ) )
+;			Send %endk%										; ...do their thing, so beware!
 		return
 	}
 
-	if ( CurrNumOfDKs == 0 ) {
-		pkl_Send( DeadKeyChar )
+	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {
+		pkl_Send( DeadKeyChar )								; If queue is empty(?), release entry 0
 		return
 	}
 	if ( getKeyInfo( "CurrBaseKey_" ) != 0 ) {
 		hx := getKeyInfo( "CurrBaseKey_" )
-		nk := chr(hx)
+		nk := chr( hx )										; Send the base key
 	} else {
-		hx := asc(nk)
+		hx := asc( nk )										; Send key listed above like {BS}
 	}
 	
-	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs )			; CurrNumOfDKs--
+	setKeyInfo( "CurrNumOfDKs", getKeyInfo( "CurrNumOfDKs" ) - 1 )	;--CurrNumOfDKs )	; CurrNumOfDKs--
 	setKeyInfo( "CurrBaseKey_", 0 )
-	newkey := DeadKeyValue( DK, hx )						; Set the DK (based on number)
+	newkey := DeadKeyValue( DK, hx )						; Get the DK value
 
 	if ( newkey && (newkey + 0) == "" ) {					; New key (value) is a special string, like {Home}+{End}
 		if ( PVDK ) {
@@ -69,18 +66,18 @@ DeadKey(DK)
 	} else if ( newkey && PVDK == "" ) {
 		pkl_Send( newkey )
 	} else {
-		if ( CurrNumOfDKs == 0 ) {
+		if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {			; No more active dead keys, so release
 			pkl_Send( DeadKeyChar )
 			if ( PVDK ) {
 				StringTrimRight, PVDK, PVDK, 1
 				Loop, Parse, PVDK, %A_Space%
 				{
-					pkl_Send( A_LoopField )
+					pkl_Send( A_LoopField )					; Send all release chars in PVDK queue
 				}
 				PVDK := ""
 			}
 		} else {
-			PVDK := DeadKeyChar  . " " . PVDK
+			PVDK := DeadKeyChar  . " " . PVDK				; Add DK base char to space separated PVDK queue
 		}
 		pkl_Send( hx )
 	}
@@ -92,16 +89,15 @@ setDeadKeysInCurrentLayout( deadkeys )
 }
 
 getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
-{
-	; eD TODO: Make PKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
+{				; eD TODO: Make PKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static deadkeys := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "Pkl_Dic", "DeadKeysFromLocID" ) ; eD
 	if ( DKsOfSysLayout == "-2" )
 		setPklInfo( "RAltAsAltGrLocale", true )
-	DKsOfSysLayout := ( SubStr(DKsOfSysLayout,1,1) == "-" ) ? "" : DKsOfSysLayout	; eD
+	DKsOfSysLayout := ( SubStr(DKsOfSysLayout,1,1) == "-" ) ? "" : DKsOfSysLayout
 	if ( set == 1 ) {
 		if ( newDeadkeys == "auto" )
-			deadkeys := DKsOfSysLayout 	; eD: replaced getDeadKeysOfSystemsActiveLayout()
+			deadkeys := DKsOfSysLayout
 		else if ( newDeadkeys == "dynamic" )
 			deadkeys := 0
 		else

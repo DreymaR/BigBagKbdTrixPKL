@@ -93,32 +93,35 @@ Anti-madness tips for PKL file editing:
 * PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
 * Don't use end-of-line comments in the original PKL's .ini files, except layout.ini. PKL_eD allows them in all .ini files.
 
+
 DONE:
 -----
 These changes are now implemented in [PKL_eD]:
-* Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
-* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr indicators can be in different images.
 * Various menu and language file improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 * DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
+* Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
+* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr indicators can be in different images.
+* A Help Image Generator that uses Inkscape (separate download) to generate a full set of help images from the current layout.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central file that layouts can point to.
 * A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
 * Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much easier.
 * The settings/layout and Extend parts of PKL.ini are now split into separate files.
-* There's a shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layout(s).
+* There's a shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 
 
 TODO:
 -----
 I have several [PKL_eD] changes on my wishlist, including:
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
-* Multiple Extend layers
-* Automatic help image generation based on layouts
+* Multiple Extend layers (NumPad, hotstring...).
+* Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
+* More flexible dead key output in general, allowing literal glyphs, ligatures and DK chaining (one DK may release another).
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-03_
+_Øystein "DreymaR" Gadmar, 2018-08_
 
 
 [PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)

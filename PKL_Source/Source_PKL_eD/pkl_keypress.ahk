@@ -7,7 +7,7 @@
 	
 	if ( extendKey == "--" )
 		extendKey := getLayInfo( "extendKey" )
-	cap := getKeyInfo( HK . "capSt" )					; Caps state (0-5 for states; -1 for vk; -2 for mod)
+	cap := getKeyInfo( HK . "capSt" )					; Caps state (0-5 as MSKLC; -1 for vk; -2 for mod)
 	
 	if ( extendKey && getKeyState( extendKey, "P" ) ) {	; If there is an Extend modifier and it's pressed...
 		extendKeyStroke = 1
@@ -26,28 +26,28 @@
 	extendKeyStroke = 0
 	; eD TODO: Remove hasAltGr & altGrEqualsAltCtrl from pkl.ini and here, enforcing <^>! (if a laptop hasn't got >!, they'll have to remap something)?
 	if ( getLayInfo("hasAltGr") ) {
-		if ( AltGrIsPressed() ) {
+		if ( AltGrIsPressed() ) {								; AltGr
 			sh := getKeyState("Shift")
 			if ( (cap & 4) && getKeyState("CapsLock", "T") )
 				sh := 1 - sh
 			state := 6 + sh
 		} else {
-			if ( getKeyState("LAlt")) {
+			if ( getKeyState("LAlt")) {							; LAlt on AltGr layout
 				modif .= "!"
 				if ( getKeyState("RCtrl"))
 					modif .= "^"
 				state := _pkl_ShiftState( cap )
-			} else { ; not Alt
+			} else {
 				_pkl_CtrlState( HK, cap, state, modif )
 			}
 		}
 	} else {
-		if ( getKeyState("Alt")) {
+		if ( getKeyState("Alt")) {								; Alt
 			modif .= "!"
 			if ( getKeyState("RCtrl") || ( getKeyState("LCtrl") && !getKeyState("RAlt") ) )
 				modif .= "^"
 			state := _pkl_ShiftState( cap )
-		} else { 												; not Alt
+		} else {
 			_pkl_CtrlState( HK, cap, state, modif )
 		}
 	}
@@ -59,15 +59,15 @@
 		return
 	} else if ( state == "vkey" ) { 							; VirtualKey
 		pkl_SendThis( modif, "{VK" . ch . "}" )
-	} else if ( ch == 32 && HK == "SC039" ) {
+	} else if ( ch == 32 && HK == "SC039" ) {					; Space
 		Send, {Blind}{Space}
-	} else if ( ( ch + 0 ) > 0 ) {
+	} else if ( ( ch + 0 ) > 0 ) {								; Normal numeric Unicode entry
 		pkl_Send( ch, modif )
-	} else if ( ch == "*" || ch == "="  ) {						; Special
+	} else if ( ch == "*" || ch == "="  ) {						; Special input * or =
 		if ( ch == "=" )
-			modif = {Blind}
+			modif = {Blind}										; Blind input uses the current modifier state
 		else
-			modif := ""
+			modif := ""											; *{} = not {Raw}{} (so use AHK syntax like ^!+#)
 		
 		ch := getKeyInfo( HK . state . "s" )
 		if ( ch == "{CapsLock}" ) {
@@ -77,15 +77,15 @@
 			if ( ch != "" ) {
 				toSend = %modif%%ch%
 			} else {
-				ch := getKeyInfo( HK . "0s" )
+				ch := getKeyInfo( HK . "0s" )					; Default to state 0
 				if ( ch != "" )
 					toSend = %modif%%ch%
 			}
 			pkl_SendThis( "", toSend )
 		}
-	} else if ( ch == "%" ) {
+	} else if ( ch == "%" ) {									; Ligature
 		SendInput, getKeyInfo( HK . state . "s" )
-	} else if ( ch == "dk" ) {	; < 0 ) {
+	} else if ( ch == "dk" ) {	; < 0 ) {						; Dead key
 		DeadKey( getKeyInfo( HK . state . "s" ) )	; -1 * ch )
 ;	} else {
 ;		MsgBox, Trapped input: '%ch%'
@@ -130,27 +130,27 @@ _extendKeyPressed( HK )
 		SendInput, %ch%
 		return
 	}
-	if ( ShiftPressed && !getKeyState( ShiftPressed, "P" ) ) {
+	if ( shiftPressed && !getKeyState( shiftPressed, "P" ) ) {
 		Send {RShift Up}
-		ShiftPressed := ""
+		shiftPressed := ""
 	}
-	if ( CtrlPressed && !getKeyState( CtrlPressed, "P" ) ) {
+	if ( ctrlPressed && !getKeyState( ctrlPressed, "P" ) ) {
 		Send {LCtrl Up}
-		CtrlPressed := ""
+		ctrlPressed := ""
 	}
-	if ( AltPressed && !getKeyState( AltPressed, "P" ) ) {
+	if ( altPressed && !getKeyState( altPressed, "P" ) ) {
 		Send {LAlt Up}
-		AltPressed := ""
+		altPressed := ""
 	}
 	if ( WinPressed && !getKeyState( WinPressed, "P" ) ) {
 		Send {LWin Up}
 		WinPressed := ""
 	}
-	if ( !AltPressed && getKeyState( "RAlt", "P" ) ) {
+	if ( !altPressed && getKeyState( "RAlt", "P" ) ) {
 		Send {LAlt Down}
 		altPressed = RAlt
 	}
-	Send {Blind}{%ch%}
+	Send {Blind}{%ch%}		; By default, Extend keys are sent so that other modifiers are taken into account
 }
 
 _pkl_CtrlState( HK, capState, ByRef state, ByRef modif )

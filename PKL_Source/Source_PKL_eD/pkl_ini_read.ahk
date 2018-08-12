@@ -2,22 +2,21 @@
 ;
 ; Read a section of an .ini file
 ;     Strips away blank and comment lines but not end-of-line comments
-;     Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16?
+;     Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
 iniReadSection( file, section )
 {
 	try {
 		FileRead, fileTxt, *P65001 %file%							; A way to read UTF-8 files
 	} catch {
-		MsgBox, PKL error:`nUnable to open file %file% `n
+		pklErrorMsg( "Unable to open .ini file " . file )
 		ExitApp, 35
 	}
-	spc := "[^\S\n\r]*"
-	RegExMatch( fileTxt, "is)(^|\R)" . spc . "\[" . spc . section . spc . "\][^\R]*(\R.*?)($|\R" . spc . "\[)", secTxt )
-	secTxt := RegExReplace( secTxt2, "`am)^[ `t]*;.*" )				; Strip comment lines (multiline mode)
-	secTxt := RegExReplace( secTxt , "\R([ `t]*\R)+", "`r`n" )		; Strip empty and whitespace lines
-	;msgbox, %secTxt%
-	return secTxt	; The match string of RegExMatch
+	needle := "is)(?:^|\R)[ `t]*\[[ `t]*" . section . "[ `t]*\][^\R]*?\R\K(.*?)(?=$|\R[ `t]*\[)"
+	RegExMatch( fileTxt, needle, secTxt )							; is) = IgnoreCase, DotAll. \K = LookBehind.
+	secTxt := RegExReplace( secTxt, "`am)^[ `t]*;.*" )				; Strip comment lines (multiline mode, any \R)
+	secTxt := RegExReplace( secTxt, "\R([ `t]*\R)+", "`r`n" )		; Strip empty and whitespace lines
+	return secTxt
 }
 
 ;-------------------------------------------------------------------------------------
@@ -30,8 +29,9 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 {
 	if ( not key )
 		return
-	if ( ( not inStr( inifile, "." ) ) and FileExist( getPklInfo( "File_" . inifile ) ) )	; special files
-		inifile := getPklInfo( "File_" . inifile )
+	hereLay := ( inifile == "Lay_Ini" ) ? getLayInfo( "layDir" ) : "."	; Allow ".\" syntax for the Layouts dir
+	if ( ( not inStr( inifile, "." ) ) and FileExist( getPklInfo( "File_" . inifile ) ) )	; Special files
+		inifile := getPklInfo( "File_" . inifile )						; (These include Pkl_Ini, Lay_Ini, Pkl_Dic)
 	default := ( default == "" ) ? A_Space : default					; IniRead uses a Space for blank defaults
 	if ( key == -1 ) {													; Specify key = -1 for a section list
 		IniRead, val, %inifile%											; (AHK v1.0.90+)
@@ -39,6 +39,7 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 		IniRead, val, %inifile%, %section%, %key%, %default%
 	}
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
+	val := ( SubStr( val, 1, 2 ) == ".\" ) ? hereLay . SubStr( val, 2 ) : val	; ".\" syntax for the Layouts dir
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
 	return val
 }
@@ -47,6 +48,13 @@ pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Special 
 {
 	val := pklIniRead( key, default, inifile, section )		;IniRead, val, %inifile%, %section%, %key%, %default%
 	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
+	return val
+}
+
+pklIniPair( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Read a CSV .ini entry into an array
+{
+	val := pklIniRead( key, default, inifile, section )
+	val := StrSplit( val, ",", " `t" )
 	return val
 }
 

@@ -13,19 +13,25 @@
 ; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
-; eD WIP: 	- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
-; eD TODO: 	- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
+; eD TODO:
+;			- Locale shortcut in PKL_Settings as well? Two-letter locale code (where are they listed?).
+;			- Allow escaped semicolons (`;) in iniRead?
+;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
+;			- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
+;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
 ;			- Multi-Extend, allowing one Extend key with modifiers to select up to 4 different layers.
 ;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
-;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing).
+;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
 ; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
+; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
+;			- Help Image Generator that creates a set of help images from the current layout.
 
-setPklInfo( "pklName", "Portable Keyboard Layout" )
-setPklInfo( "pklVers", "0.4.3-eD" ) 		; eD: PKL[edition DreymaR]
-setPklInfo( "pklComp", "ed. DreymaR" )
-setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) ; http://pkl.sourceforge.net/
+setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
+setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version
+setPklInfo( "pklComp", "ed. DreymaR" )										; Compilation info, if used
+setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
 
 SendMode Event
 SetBatchLines, -1
@@ -33,15 +39,13 @@ Process, Priority, , H
 Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
-; Global variables		; eD TODO: Use set/get()? Or, e.g., gPkl[<key>] := "<val>" ? Must declare global then.
+; Global variables are largely replaced by the get/set info framework
 setKeyInfo( "CurrNumOfDKs", 0 )				; eD: How many dead keys were pressed	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
 ;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
 setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Define this globally  (was 'pkl.ini')
 setPklInfo( "File_Lay_Ini", "layout.ini"			)	; eD: --"--
-;setPklInfo( "File_Pkl_eD_", "PKL_Layouts.ini"  	)	; eD WIP: Phase this out and return to one PKL.ini
-;setPklInfo( "File_Lay_eD_", "DreymaR_Layout.ini" 	)	; eD WIP: Phase this out
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
 setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ,, "eD" ) )	; eD: Extra debug info etc
 
@@ -143,8 +147,14 @@ changeActiveLayout:
 	changeLayout( getLayInfo( "nextLayout" ) )
 return
 
-rerunWithSameLayout:
-	changeLayout( getLayInfo( "active" ) )
+rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL_Settings list changes
+	activeLay   := getLayInfo( "active" )			; Layout code (path) of the active layout
+	numLayouts  := getLayInfo( "numOfLayouts" )		; The number of listed layouts
+	Loop, % numLayouts {
+		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
+		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
+	}
+	changeLayout( "UseLayPos_" . actLayNum )		; Rerun the same layout, telling pkl_init to use position.
 return
 
 changeLayoutMenu:
@@ -182,6 +192,7 @@ return
 #Include pkl_utility.ahk	; eD: Various functions such as pkl_activity.ahk were merged into this file
 #Include pkl_get_set.ahk
 #Include pkl_ini_read.ahk
+#Include pkl_make_img.ahk	; eD: Help image generator, calling Inkscape with an SVG template
 
 ; ####################### (external) modules #######################
 

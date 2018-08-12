@@ -25,7 +25,7 @@ ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles
 
 ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary of remaps (used in pkl_init)
 {
-	test0 := mapType										; eD DEBUG
+;	test0 := mapType										; eD DEBUG
 	mapType := Format( "{:U}", SubStr( mapType, 1, 2 ) )	; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )									; Create a fresh SC pdic from mapFile KeyLayMap
@@ -58,7 +58,7 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 				thisCycle[ A_Index ] := this
 			}	; end if
 		}	; end loop
-		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; eD DEBUG
+;		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; DEBUG
 		Loop, % numSteps
 		{													; Loop to (re)write remap pdic
 			this := thisCycle[ A_Index ]					; This key's code gets remapped to...
@@ -76,11 +76,11 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 ;; Note that:    ( b | d , a | b | c )                           => 2>:[ a:b  , b:d, c:a, d:b:c ] - so order matters!
 ;; Lay(CAW): 022(Cmk-D) -> 02E(Cmk-C); 023(Cmk-H) -> 033(Cmk-,); 024(Cmk-N) -> 025(Cmk-E)
 ;; Ext(AWi): 022(Cmk-D) -> 022(Cmk-D); 023(Cmk-H) -> 024(Cmk-N); 030(Cmk-B) -> 02F(Cmk-V) -> 02E(Cmk-C) -> 02D(Cmk-X)
-;	if ( test0 == "" . "scMapLay" ) {						; eD DEBUG
+;	if ( test0 == "" . "scMapLay" ) {		; DEBUG
 ;	test1 := pdic[ "SC012" ] . " " . pdic[ "SC022" ] . " " . pdic[ "SC02F" ] . " " . pdic[ "SC02E" ] . " " . pdic[ "SC023" ] . " " . pdic[ "SC032" ]
 ;	test2 := rdic[ "SC012" ] . " " . rdic[ "SC022" ] . " " . rdic[ "SC02F" ] . " " . rdic[ "SC02E" ] . " " . rdic[ "SC023" ] . " " . rdic[ "SC032" ]
 ;	MsgBox, Debug %test0%:`n SC012 SC022 SC02F SC02E SC023 SC032 `n __E/F___G/D____V_____C_____H_____M___ `n %test1% `n %test2% `n`n%test3%
-;	}	; end eD DEBUG
+;	}		; end DEBUG
 	return pdic
 }	; end fn
 
@@ -154,7 +154,7 @@ activity_main(mode = 1, ping = 1, value = 0) {
 ;     These are minor utility functions used by other parts of PKL
 ;
 
-pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
+pklMsgBox( msg, s = "", p = "", q = "", r = "" )
 {
 	msg := getPklInfo( "LocStr_" . msg )
 	Loop, Parse, % "spqr"
@@ -162,7 +162,12 @@ pkl_MsgBox( msg, s = "", p = "", q = "", r = "" )
 		it := A_LoopField
 		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
 	}
-	MsgBox %msg%
+	MsgBox % msg
+}
+
+pklErrorMsg( errorText )
+{
+	MsgBox, 0x10, PKL ERROR, %errorText%`n`nError # %A_LastError%	; MsgBox type Error
 }
 
 pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)
@@ -190,3 +195,19 @@ getWinLocaleID()			; This was in the detect/get functions
 	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16
 	return WinLocaleID
 }
+
+isInt( in ) {		; AHK cannot use "is <type>" in expressions so use a wrapper function
+    if in is integer
+        return true
+}
+
+pklSplash( title, text, dur = 8 ) {		; Default display duration is in seconds
+	SplashTextOff
+	SetTimer, KillSplash, Off
+	SplashTextOn, 300, 100, %title%, `n%text%
+	SetTimer, KillSplash, % -1000 * dur
+}
+
+KillSplash:
+	SplashTextOff
+return

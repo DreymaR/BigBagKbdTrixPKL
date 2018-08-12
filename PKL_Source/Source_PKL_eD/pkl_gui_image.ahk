@@ -146,13 +146,14 @@
 	imgDir := LayoutDir
 	if ( getKeyInfo( "CurrNumOfDKs" ) ) {
 		imgDir := getLayInfo( "dkImgDir" )
-		ssuf   := getLayInfo( "dkImgSuf" )		; Image state suffix
+		ssuf   := getLayInfo( "dkImgSuf" )		; DK image state suffix
 		thisDK := getKeyInfo( "CurrNameOfDK" )
 		dkS    := []
 		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; Img file state 0 suffix
 		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; Img file state 1 suffix
-		dkS[6] := ssuf . "6"
-		dkS[7] := ssuf . "7"					; eD TODO: Add shift states 6-7 to images!
+		for i, st in [ 6, 7, 8, 9 ] {			; Loop through the remaining states
+			dkS[ st ] := ssuf . st
+		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
 		if ( state ) {
 			fileName := thisDK . dkS[state] . ".png"
 			if ( not FileExist( imgDir . "\" . filename ) )

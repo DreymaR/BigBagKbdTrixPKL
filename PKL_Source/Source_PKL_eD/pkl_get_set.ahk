@@ -72,7 +72,7 @@ getPklInfo( key, value = "", set = 0 )
 
 pkl_locale_load( lang, compact = 0 )
 {
-	static initialized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)
+	static initialized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)	; eD TODO: Is this working?
 	if ( initialized == 0 )
 	{																	; eD: Read/set default locale string list
 		Loop, 22														; Read default locale strings (numbered)
@@ -98,6 +98,7 @@ pkl_locale_load( lang, compact = 0 )
 
 	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"       ,, "eD" ) )
 	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history...",, "eD" ) )
+	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile",,, "eD" ) ) )
 	
 	sect := iniReadSection( file, "pkl" )
 	Loop, Parse, sect, `r`n

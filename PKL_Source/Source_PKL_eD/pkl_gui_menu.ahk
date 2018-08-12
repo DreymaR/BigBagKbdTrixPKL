@@ -21,6 +21,7 @@
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
 	suspendMenuItem := getPklInfo( "LocStr_10" )
 	exitappMenuItem := getPklInfo( "LocStr_11" )
+	makeimgMenuItem := getPklInfo( "LocStr_MakeImgMenu" )
 	helpimgMenuItem .= ( HelpImgHotkey ) ? _FixAmpInMenu( HelpImgHotkey ) : ""
 	chnglayMenuItem .= ( ChngLayHotkey ) ? _FixAmpInMenu( ChngLayHotkey ) : ""
 	refreshMenuItem .= ( RefreshHotkey ) ? _FixAmpInMenu( RefreshHotkey ) : ""
@@ -64,6 +65,7 @@
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyhistMenuItem%, keyHistory						; Key history
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
+		Menu, Tray, add, %makeimgMenuItem%, makeHelpImages					; Help Image Generator
 	}
 	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle					; Show image
 	if ( numOfLayouts > 1 ) {
@@ -100,6 +102,7 @@
 		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
 		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; %deadkeyMenuItem% ico - search (25: "speed")
 		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
+		Menu, Tray, Icon,  %makeimgMenuItem%,  shell32.dll , 142		; %makeimgMenuItem% ico - painting on screen
 	}
 	Menu, Tray, Icon,      %helpimgMenuItem%,  shell32.dll , 174		; %helpimgMenuItem% ico - keyboard (116: film)
 	if ( numOfLayouts > 1 ) {
@@ -143,8 +146,8 @@ pkl_about()
 	layPage  := pklIniRead( "homepage"  , ""        , "Lay_Ini", "informations" )
 	lLocale  := pklIniRead( "localeid"  , "0409"    , "Lay_Ini", "informations" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
-	kbdType  := getLayInfo( "KbdType" )
-	ergoMod  := getLayInfo( "CurlMod" ) . " / " . getLayInfo( "ErgoMod" )
+	kbdType  := getLayInfo( "Ini_KbdType" )
+	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " / " . getLayInfo( "Ini_ErgoMod" )
 
 	text = ;
 	text = %text%
