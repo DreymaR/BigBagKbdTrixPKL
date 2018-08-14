@@ -14,6 +14,5 @@ USAGE:
 ======
 
 * To use, comment out any active 'layout = ' lines in the [pkl] section of PKL.ini and add this:
-    layout = Colemak-eD\Cmk-eD-Vi_ANSI_WIP
-* Also, if there are no help images, set displayHelpImage = no
+    ``layout = Colemak-eD\Cmk-eD-Vi_ANSI_WIP``
 * Then (re)run PKL and hopefully it should work.

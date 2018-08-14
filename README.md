@@ -55,34 +55,36 @@ Setup:
     * Locale variants are available in some colemak-eD_ISO folders, by un-/commenting lines of a layout_#.ini file.
     * Check out that the ISO/ANSI OEM_# key numbers in your layout.ini are right for you, or remapped with a VK remap.
     * Help image sizes, Extend key, key mappings etc are in the layout.ini file.
-4. Layout help images aren't always available with the right ergo mod and keyboard type. Sorry, I'm working on that.
-
+4. Layout help images aren't always available with the right ergo mod and keyboard type, since there are so many combos.
+    * First, check around in some of the eD layout folders. Maybe there's something that works for you there.
+    * With Advanced Mode active, there is a Help Image Generator that can make images for the currently active layout.
+    * You have to have Inkscape installed, for instance from PortableApps.com, and point to it in the HIG settings file.
+    * I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
+  
 Here are the columns of a full key mapping together with a sample key – semicolon (QWERTY P) from one of my layout.ini files:
 ```
 SC01a = OEM_3   0   ;   :   --  dk13    …   ; QWERTY pP - dk_umlaut
-SC    = VK      SS  L0  L1  L2  L3      L4  ; comments
+SC    = VK      CS  S0  S1  S2  S6      S7  ; comments
 ```
 
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
-* SS: Shift state (0 by default; +1 if L0/L1 are non-/shifted versions of the same letter; +4 for L3/L4)
-* L0-L4: Standard modifier levels for the key: Unmodified, Shift, Ctrl (not often used), AltGr, Shift+AltGr
+* CS: Cap state (default 0; +1 if S0/S1 are non-/shifted versions of the same letter; +4 for S6/S7)
+* S#: Standard modifier states for the key: Unmodified, 1:Shift, 2:Ctrl (not often used), 6:AltGr, 7:Shift+AltGr...
 
 Look in the PKL .ini files if you're interested! Much is explained there.
 
-Some of the hotkeys I've set in my PKL settings file are:
-* Ctrl+Shift+1 – Display/hide help image (these may not be updated for all layouts!)
+These hotkeys are found in the PKL settings file:
+* Ctrl+Shift+1 – Display/hide help image
 * Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
-* Ctrl+Shift+3 – Suspend PKL (hit again to re-activate)
+* Ctrl+Shift+3 – Suspend PKL; hit again to re-activate
 * Ctrl+Shift+4 – Exit PKL
-* Ctrl+Shift+5 – Refresh PKL (if it gets stuck or something)
+* Ctrl+Shift+5 – Refresh PKL, if it gets stuck or something
 
 
 **NOTES:**
 ---------
-Do you have a traditional layout without a Wide/Angle modification and get the wrong Extend mappings on the right hand?
-* If so, you should set a PKL .ini layout that fits your preferred mod or lack of it.
-* Maybe all the layout files aren't quite updated with remaps yet. Check out a base one like Colemak-eD_ISO.
+Maybe all the layout files aren't quite updated with remaps yet. Check out a base one like Colemak-eD_ISO.
 
 Anti-madness tips for PKL file editing:
 * In layout.ini:
@@ -91,7 +93,7 @@ Anti-madness tips for PKL file editing:
     - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
 * In Extend sections: Don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
 * PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* Don't use end-of-line comments in the original PKL's .ini files, except layout.ini. PKL_eD allows them in all .ini files.
+* PKL_eD allows end-of-line comments (whitespace, semicolon) in .ini files, but the original PKL only handles them in layouts.
 
 
 DONE:
@@ -99,21 +101,21 @@ DONE:
 These changes are now implemented in [PKL_eD]:
 * Various menu and language file improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
-* DebugInfo setting that shows 'Key history...' and 'Refresh program' menu items and OS layout/deadkey info in the About... dialog.
+* Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
 * Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
-* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr indicators can be in different images.
-* A Help Image Generator that uses Inkscape (separate download) to generate a full set of help images from the current layout.
+* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
+* A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central file that layouts can point to.
 * A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
-* Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much easier.
+* Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
 * The settings/layout and Extend parts of PKL.ini are now split into separate files.
 * There's a shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 
 
 TODO:
 -----
-I have several [PKL_eD] changes on my wishlist, including:
+I have many more [PKL_eD] changes on my wishlist, including:
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers (NumPad, hotstring...).
 * Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.

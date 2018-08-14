@@ -127,8 +127,8 @@ TODO:
 * Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini)?
 
 * How literal is AHK output? The {Raw} send mode is on by default.
-    - PKL already supports multi-codepoint output by default! But not modified stuff?
-    - A ## entry will become Send {Raw}{##} I think
+    - PKL already supports multi-codepoint output by default! But not modified stuff? What about Unicode?
+    - A normal ## entry will become Send {Raw}{##}
     - A *{##} entry should be sent without {Raw}. Utilize this! And document the possibilities!
     - Might treat any entries starting/ending with {} as Send {##} instead of Send {Raw}{##} (literal mode)?
     - Or is it better to just keep today's style in which }^{z for instance sends Ctrl+Z ? For compatibility.
@@ -151,22 +151,23 @@ INFO: Some documentation notes
     http://www.kbdedit.com/manual/low_level_vk_list.html
     https://msdn.microsoft.com/en-us/library/ms927178.aspx
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+
 * "Anti-madness tips" for PKL (by user Eraicos and me):
     - AHK script files (AHK v1.0) need to be ANSI encoded?! What to do with special letters then?
         - The current PKL_eD AHK v1.1 ("Unicode AHK") supports scripts in UTF-8 w/ BOM (but not without!?).
     - PKL .ini files may be UTF-8 encoded. With or without BOM?
         - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab parsing).
-		- With PKL_eD end-of-line comments should be safe now!
+        - With PKL_eD end-of-line comments should be safe now!
     - In layout.ini:
         - Always use tabs as separators in layout.ini
         - After 'VirtualKey' always include a tab.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
     - In the Extend section:
         - Don't use empty mappings in the Extend section. Comment these out.
-		- The default format includes {} to send keys by name. To escape these, use my }<any string>{ trick.
+        - The default format includes {} to send keys by name. To escape these, use my }<any string>{ trick.
+  
 
-
-**INFO: From Farkas' sample.ini layout file**
+**Entry format info from Farkas' sample.ini layout file:**
 ```
 Scan code =
 	Virtual key code (like in MS KLC)

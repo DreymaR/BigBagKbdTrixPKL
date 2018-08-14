@@ -30,7 +30,7 @@ Setup:
 
 1. Just compile right into your main PKL folder, or move the resulting .exe file there.
 2. For PKL[eD], adjust any extra settings in the layout.ini file in your layout folder.
-   There's a sample [eD] layout.ini file in the Colemak-eD_ISO_CurlAWide layout folder.
+   For an example, check, e.g., the Colemak-eD_ISO layout.ini file.
 3. For generic PKL[eD] settings, look in the PKL_eD folder, and the PKL_Settings.ini file.
   
   

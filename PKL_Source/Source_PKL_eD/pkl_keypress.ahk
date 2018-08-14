@@ -84,9 +84,9 @@
 			pkl_SendThis( "", toSend )
 		}
 	} else if ( ch == "%" ) {									; Ligature
-		SendInput, getKeyInfo( HK . state . "s" )
-	} else if ( ch == "dk" ) {	; < 0 ) {						; Dead key
-		DeadKey( getKeyInfo( HK . state . "s" ) )	; -1 * ch )
+		SendInput % "{Raw}" . getKeyInfo( HK . state . "s" )
+	} else if ( ch == "dk" ) {									; Dead key
+		DeadKey( getKeyInfo( HK . state . "s" ) )
 ;	} else {
 ;		MsgBox, Trapped input: '%ch%'
 	}

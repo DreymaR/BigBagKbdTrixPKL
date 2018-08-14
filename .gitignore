@@ -1,11 +1,7 @@
-*Copy.*
-*_bak
-*_bak.*
-*_backup
-*_backup.*
-*_test.*
-*_test/*
-*/*_test/*
-*Shortcut.*
+*_bak*
+*_backup*
+*_test*
+*_Shortcut.*
+* Copy*
 Layouts/*/*ImgGen_*
 Layouts/*/*/*ImgGen_*

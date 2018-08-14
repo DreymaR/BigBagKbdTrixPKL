@@ -31,11 +31,17 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
 	
 	theLays := pklIniRead( "layout", "", "Pkl_Ini" )
-	theLays := StrReplace( theLays, "@T", "@K_@C@E" )					; eD: Shorthand .ini notation for kbd/mod types
-; eD TODO: Devise a way to omit the underscore at the end of layout folder names w/o Curl/Ergo mods
-	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>" ) )	; ISO/ANSI/etc
-	theLays := StrReplace( theLays, "@C", _pklLayRead( "CurlMod", "<CurlMod N/A>" ) )	; Curl/--
-	theLays := StrReplace( theLays, "@E", _pklLayRead( "ErgoMod", "<ErgoMod N/A>" ) )	; Plain, Angle, AWide etc
+	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>" )
+	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>" )
+	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
+	theLays := StrReplace( theLays, "@LT", "@L@K" . modded . "@C@E" )	; eD: Shorthand .ini notation for kbd/mod types
+	theLays := StrReplace( theLays,  "@T",   "@K" . modded . "@C@E" )	; --"--
+; eD TODO: Devise a way to omit the underscore at the end of layout folder names w/o Curl/Ergo mods.
+;			Simply feed _pklLayRead a prefix that's used if non-zero? But what about Curl vs CurlAngle? OK, I think.
+	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; ISO/ANSI/etc
+	theLays := StrReplace( theLays, "@C",               curlMod                          )	; Curl/--
+	theLays := StrReplace( theLays, "@E",               ergoMod                          )	; Plain, Angle, AWide etc
+	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "Pl"
 	layouts := StrSplit( theLays, ",", " " )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "numOfLayouts", numLayouts )							; Store the number of listed layouts
@@ -346,11 +352,11 @@ changeLayout( nextLayout )
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
-_pklLayRead( type, default )						; Read kbd type/mods from PKL.ini (used in pkl_init)
+_pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL.ini (used in pkl_init)
 {
-	val := pklIniRead( type, default, "Pkl_Ini" )
+	val := pklIniRead( type, def, "Pkl_Ini" )
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
-	val := ( val == "--" ) ? "" : val				; Replace "--" with nothing
+	val := ( val == "--" ) ? "" : prefix . val		; Replace "--" with nothing, otherwise use prefix
 	return val
 }
 
