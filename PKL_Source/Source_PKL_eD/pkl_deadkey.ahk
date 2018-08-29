@@ -1,6 +1,5 @@
 ﻿DeadKeyValue( dkName, base )								; eD: 'dk' was just a number, but in PKL_eD it's a name
-{
-	base := ( base < 32 ) ? "s" . base : base				; Entries 0-31 are special (and pklIniRead can't read a "0" key)	; eD TODO: Specify "s#" in entries instead?
+{															; Note: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
 	res := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not res ) {
 		res := pklIniRead( base, -1, getLayInfo( "dkFile" ), "dk_" . dkName )
@@ -13,13 +12,13 @@
 
 DeadKey(DK)
 {
-	;CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" )		; Current # of dead keys active	; eD TODO: Revert to global? No, because it's used in many files?
+	;CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" )		; Current # of dead keys active	; eD NOTE: Revert to global? No, because it's used in many files?
 	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
 	CurrBaseKey_    := getKeyInfo( "CurrBaseKey_" )			; Current base key	eD TODO: Is this definition used/needed?
 	DK              := getKeyInfo( "dk" . DK )				; Find the dk's full name
 	static PVDK     := "" 									; Pressed Dead Key Values?
-	DeadKeyChar     := DeadKeyValue( DK, 0 )
-	DeadKeyChr1     := DeadKeyValue( DK, 1 )				; eD WIP: The "1" entry gives alternative release char, if defined
+	DeadKeyChar     := DeadKeyValue( DK, "s0" )
+	DeadKeyChr1     := DeadKeyValue( DK, "s1" )				; eD WIP: The "1" entry gives alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
 	if ( getKeyInfo( "CurrNumOfDKs" ) > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK base char

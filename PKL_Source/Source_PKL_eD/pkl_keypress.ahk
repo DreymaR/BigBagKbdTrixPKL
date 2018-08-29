@@ -54,7 +54,7 @@
 	if ( getKeyState("LWin") || getKeyState("RWin") )
 		modif .= "#"
 	
-	ch := getKeyInfo( HK . state )
+	ch := getKeyInfo( HK . state )		; eD TODO: If the rest of this fn is made into a separate fn, dead keys could use it? But it has both ch, modif, state, HK, ...
 	if ( ch == "" ) {
 		return
 	} else if ( state == "vkey" ) { 							; VirtualKey
@@ -150,7 +150,7 @@ _extendKeyPressed( HK )
 		Send {LAlt Down}
 		altPressed = RAlt
 	}
-	Send {Blind}{%ch%}		; By default, Extend keys are sent so that other modifiers are taken into account
+	Send {Blind}{%ch%}		; By default, Extend keys are sent blind so that other modifiers are taken into account
 }
 
 _pkl_CtrlState( HK, capState, ByRef state, ByRef modif )
@@ -202,7 +202,7 @@ _toggleCapsLock()
 	}
 }
 
-AltGrIsPressed()
+AltGrIsPressed()									; Used above and in pkl_gui_image
 {
 	static altGrEqualsAltCtrl := -1
 	if ( altGrEqualsAltCtrl == -1 ) {
@@ -211,7 +211,7 @@ AltGrIsPressed()
 	return getKeyState( "RAlt" ) || ( altGrEqualsAltCtrl && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
-processKeyPress( ThisHotkey )
+processKeyPress( ThisHotkey )						; Used above and in PKL_main
 {
 	Critical
 	global PklHotKeyBuffer	; eD: Was 'HotkeysBuffer'

@@ -14,14 +14,15 @@
 ;
 
 ; eD TODO:
-;			- Locale shortcut in PKL_Settings as well? Two-letter locale code (where are they listed?).
+;			- Most layout variants should not need the dead key names list?! Read the one in the dead key file first, then check for changes? What about the base layout one?
 ;			- Allow escaped semicolons (`;) in iniRead?
 ;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
 ;			- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
 ;			- Multi-Extend, allowing one Extend key with modifiers to select up to 4 different layers.
-;			- Ligature tables both for keys and dead keys. Short ligatures may be specified directly as %{<lig>}?
-;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.
+;			- Ligature tables both for keys and dead keys. Short ligatures may already be specified directly as %<lig>; make it so for DK too.
+;			- Use the same style as dead keys for ligatures: 'li##', [LigatureNames] and a LigatureFile. Are multiline ligatures possible? <Lig>_01_04 = ?
+;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.? Already possible with hex (0x####). %## covers this!
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
 ; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().

@@ -60,7 +60,6 @@ for the current layout, or only state images?
 		Return
 	}
 	shiftStates := "0:1:6:7:8:9"							;getLayInfo( "shiftStates" ) - but may skip, e.g., state 2 (Ctrl)
-;	shiftStates := "0:1:6"		; DEBUG
 	Loop, Parse, shiftStates, :								; Shift state loop - these are colon separated
 	{
 		state := A_LoopField
@@ -72,7 +71,7 @@ for the current layout, or only state images?
 			_makeOneHelpImg( "state", state, "root" )
 		}
 	}
-;	HIG_DKNames := Array( "dblacute-sci" )		; DEBUG, often "acute-sup" "dotbelow" "dblacute-sci"
+	HIG_DKNames := Array( "ringabov-lig" )		; DEBUG, often "acute-sup" "dotbelow" "dblacute-sci"
 	for key, dkName in HIG_DKNames							; Dead key image loop
 	{
 		if ( stateImgOnly )
@@ -107,7 +106,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 		dkName      := SubStr( imgName, 4 )
 		For i, rel in [ 0, 1, 4, 5, 6, 7 ]				; Loop through DK releases to be marked
 		{
-			dkv     := DeadKeyvalue( dkName, rel )
+			dkv     := DeadKeyvalue( dkName, "s" . rel )
 			if not dkv
 				Continue
 			dkv 	:= "_" . dkv . "_"					; Pad to avoid matching, e.g., 123 to 1234
@@ -145,7 +144,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 			if ( not InStr( dkvs, "_" . -dkv . "_" ) )	; Negative DK s# entries mean don't mark this char
 				dkv := ( dkvp ~= dkvs ) ? "dc_" . dkv : dkv	; The DKV is in the base/mark list, so mark it for display
 			HIG_ImgDic[ dkName . "_" . state . CO ] := dkv	; Store the release value for this DK/state/key
-;	if ( CO == "SPC" ) {		; DEBUG
+;	if ( CO == "_1" ) {		; DEBUG
 ;		debugStr := imgName . "`nTag/Val: " . chrTag . " / " . chrVal
 ;		debugStr := dkName . " state" . state . "`ndkvs: " . dkvs . "`ndkv: " . dkv
 ;		pklSplash( "Debug", debugStr, 0.2 )
@@ -196,6 +195,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 	destFile    := HIG_ImgDirs[destDir] . "\" . imgName . ".png"
 	imXY        := pklIniPair( "imgPos" . getLayInfo( "Ini_KbdType" ) ,, iniFileHIG )
 	imWH        := pklIniPair( "imgSizeWH"                            ,, iniFileHIG )
+	imgDPI      := pklIniRead( "imgResDPI", 96                         , iniFileHIG )
 	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
 	
 	try {
@@ -213,11 +213,11 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 			aChr := ;
 			dChr := ;
 		} else if ( chrTag == "dk" ) {					; Dead key (full dkName, or classic name if used)
-			dkv2 := DeadKeyValue( chrVal, 2 )			; Get the base char (entry 2) for the dead key
-			dkv2 := ( dkv2 ) ? dkv2 : DeadKeyValue( chrVal, 0 )	; Fallback is entry0
+			dkv2 := DeadKeyValue( chrVal, "s2" )		; Get the base char (entry 2) for the dead key
+			dkv2 := ( dkv2 ) ? dkv2 : DeadKeyValue( chrVal, "s0" )	; Fallback is entry0
 			comb := _combAcc( dkv2 ) ? " " : ""			; Pad combining accents w/ a space for better display
 			aChr := comb . _svgChar( dkv2 )				; Note: Padding may lead to unwanted lateral shift
-			dkv3 := DeadKeyValue( chrVal, 3 )			; Get the alternate display base char, if it exists
+			dkv3 := DeadKeyValue( chrVal, "s3" )		; Get the alternate display base char, if it exists
 			if ( dkv3 ) && ( dkv3 != dkv2 ) {			; If there is a second display char, show both
 				comb := ;_combAcc( dkv3 ) ? " " : ""	; Note: Padding works well for some but not others...?
 				aChr := aChr . comb . _svgChar( dkv3 )
@@ -227,7 +227,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 			mark := _combAcc( chrVal ) ? dkCombMark : dkBaseMark
 			aChr := _svgChar( chrVal )
 			dChr := chr( mark )							; Mark for DK base chars: Default U+2B24 Black Large Circle
-; eD WIP:	Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
+; eD TODO:	Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
 		} else if ( ch == -1 ) {
 			aChr := chr( naCharMark )					; Replace nonprintables (marked in pdic), default U+25AF Rect.
 			dChr := ;
@@ -247,7 +247,8 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 		pklErrorMsg( "Writing temporary SVG file failed." )
 		Return
 	}
-	inkOptStr  := " --file=" . tempFile . " --export-png=" . destFile . " --export-area=" . areaStr
+	inkOptStr  := " --file=" . tempFile . " --export-png=" . destFile 
+				. " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	try {												; Call InkScape w/ cmd line options
 		RunWait % inkscapeStr . inkOptStr				; eD TODO: Can I use --shell to avoid many Inkscape restarts? How?
 		;Run % inkscapeStr . " --shell" ???				; " --without-gui" does nothing on Windows I think.

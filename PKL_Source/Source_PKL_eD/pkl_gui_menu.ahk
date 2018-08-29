@@ -175,7 +175,7 @@ pkl_about()
 	text = ;
 	text = %text%%activeLayout%:`n  %layName%
 	text = %text%`n%locVersion%: %layVers%
-	text = %text%`n%locLanguage%: %layLang%
+	text = %text%`n%locLanguage%: %layLang% (++?)
 	text = %text%`n%locCopyright%: %layCopy%
 	text = %text%`n%locCompany%: %layComp%
 	Gui, Add, Text, , %text%

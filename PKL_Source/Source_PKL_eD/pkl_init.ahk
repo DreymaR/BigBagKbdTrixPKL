@@ -79,7 +79,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	nextLayoutIndex := ( nextLayoutIndex > numLayouts ) ? 1 : nextLayoutIndex
 	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
 }	; end fn
-	
+
 _initReadLayIni()									;   ####################### layout.ini #######################
 {
 	theLayout := getLayInfo( "active" )
@@ -139,7 +139,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		if ( key == "<NoKey>" )
 			Continue
 		key := scMapLay[ key ] ? scMapLay[ key ] : key					; If there is a SC remapping, apply it
-		entry := StrSplit( entries, "`t" )
+		entry := StrSplit( entries, "`t" )		; eD TODO: Trim these so that we can prettify the layouts? But then, ligatures may need a %{} syntax? Or, trim only if not %?
 		numEntries := entry.MaxIndex()
 		if ( numEntries < 2 ) {
 			Hotkey, *%key%, doNothing
@@ -261,19 +261,23 @@ _initReadAndSetOtherInfo()							;   ####################### other settings ####
 		if ( ky2 != key )												; ... and also, ...
 			setKeyInfo( ky2, val )										; "dk1" = "deadkey1", backwards compatible
 	}
-	file := pklIniRead( "dkListFile", "", "Lay_Ini", "eD_info" )
-	file := ( FileExist( file ) ) ? file : layoutFile					; If no dedicated DK file, try the layout file
+	dkFile  := pklIniRead( "dkListFile", "", "Lay_Ini", "eD_info" )
+	dkFile  := ( FileExist( dkFile ) ) ? dkFile : ""
+	file    := ( dkFile ) ? dkFile : LayoutFile							; If no dedicated DK file, use the layout file
 	setLayInfo( "dkfile", file )										; This file should contain the actual dk tables
 	dknames := "deadKeyNames"											; The .ini section that holds dk names
-	file := ( InStr( pklIniRead( -1, -1, layoutFile ) , dknames ) ) ? layoutFile : file	; Prefer the layout file
-	remap := iniReadSection( file, dknames )							; Make the dead key name lookup table
-	Loop, Parse, remap, `r`n
+;	file := ( InStr( pklIniRead( -1, -1, layoutFile ) , dknames ) ) ? layoutFile : file	; Prefer the layout file
+	dkFiles := ( dkFile ) ? dkFile . "," . layoutFile : layoutFile
+	Loop, Parse, dkFiles, CSV											; Go through both DK and Layout files for names
 	{
-		pklIniKeyVal( A_LoopField, key, val )
-		if ( val )
-			setKeyInfo( key, val )										; e.g., "dk01" = "dk_dotbelow"
+		remap   := iniReadSection( A_LoopField, dknames )				; Make the dead key name lookup table
+		Loop, Parse, remap, `r`n
+		{
+			pklIniKeyVal( A_LoopField, key, val )
+			if ( val )
+				setKeyInfo( key, val )									; e.g., "dk01" = "dk_dotbelow"
+		}
 	}
-	
 	dkImDir := pklIniRead( "img_DKeyDir", ".\DeadkeyImg", "Lay_Ini", "eD_info" )	; Read/set dead key image data
 	dkImDir := ( FileExist( dkImDir ) ) ? dkImDir : layoutDir			; If no dedicated DK image dir, try the layout dir (old default)
 	setLayInfo( "dkImgDir", dkImDir )
