@@ -34,14 +34,12 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>" )
 	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>" )
 	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
-	theLays := StrReplace( theLays, "@LT", "@L@K" . modded . "@C@E" )	; eD: Shorthand .ini notation for kbd/mod types
-	theLays := StrReplace( theLays,  "@T",   "@K" . modded . "@C@E" )	; --"--
-; eD TODO: Devise a way to omit the underscore at the end of layout folder names w/o Curl/Ergo mods.
-;			Simply feed _pklLayRead a prefix that's used if non-zero? But what about Curl vs CurlAngle? OK, I think.
-	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; ISO/ANSI/etc
-	theLays := StrReplace( theLays, "@C",               curlMod                          )	; Curl/--
-	theLays := StrReplace( theLays, "@E",               ergoMod                          )	; Plain, Angle, AWide etc
-	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "Pl"
+	theLays := StrReplace( theLays, "@V",        "@K@C@E" )				; eD: Shorthand .ini notation for kbd/mod
+	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "-Pl"
+	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; _ISO/_ANSI/_etc
+	theLays := StrReplace( theLays, "@C@E", modded . curlMod . ergoMod )	; CurlAngle[Wide]
+	theLays := StrReplace( theLays, "@C",   modded . curlMod           )	; --, Curl
+	theLays := StrReplace( theLays, "@E",   modded . ergoMod           )	; --, Angle, AWide...
 	layouts := StrSplit( theLays, ",", " " )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "numOfLayouts", numLayouts )							; Store the number of listed layouts
@@ -115,6 +113,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			%mapType% := ReadRemaps( mapList, mapFile )					; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, mapFile )		; Parse the cycle list into a pdic of mappings
 		}
+		vkDic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a dictionary of SC to VK codes for VK mapping below
 	initiated := 1
 	}
 	
@@ -136,12 +135,20 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	Loop, Parse, remap, `r`n
 	{
 		pklIniKeyVal( A_LoopField, key, entries, 0, 0 )	; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
-		if ( key == "<NoKey>" )
+		if ( key == "<NoKey>" )							; Are there key entries using <NoKey> for SC?
 			Continue
 		key := scMapLay[ key ] ? scMapLay[ key ] : key					; If there is a SC remapping, apply it
-		entry := StrSplit( entries, "`t" )		; eD TODO: Trim these so that we can prettify the layouts? But then, ligatures may need a %{} syntax? Or, trim only if not %?
+		entry := StrSplit( entries, "`t" )		; eD TODO: Trim these so that we can prettify the layouts? Trim only if not % (or %{}?).
 		numEntries := entry.MaxIndex()
-		if ( numEntries < 2 ) {
+		if ( numEntries == 1 ) {
+			ent := Format( "{:L}", entry[1] )							; Check the entry for 'VK' (VK map it to itself)
+			if ( ent == "virtualkey" || ent == "vk" || ent == -1 ) {
+				numEntries  := 2
+				entry[2] := "vk"
+				entry[1] := "VK" . getVKeyCodeFromName( vkDic[key] )	; Find the right VK code for the key, from the Remap file
+			}
+		}
+		if ( numEntries < 2 ) {											; An empty or one-entry key mapping will deactivate the key
 			Hotkey, *%key%, doNothing
 			Continue
 		}
@@ -170,7 +177,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			ks := shiftState[ A_Index ]									; ks is the shift state being processed
 			sv := entry[ A_Index + 2 ]									; sv is the value for that state
 			if ( StrLen( sv ) == 0 ) {
-				sv = -- ; Disabled
+				sv = --													; Disabled
 			} else if ( StrLen( sv ) == 1 ) {
 				sv := asc( sv )
 			} else {

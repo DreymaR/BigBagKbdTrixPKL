@@ -88,7 +88,7 @@
 	} else if ( ch == "dk" ) {									; Dead key
 		DeadKey( getKeyInfo( HK . state . "s" ) )
 ;	} else {
-;		MsgBox, Trapped input: '%ch%'
+;		MsgBox, Trapped input: '%ch%'							; DEBUG
 	}
 	
 }

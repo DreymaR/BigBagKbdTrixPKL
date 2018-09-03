@@ -40,7 +40,7 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 	}
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 	val := ( SubStr( val, 1, 2 ) == ".\" ) ? hereLay . SubStr( val, 2 ) : val	; ".\" syntax for the Layouts dir
-;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD: Debug
+;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD DEBUG
 	return val
 }
 

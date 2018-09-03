@@ -62,10 +62,10 @@
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "eD_info" )	; BG image
-		if ( not FileExist ( imgBgImage ) )
+		if ( not FileExist( imgBgImage ) )
 			imgBgImage := ""	; eD: Is default robust if there's no .png nor layout.ini entry?
 		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "eD_info" )	; Shift images
-		if ( not FileExist ( imgShftDir . "\state?.png" ) )
+		if ( not FileExist( imgShftDir . "\state?.png" ) )
 			imgShftDir := ""
 		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "eD_info" )	; BG color
 		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Pkl_Ini", "eD" )

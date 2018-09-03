@@ -1,26 +1,16 @@
 ﻿;-------------------------------------------------------------------------------------
 ;
-; Generate help images from the active layout
+; PKL Help Image Generator: Generate help images from the active layout
 ;     Calls InkScape with a .SVG template to generate a set of .PNG help images
-;     Images are made for each shift state, also for any dead keys
-;     Dead keys are also marked in a separate layer of the template image (in bold yellow)
+;     Edits the SVG template using a lookup dictionary of KLD(CO) key names; see the Remap file
+;     Example – KLD(CO) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
+;     The template can hold an area for ISO and another for ANSI, specified in the PKL_ImgGen_Settings.ini file
+;     Images are made for each shift state, also for any dead keys if "Full" is chosen
+;     Images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
+;     Dead keys can be marked in a separate layer of the template image (in bold yellow in the default template)
+;     Special marks for released DK base chars and combining accents
 ;     An Extend image is not generated, as these require a special layout
-;     Edits the SVG template entries according to a lookup dictionary using KLD(CO) key names; see the Remap file
 ;
-/*
-	eD WIP: Help Image Generator
-	- A KLD dictionary between SC in the layout and CO in an .SVG img template. Remaps should already be applied then!
-	- One .SVG layer for the DK markings; set each entry to blank if not a DK.
-	- DK markings: Search/replace DK only from 'KLD_CO template DK' to next 'inkscape:groupmode="layer"'? Or just first/second hit.
-	- Call InkScape with command-line options to generate .png
-	- Make images from two areas: ANSI - pos (100, 340) / ISO – pos (100,940). Both have size (812,226) but need (812,282) for help img.
-	- Put images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
-	- Include space in the template, with the big yellow blob for the DK image? Or another type of mark. Won't be fuzzy but okay.
-	- Wrap combining accents in spaces for safe rendering (avoiding showing the dotted circle).
-	- ;;  Don't mark the keys excluded below. This keeps, e.g., Greek Mu on the M key from getting marked as a base release.
-	  dkExcludeMarks  = |_M|		; |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
-	  For now though, don't mark Greek Mu at all, or use it as release.
-*/
 
 makeHelpImages()
 {
@@ -71,7 +61,7 @@ for the current layout, or only state images?
 			_makeOneHelpImg( "state", state, "root" )
 		}
 	}
-	HIG_DKNames := Array( "ringabov-lig" )		; DEBUG, often "acute-sup" "dotbelow" "dblacute-sci"
+;	HIG_DKNames := Array( "ringabov-lig" )		; DEBUG, often "acute-sup" "dotbelow" "dblacute-sci"
 	for key, dkName in HIG_DKNames							; Dead key image loop
 	{
 		if ( stateImgOnly )

@@ -68,6 +68,7 @@ getPklInfo( key, value = "", set = 0 )
 ;
 ; PKL locale module
 ;     Functions to set up locale strings
+;     Used by _initReadPklIni() in pkl_init.ahk
 ;
 
 pkl_locale_load( lang, compact = 0 )
@@ -82,7 +83,6 @@ pkl_locale_load( lang, compact = 0 )
 			setPklInfo( "LocStr_" . A_Index , str )
 		}
 		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
-;		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
 		Loop, Parse, sect, `r`n
 		{
 			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
@@ -90,16 +90,18 @@ pkl_locale_load( lang, compact = 0 )
 		}
 		initialized := 1
 	}
-
-	if ( compact )
-		file = %lang%.ini
-	else
-		file = Languages\%lang%.ini
-
+	
 	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"       ,, "eD" ) )
 	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history...",, "eD" ) )
 	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile",,, "eD" ) ) )
 	
+	if ( compact )
+		file = %lang%.ini
+	else
+		file = Languages\%lang%.ini
+	
+	if ( not FileExist( file ) )					; If the language file isn't found, we'll just use the defaults
+		return
 	sect := iniReadSection( file, "pkl" )
 	Loop, Parse, sect, `r`n
 	{

@@ -13,8 +13,11 @@
 ; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
+; eD TOFIX:
+;			- 
+;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ; eD TODO:
-;			- Most layout variants should not need the dead key names list?! Read the one in the dead key file first, then check for changes? What about the base layout one?
+;			- Layouts should be able to unmap keys and dead keys by using a -1 entry. And document it!
 ;			- Allow escaped semicolons (`;) in iniRead?
 ;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
 ;			- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
@@ -25,9 +28,12 @@
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.? Already possible with hex (0x####). %## covers this!
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
-; eD DONE:	- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
+; eD DONE:
+;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 ; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- Help Image Generator that creates a set of help images from the current layout.
+;			- Fix error message when starting up with auto locale and an unknown locale. Just use defaults silently.
+;			- Fix _@K and _@C@E/_@E trouble in PKL_Settings.ini vs pkl_init
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
 setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version

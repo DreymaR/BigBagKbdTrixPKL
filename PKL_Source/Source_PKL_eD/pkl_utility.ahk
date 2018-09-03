@@ -52,10 +52,8 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 			this := thisCycle[ A_Index ]
 			if ( mapType == "SC" ) {						; Remap from thisType to SC
 				thisCycle[ A_Index ] := mapDic[ this ]
-			} else if ( mapType == "VK" )  {				; Remap from VK name/code to VK code (upper case)
-				this := Format( "{:U}", this )
-				this := ( InStr( this, "VK" ) == 1 ) ? ( SubStr( this, 3 ) ) : ( getVKeyCodeFromName( this ) )	; "VK" . 
-				thisCycle[ A_Index ] := this
+			} else if ( mapType == "VK" )  {				; Remap from VK name/code to VK code
+				thisCycle[ A_Index ] := getVKeyCodeFromName( this )
 			}	; end if
 		}	; end loop
 ;		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; DEBUG
@@ -184,7 +182,13 @@ pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used i
 
 getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 {
-	return pklIniRead( "VK_" . Format( "{:U}", name ), "00", "Pkl_Dic", "VKeyCodeFromName" )
+	name := Format( "{:U}", name )
+	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
+		name := SubStr( name, 3 )						; Keep only the ## here
+	} else {
+		name := pklIniRead( "VK_" . name, "00", "Pkl_Dic", "VKeyCodeFromName" )
+	}
+	return name
 }
 
 getWinLocaleID()			; This was in the detect/get functions
