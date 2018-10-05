@@ -38,7 +38,7 @@ getDeadKeysOfSystemsActiveLayout()
 	if ( l%Layout% == "-1" )
 		return ""
 	else if ( l%Layout% == "" )
-		return ""
+		return ""	; eD: Was "^", which must be a bug?
 	else
 		return l%Layout%
 }

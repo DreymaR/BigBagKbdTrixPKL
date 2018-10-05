@@ -39,18 +39,18 @@
 
 pkl_SendThis( modif, toSend )
 {
-	toggleAltgr := _getAltGrState()
+	toggleAltGr := _getAltGrState()
 	prefix := ""
-
-	if ( toggleAltgr )
+	
+	if ( toggleAltGr )
 		_setAltGrState( 0 )
-
-	if ( inStr( modif, "!" ) && getKeyState("Alt") )
+	
+	if ( inStr( modif, "!" ) && getKeyState("Alt") ) ; Alt + F to File menu doesn't work without Blind if the user pressed the Alt button
 		prefix = {Blind}
-
+	
 	Send, %prefix%%modif%%toSend%
-
-	if ( toggleAltgr )
+	
+	if ( toggleAltGr )
 		_setAltGrState( 1 )
 }
 

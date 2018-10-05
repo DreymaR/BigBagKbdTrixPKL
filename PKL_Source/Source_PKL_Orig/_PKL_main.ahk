@@ -9,7 +9,7 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 20
 
-setPklInfo( "version", "0.4 preview recompiled" )
+setPklInfo( "version", "0.4 preview" )
 setPklInfo( "compiled", "not released yet" )
 
 SendMode Event

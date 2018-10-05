@@ -1,8 +1,8 @@
 DreymaR's Big Bag Of Keyboard Tricks - PKL[eD]
 ==============================================
 
-### For [PortableKeyboardLayout][PKLSFo] on Windows
-#### (Written By Farkas Máté [(2008)][PKLAHK] using [AutoHotkey][AHKHom])
+### For [PortableKeyboardLayout][PKLGit] on Windows
+#### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
 Documentation
 -------------
@@ -99,7 +99,7 @@ Anti-madness tips for PKL file editing:
 DONE:
 -----
 These changes are now implemented in [PKL_eD]:
-* Various menu and language file improvements and additions.
+* Various menu and language improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 * Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
 * Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
@@ -123,10 +123,11 @@ I have many more [PKL_eD] changes on my wishlist, including:
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-08_
+_Øystein "DreymaR" Gadmar, 2018-09_
 
 
-[PKLSFo]: http://pkl.sourceforge.net/ (PortableKeyboardLayout on SourceForge)
+[PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)
+[PKLSFo]: https://sourceforge.net/projects/pkl/ (PKL on SourceForge)
 [PKLAHK]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (PKL on the AutoHotkey forums)
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)

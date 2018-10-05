@@ -100,7 +100,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 			if not dkv
 				Continue
 			dkv 	:= "_" . dkv . "_"					; Pad to avoid matching, e.g., 123 to 1234
-			dkvp    := ( dkvs ) ? "|" . dkv : dkv		; For if in, CSV; for RegEx, "|"
+			dkvp    := ( dkvs ) ? "|" . dkv : dkv		; For if in, use CSV?; for RegEx, "|"
 			dkvs    .= ( InStr( dkvs, dkv ) ) ? "" : dkvp	; If not already there, add the DKVal entry
 		}
 	}

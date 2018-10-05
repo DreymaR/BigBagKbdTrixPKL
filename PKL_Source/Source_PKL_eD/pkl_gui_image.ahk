@@ -10,7 +10,7 @@
 	
 	static guiActiveBeforeSuspend := 0
 	static guiActive := 0
-	static prevFile
+	static prevImg
 	static imgPosX   := []
 	static imgPosY   := []
 	static imgPosNr  := 0
@@ -61,12 +61,10 @@
 
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		imgBgImage := pklIniRead( "img_bgImage"  , layoutDir . "\backgr.png", "Lay_Ini", "eD_info" )	; BG image
-		if ( not FileExist( imgBgImage ) )
-			imgBgImage := ""	; eD: Is default robust if there's no .png nor layout.ini entry?
-		imgShftDir := pklIniRead( "img_shftDir"  , ""                       , "Lay_Ini", "eD_info" )	; Shift images
-		if ( not FileExist( imgShftDir . "\state?.png" ) )
-			imgShftDir := ""
+		imgBgImage  := fileOrAlt( pklIniRead( "img_bgImage",, "Lay_Ini", "eD_info" )
+								, layoutDir . "\backgr.png"                          )					; BG image, if found
+		imgShftDir  := fileOrAlt( pklIniRead( "img_shftDir",, "Lay_Ini", "eD_info" )
+								, layoutDir . "\ModStateImg"                         )					; Shift state images
 		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "eD_info" )	; BG color
 		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Pkl_Ini", "eD" )
 		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Pkl_Ini", "eD" )
@@ -120,7 +118,6 @@
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		setTimer, showHelpImage, Off
 		Gui, 2:Destroy
-;		Gui, 3:Destroy
 		return
 	}
 	if ( guiActive == 0 )
@@ -143,37 +140,28 @@
 		Gui, 2:Show, x%xPos% y%yPos% AutoSize NA, pklHelpShImg
 	}
 	
-	imgDir := LayoutDir
-	if ( getKeyInfo( "CurrNumOfDKs" ) ) {
-		imgDir := getLayInfo( "dkImgDir" )
-		ssuf   := getLayInfo( "dkImgSuf" )		; DK image state suffix
-		thisDK := getKeyInfo( "CurrNameOfDK" )
-		dkS    := []
-		dkS0   := ( ssuf ) ? ssuf . "0" : ""  	; Img file state 0 suffix
-		dkS[1] := ( ssuf ) ? ssuf . "1" : "sh"	; Img file state 1 suffix
-		for i, st in [ 6, 7, 8, 9 ] {			; Loop through the remaining states
-			dkS[ st ] := ssuf . st
+	if ( getKeyInfo( "CurrNumOfDKs" ) ) {								; DK images
+		thisDK  := getLayInfo( "dkImgDir" ) . "\" . getKeyInfo( "CurrNameOfDK" )
+		ssuf    := getLayInfo( "dkImgSuf" )					; DK image state suffix
+		dkS     := []
+		dkS0    := ( ssuf ) ? ssuf . "0.png" :   ".png"		; Img file state 0 suffix
+		dkS[1]  := ( ssuf ) ? ssuf . "1.png" : "sh.png"		; Img file state 1 suffix
+		for ix, st in [ 6, 7, 8, 9 ] {						; Loop through the remaining states
+			dkS[ st ] := ssuf . st . ".png"
 		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
-		if ( state ) {
-			fileName := thisDK . dkS[state] . ".png"
-			if ( not FileExist( imgDir . "\" . filename ) )
-				fileName := thisDK . dkS0 . ".png"
-		} else {
-			fileName := thisDK . dkS0 . ".png"
-		}
-	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {
-		fileName = extend.png
-	} else {
-		fileName = state%state%.png
+		imgPath := thisDK . dkS0
+		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
+	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {			; Extend image
+		imgPath := getLayInfo( "extndImg" )		;layoutDir . "\extend.png"
+	} else {															; Shift state images
+		imgPath := layoutDir . "\state" . state . ".png"
 	}
-	if ( not FileExist( imgDir . "\" . fileName ) )
-		fileName = state0.png
-	
-	if ( prevFile == fileName )
+	imgPath := FileExist( imgPath ) ? imgPath : layoutDir . "\state0.png"
+	if ( prevImg == imgPath )
 		return
-	prevFile := fileName
+	prevImg := imgPath
 	
-	GuiControl, 2:, HelpImage, *w%img_Width% *h%imgHeight% %imgDir%\%fileName%
+	GuiControl, 2:, HelpImage, *w%img_Width% *h%imgHeight% %imgPath%
 	GuiControl, 2:, HelpShImg, *w%img_Width% *h%imgHeight% %imgShftDir%\state%state%.png
 }
 

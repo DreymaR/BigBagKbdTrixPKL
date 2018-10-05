@@ -15,8 +15,13 @@
 
 ; eD TOFIX:
 ;			- 
-;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
+;			- ANSI Extend images!
+;			- Update QWE layouts. Use remaps?!
+;			- Update help images and files for VK layouts. Hard to make the ImGen work for those? So reuse some images from other layouts instead.
 ; eD TODO:
+;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
+;			- Verify and implement in layouts the VKEY maps between ANSI and ISO, thus needing only one full base layout. ANSI has the most logical key names.
+;			- Might be able to make the Japanese layout now, since dead keys already support primitive ligatures!?
 ;			- Layouts should be able to unmap keys and dead keys by using a -1 entry. And document it!
 ;			- Allow escaped semicolons (`;) in iniRead?
 ;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
@@ -28,12 +33,14 @@
 ;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.? Already possible with hex (0x####). %## covers this!
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
+;			- Greek layout. Greek polytonic accents in the dead keys!
+;			- Hebrew layout. Eventually, Arabic too.
 ; eD DONE:
 ;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 ; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- Help Image Generator that creates a set of help images from the current layout.
-;			- Fix error message when starting up with auto locale and an unknown locale. Just use defaults silently.
-;			- Fix _@K and _@C@E/_@E trouble in PKL_Settings.ini vs pkl_init
+;			- Point to Extend and on/off image(s) in layout.ini. Tidy up all loose images.
+;			- Update Rulemak (and add Bulmak, with images)
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
 setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version
@@ -52,7 +59,7 @@ setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'Current
 setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
 ;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
 setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Define this globally  (was 'pkl.ini')
-setPklInfo( "File_Lay_Ini", "layout.ini"			)	; eD: --"--
+setPklInfo( "File_Lay_Nam", "layout.ini"			)	; eD: --"--
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
 setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ,, "eD" ) )	; eD: Extra debug info etc
 

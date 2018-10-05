@@ -39,11 +39,8 @@
 			Menu, changeLayout, Check, %layName%
 			activeLayName := layName
 		}
-		
-		layIcon = Layouts\%layCode%\on.ico
-		if ( not FileExist( layIcon ) )
-			layIcon := A_ScriptName								; icon = on.ico
-		Menu, changeLayout, Icon,        %layName%, %layIcon%, 1
+		ico := readLayoutIcons( "Layouts\" . layCode )
+		Menu, changeLayout, Icon, %layName%, % ico.Fil1, % ico.Num1
 	}
 
 	if ( A_IsCompiled ) {
@@ -183,8 +180,8 @@ pkl_about()
 	if ( getPklInfo( "AdvancedMode" ) ) {
 		Gui, Add, Text, , ......................................................................
 		text = ; eD: Show MS Locale ID and current underlying layout dead keys
-		text = %text%Keyboard type (from PKL.ini): %kbdType%
-		text = %text%`nCurl/Ergo mod type: %ergoMod%
+		text = %text%Keyboard type (from PKL_Settings.ini): %kbdType%
+		text = %text%`nCurl/Ergo mod type (---"---): %ergoMod%
 		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
 		text = %text%`nDead keys set for this Windows layout: %dkStr%
 		Gui, Add, Text, , %text%

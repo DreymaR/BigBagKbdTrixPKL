@@ -34,9 +34,11 @@ DONE:
 * Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key(?).
 
 * Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
-	- Also, settings for image scaling, background color, overall transparency and top/bottom gutter distance.
-	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images
+	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images.
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
+	- Settings in layout.ini: Size/scaling, background image, background color, shift indicator and dead key dirs.
+	- Settings in settings.ini: Overall transparency/opacity, top/bottom gutter distances, horizonal activation zone.
+	- If settings are missing, may default to backgr.png and ModStateImg\ in the layout dir.
 * Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
 * Help Image Generator, using my KLD format in an SVG image template. With search/replace this is turned into a key glyph image.
 	- You'll need an Inkscape (Scalable Vector Graphics program) install. A good option is portable Inkscape from PortableApps.com.
@@ -91,8 +93,6 @@ TODO:
 
 * Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
 
-* Allow path pseudovariables like $layout in layout.ini? Don't think so?
-
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
 	- That way, one could for instance use the Vietnamese Telex method with aou dead keys (aw ow uw make â ô ư) etc.
@@ -102,7 +102,6 @@ TODO:
 
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
     - Transparent foreground images for all states and dead keys.
-    - Also for dead key state 6/7
 
 * More generic dead key output: Ligatures (important for my Jap layout! Also for combining accents and hotstrings)
 	- Selectable mode per key: By Unicode characters, hex or dec (default today).
@@ -119,7 +118,8 @@ TODO:
 	- Basically, a dead key might be allowed to release anything that a layout or Extend entry can!
 
 * Some more dead key mappings:
-	- Greek with accents? Need nestable accents, e.g., iota with diaeresis and tonos
+	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. See https://en.wikipedia.org/wiki/Greek_diacritics for tables.
+	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
 	- IPA on AltGr+Shift symbol keys?
 
 * Define Mirror layouts as remap cycles
@@ -140,10 +140,6 @@ TODO:
     - Today, tab+; comments are stripped in layout.ini but not in PKL .ini. Make this consistent?
     - Important: Leave escaped semicolon (`;) alone, even after whitespace! And document the need for escaping it!
 	- Probably not a big deal. It works well enough as it is.
-	
-* Would it be useful to make single-key images so that they may be remapped?
-    - No, too many glyphs would be needed for dead key images!
-    - Also, not sure whether rendering would be smooth enough.
 
 
 INFO: Some documentation notes
@@ -155,14 +151,13 @@ INFO: Some documentation notes
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 
 * "Anti-madness tips" for PKL (by user Eraicos and me):
-    - AHK script files (AHK v1.0) need to be ANSI encoded?! What to do with special letters then?
-        - The current PKL_eD AHK v1.1 ("Unicode AHK") supports scripts in UTF-8 w/ BOM (but not without!?).
+    - AHK v1.0 script files need to be ANSI encoded. They don't support special letters well.
+        - The current PKL_eD AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM (but not without BOM!?).
     - PKL .ini files may be UTF-8 encoded. With or without BOM?
         - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab parsing).
         - With PKL_eD end-of-line comments should be safe now!
     - In layout.ini:
-        - Always use tabs as separators in layout.ini
-        - After 'VirtualKey' always include a tab.
+        - Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
     - In the Extend section:
         - Don't use empty mappings in the Extend section. Comment these out.

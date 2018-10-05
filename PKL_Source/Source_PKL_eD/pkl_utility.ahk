@@ -163,9 +163,14 @@ pklMsgBox( msg, s = "", p = "", q = "", r = "" )
 	MsgBox % msg
 }
 
-pklErrorMsg( errorText )
+pklErrorMsg( text )
 {
-	MsgBox, 0x10, PKL ERROR, %errorText%`n`nError # %A_LastError%	; MsgBox type Error
+	MsgBox, 0x10, PKL ERROR, %text%`n`nError # %A_LastError%	; MsgBox type Error
+}
+
+pklWarningMsg( text, time = 5 )
+{
+	MsgBox, 0x30, PKL WARNING, %text%, %time%					; MsgBox type Warning
 }
 
 pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)
@@ -183,8 +188,8 @@ pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used i
 getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 {
 	name := Format( "{:U}", name )
-	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
-		name := SubStr( name, 3 )						; Keep only the ## here
+	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
+		name := SubStr( name, 3 )							; Keep only the ## here
 	} else {
 		name := pklIniRead( "VK_" . name, "00", "Pkl_Dic", "VKeyCodeFromName" )
 	}
@@ -200,9 +205,18 @@ getWinLocaleID()			; This was in the detect/get functions
 	return WinLocaleID
 }
 
-isInt( in ) {		; AHK cannot use "is <type>" in expressions so use a wrapper function
-    if in is integer
-        return true
+isInt( this ) {		; AHK cannot use "is <type>" in expressions so use a wrapper function
+	if this is integer
+		return true
+}
+
+fileOrAlt( file, default, errMsg = "", errDur = 2 )		; Find a file/dir, or use the alternative
+{
+	if FileExist( file )
+		return file
+	if ( errMsg ) && ( not FileExist( default ) )		; Issue a warning if neither file is found
+		pklWarningMsg( errMsg, errDur )
+	return default
 }
 
 pklSplash( title, text, dur = 8 ) {		; Default display duration is in seconds
