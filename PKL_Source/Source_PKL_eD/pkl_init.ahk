@@ -36,7 +36,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
 	theLays := StrReplace( theLays, "@V",        "@K@C@E" )				; eD: Shorthand .ini notation for kbd/mod
 	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "-Pl"
-	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; _ISO/_ANSI/_etc
+	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; _ISO/_ANS/_etc
 	theLays := StrReplace( theLays, "@C@E", modded . curlMod . ergoMod )	; CurlAngle[Wide]
 	theLays := StrReplace( theLays, "@C",   modded . curlMod           )	; --, Curl
 	theLays := StrReplace( theLays, "@E",   modded . ergoMod           )	; --, Angle, AWide...

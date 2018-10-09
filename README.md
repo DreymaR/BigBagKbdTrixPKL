@@ -3,6 +3,7 @@ DreymaR's Big Bag Of Keyboard Tricks - PKL[eD]
 
 ### For [PortableKeyboardLayout][PKLGit] on Windows
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
+#### ([PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-)
 
 Documentation
 -------------
@@ -14,7 +15,7 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 
 * This repo implements most of my Big Bag for PKL, as layout and PKL .ini files.
 * It also adds my own PKL - edition DreymaR (PKL[eD]) with several improvements.
-* Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors.
+* Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors!
 
 Some Know-How-To
 ----------------

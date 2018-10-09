@@ -20,10 +20,6 @@ DONE:
 	- This also makes Refresh robust against layout changes in PKL_Settings.
 * Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Shorthand notation in PKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@E resp. (@T for all at once).
-	- Alternative idea: Each layout has ISO/ANSI and ergo subfolders? Which way to organize? E.g., Extend will be common for ISO-ANSI/Ergo.
-	- But this leads to a plethora of subfolders, not all of which are currently populated!
-	- Could PKL look for the specified subfolder but if not found, default to something using relevant remaps?
-	- ISO-ANSI/Ergo folders could have a Common resource folder, for Extend maps etc? Maybe keep Extend images in common folders?!
 * Path shortcut for layout.ini entries, allowing ".\" instead of full path from PKL root.
   
 **MENUS/IMAGES**
@@ -36,10 +32,10 @@ DONE:
 * Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
 	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images.
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
-	- Settings in layout.ini: Size/scaling, background image, background color, shift indicator and dead key dirs.
+	- Settings in layout.ini: Size/scaling, background/extend images, background color, shift indicator, icons and dead key dirs.
 	- Settings in settings.ini: Overall transparency/opacity, top/bottom gutter distances, horizonal activation zone.
-	- If settings are missing, may default to backgr.png and ModStateImg\ in the layout dir.
-* Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
+	- If settings are missing, may default to backgr.png, extend.png, on/off.ico and ModStateImg\ in the layout dir.
+	- Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
 * Help Image Generator, using my KLD format in an SVG image template. With search/replace this is turned into a key glyph image.
 	- You'll need an Inkscape (Scalable Vector Graphics program) install. A good option is portable Inkscape from PortableApps.com.
 	- You can choose whether to make shift state images only or a full image set with all shift states for all deadkeys. The latter takes time!
