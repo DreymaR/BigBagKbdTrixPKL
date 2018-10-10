@@ -50,9 +50,11 @@ DONE:
 * Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or layout.ini). The old way should still work though.
 * Made Extend substitutes for Launch_Media/Search/App1/App2, as AHK multimedia launcher keys aren't working in Win 10.
 * Scan code modular remapping, making ergo and other variants much easier. Separate key permutation cycles, and remaps combining/translating them.
+	- In layout.ini, specify any remap combinations using the names (and syntax) found in the [remaps] section of the Remap.ini file.
+	- The _layout remap specifies a full remapping, while the _extend remap is only for those keys you want to move for Extend ("hard" remaps).
 	- Uses my KeyLayoutDefinition (KLD) mapping format.
-	- This is good for remaps, but too compact for main layout or Extend definitions. (Besides, Aldo Gunsing has a conversion tool for those.)
-	- Unfortunately though, so far I can't make that work for the help images.
+	- KLD is good for remaps, but too compact for main layout or Extend definitions. (Besides, Aldo Gunsing has a conversion tool for those.)
+	- Unfortunately though, I can't make that work for the help images directly. New images need to be generated then.
 	- Should I have a cycle merge syntax, e.g., "Angle_ISO105 = TC<  |L0LG  | ^Angle_ANSI-Z"? Probably unnecessary.
 * Virtual Key remapping, similarly to SC. I'd like to make only ANSI or ISO layouts, and leave the ISO-ANSI VK issue to a simple remap routine.
 * Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central doc that layouts can point to.

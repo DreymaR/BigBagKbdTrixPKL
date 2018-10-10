@@ -6,19 +6,21 @@
 ;
 ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles (used in pkl_init)
 {
-	mapList     := pklIniRead( mapList, "", mapFile, "remaps" )		; List name -> actual list
+	mapList     := pklIniRead( mapList, mapList, mapFile, "remaps" )	; Name -> actual list, or literal list
 	mapCycList  := ;
-	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%						; Parse CSV by comma
+	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%						; Parse lists by comma/CSV
 	{
 		tmpCycle    := ;
-		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%				; Parse by plus sign
+		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%				; Parse merges by plus sign
 		{
-			theMap  := A_LoopField
-			if ( SubStr( A_LoopField , 1, 1 ) == "^" )		; Ref. to another map -> Self recursion
-				theMap := ReadRemaps( SubStr( A_LoopField , 2 ), mapFile )
-			tmpCycle := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap		; re-attach +
+			if ( SubStr( A_LoopField , 1, 1 ) == "^" ) {			; Cycle reference
+				theMap  := SubStr( A_LoopField , 2 )
+			} else {
+				theMap  := ReadRemaps( A_LoopField , mapFile )		; Ref. to another map -> Self recursion
+			}
+			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap	; re-attach by +
 		}	; end loop
-		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle	; re-attach CSV
+		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle	; re-attach by CSV
 	}	; end loop
 	return mapCycList
 }	; end fn
@@ -38,6 +40,8 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%		; Parse and merge composite cycles by plus sign
 		{
 			thisCycle := pklIniRead( A_LoopField , "", mapFile, "RemapCycles" )
+			if ( not thisCycle )
+				pklWarningMsg( "Remap element '" . A_LoopField . "' not found", 3 )
 			thisType  := SubStr( thisCycle, 1, 2 )			; KLM map type, such as TC for TMK-like Colemak
 ;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
 			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and extra pipes

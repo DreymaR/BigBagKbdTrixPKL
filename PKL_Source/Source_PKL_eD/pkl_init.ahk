@@ -76,7 +76,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	}
 	nextLayoutIndex := ( nextLayoutIndex > numLayouts ) ? 1 : nextLayoutIndex
 	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
-}	; end fn
+}	; end fn _initReadPklIni()
 
 _initReadLayIni()									;   ####################### layout.ini #######################
 {
@@ -109,7 +109,6 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		{
 			mapType := A_LoopField
 			mapList := pklIniRead( mapSects[ A_Index ], "", "Lay_Ini", "eD_info" )	; First, get the name of the map list
-;			Loop, Parse, mapList, CSV, %A_Space%%A_Tab%					; eD TODO: Allow the map list to be a list, or only singular maps?
 			%mapType% := ReadRemaps( mapList, mapFile )					; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, mapFile )		; Parse the cycle list into a pdic of mappings
 		}
@@ -297,7 +296,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	setLayInfo( "Ico_OffFile", ico.Fil2 )
 	setLayInfo( "Ico_OffNum_", ico.Num2 )
 	pkl_set_tray_menu()
-}	; end fn
+}	; end fn _initReadLayIni()
 
 readLayoutIcons( layoutDir )
 {

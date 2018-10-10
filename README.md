@@ -9,54 +9,58 @@ Documentation
 -------------
 
 Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
-
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
-
+  
 * This repo implements most of my Big Bag for PKL, as layout and PKL .ini files.
 * It also adds my own PKL - edition DreymaR (PKL[eD]) with several improvements.
-* Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors!
+* Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors.
 
-Some Know-How-To
+Getting PKL up and running
+--------------------------
+
+* Download a copy of this repo, for instance with its GitHub Download/Clone button (and then unzip the file you got).
+* The simplest way of running PKL is to just put the main folder somewhere and run PKL.exe any way you like!
+* PKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
+  
+* I usually put a shortcut to PKL_eD.exe in my Start Menu "Startup" folder so it starts on logon, per user.
+* PKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a C:\PortableApps folder.
+* If the PortableApps menu is started on logon it can start up PKL for you too.
+  
+* Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
+* In PKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
+    * My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
+    * The format is: layout = <1st layout folder name>:<name you want in menu>,<2nd layout folder>:<2nd menu entry> etc
+
+More Know-How-To
 ----------------
 
 * The repo contains executables for the original PKL as well as PKL[eD], and source code for both.
-* PKL is easily run by putting its folder in a C:\PortableApps folder and using the [PortableApps.com][PrtApp] menu
-* Also, I usually put a shortcut to PKL.exe in my Start Menu "Startup" folder so it starts on logon, per user
-* Alternatively, if the PortableApps menu is started on logon it can start up PKL for you too
-* If you don't want any of that, just put the folder somewhere and run PKL.exe any way you like!
-* **NOTE:** To make many PKL_eD changes work, your PKL settings .ini and layout.ini files need extra settings.
-* **NOTE:** Running PKL with other AutoHotkey key mapping scripts may get confusing if there is hook competition.
-
+* Most of the layouts are now updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
+* To make many PKL_eD changes work, your PKL settings .ini and layout.ini files need extra settings.
+  
 These PKL files may take a little tweaking to get what you want. Remember, there are several parameters:
-
 * The PKL_Settings.ini file holds layout choices. The layout.ini files hold layout settings and mappings.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-	* These differ notably in the VK_102 key at the lower left, and some of the OEM_ key codes
-	* I haven't supported JIS (Japanese) etc so far - sorry
+    * These differ notably in the VK_102 key at the lower left, and some of the OEM_ key codes
+    * I haven't supported JIS (Japanese) etc so far - sorry
 * QWERTY vs Colemak vs what-have-you, obviously. Choose wisely!
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
-	* The 'VK' layouts just move the keys of your installed OS layout around, without other changes
-	* The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
+    * The 'VK' layouts just move the keys of your installed OS layout around, without other changes
+    * The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
-	* Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
-	* Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
+    * Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
+    * Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
 * In PKL .ini you can use a shorthand specifying KbdType, CurlMod and ErgoMod, or use the layout folder name directly.
 * In layout.ini you can specify in the [eD_info] section some remaps that turn one layout into a modded one, and more.
-
-Setup:
-------
-0. Set your Curl/Angle/Wide preferences and keyboard type (ANSI/ISO), and then a layout shorthand or full name:
-1. In PKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
-    * The format is: layout = <1st layout folder name>:<name you want in menu>,<2nd layout folder>:<2nd menu entry> etc
-2. If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
+  
+* If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
     * For [Scan Codes (SC###)][SCMSDN] and [Virtual Key names (VK##)][VKCAHK] see below.
-3. In the layout folder(s) you've chosen, you may edit further if required.
-    * Locale variants are available in some colemak-eD_ISO folders, by un-/commenting lines of a layout_#.ini file.
-    * Check out that the ISO/ANSI OEM_# key numbers in your layout.ini are right for you, or remapped with a VK remap.
-    * Help image sizes, Extend key, key mappings etc are in the layout.ini file.
-4. Layout help images aren't always available with the right ergo mod and keyboard type, since there are so many combos.
+* In the layout folder(s) you've chosen, you may edit their layout.ini files further if required.
+    * Check out that the ISO/ANSI OEM_# key numbers are right for you, or remapped with a VK remap.
+    * Help image specifications, Extend key, key mappings etc are in the layout.ini file.
+* Help images aren't always available with the right ergo mod and keyboard type, since there are so many combos.
     * First, check around in some of the eD layout folders. Maybe there's something that works for you there.
     * With Advanced Mode active, there is a Help Image Generator that can make images for the currently active layout.
     * You have to have Inkscape installed, for instance from PortableApps.com, and point to it in the HIG settings file.
@@ -67,14 +71,13 @@ Here are the columns of a full key mapping together with a sample key – semico
 SC01a = OEM_3   0   ;   :   --  dk13    …   ; QWERTY pP - dk_umlaut
 SC    = VK      CS  S0  S1  S2  S6      S7  ; comments
 ```
-
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
 * CS: Cap state (default 0; +1 if S0/S1 are non-/shifted versions of the same letter; +4 for S6/S7)
 * S#: Standard modifier states for the key: Unmodified, 1:Shift, 2:Ctrl (not often used), 6:AltGr, 7:Shift+AltGr...
-
+  
 Look in the PKL .ini files if you're interested! Much is explained there.
-
+  
 These hotkeys are found in the PKL settings file:
 * Ctrl+Shift+1 – Display/hide help image
 * Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
@@ -85,8 +88,10 @@ These hotkeys are found in the PKL settings file:
 
 **NOTES:**
 ---------
-Maybe all the layout files aren't quite updated with remaps yet. Check out a base one like Colemak-eD_ISO.
-
+Maybe all the layout files aren't quite updated with remaps yet. Check out base ones like Colemak-eD_ISO vs Cmk-eD_ISO_CAWide.
+  
+* Tech note: Running PKL with other AutoHotkey key mapping scripts may get confusing if there is _hook competition_.
+  
 Anti-madness tips for PKL file editing:
 * In layout.ini:
     - Always use tabs as separators.
