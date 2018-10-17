@@ -152,7 +152,7 @@
 		imgPath := thisDK . dkS0
 		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
 	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {			; Extend image
-		imgPath := getLayInfo( "extndImg" )		;layoutDir . "\extend.png"
+		imgPath := getLayInfo( "extndImg" )					; Default layoutDir . "\extend.png"
 	} else {															; Shift state images
 		imgPath := layoutDir . "\state" . state . ".png"
 	}

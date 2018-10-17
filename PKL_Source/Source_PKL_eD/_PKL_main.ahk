@@ -15,12 +15,10 @@
 
 ; eD TOFIX:
 ;			- 
-;			- ANSI Extend images!
-;			- Update help images and files for VK layouts. Hard to make the ImGen work for those? So reuse some images from other layouts instead.
 ; eD TODO:
 ;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
-;			- Verify and implement in layouts the VKEY maps between ANSI and ISO, thus needing only one full base layout. ANSI has the most logical key names.
+;			- Implement in layouts the ANS2ISO VKEY maps, thus needing only one full base layout. ANSI has the most logical key names for a base.
 ;			- Layouts should be able to unmap keys and dead keys by using a -1 entry. And document it!
 ;			- Allow escaped semicolons (`;) in iniRead?
 ;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
@@ -33,12 +31,13 @@
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
 ;			- Might be able to make the Japanese layout now, since dead keys already support primitive ligatures!?
-;			- Greek layout. Greek polytonic accents in the dead keys!
+;			- Greek polytonic accents in the dead keys!
 ;			- Hebrew layout. Eventually, Arabic too.
 ; eD DONE:
 ;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 ; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- Help Image Generator that creates a set of help images from the current layout.
+;			- Updated help images and files for VK layouts. Hard to make the ImGen work for those, so I used state0/1 images from eD layouts.
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
 setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version

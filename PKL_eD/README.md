@@ -99,7 +99,7 @@ TODO:
 	- That'd be backwards compatible with existing PKL tables, and one can choose behavior.
 
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
-    - Transparent foreground images for all states and dead keys.
+	- Transparent foreground images for all states and dead keys.
 
 * More generic dead key output: Ligatures (important for my Jap layout! Also for combining accents and hotstrings)
 	- Selectable mode per key: By Unicode characters, hex or dec (default today).
@@ -109,7 +109,7 @@ TODO:
 	- Example:	"102  =  402	; f -> ƒ" – could become "-f = -ƒ"
 	- Example:	"77   = 11374	; M -> ?" – Meng not shown properly; to avoid trouble, use for instance "-M = u2C6E"
 	- Keep it easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (here, simply regexp "u$1 = u$2 ; $3")
-    - Simplest and best: Allow for AHK literals?! Use maybe * to initiate one (as in layout.ini "special").
+	- Simplest and best: Allow for AHK literals?! Use maybe * to initiate one (as in layout.ini "special").
 	- Simplest for literals and ligatures/hotstrings: % initiates, then the rest of the line is directly sent (as in layout.ini ligatures).
 	- Look to the layout format, using % *{} ={} type entries? Maybe put this processing in a separate function that both can use?
 	- Chainable dead keys: Allow entries of the form dk##, meaning another DK is activated instead
@@ -133,11 +133,11 @@ TODO:
     - Might treat any entries starting/ending with {} as Send {##} instead of Send {Raw}{##} (literal mode)?
     - Or is it better to just keep today's style in which }^{z for instance sends Ctrl+Z ? For compatibility.
     - We don't really need the %#### 'utf ligature' notation then, do we? It's a leftover from MS-KLC.
-
+  
 * Allow non-Tab whitespace in layout entries? (Strip whitespace. To preserve it use {# } or }{# }{ in entries?)
     - Today, tab+; comments are stripped in layout.ini but not in PKL .ini. Make this consistent?
     - Important: Leave escaped semicolon (`;) alone, even after whitespace! And document the need for escaping it!
-	- Probably not a big deal. It works well enough as it is.
+    - Probably not a big deal. It works well enough as it is.
 
 
 INFO: Some documentation notes
@@ -147,13 +147,13 @@ INFO: Some documentation notes
     http://www.kbdedit.com/manual/low_level_vk_list.html
     https://msdn.microsoft.com/en-us/library/ms927178.aspx
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
-
+  
 * "Anti-madness tips" for PKL (by user Eraicos and me):
     - AHK v1.0 script files need to be ANSI encoded. They don't support special letters well.
         - The current PKL_eD AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM (but not without BOM!?).
-    - PKL .ini files may be UTF-8 encoded. With or without BOM?
+    - PKL .ini files may be UTF-8 encoded, with or without BOM. Source .ahk files should be UTF-8-BOM?
         - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab parsing).
-        - With PKL_eD end-of-line comments should be safe now!
+        - With PKL_eD end-of-line comments are safe!
     - In layout.ini:
         - Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?

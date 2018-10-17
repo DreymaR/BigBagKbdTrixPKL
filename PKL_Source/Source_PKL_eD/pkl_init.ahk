@@ -155,7 +155,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		else if ( entry[2] == "modifier" )
 			entry[2] := -2
 		vkcode := getVKeyCodeFromName( entry[1] )
-		vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode		; Remap the VK here before assignment. eD WIP: Check this!
+		vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode		; Remap the VK here before assignment.
 		setKeyInfo( key . "vkey", vkcode )								; Set VK code (hex ##) for key
 		setKeyInfo( key . "capSt", entry[2] )							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
 		if ( entry[2] == -2 ) {											; The key is a modifier

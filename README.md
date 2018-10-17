@@ -93,19 +93,15 @@ Maybe all the layout files aren't quite updated with remaps yet. Check out base 
 * Tech note: Running PKL with other AutoHotkey key mapping scripts may get confusing if there is _hook competition_.
   
 Anti-madness tips for PKL file editing:
-* In layout.ini:
-    - Always use tabs as separators.
-    - After 'VirtualKey' always append a tab.
-    - The CapsLock key should have scan code 'CapsLock' instead of SC03A?
+* In layout.ini: Always use tabs as separators.
 * In Extend sections: Don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
 * PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* PKL_eD allows end-of-line comments (whitespace, semicolon) in .ini files, but the original PKL only handles them in layouts.
+* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only handles them in layouts.
 
 
 DONE:
 -----
 These changes are now implemented in [PKL_eD]:
-* Various menu and language improvements and additions.
 * A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 * Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
 * Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
@@ -129,7 +125,7 @@ I have many more [PKL_eD] changes on my wishlist, including:
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-09_
+_Øystein "DreymaR" Gadmar, 2018-10_
 
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)

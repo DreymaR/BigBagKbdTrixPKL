@@ -25,18 +25,21 @@ makeHelpImages()
 	FormatTime, theNow,, yyyy-MM-dd_HHmm						; Use A_Now (local time) for a folder time stamp
 	imgRoot     := getLayInfo( "layDir" ) . "\ImgGen_" . theNow
 	HIG_ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
+	onlyOneDK   := pklIniRead( "imgMakeSingleDK",, pklIniRead( "imgGenIniFile",,, "eD" ) )	; Refresh single DK imgs
+	onlyOneStr  := ( onlyOneDK ) ? "`nDEBUG: Only creating images for dk_" . onlyOneDK . "." : ""
 	
 	SetTimer, ChangeButtonNamesHIG, 100
 	MsgBox, 0x133, Make Help Images?, 
 (
 Do you want to make a full set of help images
 for the current layout, or only state images?
-(Many Inkscape calls will take a long time!)
+(Many Inkscape calls will take a long time!)%onlyOneStr%
 )
 	IfMsgBox, Cancel				; MsgBox type 0x133 (3+48+256) is Yes/No/Cancel, Warning, 2nd button is default
 		Return
 	IfMsgBox, No					; Make only the state images, not the full set with deadkey images
 		stateImgOnly := true
+	stateImgOnly := ( onlyoneDK ) ? false : stateImgOnly	; StateImgOnly overrides DK images, unless DK debug is set
 	pklSplash( HIG_Name, "Starting...", 4 )					;MsgBox, 0x41, %HIG_Name%, Starting..., 1.0
 	try {
 		for dirTag, theDir in HIG_ImgDirs
@@ -56,12 +59,12 @@ for the current layout, or only state images?
 		empty := _makeHelpImgDic( "state", state )
 		if ( empty ) {
 			pklSplash( HIG_Name, "Layout state`n" . state . "`nempty - skipping.", 4 )	;MsgBox, 0, %HIG_Name%, % <txt>, 0.8
-		} else {
+		} else if ( not onlyOneDK ) {						; If refreshing one DK, don't render state images
 			pklSplash( HIG_Name, "Making image for:`nstate" . state . "`n" )			
 			_makeOneHelpImg( "state", state, "root" )
 		}
 	}
-;	HIG_DKNames := Array( "ringabov-lig" )		; DEBUG, often "acute-sup" "dotbelow" "dblacute-sci"
+	HIG_DKNames := ( onlyOneDK ) ? Array( onlyOneDK ) : HIG_DKNames	; DEBUG, e.g., "acute-sup" "dotbelow" "dblacute-sci" "ringabov-lig"
 	for key, dkName in HIG_DKNames							; Dead key image loop
 	{
 		if ( stateImgOnly )
@@ -250,7 +253,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 
 _combAcc( ch )											; Check whether a character code is a Combining Accent
 {
-	comb := ( ch >= 768 && ch <= 879 ) ? true : false	; The Unicode range for combining marks
+	comb := ( ch >= 768 && ch <= 879 ) ? true : false	; The main Unicode range for combining marks (768-879)
 	Return comb
 }
 
