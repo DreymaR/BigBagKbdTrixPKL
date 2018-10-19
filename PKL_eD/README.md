@@ -63,6 +63,7 @@ DONE:
 	- This way, one change in a DK will affect all layouts using that DK
 	- DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
 	- DK imgs named <name>_dk<#> for state <#> (add s6/7 where applicable?!)
+* Dead key base entries can be in U#### Unicode format in addition to the old decimal format. For releases, still use 0x## syntax for hex. Literals pending!
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).

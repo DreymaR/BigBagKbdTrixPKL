@@ -2,8 +2,8 @@
 {															; Note: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
 	res := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not res ) {
-		res := pklIniRead( base, -1, getLayInfo( "dkFile" ), "dk_" . dkName )
-;		MsgBox,,, DKey: %dkName%`nBase: %base%`nChar: %res%, 1	; DEBUG
+		res :=                 pklIniRead(                  base ,  0, getLayInfo( "dkFile" ), "dk_" . dkName )	; Key as raw number
+		res := ( res ) ? res : pklIniRead( Format("U{:04X}",base), -1, getLayInfo( "dkFile" ), "dk_" . dkName )	; As U#### code point
 		setKeyInfo( "DKval_" . dkName . "_" . base, res)	; The DK info pdic is filled in gradually with use
 	}
 	res := ( res == -1 ) ? 0 : res

@@ -31,13 +31,14 @@
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
 ;			- Might be able to make the Japanese layout now, since dead keys already support primitive ligatures!?
-;			- Greek polytonic accents in the dead keys!
+;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;			- Hebrew layout. Eventually, Arabic too.
 ; eD DONE:
 ;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 ; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- Help Image Generator that creates a set of help images from the current layout.
 ;			- Updated help images and files for VK layouts. Hard to make the ImGen work for those, so I used state0/1 images from eD layouts.
+;			- Greek layout w/ tonos/dialytika in the acute/umlaut dead keys.
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
 setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version
