@@ -116,7 +116,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 			emptyBool := ( cha ) ? false : emptyBool
 			if ( not cha ) {
 				Continue
-			} else if ( cha == "dk" ) {
+			} else if ( cha == "@" ) {					; eD WIP: Was "dk"
 				dkName := getKeyInfo( chas )			; Get the true name of the dead key
 				HIG_DKNames[ chas ] := dkName			; eD TODO: Support chained DK. How?
 				res := "dk_" . dkName
@@ -203,8 +203,8 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 		chrTag  := SubStr( ch, 1, 2 )					; Character entry, e.g., "dk_breve"
 		chrVal  := SubStr( ch, 4 )
 		if ( not ch ) {									; Empty entry
-			aChr := ;
-			dChr := ;
+			aChr := ""
+			dChr := ""
 		} else if ( chrTag == "dk" ) {					; Dead key (full dkName, or classic name if used)
 			dkv2 := DeadKeyValue( chrVal, "s2" )		; Get the base char (entry 2) for the dead key
 			dkv2 := ( dkv2 ) ? dkv2 : DeadKeyValue( chrVal, "s0" )	; Fallback is entry0
@@ -212,21 +212,21 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 			aChr := comb . _svgChar( dkv2 )				; Note: Padding may lead to unwanted lateral shift
 			dkv3 := DeadKeyValue( chrVal, "s3" )		; Get the alternate display base char, if it exists
 			if ( dkv3 ) && ( dkv3 != dkv2 ) {			; If there is a second display char, show both
-				comb := ;_combAcc( dkv3 ) ? " " : ""	; Note: Padding works well for some but not others...?
+				comb := ""	;_combAcc( dkv3 ) ? " " : ""	; Note: Padding works well for some but not others.
 				aChr := aChr . comb . _svgChar( dkv3 )
 			}
 			dChr := aChr
 		} else if ( chrTag == "dc" ) {					; Dead key base char (marked in pdic)
 			mark := _combAcc( chrVal ) ? dkCombMark : dkBaseMark
 			aChr := _svgChar( chrVal )
-			dChr := chr( mark )							; Mark for DK base chars: Default U+2B24 Black Large Circle
+			dChr := Chr( mark )							; Mark for DK base chars: Default U+2B24 Black Large Circle
 ; eD TODO:	Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
 		} else if ( ch == -1 ) {
-			aChr := chr( naCharMark )					; Replace nonprintables (marked in pdic), default U+25AF Rect.
-			dChr := ;
+			aChr := Chr( naCharMark )					; Replace nonprintables (marked in pdic), default U+25AF Rect.
+			dChr := ""
 		} else {
 			aChr := _svgChar( ch )
-			dChr := ;									; The dead key layer entry is empty for non-DK keys
+			dChr := ""									; The dead key layer entry is empty for non-DK keys
 		}
 		tstx := "</tspan></text>"							; This always follows text elements in an SVG file
 		needle := ">\K" . CO . tstx . "(.*>)" . CO . tstx	; The RegEx to search for (ignore the start w/ \K)
@@ -262,7 +262,7 @@ _svgChar( ch )											; Convert character code to RegEx-able SVG text entry
 	static escapeDic := {}
 	escapeDic   :=  { "&"  : "&amp;"  , "'"  : "&apos;" , """" : "&quot;"		; &'"<> for SVG XML compliance.
 					, "<"  : "&lt;"   , ">"  : "&gt;"   , "$"  : "$$"     }		; $ -> $$ for use with RegExReplace.
-	txt := chr( ch )
+	txt := Chr( ch )
 	for key, val in escapeDic {
 		txt := ( txt == key ) ? val : txt				; Escape forbidden characters for XML/SVG and $ for RegEx
 	}

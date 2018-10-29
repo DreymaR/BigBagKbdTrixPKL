@@ -81,7 +81,7 @@
 			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                    , "Pkl_Ini", "eD" )
 			imgHorPos := [ imgHorMrg, ( A_ScreenWidth - img_Width )/2, A_ScreenWidth  - img_Width - imgHorMrg ]	; Left/Mid/Right
 			imgVerPos := [ imgTopMrg,                                  A_ScreenHeight - imgHeight - imgLowMrg ]	; Top/bottom
-			Loop, 6 {
+			Loop % 6 {
 				imgPosX[ A_Index ] := imgHorPos[ 1 + Mod( ( A_Index - 1 ) , 3 ) ]
 				imgPosY[ A_Index ] := imgVerPos[ Ceil( A_Index / 3 ) ]
 			}
@@ -118,10 +118,10 @@
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		setTimer, showHelpImage, Off
 		Gui, 2:Destroy
-		return
+		Return
 	}
 	if ( guiActive == 0 )
-		return
+		Return
 	
 	CoordMode, Mouse, Screen
 	MouseGetPos, mouseX, , id
@@ -158,7 +158,7 @@
 	}
 	imgPath := FileExist( imgPath ) ? imgPath : layoutDir . "\state0.png"
 	if ( prevImg == imgPath )
-		return
+		Return
 	prevImg := imgPath
 	
 	GuiControl, 2:, HelpImage, *w%img_Width% *h%imgHeight% %imgPath%
@@ -170,5 +170,5 @@ _GetState()	; The shift state 0:1:6:7 as in layout.ini and image names
 	state = 0
 	state += 1 * getKeyState( "Shift" )
 	state += 6 * getLayInfo( "hasAltGr" ) * AltGrIsPressed()
-	return state
+	Return state
 }

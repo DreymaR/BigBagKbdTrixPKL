@@ -16,7 +16,7 @@ iniReadSection( file, section )
 	RegExMatch( fileTxt, needle, secTxt )							; is) = IgnoreCase, DotAll. \K = LookBehind.
 	secTxt := RegExReplace( secTxt, "`am)^[ `t]*;.*" )				; Strip comment lines (multiline mode, any \R)
 	secTxt := RegExReplace( secTxt, "\R([ `t]*\R)+", "`r`n" )		; Strip empty and whitespace lines
-	return secTxt
+	Return secTxt
 }
 
 ;-------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ iniReadSection( file, section )
 pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 {
 	if ( not key )
-		return
+		Return
 	hereLay := ( inifile == "Lay_Ini" ) ? getLayInfo( "layDir" ) : "."	; Allow ".\" syntax for the Layouts dir
 	if ( ( not inStr( inifile, "." ) ) and FileExist( getPklInfo( "File_" . inifile ) ) )	; Special files
 		inifile := getPklInfo( "File_" . inifile )						; (These include Pkl_Ini, Lay_Ini, Pkl_Dic)
@@ -41,21 +41,21 @@ pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 	val := ( SubStr( val, 1, 2 ) == ".\" ) ? hereLay . SubStr( val, 2 ) : val	; ".\" syntax for the Layouts dir
 ;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD DEBUG
-	return val
+	Return val
 }
 
 pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Special read function for boolean values
 {
 	val := pklIniRead( key, default, inifile, section )		;IniRead, val, %inifile%, %section%, %key%, %default%
 	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
-	return val
+	Return val
 }
 
 pklIniPair( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Read a CSV .ini entry into an array
 {
 	val := pklIniRead( key, default, inifile, section )
 	val := StrSplit( val, ",", " `t" )
-	return val
+	Return val
 }
 
 ;-------------------------------------------------------------------------------------
@@ -75,14 +75,17 @@ pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0, com=1 )		; Because PKL doesn
 strCom( str )												; Remove end-of-line comments (whitespace then semicolon)
 {
 	str := RegExReplace( str, "m)[ `t]+;.*$" )				; Multiline option for matching single lines
-	return str
+	Return str
 }
 
-strEsc( str )												; Replace \n and \\ escapes
+strEsc( str )												; Replace \# escapes
 {
+	str := StrReplace( str, "\r", "`r" )
 	str := StrReplace( str, "\n", "`n" )
+	str := StrReplace( str, "\t", "`t" )
+	str := StrReplace( str, "\b", "`b" )
 	str := StrReplace( str, "\\", "\"  )
-	return str
+	Return str
 }
 
 /*

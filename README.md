@@ -30,7 +30,7 @@ Getting PKL up and running
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
 * In PKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
     * My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
-    * The format is: layout = <1st layout folder name>:<name you want in menu>,<2nd layout folder>:<2nd menu entry> etc
+    * The format is: layout = ‹1st layout folder name›:‹name you want in menu›,‹2nd layout folder›:‹2nd menu entry› etc
 
 More Know-How-To
 ----------------
@@ -57,6 +57,7 @@ These PKL files may take a little tweaking to get what you want. Remember, there
   
 * If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
     * For [Scan Codes (SC###)][SCMSDN] and [Virtual Key names (VK##)][VKCAHK] see below.
+* Similarly, there's a PKL_eD file for named ligatures/hotstrings. These are useable by layouts, Extend and dead keys.
 * In the layout folder(s) you've chosen, you may edit their layout.ini files further if required.
     * Check out that the ISO/ANSI OEM_# key numbers are right for you, or remapped with a VK remap.
     * Help image specifications, Extend key, key mappings etc are in the layout.ini file.
@@ -68,13 +69,20 @@ These PKL files may take a little tweaking to get what you want. Remember, there
   
 Here are the columns of a full key mapping together with a sample key – semicolon (QWERTY P) from one of my layout.ini files:
 ```
-SC01a = OEM_3   0   ;   :   --  dk13    …   ; QWERTY pP - dk_umlaut
+SC01a = OEM_3   0   ;   :   --  @13     …   ; QWERTY pP - dk_umlaut
 SC    = VK      CS  S0  S1  S2  S6      S7  ; comments
 ```
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
 * CS: Cap state (default 0; +1 if S0/S1 are non-/shifted versions of the same letter; +4 for S6/S7)
 * S#: Standard modifier states for the key: Unmodified, 1:Shift, 2:Ctrl (not often used), 6:AltGr, 7:Shift+AltGr...
+* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries):
+    - %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
+    - $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
+    - *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# mods, {} key names)
+    - =‹entry› : Send {Blind}‹entry›, keeping the state of any held modifier keys
+    - @‹entry› : Send the current layout's dead key named ‹entry›
+    - &‹entry› : Send the current layout's ligature named ‹entry›
   
 Look in the PKL .ini files if you're interested! Much is explained there.
   
@@ -96,7 +104,7 @@ Anti-madness tips for PKL file editing:
 * In layout.ini: Always use tabs as separators.
 * In Extend sections: Don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
 * PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only handles them in layouts.
+* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layouts.
 
 
 DONE:
@@ -108,11 +116,13 @@ These changes are now implemented in [PKL_eD]:
 * Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
 * A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
 * A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
-* Sensible dead key names for images and entries (e.g., dk14 -> tilde) in a central file that layouts can point to.
+* Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
 * A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
 * Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
 * The settings/layout and Extend parts of PKL.ini are now split into separate files.
 * There's a shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+* Layouts, Extend and dead keys now all allow the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
+* The "&" prefix denotes ligatures/hotstrings found in a separate PKL_eD file. These may span more than one line.
 
 
 TODO:
@@ -121,7 +131,6 @@ I have many more [PKL_eD] changes on my wishlist, including:
 * A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers (NumPad, hotstring...).
 * Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
-* More flexible dead key output in general, allowing literal glyphs, ligatures and DK chaining (one DK may release another).
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_

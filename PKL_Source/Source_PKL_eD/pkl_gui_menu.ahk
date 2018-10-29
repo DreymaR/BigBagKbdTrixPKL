@@ -29,8 +29,7 @@
 	exitappMenuItem .= ( ExitAppHotkey ) ? _FixAmpInMenu( ExitAppHotkey ) : ""
 	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
-	Loop, % numOfLayouts
-	{
+	Loop % numOfLayouts {
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
@@ -118,7 +117,7 @@ pkl_about()
 	dkStr := dkStr ? dkStr : "<none>"
 
 	pklAppName      := getPklInfo( "pklName" )
-	pklMainURL      := "http://pkl.sourceforge.net"
+	pklMainURL      := "https://github.com/Portable-Keyboard-Layout"
 	pklProgURL      := getPklInfo( "pkl_URL" )
 	pklVersion      := getPklInfo( "pklVers" )
 	compiledAt      := getPklInfo( "pklComp" )
@@ -146,9 +145,9 @@ pkl_about()
 	kbdType  := getLayInfo( "Ini_KbdType" )
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " / " . getLayInfo( "Ini_ErgoMod" )
 
-	text = ;
+	text := ""
 	text = %text%
-	Gui, Add, Text, , %pklAppName%, v%pklVersion% (%compiledAt%)
+	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
 	Gui, Add, Edit, , %pklMainURL%
 	if ( pklProgURL != pklMainURL )
 		Gui, Add, Edit, , %pklProgURL%
@@ -158,7 +157,7 @@ pkl_about()
 	Gui, Add, Text, , %locLicense%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
 	Gui, Add, Text, , ......................................................................
-	text = ;
+	text := ""
 	text = %text%%locContributors%:
 	text = %text%`n- OEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
 ;	text = %text%`nAutoHotkey authors && contributors
@@ -169,7 +168,7 @@ pkl_about()
 		text = %text%`n`n%translatorName%: %translationName%
 	Gui, Add, Text, , %text%
 	Gui, Add, Text, , ......................................................................
-	text = ;
+	text := ""
 	text = %text%%activeLayout%:`n  %layName%
 	text = %text%`n%locVersion%: %layVers%
 	text = %text%`n%locLanguage%: %layLang% (++?)
@@ -179,7 +178,7 @@ pkl_about()
 	Gui, Add, Edit, , %layPage%
 	if ( getPklInfo( "AdvancedMode" ) ) {
 		Gui, Add, Text, , ......................................................................
-		text = ; eD: Show MS Locale ID and current underlying layout dead keys
+		text := ""							; eD: Show MS Locale ID and current underlying layout DKs
 		text = %text%Keyboard type (from PKL_Settings.ini): %kbdType%
 		text = %text%`nCurl/Ergo mod type (---"---): %ergoMod%
 		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
@@ -193,14 +192,14 @@ _FixAmpInMenu( menuItem )
 {
 	menuItem := StrReplace( menuItem, " & ", "+" )		; Used to be '& , &&,' to display the ampersand.
 	menuItem := " (" . menuItem . ")"
-	return menuItem
+	Return menuItem
 }
 
 /*
 	_AHK_NOTIFYICON(wParam, lParam)			; Called by tray icon clicks w/ OnMessage( 0x404 ). Now disabled.
 	{
 		if ( lParam == 0x205 ) { 			; WM_RBUTTONUP
-			return
+			Return
 		} else if ( lParam == 0x201 ) { 	; WM_LBUTTONDOWN
 			gosub ToggleSuspend				; This suspends PKL on tray icon single-click
 		}

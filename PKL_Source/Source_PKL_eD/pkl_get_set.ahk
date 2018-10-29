@@ -24,12 +24,12 @@
 	
 setKeyInfo( key, value )
 {
-	return getKeyInfo( key, value, 1 )
+	Return getKeyInfo( key, value, 1 )
 }
 
 setLayInfo( var, val )
 {
-	return getLayInfo( var, val, 1 )
+	Return getLayInfo( var, val, 1 )
 }
 
 setPklInfo( key, value )
@@ -43,7 +43,7 @@ getKeyInfo( key, value = "", set = 0 )
 	if ( set == 1 )
 		pdic[key]   := value
 	else
-		return pdic[key]
+		Return pdic[key]
 }
 
 getLayInfo( key, value = "", set = 0 )
@@ -52,7 +52,7 @@ getLayInfo( key, value = "", set = 0 )
 	if ( set == 1 )
 		pdic[key]   := value
 	else
-		return pdic[key]
+		Return pdic[key]
 }
 
 getPklInfo( key, value = "", set = 0 )
@@ -61,7 +61,7 @@ getPklInfo( key, value = "", set = 0 )
 	if ( set == 1 )
 		pdic[key]   := value
 	else
-		return pdic[key]
+		Return pdic[key]
 }
 
 ;-------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ pkl_locale_load( lang, compact = 0 )
 		Loop, 22														; Read default locale strings (numbered)
 		{
 			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
-			str := strEsc( str )										; Replace \n and \\ escapes
+			str := strEsc( str )										; Replace \# escapes
 			setPklInfo( "LocStr_" . A_Index , str )
 		}
 		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
@@ -101,7 +101,7 @@ pkl_locale_load( lang, compact = 0 )
 		file = Languages\%lang%.ini
 	
 	if ( not FileExist( file ) )					; If the language file isn't found, we'll just use the defaults
-		return
+		Return
 	sect := iniReadSection( file, "pkl" )
 	Loop, Parse, sect, `r`n
 	{
@@ -139,8 +139,8 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 		localizedHotkeys .= " " . hk
 	} else {
 		if ( hk == "all" )
-			return localizedHotkeys
-		return getKeyInfo( "HKtxt_" . hk )
+			Return localizedHotkeys
+		Return getKeyInfo( "HKtxt_" . hk )
 	}
 }
 
@@ -169,5 +169,5 @@ getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of h
 	for key, val in strDic
 		str := StrReplace( str, key, val )
 	
-	return str
+	Return str
 }

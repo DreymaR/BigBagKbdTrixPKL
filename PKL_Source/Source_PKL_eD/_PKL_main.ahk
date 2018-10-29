@@ -9,43 +9,51 @@
 #MaxThreads 20
 
 ;
-; Portable Keyboard Layout by Farkas Máté   [http://pkl.sourceforge.net]
+; Portable Keyboard Layout by Farkas Máté   [https://github.com/Portable-Keyboard-Layout]
 ; edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
-; eD TOFIX:
+; eD TOFIX/WIP:
 ;			- 
+;			- Set a "Bas_ini" parameter to point to the base layout file, if used?
+;			- Read {remapsFile, extendFile, dkListFile, stringFile} from base layout if not found in top layout?! Other info too? img_width/height/scale - nah...
+;			- Make unified pklParseSend() work for DK chaining (one DK releases another)!
+;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this must not happen for @ entries?
 ; eD TODO:
-;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;			- Implement in layouts the ANS2ISO VKEY maps, thus needing only one full base layout. ANSI has the most logical key names for a base.
-;			- Layouts should be able to unmap keys and dead keys by using a -1 entry. And document it!
-;			- Allow escaped semicolons (`;) in iniRead?
-;			- Generic entry processing for keypress, deadkeys, Extend? Allowing the same syntax all over. (Except that Extend has {Raw} off by default)
-;			- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
+;			- Layouts can now unmap keys and dead keys by using a -1 entry. Test and document it!
+;				- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
 ;			- Multi-Extend, allowing one Extend key with modifiers to select up to 4 different layers.
-;			- Ligature tables both for keys and dead keys. Short ligatures may already be specified directly as %<lig>; make it so for DK too.
-;			- Use the same style as dead keys for ligatures: 'li##', [LigatureNames] and a LigatureFile. Are multiline ligatures possible? <Lig>_01_04 = ?
-;			- Expand the key definition possibilities, allowing dec/hex/glyph/ligature for dead keys etc.? Already possible with hex (0x####). %## covers this!
-;			- Remove the Layouts submenu? Make it optional by .ini?
-;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
-;			- Might be able to make the Japanese layout now, since dead keys already support primitive ligatures!?
+;			- Could make the Japanese layout now, since dead keys support ligatures!
 ;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;			- Hebrew layout. Eventually, Arabic too.
-; eD DONE:
+;			
+;			- Allow escaped semicolons (`;) in iniRead?
+;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
+;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
+;			- Remove the Layouts submenu? Make it optional by .ini?
+; eD DONE/FIXED:
 ;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
 ; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- Help Image Generator that creates a set of help images from the current layout.
-;			- Updated help images and files for VK layouts. Hard to make the ImGen work for those, so I used state0/1 images from eD layouts.
-;			- Greek layout w/ tonos/dialytika in the acute/umlaut dead keys.
+;			- Updated and added several layouts, including many locale and script variants. 
+;			- Ligatures/hotstring file, including multiline. To avoid stuck modifiers for long lig., a SendMessage() method was used. Somehow it's slow for short strings?
+;			- A $ prefix to SendMessage instead of {Raw} (by %)
+;			- Unified parsing fn for keypress/deadkey/extend syntax. Allows, e.g., ligature/deadkey release from Extend; DK chaining doesn't work yet though.
+;			- Problem with the DK getting stuck after special send. But this was the case before too! A call to pkl_Send() somehow prevents it...
+;			- Loop through ligature lines, sending +{Enter} instead of `n! That should fix the line ending problem.
+;			- SendMode for ligatures (Input, Message, Clipboard).
+
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
-setPklInfo( "pklVers", "0.4.4-eD" ) 										; Version
+setPklInfo( "pklVers", "0.4.5-eD" ) 										; Version
 setPklInfo( "pklComp", "ed. DreymaR" )										; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
 
 SendMode Event
+SetKeyDelay 3								; eD: The Send key delay was not set, defaulted to 10
 SetBatchLines, -1
 Process, Priority, , H
 Process, Priority, , R
@@ -64,21 +72,21 @@ setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ,, "eD" ) )	; eD: 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )
 pkl_activate()
-return
+Return
 
 ; ####################### labels #######################
 
 exitPKL:
 	ExitApp
-return
+Return
 
 keyHistory:
 	KeyHistory
-return
+Return
 
 detectDeadKeysInCurrentLayout:
 	setDeadKeysInCurrentLayout( detectDeadKeysInCurrentLayout() )
-return
+Return
 
 processKeyPress0:
 processKeyPress1:
@@ -111,75 +119,75 @@ processKeyPress27:
 processKeyPress28:
 processKeyPress29:
 	runKeyPress()
-return
+Return
 
-keyPressedwoStar: ; SC025
-	activity_ping()
-	Critical
-	processKeyPress( A_ThisHotkey )
-return
+;keyPressedWoStar:		; SC###
+;	activity_ping()
+;	Critical
+;	processKeyPress( A_ThisHotkey )
+;Return
 
-keyPressed: ; *SC025
+keyPressed: 			; *SC###
 	activity_ping()
 	Critical
 	processKeyPress( SubStr( A_ThisHotkey, 2 ) )
-return
+Return
 
-upToDownKeyPress: ; *SC025 UP
-	activity_ping()
+keyReleased:			; *SC### UP
+;	activity_ping()
 	Critical
 	processKeyPress( SubStr( A_ThisHotkey, 2, -3 ) )
-return
+Return
 
-modifierDown:  ; *SC025
+modifierDown:			; *SC###
 	activity_ping()
 	Critical
 	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "vkey" ), 1 )
-return
+Return
 
-modifierUp: ; *SC025 UP
+modifierUp: 			; *SC### UP
 	activity_ping()
 	Critical
 	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ), 0 )
-return
+Return
 
 showAbout:
 	pkl_about()
-return
+Return
 
 showHelpImage:
 	pkl_showHelpImage()
-return
+Return
 
 showHelpImageToggle:
 	pkl_showHelpImage( 2 )
-return
+Return
 
 changeActiveLayout:
 	changeLayout( getLayInfo( "nextLayout" ) )
-return
+Return
 
 rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL_Settings list changes
 	activeLay   := getLayInfo( "active" )			; Layout code (path) of the active layout
 	numLayouts  := getLayInfo( "numOfLayouts" )		; The number of listed layouts
-	Loop, % numLayouts {
+	Loop % numLayouts {
 		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
 	}
 	changeLayout( "UseLayPos_" . actLayNum )		; Rerun the same layout, telling pkl_init to use position.
-return
+Return
 
 changeLayoutMenu:
 	changeLayout( getLayInfo( "layout" . A_ThisMenuItemPos . "code" ) )
-return
+Return
 
 doNothing:
-return
+Return
 
 ToggleSuspend:
 	Suspend
 	goto afterSuspend
-return
+Return
 
 afterSuspend:
 	if ( A_IsSuspended ) {
@@ -191,12 +199,12 @@ afterSuspend:
 		pkl_showHelpImage( 4 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	}
-return
+Return
 
 ; ####################### functions #######################
 
 #Include pkl_init.ahk
-#Include pkl_gui_image.ahk	; eD: pkl_gui was very long; split into a help image and a menu/about part
+#Include pkl_gui_image.ahk	; eD: pkl_gui was too long; it's been split into a help image and a menu/about part
 #Include pkl_gui_menu.ahk
 #Include pkl_keypress.ahk
 #Include pkl_send.ahk
@@ -209,9 +217,9 @@ return
 ; ####################### (external) modules #######################
 
 ; eD: #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
-; eD: #Include ext_MenuIcons.ahk ; http://www.autohotkey.com/forum/viewtopic.php?t=21991 - Renamed from MI.ahk
-; eD: #Include ext_SendUni.ahk ; eD: SendU by Farkas et al - obviated by Unicode AHK v1.1
-; eD: #Include ext_HashTable.ahk ; eD: Merged w/ CoHelper then obviated by AHK v1.1 associative arrays
+; eD: #Include ext_MenuIcons.ahk ; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
+; eD: #Include ext_SendUni.ahk ; SendU by Farkas et al - obviated by Unicode AHK v1.1
+; eD: #Include ext_HashTable.ahk ; Merged w/ CoHelper then obviated by AHK v1.1 associative arrays
 ; eD: #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
 ; eD: #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
 ; eD: #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead

@@ -43,7 +43,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	layouts := StrSplit( theLays, ",", " " )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "numOfLayouts", numLayouts )							; Store the number of listed layouts
-	Loop, % numLayouts {												; Store the layout dir names and menu names
+	Loop % numLayouts {													; Store the layout dir names and menu names
 		nameParts := StrSplit( layouts[ A_Index ], ":" )
 		theCode := nameParts[1]
 		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : nameParts[1]
@@ -68,7 +68,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	setLayInfo( "active", theLayout )
 	
 	nextLayoutIndex := 1												; Determine the next layout's index
-	Loop, % numLayouts {
+	Loop % numLayouts {
 		if ( theLayout == getLayInfo( "layout" . A_Index . "code") ) {
 			nextLayoutIndex := A_Index + 1
 			break
@@ -91,7 +91,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		pklMsgBox( 2, layoutFile1 )										; "File not found, exiting"
 		ExitApp
 	}
-	setPklInfo( "File_Lay_Ini", layoutFile1 )							; The layout file path
+	setPklInfo( "File_Lay_Ini", layoutFile1 )							; The main layout file path
 	setLayInfo( "layDir", layoutDir )
 	
 	extendKey := pklIniRead( "extend_key", "", layoutFile1, "global" )	; eD TODO: If this is set, look for multi-Extend in layout.ini
@@ -117,8 +117,11 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	}
 	
 	layoutFile0 := pklIniRead( "baseLayout",, "Lay_Ini", "eD_info" )	; eD: Read a base layout then augment/replace it
-	if ( layoutFile0 ) && ( not FileExist( layoutFile0 ) )
-		pklWarningMsg( "File '" . layoutFile0 . "' not found!" )		; "File not found" iff base is defined but not present
+	if ( FileExist( layoutFile0 ) ) {
+		setPklInfo( "File_Bas_Ini", layoutFile0 )						; The base layout file path	; eD WIP
+	} else if ( layoutFile0 ) {
+		pklWarning( "File '" . layoutFile0 . "' not found!" )			; "File not found" iff base is defined but not present
+	}
 	layoutFiles := FileExist( layoutFile0 ) ? [ layoutFile0, layoutFile1 ] : [ layoutFile1 ]
 	for ix, layoutFile in layoutFiles									; Loop to parse the layout file(s)
 	{
@@ -135,8 +138,9 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		if ( key == "<NoKey>" )							; Are there key entries using <NoKey> for SC?
 			Continue
 		key := scMapLay[ key ] ? scMapLay[ key ] : key					; If there is a SC remapping, apply it
-		entry := StrSplit( entries, "`t" )		; eD TODO: Trim these so that we can prettify the layouts? Trim only if not % (or %{}?).
+		entry := StrSplit( entries, "`t" )
 		numEntries := entry.MaxIndex()
+		entry[1] := Trim( entry[1] )									; Trim the first entry only, allowing padding of the VK name
 		if ( numEntries == 1 ) {
 			ent := Format( "{:L}", entry[1] )							; Check the entry for 'VK' (VK map it to itself)
 			if ( ent == "virtualkey" || ent == "vk" || ent == -1 ) {
@@ -154,7 +158,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			entry[2] := -1
 		else if ( entry[2] == "modifier" )
 			entry[2] := -2
-		vkcode := getVKeyCodeFromName( entry[1] )
+		vkcode := getVKeyCodeFromName( entry[1] )						; Two-digit VK hex code (Uppercase)
 		vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode		; Remap the VK here before assignment.
 		setKeyInfo( key . "vkey", vkcode )								; Set VK code (hex ##) for key
 		setKeyInfo( key . "capSt", entry[2] )							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
@@ -166,53 +170,32 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			else
 				setKeyInfo( key . "vkey", entry[1] )					; Set VK modifier name, e.g., "rshift"
 		} else if ( key == extendKey ) {								; Set the Extend key
-			Hotkey, *%key% Up, upToDownKeyPress
+			Hotkey, *%key% Up, keyReleased
 		} else {
 			Hotkey, *%key%, keyPressed
 		}
-		Loop, % numEntries - 3 {										; Loop through all entries for the key
-			ks := shiftState[ A_Index ]									; ks is the shift state being processed
-			sv := entry[ A_Index + 2 ]									; sv is the value for that state
-			if ( StrLen( sv ) == 0 ) {
-				sv = --													; Disabled
-			} else if ( StrLen( sv ) == 1 ) {
-				sv := asc( sv )
-			} else {
-				if ( SubStr( sv, 1, 1 ) == "*" ) { 						; * : Special chars
-					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
-					sv := "*"
-				} else if ( SubStr( sv, 1, 1 ) == "=" ) { 				; = : Special chars with {Blind}
-					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
-					sv := "="
-				} else if ( SubStr( sv, 1, 1 ) == "%" ) { 				; % : Ligature (with unicode chars, too)
-					setKeyInfo( key . ks . "s", SubStr( sv, 2 ) )
-					sv := "%"
-				} else if ( sv == "--" ) {
-					sv = -- ;) Disabled
-				} else if ( SubStr( sv, 1, 2 ) == "dk" ) { 				; dk: Dead key
-					setKeyInfo( key . ks . "s", SubStr( sv, 3 ) )
-					sv := "dk"
-				} else {
-					Loop, Parse, sv
-					{
-						if ( A_Index == 1 ) {
-							ligature = 0
-						} else if ( asc( A_LoopField ) < 128 ) {		; eD TOFIX: Does this mean ligatures can't be Unicode?
-							ligature = 1
-							break
-						}
-					}
-					if ( ligature ) { 									; Ligature
-						setKeyInfo( key . ks . "s", sv )
-						sv := "%"
-					} else { 											; One character
-						sv := "0x" . _HexUC( sv )
-						sv += 0
-					}
-				}
+		Loop % numEntries - 3 { 										; Loop through all entries for the key
+			ks  := shiftState[ A_Index ]								; This shift state for this key
+			ksE := entry[ A_Index + 2 ]									; The value/entry for that state
+			if        ( StrLen( ksE ) == 0 ) {							; Empty entry; ignore
+				Continue
+			} else if ( StrLen( ksE ) == 1 ) {							; Single character entry:
+				setKeyInfo( key . ks , Ord(ksE) )						; Convert to ASCII/Unicode ordinal number; was Asc()
+			} else if ( ksE != "--" ) { 								; --: Disabled state entry
+				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
+;				ksD := SubStr( ksE, 1, 2 )
+;				if ( ksD == "dk" || ksD == "li" ) { 					; Dead key or Ligature/Hotstring
+;					ksP := ksD
+;					ksE := SubStr( ksE, 3 )
+;				} else if ( not InStr( "%$*=@&", ksP ) ) {
+				if ( InStr( "%$*=@&", ksP ) ) {
+					ksE := SubStr( ksE, 2 ) 							; = : Send {Blind} - use current mod state
+				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
+					ksP := "%"											; % : Unicode/ASCII literal (auto-)ligature
+				}														; @&: Dead keys and numbered ligatures/strings	;eD WIP
+				setKeyInfo( key . ks      , ksP )						; "key<state>"  contains the code (=/*/%/@/&)
+				setKeyInfo( key . ks . "s", ksE )						; "key<state>s" contains the entry itself
 			}
-			if ( sv != "--" )
-				setKeyInfo( key . ks , sv )
 		}	; end loop entries
 	}	; end loop (parse remap)
 	}	; end loop (parse layoutFiles)
@@ -230,8 +213,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		extendFiles := [ extendFile, layoutFile1 ]		; An [extend] section in layout.ini overrides pkl.ini maps
 		for ix, thisFile in extendFiles
 		{																; Loop to parse the Extend files
-			Loop, 4														; eD TODO: Multi-Extend
-			{
+			Loop % 4 {														; eD TODO: Multi-Extend
 				thisExt  := A_Index										
 				thisSect := pklIniRead( "ext" . thisExt, "", thisFile, "ExtendMaps" )
 				thisSect := ( thisFile == getPklInfo( "File_Pkl_Ini" ) ) ? "extend" : thisSect
@@ -252,15 +234,14 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	}	; end if ( extendKey )
 	
 	;-------------------------------------------------------------------------------------
-	; Read and set the deadkey name list and help image info
+	; Read and set the deadkey name list and help image info, and the ligature table file
 	;
 	; eD TODO: List both a base DK table file and an optional local one adding/overriding it?
 	;          Or, always use a local deadkey.ini in addition if it exists?
 	;          An overriding file could add a -1 entry to remove a dk entry found in the base file
-	Loop, 32
-	{																	; Start with the default dead key table
-		key := "dk" . Format( "{:02}", A_Index )						; Pad with zero if index < 10
-		ky2 := "dk" .                  A_Index  						; e.g., "dk1" or "dk14"
+	Loop % 32 {															; Start with the default dead key table
+		key := "@" . Format( "{:02}", A_Index ) 						; Pad with zero if index < 10
+		ky2 := "@" .                  A_Index   						; e.g., "dk1" or "dk14"
 		val := "deadkey" . A_Index
 		setKeyInfo( key, val )											; "dk01" = "deadkey1"
 		if ( ky2 != key )												; ... and also, ...
@@ -286,6 +267,10 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	setLayInfo( "dkImgDir", dkImDir )
 	HIGfile := pklIniRead( "imgGenIniFile",,, "eD" )					; DK img state suffix was in Lay_Ini, eD_info
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf", "", HIGfile ) )	; DK img state suffix, if used. Defaults to old ""/"sh".
+	
+	ligFile  := fileOrAlt( pklIniRead( "stringFile",, "Lay_Ini", "eD_info" )
+						, layoutFile1 )									; Default ligature/hotstring file: layout.ini
+	setLayInfo( "ligFile", ligFile )									; This file should contain the ligature tables
 	
 	;-------------------------------------------------------------------------------------
 	; Read and set layout on/off icons and the tray menu
@@ -325,8 +310,7 @@ pkl_activate()
 	SetTitleMatchMode 2
 	DetectHiddenWindows on
 	WinGet, id, list, %A_ScriptName%
-	Loop, %id%				; This isn't the first instance. Send "kill yourself" message to all instances.
-	{
+	Loop % id {				; This isn't the first instance: Send "kill yourself" message to all instances.
 		id := id%A_Index%
 		PostMessage, 0x398, 422,,, ahk_id %id%
 	}
@@ -367,23 +351,11 @@ _pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL.i
 	val := pklIniRead( type, def, "Pkl_Ini" )
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
 	val := ( val == "--" ) ? "" : prefix . val		; Replace "--" with nothing, otherwise use prefix
-	return val
+	Return val
 }
 
 _MessageFromNewInstance( lparam )	; Called by OnMessage( 0x0398 ) in pkl_init
 {	; If running a second instance, this message is sent
 	if ( lparam == 422 )
 		ExitApp
-}
-
-; eD TODO: Moved this here from ext_Uni2Hex.ahk. In AHK v1.1, can it be replaced?
-_HexUC(utf8) {   ; by Laszlo Hars: Return 4 hex Unicode digits of a UTF-8 input CHAR
-   format = %A_FormatInteger%		; save original integer format
-   SetFormat Integer, Hex			; for converting bytes to hex
-   VarSetCapacity(U, 2)				; from CoHelper.ahk
-   DllCall("MultiByteToWideChar", UInt,65001, UInt,0, Str,utf8, Int,-1, UInt,&U, Int,1)
-   h := 0x10000 + (*(&U+1)<<8) + *(&U)
-   StringTrimLeft h, h, 3
-   SetFormat Integer, %format%		; restore original format
-   return h
 }
