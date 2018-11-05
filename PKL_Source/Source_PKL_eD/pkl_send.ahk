@@ -56,9 +56,9 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 		Return false											; Not a recognized prefix-entry form
 	sendPref := -1
 	ent := SubStr( entry, 2 )
-	if        ( prf == "%" ) {									; Literal/ligature by {Raw}
+	if        ( prf == "%" ) {									; Literal/string by SendInput {Raw}
 		SendInput %   "{Raw}" . ent
-	} else if ( prf == "$" ) {									; Literal/ligature by SendMessage
+	} else if ( prf == "$" ) {									; Literal/string by SendMessage
 		pkl_SendMessage( ent )
 	} else if ( ent == "{CapsLock}" ) {							; CapsLock toggle
 		togCap := ( getKeyState("CapsLock", "T") ) ? "Off" : "On"
@@ -69,8 +69,8 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 		sendPref := "{Blind}"
 	} else if ( prf == "@" ) {									; Named dead key (may vary between layouts!)
 		pkl_DeadKey( ent )
-	} else if ( prf == "&" ) {									; Named ligature (may vary between layouts!)
-		pkl_Ligature( ent )
+	} else if ( prf == "&" ) {									; Named literal/powerstring (may vary between layouts!)
+		pkl_PwrString( ent )
 	}
 	if ( sendPref != -1 ) {
 		if ( mode == "SendThis" && ent ) {
@@ -119,26 +119,27 @@ _strSendMode( string, strMode )
 	} else if ( strMode == "Paste" ) {					; Send by pasting from the Clipboard, preserving its content.
 		pkl_SendClipboard( string )						; - Quick, but may fail if the timing is off. Best for non-parsed send.
 	} else {
-		pklWarning( "Send mode '" . strMode . "' unknown.`nString '" . ligName . "' not sent." )
+		pklWarning( "Send mode '" . strMode . "' unknown.`nString '" . string . "' not sent." )
 		Return false
 	}	; end if strMode
 	Return true
 }
 
-pkl_Ligature( ligName )											; Send named literal ligature/hotstrings from a file
+pkl_PwrString( strName )											; Send named literal/ligature/powerstring from a file
 {
-	ligFile := getLayInfo( "ligFile" )							; The file containing named ligature tables
-	strMode := pklIniRead( "strMode", "Message", ligFile )		; Mode for sending strings: "Input", "Message", "Paste"
-	brkMode := pklIniRead( "brkMode", "+Enter" , ligFile )		; Mode for handling line breaks: "+Enter", "n", "rn"
-	theString := pklIniRead( ligName, , ligFile, "ligatures" )	; Read the named ligature's entry (w/ comment stripping)
+	strFile := getLayInfo( "strFile" )							; The file containing named string tables
+	strMode := pklIniRead( "strMode", "Message", strFile )		; Mode for sending strings: "Input", "Message", "Paste"
+	brkMode := pklIniRead( "brkMode", "+Enter" , strFile )		; Mode for handling line breaks: "+Enter", "n", "rn"
+	theString := pklIniRead( strName, , strFile, "strings" )	; Read the named string's entry (w/ comment stripping)
 	if ( SubStr( theString, 1, 11 ) == "<Multiline>" ) {		; Multiline string entry
 		Loop % SubStr( theString, 13 ) {
-			IniRead, val, %ligFile%, ligatures, % ligName . "-" . Format( "{:02}", A_Index )
+			IniRead, val, %strFile%, strings, % strName . "-" . Format( "{:02}", A_Index )
 			mltString .= val									; IniRead is a bit faster than pklIniRead() (1-2 s on a 34 line str)
 		}
 		theString := mltString
 	}
 	theString := strEsc( theString )							; Replace \# escapes
+;	pklWarning( "DEBUG:`n" . strName . "`n" . theString )
 	if ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r							; Parse by lines, sending Enter key presses between them
 		{														; - This is more robust since apps use different breaks

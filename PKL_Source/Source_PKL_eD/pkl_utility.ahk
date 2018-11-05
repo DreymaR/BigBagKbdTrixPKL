@@ -166,12 +166,12 @@ pklMsgBox( msg, s = "", p = "", q = "", r = "" )
 
 pklErrorMsg( text )
 {
-	MsgBox, 0x10, PKL ERROR, %text%`n`nError # %A_LastError%	; MsgBox type Error
+	MsgBox, 0x10, PKL ERROR, %text%`n`nError # %A_LastError%	; PKL Error type message box
 }
 
 pklWarning( text, time = 5 )
 {
-	MsgBox, 0x30, PKL WARNING, %text%, %time%					; MsgBox type Warning
+	MsgBox, 0x30, PKL WARNING, %text%, %time%					; PKL Warning type message box
 }
 
 pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)

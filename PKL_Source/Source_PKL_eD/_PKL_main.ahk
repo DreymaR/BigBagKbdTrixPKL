@@ -17,38 +17,40 @@
 ;			- 
 ;			- Set a "Bas_ini" parameter to point to the base layout file, if used?
 ;			- Read {remapsFile, extendFile, dkListFile, stringFile} from base layout if not found in top layout?! Other info too? img_width/height/scale - nah...
-;			- Make unified pklParseSend() work for DK chaining (one DK releases another)!
+;				- A function to read from one file with an alternative file, or default value?
+;			- Make pklParseSend() work for DK chaining (one DK releases another)!
 ;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this must not happen for @ entries?
+;				- That alone isn't enough though?
 ; eD TODO:
-;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
-;			- Implement in layouts the ANS2ISO VKEY maps, thus needing only one full base layout. ANSI has the most logical key names for a base.
+;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout. ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS).
 ;			- Layouts can now unmap keys and dead keys by using a -1 entry. Test and document it!
 ;				- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
 ;			- Multi-Extend, allowing one Extend key with modifiers to select up to 4 different layers.
-;			- Could make the Japanese layout now, since dead keys support ligatures!
+;			- Could make the Japanese layout now, since dead keys support literals/ligatures!
 ;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;			- Hebrew layout. Eventually, Arabic too.
 ;			
+;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
+;				- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;			- Allow escaped semicolons (`;) in iniRead?
-;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing)?
+;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing between layout entries)?
 ;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ; eD DONE/FIXED:
-;			- AHK v1.1: Menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead().
-; 			- Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
-;			- Help Image Generator that creates a set of help images from the current layout.
+;			- PKL[eD] v0.4.2: AHK v1.1; menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead(); layered help images.
+; 			- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
+;			- PKL[eD] v0.4.4: Help Image Generator that uses Inkscape to create a set of help images from the current layout.
+;			- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend. DK chaining doesn't work yet though.
 ;			- Updated and added several layouts, including many locale and script variants. 
-;			- Ligatures/hotstring file, including multiline. To avoid stuck modifiers for long lig., a SendMessage() method was used. Somehow it's slow for short strings?
-;			- A $ prefix to SendMessage instead of {Raw} (by %)
-;			- Unified parsing fn for keypress/deadkey/extend syntax. Allows, e.g., ligature/deadkey release from Extend; DK chaining doesn't work yet though.
-;			- Problem with the DK getting stuck after special send. But this was the case before too! A call to pkl_Send() somehow prevents it...
-;			- Loop through ligature lines, sending +{Enter} instead of `n! That should fix the line ending problem.
-;			- SendMode for ligatures (Input, Message, Clipboard).
+;			- Literals/Ligatures/Powerstrings file, including multiline. To avoid stuck modifiers for long strings, a SendMessage() method was implemented.
+;			- Problem with DKs getting stuck after a special entry. But this was the case before too! A call to pkl_Send() somehow prevents it...
+;			- SendMode for powerstrings (Input, Message, Paste from Clipboard).
+;			- Merged .ini sections into default [pkl] ones. For literals, renamed "Ligatures" -> "PowerStrings" for clarity.
 
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
-setPklInfo( "pklVers", "0.4.5-eD" ) 										; Version
+setPklInfo( "pklVers", "0.4.5_eD" ) 										; Version
 setPklInfo( "pklComp", "ed. DreymaR" )										; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
 
@@ -67,7 +69,7 @@ setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseK
 setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Define this globally  (was 'pkl.ini')
 setPklInfo( "File_Lay_Nam", "layout.ini"			)	; eD: --"--
 setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
-setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ,, "eD" ) )	; eD: Extra debug info etc
+setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ) )	; eD: Extra debug info etc
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )

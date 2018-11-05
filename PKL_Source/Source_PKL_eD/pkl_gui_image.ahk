@@ -61,24 +61,24 @@
 
 	if ( activate == 1 ) {
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" )
-		imgBgImage  := fileOrAlt( pklIniRead( "img_bgImage",, "Lay_Ini", "eD_info" )
-								, layoutDir . "\backgr.png"                          )					; BG image, if found
-		imgShftDir  := fileOrAlt( pklIniRead( "img_shftDir",, "Lay_Ini", "eD_info" )
-								, layoutDir . "\ModStateImg"                         )					; Shift state images
-		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff"                 , "Lay_Ini", "eD_info" )	; BG color
-		imgOpacity := pklIniRead( "img_opacity"  , 255                      , "Pkl_Ini", "eD" )
-		imgHorZone := pklIniRead( "img_horZone"  , 20                       , "Pkl_Ini", "eD" )
+		imgBgImage  := fileOrAlt( pklIniRead( "img_bgImage",, "Lay_Ini" )
+								, layoutDir . "\backgr.png"                          )		; BG image, if found
+		imgShftDir  := fileOrAlt( pklIniRead( "img_shftDir",, "Lay_Ini" )
+								, layoutDir . "\ModStateImg"                         )		; Shift state images
+		imgBgColor := pklIniRead( "img_bgColor"  , "fefeff" , "Lay_Ini" )					; BG color
+		imgOpacity := pklIniRead( "img_opacity"  , 255   )
+		imgHorZone := pklIniRead( "img_horZone"  , 20    )
 		if ( not imgPosNr ) {
-			img_Width := pklIniRead( "img_width"    , 0                     , "Lay_Ini", "eD_info"  )	; [global] is old default
+			img_Width := pklIniRead( "img_width"    , 0     , "Lay_Ini" )					; Was in [global]
 			img_Width := ( img_Width ) ? img_Width : pklIniRead( "img_width" , 460, "Lay_Ini", "global" )
-			imgHeight := pklIniRead( "img_height"   , 0                     , "Lay_Ini", "eD_info"  )	; --"--
+			imgHeight := pklIniRead( "img_height"   , 0     , "Lay_Ini" )					; --"--
 			imgHeight := ( imgHeight ) ? imgHeight : pklIniRead( "img_height", 160, "Lay_Ini", "global" )
-			img_Scale := pklIniRead( "img_scale"    , 100.0                 , "Lay_Ini", "eD_info" )	; Scale factor, in % (float)
+			img_Scale := pklIniRead( "img_scale"    , 100.0 , "Lay_Ini" )					; Scale factor, in % (float)
 			img_Width := Ceil( img_Scale * img_Width / 100.0 )
 			imgHeight := Ceil( img_Scale * imgHeight / 100.0 )
-			imgTopMrg := pklIniRead( "img_top_mrg"  , 10                    , "Pkl_Ini", "eD" )
-			imgLowMrg := pklIniRead( "img_low_mrg"  , 60                    , "Pkl_Ini", "eD" )
-			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10                    , "Pkl_Ini", "eD" )
+			imgTopMrg := pklIniRead( "img_top_mrg"  , 10 )
+			imgLowMrg := pklIniRead( "img_low_mrg"  , 60 )
+			imgHorMrg := pklIniRead( "img_hor_mrg"  , 10 )
 			imgHorPos := [ imgHorMrg, ( A_ScreenWidth - img_Width )/2, A_ScreenWidth  - img_Width - imgHorMrg ]	; Left/Mid/Right
 			imgVerPos := [ imgTopMrg,                                  A_ScreenHeight - imgHeight - imgLowMrg ]	; Top/bottom
 			Loop % 6 {

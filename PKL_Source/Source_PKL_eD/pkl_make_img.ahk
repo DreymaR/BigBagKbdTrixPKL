@@ -25,7 +25,7 @@ makeHelpImages()
 	FormatTime, theNow,, yyyy-MM-dd_HHmm						; Use A_Now (local time) for a folder time stamp
 	imgRoot     := getLayInfo( "layDir" ) . "\ImgGen_" . theNow
 	HIG_ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
-	onlyOneDK   := pklIniRead( "imgMakeSingleDK",, pklIniRead( "imgGenIniFile",,, "eD" ) )	; Refresh single DK imgs
+	onlyOneDK   := pklIniRead( "imgMakeSingleDK",, pklIniRead( "imgGenIniFile" ) )	; Refresh single DK imgs
 	onlyOneStr  := ( onlyOneDK ) ? "`nDEBUG: Only creating images for dk_" . onlyOneDK . "." : ""
 	
 	SetTimer, ChangeButtonNamesHIG, 100
@@ -141,7 +141,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 ;		debugStr := imgName . "`nTag/Val: " . chrTag . " / " . chrVal
 ;		debugStr := dkName . " state" . state . "`ndkvs: " . dkvs . "`ndkv: " . dkv
 ;		pklSplash( "Debug", debugStr, 0.2 )
-;		MsgBox % debugStr
+;		pklWarning( "DEBUG:`n" . debugStr )
 ;	}		; end DEBUG
 			emptyBool := ( dkv ) ? false : emptyBool
 		}	; end if imgName
@@ -163,7 +163,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 	static dkCombMark
 	static initialized  := false
 	if ( not initialized ) {							; eD TOFIX: Is this still running several times...?
-		iniFileHIG  := pklIniRead( "imgGenIniFile"  ,       ,,     "eD" )
+		iniFileHIG  := pklIniRead( "imgGenIniFile" )
 		origImgFile := pklIniRead( "origImgFile"    ,       , iniFileHIG )
 		inkscapeStr := pklIniRead( "InkscapePath"   ,       , iniFileHIG )
 		naCharMark  := pklIniRead( "imgNonCharMark" , 0x25AF, iniFileHIG )	; U+25AF White Rectangle
@@ -271,7 +271,7 @@ _svgChar( ch )											; Convert character code to RegEx-able SVG text entry
 
 ChangeButtonNamesHIG:									; For the MsgBox asking whether to make full or state images
 IfWinNotExist, Make Help Images?
-	Return		; Keep waiting for the MsgBox
+	Return		; Keep waiting for the message box
 SetTimer, ChangeButtonNamesHIG, Off
 WinActivate
 ControlSetText, Button1, &Full

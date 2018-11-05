@@ -82,9 +82,9 @@
 
 	Menu, Tray, Click, 2
 	try {
-		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem, "Pkl_Ini", "eD" )
+		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem )
 	} catch {
-		MsgBox, PKL_eD.ini:`nNon-existent menu item specified as default!?
+		pklWarning( "PKL_Settings.ini:`nNon-existing menu item specified as default!?" )
 	}
 ;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chnglayMenuItem%

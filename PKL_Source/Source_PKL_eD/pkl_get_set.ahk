@@ -91,9 +91,9 @@ pkl_locale_load( lang, compact = 0 )
 		initialized := 1
 	}
 	
-	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"       ,, "eD" ) )
-	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history...",, "eD" ) )
-	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile",,, "eD" ) ) )
+	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) )
+	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history..." ) )
+	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
 	
 	if ( compact )
 		file = %lang%.ini
