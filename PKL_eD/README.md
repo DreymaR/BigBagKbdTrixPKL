@@ -15,6 +15,7 @@ DONE:
 * Unicode native AHK now works. SendU and changeNonASCIIMode removed.
 * New iniRead functions that support the UTF-8 Unicode file format.
   
+* Merged several .ini sections including eD specific ones into the default [pkl] as it's tidier.
 * Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * If using a layout from the command line, the notation "UseLayPos_#" will run layout # in the layout list set in PKL_Settings.
 	- This also makes Refresh robust against layout changes in PKL_Settings.
@@ -46,6 +47,7 @@ DONE:
 	- You can make full layout images showing keys as well, by combining with a PKL_eD\ImgBackground image of choice. I use the GIMP for that.
   
 **MAPPINGS**
+* Updated and added several layouts, including locale and script variants.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
 * Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or layout.ini). The old way should still work though.
 * Made Extend substitutes for Launch_Media/Search/App1/App2, as AHK multimedia launcher keys aren't working in Win 10.
@@ -67,15 +69,20 @@ DONE:
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
-* Ligature/literals/hotstrings are specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries.
-	- There's a string file specified in the layout.ini, by default it's PKL_eD\_eD_Ligatures.ini
+* Literals/Ligatures/Powerstrings are specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. These can be multiline defined.
+	- There's a string file specified in the layout.ini, by default it's PKL_eD\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
+	- SendMode can be selected for powerstrings (Input, Message, Paste from Clipboard) in the string file.
+	- To avoid stuck modifiers for long strings, a SendMessage() method was implemented.
 * More generic dead key output: Same prefix-entry syntax as layout/Extend, parsing "%$*=@&" entries.
 	- Dead key base/release entries can be in 0x#### Unicode format in addition to the old decimal format. For base keys, the syntax must be exact.
 	- Examples: "102 = ƒ" is possible instead of "102 = 402". For a glyph not shown in your font such as Meng, "77 = 0x2C6E" (or 11374 still).
 	- Should be easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (e.g., RegExp "0x$1 = 0x$2	; $3")
 * In layout.ini, the VK name entry may be white space padded now to create more readable entry tables. The other entries should not be padded.
+  
+**OTHER/NOTES**
+* There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
 
 
 TODO:
@@ -85,7 +92,7 @@ TODO:
 
 * Multi-Extend! E.g., LAlt+Caps triggers NumPad Extend layer; Caps (or LAlt?) holds it. (LAlt+Shift+Caps locks/unlocks it?)
 	- Others: Ctrl+Caps(only good w/ RCtrl), AltGr+Caps(good!)..., Alt+AltGr+Caps (fancy)
-	- Wanted: NumPad layer, coding layer (brackets/templates), hotstring layer...
+	- Wanted: NumPad layer, coding layer (brackets/templates), powerstring layer...
 	- Extend layers defined in a separate file; possibility of separate scan code remaps for these (e.g., AngleWide but mostly not Curl)
 	- Extend "hold": Any of the keys involved in selecting an extend layer could be held to keep that layer?
 

@@ -66,7 +66,7 @@
 		pkl_Send( Pri, modif )
 	} else {
 		Ent := ( Ent == "" ) ? getKeyInfo( HK . "0s" ) : Ent	; Default to state 0 if state # entry is empty
-		if ( not pkl_ParseSend( Pri . Ent ), "SendThis" ) { 	; eD WIP: Unified parse/send fn
+		if ( not pkl_ParseSend( Pri . Ent ), "SendThis" ) { 	; Unified parse/send fn
 ;			pklWarning( "Trapped input:`n'" . Pri . "'`n" . Ent )	; eD DEBUG
 		}
 	}	; end if Pri
@@ -95,7 +95,7 @@ _extendKeyPressed( HK )
 		Send {LAlt Down}
 		modPressed["Alt"] := "RAlt"
 	}
-	if ( not pkl_ParseSend( xVal ) )						; eD WIP Unified parse/send fn
+	if ( not pkl_ParseSend( xVal ) )						; Unified parse/send fn
 		Send {Blind}{%xVal%}								; By default, take mods into account
 }
 

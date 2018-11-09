@@ -116,7 +116,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 			emptyBool := ( cha ) ? false : emptyBool
 			if ( not cha ) {
 				Continue
-			} else if ( cha == "@" ) {					; eD WIP: Was "dk"
+			} else if ( cha == "@" ) {					; Was "dk"
 				dkName := getKeyInfo( chas )			; Get the true name of the dead key
 				HIG_DKNames[ chas ] := dkName			; eD TODO: Support chained DK. How?
 				res := "dk_" . dkName
@@ -162,7 +162,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 	static dkBaseMark
 	static dkCombMark
 	static initialized  := false
-	if ( not initialized ) {							; eD TOFIX: Is this still running several times...?
+	if ( not initialized ) {
 		iniFileHIG  := pklIniRead( "imgGenIniFile" )
 		origImgFile := pklIniRead( "origImgFile"    ,       , iniFileHIG )
 		inkscapeStr := pklIniRead( "InkscapePath"   ,       , iniFileHIG )

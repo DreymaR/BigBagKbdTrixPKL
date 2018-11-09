@@ -37,35 +37,60 @@ More Know-How-To
 
 * The repo contains executables for the original PKL as well as PKL[eD], and source code for both.
 * Most of the layouts are now updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
-* To make many PKL_eD changes work, your PKL settings .ini and layout.ini files need extra settings.
   
-These PKL files may take a little tweaking to get what you want. Remember, there are several parameters:
+The files may take a little tweaking to get what you want. Remember, there are several parameters:
 * The PKL_Settings.ini file holds layout choices. The layout.ini files hold layout settings and mappings.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
     * These differ notably in the VK_102 key at the lower left, and some of the OEM_ key codes
-    * I haven't supported JIS (Japanese) etc so far - sorry
-* QWERTY vs Colemak vs what-have-you, obviously. Choose wisely!
-* Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
-    * The 'VK' layouts just move the keys of your installed OS layout around, without other changes
-    * The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
+    * I haven't supported JIS (Japanese) etc so far - sorry!
+* Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     * Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
     * Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
+* Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
+    * The 'VK' layouts just move the keys of your installed OS layout around, without other changes
+    * The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
-* In PKL .ini you can use a shorthand specifying KbdType, CurlMod and ErgoMod, or use the layout folder name directly.
-* In layout.ini you can specify in the [eD_info] section some remaps that turn one layout into a modded one, and more.
+* In PKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or use the layout folder path directly.
+* In the layout folder(s) you've chosen, you may edit the layout.ini files further if required.
+    * Check out that the ISO/ANSI OEM_# key numbers are right for you, or remapped with a VK remap.
+    * Mod remaps, help image specifications, Extend key, key mappings etc are in the layout.ini file. See below.
   
 * If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
     * For [Scan Codes (SC###)][SCMSDN] and [Virtual Key names (VK##)][VKCAHK] see below.
-* Similarly, there's a PKL_eD file for named ligatures/hotstrings. These are useable by layouts, Extend and dead keys.
-* In the layout folder(s) you've chosen, you may edit their layout.ini files further if required.
-    * Check out that the ISO/ANSI OEM_# key numbers are right for you, or remapped with a VK remap.
-    * Help image specifications, Extend key, key mappings etc are in the layout.ini file.
-* Help images aren't always available with the right ergo mod and keyboard type, since there are so many combos.
-    * First, check around in some of the eD layout folders. Maybe there's something that works for you there.
-    * With Advanced Mode active, there is a Help Image Generator that can make images for the currently active layout.
-    * You have to have Inkscape installed, for instance from PortableApps.com, and point to it in the HIG settings file.
-    * I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
+* Similarly, there's a PKL_eD file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
+* Help images aren't always available with the right ergo mod and keyboard type, since there are many combos. See below.
+  
+Hotkeys found in the PKL settings file:
+* Ctrl+Shift+1 – Display/hide help image
+* Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
+* Ctrl+Shift+3 – Suspend PKL; hit again to re-activate (it may be Ctrl+Shift+` instead)
+* Ctrl+Shift+4 – Exit PKL
+* Ctrl+Shift+5 – Refresh PKL, if it gets stuck or something
+  
+Techy tips for PKL:
+* Running PKL with other AutoHotkey key mapping scripts may get confusing if there is _hook competition_.
+* In Extend sections, don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
+* PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
+* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layouts.
+
+Layout variants
+---------------
+
+You can quite easily make your preferred (non-)ergonomic variant of, say, a locale layout:
+* Copy-Paste the layout folder and rename the result to what you want, such as 'Cmk-eD-De_ISO_Angle' for German with only the ISO-Angle mod.
+* In that folder's layout.ini file, edit the remap fields to represent the new setting. In this case, 'CmkCAW_ISO' → 'Angle_ISO'.
+    - For non-DH layouts, Extend uses the same remap as the layout; for Curl(DH)/CAW you need an _ext remap for Extend.
+    - To learn more about the remaps, see the PKL_eD\_eD_Remap.ini file.
+* Now, if the PKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right – in this case, ISO/--/Angle/De – you should get the variant you wanted.
+    - After making layout changes, I refresh PKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart PKL.
+* If you want updated help images you must get Inkscape and run the "Create help images..." option.
+    - First, check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
+    - You can download Inkscape for instance from PortableApps.com, and point to it in the PKL_eD\ImgGenerator\PKL_ImgGen_Settings.ini file.
+    - By default, the HIG looks for Inkscape in C:\PortableApps\InkscapePortable\InkscapePortable.exe, so you could just put it there and go.
+    - To see the menu option you must have advancedMode active (in PKL_Settings.ini). The HIG will make images for the currently active layout.
+    - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
+* Most of my layouts have a base layout defined; their [layout] section then changes some keys. You can add key definitions following this pattern.
   
 Here are the columns of a full key mapping together with a sample key – semicolon (QWERTY P) from one of my layout.ini files:
 ```
@@ -83,46 +108,28 @@ Where:
     - =‹entry› : Send {Blind}‹entry›, keeping the state of any held modifier keys
     - @‹entry› : Send the current layout's dead key named ‹entry›
     - &‹entry› : Send the current layout's ligature named ‹entry›
+* Entries need to be tab-separated and except for the VK name entry, not padded with other whitespace
   
-Look in the PKL .ini files if you're interested! Much is explained there.
-  
-These hotkeys are found in the PKL settings file:
-* Ctrl+Shift+1 – Display/hide help image
-* Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
-* Ctrl+Shift+3 – Suspend PKL; hit again to re-activate
-* Ctrl+Shift+4 – Exit PKL
-* Ctrl+Shift+5 – Refresh PKL, if it gets stuck or something
-
-
-**NOTES:**
----------
-Maybe all the layout files aren't quite updated with remaps yet. Check out base ones like Colemak-eD_ISO vs Cmk-eD_ISO_CAWide.
-  
-* Tech note: Running PKL with other AutoHotkey key mapping scripts may get confusing if there is _hook competition_.
-  
-Anti-madness tips for PKL file editing:
-* In layout.ini: Always use tabs as separators.
-* In Extend sections: Don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
-* PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layouts.
+Look in the various .ini files if you're interested! Much is explained there.
 
 
 DONE:
 -----
-These changes are now implemented in [PKL_eD]:
-* A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
-* Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
-* Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
-* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
-* A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
-* A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
-* Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
-* A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
-* Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
-* The settings/layout and Extend parts of PKL.ini are now split into separate files.
-* There's a shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
-* Layouts, Extend and dead keys now all allow the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
-* The "&" prefix denotes ligatures/hotstrings found in a separate PKL_eD file. These may span more than one line.
+These are some of the changes in [PKL_eD]:
+* v0.4.0: Transition to AHK v1.1
+	* A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
+	* Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
+	* Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
+	* A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+* v0.4.1: Transition to AHK v1.1 Unicode, using native Unicode Send and UTF-8 compatible files.
+	* A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
+* v0.4.2: Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
+	* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
+* v0.4.3: Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
+* v0.4.4: A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
+	* A shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+* v0.4.5: Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
+	* The "&" prefix denotes literals/powerstrings found in a separate PKL_eD file. These may span more than one line.
 
 
 TODO:

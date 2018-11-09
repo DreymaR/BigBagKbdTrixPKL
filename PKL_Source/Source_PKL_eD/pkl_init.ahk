@@ -118,7 +118,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	
 	layoutFile0 := pklIniRead( "baseLayout",, "Lay_Ini" )				; eD: Read a base layout then augment/replace it
 	if ( FileExist( layoutFile0 ) ) {
-		setPklInfo( "File_Bas_Ini", layoutFile0 )						; The base layout file path	; eD WIP
+		setPklInfo( "File_Bas_Ini", layoutFile0 )						; The base layout file path	; eD WIP: Refer to this where needed!
 	} else if ( layoutFile0 ) {
 		pklWarning( "File '" . layoutFile0 . "' not found!" )			; "File not found" iff base is defined but not present
 	}

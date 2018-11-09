@@ -15,7 +15,7 @@
 
 ; eD TOFIX/WIP:
 ;			- 
-;			- Set a "Bas_ini" parameter to point to the base layout file, if used?
+;			- Set a "Bas_ini" parameter to point to the base layout file, if used.
 ;			- Read {remapsFile, extendFile, dkListFile, stringFile} from base layout if not found in top layout?! Other info too? img_width/height/scale - nah...
 ;				- A function to read from one file with an alternative file, or default value?
 ;			- Make pklParseSend() work for DK chaining (one DK releases another)!
@@ -42,11 +42,6 @@
 ; 			- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- PKL[eD] v0.4.4: Help Image Generator that uses Inkscape to create a set of help images from the current layout.
 ;			- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend. DK chaining doesn't work yet though.
-;			- Updated and added several layouts, including many locale and script variants. 
-;			- Literals/Ligatures/Powerstrings file, including multiline. To avoid stuck modifiers for long strings, a SendMessage() method was implemented.
-;			- Problem with DKs getting stuck after a special entry. But this was the case before too! A call to pkl_Send() somehow prevents it...
-;			- SendMode for powerstrings (Input, Message, Paste from Clipboard).
-;			- Merged .ini sections into default [pkl] ones. For literals, renamed "Ligatures" -> "PowerStrings" for clarity.
 
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
