@@ -25,35 +25,36 @@ iniReadSection( file, section )
 ;     Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section] )
 ;     Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
-pklIniRead( key, default = "", inifile = "Pkl_Ini", section = "pkl", strip = 1 )
+pklIniRead( key, default = "", iniFile = "Pkl_Ini", section = "pkl", strip = 1 )	; eD WIP: Add an altFile?
 {
 	if ( not key )
 		Return
-	hereLay := ( inifile == "Lay_Ini" ) ? getLayInfo( "layDir" ) : "."	; Allow ".\" syntax for the Layouts dir
-	if ( ( not inStr( inifile, "." ) ) and FileExist( getPklInfo( "File_" . inifile ) ) )	; Special files
-		inifile := getPklInfo( "File_" . inifile )						; (These include Pkl_Ini, Lay_Ini, Pkl_Dic)
+; 	for inx, theFile in [ iniFile, altFile ]	; eD WIP
+	hereLay := ( iniFile == "Lay_Ini" ) ? getLayInfo( "layDir" ) : "."	; Allow ".\" syntax for the Layouts dir
+	if ( ( not inStr( iniFile, "." ) ) and FileExist( getPklInfo( "File_" . iniFile ) ) )	; Special files
+		iniFile := getPklInfo( "File_" . iniFile )						; (These include Pkl_Ini, Lay_Ini, Pkl_Dic)
 	default := ( default == "" ) ? A_Space : default					; IniRead uses a Space for blank defaults
 	if ( key == -1 ) {													; Specify key = -1 for a section list
-		IniRead, val, %inifile%											; (AHK v1.0.90+)
+		IniRead, val, %iniFile%											; (AHK v1.0.90+)
 	} else {
-		IniRead, val, %inifile%, %section%, %key%, %default%
+		IniRead, val, %iniFile%, %section%, %key%, %default%
 	}
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 	val := ( SubStr( val, 1, 2 ) == ".\" ) ? hereLay . SubStr( val, 2 ) : val	; ".\" syntax for the Layouts dir
-;	MsgBox, '%val%', '%inifile%', '%section%', '%key%', '%default%'		; eD DEBUG
+;	MsgBox, '%val%', '%iniFile%', '%section%', '%key%', '%default%'		; eD DEBUG
 	Return val
 }
 
-pklIniBool( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Special read function for boolean values
+pklIniBool( key, default = "", iniFile = "Pkl_Ini", section = "pkl" )	; Special read function for boolean values
 {
-	val := pklIniRead( key, default, inifile, section )		;IniRead, val, %inifile%, %section%, %key%, %default%
+	val := pklIniRead( key, default, iniFile, section )		;IniRead, val, %iniFile%, %section%, %key%, %default%
 	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
 	Return val
 }
 
-pklIniPair( key, default = "", inifile = "Pkl_Ini", section = "pkl" )	; Read a CSV .ini entry into an array
+pklIniPair( key, default = "", iniFile = "Pkl_Ini", section = "pkl" )	; Read a CSV .ini entry into an array
 {
-	val := pklIniRead( key, default, inifile, section )
+	val := pklIniRead( key, default, iniFile, section )
 	val := StrSplit( val, ",", " `t" )
 	Return val
 }

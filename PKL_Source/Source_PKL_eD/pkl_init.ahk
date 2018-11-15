@@ -210,7 +210,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	if ( getLayInfo( "extendKey" ) ) {									; Set the Extend key mappings.
 		extendFile  := fileOrAlt( pklIniRead( "extendFile",, "Lay_Ini" )
 								, getPklInfo( "File_Pkl_Ini" ) )		; Default Extend file: pkl.ini
-		extendFiles := [ extendFile, layoutFile1 ]		; An [extend] section in layout.ini overrides pkl.ini maps
+		extendFiles := [ extendFile, layoutFile1 ]		; An [extend] section in layout.ini overrides pkl.ini maps	; eD WIP: Add layoutFile0 in the middle?!
 		for ix, thisFile in extendFiles
 		{																; Loop to parse the Extend files
 			Loop % 4 {														; eD TODO: Multi-Extend

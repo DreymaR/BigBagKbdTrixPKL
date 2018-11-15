@@ -35,44 +35,44 @@ Getting PKL up and running
 More Know-How-To
 ----------------
 
-* The repo contains executables for the original PKL as well as PKL[eD], and source code for both.
-* Most of the layouts are now updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
+* This repo contains executables for the original PKL as well as PKL[eD], and source code for both.
+* The layouts are updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
+* The PKL_Settings.ini file holds layout choices. The layout.ini files hold layout settings and mappings.
   
 The files may take a little tweaking to get what you want. Remember, there are several parameters:
-* The PKL_Settings.ini file holds layout choices. The layout.ini files hold layout settings and mappings.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-    * These differ notably in the VK_102 key at the lower left, and some of the OEM_ key codes
-    * I haven't supported JIS (Japanese) etc so far - sorry!
+    * ISO boards have a `VK_102` key between `Z` and `LShift`, and some OEM_ key codes differ from ANSI ones
+    * JIS (Japanese) etc are not supported so far - sorry!
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
+* Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     * Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
     * Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     * The 'VK' layouts just move the keys of your installed OS layout around, without other changes
     * The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
-* Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
 * In PKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or use the layout folder path directly.
-* In the layout folder(s) you've chosen, you may edit the layout.ini files further if required.
-    * Check out that the ISO/ANSI OEM_# key numbers are right for you, or remapped with a VK remap.
-    * Mod remaps, help image specifications, Extend key, key mappings etc are in the layout.ini file. See below.
-  
+* In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
+    * Mod remaps, help image specifications, Extend key, key mappings etc are set in the layout.ini file.
+    * Many layouts use a base layout. Most mappings may be there, so the top layout.ini only has to change a few keys.
 * If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
-    * For [Scan Codes (SC###)][SCMSDN] and [Virtual Key names (VK##)][VKCAHK] see below.
 * Similarly, there's a PKL_eD file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
+* To learn more about remaps, see the PKL_eD\_eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
 * Help images aren't always available with the right ergo mod and keyboard type, since there are many combos. See below.
   
-Hotkeys found in the PKL settings file:
+**Hotkeys found in the PKL settings file:**
 * Ctrl+Shift+1 – Display/hide help image
 * Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
 * Ctrl+Shift+3 – Suspend PKL; hit again to re-activate (it may be Ctrl+Shift+` instead)
 * Ctrl+Shift+4 – Exit PKL
 * Ctrl+Shift+5 – Refresh PKL, if it gets stuck or something
   
-Techy tips for PKL:
-* Running PKL with other AutoHotkey key mapping scripts may get confusing if there is _hook competition_.
-* In Extend sections, don't use empty mappings; comment these out. See my examples for advanced mappings like hotstrings!
+**Techy tips for PKL:**
+* Look in the various .ini files if you're interested! Much is explained there.
+* See my examples in the Extend file for some advanced mappings! These may be used in layouts and dead keys too.
 * PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layouts.
+* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layout entries.
+* Running PKL with other AutoHotkey key mapping scripts may get confusing if there is so-called _hook competition_.
 
 Layout variants
 ---------------
@@ -81,7 +81,6 @@ You can quite easily make your preferred (non-)ergonomic variant of, say, a loca
 * Copy-Paste the layout folder and rename the result to what you want, such as 'Cmk-eD-De_ISO_Angle' for German with only the ISO-Angle mod.
 * In that folder's layout.ini file, edit the remap fields to represent the new setting. In this case, 'CmkCAW_ISO' → 'Angle_ISO'.
     - For non-DH layouts, Extend uses the same remap as the layout; for Curl(DH)/CAW you need an _ext remap for Extend.
-    - To learn more about the remaps, see the PKL_eD\_eD_Remap.ini file.
 * Now, if the PKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right – in this case, ISO/--/Angle/De – you should get the variant you wanted.
     - After making layout changes, I refresh PKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart PKL.
 * If you want updated help images you must get Inkscape and run the "Create help images..." option.
@@ -90,27 +89,44 @@ You can quite easily make your preferred (non-)ergonomic variant of, say, a loca
     - By default, the HIG looks for Inkscape in C:\PortableApps\InkscapePortable\InkscapePortable.exe, so you could just put it there and go.
     - To see the menu option you must have advancedMode active (in PKL_Settings.ini). The HIG will make images for the currently active layout.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
-* Most of my layouts have a base layout defined; their [layout] section then changes some keys. You can add key definitions following this pattern.
+
+Key mappings
+------------
+
+Most of my layouts have a base layout defined; their layout section then changes some keys. You can add key definitions following this pattern.
   
-Here are the columns of a full key mapping together with a sample key – semicolon (QWERTY P) from one of my layout.ini files:
+Here are some sample full key mappings followed by a legend:
 ```
-SC01a = OEM_3   0   ;   :   --  @13     …   ; QWERTY pP - dk_umlaut
-SC    = VK      CS  S0  S1  S2  S6      S7  ; comments
+SC018 = Y       1   y   Y   --  ›    »   ; QWERTY oO
+SC019 = OEM_1   0   ;   :   --  @13  …   ; QWERTY pP - dk_umlaut (ANS_1 ISO_3)
+;SC   = VK      CS  S0  S1  S2  S6   S7  ; comments
 ```
 Where:
-* SC & VK: [Scan code ("hard code")][SCMSDN] & [Virtual Key Code ("key name")][VKCAHK]; see my [Key Code Table][KeyTab].
-* CS: Cap state (default 0; +1 if S0/S1 are non-/shifted versions of the same letter; +4 for S6/S7)
-* S#: Standard modifier states for the key: Unmodified, 1:Shift, 2:Ctrl (not often used), 6:AltGr, 7:Shift+AltGr...
+* SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
+    - For SC, you can use an AHK key name instead. For full mappings I think you need the real VK name in the VK entry.
+    - _Example:_ The above keys are the SC for the `O` and `P` keys; these are then mapped to their Colemak equivalents `Y` and `;`.
+    - Check out that the ISO/ANSI specific `OEM_#` key numbers are right for you, or remapped with a VK remap.
+    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names it `OEM_3`.
+* CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
+    - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
+* S#: Modifier states for the key. S0:Unmodified, S1:+Shift, S2:+Ctrl (rarely used), S6:+AltGr, S7:+Shift+AltGr.
+    - _Example:_ Shift+AltGr+`y` gives the `»` glyph. AltGr+`;` has the special entry `@13` (dk_umlaut).
 * Special prefix-entry syntax (can be used for layouts, Extend and dead key entries):
     - %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
     - $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
     - *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# mods, {} key names)
     - =‹entry› : Send {Blind}‹entry›, keeping the state of any held modifier keys
     - @‹entry› : Send the current layout's dead key named ‹entry›
-    - &‹entry› : Send the current layout's ligature named ‹entry›
-* Entries need to be tab-separated and except for the VK name entry, not padded with other whitespace
+    - &‹entry› : Send the current layout's powerstring named ‹entry›
   
-Look in the various .ini files if you're interested! Much is explained there.
+Here are some sample VirtualKey (VK) and Modifier mappings. Any layout may contain all types of mappings.
+```
+RWin    = Back      VirtualKey      ; RWin   -> Backspace
+RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
+SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (needed the VKEY name here)
+SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
+```
+Entries need to be tab-separated and except for the VK name entry, not padded with other whitespace.
 
 
 DONE:
@@ -135,13 +151,13 @@ These are some of the changes in [PKL_eD]:
 TODO:
 -----
 I have many more [PKL_eD] changes on my wishlist, including:
-* A timer that checks whether the underlaying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
+* A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Multiple Extend layers (NumPad, hotstring...).
 * Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-10_
+_Øystein "DreymaR" Gadmar, 2018-11_
 
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)

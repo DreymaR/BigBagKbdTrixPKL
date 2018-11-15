@@ -15,6 +15,8 @@
 
 ; eD TOFIX/WIP:
 ;			- 
+;			- Instead of fileOrAlt(), fileOrAlts()? So I can look both in Lay_Ini, Bas_Ini and Pkl_Ini.
+;			- Or, could pklIniRead() have an altFile too?! Last parameter, default "", could be "Bas_Ini" for instance.
 ;			- Set a "Bas_ini" parameter to point to the base layout file, if used.
 ;			- Read {remapsFile, extendFile, dkListFile, stringFile} from base layout if not found in top layout?! Other info too? img_width/height/scale - nah...
 ;				- A function to read from one file with an alternative file, or default value?
@@ -22,6 +24,7 @@
 ;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this must not happen for @ entries?
 ;				- That alone isn't enough though?
 ; eD TODO:
+;			- On 0.5+ release, change name to PKLE (Experience/Expanded/Enhancer)? PKLE[D]? PIKL(E) (Improved)? PEK(L)A (App)? PIKLE :-)
 ;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout. ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS).
 ;			- Layouts can now unmap keys and dead keys by using a -1 entry. Test and document it!
 ;				- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
@@ -30,11 +33,11 @@
 ;			- Could make the Japanese layout now, since dead keys support literals/ligatures!
 ;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;			- Hebrew layout. Eventually, Arabic too.
-;			
+; eD ONHOLD:
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;				- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;			- Allow escaped semicolons (`;) in iniRead?
-;			- Reading layout files, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing between layout entries)?
+;			- Reading layout sections, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing between layout entries)? No, that'll interfere with space padding.
 ;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ; eD DONE/FIXED:
