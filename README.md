@@ -37,13 +37,15 @@ More Know-How-To
 
 * This repo contains executables for the original PKL as well as PKL[eD], and source code for both.
 * The layouts are updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
-* The PKL_Settings.ini file holds layout choices. The layout.ini files hold layout settings and mappings.
+* The PKL_Settings.ini file holds layout choices and general program settings.
+* The layout.ini files hold layout settings and mappings. It may point to and augment a baseLayout.ini file.
   
-The files may take a little tweaking to get what you want. Remember, there are several parameters:
+The files may take a little tweaking to get what you want. There are several parameters:
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-    * ISO boards have a `VK_102` key between `Z` and `LShift`, and some OEM_ key codes differ from ANSI ones
-    * JIS (Japanese) etc are not supported so far - sorry!
+    * ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
+    * JIS (Japanese) etc are not supported so far - sorry.
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
+    * This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY included.
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     * Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
@@ -97,20 +99,20 @@ Most of my layouts have a base layout defined; their layout section then changes
   
 Here are some sample full key mappings followed by a legend:
 ```
-SC018 = Y       1   y   Y   --  ›    »   ; QWERTY oO
-SC019 = OEM_1   0   ;   :   --  @13  …   ; QWERTY pP - dk_umlaut (ANS_1 ISO_3)
-;SC   = VK      CS  S0  S1  S2  S6   S7  ; comments
+SC018 = Y       1   y   Y   --      ›    »   ; QWERTY oO
+SC019 = OEM_1   0   ;   :   --      @13  …   ; QWERTY pP - dk_umlaut (ANS_1 ISO_3)
+;SC   = VK      CS  S0  S1  S2      S6   S7  ; comments
 ```
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
     - For SC, you can use an AHK key name instead. For full mappings I think you need the real VK name in the VK entry.
-    - _Example:_ The above keys are the SC for the `O` and `P` keys; these are then mapped to their Colemak equivalents `Y` and `;`.
+    - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
     - Check out that the ISO/ANSI specific `OEM_#` key numbers are right for you, or remapped with a VK remap.
-    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names it `OEM_3`.
+    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names the semicolon key `OEM_3`.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
     - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
-* S#: Modifier states for the key. S0:Unmodified, S1:+Shift, S2:+Ctrl (rarely used), S6:+AltGr, S7:+Shift+AltGr.
-    - _Example:_ Shift+AltGr+`y` gives the `»` glyph. AltGr+`;` has the special entry `@13` (dk_umlaut).
+* S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
+    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@13` (dk_umlaut).
 * Special prefix-entry syntax (can be used for layouts, Extend and dead key entries):
     - %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
     - $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
@@ -126,7 +128,7 @@ RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift 
 SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (needed the VKEY name here)
 SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
 ```
-Entries need to be tab-separated and except for the VK name entry, not padded with other whitespace.
+Entries are any-whitespace delimited since v0.4.6 (PKL used to strictly require a single Tab character between entries).
 
 
 DONE:
@@ -146,6 +148,9 @@ These are some of the changes in [PKL_eD]:
 	* A shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 * v0.4.5: Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
 	* The "&" prefix denotes literals/powerstrings found in a separate PKL_eD file. These may span more than one line.
+* v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
+	* Read most layout settings apart from remaps from the base layout if not found in the main layout.
+	* Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
 
 
 TODO:

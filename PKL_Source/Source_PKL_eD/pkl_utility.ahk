@@ -192,7 +192,7 @@ getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
 		name := SubStr( name, 3 )							; Keep only the ## here
 	} else {
-		name := pklIniRead( "VK_" . name, "00", "Pkl_Dic", "VKeyCodeFromName" )
+		name := pklIniRead( "VK_" . name, "00", "PklDic", "VKeyCodeFromName" )
 	}
 	Return name
 }

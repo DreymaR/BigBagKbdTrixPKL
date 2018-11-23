@@ -2,12 +2,11 @@
 {
 	_initReadPklIni( layoutFromCommandLine )			; Read settings from pkl.ini
 	_initReadLayIni()									; Read settings from layout.ini and layout part files
-;	_initReadOtherInfo()								; Other layout settings (dead key images, icons)
 }	; end fn
 
 _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #######################
 {
-	PklIniFile := getPklInfo( "File_Pkl_Ini" )
+	PklIniFile := getPklInfo( "File_PklIni" )
 	if ( not FileExist( PklIniFile ) ) {
 		MsgBox, %PklIniFile% file NOT FOUND`nSorry. The program will exit.
 		ExitApp
@@ -15,7 +14,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	
 	it := pklIniRead( "language", "auto" )								; Load locale strings
 	if ( it == "auto" )
-		it := pklIniRead( SubStr( A_Language , -3 ), "", "Pkl_Dic", "LangStrFromLangID" )
+		it := pklIniRead( SubStr( A_Language , -3 ), "", "PklDic", "LangStrFromLangID" )
 	pkl_locale_load( it, pklIniBool( "compactMode", false ) )
 
 	pklSetHotkey( pklIniRead( "suspendHotkey"       ), "ToggleSuspend"       , "HK_Suspend"      )
@@ -30,7 +29,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
 	
-	theLays := pklIniRead( "layout", "" )								; Read from PKL_Ini
+	theLays := pklIniRead( "layout", "" )								; Read the layouts string from PKL_Ini
 	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>" )
 	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>" )
 	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
@@ -62,7 +61,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 		theLayout := getLayInfo( "layout1code" )
 	}
 	if ( theLayout == "" ) {
-		pklMsgBox( 1, getPklInfo( "File_Pkl_Ini" ) )					; "You must set the layout file in PKL .ini!"
+		pklMsgBox( 1, getPklInfo( "File_PklIni" ) )					; "You must set the layout file in PKL .ini!"
 		ExitApp
 	}
 	setLayInfo( "active", theLayout )
@@ -82,33 +81,38 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 {
 	theLayout := getLayInfo( "active" )
 	if ( pklIniBool( "compactMode", false )	) {
-		layoutDir := "."
+		layDir := "."
 	} else {
-		layoutDir := "Layouts\" . theLayout
+		layDir := "Layouts\" . theLayout
 	}
-	layoutFile1 := layoutDir . "\" . getPklInfo( "File_Lay_Nam" )		; The name of the layout .ini file
-	if ( not FileExist(layoutFile1) ) {
-		pklMsgBox( 2, layoutFile1 )										; "File not found, exiting"
-		ExitApp
+	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
+	if ( not FileExist( mainLay ) ) {
+		pklMsgBox( 2, mainLay ) 										; "File not found, exiting"
+		ExitApp	; eD TOFIX: Why isn't the program exiting here? Use pklExit instead?
 	}
-	setPklInfo( "File_Lay_Ini", layoutFile1 )							; The main layout file path
-	setLayInfo( "layDir", layoutDir )
+	setLayInfo( "layDir"      , layDir  )
+	setPklInfo( "File_LayIni", mainLay )								; The main layout file path
+	baseDir := "Layouts\" . pklIniRead( "baseLayout",, "LayIni" )		; eD: Read a base layout then augment/replace it
+	baseLay := ( baseDir == "Layouts\" ) ? "" : baseDir . "\baseLayout.ini"
+	if ( FileExist( baseLay ) ) {
+		setLayInfo( "basDir"      , baseDir )
+		setPklInfo( "File_BasIni", baseLay )							; The base layout file path
+	} else if ( baseLay ) {
+		setLayInfo( "basDir"      , "" )
+		setPklInfo( "File_BasIni", "" )
+		pklWarning( "File '" . baseLay . "' not found!" )				; "File not found" iff base is defined but not present
+	}
 	
-	extendKey := pklIniRead( "extend_key", "", layoutFile1 )			; Was in [global]
-	if ( extendKey <> "" ) {
-		setLayInfo( "extendKey", extendKey )							; eD TODO: If this is set, look for multi-Extend in layout.ini
-	}
-	
-	static initiated := 0	; Ensure the tables are read only once (eD TODO: Is this the right way? Necessary?)
-	mapFile := pklIniRead( "remapsFile", "", "Lay_Ini" )				; Layout remapping for ergo mods, ANSI/ISO conversion etc. 
+	static initiated							; Ensure the tables are read only once (eD TODO: Is this the right way? Necessary?)
+	mapFile := pklIniRead( "remapsFile",, "LayIni",, "BasIni" ) 		; Layout remapping for ergo mods, ANSI/ISO conversion etc. 
 	if ( not initiated ) && ( FileExist( mapFile ) )
 	{																	; Read/set remap dictionaries
 		mapTypes  := "  scMapLay     ,  scMapExt     ,  vkMapMec    "
-		mapSects  := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ]
+		mapSects  := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ]	; Section names in the .ini file
 		Loop, Parse, mapTypes, CSV, %A_Space%%A_Tab%
 		{
 			mapType := A_LoopField
-			mapList := pklIniRead( mapSects[ A_Index ], "", "Lay_Ini" )	; First, get the name of the map list
+			mapList := pklIniRead( mapSects[ A_Index ],, "LayIni",, "BasIni" )	; First, get the name of the map list
 			%mapType% := ReadRemaps( mapList, mapFile )					; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, mapFile )		; Parse the cycle list into a pdic of mappings
 		}
@@ -116,31 +120,28 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	initiated := 1
 	}
 	
-	layoutFile0 := pklIniRead( "baseLayout",, "Lay_Ini" )				; eD: Read a base layout then augment/replace it
-	if ( FileExist( layoutFile0 ) ) {
-		setPklInfo( "File_Bas_Ini", layoutFile0 )						; The base layout file path	; eD WIP: Refer to this where needed!
-	} else if ( layoutFile0 ) {
-		pklWarning( "File '" . layoutFile0 . "' not found!" )			; "File not found" iff base is defined but not present
-	}
-	layoutFiles := FileExist( layoutFile0 ) ? [ layoutFile0, layoutFile1 ] : [ layoutFile1 ]
-	for ix, layoutFile in layoutFiles									; Loop to parse the layout file(s)
-	{
-	shiftStates := pklIniRead( "shiftstates", "0:1", layoutFile )		; Was in [global]
-	shiftStates := shiftStates . ":8:9"									; SgCap, SgCap + Shift	(eD TODO: Utilize these somewhere?)
+	extendKey := pklIniRead( "extend_key",, mainLay,, baseLay )			; Was in layout.ini [global]
+	if ( extendKey )
+		setLayInfo( "extendKey", extendKey )							; eD TODO: If this is set, look for multi-Extend in layout.ini
+	shiftStates := pklIniRead( "shiftstates", "0:1", mainLay,, baseLay )	; Was in [global]
+	shiftStates .= ":8:9"												; SgCap, SgCap + Shift		eD TODO: Utilize these somewhere?
 	setLayInfo( "hasAltGr", ( InStr( shiftStates, 6 ) ) ? 1 : 0 )
 	setLayInfo( "shiftStates", shiftStates )							; Used by the Help Image Generator
 	shiftState := StrSplit( shiftStates, ":" )
 	
-	remap := iniReadSection( layoutFile, "layout" )
+	layoutFiles := FileExist( baseLay ) ? [ baseLay, mainLay ] : [ mainLay ]
+	for ix, layFile in layoutFiles										; Loop to parse the layout file(s)
+	{
+	remap := iniReadSection( layFile, "layout" )
 	Loop, Parse, remap, `r`n
 	{
 		pklIniKeyVal( A_LoopField, key, entries, 0, 0 )	; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
-		if ( key == "<NoKey>" )							; Are there key entries using <NoKey> for SC?
+		if ( key == "<NoKey>" )											; eD WIP: Are there key entries using <NoKey> for SC? Documented?
 			Continue
 		key := scMapLay[ key ] ? scMapLay[ key ] : key					; If there is a SC remapping, apply it
-		entry := StrSplit( entries, "`t" )
-		numEntries := entry.MaxIndex()
-		entry[1] := Trim( entry[1] )									; Trim the first entry only, allowing padding of the VK name
+		entries := RegExReplace( entries, "[ `t]+", "`t" )				; Turn any consecutive whitespace into single tabs, so...
+		entry := StrSplit( entries, "`t" )								; The Tab delimiter and no padding requirements are lifted
+		numEntries := ( entry.MaxIndex() < 2+shiftState.MaxIndex() ) ? entry.MaxIndex() : 2+shiftState.MaxIndex()	; Comments make pseudo-entries
 		if ( numEntries == 1 ) {
 			ent := Format( "{:L}", entry[1] )							; Check the entry for 'VK' (VK map it to itself)
 			if ( ent == "virtualkey" || ent == "vk" || ent == -1 ) {
@@ -201,22 +202,20 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	}	; end loop (parse layoutFiles)
 	
 ;_initReadOtherInfo()								;   ####################### other settings #######################
-;	layoutFile  := getPklInfo( "File_Lay_Ini" )	; layoutfile1
-;	layoutDir   := getLayInfo( "layDir" )		; layoutDir
 	
 	;-------------------------------------------------------------------------------------
 	; Read and set Extend mappings and help imagefo
 	;
 	if ( getLayInfo( "extendKey" ) ) {									; Set the Extend key mappings.
-		extendFile  := fileOrAlt( pklIniRead( "extendFile",, "Lay_Ini" )
-								, getPklInfo( "File_Pkl_Ini" ) )		; Default Extend file: pkl.ini
-		extendFiles := [ extendFile, layoutFile1 ]		; An [extend] section in layout.ini overrides pkl.ini maps	; eD WIP: Add layoutFile0 in the middle?!
+		extendFile  := fileOrAlt( pklIniRead( "extendFile",, "LayIni",, "BasIni" )
+								, getPklInfo( "File_PklIni" ) )		; Default Extend file: pkl.ini
+		extendFiles := [ extendFile, mainLay ]		; An [extend] section in layout.ini overrides pkl.ini maps	; eD WIP: Add baseLay in the middle?!
 		for ix, thisFile in extendFiles
 		{																; Loop to parse the Extend files
-			Loop % 4 {														; eD TODO: Multi-Extend
+			Loop % 4 {													; eD TODO: Multi-Extend
 				thisExt  := A_Index										
 				thisSect := pklIniRead( "ext" . thisExt, "", thisFile, "ExtendMaps" )
-				thisSect := ( thisFile == getPklInfo( "File_Pkl_Ini" ) ) ? "extend" : thisSect
+				thisSect := ( thisFile == getPklInfo( "File_PklIni" ) ) ? "extend" : thisSect
 				remap := iniReadSection( thisFile, thisSect )
 				If ( not remap )										; If this remap is empty, continue to the next
 					Continue
@@ -230,7 +229,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			}
 		}	; end loop (parse extendFiles)
 		setLayInfo( "extndImg"											; Extend image	; eD TODO: Multi-Extend
-				  , fileOrAlt( pklIniRead( "img_Extend1",, "Lay_Ini" ), layoutDir . "\extend.png" ) )
+				  , fileOrAlt( pklIniRead( "img_Extend1",, "LayIni",, "BasIni" ), layDir . "\extend.png" ) )
 	}	; end if ( extendKey )
 	
 	;-------------------------------------------------------------------------------------
@@ -247,11 +246,11 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		if ( ky2 != key )												; ... and also, ...
 			setKeyInfo( ky2, val )										; "dk1" = "deadkey1", backwards compatible
 	}
-	dkFile  := fileOrAlt( pklIniRead( "dkListFile",, "Lay_Ini" )
-						, layoutFile1 )									; Default DK file: layout.ini
+	dkFile  := fileOrAlt( pklIniRead( "dkListFile",, "LayIni",, "BasIni" )
+						, mainLay )										; Default DK file: layout.ini
 	setLayInfo( "dkFile", dkFile )										; This file should contain the actual dk tables
 	dknames := "deadKeyNames"											; The .ini section that holds dk names
-	dkFiles := ( dkFile != layoutFile1 ) ? [ dkFile, layoutFile1 ] : [ layoutFile1 ]
+	dkFiles := ( dkFile != mainLay ) ? [ dkFile, mainLay ] : [ mainLay ]
 	for ix, thisFile in dkFiles											; Go through both DK and Layout files for names
 	{
 		remap   := iniReadSection( thisFile, dknames )					; Make the dead key name lookup table
@@ -262,20 +261,20 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 				setKeyInfo( key, val )									; e.g., "dk01" = "dk_dotbelow"
 		}
 	}
-	dkImDir := fileOrAlt( pklIniRead( "img_DKeyDir", ".\DeadkeyImg", "Lay_Ini" )	; Read/set dead key image data
-						, layoutDir )									; Default DK img dir: Layout dir or DeadkeyImg
+	dkImDir := fileOrAlt( pklIniRead( "img_DKeyDir", ".\DeadkeyImg", "LayIni",, "BasIni" )	; Read/set DK image data
+						, layDir )										; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
-	HIGfile := pklIniRead( "imgGenIniFile" )							; DK img state suffix was in Lay_Ini
+	HIGfile := pklIniRead( "imgGenIniFile" )							; DK img state suffix was in LayIni
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf", "", HIGfile ) )	; DK img state suffix. Defaults to old ""/"sh".
 	
-	strFile  := fileOrAlt( pklIniRead( "stringFile",, "Lay_Ini" )
-						, layoutFile1 )									; Default literals/powerstring file: layout.ini
+	strFile  := fileOrAlt( pklIniRead( "stringFile",, "LayIni",, "BasIni" )
+						, mainLay )										; Default literals/powerstring file: layout.ini
 	setLayInfo( "strFile", strFile )									; This file should contain the string tables
 	
 	;-------------------------------------------------------------------------------------
 	; Read and set layout on/off icons and the tray menu
 	;
-	ico := readLayoutIcons( layoutDir )
+	ico := readLayoutIcons( layDir, baseDir )
 	setLayInfo( "Ico_On_File", ico.Fil1 )
 	setLayInfo( "Ico_On_Num_", ico.Num1 )
 	setLayInfo( "Ico_OffFile", ico.Fil2 )
@@ -283,13 +282,14 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	pkl_set_tray_menu()
 }	; end fn _initReadLayIni()
 
-readLayoutIcons( layoutDir )
+readLayoutIcons( layDir, altDir = "" )									; Read icons for a specified layout dir
 {
-	layIni  := layoutDir . "\" . getPklInfo( "File_Lay_Nam" )
+	layIni  := layDir . "\" . getPklInfo( "LayFileName" )
+	altIni  := altDir . "\" . getPklInfo( "LayFileName" )
 	for ix, OnOff in [ "on", "off" ]
 	{
 		icon := OnOff . ".ico"
-		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layoutDir . "\", layIni ) . icon
+		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni,, altIni ) . icon
 							, "PKL_eD\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
 		if ( FileExist( icoFile ) ) {
 			icoFil%ix%  := icoFile

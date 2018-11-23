@@ -79,7 +79,12 @@ DONE:
 	- Dead key base/release entries can be in 0x#### Unicode format in addition to the old decimal format. For base keys, the syntax must be exact.
 	- Examples: "102 = ƒ" is possible instead of "102 = 402". For a glyph not shown in your font such as Meng, "77 = 0x2C6E" (or 11374 still).
 	- Should be easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (e.g., RegExp "0x$1 = 0x$2	; $3")
-* In layout.ini, the VK name entry may be white space padded now to create more readable entry tables. The other entries should not be padded.
+* PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
+	- pklIniRead() can have an altFile, such as "BasIni".
+	- Allow a ..\ syntax too in pklIniRead(), to simplify entries like this: img_DKeyDir = ..\Cmk-eD_ISO\DeadkeyImg
+	- Change baseLayout entries to same format as in PKL_Settings.ini, so baseLayout = "Layouts\" . entry . "\baseLayout.ini".
+	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
+* Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
   
 **OTHER/NOTES**
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
@@ -125,11 +130,6 @@ TODO:
 
 * Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini)?
 
-* Allow non-Tab whitespace in layout entries? (Strip whitespace. To preserve it use {# } or }{# }{ in entries?)
-    - Today, tab+; comments are stripped in layout.ini but not in PKL .ini. Make this consistent?
-    - Important: Leave escaped semicolon (`;) alone, even after whitespace! And document the need for escaping it!
-    - Probably not a big deal. It works well enough as it is.
-
 
 INFO: Some documentation notes
 ------------------------------
@@ -141,19 +141,19 @@ INFO: Some documentation notes
   
 * "Anti-madness tips" for PKL (by user Eraicos and me):
     - AHK v1.0 script files need to be ANSI encoded. They don't support special letters well.
-        - The current PKL_eD AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM (but not without BOM!?).
+        - The current PKL_eD AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM.
     - PKL .ini files may be UTF-8 encoded, with or without BOM. Source .ahk files should be UTF-8-BOM?
-        - For safety, don't use end-of-line comments in the .ini files? OK in layout.ini (because of tab parsing).
-        - With PKL_eD end-of-line comments are safe!
+        - PKL: Don't use end-of-line comments in the .ini files. OK in layout.ini because of tab parsing.
+        - PKL_eD: End-of-line comments are now safe!
     - In layout.ini:
-        - Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
+        - Before v0.4.6: Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
     - In the Extend section:
         - Don't use empty mappings in the Extend section. Comment these out.
-        - The default format includes {} to send keys by name. To escape these, use my }‹any string›{ trick.
+        - The default format includes {} to send keys by name. To escape these, use the }‹any string›{ trick.
   
 
-**Entry format info from Farkas' sample.ini layout file:** (Note that I now use '@' for 'dk' entries, ++)
+**Entry format info from Farkas' sample.ini layout file:** (Note that I now use '@' for 'dk' entries, etc)
 ```
 Scan code =
 	Virtual key code (like in MS KLC)

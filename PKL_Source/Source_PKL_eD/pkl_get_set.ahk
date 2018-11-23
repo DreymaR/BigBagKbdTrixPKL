@@ -78,11 +78,11 @@ pkl_locale_load( lang, compact = 0 )
 	{																	; eD: Read/set default locale string list
 		Loop, 22														; Read default locale strings (numbered)
 		{
-			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "Pkl_Dic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
+			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "PklDic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
 			str := strEsc( str )										; Replace \# escapes
 			setPklInfo( "LocStr_" . A_Index , str )
 		}
-		sect := iniReadSection( getPklInfo( "File_Pkl_Dic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
+		sect := iniReadSection( getPklInfo( "File_PklDic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
 		Loop, Parse, sect, `r`n
 		{
 			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
@@ -120,7 +120,7 @@ pkl_locale_load( lang, compact = 0 )
 	sect := iniReadSection( file, "keyNames" )
 	Loop, Parse, sect, `r`n
 	{
-		pklIniKeyVal( A_Loopfield, key, val, 0 )
+		pklIniKeyVal( A_Loopfield, key, val, 0 )	; Read without character escapes
 		_setHotkeyText( key, val )
 	}
 }

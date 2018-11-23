@@ -15,17 +15,13 @@
 
 ; eD TOFIX/WIP:
 ;			- 
-;			- Instead of fileOrAlt(), fileOrAlts()? So I can look both in Lay_Ini, Bas_Ini and Pkl_Ini.
-;			- Or, could pklIniRead() have an altFile too?! Last parameter, default "", could be "Bas_Ini" for instance.
-;			- Set a "Bas_ini" parameter to point to the base layout file, if used.
-;			- Read {remapsFile, extendFile, dkListFile, stringFile} from base layout if not found in top layout?! Other info too? img_width/height/scale - nah...
-;				- A function to read from one file with an alternative file, or default value?
+;			- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones.
 ;			- Make pklParseSend() work for DK chaining (one DK releases another)!
-;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this must not happen for @ entries?
-;				- That alone isn't enough though?
+;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this should this happen for @ entries?
+;				- Removing that isn't enough though? And actually, should a dk chaining start anew?
 ; eD TODO:
-;			- On 0.5+ release, change name to PKLE (Experience/Expanded/Enhancer)? PKLE[D]? PIKL(E) (Improved)? PEK(L)A (App)? PIKLE :-)
-;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout. ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS).
+;			- On 0.5.0 release, change name to EPKL (Expanded/Enhanced). Also rename the PKL_eD folder etc (just Files?).
+;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout? ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS)?
 ;			- Layouts can now unmap keys and dead keys by using a -1 entry. Test and document it!
 ;				- Overriding dead key defs in layout.ini (and another file?). Do -1 entries remove a mapping?
 ;			- A timer that checks for an OS layout change, updating the OS dead keys etc as necessary.
@@ -37,7 +33,6 @@
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;				- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;			- Allow escaped semicolons (`;) in iniRead?
-;			- Reading layout sections, replace four or more spaces [ ]{4,} with a tab (allows space-tabbing between layout entries)? No, that'll interfere with space padding.
 ;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ; eD DONE/FIXED:
@@ -45,6 +40,13 @@
 ; 			- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
 ;			- PKL[eD] v0.4.4: Help Image Generator that uses Inkscape to create a set of help images from the current layout.
 ;			- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend. DK chaining doesn't work yet though.
+;			- PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
+;			- pklIniRead() can have an altFile, such as "BasIni".
+;			- Allow a ..\ syntax too in pklIniRead(), to simplify entries like this: img_DKeyDir = ..\Cmk-eD_ISO\DeadkeyImg
+;			- Change baseLayout entries to same format as in PKL_Settings.ini, so baseLayout = "Layouts\" . entry . "\baseLayout.ini".
+;			- Read most layout settings apart from remaps from the base layout if not found in the main layout.
+;			- ONHOLD: Look for backup bgImg/extImg/dkImg in BasIni after all? If using an ANS base file for an ISO layout, it looks silly. But better than nothing?
+;			- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
 
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
@@ -64,9 +66,9 @@ setKeyInfo( "CurrNumOfDKs", 0 )				; eD: How many dead keys were pressed	(was 'C
 setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
 ;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
-setPklInfo( "File_Pkl_Ini", "PKL_Settings.ini"		)	; eD: Define this globally  (was 'pkl.ini')
-setPklInfo( "File_Lay_Nam", "layout.ini"			)	; eD: --"--
-setPklInfo( "File_Pkl_Dic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
+setPklInfo( "File_PklIni", "PKL_Settings.ini"      )	; eD: Define this globally  (was 'pkl.ini')
+setPklInfo( "LayFileName", "layout.ini"            )	; eD: --"--
+setPklInfo( "File_PklDic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
 setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ) )	; eD: Extra debug info etc
 
 arg = %1% ; Layout from command line parameter

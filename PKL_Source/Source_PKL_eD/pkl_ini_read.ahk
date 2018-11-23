@@ -22,39 +22,55 @@ iniReadSection( file, section )
 ;-------------------------------------------------------------------------------------
 ;
 ; Read a (pkl).ini value
-;     Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section] )
+;     Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section], [altfile|str], [stripcomments] )
 ;     Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
-pklIniRead( key, default = "", iniFile = "Pkl_Ini", section = "pkl", strip = 1 )	; eD WIP: Add an altFile?
+pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "", strip = 1 )
 {
 	if ( not key )
 		Return
-; 	for inx, theFile in [ iniFile, altFile ]	; eD WIP
-	hereLay := ( iniFile == "Lay_Ini" ) ? getLayInfo( "layDir" ) : "."	; Allow ".\" syntax for the Layouts dir
-	if ( ( not inStr( iniFile, "." ) ) and FileExist( getPklInfo( "File_" . iniFile ) ) )	; Special files
-		iniFile := getPklInfo( "File_" . iniFile )						; (These include Pkl_Ini, Lay_Ini, Pkl_Dic)
-	default := ( default == "" ) ? A_Space : default					; IniRead uses a Space for blank defaults
-	if ( key == -1 ) {													; Specify key = -1 for a section list
-		IniRead, val, %iniFile%											; (AHK v1.0.90+)
-	} else {
-		IniRead, val, %iniFile%, %section%, %key%, %default%
-	}
+	for inx, theFile in [ iniFile, altFile ]							; Read from iniFile. Failing that, altFile.
+	{
+		if        ( theFile == "LayIni" ) {
+			hereDir := getLayInfo( "layDir" )							; ".\" syntax for the main layout dir
+		} else if ( theFile == "BasIni" ) {
+			hereDir := getLayInfo( "basDir" )							; ".\" syntax for the base layout dir
+		} else {
+			hereDir := "."
+		}
+		if ( ( not inStr( theFile, "." ) ) and FileExist( getPklInfo( "File_" . theFile ) ) )	; Special files
+			theFile := getPklInfo( "File_" . theFile )					; (These include PklIni, LayIni, PklDic)
+		if        ( key == -1 ) {										; Specify key = -1 for a section list
+			IniRead, val, %theFile%										; (AHK v1.0.90+)
+		} else if ( key == -2 ) {										; Specify key = -2 to read a whole section
+			IniRead, val, %theFile%, %section%							; (AHK v1.0.90+)
+		} else {
+			IniRead, val, %theFile%, %section%, %key%, %A_Space%		; IniRead uses a Space for blank defaults
+		}
+		if ( val )
+			Break
+	}	; end for
+	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR)
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
-	val := ( SubStr( val, 1, 2 ) == ".\" ) ? hereLay . SubStr( val, 2 ) : val	; ".\" syntax for the Layouts dir
-;	MsgBox, '%val%', '%iniFile%', '%section%', '%key%', '%default%'		; eD DEBUG
+	if        ( SubStr( val, 1, 3 ) == "..\" ) {						; "..\" syntax for layout dirs
+		val := hereDir . "\.." . SubStr( val, 3 )
+	} else if ( SubStr( val, 1, 2 ) == ".\"  ) {						; ".\"  syntax --"--
+		val := hereDir .         SubStr( val, 2 )
+	}
+;	MsgBox, '%val%', '%theFile%', '%section%', '%key%', '%default%'		; eD DEBUG
 	Return val
 }
 
-pklIniBool( key, default = "", iniFile = "Pkl_Ini", section = "pkl" )	; Special read function for boolean values
+pklIniBool( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "" )	; Special .ini read for boolean values
 {
-	val := pklIniRead( key, default, iniFile, section )		;IniRead, val, %iniFile%, %section%, %key%, %default%
+	val := pklIniRead( key, default, iniFile, section, altFile )
 	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
 	Return val
 }
 
-pklIniPair( key, default = "", iniFile = "Pkl_Ini", section = "pkl" )	; Read a CSV .ini entry into an array
+pklIniCSVs( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "" )	; Read a CSV .ini entry into an array
 {
-	val := pklIniRead( key, default, iniFile, section )
+	val := pklIniRead( key, default, iniFile, section, altFile )		; The default could be, e.g., "400,300"
 	val := StrSplit( val, ",", " `t" )
 	Return val
 }
@@ -68,8 +84,8 @@ pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0, com=1 )		; Because PKL doesn
 	pos := InStr( iniLine, "=" )
 	key := Trim( SubStr( iniLine, 1, pos-1 ))
 	val := Trim( SubStr( iniLine,    pos+1 ))
-	val := ( com ) ? strCom( val ) : val
-	val := ( esc ) ? strEsc( val ) : val
+	val := ( com ) ? strCom( val ) : val					; Comment stripping
+	val := ( esc ) ? strEsc( val ) : val					; Character escapes
 	key := ( pos == 0 ) ? "<NoKey>" : key
 }
 
@@ -79,7 +95,7 @@ strCom( str )												; Remove end-of-line comments (whitespace then semicolo
 	Return str
 }
 
-strEsc( str )												; Replace \# escapes
+strEsc( str )												; Replace \# character escapes in a string
 {
 	str := StrReplace( str, "\r", "`r" )
 	str := StrReplace( str, "\n", "`n" )
@@ -88,10 +104,3 @@ strEsc( str )												; Replace \# escapes
 	str := StrReplace( str, "\\", "\"  )
 	Return str
 }
-
-/*
-; eD TODO: Make a function that reads a section and returns a pdic of (key,value) pairs?
-;			- Better than it is today in, say, locale.ahk!
-;			- How to "save" existing layout files?! Exclude `t;`t sequences?
-;			- Today's solution of parsing layout.ini by column should be sufficient though!
-*/

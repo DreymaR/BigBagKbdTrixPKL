@@ -186,9 +186,9 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 	}
 	tempFile    := HIG_ImgDirs[ "raw" ] . "\" . imgName . ".svg"
 	destFile    := HIG_ImgDirs[destDir] . "\" . imgName . ".png"
-	imXY        := pklIniPair( "imgPos" . getLayInfo( "Ini_KbdType" ) ,, iniFileHIG )
-	imWH        := pklIniPair( "imgSizeWH"                            ,, iniFileHIG )
-	imgDPI      := pklIniRead( "imgResDPI", 96                         , iniFileHIG )
+	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , iniFileHIG )
+	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , iniFileHIG )
+	imgDPI      := pklIniRead( "imgResDPI"                            , 96  , iniFileHIG )
 	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
 	
 	try {
