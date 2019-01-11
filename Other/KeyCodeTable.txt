@@ -2,7 +2,7 @@
 ;  KEY CODE TABLE FOR AHK INCLUDING PKL
 ;  ~ Compiled by Eraicos and DreymaR, 2017-09
 ; =====================================================================
-;  SC      VK_(ANSI)    VK_ (ISO)   AutoHotkey Name     KeyName
+;  SC      VK_(ANSI)    VK_ (ISO)   AutoHotkey Name     Description
 ;
 ; ======== Top row ====================================================
 SC001 =  ; ESCAPE       ESCAPE      Escape (or Esc)     Escape
@@ -90,19 +90,19 @@ SC15b =  ; LWIN         LWIN        LWin                Left Win
 SC038 =  ; LMenu        LMenu       LAlt                Left Alt
 SC039 =  ; SPACE        SPACE       Space               Space
 SC138 =  ; RMenu        RMenu       RAlt                Right Alt
-SC15d =  ; APPS         APPS        AppsKey             Context menu
+SC15d =  ; APPS         APPS        AppsKey             Context Menu
 SC11d =  ; RCONTROL     RCONTROL    RControl (or RCtrl) Right Control
 ; ======== Cursor control block =======================================
 SC152 =  ; INSERT       INSERT      Insert (or Ins)     Insert
 SC153 =  ; DELETE       DELETE      Delete (or Del)     Del
 SC147 =  ; HOME         HOME        Home                Home
 SC14f =  ; END          END         End                 End
-SC149 =  ; PRIOR        PRIOR       PgUp                Page up
-SC151 =  ; NEXT         NEXT        PgDn                Page down
-SC148 =  ; UP           UP          Up                  Up arrow
-SC14b =  ; LEFT         LEFT        Left                Left arrow
-SC150 =  ; DOWN         DOWN        Down                Down arrow
-SC14d =  ; RIGHT        RIGHT       Right               Right arrow
+SC149 =  ; PRIOR        PRIOR       PgUp                Page Up
+SC151 =  ; NEXT         NEXT        PgDn                Page Down
+SC148 =  ; UP           UP          Up                  Up Arrow
+SC14b =  ; LEFT         LEFT        Left                Left Arrow
+SC150 =  ; DOWN         DOWN        Down                Down Arrow
+SC14d =  ; RIGHT        RIGHT       Right               Right Arrow
 ; ======== Number pad =================================================
 SC052 =  ; NUMPAD0      NUMPAD0     Numpad0             Num0
 SC04f =  ; NUMPAD1      NUMPAD1     Numpad1             Num1
@@ -119,6 +119,6 @@ SC035 =  ; DIVIDE       DIVIDE      NumpadDiv           Num /
 SC037 =  ; MULTIPLY     MULTIPLY    NumpadMult          Num *
 SC04a =  ; SUBTRACT     SUBTRACT    NumpadSub           Num -
 SC04e =  ; ADD          ADD         NumpadAdd           Num +
-SC053 =  ; DECIMAL      DECIMAL     NumpadDot           Num decimal
-SC11c =  ; ENTER        ENTER       NumpadEnter         Num enter
+SC053 =  ; DECIMAL      DECIMAL     NumpadDot           Num Decimal
+SC11c =  ; ENTER        ENTER       NumpadEnter         Num Enter
 ; =====================================================================

@@ -18,7 +18,7 @@
 	static yPos
 	static img_Width
 	static imgHeight
-	static layoutDir := 0
+	static layoutDir := "--"
 	static extendKey
 	static HelpImage
 	static HelpBgImg
@@ -35,7 +35,7 @@
 ;     - Overall image opacity
 ;     - Six positions with adjustable screen gutters and right/left push in addition to up/down
 	
-	if ( layoutDir == 0 )
+	if ( layoutDir == "--" )
 	{
 		layoutDir := getLayInfo( "layDir" )
 		extendKey := getLayInfo( "extendKey" )
@@ -69,7 +69,7 @@
 		imgOpacity := pklIniRead( "img_opacity"  , 255   )
 		imgHorZone := pklIniRead( "img_horZone"  , 20    )
 		if ( not imgPosNr ) {
-			imgSizeWH := pklIniCSVs( "img_sizeWH",, "LayIni",, "BasIni" )				; Was img_width/img_height in [global]
+			imgSizeWH := pklIniCSVs( "img_sizeWH","541,188", "LayIni",, "BasIni" )		; Was img_width/img_height in [global]
 ;			img_Width := pklIniRead( "img_width"    , 0     , "LayIni",, "BasIni" ) 	; Was in [global]
 ;			imgHeight := pklIniRead( "img_height"   , 0     , "LayIni",, "BasIni" ) 	; --"--
 			img_Scale := pklIniRead( "img_scale"    , 100.0 , "LayIni",, "BasIni" ) 	; Scale factor, in % (float)
@@ -89,6 +89,7 @@
 			imgPosNr := 5							; Default image position is bottom center (used to be "xCenter")
 			xPos := imgPosX[ imgPosNr ]
 			yPos := imgPosY[ imgPosNr ]
+;		MsgBox % "DEBUG:`n" imgSizeWH[1] "," imgSizeWH[2] "`n" img_Scale "`n" img_Width "," imgHeight	; eD DEBUG
 		}
 		imgHorZone := Floor( img_Width * imgHorZone / 100 )		; Convert from percent to pixels
 		Gui, 2:+AlwaysOnTop -Border -Caption +ToolWindow +LastFound
@@ -152,9 +153,9 @@
 		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
 		imgPath := thisDK . dkS0
 		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
-	} else if ( extendKey && getKeyState( extendKey, "P" ) ) {			; Extend image
-		imgPath := getLayInfo( "extndImg" )					; Default layoutDir . "\extend.png"
-	} else {															; Shift state images
+	} else if ( extendKey && getKeyState( extendKey, "P" ) ) { 			; Extend image
+		imgPath := getLayInfo( "extendImg" )				; Default layoutDir . "\extend.png"
+	} else {												; Shift state images
 		imgPath := layoutDir . "\state" . state . ".png"
 	}
 	imgPath := FileExist( imgPath ) ? imgPath : layoutDir . "\state0.png"

@@ -29,6 +29,15 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
 	
+	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; eD WIP: Sticky/OneShot modifiers (CSV)
+	setPklInfo( "stickyTime", pklIniRead( "stickyTime" ) )				; --"--
+	
+	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
+	setPklInfo( "extendMod1", ( extMods[1] ) ? extMods[1] : "" )
+	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
+	setPklInfo( "extendTaps", pklIniRead( "extendTaps" ) )				; --"--
+	setPklInfo( "extendTime", pklIniRead( "extTapTime" ) )				; --"--
+	
 	theLays := pklIniRead( "layout", "" )								; Read the layouts string from PKL_Ini
 	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>" )
 	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>" )
@@ -61,7 +70,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 		theLayout := getLayInfo( "layout1code" )
 	}
 	if ( theLayout == "" ) {
-		pklMsgBox( 1, getPklInfo( "File_PklIni" ) )					; "You must set the layout file in PKL .ini!"
+		pklMsgBox( 1, getPklInfo( "File_PklIni" ) ) 					; "You must set the layout file in PKL .ini!"
 		ExitApp
 	}
 	setLayInfo( "active", theLayout )
@@ -120,10 +129,10 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	initiated := 1
 	}
 	
-	extendKey := pklIniRead( "extend_key",, mainLay,, baseLay )			; Was in layout.ini [global]
+	extendKey := pklIniRead( "extend_key",, mainLay,, baseLay ) 		; Extend key (was in layout.ini [global])
 	if ( extendKey )
-		setLayInfo( "extendKey", extendKey )							; eD TODO: If this is set, look for multi-Extend in layout.ini
-	shiftStates := pklIniRead( "shiftstates", "0:1", mainLay,, baseLay )	; Was in [global]
+		setLayInfo( "extendKey", extendKey )
+	shiftStates := pklIniRead( "shiftstates", "0:1", mainLay,, baseLay )
 	shiftStates .= ":8:9"												; SgCap, SgCap + Shift		eD TODO: Utilize these somewhere?
 	setLayInfo( "hasAltGr", ( InStr( shiftStates, 6 ) ) ? 1 : 0 )
 	setLayInfo( "shiftStates", shiftStates )							; Used by the Help Image Generator
@@ -143,7 +152,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		entry := StrSplit( entries, "`t" )								; The Tab delimiter and no padding requirements are lifted
 		numEntries := ( entry.MaxIndex() < 2+shiftState.MaxIndex() ) ? entry.MaxIndex() : 2+shiftState.MaxIndex()	; Comments make pseudo-entries
 		if ( numEntries == 1 ) {
-			ent := Format( "{:L}", entry[1] )							; Check the entry for 'VK' (VK map it to itself)
+			ent := Format( "{:L}", entry[1] )							; Check the entry for 'VK'/'-1' (VK map the key to itself)
 			if ( ent == "virtualkey" || ent == "vk" || ent == -1 ) {
 				numEntries  := 2
 				entry[2] := "vk"
@@ -164,16 +173,17 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		setKeyInfo( key . "vkey", vkcode )								; Set VK code (hex ##) for key
 		setKeyInfo( key . "capSt", entry[2] )							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
 		if ( entry[2] == -2 ) {											; The key is a modifier
-			Hotkey, *%key%, modifierDown
-			Hotkey, *%key% Up, modifierUp
+			Hotkey, *%key%   ,  modifierDown
+			Hotkey, *%key% Up,  modifierUp
 			if ( getLayInfo( "hasAltGr" ) && entry[1] == "RAlt" )
 				setKeyInfo( key . "vkey", "AltGr" )						; Set RAlt as AltGr
 			else
 				setKeyInfo( key . "vkey", entry[1] )					; Set VK modifier name, e.g., "rshift"
-		} else if ( key == extendKey ) {								; Set the Extend key
-			Hotkey, *%key% Up, keyReleased
+		} else if ( key == extendKey ) {								; Set the Extend key (was only mapped to Up, keyReleased)
+			Hotkey, *%key%   ,  extendDown
+			Hotkey, *%key% Up,  extendUp
 		} else {
-			Hotkey, *%key%, keyPressed
+			Hotkey, *%key%,     keyPressed
 		}
 		Loop % numEntries - 3 { 										; Loop through all entries for the key
 			ks  := shiftState[ A_Index ]								; This shift state for this key
@@ -212,24 +222,27 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		extendFiles := [ extendFile, mainLay ]		; An [extend] section in layout.ini overrides pkl.ini maps	; eD WIP: Add baseLay in the middle?!
 		for ix, thisFile in extendFiles
 		{																; Loop to parse the Extend files
-			Loop % 4 {													; eD TODO: Multi-Extend
-				thisExt  := A_Index										
-				thisSect := pklIniRead( "ext" . thisExt, "", thisFile, "ExtendMaps" )
+			Loop % 4 {													; Loop the multi-Extend layers
+				thisExtN := A_Index
+				thisSect := pklIniRead( "ext" . thisExtN , "", thisFile, "ExtendMaps" )
 				thisSect := ( thisFile == getPklInfo( "File_PklIni" ) ) ? "extend" : thisSect
 				remap := iniReadSection( thisFile, thisSect )
-				If ( not remap )										; If this remap is empty, continue to the next
+				if ( not remap )										; If this remap is empty, continue to the next
 					Continue
 				Loop, Parse, remap, `r`n
 				{
 					pklIniKeyVal( A_LoopField , key, extMapping )		; Read the Extend mapping for this SC
 					key := Format( "{:U}", key )
 					key := scMapExt[ key ] ? scMapExt[ key ] : key		; If applicable, remap Extend entries
-					setKeyInfo( key . "ext" . thisExt, extMapping )
-				}
-			}
+					setKeyInfo( key . "ext" . thisExtN , extMapping )
+				}	; end loop (parse extMappings)
+			}	; end loop ext#
 		}	; end loop (parse extendFiles)
-		setLayInfo( "extndImg"											; Extend image	; eD TODO: Multi-Extend
-				  , fileOrAlt( pklIniRead( "img_Extend1",, "LayIni",, "BasIni" ), layDir . "\extend.png" ) )
+		setPklInfo( "extReturnTo", pklIniRead( "extReturnTo", "1/2/3/4", extendFile,, mainLay ) ) 	; ReturnTo layers
+		Loop % 4 {
+			setLayInfo( "extImg" . A_Index								; Extend images
+				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayIni",, "BasIni" ), layDir . "\extend.png" ) )
+		}	; end loop ext#
 	}	; end if ( extendKey )
 	
 	;-------------------------------------------------------------------------------------

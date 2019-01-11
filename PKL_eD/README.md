@@ -69,7 +69,7 @@ DONE:
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
-* Literals/Ligatures/Powerstrings are specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. These can be multiline defined.
+* PKL[eD] v0.4.5: Literals/Ligatures/Powerstrings specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. Can be defined as multiline.
 	- There's a string file specified in the layout.ini, by default it's PKL_eD\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
@@ -80,11 +80,16 @@ DONE:
 	- Examples: "102 = ƒ" is possible instead of "102 = 402". For a glyph not shown in your font such as Meng, "77 = 0x2C6E" (or 11374 still).
 	- Should be easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (e.g., RegExp "0x$1 = 0x$2	; $3")
 * PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
-	- pklIniRead() can have an altFile, such as "BasIni".
-	- Allow a ..\ syntax too in pklIniRead(), to simplify entries like this: img_DKeyDir = ..\Cmk-eD_ISO\DeadkeyImg
-	- Change baseLayout entries to same format as in PKL_Settings.ini, so baseLayout = "Layouts\" . entry . "\baseLayout.ini".
+	- pklIniRead() can have an altFile, such as "BasIni". For BasIni/LayIni, .\ and ..\ point to their own and mother directories.
 	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
-* Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
+	- ONHOLD: Look for backup bgImg/extImg/dkImg in BasIni after all? If using an ANS base file for an ISO layout, it looks silly. But better than nothing?
+	- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
+* PKL[eD] v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
+	- Multi-Extend, allowing one Extend key with 2 modifiers (e.g., RAlt/RShift) to select up to 4 different layers. Ext+Mod{2/3/2+3} -> Ext2/3/4.
+	- Ext2 is a NumPad/nav layer w/ some useful symbols. Ext3/Ext4 are one-shot string layers but mostly to be filled by the user.
+	- Dual-role tap-release Extend key. Works as Back on tap within a certain time and Ext on hold. Set the time to 0 ms to disable it.
+	- ExtReturnTo setting to allow one-shot Extend, e.g., for strings. Can for instance return from Ext3 to Ext1.
+
   
 **OTHER/NOTES**
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...

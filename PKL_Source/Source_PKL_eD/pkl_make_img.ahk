@@ -44,7 +44,7 @@ for the current layout, or only state images?
 	try {
 		for dirTag, theDir in HIG_ImgDirs
 		{
-			If ( dirTag == "dkey" && stateImgOnly )
+			if ( dirTag == "dkey" && stateImgOnly )
 				Continue
 			FileCreateDir % theDir
 		}
@@ -140,8 +140,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 ;	if ( CO == "_1" ) {		; DEBUG
 ;		debugStr := imgName . "`nTag/Val: " . chrTag . " / " . chrVal
 ;		debugStr := dkName . " state" . state . "`ndkvs: " . dkvs . "`ndkv: " . dkv
-;		pklSplash( "Debug", debugStr, 0.2 )
-;		pklWarning( "DEBUG:`n" . debugStr )
+;		pklDebug( debugStr )
 ;	}		; end DEBUG
 			emptyBool := ( dkv ) ? false : emptyBool
 		}	; end if imgName
@@ -270,10 +269,10 @@ _svgChar( ch )											; Convert character code to RegEx-able SVG text entry
 }
 
 ChangeButtonNamesHIG:									; For the MsgBox asking whether to make full or state images
-IfWinNotExist, Make Help Images?
-	Return		; Keep waiting for the message box
-SetTimer, ChangeButtonNamesHIG, Off
-WinActivate
-ControlSetText, Button1, &Full
-ControlSetText, Button2, &State
+	IfWinNotExist, Make Help Images?
+		Return 											; Keep waiting for the message box if it isn't ready
+	SetTimer, ChangeButtonNamesHIG, Off
+	WinActivate
+	ControlSetText, Button1, &Full
+	ControlSetText, Button2, &State
 Return

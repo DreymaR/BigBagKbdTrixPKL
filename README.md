@@ -136,7 +136,7 @@ DONE:
 These are some of the changes in [PKL_eD]:
 * v0.4.0: Transition to AHK v1.1
 	* A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
-	* Advanced Mode setting that shows 'Key history...' and other menu options, plus more info in the About... dialog.
+	* Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
 	* Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
 	* A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * v0.4.1: Transition to AHK v1.1 Unicode, using native Unicode Send and UTF-8 compatible files.
@@ -151,18 +151,22 @@ These are some of the changes in [PKL_eD]:
 * v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 	* Read most layout settings apart from remaps from the base layout if not found in the main layout.
 	* Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
+* v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
+	* Multi-Extend, allowing one Extend key with 2 modifiers (e.g., RAlt/RShift) to select up to 4 different layers. Ext+Mod{2/3/2+3} -> Ext2/3/4.
+	* Ext2 is a NumPad/nav layer w/ some useful symbols. Ext3/Ext4 are one-shot string layers but mostly to be filled by the user.
+	* Dual-role tap-release Extend key. Works as Back on tap within a certain time and Ext on hold. Set the time to 0 ms to disable it.
+	* ExtReturnTo setting to allow one-shot Extend, e.g., for strings. Can for instance return from Ext3 to Ext1.
 
 
 TODO:
 -----
 I have many more [PKL_eD] changes on my wishlist, including:
 * A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
-* Multiple Extend layers (NumPad, hotstring...).
 * Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-11_
+_Øystein "DreymaR" Gadmar, 2019-01_
 
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)

@@ -43,7 +43,7 @@ pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltG
 		_setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed:
 	prefix := ( inStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
-	Send, %prefix%%modif%%toSend%
+	Send %prefix%%modif%%toSend%
 	if ( toggleAltGr )
 		_setAltGrState( 1 )
 }
@@ -100,7 +100,7 @@ pkl_SendClipboard( string ) 									; Send a string quickly via the Clipboard (
 	ClipWait 1													; Wait some seconds for the clipboard to contain text
 	if ( ErrorLevel ) {
 		Content := ( Clipboard ) ? Clipboard : "<empty>"
-		pklWarning( "DEBUG: Clipboard not ready! Content:`n" . Content )
+		pklDebug( "Clipboard not ready! Content:`n" . Content )
 	}
 	Send ^v 													; Wait 50-250 ms(?) after pasting before changing clipboard.
 	Sleep 250													; See https://autohotkey.com/board/topic/10412-paste-plain-text-and-copycut/
@@ -127,10 +127,12 @@ _strSendMode( string, strMode )
 
 pkl_PwrString( strName )											; Send named literal/ligature/powerstring from a file
 {
+	Critical
 	strFile := getLayInfo( "strFile" )							; The file containing named string tables
 	strMode := pklIniRead( "strMode", "Message", strFile )		; Mode for sending strings: "Input", "Message", "Paste"
 	brkMode := pklIniRead( "brkMode", "+Enter" , strFile )		; Mode for handling line breaks: "+Enter", "n", "rn"
 	theString := pklIniRead( strName, , strFile, "strings" )	; Read the named string's entry (w/ comment stripping)
+	; eD WIP: Parse for prefix here!
 	if ( SubStr( theString, 1, 11 ) == "<Multiline>" ) {		; Multiline string entry
 		Loop % SubStr( theString, 13 ) {
 			IniRead, val, %strFile%, strings, % strName . "-" . Format( "{:02}", A_Index )
@@ -139,13 +141,12 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 		theString := mltString
 	}
 	theString := strEsc( theString )							; Replace \# escapes
-;	pklWarning( "DEBUG:`n" . strName . "`n" . theString )
 	if ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r							; Parse by lines, sending Enter key presses between them
 		{														; - This is more robust since apps use different breaks
 			if ( A_Index > 1 )
 				SendInput +{Enter}								; Send Shift+Enter, which should be robust for msg boards.
-;				WinGet, hWnd, ID, A 							; Use SendMessage to send Enter then wait for it to happen.
+;				WinGet, hWnd, ID, A 							; eD TRY: Use SendMessage to send Enter then wait for it to happen.
 ;				ControlGetFocus, vClsN, ahk_id%hWnd%
 ;				SendMessage, 0x100, 0x0D, 0, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_KEYDOWN. Sends a Windows key input message.
 ;				SendMessage, 0x101, 0x0D, 0, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_KEYUP, 0x0D = VK_RETURN = {Enter}.
@@ -162,14 +163,12 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
 	}	; end if brkMode
 ;	Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up}{RShift Up}{RCtrl Up}{RAlt Up}{RWin Up}	; Remove mods to clean up?
-;	for ix, mod in [ "LShift", "RShift", "Shift", "Ctrl", "Alt", "Win", "AltGr" ] {		; Why doesn't this work?
-;		setModifierState( mod, 0 )								; Because we can't wait for the actual send to finish, I think!
 }
 
 ;-------------------------------------------------------------------------------------
 ;
 ; Set/get mod key states
-;     Process states of modifiers. Used by Send, and in PKL_main.
+;     Process states of modifiers. Used in PKL_main; _?etAltGrState() also in PKL_send.
 ;
 
 setModifierState( modifier, isdown )

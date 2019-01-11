@@ -1,6 +1,6 @@
 ﻿;-------------------------------------------------------------------------------------
 ;
-; Remap module (PKL_eD)
+; Remap module
 ;     Functions to read and parse remap cycles for ergo mods and suchlike
 ;     Used primarily in pkl_init.ahk
 ;
@@ -74,13 +74,6 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 ;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
 ;; With rdic: 1<:[ b:a, c:b, a:c, d:d ] => 2>:[ r[b]:d, r[d]:b ] => 2>:[ a:d  , b:c, c:a, d:b   ]
 ;; Note that:    ( b | d , a | b | c )                           => 2>:[ a:b  , b:d, c:a, d:b:c ] - so order matters!
-;; Lay(CAW): 022(Cmk-D) -> 02E(Cmk-C); 023(Cmk-H) -> 033(Cmk-,); 024(Cmk-N) -> 025(Cmk-E)
-;; Ext(AWi): 022(Cmk-D) -> 022(Cmk-D); 023(Cmk-H) -> 024(Cmk-N); 030(Cmk-B) -> 02F(Cmk-V) -> 02E(Cmk-C) -> 02D(Cmk-X)
-;	if ( test0 == "" . "scMapLay" ) {		; DEBUG
-;	test1 := pdic[ "SC012" ] . " " . pdic[ "SC022" ] . " " . pdic[ "SC02F" ] . " " . pdic[ "SC02E" ] . " " . pdic[ "SC023" ] . " " . pdic[ "SC032" ]
-;	test2 := rdic[ "SC012" ] . " " . rdic[ "SC022" ] . " " . rdic[ "SC02F" ] . " " . rdic[ "SC02E" ] . " " . rdic[ "SC023" ] . " " . rdic[ "SC032" ]
-;	MsgBox, Debug %test0%:`n SC012 SC022 SC02F SC02E SC023 SC032 `n __E/F___G/D____V_____C_____H_____M___ `n %test1% `n %test2% `n`n%test3%
-;	}		; end DEBUG
 	Return pdic
 }	; end fn
 
@@ -172,6 +165,11 @@ pklErrorMsg( text )
 pklWarning( text, time = 5 )
 {
 	MsgBox, 0x30, PKL WARNING, %text%, %time%					; PKL Warning type message box
+}
+
+pklDebug( text, time = 1 )
+{
+	MsgBox, 0x30, PKL DEBUG: , %text%, %time%					; PKL Warning type message box
 }
 
 pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)
