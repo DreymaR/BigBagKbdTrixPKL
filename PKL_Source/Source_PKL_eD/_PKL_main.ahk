@@ -15,22 +15,19 @@
 
 ; eD TOFIX/WIP:
 ;			- 
-;			- WIP: Sticky mods (for Ckofy). Make two global settings for which mods (must be set to Modifier in layout) and delay.
-;				- Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
-;			- Allow powerstrings to use prefix syntax? Could be powerful? A way to have long command strings referenced by name in layouts.
-;			- WIP: Mods unsticker timer. Every 5 s(?) check if no keys are held and no sticky timers counting, then send Up for those that aren't in use.
-;				- Update the OS dead keys etc as necessary.
-;				- Combine w/ other housekeeping...?
 ;			- Layouts can now unmap keys and dead keys(?) by using a '-1' or 'vk' entry. Tested. Document it!
 ;				- Augmenting/overriding dead key defs in layout.ini (and baseLayout.ini?). Entries of -1 should remove a mapping.
 ;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout? ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS)?
-;			- Replace activityPing() etc with A_TimeIdlePhysical in a timer loop?
 ;			- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones.
 ;			- Make pklParseSend() work for DK chaining (one DK releases another)!
 ;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this should this happen for @ entries?
 ;				- Removing that isn't enough though? And actually, should a dk chaining start anew? So, replicate the state and effect of a normal layout DK press.
 ; eD TODO:
-;			- On 0.5.0/1.0.0(?) release, change name to EPKL (Enhanced). Also rename the PKL_eD folder etc (-> Files), and PKL[eD] instances. Put Languages in Files.
+;			- On 0.5.0/1.0.0(?) release, change name to EPKL (EPiKaL). Also rename the PKL_eD folder etc (-> Etc), and PKL[eD] instances. Put Languages in Files.
+;			- Mods unsticker timer. Every 5 s(?) check if no keys are held and no sticky timers counting, then send Up for those that aren't in use.
+;				- Update the OS dead keys etc as necessary.
+;				- Combine w/ other housekeeping...?
+;			- Replace activityPing() etc with A_TimeIdlePhysical in a timer loop?
 ;			- Shift sensitive Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
 ;			- Could make the Japanese layout now, since dead keys support literals/ligatures!
 ;			- Hebrew layout. Eventually, Arabic too.
@@ -41,9 +38,10 @@
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;				- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;			- Allow escaped semicolons (`;) in iniRead?
-;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary
+;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
+;			- Extend lock? E.g., LShift+Mod2+Ext locks Ext2. Maybe too confusing. But for, say, protracted numeric entry it could be useful?
 ; eD DONE/FIXED:
 ;			- PKL[eD] v0.4.2: AHK v1.1; menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead(); layered help images.
 ; 			- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
@@ -51,10 +49,16 @@
 ;			- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend. DK chaining doesn't work yet though.
 ;			- PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 ;			- PKL[eD] v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
+;			- PKL[eD] v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify.
+;			- Notify Ckofy about OSM!
+;				- Settings for which keys are OSM and the wait time. Stacking up to two OSMs works.
+;			- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
+;				- Allow AltGr as OSM? Currently not because of special treatment in setModifierState(). Also because of the bug w/ LCtrl+RAlt mapping?
+;			- Powerstrings can have prefix-entry syntax too. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
 
 
 setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
-setPklInfo( "pklVers", "0.4.7_eD" ) 										; Version
+setPklInfo( "pklVers", "0.4.8_eD" ) 										; Version
 setPklInfo( "pklComp", "ed. DreymaR" )										; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
 
@@ -145,13 +149,13 @@ keyReleased:			; *SC### UP
 	processKeyPress( SubStr( A_ThisHotkey, 2, -3 ) )
 Return
 
-modifierDown:			; *SC###
+modifierDown:			; *SC###    (translate to VK name)
 	activity_ping()
 	Critical
 	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "vkey" ), 1 )
 Return
 
-modifierUp: 			; *SC### UP
+modifierUp: 			; *SC### UP (translate to VK name)
 	activity_ping()
 	Critical
 	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ), 0 )

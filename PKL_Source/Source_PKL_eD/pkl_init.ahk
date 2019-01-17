@@ -29,7 +29,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
 	
-	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; eD WIP: Sticky/OneShot modifiers (CSV)
+	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; Sticky/One-Shot modifiers (CSV)
 	setPklInfo( "stickyTime", pklIniRead( "stickyTime" ) )				; --"--
 	
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release

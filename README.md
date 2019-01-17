@@ -29,8 +29,8 @@ Getting PKL up and running
   
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
 * In PKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
-    * My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
-    * The format is: layout = ‹1st layout folder name›:‹name you want in menu›,‹2nd layout folder›:‹2nd menu entry› etc
+    - My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
+    - The format is: layout = ‹1st layout folder name›:‹name you want in menu›,‹2nd layout folder›:‹2nd menu entry› etc
 
 More Know-How-To
 ----------------
@@ -42,21 +42,21 @@ More Know-How-To
   
 The files may take a little tweaking to get what you want. There are several parameters:
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-    * ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
-    * JIS (Japanese) etc are not supported so far - sorry.
+    - ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
+    - JIS (Japanese) etc are not supported so far - sorry.
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
-    * This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY included.
+    - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY included.
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
-    * Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
-    * Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
+    - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
+    - Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
-    * The 'VK' layouts just move the keys of your installed OS layout around, without other changes
-    * The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
+    - The 'VK' layouts just move the keys of your installed OS layout around, without other changes
+    - The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
 * In PKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or use the layout folder path directly.
 * In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
-    * Mod remaps, help image specifications, Extend key, key mappings etc are set in the layout.ini file.
-    * Many layouts use a base layout. Most mappings may be there, so the top layout.ini only has to change a few keys.
+    - Mod remaps, help image specifications, Extend key, key mappings etc are set in the layout.ini file.
+    - Many layouts use a base layout. Most mappings may be there, so the top layout.ini only has to change a few keys.
 * If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
 * Similarly, there's a PKL_eD file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
 * To learn more about remaps, see the PKL_eD\_eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
@@ -135,27 +135,31 @@ DONE:
 -----
 These are some of the changes in [PKL_eD]:
 * v0.4.0: Transition to AHK v1.1
-	* A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
-	* Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
-	* Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
-	* A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
+	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
+	- Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
+	- A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * v0.4.1: Transition to AHK v1.1 Unicode, using native Unicode Send and UTF-8 compatible files.
-	* A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
+	- A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
 * v0.4.2: Help image opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
-	* Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
+	- Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
 * v0.4.3: Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
 * v0.4.4: A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
-	* A shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+	- A shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 * v0.4.5: Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
-	* The "&" prefix denotes literals/powerstrings found in a separate PKL_eD file. These may span more than one line.
+	- The "&" prefix denotes literals/powerstrings found in a separate PKL_eD file. These may span more than one line.
 * v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
-	* Read most layout settings apart from remaps from the base layout if not found in the main layout.
-	* Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
+	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
+	- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
 * v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
-	* Multi-Extend, allowing one Extend key with 2 modifiers (e.g., RAlt/RShift) to select up to 4 different layers. Ext+Mod{2/3/2+3} -> Ext2/3/4.
-	* Ext2 is a NumPad/nav layer w/ some useful symbols. Ext3/Ext4 are one-shot string layers but mostly to be filled by the user.
-	* Dual-role tap-release Extend key. Works as Back on tap within a certain time and Ext on hold. Set the time to 0 ms to disable it.
-	* ExtReturnTo setting to allow one-shot Extend, e.g., for strings. Can for instance return from Ext3 to Ext1.
+	- Multi-Extend, allowing one Extend key with 2 modifiers (e.g., RAlt/RShift) to select up to 4 different layers. Ext+Mod{2/3/2+3} -> Ext2/3/4.
+	- Ext2 is a NumPad/nav layer w/ some useful symbols. Ext3/Ext4 are one-shot string layers but mostly to be filled by the user.
+	- Dual-role tap-release Extend key. Works as Back on tap within a certain time and Ext on hold. Set the time to 0 ms to disable it.
+	- ExtReturnTo setting to allow one-shot Extend, e.g., for strings. Can for instance return from Ext3 to Ext1.
+* v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify.
+	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
+	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
+	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
 
 
 TODO:

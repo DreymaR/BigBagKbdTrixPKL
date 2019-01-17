@@ -1,6 +1,6 @@
 Portable Keyboard Layout by Farkas Máté
 
-Version: 0.4.7-eD
+Version: 0.4.8-eD
 Compiled: 2019-01 for GitHub/DreymaR
 Compiler: AutoHotKey v1.1.26.1 Unicode 32 bit
 

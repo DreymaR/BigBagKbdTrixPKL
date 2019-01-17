@@ -38,14 +38,14 @@
 
 pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltGr states
 {
-	toggleAltGr := _getAltGrState()
+	toggleAltGr := getAltGrState()
 	if ( toggleAltGr )
-		_setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
+		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed:
 	prefix := ( inStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
 	Send %prefix%%modif%%toSend%
 	if ( toggleAltGr )
-		_setAltGrState( 1 )
+		setAltGrState( 1 )
 }
 
 pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
@@ -132,7 +132,8 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 	strMode := pklIniRead( "strMode", "Message", strFile )		; Mode for sending strings: "Input", "Message", "Paste"
 	brkMode := pklIniRead( "brkMode", "+Enter" , strFile )		; Mode for handling line breaks: "+Enter", "n", "rn"
 	theString := pklIniRead( strName, , strFile, "strings" )	; Read the named string's entry (w/ comment stripping)
-	; eD WIP: Parse for prefix here!
+	if ( pkl_ParseSend( theString ) ) 							; Unified prefix-entry syntax; only for single line entries
+		Return
 	if ( SubStr( theString, 1, 11 ) == "<Multiline>" ) {		; Multiline string entry
 		Loop % SubStr( theString, 13 ) {
 			IniRead, val, %strFile%, strings, % strName . "-" . Format( "{:02}", A_Index )
@@ -163,54 +164,4 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
 	}	; end if brkMode
 ;	Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up}{RShift Up}{RCtrl Up}{RAlt Up}{RWin Up}	; Remove mods to clean up?
-}
-
-;-------------------------------------------------------------------------------------
-;
-; Set/get mod key states
-;     Process states of modifiers. Used in PKL_main; _?etAltGrState() also in PKL_send.
-;
-
-setModifierState( modifier, isdown )
-{
-	getModifierState( modifier, isdown, 1 )
-}
-
-getModifierState( modifier, isdown = 0, set = 0 )
-{
-	if ( modifier == "AltGr" )
-		Return _getAltGrState( isdown, set ) ; For better performance
-	
-	if ( set == 1 ) {
-		if ( isdown == 1 ) {
-			setKeyInfo( "ModState_" . modifier, 1 )
-			Send {%modifier% Down}
-		} else {
-			setKeyInfo( "ModState_" . modifier, 0 )
-			Send {%modifier% Up}
-		}
-	} else {
-		Return getKeyInfo( "ModState_" . modifier )
-	}
-}
-
-_setAltGrState( isdown )
-{
-	_getAltGrState( isdown, 1 )
-}
-
-_getAltGrState( isdown = 0, set = 0 )
-{
-	static AltGr := 0
-	if ( set == 1 ) {
-		if ( isdown == 1 ) {
-			AltGr = 1
-			Send {LCtrl Down}{RAlt Down}
-		} else {
-			AltGr = 0
-			Send {RAlt Up}{LCtrl Up}
-		}
-	} else {
-		Return AltGr
-	}
 }

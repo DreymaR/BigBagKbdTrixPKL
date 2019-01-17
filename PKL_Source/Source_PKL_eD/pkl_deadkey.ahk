@@ -64,8 +64,7 @@ pkl_DeadKey( DK )
 			PVDK := ""
 			setKeyInfo( "CurrNumOfDKs", 0 )							; But that's not enough. It gets stuck in pkl_ParseSend()
 		}
-;		setKeyInfo( "CurrNumOfDKs", 0 ) 	; eD WIP - doesn't prevent stuckness
-;		setKeyInfo( "CurrBaseKey_", 0 ) 	; eD WIP - doesn't prevent stuckness
+;		setKeyInfo( "CurrNumOfDKs", 0 ) 	; eD WIP - doesn't prevent stuckness (nor does "CurrBaseKey_", 0 ?)
 		pkl_Send( 0 )	; eD WIP: This somehow prevents the dead key from being stuck (pkl_SendThis doesn't).
 	} else if ( dkEnt && PVDK == "" ) {
 		pkl_Send( dkEnt )									; Send the normal single-character final entry
