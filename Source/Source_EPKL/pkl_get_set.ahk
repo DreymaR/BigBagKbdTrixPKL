@@ -75,10 +75,10 @@ pkl_locale_load( lang, compact = 0 )
 {
 	static initialized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)	; eD TODO: Is this working?
 	if ( initialized == 0 )
-	{																	; eD: Read/set default locale string list
+	{																	; Read/set default locale string list
 		Loop, 22														; Read default locale strings (numbered)
 		{
-			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "PklDic", "DefaultLocaleStr" ) ; eD: Pad with zero if index < 10
+			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "PklDic", "DefaultLocaleStr" ) ; Pad with zero if index < 10
 			str := strEsc( str )										; Replace \# escapes
 			setPklInfo( "LocStr_" . A_Index , str )
 		}
@@ -95,17 +95,14 @@ pkl_locale_load( lang, compact = 0 )
 	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history..." ) )
 	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
 	
-	if ( compact )
-		file = %lang%.ini
-	else
-		file = Languages\%lang%.ini
-	
+	file := lang . ".ini"
+	file := ( compact ) ? file : "Files\Languages\" . file
 	if ( not FileExist( file ) )					; If the language file isn't found, we'll just use the defaults
 		Return
 	sect := iniReadSection( file, "pkl" )
 	Loop, Parse, sect, `r`n
 	{
-		pklIniKeyVal( A_Loopfield, key, val, 1 )	; eD: A more compact way than before (but still in a loop)
+		pklIniKeyVal( A_Loopfield, key, val, 1 )	; A more compact way than before (but still in a loop)
 		if ( val != "" )
 			setPklInfo( "LocStr_" . key , val )		; pklLocaleStrings( key, val, 1 )
 	}
@@ -163,7 +160,7 @@ getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of h
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )
 	
-	; eD: Moved the shorter key names down so they'll work on the Languages file.
+	; The shorter key names were moved down so they'll work on the Languages file.
 	strDic := {                      "Delete" : "Del"   ,    "Insert" : "Ins"   ,   "Control" : "Ctrl"
 		,    "Return" : "Enter" ,    "Escape" : "Esc"   , "BackSpace" : "Back"  , "Backspace" : "Back" }
 	for key, val in strDic

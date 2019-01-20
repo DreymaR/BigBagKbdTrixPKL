@@ -20,7 +20,7 @@ makeHelpImages()
 	global HIG_ImgDirs  := {}	; --"--
 	global HIG_DKNames  := {}	; --"--
 	
-	remapFile   := "PKL_eD\_eD_Remap.ini"
+	remapFile   := "Files\_eD_Remap.ini"
 	HIG_PngDic  := ReadKeyLayMapPDic( "CO", "SC", remapFile )	; PDic from the CO codes of the SVG template to SC
 	FormatTime, theNow,, yyyy-MM-dd_HHmm						; Use A_Now (local time) for a folder time stamp
 	imgRoot     := getLayInfo( "layDir" ) . "\ImgGen_" . theNow
@@ -191,7 +191,7 @@ _makeOneHelpImg( imgName, state, destDir )				; Generate an actual help image fr
 	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
 	
 	try {
-		FileRead, templateFile, %origImgFile%			; eD: Use FileRead or Loop, Read, ? Nah, 160 kB isn't so big.
+		FileRead, templateFile, %origImgFile%			; eD NOTE: Use FileRead or Loop, Read, ? Nah, 160 kB isn't so big.
 	} catch {
 		pklErrorMsg( "Reading SVG template failed." )
 		Return

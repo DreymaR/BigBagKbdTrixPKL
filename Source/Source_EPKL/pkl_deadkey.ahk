@@ -1,4 +1,4 @@
-﻿DeadKeyValue( dkName, base )								; NOTE: 'dk' was just a number, but in PKL_eD it's a name
+﻿DeadKeyValue( dkName, base )								; NOTE: 'dk' was just a number, but it's a name now
 {															; NOTE: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {

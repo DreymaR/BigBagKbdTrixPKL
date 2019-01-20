@@ -17,14 +17,14 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 		it := pklIniRead( SubStr( A_Language , -3 ), "", "PklDic", "LangStrFromLangID" )
 	pkl_locale_load( it, pklIniBool( "compactMode", false ) )
 
-	pklSetHotkey( pklIniRead( "suspendHotkey"       ), "ToggleSuspend"       , "HK_Suspend"      )
-	pklSetHotkey( pklIniRead( "showHelpImageHotkey" ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
-	pklSetHotkey( pklIniRead( "changeLayoutHotkey"  ), "changeActiveLayout"  , "HK_ChangeLayout" )
-	pklSetHotkey( pklIniRead( "exitAppHotkey"       ), "ExitPKL"             , "HK_ExitApp"      )
-	pklSetHotkey( pklIniRead( "refreshHotkey"       ), "rerunWithSameLayout" , "HK_Refresh"      )
+	pklSetHotkey( pklIniRead( "suspendHotkey"   ), "ToggleSuspend"       , "HK_Suspend"      )
+	pklSetHotkey( pklIniRead( "helpImageHotkey" ), "showHelpImageToggle" , "HK_ShowHelpImg"  )
+	pklSetHotkey( pklIniRead( "changeLayHotkey" ), "changeActiveLayout"  , "HK_ChangeLayout" )
+	pklSetHotkey( pklIniRead( "exitAppHotkey"   ), "ExitPKL"             , "HK_ExitApp"      )
+	pklSetHotkey( pklIniRead( "refreshHotkey"   ), "rerunWithSameLayout" , "HK_Refresh"      )
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
-	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "altGrEqualsAltCtrl", false ) )
+	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "ctrlAltIsAltGr", false ) )
 	
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
@@ -42,7 +42,7 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>" )
 	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>" )
 	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
-	theLays := StrReplace( theLays, "@V",        "@K@C@E" )				; eD: Shorthand .ini notation for kbd/mod
+	theLays := StrReplace( theLays, "@V",        "@K@C@E" )				; Shorthand .ini notation for kbd/mod
 	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "-Pl"
 	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; _ISO/_ANS/_etc
 	theLays := StrReplace( theLays, "@C@E", modded . curlMod . ergoMod )	; CurlAngle[Wide]
@@ -101,7 +101,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	}
 	setLayInfo( "layDir"      , layDir  )
 	setPklInfo( "File_LayIni", mainLay )								; The main layout file path
-	baseDir := "Layouts\" . pklIniRead( "baseLayout",, "LayIni" )		; eD: Read a base layout then augment/replace it
+	baseDir := "Layouts\" . pklIniRead( "baseLayout",, "LayIni" )		; Read a base layout then augment/replace it
 	baseLay := ( baseDir == "Layouts\" ) ? "" : baseDir . "\baseLayout.ini"
 	if ( FileExist( baseLay ) ) {
 		setLayInfo( "basDir"      , baseDir )
@@ -192,7 +192,10 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 				Continue
 			} else if ( StrLen( ksE ) == 1 ) {							; Single character entry:
 				setKeyInfo( key . ks , Ord(ksE) )						; Convert to ASCII/Unicode ordinal number; was Asc()
-			} else if ( ksE != "--" ) { 								; --: Disabled state entry
+			} else if ( ksE == "--" ) { 								; --: Disabled state entry
+				setKeyInfo( key . ks      , "" )						; "key<state>"  is the entry code
+				setKeyInfo( key . ks . "s", "" )						; "key<state>s" is the entry itself
+			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
 ;				ksD := SubStr( ksE, 1, 2 )
 ;				if ( ksD == "dk" || ksD == "li" ) { 					; Dead key or Literal/PowerString
@@ -204,8 +207,8 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
 					ksP := "%"											; % : Unicode/ASCII (auto-)literal/ligature
 				}														; @&: Dead keys and named literals/strings
-				setKeyInfo( key . ks      , ksP )						; "key<state>"  contains the code (=/*/%/@/&)
-				setKeyInfo( key . ks . "s", ksE )						; "key<state>s" contains the entry itself
+				setKeyInfo( key . ks      , ksP )						; "key<state>"  is the entry code (=/*/%/@/&)
+				setKeyInfo( key . ks . "s", ksE )						; "key<state>s" is the entry itself
 			}
 		}	; end loop entries
 	}	; end loop (parse remap)
@@ -303,7 +306,7 @@ readLayoutIcons( layDir, altDir = "" )									; Read icons for a specified layo
 	{
 		icon := OnOff . ".ico"
 		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni,, altIni ) . icon
-							, "PKL_eD\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
+							, "Files\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
 		if ( FileExist( icoFile ) ) {
 			icoFil%ix%  := icoFile
 			icoNum%ix%  := 1
@@ -342,7 +345,7 @@ pkl_activate()
 	activity_ping(2)
 	SetTimer, activityTimer, 20000
 	
-	if ( pklIniBool( "startsInSuspendMode", false ) ) {
+	if ( pklIniBool( "startSuspended", false ) ) {
 		Suspend
 		gosub afterSuspend
 	}
@@ -363,7 +366,7 @@ _pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL.i
 {
 	val := pklIniRead( type, def )
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
-	val := ( val == "--" ) ? "" : prefix . val		; Replace "--" with nothing, otherwise use prefix
+	val := ( val == "--" ) ? "" : prefix . val		; Replace -- with nothing, otherwise use prefix
 	Return val
 }
 

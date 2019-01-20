@@ -1,8 +1,0 @@
-Portable Keyboard Layout by Farkas Máté
-
-Version: 0.4.8-eD
-Compiled: 2019-01 for GitHub/DreymaR
-Compiler: AutoHotKey v1.1.26.1 Unicode 32 bit
-
-(c) FARKAS, Máté, 2007-2010
-(c) Øystein Bech "DreymaR" Gadmar, 2015-

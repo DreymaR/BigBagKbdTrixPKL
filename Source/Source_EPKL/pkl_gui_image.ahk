@@ -112,7 +112,7 @@
 			WinSet, TransColor, %imgBgColor%, pklHelpBgImg
 			WinSet, TransColor, %imgBgColor%, pklHelpImage
 			WinSet, TransColor, %imgBgColor%, pklHelpShImg
-		}	; eD: Seems that vVv got transparent color to work with separate GUIs for front/back?
+		}	; eD NOTE: Seems that vVv got transparent color to work with separate GUIs for front/back?
 
 		
 		setTimer, showHelpImage, 200

@@ -1,9 +1,9 @@
-DreymaR's Big Bag Of Keyboard Tricks - PKL[eD]
-==============================================
+DreymaR's Big Bag Of Keyboard Tricks - EPKL
+===========================================
 
 ### For [PortableKeyboardLayout][PKLGit] on Windows
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
-#### ([PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-)
+#### ([EPiKaL PKL, formerly [edition DreymaR]][CmkPKL] by DreymaR, 2017-)
 
 Documentation
 -------------
@@ -13,32 +13,32 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
   
 * This repo implements most of my Big Bag for PKL, as layout and PKL .ini files.
-* It also adds my own PKL - edition DreymaR (PKL[eD]) with several improvements.
+* It also adds my own EPiKaL PKL [EPKL] with several improvements.
 * Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors.
 
-Getting PKL up and running
---------------------------
+Getting EPKL up and running
+---------------------------
 
 * Download a copy of this repo, for instance with its GitHub Download/Clone button (and then unzip the file you got).
-* The simplest way of running PKL is to just put the main folder somewhere and run PKL.exe any way you like!
-* PKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
+* The simplest way of running EPKL is to just put the main folder somewhere and run EPKL.exe any way you like!
+* EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
   
-* I usually put a shortcut to PKL_eD.exe in my Start Menu "Startup" folder so it starts on logon, per user.
-* PKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a C:\PortableApps folder.
-* If the PortableApps menu is started on logon it can start up PKL for you too.
+* I usually put a shortcut to EPKL.exe in my Start Menu "Startup" folder so it starts on logon, per user.
+* EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a C:\PortableApps folder.
+* If the PortableApps menu is started on logon it can start up EPKL for you too.
   
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
-* In PKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
+* In EPKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
     - My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
     - The format is: layout = ‹1st layout folder name›:‹name you want in menu›,‹2nd layout folder›:‹2nd menu entry› etc
 
 More Know-How-To
 ----------------
 
-* This repo contains executables for the original PKL as well as PKL[eD], and source code for both.
-* The layouts are updated to PKL[eD] format though, so they'd need a little reconstruction for old PKL.
-* The PKL_Settings.ini file holds layout choices and general program settings.
-* The layout.ini files hold layout settings and mappings. It may point to and augment a baseLayout.ini file.
+* This repo contains executables for EPKL as well as the original PKL, and source code for both.
+* The layouts are updated to EPKL format though, so they'd need a little reconstruction for old PKL.
+* The EPKL_Settings.ini file holds layout choices and general program settings.
+* The layout.ini files hold layout settings and mappings. They may point to and augment a baseLayout.ini file.
   
 The files may take a little tweaking to get what you want. There are several parameters:
 * ISO (European/World) vs ANSI (US) vs other keyboard types
@@ -53,28 +53,28 @@ The files may take a little tweaking to get what you want. There are several par
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     - The 'VK' layouts just move the keys of your installed OS layout around, without other changes
     - The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
-* In PKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or use the layout folder path directly.
+* In EPKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or use the layout folder path directly.
 * In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
     - Mod remaps, help image specifications, Extend key, key mappings etc are set in the layout.ini file.
     - Many layouts use a base layout. Most mappings may be there, so the top layout.ini only has to change a few keys.
-* If you need to tweak some Extend mappings, they're now in a separate file usually found in the PKL_eD folder.
-* Similarly, there's a PKL_eD file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
-* To learn more about remaps, see the PKL_eD\_eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
+* If you need to tweak some Extend mappings, they're now in a separate file usually found in the Files folder.
+* Similarly, there's a file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
+* To learn more about remaps, see the _eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
 * Help images aren't always available with the right ergo mod and keyboard type, since there are many combos. See below.
   
-**Hotkeys found in the PKL settings file:**
+**Hotkeys found in the EPKL settings file:**
 * Ctrl+Shift+1 – Display/hide help image
 * Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
-* Ctrl+Shift+3 – Suspend PKL; hit again to re-activate (it may be Ctrl+Shift+` instead)
-* Ctrl+Shift+4 – Exit PKL
-* Ctrl+Shift+5 – Refresh PKL, if it gets stuck or something
+* Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate (it may be Ctrl+Shift+` instead)
+* Ctrl+Shift+4 – Exit EPKL
+* Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
   
-**Techy tips for PKL:**
+**Techy tips for EPKL:**
 * Look in the various .ini files if you're interested! Much is explained there.
 * See my examples in the Extend file for some advanced mappings! These may be used in layouts and dead keys too.
-* PKL_eD uses both .ini and source files that may be UTF-8 Unicode encoded.
-* PKL_eD allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layout entries.
-* Running PKL with other AutoHotkey key mapping scripts may get confusing if there is so-called _hook competition_.
+* EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
+* EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layout entries.
+* Running EPKL with other AutoHotkey key mapping scripts may get confusing if there is so-called _hook competition_.
 
 Layout variants
 ---------------
@@ -83,13 +83,13 @@ You can quite easily make your preferred (non-)ergonomic variant of, say, a loca
 * Copy-Paste the layout folder and rename the result to what you want, such as 'Cmk-eD-De_ISO_Angle' for German with only the ISO-Angle mod.
 * In that folder's layout.ini file, edit the remap fields to represent the new setting. In this case, 'CmkCAW_ISO' → 'Angle_ISO'.
     - For non-DH layouts, Extend uses the same remap as the layout; for Curl(DH)/CAW you need an _ext remap for Extend.
-* Now, if the PKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right – in this case, ISO/--/Angle/De – you should get the variant you wanted.
-    - After making layout changes, I refresh PKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart PKL.
+* Now, if the EPKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right – in this case, ISO/--/Angle/De – you should get the variant you wanted.
+    - After making layout changes, I refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
 * If you want updated help images you must get Inkscape and run the "Create help images..." option.
     - First, check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
-    - You can download Inkscape for instance from PortableApps.com, and point to it in the PKL_eD\ImgGenerator\PKL_ImgGen_Settings.ini file.
+    - You can download Inkscape for instance from PortableApps.com, and point to it in the Files\ImgGenerator\EPKL_ImgGen_Settings.ini file.
     - By default, the HIG looks for Inkscape in C:\PortableApps\InkscapePortable\InkscapePortable.exe, so you could just put it there and go.
-    - To see the menu option you must have advancedMode active (in PKL_Settings.ini). The HIG will make images for the currently active layout.
+    - To see the menu option you must have advancedMode active (in EPKL_Settings.ini). The HIG will make images for the currently active layout.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
 
 Key mappings
@@ -133,7 +133,7 @@ Entries are any-whitespace delimited since v0.4.6 (PKL used to strictly require 
 
 DONE:
 -----
-These are some of the changes in [PKL_eD]:
+These are some of the changes in PKL[eD]/[EPKL]:
 * v0.4.0: Transition to AHK v1.1
 	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
@@ -145,9 +145,9 @@ These are some of the changes in [PKL_eD]:
 	- Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
 * v0.4.3: Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
 * v0.4.4: A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
-	- A shorthand notation in PKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+	- A shorthand notation in EPKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 * v0.4.5: Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
-	- The "&" prefix denotes literals/powerstrings found in a separate PKL_eD file. These may span more than one line.
+	- The "&" prefix denotes literals/powerstrings found in a separate file. These may span more than one line.
 * v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
 	- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
@@ -160,11 +160,12 @@ These are some of the changes in [PKL_eD]:
 	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
+* v1.0.0: EPKL full release.
 
 
 TODO:
 -----
-I have many more [PKL_eD] changes on my wishlist, including:
+I have more [EPKL] changes on my wishlist, including:
 * A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
 * A settings panel instead of editing .ini files.
@@ -183,4 +184,4 @@ _Øystein "DreymaR" Gadmar, 2019-01_
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
 [KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
-[PKL_eD]: ./PKL_eD/ (PKL[eD] folder/README)
+[EPKL]:   ./Files/ (EPKL Files folder/README)

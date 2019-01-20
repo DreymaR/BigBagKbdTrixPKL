@@ -1,9 +1,9 @@
 WARNING: HARD HAT AREA!
 =======================
 
-PKL[edition DreymaR] is a Work-In-Progress, so all of it may not be working perfectly ... yet. ;-)
+EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... yet. ;-)
 
-~ Øystein B "DreymaR" Gadmar, 2018
+~ Øystein B "DreymaR" Gadmar, 2019
 
 
 DONE:
@@ -17,17 +17,17 @@ DONE:
   
 * Merged several .ini sections including eD specific ones into the default [pkl] as it's tidier.
 * Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
-* If using a layout from the command line, the notation "UseLayPos_#" will run layout # in the layout list set in PKL_Settings.
-	- This also makes Refresh robust against layout changes in PKL_Settings.
+* If using a layout from the command line, the notation "UseLayPos_#" will run layout # in the layout list set in EPKL_Settings.
+	- This also makes Refresh robust against layout changes in EPKL_Settings.
 * Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Shorthand notation in PKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@E resp. (@T for all at once).
 * Path shortcut for layout.ini entries, allowing ".\" instead of full path from PKL root.
   
 **MENUS/IMAGES**
 * Edited menus and the About... dialog.
-* Added a KeyHistory shortcut for debugging etc. Make it configurable in pkl_eD.ini (eD_DebugInfo).
-* Added a Refresh hotkey. Reruns PKL in case something got stuck or similar.
-* You can specify in PKL_eD.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
+* Added a KeyHistory shortcut for debugging etc. Make it configurable in EPKL_Settings.ini (eD_DebugInfo).
+* Added a Refresh hotkey. Reruns EPKL in case something got stuck or similar.
+* You can specify in EPKL_Settings.ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
 * Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key(?).
 
 * Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
@@ -40,11 +40,11 @@ DONE:
 * Help Image Generator, using my KLD format in an SVG image template. With search/replace this is turned into a key glyph image.
 	- You'll need an Inkscape (Scalable Vector Graphics program) install. A good option is portable Inkscape from PortableApps.com.
 	- You can choose whether to make shift state images only or a full image set with all shift states for all deadkeys. The latter takes time!
-	- The HIG can be used from the menu when Advanced Mode is set. Its settings file is in PKL_eD\ImgGenerator.
+	- The HIG can be used from the menu when Advanced Mode is set. Its settings file is in Files\ImgGenerator.
 	- In the HIG settings file you can control replacement characters used in a marking layer; anything written to it will show in bold yellow.
 	- The SVG image template file is in the same location. You could use another template and specify it in the HIG settings file.
 	- If you don't want the dead keys marked in yellow for instance, you could save the SVG template with that layer hidden.
-	- You can make full layout images showing keys as well, by combining with a PKL_eD\ImgBackground image of choice. I use the GIMP for that.
+	- You can make full layout images showing keys as well, by combining with a Files\ImgBackground image of choice. I use the GIMP for that.
   
 **MAPPINGS**
 * Updated and added several layouts, including locale and script variants.
@@ -70,7 +70,7 @@ DONE:
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
 * PKL[eD] v0.4.5: Literals/Ligatures/Powerstrings specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. Can be defined as multiline.
-	- There's a string file specified in the layout.ini, by default it's PKL_eD\_eD_PwrStrings.ini
+	- There's a string file specified in the layout.ini, by default it's Files\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
 	- SendMode can be selected for powerstrings (Input, Message, Paste from Clipboard) in the string file.
@@ -93,7 +93,8 @@ DONE:
 	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
-
+* EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
+*		- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
 
   
 **OTHER/NOTES**
@@ -103,13 +104,7 @@ DONE:
 TODO:
 -----
 
-* Dead key chaining (one DK may release another). PKL_eD allows the @## syntax but it doesn't work as it should yet. Because it resets PVDK?
-
-* Sticky/latch Shift (faster and better?). Windows Sticky Keys don't work with PKL as it is.
-    - Windows way: Shift×5 turns it on/off (use ×6 for PKL?!). When turned on, Modifier×2 locks.
-    - Should have a deactivation timer, e.g., 0.5 s (config adjustable).
-    - For Shift only, or Shift+Ctrl? (Alt and Win shouldn't be sticky, as they already have semi-sticky mappings.)
-    - Probably best w/ one for Shift and one for Ctrl then. Or config it.
+* Dead key chaining (one DK may release another). EPKL allows the @## syntax but it doesn't work as it should yet. Because it resets PVDK?
 
 * Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
 
@@ -128,11 +123,11 @@ TODO:
 	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
 	- IPA on AltGr+Shift symbol keys?
 
-* Define Mirror layouts as remap cycles
+* Define Mirror layouts as remap cycles?
 	- Should be able to mirror any layout then?
 	- Make sure to apply mirroring last?
 
-* Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting (in Pkl_eD.ini)?
+* Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting?
 
 
 INFO: Some documentation notes
@@ -144,17 +139,17 @@ INFO: Some documentation notes
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
   
 * "Anti-madness tips" for PKL (by user Eraicos and me):
-    - AHK v1.0 script files need to be ANSI encoded. They don't support special letters well.
-        - The current PKL_eD AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM.
+    - PKL using AHK v1.0: Script files need to be ANSI encoded. They don't support special letters well.
+        - EPKL using AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM.
     - PKL .ini files may be UTF-8 encoded, with or without BOM. Source .ahk files should be UTF-8-BOM?
         - PKL: Don't use end-of-line comments in the .ini files. OK in layout.ini because of tab parsing.
-        - PKL_eD: End-of-line comments are now safe!
+        - EPKL: End-of-line comments are now safe!
     - In layout.ini:
-        - Before v0.4.6: Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
+        - Old PKL: Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
     - In the Extend section:
         - Don't use empty mappings in the Extend section. Comment these out.
-        - The default format includes {} to send keys by name. To escape these, use the }‹any string›{ trick.
+        - By default {} is added to send keys by name. To escape these, use a prefix-entry or }‹any string›{.
   
 
 **Entry format info from Farkas' sample.ini layout file:** (Note that I now use '@' for 'dk' entries, etc)
@@ -168,7 +163,6 @@ Scan code =
 			would like to extend it. (See extend_* layouts)
 		Else If CapsState == modifier
 			You can use this key as a modifier, like Shift, RAlt (== AltGr)
-			See DDvorak or ENTI-key++ layouts
 		Else If CapsState & 1 (first bit set)
 			Shift + Key == CapsLock + Key
 		Else If CapsState & 4 (third bit set)
@@ -178,8 +172,9 @@ Scan code =
 		*####   send without {Raw} – that is, interpret key names (and ^+1#{} ?) in AHK style
 		=####   send {Blind} – that is, keep the modifier state intact
 		%####   utf ligature
-		--      disabled
-		dk##    deadkey
+		--      disabled key/state entry
+		dk##    deadkey (EPKL: @## is used instead, w/ ## from a DeadKeyNames section)
+		&###    EPKL: PowerString name (named strings that are sent by the chosen method)
 NOTE: Use tabs as separator for these entries!!!
 
 ;scan = VK	CapStat	0Norm	1Sh	2Ctrl	6AGr	7AGrSh	Caps	CapsSh
@@ -187,7 +182,7 @@ SC002 = 1	1	1	!			; QWERTY 1!
 SC003 = 2	0	2	={Left}		; QWERTY 2@
 SC004 = 3	0	3	*{Right}	; QWERTY 3#
 SC005 = rshift	modifier		; QWERTY 4$
-SC006 = 5	0	dk1	dk2			; QWERTY 5%
+SC006 = 5	0	dk1	dk2			; QWERTY 5% (EPKL: Use, e.g., @01 @02 for DKs)
 
 [deadkey1]
 ; 0 = unicode number of the "accent"

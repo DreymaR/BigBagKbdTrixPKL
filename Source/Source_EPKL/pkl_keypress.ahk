@@ -164,7 +164,6 @@ setModifierState( theMod, isDown = 0 )
 {
 	static osmKeys      := "--"
 	static osmTime      := 0
-;	static tapTime      := 0 	; eD WIP
 	static osmN         := 1 								; OSM number switch
 	
 	if ( osmKeys == "--" ) {
@@ -181,7 +180,6 @@ setModifierState( theMod, isDown = 0 )
 			osmN := Mod( osmN, getPklInfo( "osmMax" ) )+1 	; Switch between the OSM timers
 			setPklInfo( "osmKeyN" . osmN, theMod ) 			; Marks the OSM as active
 			SetTimer, osmTimer%osmN%, %osmTime% 			; A timer to turn the OSM off again
-;			tapTime := A_TickCount + osmTime 				; eD WIP: Do we need both a tick count and a timer? ( A_TickCount < tapTime )
 		}
 		setKeyInfo( "ModState_" . theMod, 1 )
 		Send {%theMod% Down} 								; NOTE: This autorepeats. Is that desirable?

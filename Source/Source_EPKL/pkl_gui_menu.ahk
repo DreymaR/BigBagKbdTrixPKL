@@ -1,6 +1,6 @@
 ﻿pkl_set_tray_menu()
 {
-	ShowMoreInfo := getPklInfo( "AdvancedMode" )	; eD: Show extra technical info and the Reset hotkey
+	ShowMoreInfo := getPklInfo( "AdvancedMode" )	; Show extra technical info and the Reset hotkey
 	
 	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
 	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
@@ -71,7 +71,7 @@
 	}
 	Menu, Tray, add,
 	if ( ShowMoreInfo ) {
-		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; eD: Refresh
+		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; Refresh
 	}
 	Menu, Tray, add, %suspendMenuItem%, toggleSuspend						; Suspend
 	Menu, Tray, add, %exitappMenuItem%, ExitPKL								; Exit
@@ -84,7 +84,7 @@
 	try {
 		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem )
 	} catch {
-		pklWarning( "PKL_Settings.ini:`nNon-existing menu item specified as default!?" )
+		pklWarning( "PKL Settings.ini:`nNon-existing menu item specified as default!?" )
 	}
 ;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chnglayMenuItem%
@@ -129,7 +129,7 @@ pkl_about()
 	locCopyright    := getPklInfo( "LocStr_7"  )
 	locCompany      := getPklInfo( "LocStr_8"  )
 	locLicense      := getPklInfo( "LocStr_13" )
-	locInfos        := getPklInfo( "LocStr_14" )
+	locInfo         := getPklInfo( "LocStr_14" )
 	locContributors := getPklInfo( "LocStr_20" )
 	translationName := getPklInfo( "LocStr_21" )
 	translatorName  := getPklInfo( "LocStr_22" )
@@ -152,18 +152,15 @@ pkl_about()
 	if ( pklProgURL != pklMainURL )
 		Gui, Add, Edit, , %pklProgURL%
 	Gui, Add, Text, , ......................................................................
-	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010
-	Gui, Add, Text, , %locInfos%
+	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
+	Gui, Add, Text, , %locInfo%
 	Gui, Add, Text, , %locLicense%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
 	Gui, Add, Text, , ......................................................................
 	text := ""
 	text = %text%%locContributors%:
-	text = %text%`n- OEystein "DreymaR" Gadmar: PKL[eD]	; edition DreymaR
-;	text = %text%`nAutoHotkey authors && contributors
-	text = %text%`n- Chris Mallet && The AutoHotkey Foundation
-;	text = %text%`n- The AutoHotkey Foundation: AHK v1.1
-;	text = %text%`n  (Lexikos, Majkinetor, Shimanov, L. Hars...)
+;	text = %text%`n- OEystein "DreymaR" Gadmar: EPKL	; edition DreymaR
+	text = %text%`nChris Mallet && The AutoHotkey Foundation
 	if ( translatorName != "[[Translator name]]" )
 		text = %text%`n`n%translatorName%: %translationName%
 	Gui, Add, Text, , %text%
@@ -178,8 +175,8 @@ pkl_about()
 	Gui, Add, Edit, , %layPage%
 	if ( getPklInfo( "AdvancedMode" ) ) {
 		Gui, Add, Text, , ......................................................................
-		text := ""							; eD: Show MS Locale ID and current underlying layout DKs
-		text = %text%Keyboard type (from PKL_Settings.ini): %kbdType%
+		text := ""							; Show MS Locale ID and current underlying layout DKs
+		text = %text%Keyboard type (from PKL Settings.ini): %kbdType%
 		text = %text%`nCurl/Ergo mod type (---"---): %ergoMod%
 		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
 		text = %text%`nDead keys set for this Windows layout: %dkStr%

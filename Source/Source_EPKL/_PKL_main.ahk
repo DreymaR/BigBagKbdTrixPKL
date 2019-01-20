@@ -15,6 +15,7 @@
 
 ; eD TOFIX/WIP:
 ;			- 
+;			- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state!
 ;			- Layouts can now unmap keys and dead keys(?) by using a '-1' or 'vk' entry. Tested. Document it!
 ;				- Augmenting/overriding dead key defs in layout.ini (and baseLayout.ini?). Entries of -1 should remove a mapping.
 ;			- Implement the ANS2ISO VKEY maps in layouts, thus needing only one full base layout? ANSI has the most logical key names for an [eD] base (e.g., OEM_MINUS)?
@@ -23,7 +24,6 @@
 ;				- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this should this happen for @ entries?
 ;				- Removing that isn't enough though? And actually, should a dk chaining start anew? So, replicate the state and effect of a normal layout DK press.
 ; eD TODO:
-;			- On 0.5.0/1.0.0(?) release, change name to EPKL (EPiKaL). Also rename the PKL_eD folder etc (-> Etc), and PKL[eD] instances. Put Languages in Files.
 ;			- Mods unsticker timer. Every 5 s(?) check if no keys are held and no sticky timers counting, then send Up for those that aren't in use.
 ;				- Update the OS dead keys etc as necessary.
 ;				- Combine w/ other housekeeping...?
@@ -38,7 +38,7 @@
 ;			- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;				- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;			- Allow escaped semicolons (`;) in iniRead?
-;			- Similar codes in layout.ini as in PKL_Settings.ini for @K@C@E ? Maybe too arcane and unnecessary.
+;			- Similar codes in layout.ini as in PKL Settings.ini for @K@C@E ? Maybe too arcane and unnecessary.
 ;			- Remove the Layouts submenu? Make it optional by .ini?
 ;			- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;			- Extend lock? E.g., LShift+Mod2+Ext locks Ext2. Maybe too confusing. But for, say, protracted numeric entry it could be useful?
@@ -49,35 +49,32 @@
 ;			- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend. DK chaining doesn't work yet though.
 ;			- PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 ;			- PKL[eD] v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
-;			- PKL[eD] v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify.
-;			- Notify Ckofy about OSM!
-;				- Settings for which keys are OSM and the wait time. Stacking up to two OSMs works.
-;			- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
-;				- Allow AltGr as OSM? Currently not because of special treatment in setModifierState(). Also because of the bug w/ LCtrl+RAlt mapping?
-;			- Powerstrings can have prefix-entry syntax too. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
+;			- PKL[eD] v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify. Prefix-entry syntax in PowerStrings too.
+;			- EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
+;				- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
 
 
-setPklInfo( "pklName", "Portable Keyboard Layout" )							; PKL[edition DreymaR]
-setPklInfo( "pklVers", "0.4.8_eD" ) 										; Version
-setPklInfo( "pklComp", "ed. DreymaR" )										; Compilation info, if used
+setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR]
+setPklInfo( "pklVers", "1.0.0" ) 											; EPKL Version (was PKL[eD] v0.4.8)
+setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
 
 SendMode Event
-SetKeyDelay 3								; eD: The Send key delay was not set, defaulted to 10
+SetKeyDelay 3								; eD NOTE: The Send key delay was not set, defaulted to 10
 SetBatchLines, -1
 Process, Priority, , H
 Process, Priority, , R
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables are largely replaced by the get/set info framework
-setKeyInfo( "CurrNumOfDKs", 0 )				; eD: How many dead keys were pressed	(was 'CurrentDeadKeys')
-setKeyInfo( "CurrNameOfDK", 0 )				; eD: Current dead key's name			(was 'CurrentDeadKeyName')
-setKeyInfo( "CurrBaseKey_", 0 )				; eD: Current base key					(was 'CurrentBaseKey')
-;setKeyInfo( "HotKeyBuffer", 0 )			; eD: Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
-setPklInfo( "File_PklIni", "PKL_Settings.ini"      )	; eD: Define this globally  (was 'pkl.ini')
-setPklInfo( "LayFileName", "layout.ini"            )	; eD: --"--
-setPklInfo( "File_PklDic", "PKL_eD\PKL_Tables.ini" )	; eD: My info dictionary file (from internal tables)
-setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ) )	; eD: Extra debug info etc
+setKeyInfo( "CurrNumOfDKs", 0 ) 			; How many dead keys were pressed	(was 'CurrentDeadKeys')
+setKeyInfo( "CurrNameOfDK", 0 ) 			; Current dead key's name			(was 'CurrentDeadKeyName')
+setKeyInfo( "CurrBaseKey_", 0 ) 			; Current base key					(was 'CurrentBaseKey')
+;setKeyInfo( "HotKeyBuffer", 0 ) 			; Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
+setPklInfo( "File_PklIni", "EPKL_Settings.ini"      ) 	; Defined globally  	(was 'pkl.ini')
+setPklInfo( "LayFileName", "layout.ini"             ) 	; --"--
+setPklInfo( "File_PklDic", "Files\PKL_Tables.ini"   ) 	; Info dictionary file, mostly from internal tables
+setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ) )	; Extra debug info etc
 
 arg = %1% ; Layout from command line parameter
 pkl_init( arg )
@@ -132,25 +129,24 @@ processKeyPress29:
 Return
 
 ;keyPressedWoStar:		; SC###
-;	activity_ping()
 ;	Critical
 ;	processKeyPress( A_ThisHotkey )
 ;Return
 
 keyPressed: 			; *SC###
-	activity_ping()
+;	activity_ping()
 	Critical
 	processKeyPress( SubStr( A_ThisHotkey, 2 ) )
 Return
 
 keyReleased:			; *SC### UP
-;	activity_ping()
+	activity_ping()
 	Critical
 	processKeyPress( SubStr( A_ThisHotkey, 2, -3 ) )
 Return
 
 modifierDown:			; *SC###    (translate to VK name)
-	activity_ping()
+;	activity_ping()
 	Critical
 	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2 ) . "vkey" ), 1 )
 Return
@@ -162,7 +158,7 @@ modifierUp: 			; *SC### UP (translate to VK name)
 Return
 
 extendDown: 			; *SC###
-	activity_ping()
+;	activity_ping()
 	Critical
 	setExtendState( 1 )
 Return
@@ -189,7 +185,7 @@ changeActiveLayout:
 	changeLayout( getLayInfo( "nextLayout" ) )
 Return
 
-rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL_Settings list changes
+rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL Settings list changes
 	activeLay   := getLayInfo( "active" )			; Layout code (path) of the active layout
 	numLayouts  := getLayInfo( "numOfLayouts" )		; The number of listed layouts
 	Loop % numLayouts {
@@ -226,28 +222,28 @@ Return
 ; ####################### functions #######################
 
 #Include pkl_init.ahk
-#Include pkl_gui_image.ahk	; eD: pkl_gui was too long; it's been split into a help image and a menu/about part
+#Include pkl_gui_image.ahk	; pkl_gui was too long; it's been split into help image and menu/about parts
 #Include pkl_gui_menu.ahk
 #Include pkl_keypress.ahk
 #Include pkl_send.ahk
 #Include pkl_deadkey.ahk
-#Include pkl_utility.ahk	; eD: Various functions such as pkl_activity.ahk were merged into this file
+#Include pkl_utility.ahk	; Various functions such as pkl_activity.ahk were merged into this file
 #Include pkl_get_set.ahk
 #Include pkl_ini_read.ahk
-#Include pkl_make_img.ahk	; eD: Help image generator, calling Inkscape with an SVG template
+#Include pkl_make_img.ahk	; Help image generator, calling Inkscape with an SVG template
 
-; ####################### (external) modules #######################
+; #######################  modules  #######################
 
-; eD: #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
-; eD: #Include ext_MenuIcons.ahk ; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
-; eD: #Include ext_SendUni.ahk ; SendU by Farkas et al - obviated by Unicode AHK v1.1
-; eD: #Include ext_HashTable.ahk ; Merged w/ CoHelper then obviated by AHK v1.1 associative arrays
-; eD: #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
-; eD: #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
-; eD: #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead
-; eD: #Include getDeadKeysOfSystemsActiveLayout.ahk - replaced w/ read from tables .ini file
-; eD: #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
-; eD: #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one variable
-; eD: #Include iniReadBoolean.ahk - moved into pkl_iniRead and tweaked
-; eD: #Include detectDeadKeysInCurrentLayout.ahk - moved into pkl_deadkey.ahk
-; eD: #Include pkl_locale.ahk - moved into pkl_get_set.ahk
+; #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
+; #Include ext_MenuIcons.ahk ; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
+; #Include ext_SendUni.ahk ; SendU by Farkas et al - obviated by Unicode AHK v1.1
+; #Include ext_HashTable.ahk ; Merged w/ CoHelper then obviated by AHK v1.1 associative arrays
+; #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
+; #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
+; #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead
+; #Include getDeadKeysOfSystemsActiveLayout.ahk - replaced w/ read from tables .ini file
+; #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
+; #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one variable
+; #Include iniReadBoolean.ahk - moved into pkl_iniRead and tweaked
+; #Include detectDeadKeysInCurrentLayout.ahk - moved into pkl_deadkey.ahk
+; #Include pkl_locale.ahk - moved into pkl_get_set.ahk

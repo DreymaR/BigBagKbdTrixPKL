@@ -105,7 +105,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KL
 ; PKL activity module
 ;     Check for inactivity (no clicks/keypresses) in a given period
 ;
-activity_ping(mode = 1) {
+activity_ping(mode = 1) {	; eD WIP: Replace this with A_TimeIdlePhysical
 	activity_main(mode, 1)
 }
 
