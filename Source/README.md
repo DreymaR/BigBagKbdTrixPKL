@@ -3,23 +3,25 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ### For [PortableKeyboardLayout][PKLGit] on Windows
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
-#### ([EPiKaL PKL, formerly [edition DreymaR]][CmkPKL] by DreymaR, 2017-)
+#### ([EPiKaL PKL][CmkPKL], formerly PKL[edition DreymaR] by DreymaR, 2017-)
 
 Source code info
 ----------------
+
+This is the source code README, briefly explaining how to compile PKL/EPKL with AHK.
 
 Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
 
-* The [EPKL] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).
+* The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).
 
 Compiling
 ---------
 
-* For standard non-Unicode PKL versions, use the Ahk2Exe compiler from the [AHK download page][AHKDld].
-* AHK compiler v1.1 Unicode is needed EPKL; v1.0 and v1.1 in ANSI mode work for original PKL.
+* To compile the (E)PKL source code, use the Ahk2Exe compiler from the [AHK download page][AHKDld].
+* AHK compiler v1.1 Unicode is needed for EPKL; v1.0 and v1.1 in ANSI mode work for the original PKL.
 * There's a folder in Source that contains the v1.1 AHK compiler.
 * Choose the right Source\#.ahk file, EPKL or PKL_Orig.
 * Choose to compile into your main PKL folder.
@@ -46,4 +48,4 @@ _Øystein "DreymaR" Gadmar, 2018-_
 [AHKDld]: https://autohotkey.com/download/ (AutoHotkey download page)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
-[EPKL]:   ./Files/ (EPKL Files folder/README)
+[EPKLRM]: ./Files/ (EPKL Files folder/README)

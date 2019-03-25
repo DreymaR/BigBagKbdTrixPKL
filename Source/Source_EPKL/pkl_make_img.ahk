@@ -120,7 +120,7 @@ _makeHelpImgDic( imgName, state )						; Function to create a help image pdic.
 				dkName := getKeyInfo( chas )			; Get the true name of the dead key
 				HIG_DKNames[ chas ] := dkName			; eD TODO: Support chained DK. How?
 				res := "dk_" . dkName
-			} else if ( chas == "={space}" ) {
+			} else if ( Format( "{:L}", chas ) == "={space}" ) {
 				res := 32								; Space is stored as ={space}; show it as a space
 			} else {
 				cha := ( isInt( cha ) )  ? cha : -1		; Replace unprintables (see pkl_send)

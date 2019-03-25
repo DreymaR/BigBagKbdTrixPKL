@@ -92,8 +92,10 @@ pkl_locale_load( lang, compact = 0 )
 	}
 	
 	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) )
-	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyhistMenuText", "Key history..." ) )
-	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeimgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
+	setPklInfo( "LocStr_ZoomImgMenu", pklIniRead( "zoomImgMenuText", "Zoom image"     ) )
+	setPklInfo( "LocStr_MoveImgMenu", pklIniRead( "moveImgMenuText", "Move image"     ) )
+	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyHistMenuText", "Key history..." ) )
+	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeImgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
 	
 	file := lang . ".ini"
 	file := ( compact ) ? file : "Files\Languages\" . file

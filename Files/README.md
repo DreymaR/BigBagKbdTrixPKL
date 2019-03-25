@@ -3,6 +3,8 @@ WARNING: HARD HAT AREA!
 
 EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... yet. ;-)
 
+This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
+
 ~ Øystein B "DreymaR" Gadmar, 2019
 
 
@@ -33,6 +35,7 @@ DONE:
 * Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
 	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images.
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
+	- Zoom and Move hotkeys for the help image, cycling between image sizes and positions. Set e.g., imgZoom = 60,100,150 (%) in EPKL_Settings.
 	- Settings in layout.ini: Size/scaling, background/extend images, background color, shift indicator, icons and dead key dirs.
 	- Settings in settings.ini: Overall transparency/opacity, top/bottom gutter distances, horizonal activation zone.
 	- If settings are missing, may default to backgr.png, extend.png, on/off.ico and ModStateImg\ in the layout dir.
@@ -94,7 +97,16 @@ DONE:
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
 * EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
-*		- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
+	- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
+* EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
+	- Fixed: DK images were gone due to an error in EPKL_Settings.ini. DK images also didn't work for some layouts.
+	- Fixed: Sticky/One-Shot mods stayed active when selecting Extend, affecting strings if sent within the OSM timer even when sent with %.
+	- A set of Kaomoji text faces in the Strings Extend layer. Help images included.  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
+	- Moved the BaseLayout files up one tree level. In layout.ini, use its file path from Layouts w/o extension, e.g., Colemak-VK\BaseLayout_Cmk-VK-ISO
+	- 'Spc' and 'Tab' layout mappings, sending {Blind}{Key}. Makes for compact layout entries for the delimiting whitespace characters.
+	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' rather than the extend_key setting with a mapped key as before.
+	- Extend layers can be set as hard/soft in the _Extend file. Soft layers follow mnemonic letter mappings, hard ones are positional (like my Ext1/2).
+		- The Curl(DH) Ext+V may still be mnemonic/soft instead of positional/hard (^V on Ext+D). Use _ExtDV with AWide/Angle mods for mapSC_extend then.
 
   
 **OTHER/NOTES**
@@ -140,19 +152,21 @@ INFO: Some documentation notes
   
 * "Anti-madness tips" for PKL (by user Eraicos and me):
     - PKL using AHK v1.0: Script files need to be ANSI encoded. They don't support special letters well.
-        - EPKL using AHK v1.1-Unicode supports scripts in UTF-8 w/ BOM.
+        - EPKL using AHK v1.1-Unicode: Supports scripts in UTF-8 w/ BOM.
     - PKL .ini files may be UTF-8 encoded, with or without BOM. Source .ahk files should be UTF-8-BOM?
         - PKL: Don't use end-of-line comments in the .ini files. OK in layout.ini because of tab parsing.
-        - EPKL: End-of-line comments are now safe!
-    - In layout.ini:
-        - Old PKL: Always use tabs as separators in layout.ini, including between a VK code and 'VirtualKey'.
-        - The CapsLock key should have scan code 'CapsLock' instead of SC03A? Why?
+        - EPKL: End-of-line comments are now safe.
+    - In layout.ini, for old PKL:
+        - Always use single tabs as separators in layout.ini, also between a VK code and 'VirtualKey'.
+        - The CapsLock key should have scan code 'CapsLock' instead of SC03A, if using 'extend_key = CapsLock'.
+        - The Extend key should be mapped or it won't work, e.g., 'CapsLock = CAPITAL	VirtualKey'.
+        - EPKL changes all of the above: Any whitespace delimits, and Extend is mapped as 'Extend Modifier'.
     - In the Extend section:
-        - Don't use empty mappings in the Extend section. Comment these out.
+        - Don't have empty mappings in the Extend section. Comment these out.
         - By default {} is added to send keys by name. To escape these, use a prefix-entry or }‹any string›{.
   
 
-**Entry format info from Farkas' sample.ini layout file:** (Note that I now use '@' for 'dk' entries, etc)
+**Entry format info from Farkas' sample.ini layout file:** (Note that EPKL now uses '@' for 'dk' entries etc)
 ```
 Scan code =
 	Virtual key code (like in MS KLC)

@@ -22,6 +22,8 @@ _initReadPklIni( layoutFromCommandLine )			;   ####################### pkl.ini #
 	pklSetHotkey( pklIniRead( "changeLayHotkey" ), "changeActiveLayout"  , "HK_ChangeLayout" )
 	pklSetHotkey( pklIniRead( "exitAppHotkey"   ), "ExitPKL"             , "HK_ExitApp"      )
 	pklSetHotkey( pklIniRead( "refreshHotkey"   ), "rerunWithSameLayout" , "HK_Refresh"      )
+	pklSetHotkey( pklIniRead( "zoomImageHotkey" ), "zoomHelpImage"       , "HK_ZoomHelpImg"  )
+	pklSetHotkey( pklIniRead( "moveImageHotkey" ), "moveHelpImage"       , "HK_MoveHelpImg"  )
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "ctrlAltIsAltGr", false ) )
@@ -99,25 +101,27 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 		pklMsgBox( 2, mainLay ) 										; "File not found, exiting"
 		ExitApp	; eD TOFIX: Why isn't the program exiting here? Use pklExit instead?
 	}
-	setLayInfo( "layDir"      , layDir  )
-	setPklInfo( "File_LayIni", mainLay )								; The main layout file path
-	baseDir := "Layouts\" . pklIniRead( "baseLayout",, "LayIni" )		; Read a base layout then augment/replace it
-	baseLay := ( baseDir == "Layouts\" ) ? "" : baseDir . "\baseLayout.ini"
+	setLayInfo( "layDir"            , layDir  )
+	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
+	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
+	SplitPath, basePath, baseLay, baseDir
+	baseDir         := "Layouts\" . baseDir
+	baseLay         := "Layouts\" . basePath . ".ini"
 	if ( FileExist( baseLay ) ) {
-		setLayInfo( "basDir"      , baseDir )
-		setPklInfo( "File_BasIni", baseLay )							; The base layout file path
-	} else if ( baseLay ) {
-		setLayInfo( "basDir"      , "" )
-		setPklInfo( "File_BasIni", "" )
-		pklWarning( "File '" . baseLay . "' not found!" )				; "File not found" iff base is defined but not present
+		setLayInfo( "basDir"        , baseDir )
+		setPklInfo( "File_BasIni"   , baseLay ) 						; The base layout file path
+	} else if ( basePath ) {
+		setLayInfo( "basDir"        , "" )
+		setPklInfo( "File_BasIni"   , "" )
+		pklWarning( "File '" . baseLay . "' not found!" ) 				; "File not found" iff base is defined but not present
 	}
 	
 	static initiated							; Ensure the tables are read only once (eD TODO: Is this the right way? Necessary?)
 	mapFile := pklIniRead( "remapsFile",, "LayIni",, "BasIni" ) 		; Layout remapping for ergo mods, ANSI/ISO conversion etc. 
 	if ( not initiated ) && ( FileExist( mapFile ) )
 	{																	; Read/set remap dictionaries
-		mapTypes  := "  scMapLay     ,  scMapExt     ,  vkMapMec    "
-		mapSects  := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ]	; Section names in the .ini file
+		mapTypes    := "  scMapLay     ,  scMapExt     ,  vkMapMec    "
+		mapSects    := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ]	; Section names in the .ini file
 		Loop, Parse, mapTypes, CSV, %A_Space%%A_Tab%
 		{
 			mapType := A_LoopField
@@ -129,7 +133,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	initiated := 1
 	}
 	
-	extendKey := pklIniRead( "extend_key",, mainLay,, baseLay ) 		; Extend key (was in layout.ini [global])
+	extendKey := pklIniRead( "extend_key",, mainLay,, baseLay ) 		; Extend key (was in layout.ini [global]) 	; eD WIP: Map it directly instead.
 	if ( extendKey )
 		setLayInfo( "extendKey", extendKey )
 	shiftStates := pklIniRead( "shiftstates", "0:1", mainLay,, baseLay )
@@ -164,37 +168,51 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 			Continue
 		}
 		entry[2] := Format( "{:L}", entry[2] )							; Check the 2nd entry (in lower case) for 'VK' or 'Modifier'
-		if ( entry[2] == "virtualkey" || entry[2] == "vk")
-			entry[2] := -1
-		else if ( entry[2] == "modifier" )
-			entry[2] := -2
-		vkcode := getVKeyCodeFromName( entry[1] )						; Two-digit VK hex code (Uppercase)
-		vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode		; Remap the VK here before assignment.
-		setKeyInfo( key . "vkey", vkcode )								; Set VK code (hex ##) for key
-		setKeyInfo( key . "capSt", entry[2] )							; Normally caps state (0-5 for states; -1 for vk; -2 for mod)
-		if ( entry[2] == -2 ) {											; The key is a modifier
-			Hotkey, *%key%   ,  modifierDown
-			Hotkey, *%key% Up,  modifierUp
-			if ( getLayInfo( "hasAltGr" ) && entry[1] == "RAlt" )
-				setKeyInfo( key . "vkey", "AltGr" )						; Set RAlt as AltGr
-			else
-				setKeyInfo( key . "vkey", entry[1] )					; Set VK modifier name, e.g., "rshift"
-		} else if ( key == extendKey ) {								; Set the Extend key (was only mapped to Up, keyReleased)
+		if ( entry[2] == "virtualkey" || entry[2] == "vk") {
+			entry[2] := -1 												; -1 = VK
+		} else if ( entry[2] == "modifier" ) {
+			entry[2] := -2 												; -2 = Modifier
+		}
+		if ( Format( "{:L}", entry[1] ) == "extend" ) { 				; Directly mapped Extend key ( <key> = Extend Modifier )
+			extendKey := key
+			setLayInfo( "extendKey", extendKey )
+		} else {
+			vkcode := getVKeyCodeFromName( entry[1] )					; Translate to the two-digit VK## hex code (Uppercase)
+			vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode	; Remap the VK here before assignment.
+			setKeyInfo( key . "vkey", vkcode )							; Set VK code (hex ##) for key
+		}
+		setKeyInfo( key . "capSt", entry[2] ) 							; Set Caps state (0-5 for states; -1 for VK; -2 for Mod)
+		if ( key == extendKey ) { 										; Set the Extend key (was only mapped to Up, keyReleased)
 			Hotkey, *%key%   ,  extendDown
 			Hotkey, *%key% Up,  extendUp
+		} else if ( entry[2] == -2 ) {									; Set modifier keys
+			Hotkey, *%key%   ,  modifierDown
+			Hotkey, *%key% Up,  modifierUp
+			if ( getLayInfo( "hasAltGr" ) && entry[1] == "RAlt" ) {
+				setKeyInfo( key . "vkey", "AltGr" )						; Set RAlt as AltGr
+			} else {
+				setKeyInfo( key . "vkey", entry[1] )					; Set VK modifier name, e.g., "rshift"
+			}
 		} else {
-			Hotkey, *%key%,     keyPressed
-		}
+			Hotkey, *%key%,     keyPressed 								; Set normal keys
+		}	; end if entries
 		Loop % numEntries - 3 { 										; Loop through all entries for the key
 			ks  := shiftState[ A_Index ]								; This shift state for this key
 			ksE := entry[ A_Index + 2 ]									; The value/entry for that state
+			ksL := Format( "{:L}", ksE ) 								; Lower case formatted entry
 			if        ( StrLen( ksE ) == 0 ) {							; Empty entry; ignore
 				Continue
 			} else if ( StrLen( ksE ) == 1 ) {							; Single character entry:
 				setKeyInfo( key . ks , Ord(ksE) )						; Convert to ASCII/Unicode ordinal number; was Asc()
 			} else if ( ksE == "--" ) { 								; --: Disabled state entry
-				setKeyInfo( key . ks      , "" )						; "key<state>"  is the entry code
-				setKeyInfo( key . ks . "s", "" )						; "key<state>s" is the entry itself
+				setKeyInfo( key . ks      , "" )						;     "key<state>"  is the entry code
+				setKeyInfo( key . ks . "s", "" )						;     "key<state>s" is the entry itself
+			} else if ( ksL == "spc" ) { 								; Spc: Special space entry (to avoid whitespace problem)
+				setKeyInfo( key . ks      , "=" ) 						;     "key<state>"  to send the key {Blind} w/ mods
+				setKeyInfo( key . ks . "s", "{Space}" ) 				;     "key<state>s" is the entry itself
+			} else if ( ksL == "tab" ) { 								; Tab: Special tab entry (to avoid whitespace problem)
+				setKeyInfo( key . ks      , "=" ) 						;     "key<state>"  to send the key {Blind} w/ mods
+				setKeyInfo( key . ks . "s", "{Tab}" ) 					;     "key<state>s" is the entry itself
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
 ;				ksD := SubStr( ksE, 1, 2 )
@@ -221,13 +239,14 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	;
 	if ( getLayInfo( "extendKey" ) ) {									; Set the Extend key mappings.
 		extendFile  := fileOrAlt( pklIniRead( "extendFile",, "LayIni",, "BasIni" )
-								, getPklInfo( "File_PklIni" ) )		; Default Extend file: pkl.ini
+								, getPklInfo( "File_PklIni" ) )			; Default Extend file: pkl.ini
 		extendFiles := [ extendFile, mainLay ]		; An [extend] section in layout.ini overrides pkl.ini maps	; eD WIP: Add baseLay in the middle?!
+		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extendFile,, mainLay ), "/", " " ) 	; Array of hard layers
 		for ix, thisFile in extendFiles
 		{																; Loop to parse the Extend files
 			Loop % 4 {													; Loop the multi-Extend layers
 				thisExtN := A_Index
-				thisSect := pklIniRead( "ext" . thisExtN , "", thisFile, "ExtendMaps" )
+				thisSect := pklIniRead( "ext" . thisExtN , "", thisFile ) 	; eD: , "ExtendMaps" )
 				thisSect := ( thisFile == getPklInfo( "File_PklIni" ) ) ? "extend" : thisSect
 				remap := iniReadSection( thisFile, thisSect )
 				if ( not remap )										; If this remap is empty, continue to the next
@@ -236,7 +255,11 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 				{
 					pklIniKeyVal( A_LoopField , key, extMapping )		; Read the Extend mapping for this SC
 					key := Format( "{:U}", key )
-					key := scMapExt[ key ] ? scMapExt[ key ] : key		; If applicable, remap Extend entries
+					if ( hardLayers[ thisExtN ] ) { 					; If this Ext# layer is hard-modded...
+						key := scMapExt[ key ] ? scMapExt[ key ] : key		; If applicable, hard remap entry
+					} else {
+						key := scMapLay[ key ] ? scMapLay[ key ] : key		; If applicable, soft remap entry
+					}
 					setKeyInfo( key . "ext" . thisExtN , extMapping )
 				}	; end loop (parse extMappings)
 			}	; end loop ext#
@@ -290,7 +313,7 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	;-------------------------------------------------------------------------------------
 	; Read and set layout on/off icons and the tray menu
 	;
-	ico := readLayoutIcons( layDir, baseDir )
+	ico := readLayoutIcons( mainLay, baseLay )
 	setLayInfo( "Ico_On_File", ico.Fil1 )
 	setLayInfo( "Ico_On_Num_", ico.Num1 )
 	setLayInfo( "Ico_OffFile", ico.Fil2 )
@@ -298,10 +321,8 @@ _initReadLayIni()									;   ####################### layout.ini ###############
 	pkl_set_tray_menu()
 }	; end fn _initReadLayIni()
 
-readLayoutIcons( layDir, altDir = "" )									; Read icons for a specified layout dir
+readLayoutIcons( layIni, altIni = "" )									; Read On/Off icons for a specified layout
 {
-	layIni  := layDir . "\" . getPklInfo( "LayFileName" )
-	altIni  := altDir . "\" . getPklInfo( "LayFileName" )
 	for ix, OnOff in [ "on", "off" ]
 	{
 		icon := OnOff . ".ico"
@@ -312,7 +333,7 @@ readLayoutIcons( layDir, altDir = "" )									; Read icons for a specified layo
 			icoNum%ix%  := 1
 		} else if ( A_IsCompiled ) {
 			icoFil%ix%  := A_ScriptName
-			icoNum%ix%  := ( OnOff == "on" ) ? 1 : 5	; was 6/3 in original PKL.exe - keyboard and red 'S' icons
+			icoNum%ix%  := ( OnOff == "on" ) ? 1 : 5			; was 6/3 in original PKL.exe - keyboard and red 'S' icons
 		} else {
 			icoFil%ix%  := "Resources\" . icon
 			icoNum%ix%  := 1
@@ -333,7 +354,7 @@ pkl_activate()
 	Sleep, 10
 	
 	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )	; _pkl_show_tray_menu()
-	Menu, Tray, Icon,,, 1 ; Freeze the icon
+	Menu, Tray, Icon,,, 1 	; Freeze the tray icon
 	
 	if ( pklIniBool( "showHelpImage", true ) )
 		pkl_showHelpImage( 1 )

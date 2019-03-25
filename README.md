@@ -3,29 +3,29 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ### For [PortableKeyboardLayout][PKLGit] on Windows
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
-#### ([EPiKaL PKL, formerly [edition DreymaR]][CmkPKL] by DreymaR, 2017-)
+#### ([EPiKaL PKL][CmkPKL], formerly PKL[edition DreymaR] by DreymaR, 2017-)
 
-Documentation
--------------
+[Θώθ][ThothW] – What Is This?
+-----------------------------
 
 Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
   
-* This repo implements most of my Big Bag for PKL, as layout and PKL .ini files.
-* It also adds my own EPiKaL PKL [EPKL] with several improvements.
+* This repo implements most of my Big Bag for (E)PKL, as layout and other .ini files.
+* It also contains my own **EPiKaL PKL** (**[EPKL][EPKLRM]**) with several improvements.
 * Big thanks to Farkas Máté, the AutoHotkey people, Vortex(vVv) and all other contributors.
 
 Getting EPKL up and running
 ---------------------------
 
-* Download a copy of this repo, for instance with its GitHub Download/Clone button (and then unzip the file you got).
+* Download a copy of this repo. For instance, press the GitHub Download/Clone button and then unzip the file you got.
 * The simplest way of running EPKL is to just put the main folder somewhere and run EPKL.exe any way you like!
-* EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
+* EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
   
 * I usually put a shortcut to EPKL.exe in my Start Menu "Startup" folder so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a C:\PortableApps folder.
-* If the PortableApps menu is started on logon it can start up EPKL for you too.
+* If the PortableApps menu is started on logon it can start up EPKL for you too.  
   
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
 * In EPKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
@@ -38,7 +38,7 @@ More Know-How-To
 * This repo contains executables for EPKL as well as the original PKL, and source code for both.
 * The layouts are updated to EPKL format though, so they'd need a little reconstruction for old PKL.
 * The EPKL_Settings.ini file holds layout choices and general program settings.
-* The layout.ini files hold layout settings and mappings. They may point to and augment a baseLayout.ini file.
+* The layout.ini files hold layout settings and mappings. They often point to and augment a BaseLayout.ini file.
   
 The files may take a little tweaking to get what you want. There are several parameters:
 * ISO (European/World) vs ANSI (US) vs other keyboard types
@@ -68,28 +68,53 @@ The files may take a little tweaking to get what you want. There are several par
 * Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate (it may be Ctrl+Shift+` instead)
 * Ctrl+Shift+4 – Exit EPKL
 * Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
+* Ctrl+Shift+6 – Zoom the help image in/out, to see it better or get it out of the way
+* Ctrl+Shift+7 – Move the help image between positions, as by mouseover
   
 **Techy tips for EPKL:**
-* Look in the various .ini files if you're interested! Much is explained there.
+* Look in the various .ini files under Files and Layouts if you're interested! Much is explained there.
 * See my examples in the Extend file for some advanced mappings! These may be used in layouts and dead keys too.
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layout entries.
-* Running EPKL with other AutoHotkey key mapping scripts may get confusing if there is so-called _hook competition_.
+* Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
 
-Layout variants
----------------
+Layout variant tutorial
+-----------------------
 
-You can quite easily make your preferred (non-)ergonomic variant of, say, a locale layout:
-* Copy-Paste the layout folder and rename the result to what you want, such as 'Cmk-eD-De_ISO_Angle' for German with only the ISO-Angle mod.
-* In that folder's layout.ini file, edit the remap fields to represent the new setting. In this case, 'CmkCAW_ISO' → 'Angle_ISO'.
-    - For non-DH layouts, Extend uses the same remap as the layout; for Curl(DH)/CAW you need an _ext remap for Extend.
-* Now, if the EPKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right – in this case, ISO/--/Angle/De – you should get the variant you wanted.
-    - After making layout changes, I refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
-* If you want updated help images you must get Inkscape and run the "Create help images..." option.
-    - First, check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
-    - You can download Inkscape for instance from PortableApps.com, and point to it in the Files\ImgGenerator\EPKL_ImgGen_Settings.ini file.
-    - By default, the HIG looks for Inkscape in C:\PortableApps\InkscapePortable\InkscapePortable.exe, so you could just put it there and go.
-    - To see the menu option you must have advancedMode active (in EPKL_Settings.ini). The HIG will make images for the currently active layout.
+You can make your own version of, say, a locale layout with a certain (non-)ergonomic variant:
+* Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale you want to start from.
+* Determine whether you want to just move keys around by VirtualKey mappings or map all their shift states like Colemak-eD does.
+* Copy/Paste a promising layout folder and rename the result to what you want.
+    - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
+    - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the `Layouts/Colemak-eD` folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
+    - Instead of 'De' you could choose any locale tag you like such as 'MyCoolDe' to set it apart.
+* In that folder's layout.ini file, edit the remap fields to represent the new settings.
+    - Here, change `mapSC_layout = CmkCAW_ISO` to `mapSC_layout = Angle_ISO`.
+    - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
+    - Here, `mapSC_extend = Angle_ISO` too since Angle is a "hard" ergo mod. (If using Curl-DH, you can move Ctrl+V by adding _ExtDV.)
+* Change any key mappings you want to tweak.
+    - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
+    - See the next section to learn more about key mapping syntax.
+    - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (OEM_102) for the sake of example.
+    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. OEM_102 is there, state 0/1 mapped to ö/Ö.
+    - To find the V key, see the `baseLayout = Colemak-eD\BaseLayout_Cmk-eD_ISO` line and open that file. There's the V key, SC02f.
+    - Now, copy the V key to your layout.ini `[layout]` section so it'll override the baseLayout, and swap the SC### codes of V and OEM_102.
+    - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
+* Now, if the EPKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right you should get the variant you wanted.
+    - Here, set KbdType/CurlMod/ErgoMod/LocalID to ISO/--/Angle/De respectively (or 'MyCoolDe' if you really went with that!).
+    - If you used a VK layout or anything else than Colemak-eD as your path, comment out the `layout = ` line with `;` and activate another.
+    - If you prefer, write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path from `Layouts\`.
+* After making layout changes, refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
+* To get updated help images, see the next point if you want to generate them using Inkscape.
+    - First though, check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
+    - Here, you might either keep the current De_ISO_CurlAWide settings to see the German special signs without making new images, or...
+    - ...edit the image settings, replacing AWide/CAWide/CAngle with 'Angle' to get normal ISO_Angle images without German letters, or...
+    - ...edit the help images in an image editor, combining the ones you need. I use Gimp for such tasks.
+* If you do want to generate a set of help images from your layout you must get Inkscape and run the EPKL Help Image Generator (HIG).
+    - To see the "Create help images..." menu option, advancedMode must be on in EPKL_Settings.
+    - The HIG will make images for the currently active layout.
+    - You can download Inkscape for instance from PortableApps.com, and point to it in the `Files\ImgGenerator\EPKL_ImgGen_Settings.ini` file.
+    - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
 
 Key mappings
@@ -117,9 +142,10 @@ Where:
     - %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
     - $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
     - *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# mods, {} key names)
-    - =‹entry› : Send {Blind}‹entry›, keeping the state of any held modifier keys
+    - =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
     - @‹entry› : Send the current layout's dead key named ‹entry›
     - &‹entry› : Send the current layout's powerstring named ‹entry›
+    - Spc/Tab  : Send a blind Space or Tab; these have special entries since they also delimit columns
   
 Here are some sample VirtualKey (VK) and Modifier mappings. Any layout may contain all types of mappings.
 ```
@@ -127,6 +153,7 @@ RWin    = Back      VirtualKey      ; RWin   -> Backspace
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
 SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (needed the VKEY name here)
 SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
+SC03A   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
 ```
 Entries are any-whitespace delimited since v0.4.6 (PKL used to strictly require a single Tab character between entries).
 
@@ -150,7 +177,7 @@ These are some of the changes in PKL[eD]/[EPKL]:
 	- The "&" prefix denotes literals/powerstrings found in a separate file. These may span more than one line.
 * v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
-	- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed. For Space, use ={Space}.
+	- Requiring Tab delimited layout entries was too harsh. Now, any combination of Space/Tab is allowed.
 * v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
 	- Multi-Extend, allowing one Extend key with 2 modifiers (e.g., RAlt/RShift) to select up to 4 different layers. Ext+Mod{2/3/2+3} -> Ext2/3/4.
 	- Ext2 is a NumPad/nav layer w/ some useful symbols. Ext3/Ext4 are one-shot string layers but mostly to be filled by the user.
@@ -161,17 +188,23 @@ These are some of the changes in PKL[eD]/[EPKL]:
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
 * v1.0.0: EPKL full release.
+* v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
+	- A set of 30+ Kaomoji text faces were added to the Strings Extend3 layer, with help images.  d( ^◇^)b
+	- Extend layers can now be marked as hard/positional or soft/mnemonic. Extend1/2 are mostly hard, the kaomoji layer soft.
+	- Since Space/Tab are used to delimit layout entries, there are now special 'Spc' and 'Tab' entries for these glyphs.
+	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' instead of the old extend_key setting.
+	- BaseLayout files are now at the same tree level as layout folders instead of inside one of them.
 
 
 TODO:
 -----
 I have more [EPKL] changes on my wishlist, including:
 * A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
-* Sticky a.k.a. One-Shot modifiers: Press-release modifier, then within a certain time hit the key to modify.
+* Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * A settings panel instead of editing .ini files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2019-01_
+_Øystein "DreymaR" Gadmar, 2019-03_
 
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)
@@ -184,4 +217,5 @@ _Øystein "DreymaR" Gadmar, 2019-01_
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
 [KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
-[EPKL]:   ./Files/ (EPKL Files folder/README)
+[EPKLRM]: ./Files/ (EPKL Files folder/README)
+[ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)

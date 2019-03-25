@@ -7,6 +7,8 @@
 	SuspendHotkey   := getReadableHotkeyString( getPklInfo( "HK_Suspend"      ) )
 	RefreshHotkey   := getReadableHotkeyString( getPklInfo( "HK_Refresh"      ) )
 	HelpImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
+	ZoomImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ZoomHelpImg"  ) )
+;	MoveImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_MoveHelpImg"  ) ) 	; Don't show this to avoid clutter
 	
 	activeLayout    := getLayInfo( "active" )
 	activeLayName   := ""
@@ -16,6 +18,8 @@
 	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )
 	deadkeyMenuItem := getPklInfo( "LocStr_12" )
 	helpimgMenuItem := getPklInfo( "LocStr_15" )
+	zoomimgMenuItem := getPklInfo( "LocStr_ZoomImgMenu" )
+;	moveimgMenuItem := getPklInfo( "LocStr_MoveImgMenu" )
 	layoutsMenu     := getPklInfo( "LocStr_19" )
 	chnglayMenuItem := getPklInfo( "LocStr_18" )
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
@@ -23,13 +27,15 @@
 	exitappMenuItem := getPklInfo( "LocStr_11" )
 	makeimgMenuItem := getPklInfo( "LocStr_MakeImgMenu" )
 	helpimgMenuItem .= ( HelpImgHotkey ) ? _FixAmpInMenu( HelpImgHotkey ) : ""
+	zoomimgMenuItem .= ( ZoomImgHotkey ) ? _FixAmpInMenu( ZoomImgHotkey ) : ""
+;	moveimgMenuItem .= ( MoveImgHotkey ) ? _FixAmpInMenu( MoveImgHotkey ) : ""
 	chnglayMenuItem .= ( ChngLayHotkey ) ? _FixAmpInMenu( ChngLayHotkey ) : ""
 	refreshMenuItem .= ( RefreshHotkey ) ? _FixAmpInMenu( RefreshHotkey ) : ""
 	suspendMenuItem .= ( SuspendHotkey ) ? _FixAmpInMenu( SuspendHotkey ) : ""
 	exitappMenuItem .= ( ExitAppHotkey ) ? _FixAmpInMenu( ExitAppHotkey ) : ""
 	setPklInfo( "LocStr_ShowHelpImgMenu", helpimgMenuItem )
 	
-	Loop % numOfLayouts {
+	Loop % numOfLayouts { 										; Layouts menu list w/ icons
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
@@ -38,7 +44,7 @@
 			Menu, changeLayout, Check, %layName%
 			activeLayName := layName
 		}
-		ico := readLayoutIcons( "Layouts\" . layCode )
+		ico := readLayoutIcons( "Layouts\" . layCode . "\" . getPklInfo( "LayFileName" ) )
 		Menu, changeLayout, Icon, %layName%, % ico.Fil1, % ico.Num1
 	}
 
@@ -64,6 +70,8 @@
 		Menu, Tray, add, %makeimgMenuItem%, makeHelpImages					; Help Image Generator
 	}
 	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle					; Show image
+	Menu, Tray, add, %zoomimgMenuItem%, zoomHelpImage 						; Zoom image
+;	Menu, Tray, add, %moveimgMenuItem%, moveHelpImage 						; Move image
 	if ( numOfLayouts > 1 ) {
 		Menu, Tray, add,													; (separator)
 		Menu, Tray, add, %layoutsMenu%, :changeLayout						; Layouts
@@ -93,20 +101,22 @@
 ;	}
 	
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
-	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; %aboutmeMenuItem% ico - about/question
+	Menu, Tray, Icon,      %aboutmeMenuItem%,  shell32.dll ,  24		; aboutmeMenuItem icon - about/question
 	if ( ShowMoreInfo ) {
-		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; %keyhistMenuItem% ico - info
-		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; %deadkeyMenuItem% ico - search (25: "speed")
-		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; %refreshMenuItem% ico - refresh arrows
-		Menu, Tray, Icon,  %makeimgMenuItem%,  shell32.dll , 142		; %makeimgMenuItem% ico - painting on screen
+		Menu, Tray, Icon,  %keyhistMenuItem%,  shell32.dll , 222		; keyhistMenuItem icon - info
+		Menu, Tray, Icon,  %deadkeyMenuItem%,  shell32.dll , 172		; deadkeyMenuItem icon - search
+		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239		; refreshMenuItem icon - refresh arrows
+		Menu, Tray, Icon,  %makeimgMenuItem%,  shell32.dll , 142		; makeimgMenuItem icon - painting on screen
 	}
-	Menu, Tray, Icon,      %helpimgMenuItem%,  shell32.dll , 174		; %helpimgMenuItem% ico - keyboard (116: film)
+	Menu, Tray, Icon,      %helpimgMenuItem%,  shell32.dll , 174		; helpimgMenuItem icon - keyboard (116: film)
+	Menu, Tray, Icon,      %zoomimgMenuItem%,  shell32.dll ,  23		; zoomimgMenuItem icon - spyglass
+;	Menu, Tray, Icon,      %moveimgMenuItem%,  shell32.dll ,  25		; moveimgMenuItem icon - speeding window
 	if ( numOfLayouts > 1 ) {
-		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; %layoutsMenu%     ico - star
-		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; %chnglayMenuItem% ico - forward arrow
+		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44		; layoutsMenu     icon - star
+		Menu, Tray, Icon,  %chnglayMenuItem%,  shell32.dll , 138		; chnglayMenuItem icon - forward arrow
 	}
-	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; %suspendMenuItem% ico - crossed circle
-	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; %exitappMenuItem% ico - power off
+	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110		; suspendMenuItem icon - crossed circle
+	Menu, Tray, Icon,      %exitappMenuItem%,  shell32.dll ,  28		; exitappMenuItem icon - power off
 ;	OnMessage( 0x404, "_AHK_NOTIFYICON" )								; Handle tray icon clicks. Using AHK defaults now.
 }
 

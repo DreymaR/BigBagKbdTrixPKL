@@ -51,6 +51,7 @@ _keyPressed( HK )										; Process a HotKey press
 	capHK := getKeyInfo( HK . "capSt" )					; Caps state (0-5 as MSKLC; -1 for vk; -2 for mod)
 	
 	if ( extendKey && getKeyState( extendKey, "P" ) ) {	; If there is an Extend mod and it's pressed...
+		_osmClearAll() 									; ...clear any sticky mods, then...
 		_extendKeyPress( HK ) 							; ...process the Extend key press.
 		Return
 	}	; end if extendKey
@@ -98,6 +99,8 @@ _keyPressed( HK )										; Process a HotKey press
 		Return
 	} else if ( state == "vkey" ) { 							; VirtualKey
 		pkl_SendThis( modif, "{VK" . Pri . "}" )
+;	} else if ( Pri == "=" && Ent == "{Space}" ) { 				; ={Space} entry. Does it need special treatment?
+;		pkl_Send( 32, modif )
 ;	} else if ( Pri == 32 && HK == "SC039" ) {					; Space bar		; eD WIP: pkl_Send already handles Space?!?
 ;		Send, {Blind}{Space}
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
@@ -108,12 +111,8 @@ _keyPressed( HK )										; Process a HotKey press
 ;			pklDebug( "Trapped input:`n'" . Pri . "'`n" . Ent )	; eD DEBUG
 		}
 	}	; end if Pri
-	Loop % getPklInfo( "osmMax" )
-	{
-	if ( getPklInfo( "osmKeyN" . A_Index ) )
-			_osmClear( A_Index ) 								; If another key is pressed while a OSM is active, cancel the OSM	; eD WIP: Should it be used more places above?
-	}
-}	; end fn _KeyPressed
+	_osmClearAll() 												; If another key is pressed while a OSM is active, cancel the OSM
+}	; end fn _KeyPressed										; eD WIP: Should _osmClearAll() be used more places above?
 
 _extendKeyPress( HK )											; Process an Extend modified key press
 {
@@ -219,6 +218,15 @@ _osmClear( osmN ) 											; Clear a specified sticky mod
 		setModifierState( theMod, 0 ) 						; Release the mod state
 }
 
+_osmClearAll() 												; Clear all active sticky mods
+{
+	Loop % getPklInfo( "osmMax" )
+	{
+	if ( getPklInfo( "osmKeyN" . A_Index ) )
+			_osmClear( A_Index )
+	}
+}
+
 setAltGrState( isDown ) 									; The set fn calls get to reuse the static var.
 {
 	getAltGrState( isDown, 1 )
@@ -240,8 +248,8 @@ getAltGrState( isDown = 0, set = 0 )
 	}
 }
 
-setExtendState( set = 0 )									; Called from the PKL_main  ExtendDown/Up labels
-{
+setExtendState( set = 0 )									; Called from the PKL_main ExtendDown/Up labels
+{ 															; This function handles Extend key tap or hold
 	static extendKey    := "--"
 	static extMod1      := ""
 	static extMod2      := ""
@@ -271,6 +279,13 @@ setExtendState( set = 0 )									; Called from the PKL_main  ExtendDown/Up labe
 			Send {Blind}{%extSend%} 						; ...send its release entry.
 	}	; end if
 }	; end fn
+
+;setDualRoleModState(, tapModKeys = 0, set = 0 ) 			; Called from the PKL_main dualRoleModDown/Up labels	; eD WIP
+;{ 															; This function handles dual-role modifier tap or hold
+;	static tapTime     := {}								; We'll have tap times for Alt/Win/Shift/Ctrl/Ext(?)	; eD WIP: Also handle interrupt by other keys?
+;	
+;	tapMod := StrSplit( tapModKeys, "|" )
+;}
 
 _pkl_CtrlState( HK, capState, ByRef state, ByRef modif )	; Handle state/modif vs Ctrl(+Shift)
 {

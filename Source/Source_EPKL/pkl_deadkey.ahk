@@ -6,14 +6,15 @@
 		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base), -1, getLayInfo( "dkFile" ), "dk_" . dkName )	; As U+#### code point
 		setKeyInfo( "DKval_" . dkName . "_" . base, val)	; The DK info pdic is filled in gradually with use
 	}
+;	pklDebug( "DK: " dkName "`nBase: " base "`nVal: " val )	; eD DEBUG: Check DK value functionality
 	val := ( val == -1 ) ? 0 : val							; Store an empty entry as -1 so it isn't reread, but return it as 0
 	Return val
 }
 
 pkl_DeadKey( DK )
 {
-	;CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" )		; Current # of dead keys active	; eD NOTE: Revert to global? No, because it's used in many files?
-	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
+	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active	; eD NOTE: Revert to global? No, because it's used in many files?
+;	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
 	CurrBaseKey_    := getKeyInfo( "CurrBaseKey_" )			; Current base/release key, set by pkl_Send()
 	DK              := getKeyInfo( "@" . DK )				; Find the dk's full name
 	static PVDK     := "" 									; Pressed Dead Key Values queue?
@@ -21,16 +22,18 @@ pkl_DeadKey( DK )
 	DeadKeyChr1     := DeadKeyValue( DK, "s1" ) 			; eD WIP: The "1" entry gives alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK base char
+	; eD WIP: Make a label at the end of this function to reset DK by nulling the Num/Name KeyInfo, then use some Goto(?) below to jump out.
+	
+	if ( CurrNumOfDKs > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK base char
 	{
 		pkl_Send( DeadKeyChr1 )								; eD WIP: Pressing the dead key twice now releases entry 1 (or does it?)
 		Return
 	}
-
-	setKeyInfo( "CurrNumOfDKs", getKeyInfo( "CurrNumOfDKs" ) + 1 )	;++CurrNumOfDKs )	; CurrNumOfDKs++
+	
+	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs ) 			; Increase the # of registered DKs, both as variable and KeyInfo
 	setKeyInfo( "CurrNameOfDK", DK )
 	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Esc}	; eD: Added {Esc}
-	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys
+	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys from the next-key input
 	{
 		setKeyInfo( "CurrNumOfDKs", 0 )
 		setKeyInfo( "CurrBaseKey_", 0 )
@@ -40,19 +43,21 @@ pkl_DeadKey( DK )
 ;			Send %endk%										; ...do their thing, so beware!
 		Return
 	}
+;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey_ "`nNewKey: '" nk "'`nChr0: " DeadKeyChar, 2 )	; eD DEBUG: Check DK functionality
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {
+	if ( CurrNumOfDKs == 0 ) { 								; eD TODO: When is this triggered? And Why? CurrNum gets increasec above!?
 		pkl_Send( DeadKeyChar )								; If queue is empty, release entry 0 and return
 		Return
 	}
-	if ( getKeyInfo( "CurrBaseKey_" ) != 0 ) {
+	
+	if ( getKeyInfo( "CurrBaseKey_" ) != 0 ) { 				; If a BaseKey is set, use that, otherwise use the nk input directly
 		hx := getKeyInfo( "CurrBaseKey_" )
 		nk := Chr( hx )										; The chr symbol for the current base key (e.g., 65 = A)
 	} else {
 		hx := Ord( nk )										; The ASCII/Unicode ordinal number for the pressed key; was Asc()
 	}
 	
-	setKeyInfo( "CurrNumOfDKs", getKeyInfo( "CurrNumOfDKs" ) - 1 )	; Pop one DK from the DK chain
+	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs ) 			; Pop one DK from the queue. Note: ++ and -- have the Input between them.
 	setKeyInfo( "CurrBaseKey_", 0 )
 	dkEnt   := DeadKeyValue( DK, hx )						; Get the DK value/entry for this base key
 	
@@ -65,7 +70,8 @@ pkl_DeadKey( DK )
 			setKeyInfo( "CurrNumOfDKs", 0 )							; But that's not enough. It gets stuck in pkl_ParseSend()
 		}
 ;		setKeyInfo( "CurrNumOfDKs", 0 ) 	; eD WIP - doesn't prevent stuckness (nor does "CurrBaseKey_", 0 ?)
-		pkl_Send( 0 )	; eD WIP: This somehow prevents the dead key from being stuck (pkl_SendThis doesn't).
+		pkl_CheckForDKs( 0 ) 								; eD WIP: This prevents the dead key from being stuck.
+;		pkl_Send( 0 ) 	; eD WIP: This somehow prevents the dead key from being stuck (pkl_SendThis doesn't).
 	} else if ( dkEnt && PVDK == "" ) {
 		pkl_Send( dkEnt )									; Send the normal single-character final entry
 	} else {
@@ -163,7 +169,7 @@ detectDeadKeysInCurrentLayout()
 	{
 		clipboard := ""
 		cha := Chr( ordinal )
-		Send {%cha%}{space}+{Left}^{Ins}
+		Send {%cha%}{Space}+{Left}^{Ins}
 		ClipWait
 		ifNotEqual clipboard, %A_Space%
 			DeadKeysInCurrentLayout = %DeadKeysInCurrentLayout%%ch%

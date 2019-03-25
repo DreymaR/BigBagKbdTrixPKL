@@ -1,16 +1,7 @@
-﻿pkl_Send( ch, modif = "" )		; Process a single char with mods for send, w/ OS DK & special char handling
+﻿pkl_Send( ch, modif = "" )		; Process a single char/str with mods for send, w/ OS DK & special char handling
 {
-	static SpaceWasSentForSystemDKs = 0
-	
-	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
-		SpaceWasSentForSystemDKs = 0
-	} else {
-		setKeyInfo( "CurrBaseKey_", ch )			; DK(s) active, so record the key as Base key
-		if ( SpaceWasSentForSystemDKs == 0 )		; If there is an OS dead key that needs a Spc sent, do it
-			Send {Space}
-		SpaceWasSentForSystemDKs = 1
+	if pkl_CheckForDKs( ch )
 		Return
-	}
 	
 	if ( 32 < ch ) {			;&& ch < 128 (using pre-Unicode AHK)
 		char := "{" . Chr(ch) . "}"
@@ -48,6 +39,22 @@ pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltG
 		setAltGrState( 1 )
 }
 
+pkl_CheckForDKs( ch )
+{
+	static SpaceWasSentForSystemDKs = 0
+	
+	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
+		SpaceWasSentForSystemDKs = 0
+		Return false
+	} else { 	; eD TOFIX: Why doesn't a Space key press get sent here? Because the ={Space} gets sent to pklParseSend()!
+		setKeyInfo( "CurrBaseKey_", ch )			; DK(s) active, so record the pressed key as Base key
+		if ( SpaceWasSentForSystemDKs == 0 )		; If there is an OS dead key that needs a Spc sent, do it
+			Send {Space}
+		SpaceWasSentForSystemDKs = 1
+		Return true
+	}
+}
+
 pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
 {
 ;	static parse := { "%" : "{Raw}" , "=" : "{Blind}" , "*" : "" }
@@ -73,8 +80,8 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 		pkl_PwrString( ent )
 	}
 	if ( sendPref != -1 ) {
-		if ( mode == "SendThis" && ent ) {
-			pkl_SendThis( "", sendPref . ent )					; Used by _keyPressed()
+		if ( mode == "SendThis" && ent ) { 						; eD WIP: Used pkl_SendThis(), now pkl_Send()
+			pkl_Send( "", sendPref . ent ) 						; Used by _keyPressed()
 		} else {
 			SendInput %       sendPref . ent
 		}
