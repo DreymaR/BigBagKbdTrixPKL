@@ -4,7 +4,7 @@
 		Return
 	
 	if ( 32 < ch ) {			;&& ch < 128 (using pre-Unicode AHK)
-		char := "{" . Chr(ch) . "}"
+		char := "{" . Chr(ch) . "}" 	; Normal char
 		if ( inStr( getDeadKeysInCurrentLayout(), Chr(ch) ) )
 			char .= "{Space}"
 	} else if ( ch == 32 ) {
@@ -46,7 +46,7 @@ pkl_CheckForDKs( ch )
 	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
 		SpaceWasSentForSystemDKs = 0
 		Return false
-	} else { 	; eD TOFIX: Why doesn't a Space key press get sent here? Because the ={Space} gets sent to pklParseSend()!
+	} else { 	; eD TOFIX: Why doesn't a Space key press get sent here? Because the ={Space} gets sent to pkl_ParseSend()!
 		setKeyInfo( "CurrBaseKey_", ch )			; DK(s) active, so record the pressed key as Base key
 		if ( SpaceWasSentForSystemDKs == 0 )		; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
@@ -59,7 +59,7 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 {
 ;	static parse := { "%" : "{Raw}" , "=" : "{Blind}" , "*" : "" }
 	prf := SubStr( entry, 1, 1 )
-	if ( not InStr( "%$*=@&", prf ) )
+	if ( not InStr( "%$*=~@&", prf ) )
 		Return false											; Not a recognized prefix-entry form
 	sendPref := -1
 	ent := SubStr( entry, 2 )
@@ -68,12 +68,15 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 	} else if ( prf == "$" ) {									; Literal/string by SendMessage
 		pkl_SendMessage( ent )
 	} else if ( ent == "{CapsLock}" ) {							; CapsLock toggle
-		togCap := ( getKeyState("CapsLock", "T") ) ? "Off" : "On"
+		togCap := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
 	} else if ( prf == "*" ) {									; * : Omit {Raw} etc; use special !+^#{} AHK syntax
 		sendPref := ""
 	} else if ( prf == "=" ) {									; = : Send {Blind} - as above w/ current mod state
 		sendPref := "{Blind}"
+	} else if ( prf == "~" ) {									; ~ : Send a hex Unicode point U+####
+		sendPref := ""
+		ent := "{U+" . ent . "}"
 	} else if ( prf == "@" ) {									; Named dead key (may vary between layouts!)
 		pkl_DeadKey( ent )
 	} else if ( prf == "&" ) {									; Named literal/powerstring (may vary between layouts!)
@@ -134,10 +137,17 @@ _strSendMode( string, strMode )
 
 pkl_PwrString( strName )											; Send named literal/ligature/powerstring from a file
 {
+	static strFile := -1
+	static strMode
+	static brkMode
+	
 	Critical
-	strFile := getLayInfo( "strFile" )							; The file containing named string tables
-	strMode := pklIniRead( "strMode", "Message", strFile )		; Mode for sending strings: "Input", "Message", "Paste"
-	brkMode := pklIniRead( "brkMode", "+Enter" , strFile )		; Mode for handling line breaks: "+Enter", "n", "rn"
+	if ( StrFile == -1 ) {
+		strFile := getLayInfo( "strFile" )						; The file containing named string tables
+		strMode := pklIniRead( "strMode", "Message", strFile )	; Mode for sending strings: "Input", "Message", "Paste"
+		brkMode := pklIniRead( "brkMode", "+Enter" , strFile )	; Mode for handling line breaks: "+Enter", "n", "rn"
+	}
+	
 	theString := pklIniRead( strName, , strFile, "strings" )	; Read the named string's entry (w/ comment stripping)
 	if ( pkl_ParseSend( theString ) ) 							; Unified prefix-entry syntax; only for single line entries
 		Return
@@ -149,7 +159,9 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 		theString := mltString
 	}
 	theString := strEsc( theString )							; Replace \# escapes
-	if ( brkMode == "+Enter" ) {
+	if ( strMode == "Text" ) {
+		SendInput {Text}%theString%
+	} else if ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r							; Parse by lines, sending Enter key presses between them
 		{														; - This is more robust since apps use different breaks
 			if ( A_Index > 1 )

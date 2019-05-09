@@ -9,6 +9,7 @@
 	HelpImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
 	ZoomImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ZoomHelpImg"  ) )
 ;	MoveImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_MoveHelpImg"  ) ) 	; Don't show this to avoid clutter
+;	DebugMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_DebugWIP"     ) )
 	
 	activeLayout    := getLayInfo( "active" )
 	activeLayName   := ""
@@ -25,6 +26,7 @@
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMenu" )
 	suspendMenuItem := getPklInfo( "LocStr_10" )
 	exitappMenuItem := getPklInfo( "LocStr_11" )
+;	importsMenuItem := getPklInfo( "LocStr_ImportsMenu" )
 	makeimgMenuItem := getPklInfo( "LocStr_MakeImgMenu" )
 	helpimgMenuItem .= ( HelpImgHotkey ) ? _FixAmpInMenu( HelpImgHotkey ) : ""
 	zoomimgMenuItem .= ( ZoomImgHotkey ) ? _FixAmpInMenu( ZoomImgHotkey ) : ""
@@ -67,7 +69,9 @@
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyhistMenuItem%, keyHistory						; Key history
 		Menu, Tray, add, %deadkeyMenuItem%, detectDeadKeysInCurrentLayout	; Detect DKs
+;		Menu, Tray, add, %importsMenuItem%, importLayouts 					; Import Module
 		Menu, Tray, add, %makeimgMenuItem%, makeHelpImages					; Help Image Generator
+		Menu, Tray, add,													; (separator)
 	}
 	Menu, Tray, add, %helpimgMenuItem%, showHelpImageToggle					; Show image
 	Menu, Tray, add, %zoomimgMenuItem%, zoomHelpImage 						; Zoom image
@@ -144,13 +148,13 @@ pkl_about()
 	translationName := getPklInfo( "LocStr_21" )
 	translatorName  := getPklInfo( "LocStr_22" )
 	
-	layName  := pklIniRead( "layoutname", locUnknown, "LayIni", "information" )
+	layName  := pklIniRead( "layoutName", locUnknown, "LayIni", "information" )
 	layVers  := pklIniRead( "version"   , locUnknown, "LayIni", "information" )
-	layCode  := pklIniRead( "layoutcode", locUnknown, "LayIni", "information" )
+	layCode  := pklIniRead( "layoutCode", locUnknown, "LayIni", "information" )
 	layCopy  := pklIniRead( "copyright" , locUnknown, "LayIni", "information" )
 	layComp  := pklIniRead( "company"   , locUnknown, "LayIni", "information" )
 	layPage  := pklIniRead( "homepage"  , ""        , "LayIni", "information" )
-	lLocale  := pklIniRead( "localeid"  , "0409"    , "LayIni", "information" )
+	lLocale  := pklIniRead( "localeID"  , "0409"    , "LayIni", "information" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
 	kbdType  := getLayInfo( "Ini_KbdType" )
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " / " . getLayInfo( "Ini_ErgoMod" )
@@ -193,6 +197,27 @@ pkl_about()
 		Gui, Add, Text, , %text%
 	}
 	Gui, Show
+}
+
+readLayoutIcons( layIni, altIni = "" )									; Read On/Off icons for a specified layout
+{
+	for ix, OnOff in [ "on", "off" ]
+	{
+		icon := OnOff . ".ico"
+		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni,, altIni ) . icon
+							, "Files\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
+		if ( FileExist( icoFile ) ) {
+			icoFil%ix%  := icoFile
+			icoNum%ix%  := 1
+		} else if ( A_IsCompiled ) {
+			icoFil%ix%  := A_ScriptName
+			icoNum%ix%  := ( OnOff == "on" ) ? 1 : 5			; was 6/3 in original PKL.exe - keyboard and red 'S' icons
+		} else {
+			icoFil%ix%  := "Resources\" . icon
+			icoNum%ix%  := 1
+		}
+	}
+	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }
 }
 
 _FixAmpInMenu( menuItem )

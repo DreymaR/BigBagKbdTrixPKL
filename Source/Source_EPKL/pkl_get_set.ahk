@@ -1,7 +1,7 @@
-﻿;-------------------------------------------------------------------------------------
-;
-; PKL get/set module
-;     Handles associative dictionaries for PKL info; usable instead of globals
+﻿;;  -----------------------------------------------------------------------------------------------
+;;
+;;  PKL get/set module
+;;      Static associative dictionaries for PKL info are used instead of most globals
 ;
 /*
 	LayoutInfo entries:
@@ -64,17 +64,17 @@ getPklInfo( key, value = "", set = 0 )
 		Return pdic[key]
 }
 
-;-------------------------------------------------------------------------------------
-;
-; PKL locale module
-;     Functions to set up locale strings
-;     Used by _initReadPklIni() in pkl_init.ahk
+;;  -----------------------------------------------------------------------------------------------
+;;
+;;  PKL locale module
+;;      Functions to set up locale strings
+;;      Used by initPklIni() in pkl_init.ahk
 ;
 
 pkl_locale_load( lang, compact = 0 )
 {
-	static initialized := 0	; Ensure the defaults are read only once (as this function is run on layout change too)	; eD TODO: Is this working?
-	if ( initialized == 0 )
+	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too
+	if ( not initialized )
 	{																	; Read/set default locale string list
 		Loop, 22														; Read default locale strings (numbered)
 		{
@@ -88,13 +88,14 @@ pkl_locale_load( lang, compact = 0 )
 			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
 			setPklInfo( key, val )
 		}
-		initialized := 1
+		initialized := true
 	}
 	
-	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) )
+	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) ) 	; eD TODO: Move these into the languages file
 	setPklInfo( "LocStr_ZoomImgMenu", pklIniRead( "zoomImgMenuText", "Zoom image"     ) )
 	setPklInfo( "LocStr_MoveImgMenu", pklIniRead( "moveImgMenuText", "Move image"     ) )
 	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyHistMenuText", "Key history..." ) )
+	setPklInfo( "LocStr_ImportsMenu", pklIniRead( "importsMenuText", "Import layouts..." ) )
 	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeImgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
 	
 	file := lang . ".ini"
@@ -106,14 +107,14 @@ pkl_locale_load( lang, compact = 0 )
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 1 )	; A more compact way than before (but still in a loop)
 		if ( val != "" )
-			setPklInfo( "LocStr_" . key , val )		; pklLocaleStrings( key, val, 1 )
+			setPklInfo( "LocStr_" . key , val ) 	; pklLocaleStrings( key, val, 1 )
 	}
-
+	
 	sect := iniReadSection( file, "detectDeadKeys" )
 	Loop, Parse, sect, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 1 )
-		setPklInfo( "DetecDK_" . key, val )			; detectDeadKeys_SetLocaleTxt(
+		setPklInfo( "DetecDK_" . key, val ) 		; detectDeadKeys_SetLocaleTxt(
 	}
 	
 	sect := iniReadSection( file, "keyNames" )

@@ -72,16 +72,21 @@ DONE:
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
+  
+**OTHER/NOTES**
+* There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
+  
+**PKL[eD] VERSION INFO**
 * PKL[eD] v0.4.5: Literals/Ligatures/Powerstrings specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. Can be defined as multiline.
 	- There's a string file specified in the layout.ini, by default it's Files\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
 	- SendMode can be selected for powerstrings (Input, Message, Paste from Clipboard) in the string file.
 	- To avoid stuck modifiers for long strings, a SendMessage() method was implemented.
-* More generic dead key output: Same prefix-entry syntax as layout/Extend, parsing "%$*=@&" entries.
-	- Dead key base/release entries can be in 0x#### Unicode format in addition to the old decimal format. For base keys, the syntax must be exact.
-	- Examples: "102 = ƒ" is possible instead of "102 = 402". For a glyph not shown in your font such as Meng, "77 = 0x2C6E" (or 11374 still).
-	- Should be easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (e.g., RegExp "0x$1 = 0x$2	; $3")
+	- More generic dead key output: Same prefix-entry syntax as layout/Extend, parsing "%$*=@&" entries.
+		- Dead key base/release entries can be in 0x#### Unicode format in addition to the old decimal format. For base keys, the syntax must be exact.
+		- Examples: "102 = ƒ" is possible instead of "102 = 402". For a glyph not shown in your font such as Meng, "77 = 0x2C6E" (or 11374 still).
+		- Should be easy to import MSKLC dead key tables of the form '006e	0144	// n -> ń' by script (e.g., RegExp "0x$1 = 0x$2	; $3")
 * PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
 	- pklIniRead() can have an altFile, such as "BasIni". For BasIni/LayIni, .\ and ..\ point to their own and mother directories.
 	- Read most layout settings apart from remaps from the base layout if not found in the main layout.
@@ -96,21 +101,36 @@ DONE:
 	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
+  
+**EPKL VERSION INFO**
 * EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
 	- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
 * EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
 	- Fixed: DK images were gone due to an error in EPKL_Settings.ini. DK images also didn't work for some layouts.
 	- Fixed: Sticky/One-Shot mods stayed active when selecting Extend, affecting strings if sent within the OSM timer even when sent with %.
-	- A set of Kaomoji text faces in the Strings Extend layer. Help images included.  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
+	- New: A set of Kaomoji text faces in the Strings Extend layer. Help images included.  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
+	- New: Hungarian Cmk[eD] locale variant.
+	- New: Zoom and Move hotkeys for the help image, cycling between image sizes and positions. Set e.g., imgZoom = 60,100,150 (%) in EPKL_Settings.
+	- Tutorial on making a layout variant in README. How to make and activate a layout, changing locale, remaps and a keys mappings.
 	- Moved the BaseLayout files up one tree level. In layout.ini, use its file path from Layouts w/o extension, e.g., Colemak-VK\BaseLayout_Cmk-VK-ISO
 	- 'Spc' and 'Tab' layout mappings, sending {Blind}{Key}. Makes for compact layout entries for the delimiting whitespace characters.
 	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' rather than the extend_key setting with a mapped key as before.
 	- Extend layers can be set as hard/soft in the _Extend file. Soft layers follow mnemonic letter mappings, hard ones are positional (like my Ext1/2).
 		- The Curl(DH) Ext+V may still be mnemonic/soft instead of positional/hard (^V on Ext+D). Use _ExtDV with AWide/Angle mods for mapSC_extend then.
-
-  
-**OTHER/NOTES**
-* There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
+* EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
+	- Fixed: HIG made a state8 image of semicolons. This was due to the SGCaps states (8:9) being added unnecessarily.  (つ_〃*)
+		- Also fixed some minor HIG bugs related to hex dead key values etc.
+	- Fixed: On the first help img minimizing, a taskbar icon sometimes appeared on-screen or in tray. Showing the image once before resizing solved it.
+	- New: Tap-or-Modifier a.k.a. Dual-Role Modifier keys. Work-in-progress, not working well for rapidly typed keys yet.
+		- To make a ToM key, specify its VK layout entry as VK/Mod, where 'Mod' is a modifier name. The rest of the line can be any valid entry.
+		- The Help Image Generator can mark ToM keys (state 0 and 1) with a background symbol.
+	- The Extend key can be set the old way as extend_key in [pkl] (but no layout entry is needed anymore!), as 'Ext Mod' or as ToM, e.g., 'VK/EXT VKey'
+	- Modifiers can be referred to by the first letters of their name so, e.g., 'LS' and 'LSh' both point to LShift. Also, VK or VKey = VirtualKey.
+	- Unicode points can be sent by the ~ prefix; a ~#### entry sends the U+#### character as used in MSKLC file entries.
+	- The shiftStates layout entry is now in the [layouts] section of layout.ini, spaced out so entries have more room and are clearer.
+	- Instead of the special Spc and Tab entries, use &Spc and &Tab, defined in the PowerStrings file.
+	- Dead key abbreviations are now by code point instead of numbered, as in MSKLC. Example: The .klc entry 02c7@ is a caron DK; in EPKL it becomes @2c7.
+	- Added a Compile_EPKL.bat file that compiles the source code by running AHK2Exe with default settings.
 
 
 TODO:

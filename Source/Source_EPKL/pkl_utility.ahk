@@ -1,8 +1,8 @@
-﻿;-------------------------------------------------------------------------------------
-;
-; Remap module
-;     Functions to read and parse remap cycles for ergo mods and suchlike
-;     Used primarily in pkl_init.ahk
+﻿;;  -----------------------------------------------------------------------------------------------
+;;
+;;  Remap module
+;;      Functions to read and parse remap cycles for ergo mods and suchlike
+;;      Used primarily in pkl_init.ahk
 ;
 ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles (used in pkl_init)
 {
@@ -27,8 +27,7 @@ ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles
 
 ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary of remaps (used in pkl_init)
 {
-;	test0 := mapType										; eD DEBUG
-	mapType := Format( "{:U}", SubStr( mapType, 1, 2 ) )	; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
+	mapType := upCase( SubStr( mapType, 1, 2 ) ) 			; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )									; Create a fresh SC pdic from mapFile KeyLayMap
 		pdic := ReadKeyLayMapPDic( "SC", "SC", mapFile )
@@ -59,7 +58,6 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 				thisCycle[ A_Index ] := getVKeyCodeFromName( this )
 			}	; end if
 		}	; end loop
-;		test3 := test3 . ( ( test3 ) ? ( "`n" ) : ( "" ) ) . "|" . fullCycle	; DEBUG
 		Loop % numSteps {									; Loop to (re)write remap pdic
 			this := thisCycle[ A_Index ]					; This key's code gets remapped to...
 			this := ( mapType == "SC" ) ? rdic[ this ] : this	; When chaining maps, map the remapped key ( a→b→c )
@@ -92,18 +90,18 @@ ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KL
 				Continue
 			key := A_LoopField
 			val := valRow[ A_Index ]
-			if ( keyType == "SC" )					; ensure upper case for SC###
-				key := Format( "{:U}", key )
-			pdic[ key ] := Format( "{:U}", val )	; e.g., pdic[ "SC001" ] := "SC001"
+			if ( keyType == "SC" ) 					; ensure upper case for SC###
+				key := upCase( key )
+			pdic[ key ] := upCase( val ) 			; e.g., pdic[ "SC001" ] := "SC001"
 		}	; end loop
 	}	; end loop
 	Return pdic
 }	; end fn
 
-;-------------------------------------------------------------------------------------
-;
-; PKL activity module
-;     Check for inactivity (no clicks/keypresses) in a given period
+;;  -----------------------------------------------------------------------------------------------
+;;
+;;  PKL activity module
+;;      Check for inactivity (no clicks/keypresses) in a given period
 ;
 activity_ping(mode = 1) {	; eD WIP: Replace this with A_TimeIdlePhysical
 	activity_main(mode, 1)
@@ -140,10 +138,10 @@ activity_main(mode = 1, ping = 1, value = 0) {
 	Return
 }
 
-;-------------------------------------------------------------------------------------
-;
-; Utility functions
-;     These are minor utility functions used by other parts of PKL
+;;  -----------------------------------------------------------------------------------------------
+;;
+;;  Utility functions
+;;      These are minor utility functions used by other parts of PKL
 ;
 
 pklMsgBox( msg, s = "", p = "", q = "", r = "" )
@@ -172,10 +170,11 @@ pklDebug( text, time = 1 )
 	MsgBox, 0x30, PKL DEBUG: , %text%, %time%					; PKL Warning type message box
 }
 
-pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used in pkl_init)
+pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a PKL menu hotkey (used in pkl_init)
 {
+	hkStr   := pklIniRead( hkIniName )
 	if ( hkStr <> "" ) {
-		Loop, Parse, hkStr, `,
+		Loop, Parse, hkStr, `, 									; Parse by comma
 		{
 			Hotkey, %A_LoopField%, %gotoLabel%
 			if ( A_Index == 1 )
@@ -186,7 +185,7 @@ pklSetHotkey( hkStr, gotoLabel, pklInfoTag )					; Set a PKL menu hotkey (used i
 
 getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 {
-	name := Format( "{:U}", name )
+	name := upCase( name )
 	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
 		name := SubStr( name, 3 )							; Keep only the ## here
 	} else {
@@ -218,7 +217,7 @@ fileOrAlt( file, default, errMsg = "", errDur = 2 )		; Find a file/dir, or use t
 	Return default
 }
 
-pklSplash( title, text, dur = 8 ) {		; Default display duration is in seconds
+pklSplash( title, text, dur = 6 ) {		; Default display duration is in seconds
 	SplashTextOff
 	SetTimer, KillSplash, Off
 	SplashTextOn, 300, 100, %title%, `n%text%
@@ -240,4 +239,12 @@ getPriority(procName="") {				; Utility function to get process priority, by SKA
 	Priority := DllCall( "GetPriorityClass", Int, hProcess )
 	DllCall( "CloseHandle", Int, hProcess )
 	Return % procList[ Priority ]
+}
+
+loCase( str ) {
+	Return % Format( "{:L}", str )
+}
+
+upCase( str ) {
+	Return % Format( "{:U}", str )
 }

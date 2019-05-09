@@ -1,8 +1,8 @@
-﻿;-------------------------------------------------------------------------------------
-;
-; Read a section of an .ini file
-;     Strips away blank and comment lines but not end-of-line comments
-;     Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
+﻿;;  -----------------------------------------------------------------------------------------------
+;;
+;;  Read a section of an .ini file
+;;      Strips away blank and comment lines but not end-of-line comments
+;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
 iniReadSection( file, section )
 {
@@ -19,17 +19,18 @@ iniReadSection( file, section )
 	Return secTxt
 }
 
-;-------------------------------------------------------------------------------------
-;
-; Read a (pkl).ini value
-;     Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section], [altfile|str], [stripcomments] )
-;     Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
+;;  -----------------------------------------------------------------------------------------------
+;;
+;;  Read a (pkl).ini value
+;;      Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section], [altfile|str], [stripcomments] )
+;;      Special key values return a section list or the contents of a section
+;;      Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
 pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "", strip = 1 )
 {
 	if ( not key )
 		Return
-	for inx, theFile in [ iniFile, altFile ]							; Read from iniFile. Failing that, altFile.
+	for ix, theFile in [ iniFile, altFile ] 							; Read from iniFile. Failing that, altFile.
 	{
 		if        ( theFile == "LayIni" ) {
 			hereDir := getLayInfo( "layDir" )							; ".\" syntax for the main layout dir
@@ -40,10 +41,10 @@ pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 		}
 		if ( ( not inStr( theFile, "." ) ) and FileExist( getPklInfo( "File_" . theFile ) ) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklIni, LayIni, PklDic)
-		if        ( key == -1 ) {										; Specify key = -1 for a section list
-			IniRead, val, %theFile%										; (AHK v1.0.90+)
-		} else if ( key == -2 ) {										; Specify key = -2 to read a whole section
-			IniRead, val, %theFile%, %section%							; (AHK v1.0.90+)
+		if        ( key == "__List" ) { 								; Specify key = -1 for a section list
+			IniRead, val, %theFile% 									; (AHK v1.0.90+)
+		} else if ( key == "__Sect" ) { 								; Specify key = -2 to read a whole section
+			IniRead, val, %theFile%, %section% 							; (AHK v1.0.90+)
 		} else {
 			IniRead, val, %theFile%, %section%, %key%, %A_Space%		; IniRead uses a Space for blank defaults
 		}
@@ -63,8 +64,8 @@ pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 
 pklIniBool( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "" )	; Special .ini read for boolean values
 {
-	val := pklIniRead( key, default, iniFile, section, altFile )
-	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
+	val := loCase( pklIniRead( key, default, iniFile, section, altFile ) )
+	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false 	; Could use InStr( "yes|1|true"
 	Return val
 }
 
@@ -75,9 +76,9 @@ pklIniCSVs( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 	Return val
 }
 
-;-------------------------------------------------------------------------------------
-;
-; Helper functions for .ini file handling
+;;  -----------------------------------------------------------------------------------------------
+;;
+;;  Helper functions for .ini file handling
 ;
 pklIniKeyVal( iniLine, ByRef key, ByRef val, esc=0, com=1 )		; Because PKL doesn't always use IniRead? Why though?
 {

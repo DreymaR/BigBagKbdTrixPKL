@@ -2,12 +2,16 @@
 {															; NOTE: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
-		val :=                 pklIniRead(                   base ,  0, getLayInfo( "dkFile" ), "dk_" . dkName )	; Key as decimal number
-		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base), -1, getLayInfo( "dkFile" ), "dk_" . dkName )	; As U+#### code point
+		val :=                 pklIniRead(                   base ,, getLayInfo( "dkFile" ), "dk_" . dkName ) 	; Key as decimal number
+		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, getLayInfo( "dkFile" ), "dk_" . dkName ) 	; As U+#### code point
+		val := ( val ) ? val : "--"
+		if val is integer
+			val := Format( "{:i}", val ) 					; Converts hex to decimal so it's always treated as the same number
 		setKeyInfo( "DKval_" . dkName . "_" . base, val)	; The DK info pdic is filled in gradually with use
 	}
-;	pklDebug( "DK: " dkName "`nBase: " base "`nVal: " val )	; eD DEBUG: Check DK value functionality
-	val := ( val == -1 ) ? 0 : val							; Store an empty entry as -1 so it isn't reread, but return it as 0
+;	if ( base == 97 ) 												; eD DEBUG: Only for one key ( 97 = 'a' ) ...
+;		pklDebug( "DK: " dkName "`nBase: " base "`nVal: " val ) 	; --"--     Check DK value functionality
+	val := ( val == "--" ) ? 0 : val 						; Store any empty entry so it isn't reread, but return it as 0
 	Return val
 }
 
@@ -45,7 +49,7 @@ pkl_DeadKey( DK )
 	}
 ;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey_ "`nNewKey: '" nk "'`nChr0: " DeadKeyChar, 2 )	; eD DEBUG: Check DK functionality
 	
-	if ( CurrNumOfDKs == 0 ) { 								; eD TODO: When is this triggered? And Why? CurrNum gets increasec above!?
+	if ( CurrNumOfDKs == 0 ) { 								; eD WIP: When is this triggered? And Why? CurrNum gets increased above!?
 		pkl_Send( DeadKeyChar )								; If queue is empty, release entry 0 and return
 		Return
 	}
@@ -103,7 +107,7 @@ getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
 	if ( DKsOfSysLayout == "-2" )
 		setPklInfo( "RAltAsAltGrLocale", true )
-	DKsOfSysLayout := ( SubStr(DKsOfSysLayout,1,1) == "-" ) ? "" : DKsOfSysLayout
+	DKsOfSysLayout := ( InStr( DKsOfSysLayout, "-" ) == 1 ) ? "" : DKsOfSysLayout
 	if ( set == 1 ) {
 		if ( newDeadkeys == "auto" )
 			deadkeys := DKsOfSysLayout
