@@ -2,15 +2,20 @@
 {															; NOTE: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
-		val :=                 pklIniRead(                   base ,, getLayInfo( "dkFile" ), "dk_" . dkName ) 	; Key as decimal number
-		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, getLayInfo( "dkFile" ), "dk_" . dkName ) 	; As U+#### code point
+		dkFile  := getLayInfo( "dkFile" )
+;		chr := ( base < 256 ) ? Chr( base ) : "" 			; NOTE: AHK IniRead can't handle UTF-8 Unicode keys, and makes no case distinction.
+		chr := "<" . convertToANSI( Chr( base ) ) . ">" 	; Convert the key from UTF-8 to ANSI so IniRead() can handle single-char entries 	; eD WIP
+		chr .= ( chr == Format("{:L}",chr) ) ? "" : "+" 	; Mark upper case with <#>+, others with <#> only
+		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number,
+		val := ( val ) ? val : pklIniRead( chr                    ,, dkFile, "dk_" . dkName ) 	;     as <#> character (NB: Not UTF-8 Unicode?)
+		val := ( val ) ? val : pklIniRead( Format(">{:04X}",base) ,, dkFile, "dk_" . dkName ) 	;     as >#### hex Unicode point (was "0x{:04X}")
 		val := ( val ) ? val : "--"
 		if val is integer
 			val := Format( "{:i}", val ) 					; Converts hex to decimal so it's always treated as the same number
 		setKeyInfo( "DKval_" . dkName . "_" . base, val)	; The DK info pdic is filled in gradually with use
 	}
-;	if ( base == 97 ) 												; eD DEBUG: Only for one key ( 97 = 'a' ) ...
-;		pklDebug( "DK: " dkName "`nBase: " base "`nVal: " val ) 	; --"--     Check DK value functionality
+;	if ( base == 960 ) 												; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
+;		pklDebug( "DK: " dkName "`nBase: " base " (" Chr(base) ")`nVal: " val, 6 ) 	; --"--     Check DK value functionality
 	val := ( val == "--" ) ? 0 : val 						; Store any empty entry so it isn't reread, but return it as 0
 	Return val
 }

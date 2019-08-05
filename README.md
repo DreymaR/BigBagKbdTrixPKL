@@ -20,12 +20,13 @@ Getting EPKL up and running
 ---------------------------
 
 * Download a copy of this repo. For instance, press the GitHub Download/Clone button and then unzip the file you got.
+* Also make sure you have the EPKL.exe binary. This is the actual program, but it needs other files to work.
 * The simplest way of running EPKL is to just put the main folder somewhere and run EPKL.exe any way you like!
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
   
 * I usually put a shortcut to EPKL.exe in my Start Menu "Startup" folder so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a C:\PortableApps folder.
-* If the PortableApps menu is started on logon it can start up EPKL for you too.  
+    - If the PortableApps menu is started on logon it can start up EPKL for you too.  
   
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
 * In EPKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
@@ -78,6 +79,71 @@ The files may take a little tweaking to get what you want. There are several par
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, but the original PKL only allows them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
 
+Key mappings
+------------
+
+Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
+  
+Here are some full key mappings followed by a legend:
+```
+SC018 = Y       1     y     Y     --    ›     »     ; QWERTY oO
+SC019 = OEM_1   0     ;     :     --    @0a8  …     ; QWERTY pP - dk_umlaut (ANS/ISO_1/3)
+;SC   = VK      CS    S0    S1    S2    S6    S7    ; comments
+```
+Where:
+* SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
+    - For SC, you can use an AHK key name instead. For full mappings I think you need the real VK name in the VK entry.
+    - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
+    - Check out that the ISO/ANSI specific `OEM_#` key numbers are right for you, or remapped with a VK remap.
+    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names the semicolon key `OEM_3`.
+    - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it works as stated, if held down it's the modifier.
+    - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
+* CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
+    - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
+* S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
+    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@0a8` (umlaut DK).
+* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for each prefix):
+    - → | %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
+    - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
+    - α | *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# are modifiers, {} key names)
+    - β | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
+    - « | ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
+    - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
+    - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Spc, &Tab, &Esc...
+  
+Here are some VirtualKey (VK) and Modifier mappings. Any layout may contain all types of mappings.
+```
+RWin    = Back      VirtualKey      ; RWin   -> Backspace
+RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
+SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (needed the VKEY name here)
+SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
+```
+Entries are any-whitespace delimited since v0.4.6 (PKL used to strictly require a single Tab character between entries).
+
+Advanced Extending
+------------------
+Here are some sample Extend key mappings:
+```
+SC03A   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
+SC03A   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod (a.k.a. Dual-Role Mod): Backspace if tapped, Extend if held
+SC03A   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Caps as Mother-of-DKs (MoDK) on tap, Extend on hold
+```
+* These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
+* Holding a designated modifier specified in the Settings, RShift and/or RAlt by default, chooses Extend layers.
+    - So, e.g., holding the Ext1 mod (RAlt) then the Ext key (Caps) activates the Extend2 layer (NumPad).
+* After selecting your Extend layer, you hold down only the Extend key (Caps by default) and start using Extend!
+* For completeness, layers (like Ext3/Ext4) can be set as one-shot so they fall back to another layer after each use.
+    - This lets you for instance release a string then keep editing. But dead keys are better for that, see below.
+* Setting the Extend key as a Tap-or-Mod (ToM) key as above lets you tap it for, e.g., Backspace or hold for Extend.
+* Mother-of-DeadKeys (MoDK) is the most powerful option. Tapping Extend activates a dead key depending on shift state!
+    - In the example above, holding Ctrl then tapping Ext opens the Emoji picker (same as pressing Win+Period).
+    - Tapping Ext alone or with Shift/AltGr activates the dead keys "ex0/1/6/7". See the DeadKeys.ini file!
+    - In my default example, Ext-tap alone lets you activate symbols and commands easily.
+    - Shift+Ext-tap activates a kaomoji DK, similar to Ext3 but you don't have to hold down the Ext key! d( ^◇^)b
+    - Another advantage of DK layers over Extend layers is that you can make entries for any release char.
+    - So, e.g., Ext3 has one kitty kaomoji (=^･ω･^=)丿 but dk_Ext_Kaomoji has one for k and one for K. (=ΦωΦ=)ʃ
+    - Another example: If you use sticky Shift then tapping {Ext, Shift, T} opens the Task Manager! Powerful!
+
 Layout variant tutorial
 -----------------------
 
@@ -117,54 +183,10 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
 
-Key mappings
-------------
-
-Most of my layouts have a base layout defined; their layout section then changes some keys. You can add key definitions following this pattern.
-  
-Here are some full key mappings followed by a legend:
-```
-SC018 = Y       1     y     Y     --    ›     »     ; QWERTY oO
-SC019 = OEM_1   0     ;     :     --    @0a8  …     ; QWERTY pP - dk_umlaut (ANS/ISO_1/3)
-;SC   = VK      CS    S0    S1    S2    S6    S7    ; comments
-```
-Where:
-* SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
-    - For SC, you can use an AHK key name instead. For full mappings I think you need the real VK name in the VK entry.
-    - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
-    - Check out that the ISO/ANSI specific `OEM_#` key numbers are right for you, or remapped with a VK remap.
-    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names the semicolon key `OEM_3`.
-    - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it works as stated, if held down it's the modifier.
-    - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
-* CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
-    - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
-* S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
-    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@13` (umlaut DK).
-* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries):
-    - %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
-    - $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
-    - *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# mods, {} key names)
-    - =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
-    - ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
-    - @‹entry› : Send the current layout's dead key named ‹entry›
-    - &‹entry› : Send the current layout's powerstring named ‹entry›
-    - Spc/Tab  : Send a blind Space or Tab; these have special entries since they also delimit columns
-  
-Here are some VirtualKey (VK) and Modifier mappings. Any layout may contain all types of mappings.
-```
-RWin    = Back      VirtualKey      ; RWin   -> Backspace
-RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (needed the VKEY name here)
-SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
-SC03A   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
-SC03A   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod (a.k.a. Dual-Role Mod): Backspace if tapped, Extend if held
-```
-Entries are any-whitespace delimited since v0.4.6 (PKL used to strictly require a single Tab character between entries).
-
 
 DONE:
 -----
-These are some of the changes in PKL[eD]/[EPKL]:
+These are some of the changes in [EPKL] (PKL[eD] up to v1):
 * v0.4.0: Transition to AHK v1.1
 	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.

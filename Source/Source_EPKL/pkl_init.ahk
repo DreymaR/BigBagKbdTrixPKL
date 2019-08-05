@@ -25,7 +25,8 @@ initPklIni( layoutFromCommandLine ) 				;   ########################### pkl.ini 
 	setPklInfo( "altGrEqualsAltCtrl", pklIniBool( "ctrlAltIsAltGr", false ) )
 	
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
-	activity_setTimeout( 2, pklIniRead( "exitTimeOut"   , 0 ) )
+	activity_setTimeout( 2, pklIniRead( "exitAppTimeOut", 0 ) )
+	setPklInfo( "cleanupTimeOut", pklIniRead( "cleanupTimeOut" ) ) 		; Time idle before mods etc are cleaned up
 	
 	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; Sticky/One-Shot modifiers (CSV)
 	setPklInfo( "stickyTime", pklIniRead( "stickyTime" ) )				; --"--
@@ -42,7 +43,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################### pkl.ini 
 	modded  := ( curlMod || ergoMod ) ? "_" : ""						; Use an underscore between KbdType and Mods
 	theLays := StrReplace( theLays, "@V",        "@K@C@E" )				; Shorthand .ini notation for kbd/mod
 	theLays := StrReplace( theLays, "@L", _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) )	; Locale ID, e.g., "-Pl"
-	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "<KbdType N/A>", "_" ) )	; _ISO/_ANS/_etc
+	theLays := StrReplace( theLays, "@K", _pklLayRead( "KbdType", "ISO"          , "_" ) )	; _ISO/_ANS/_etc
 	theLays := StrReplace( theLays, "@C@E", modded . curlMod . ergoMod )	; CurlAngle[Wide]
 	theLays := StrReplace( theLays, "@C",   modded . curlMod           )	; --, Curl
 	theLays := StrReplace( theLays, "@E",   modded . ergoMod           )	; --, Angle, AWide...
@@ -216,12 +217,12 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks . "s", "{Space}" ) 				;     "key<state>s" is the entry itself
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
-				if ( InStr( "%$*=~@&", ksP ) ) {
+				if ( InStr( "→§αβ«Ð¶%$*=~@&", ksP ) ) {
 					ksE := SubStr( ksE, 2 ) 							; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
-					ksP := "%"											; % : Unicode/ASCII (auto-)literal/ligature
+					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
-				setKeyInfo( key . ks      , ksP )						; "key<state>"  is the entry code (=/*/%/@/&)
+				setKeyInfo( key . ks      , ksP )						; "key<state>"  is the entry prefix
 				setKeyInfo( key . ks . "s", ksE )						; "key<state>s" is the entry itself
 			}
 ;		debug   .= "`n" key " = VK" getKeyInfo( key . "vkey" ) "`tCapSt:" getKeyInfo( key . "CapSt" ) "`tState0/1:" getKeyInfo( key . "0s" ) " " getKeyInfo( key . "1s" )
@@ -349,7 +350,8 @@ activatePKL() 										; Activate PKL single-instance, with a tray icon etc
 	
 	activity_ping(1) 								; Update the current ping time
 	activity_ping(2)
-	SetTimer, activityTimer, 20000 					; Check for timeouts every 20 s
+	SetTimer, activityTimer, 20000 					; Check for timeouts every 20 s 	; eD WIP: Put this into cleanup?!
+	SetTimer, cleanupTimer,   2000 					; Perform cleanup routine every 2 s
 	
 	if ( pklIniBool( "startSuspended", false ) ) {
 		Suspend
@@ -368,7 +370,7 @@ changeLayout( nextLayout ) 							; Rerun PKL with a specified layout
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
-_pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL.ini (used in pkl_init)
+_pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL_Settings.ini (used in pkl_init)
 {
 	val := pklIniRead( type, def )
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
@@ -378,7 +380,7 @@ _pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods from PKL.i
 
 _checkModName( key ) 								; Mod keys need only the first letters of their name
 {
-	static modNames := [ "LShift", "RShift", "CapsLock", "Extend"
+	static modNames := [ "LShift", "RShift", "CapsLock", "Extend", "SGCaps"
 						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin" ]
 	
 	for ix, modName in modNames {

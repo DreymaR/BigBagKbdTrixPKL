@@ -68,12 +68,12 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		Return
 	}	; end if VK
 	
-	if ( getLayInfo("hasAltGr") ) {
+	if ( getLayInfo("hasAltGr") ) { 							; For AltGr layouts...
 		if ( AltGrIsPressed() ) { 								; AltGr is down
 			sh := getKeyState("Shift")
 			if ( (capHK & 4) && getKeyState("CapsLock", "T") )
 				sh := 1 - sh
-			state := 6 + sh
+			state := 6 + sh 									; eD WIP: The state calc. is a mess. Prepare for SGCaps in the mix by simplifying this mess?
 		} else {
 			if ( getKeyState("LAlt")) { 						; LAlt on AltGr layout
 				modif .= "!"
@@ -84,12 +84,12 @@ _keyPressed( HKey ) 											; Process a HotKey press
 				_pkl_CtrlState( HKey, capHK, state, modif )
 			}
 		}
-	} else {
+	} else { 													; For non-AltGr layouts...
 		if ( getKeyState("Alt")) {								; Alt is down
 			modif .= "!"
 			if ( getKeyState("RCtrl") || ( getKeyState("LCtrl") && !getKeyState("RAlt") ) )
 				modif .= "^"
-			state := _pkl_CapsState( capHK )					; CapsLock on
+			state := _pkl_CapsState( capHK )					; CapsLock on?
 		} else {
 			_pkl_CtrlState( HKey, capHK, state, modif )			; Ctrl is down
 		}

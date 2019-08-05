@@ -162,9 +162,11 @@ pkl_about()
 	text := ""
 	text = %text%
 	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
-	Gui, Add, Edit, , %pklMainURL%
-	if ( pklProgURL != pklMainURL )
+	if ( pklProgURL != pklMainURL ) {
 		Gui, Add, Edit, , %pklProgURL%
+		Gui, Add, Text, , Based on Portable Keyboard Layout v0.4
+	}
+	Gui, Add, Edit, , %pklMainURL%
 	Gui, Add, Text, , ......................................................................
 	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
 	Gui, Add, Text, , %locInfo%
@@ -173,7 +175,6 @@ pkl_about()
 	Gui, Add, Text, , ......................................................................
 	text := ""
 	text = %text%%locContributors%:
-;	text = %text%`n- OEystein "DreymaR" Gadmar: EPKL	; edition DreymaR
 	text = %text%`nChris Mallet && The AutoHotkey Foundation
 	if ( translatorName != "[[Translator name]]" )
 		text = %text%`n`n%translatorName%: %translationName%

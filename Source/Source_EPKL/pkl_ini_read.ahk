@@ -51,6 +51,7 @@ pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 		if ( val )
 			Break
 	}	; end for
+	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
 	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR)
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 	if        ( SubStr( val, 1, 3 ) == "..\" ) {						; "..\" syntax for layout dirs

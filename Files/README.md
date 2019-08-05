@@ -120,7 +120,6 @@ DONE:
 * EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 	- Fixed: HIG made a state8 image of semicolons. This was due to the SGCaps states (8:9) being added unnecessarily.  (つ_〃*)
 		- Also fixed some minor HIG bugs related to hex dead key values etc.
-	- Fixed: On the first help img minimizing, a taskbar icon sometimes appeared on-screen or in tray. Showing the image once before resizing solved it.
 	- New: Tap-or-Modifier a.k.a. Dual-Role Modifier keys. Work-in-progress, not working well for rapidly typed keys yet.
 		- To make a ToM key, specify its VK layout entry as VK/Mod, where 'Mod' is a modifier name. The rest of the line can be any valid entry.
 		- The Help Image Generator can mark ToM keys (state 0 and 1) with a background symbol.

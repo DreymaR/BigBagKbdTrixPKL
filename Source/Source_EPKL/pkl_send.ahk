@@ -59,34 +59,34 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 {
 ;	static parse := { "%" : "{Raw}" , "=" : "{Blind}" , "*" : "" }
 	prf := SubStr( entry, 1, 1 )
-	if ( not InStr( "%$*=~@&", prf ) )
+	if ( not InStr( "→§αβ«Ð¶%$*=~@&", prf ) )
 		Return false											; Not a recognized prefix-entry form
 	sendPref := -1
 	ent := SubStr( entry, 2 )
-	if        ( prf == "%" ) {									; Literal/string by SendInput {Raw}
-		SendInput %   "{Raw}" . ent
-	} else if ( prf == "$" ) {									; Literal/string by SendMessage
+	if        ( prf == "%" || prf == "→" ) { 					; Literal/string by SendInput {Raw}
+		SendInput % "{Raw}" . ent
+	} else if ( prf == "$" || prf == "§" ) { 					; Literal/string by SendMessage
 		pkl_SendMessage( ent )
 	} else if ( ent == "{CapsLock}" ) {							; CapsLock toggle
 		togCap := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
-	} else if ( prf == "*" ) {									; * : Omit {Raw} etc; use special !+^#{} AHK syntax
+	} else if ( prf == "*" || prf == "α" ) { 					; * : AHK special !+^#{} syntax, omitting {Raw}
 		sendPref := ""
-	} else if ( prf == "=" ) {									; = : Send {Blind} - as above w/ current mod state
+	} else if ( prf == "=" || prf == "β" ) { 					; = : Send {Blind} - as above w/ current mod state
 		sendPref := "{Blind}"
-	} else if ( prf == "~" ) {									; ~ : Send a hex Unicode point U+####
+	} else if ( prf == "~" || prf == "«" ) { 					; ~ : Send a hex Unicode point U+####
 		sendPref := ""
 		ent := "{U+" . ent . "}"
-	} else if ( prf == "@" ) {									; Named dead key (may vary between layouts!)
+	} else if ( prf == "@" || prf == "Ð" ) { 					; Named dead key (may vary between layouts!)
 		pkl_DeadKey( ent )
-	} else if ( prf == "&" ) {									; Named literal/powerstring (may vary between layouts!)
+	} else if ( prf == "&" || prf == "¶" ) { 					; Named literal/powerstring (may vary between layouts!)
 		pkl_PwrString( ent )
 	}
 	if ( sendPref != -1 ) {
 		if ( mode == "SendThis" && ent ) { 						; eD WIP: Used pkl_SendThis(), now pkl_Send()
 			pkl_Send( "", sendPref . ent ) 						; Used by _keyPressed()
 		} else {
-			SendInput %       sendPref . ent
+			SendInput % sendPref . ent
 		}
 	}
 	Return % prf												; Return the recognized prefix
@@ -182,5 +182,4 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 			StrReplace( theString, "`n", "`r`n" )
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
 	}	; end if brkMode
-;	Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up}{RShift Up}{RCtrl Up}{RAlt Up}{RWin Up}	; Remove mods to clean up?
 }

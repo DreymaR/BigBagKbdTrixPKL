@@ -123,7 +123,7 @@ activity_main(mode = 1, ping = 1, value = 0) {
 	}
 	Return
 
-	activityTimer:
+activityTimer:
 	if ( mode1timeout > 0 && A_TickCount - mode1ping > mode1timeout * 60000 ) {
 		if ( not A_IsSuspended ) {
 			gosub toggleSuspend
@@ -135,8 +135,23 @@ activity_main(mode = 1, ping = 1, value = 0) {
 		gosub ExitPKL
 		Return
 	}
-	Return
+Return
 }
+
+cleanupTimer:
+	if ( A_TimeIdle > getPklInfo( "cleanupTimeOut" ) * 1000 ) { 	; Timeout set in seconds (use TimeIdlePhysical?)
+		for ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin"
+					   , "RShift", "RCtrl", "RAlt", "RWin" ] {
+			if ( getKeyState( mod ) ) {
+				Return 									; If the key is being held down, leave everything be
+			} else {
+				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
+			}
+		}
+;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 	; Remove mods (avoid stuck mods)
+;		Send {RShift Up}{RCtrl Up}{RAlt Up}{RWin Up} 	; --"--
+	}
+Return
 
 ;;  -----------------------------------------------------------------------------------------------
 ;;
@@ -247,4 +262,20 @@ loCase( str ) {
 
 upCase( str ) {
 	Return % Format( "{:U}", str )
+}
+
+convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP
+	dum := "--" 											; The string is written as ANSI/CP0
+	VarSetCapacity( dum, StrPut( str, "UTF-8" ) ) 			; Ensure var capacity
+; 		* ((codePg="utf-16"||codePg="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
+	len := StrPut( str, &dum, "UTF-8" ) 					; Copy/convert string (returns length in chars)
+	Return StrGet( &dum, "CP0" ) 							; Return str as UTF-8
+}
+
+convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; eD WIP
+	dum := "--" 											; The string is read as ANSI/CP0
+	VarSetCapacity( dum, StrPut( str, "CP0" ) ) 			; Ensure var capacity
+; 		* ((codePg="utf-16"||codePg="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
+	len := StrPut( str, &dum, "CP0" ) 						; Copy/convert string (returns length in chars)
+	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
 }

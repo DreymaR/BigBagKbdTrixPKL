@@ -23,9 +23,9 @@ makeHelpImages()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\ImgGenerator\EPKL_ImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
-	onlyOneDK   := pklIniRead( "imgMakeSingleDK",, HIG.Ini ) 	; Refresh single DK imgs
-	onlyOneStr  := ( onlyOneDK ) ? "`nNOTE: Only creating images for dk_" . onlyOneDK . "." : ""
-	if ( onlyOneDK )
+	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Refresh specified DK imgs
+	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." : ""
+	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
 	HIG.OrigImg := pklIniRead( "OrigImgFile"    ,       , HIG.Ini )
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
@@ -39,13 +39,13 @@ makeHelpImages()
 (
 Do you want to make a full set of help images
 for the current layout, or only state images?
-(Many Inkscape calls will take a long time!)%onlyOneStr%
+(Many Inkscape calls will take a long time!)%makeMsgStr%
 )
 	IfMsgBox, Cancel 				; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
 		Return
 	IfMsgBox, No 					; Make only the state images, not the full set with deadkey images
 		stateImgOnly := true
-	stateImgOnly := ( onlyoneDK ) ? false : stateImgOnly 		; StateImgOnly overrides DK images, unless DK debug is set
+	stateImgOnly := ( onlyMakeDK ) ? false : stateImgOnly 		; StateImgOnly overrides DK images, unless DK only is set
 	if not FileExist( HIG.InkPath ) {
 		pklErrorMsg( "You must set a path to a working copy of Inkscape in " . HIG.Ini . "!" )
 		Return
@@ -54,7 +54,7 @@ for the current layout, or only state images?
 	try {
 		for dirTag, theDir in HIG.ImgDirs 						; Make directories
 		{
-			if ( dirTag == "dkey" && ( stateImgOnly || onlyOneDK ) )
+			if ( dirTag == "dkey" && ( stateImgOnly || onlyMakeDK ) )
 				Continue
 			FileCreateDir % theDir
 		}
@@ -63,14 +63,14 @@ for the current layout, or only state images?
 		Return
 	}
 	shiftStates := getLayInfo( "shiftStates" ) 					; may skip some, e.g., state 2 (Ctrl), by imgStates
-	HIG.imgType := ( onlyOneDK ) ? "--" : "shift state" 		; If refreshing one DK, don't render state images
+	HIG.imgType := ( onlyMakeDK ) ? "--" : "shift state" 		; If refreshing one DK, don't render state images
 	HIG.imgName := "state"
 	Loop, Parse, shiftStates, : 								; Shift state loop - also detects dead keys
 	{
 		_makeImgDicThenImg( HIG, A_LoopField )
 	}
 	HIG.imgType := "deadkey"
-	HIG.DKNames := ( onlyOneDK ) ? Array( onlyOneDK ) : HIG.DKNames
+	HIG.DKNames := ( onlyMakeDK ) ? StrSplit( onlyMakeDK, "," ) : HIG.DKNames
 	for key, dkName in HIG.DKNames 								; Dead key loop
 	{
 		if ( stateImgOnly )
@@ -113,7 +113,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 				Continue
 			} else if ( ent == "@" ) { 							; Was "dk"
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
-				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How?
+				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				res := "dk_" . dkName
 			} else if ( RegExMatch( ents, "i).*(space|spc).*" ) ) {
 				res := 32 										; Space may be stored as ={space}; show it as a space
