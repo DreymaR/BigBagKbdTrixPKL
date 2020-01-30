@@ -96,7 +96,7 @@
 	try {
 		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem )
 	} catch {
-		pklWarning( "PKL Settings.ini:`nNon-existing menu item specified as default!?" )
+		pklWarning( "EPKL_Settings.ini:`nNon-existing menu item specified as default!?" )
 	}
 ;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chnglayMenuItem%
@@ -156,11 +156,9 @@ pkl_about()
 	layPage  := pklIniRead( "homepage"  , ""        , "LayIni", "information" )
 	lLocale  := pklIniRead( "localeID"  , "0409"    , "LayIni", "information" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
-	kbdType  := getLayInfo( "Ini_KbdType" )
-	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " / " . getLayInfo( "Ini_ErgoMod" )
+	kbdType  := getLayInfo( "Ini_KbdType" ) . " / " . getLayInfo( "Ini_LayType" )
+	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 
-	text := ""
-	text = %text%
 	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
 	if ( pklProgURL != pklMainURL ) {
 		Gui, Add, Edit, , %pklProgURL%
@@ -169,43 +167,36 @@ pkl_about()
 	Gui, Add, Edit, , %pklMainURL%
 	Gui, Add, Text, , ......................................................................
 	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
+	Gui, Add, Text, , %locContributors%: Chris Mallet && The AHK Foundation
 	Gui, Add, Text, , %locInfo%
 	Gui, Add, Text, , %locLicense%
 	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
 	Gui, Add, Text, , ......................................................................
-	text := ""
-	text = %text%%locContributors%:
-	text = %text%`nChris Mallet && The AutoHotkey Foundation
-	if ( translatorName != "[[Translator name]]" )
-		text = %text%`n`n%translatorName%: %translationName%
-	Gui, Add, Text, , %text%
-	Gui, Add, Text, , ......................................................................
-	text := ""
-	text = %text%%activeLayout%:`n  %layName%
-	text = %text%`n%locVersion%: %layVers%
-	text = %text%`n%locLanguage%: %layLang% (++?)
-	text = %text%`n%locCopyright%: %layCopy%
-	text = %text%`n%locCompany%: %layComp%
-	Gui, Add, Text, , %text%
+	text :=        activeLayout . ": " . layName
+	text .= "`n" . locVersion   . ": " . layVers
+	text .= "`n" . locLanguage  . ": " . layLang . " (++?)"
+	text .= ( translatorName == "[[Translator name]]" ) ? "" : "`n" . translationName . ": " . translatorName
+	text .= "`n" . locCopyright . ": " . layCopy
+	text .= "`n" . locCompany   . ": " . layComp
+	Gui, Add, Text, , %text% 								; Layout info
 	Gui, Add, Edit, , %layPage%
 	if ( getPklInfo( "AdvancedMode" ) ) {
 		Gui, Add, Text, , ......................................................................
-		text := ""							; Show MS Locale ID and current underlying layout DKs
-		text = %text%Keyboard type (from PKL Settings.ini): %kbdType%
-		text = %text%`nCurl/Ergo mod type (---"---): %ergoMod%
-		text = %text%`nCurrent Microsoft Windows Locale ID: %msLID%
-		text = %text%`nDead keys set for this Windows layout: %dkStr%
-		Gui, Add, Text, , %text%
+		text := "Keyboard/Layout type from settings: "      . kbdType
+		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
+		text .= "`nCurrent Microsoft Windows Locale ID: "   . msLID
+		text .= "`nDead keys set for this Windows layout: " . dkStr
+		Gui, Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	Gui, Show
 }
 
-readLayoutIcons( layIni, altIni = "" )									; Read On/Off icons for a specified layout
+readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
 	for ix, OnOff in [ "on", "off" ]
 	{
 		icon := OnOff . ".ico"
-		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni,, altIni ) . icon
+		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
 		if ( FileExist( icoFile ) ) {
 			icoFil%ix%  := icoFile
@@ -234,7 +225,7 @@ _FixAmpInMenu( menuItem )
 		if ( lParam == 0x205 ) { 			; WM_RBUTTONUP
 			Return
 		} else if ( lParam == 0x201 ) { 	; WM_LBUTTONDOWN
-			gosub ToggleSuspend				; This suspends PKL on tray icon single-click
+			gosub ToggleSuspend				; This suspends EPKL on tray icon single-click
 		}
 	}
 */

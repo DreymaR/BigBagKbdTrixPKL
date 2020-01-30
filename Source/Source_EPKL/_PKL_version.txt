@@ -1,7 +1,7 @@
 EPiKaL Portable Keyboard Layout by Farkas Máté & DreymaR
 
-Version: 1.1.2
-Compiled: 2019-08 for GitHub/DreymaR
+Version:  1.1.3
+Compiled: 2020-01 for GitHub/DreymaR
 Compiler: AutoHotKey v1.1.26.1 Unicode 32 bit
 
 (c)  PKL:   FARKAS, Máté, 2007-2010

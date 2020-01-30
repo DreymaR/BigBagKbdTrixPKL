@@ -3,12 +3,13 @@
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
 		dkFile  := getLayInfo( "dkFile" )
-;		chr := ( base < 256 ) ? Chr( base ) : "" 			; NOTE: AHK IniRead can't handle UTF-8 Unicode keys, and makes no case distinction.
-		chr := "<" . convertToANSI( Chr( base ) ) . ">" 	; Convert the key from UTF-8 to ANSI so IniRead() can handle single-char entries 	; eD WIP
-		chr .= ( chr == Format("{:L}",chr) ) ? "" : "+" 	; Mark upper case with <#>+, others with <#> only
-		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number,
-		val := ( val ) ? val : pklIniRead( chr                    ,, dkFile, "dk_" . dkName ) 	;     as <#> character (NB: Not UTF-8 Unicode?)
-		val := ( val ) ? val : pklIniRead( Format(">{:04X}",base) ,, dkFile, "dk_" . dkName ) 	;     as >#### hex Unicode point (was "0x{:04X}")
+		chr := Chr( base )
+		upp := ( ( base > 64 ) && ( base < 91 ) ) ? "+" : "" 	; Mark upper case with a tag, as IniRead() lacks base letter case distinction
+		cha := convertToANSI( chr ) 						; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
+		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
+		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkFile, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
+		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
+		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as  ~#### hex Unicode point 	; eD WIP
 		val := ( val ) ? val : "--"
 		if val is integer
 			val := Format( "{:i}", val ) 					; Converts hex to decimal so it's always treated as the same number
@@ -107,7 +108,7 @@ setDeadKeysInCurrentLayout( deadkeys )
 }
 
 getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
-{				; eD TODO: Make PKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
+{				; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static deadkeys := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
 	if ( DKsOfSysLayout == "-2" )

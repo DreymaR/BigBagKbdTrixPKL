@@ -1,6 +1,6 @@
 ﻿;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
+;;  EPKL Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
 ;;      Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
 ;;      Uses a template with a set of regular expression (RegEx) entries to generate the layout.ini file.
 ;
@@ -8,7 +8,7 @@
 importLayouts()
 {
 	IMP                 := {}
-	IMP.Name            := "PKL Import Module"
+	IMP.Name            := "EPKL Import Module"
 	IMP.LayDic          := {}
 	
 	impRoot             := "Layouts\_Import"

@@ -45,18 +45,18 @@
 	
 	if ( not initialized ) 															; First-time initialization
 	{
-		im.LayDir   := getLayInfo( "layDir" )
-		im.BgPath  := fileOrAlt( pklIniRead( "img_bgImage",, "LayIni",, "BasIni" ) 
-								, im.LayDir . "\backgr.png"                       ) ; BG image, if found
-		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir",, "LayIni",, "BasIni" ) 
-								, im.LayDir . "\ModStateImg"                      ) ; Shift state images
-		im.BgColor  := pklIniRead( "img_bgColor"  , "fefeff", "LayIni",, "BasIni" ) ; BG color
+		im.LayDir   := getLayInfo( "Dir_LayIni" )
+		im.BgPath  := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
+								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
+		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
+								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
+		im.BgColor  := pklIniRead( "img_bgColor"  , "fefeff",   "LayStk" ) 	; BG color
 		im.Opacity  := pklIniRead( "img_opacity"  , 255         )
 		im.PosNr    := 5 													; Default position is bottom center (used to be "xCenter")
 		im.Zooms    := pklIniCSVs( "img_zooms"    , "100,150"   )
 		im.ZoomNr   := 1
-		imgSizeWH   := pklIniCSVs( "img_sizeWH","541,188", "LayIni",, "BasIni" ) 	; Image size in px, given as Width,Height
-		img_Scale   := pklIniRead( "img_scale"    , 100   , "LayIni",, "BasIni" ) 	; Image scale factor, in % (may be float)
+		imgSizeWH   := pklIniCSVs( "img_sizeWH"   , "541,188",  "LayStk" ) 	; Image size in px, given as Width,Height
+		img_Scale   := pklIniRead( "img_scale"    , 100      ,  "LayStk" ) 	; Image scale factor, in % (may be float)
 		im.Width_   := Ceil( img_Scale * imgSizeWH[1] / 100 )
 		im.Height   := Ceil( img_Scale * imgSizeWH[2] / 100 )
 		im.Width_   := ( im.Width_ ) ? im.Width_ : pklIniRead( "img_width" , 460, "LayIni", "global" ) 	; The old PKL had sizes in [global]

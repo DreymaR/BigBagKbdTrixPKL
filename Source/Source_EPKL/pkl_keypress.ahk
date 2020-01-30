@@ -1,6 +1,6 @@
 ﻿;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL key press
+;;  EPKL key press
 ;;      Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 
@@ -39,7 +39,7 @@ AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 ;;  ONHOLD: Remove altGrEqualsAltCtrl, enforcing <^>! (if laptops don't have >!, they'd have to remap to it)?
 ;;  
 ;;  Windows internally translates the AltGr (right Alt) key to LEFT Ctrl + RIGHT Alt.
-;;  If you enable this option, PKL detects AltGr as (one of) Ctrl + (one of) Alt.
+;;  If you enable this option, EPKL detects AltGr as (one of) Ctrl + (one of) Alt.
 ;;  This is useful for notebook keyboards that do not have a right alt or AltGr key.
 ;;  It is usually not recommended, because fortunately many programs know the
 ;;  difference between AltGr and Alt+Ctrl.
@@ -101,12 +101,8 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	Ent := getKeyInfo( HKey . state . "s" )						; Actual entry by state, if using a prefix
 	if ( Pri == "" ) {
 		Return
-	} else if ( state == "vkey" ) { 							; VirtualKey 	; eD WIP: How could state == "vkey" ?!? But without this, Ctrl+Shift+# keys are broken.
-		pkl_SendThis( modif, "{VK" . Pri . "}" )
-;	} else if ( Pri == "=" && Ent == "{Space}" ) { 				; ={Space} entry. Does it need special treatment?
-;		pkl_Send( 32, modif )
-;	} else if ( Pri == 32 && HKey == "SC039" ) { 				; Space bar		; pkl_Send already handles Space!?
-;		Send, {Blind}{Space}
+	} else if ( state == "vkey" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.
+		pkl_SendThis( modif, "{VK" . Pri . "}" ) 				; (Without this, Ctrl+Shift+# keys are broken.)
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
 		pkl_Send( Pri, modif )
 	} else {
@@ -148,6 +144,7 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 	_setExtendInfo( returnTo[ xLvl ], false ) 					; Mark this Extend Down press as used for Extend
 	if ( not pkl_ParseSend( xVal ) ) 							; Unified prefix-entry syntax
 		Send {Blind}{%xVal%} 									; By default, take modifiers into account
+	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 }
 
 _setExtendInfo( xLvl = 1, unUsed = true ) 						; Update PKL info about the Extend layer
@@ -195,10 +192,10 @@ getVKey( HKey )
 	return % getKeyInfo( HKey . "vkey" )
 }
 
-_setModState( theMod, isDown = 0 )
+_setModState( theMod, isDown = 1 )
 {
 	if ( theMod == "Extend" ) { 							; Extend
-		setExtendState( isDown )
+		_setExtendState( isDown )
 	} else if ( theMod == "AltGr" ) {
 		setAltGrState( isDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
 	} else {
@@ -264,9 +261,11 @@ getAltGrState( isDown = 0, set = 0 )
 	} else {
 		Return AltGrState
 	}
+;	( 1 ) ? pklDebug( "getAltGrState " . isDown . " " . set )  ; eD DEBUG
+;	return	; eD DEBUG – When is this used?!? Only if there's no real AltGr in the OS layout?
 }
 
-setExtendState( set = 0 )									; Called from the PKL_main ExtendDown/Up labels
+_setExtendState( set = 0 )									; Called from setModState
 { 															; This function handles Extend key tap or hold
 	static extendKey    := -1
 	static extMod1      := ""
@@ -288,6 +287,7 @@ setExtendState( set = 0 )									; Called from the PKL_main ExtendDown/Up label
 		Send {RShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up.
 		extHeld := 0
 	}	; end if
+	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)
 }	; end fn
 
 ExtendIsPressed() 											; Determine whether the Extend key is pressed
@@ -300,7 +300,7 @@ setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown
 { 															; This function handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys
 	static tapTime  := {} 									; We'll handle tap times for each key SC
 	static tomHeld  := {} 									; Is this key held down? Or check key state instead?
-												; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
+													; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
 	tomMod  := getKeyInfo( HKey . "ToM" ) 					; Modifier name for this key
 	tomTime := getPklInfo( "tapModTime" )
 	
@@ -318,7 +318,7 @@ setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown
 		setPklInfo( "tomKey", "" )
 ;		pklDebug( "caught ToM!", 0.5 ) 	; ED DEBUG
 		if ( getKeyState( HKey, "P" ) ) {
-			_setModState( tomMod, 1 ) 		; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
+			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )
 		} else {
 			processKeyPress( HKey )
@@ -328,18 +328,20 @@ setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown
 		SetTimer, tomTimer, Off
 		setPklInfo( "tomKey", "" )
 		tomHeld[HKey] := 0
-		if ( A_TickCount < tapTime[HKey] ) 					; If the key was tapped...
+		extUsed := ( HKey == getLayInfo( "extendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
+		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
 			processKeyPress( HKey )
 		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 			_setModState( tomMod, 0 )
+		setLayInfo( "extendUsed", false )
 	}
 }	; end fn
 
 tomTimer: 													; There's only one timer as you won't be activating several ToM at once
 ;	pklDebug( "ToM: " HKey " > " getPklInfo( "tomMod" ) ) 	; eD DEBUG
-	_setModState( getPklInfo( "tomMod" ), 1 )
-	setPklInfo( "tomKey", "" )
-	setPklInfo( "tomMod", -1 )
+	_setModState( getPklInfo( "tomMod" ), 1 ) 				; When the timer goes off, set the mod state for the ToM key
+	setPklInfo( "tomKey", "" ) 								; This is used by the ToM interrupt 	; eD WIP
+	setPklInfo( "tomMod", -1 ) 								; Turn off this ToM key's todo status
 Return
 
 _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) 	; Handle state/modif vs Ctrl(+Shift)

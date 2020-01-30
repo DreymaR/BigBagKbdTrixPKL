@@ -10,7 +10,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
-* Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
+* Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
   
 * This repo implements most of my Big Bag for (E)PKL, as layout and other .ini files.
 * It also contains **EPiKaL PKL** (**[EPKL][EPKLRM]**) with several improvements over PKL.
@@ -19,9 +19,13 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 Getting EPKL up and running
 ---------------------------
 
-* Download a copy of this repo. For instance, press the GitHub Download/Clone button and then unzip the file you got.
-* Also make sure you have the EPKL.exe binary. This is the actual program, but it needs other files to work.
-* The simplest way of running EPKL is to just put the main folder somewhere and run EPKL.exe any way you like!
+* Download a full copy of this repo or just its executable resources.
+    - Under [https://github.com/DreymaR/BigBagKbdTrixPKL/releases](Release) Assets, there's a .ZIP file with the files needed to run EPKL.
+    - If you also want the source code, press the GitHub Download/Clone button and then unzip the file you got.
+    - If you download or clone the repo, you need to run Compile_EPKL.bat to produce the EPKL.exe binary.
+* **FAST LANE:** If you want "just Colemak" the simple way, then rename the EPKL_Layouts_Override.ini file so EPKL uses defaults.
+    - Otherwise, see below for how to set and/or edit the layout(s) you want.
+* Now, simply run EPKL.exe inside its main folder in any way you like!
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
   
 * I usually put a shortcut to EPKL.exe in my Start Menu "Startup" folder so it starts on logon, per user.
@@ -29,7 +33,10 @@ Getting EPKL up and running
     - If the PortableApps menu is started on logon it can start up EPKL for you too.  
   
 * Choose a layout with your ISO/ANS(I) keyboard type, locale and Curl/Angle/Wide preferences, by shorthand or full name.
-* In EPKL_Settings.ini, activate the layout(s) you want by uncommenting (remove initial semicolon) and/or editing.
+    - There are two main layout types: VK which only moves your keys around, and eD which map each shift state for each key.
+    - There are some premade Locale variants, if you need to type in other languages. Check out which variants exist.
+* In your EPKL_Layouts .ini, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
+    - There's a Layouts_Default and a Layouts_Override file. Entries in the override, if present, take precedence.
     - My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
     - The format is: layout = ‹1st layout folder name›:‹name you want in menu›,‹2nd layout folder›:‹2nd menu entry› etc
 
@@ -37,30 +44,44 @@ More Know-How-To
 ----------------
 
 * This repo contains executables for EPKL as well as the original PKL, and source code for both.
-* The layouts are updated to EPKL format though, so they'd need a little reconstruction for old PKL.
-* The EPKL_Settings.ini file holds layout choices and general program settings.
+* The layouts are updated to EPKL format though, so they'd need some reconstruction for old PKL.
+* The EPKL_Layouts .ini files hold layout choices. EPKL_Settings.ini holds general program settings.
 * The layout.ini files hold layout settings and mappings. They often point to and augment a BaseLayout.ini file.
+* There's a "LayStack" priority stack for layout info. Mappings/settings at higher levels will take precedence:
+    1) The layout.ini file in the chosen Layout folder gets the last word about, e.g., remaps
+    2) The BaseLayout.ini file usually found under each layout type may define most of the layout
+    3) The EPKL_Layouts_Override, if present, can contain non-default info about the layout choice etc
+    4) EPKL_Layouts_Default.ini, finally, holds default and common settings/mappings
+    5) Beyond this, specialized files may hold Extend or DeadKey mappings. See below.
+In theory, you could put all the info needed for a whole layout into any one of these "layout stack" files.
   
 The files may take a little tweaking to get what you want. There are several parameters:
-* ISO (European/World) vs ANSI (US) vs other keyboard types
-    - ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
-    - JIS (Japanese) etc are not supported so far - sorry.
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
     - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY included.
-* Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
-* Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
-    - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
-    - Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     - The 'VK' layouts just move the keys of your installed OS layout around, without other changes
     - The [eD] layouts have their own Shift/AltGr mappings specified. You may mix types if you want.
-* In EPKL_Settings.ini you can use shorthand for KbdType, CurlMod and ErgoMod, or set the layout folder path directly.
+* ISO (European/World) vs ANSI (US) vs other keyboard types
+    - ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
+    - JIS (Japanese) etc are not supported so far - sorry.
+* Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
+    - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
+    - Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
+* Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
+    - The Extend modifier may even double as a Tap-or-Mod key so that when you tap it, something else happens.
+    - The most advanced way of using this may be the Mother-of-DeadKeys which allows really fancy "tap dances"!
+    - Holding down Shift and/or AltGr while first holding or while tapping the Ext key affects which layer is used.
+* In EPKL_Layouts.ini you can use shorthand for KbdType/CurlMod/ErgoMod etc, or set the layout folder path directly.
+    - For Extend set an Extend file and a working Extend modifier. The latter needs to be mapped to a key.
+    - My Extend mappings file is in the Files folder. Look inside it to learn more.
 * In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
-    - Mod remaps, help image specifications, Extend key, key mappings etc are set in the layout.ini file.
+    - Mod remaps, help image specifications, Extend key, key mappings etc can be set in the LayStack .ini files.
     - Many layouts use a base layout. Most mappings may be there, so the top layout.ini only has to change a few keys.
-* If you need to tweak some Extend mappings, they're now in a separate file usually found in the Files folder.
-* Similarly, there's a file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
 * To learn more about remaps, see the _eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
+* There's a file for named literals/powerstrings. These are useable by layouts, Extend and dead keys.
+* Also, a dead key file. DKs are mapped as @###. Pressing the key then a release glyph may produce something new!
+    - There are help images for DKs, these can be very useful as they show what releases are in different shift states.
+    - I haven't made images for all variants though, so there may be minor discrepancies.
 * Help images aren't always available with the right ergo mod and keyboard type, since there are many combos. See below.
   
 **Hotkeys found in the EPKL settings file:**
@@ -129,7 +150,8 @@ SC03A   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod (a.k.a. Dual-Role Mod
 SC03A   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Caps as Mother-of-DKs (MoDK) on tap, Extend on hold
 ```
 * These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
-* Holding a designated modifier specified in the Settings, RShift and/or RAlt by default, chooses Extend layers.
+* The above Extend modifier mappings may be in any LayStack .ini file, usually in EPKL_Layouts_Default.ini
+* Holding designated modifiers specified in the Settings, RShift and/or RAlt by default, chooses Extend layers.
     - So, e.g., holding the Ext1 mod (RAlt) then the Ext key (Caps) activates the Extend2 layer (NumPad).
 * After selecting your Extend layer, you hold down only the Extend key (Caps by default) and start using Extend!
 * For completeness, layers (like Ext3/Ext4) can be set as one-shot so they fall back to another layer after each use.
@@ -153,7 +175,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 * Copy/Paste a promising layout folder and rename the result to what you want.
     - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
     - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the `Layouts/Colemak-eD` folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
-    - Instead of 'De' you could choose any locale tag you like such as 'MyCoolDe' to set it apart.
+    - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
 * In that folder's layout.ini file, edit the remap fields to represent the new settings.
     - Here, change `mapSC_layout = CmkCAW_ISO` to `mapSC_layout = Angle_ISO`.
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
@@ -164,12 +186,12 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (OEM_102) for the sake of example.
     - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. OEM_102 is there, state 0/1 mapped to ö/Ö.
     - To find the V key, see the `baseLayout = Colemak-eD\BaseLayout_Cmk-eD_ISO` line and open that file. There's the V key, SC02f.
-    - Now, copy the V key to your layout.ini `[layout]` section so it'll override the baseLayout, and swap the SC### codes of V and OEM_102.
+    - Now, copy the V and OEM_102 keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
-* Now, if the EPKL_Settings.ini Kbd/Curl/Ergo/Locale settings are right you should get the variant you wanted.
-    - Here, set KbdType/CurlMod/ErgoMod/LocalID to ISO/--/Angle/De respectively (or 'MyCoolDe' if you really went with that!).
-    - If you used a VK layout or anything else than Colemak-eD as your path, comment out the `layout = ` line with `;` and activate another.
-    - If you prefer, write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path from `Layouts\`.
+* Now, if the EPKL_Layouts .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
+    - Here, set LayType/KbdType/LocalID/CurlMod/ErgoMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
+    - If you prefer to use another existing layout line in the file, comment out the `layout = ` line with `;` and activate another.
+    - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
 * After making layout changes, refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
 * To get updated help images, see the next point if you want to generate them using Inkscape.
     - First though, check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
@@ -198,7 +220,7 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
 * v0.4.3: Scan and virtual code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
 * v0.4.4: A Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
-	- A shorthand notation in EPKL_Settings.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+	- A shorthand notation in EPKL_Layouts.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
 * v0.4.5: Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
 	- The "&" prefix denotes literals/powerstrings found in a separate file. These may span more than one line.
 * v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
@@ -228,6 +250,22 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- The shiftStates layout entry is now in the [layouts] section of layout.ini, spaced out so entries have more room and are clearer.
 	- Since Space/Tab are used to delimit layout entries, there are now special '&Spc' and '&Tab' PowerString entries for them.
 	- Dead key abbreviations are now by code point instead of numbered, as in MSKLC. Example: The .klc entry 02c7@ is a caron DK; in EPKL it becomes @2c7.
+* EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
+	- Dead keys on Extend key tap. Examples: Tap {Extend, n} for parentheses with positioning. {Ext, z/Z} Undo/Redo. {Shift, Ext, letter} for kaomoji.
+	- Sticky Shift works to select Extend dead keys, and stays active. If you want the shift-P kaomoji tap {Shift, Ext} then P quickly. If not, wait.
+	- For InputRaw/Send/AHK/Blind/Unicode/DeadKey/PowerString entry prefixes, both the old %$*=~@& or →§αβ«Ð¶ (AltGr+Shift+ISABUDP) work now.
+	- Direct dead key entries in the format <#> = <entry> work too. If the char is an uppercase version, append a plus (<#>+).
+	- "Janitor" inactivity timeout setting (e.g., 2 s) to release any stuck modifiers. These can happen with advanced usage.
+* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
+	- The downloadable release asset .zip file now contains all files needed to run EPKL. No Source/Other/Data nor .bat/.git. files.
+	- The Kaomoji dead key now outshines the Extend layer with a related entry for each shifted letter/symbol, e.g., d( ^◇^)b vs (b￣◇￣)b.
+	- An EPKL_Layouts_Default .ini file has been split off from EPKL_Settings.ini so the layout definitions have a file of their own.
+	- If present, an EPKL_Layouts_Override.ini file will take precedence. In the future, this may be generated by a GUI panel.
+	- Several mappings and settings common to most layouts are now in the Layouts_Default file. This includes the Extend modifier mapping.
+	- The LayStack [ mainLay, baseLay, LayOver, LayDef ] can be used for most mappings and layout info, including Extend and DeadKey overrides.
+	- Added Layout Type (eD or VK) and Other Mod (e.g., Sym) shortcuts to the Layouts.ini file.
+	- Added eD/VK Colemak Curl(DHm) only layouts. Used CurlM/DHm here, to support ortho boards. Ortho help images are on the TODO list.
+	- Fixed: DeadKey+Spc didn't release the base accent as it should.
 
 
 TODO:
@@ -236,11 +274,11 @@ I have more [EPKL] changes on my wishlist, including:
 * A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers?
 * Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * Chainable dead keys, allowing for instance a Mother-of-DKs key for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
-* A settings panel instead of editing .ini files.
+* One or more GUI settings panels instead of editing .ini files.
 * An import module for MSKLC layout files.
   
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2019-03_
+_Øystein "DreymaR" Gadmar, 2020_
 
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)

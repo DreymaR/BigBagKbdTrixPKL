@@ -1,10 +1,10 @@
 ﻿;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL Help Image Generator: Generate help images from the active layout
+;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;      Calls InkScape with a .SVG template to generate a set of .PNG help images
-;;      Edits the SVG template using a lookup dictionary of KLD(CO) key names; see the Remap file
-;;      Example – KLD(CO) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
-;;      The template can hold an area for ISO and another for ANSI, specified in the PKL_ImgGen_Settings.ini file
+;;      Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
+;;      Example – KLD(Co) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
+;;      The template can hold an area for ISO and another for ANSI, specified in the EPKL_ImgGen_Settings.ini file
 ;;      Images are made for each shift state, also for any dead keys if "Full" is chosen
 ;;      Images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
 ;;      Dead keys can be marked in a separate layer of the template image (in bold yellow in the default template)
@@ -17,9 +17,9 @@ makeHelpImages()
 	HIG         := {} 											; This parameter object is passed to subfunctions
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := "Files\_eD_Remap.ini"
-	HIG.PngDic  := ReadKeyLayMapPDic( "CO", "SC", remapFile ) 	; PDic from the CO codes of the SVG template to SC
+	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the CO codes of the SVG template to SC
 	FormatTime, theNow,, yyyy-MM-dd_HHmm 						; Use A_Now (local time) for a folder time stamp
-	imgRoot     := getLayInfo( "layDir" ) . "\ImgGen_" . theNow
+	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . theNow
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\ImgGenerator\EPKL_ImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
@@ -37,6 +37,12 @@ makeHelpImages()
 	SetTimer, ChangeButtonNamesHIG, 100
 	MsgBox, 0x133, Make Help Images?, 
 (
+EPKL Help Image Generator
+============================
+Using Inkscape, make a help image for each Shift/AltGr state
+and dead key under a subfolder of the current layout folder.
+These may then be moved up to the folder for use with EPKL.
+
 Do you want to make a full set of help images
 for the current layout, or only state images?
 (Many Inkscape calls will take a long time!)%makeMsgStr%
@@ -115,8 +121,8 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
 				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				res := "dk_" . dkName
-			} else if ( RegExMatch( ents, "i).*(space|spc).*" ) ) {
-				res := 32 										; Space may be stored as ={space}; show it as a space
+			} else if ( RegExMatch( ents, "i).*(space|spc).*" ) ) { 	; Note: This shouldn't be necessary now, as Spc is stored as 32
+				res := 32 										; Space may be stored as (&)spc or ={space}; if so, show it as a space
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", state ) ) {
 				res := "tm_" . res 								; Mark Tap-or-Mod keys, for state 0:1
 			} else {

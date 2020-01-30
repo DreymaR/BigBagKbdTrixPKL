@@ -100,7 +100,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KL
 
 ;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL activity module
+;;  EPKL activity module
 ;;      Check for inactivity (no clicks/keypresses) in a given period
 ;
 activity_ping(mode = 1) {	; eD WIP: Replace this with A_TimeIdlePhysical
@@ -138,25 +138,32 @@ activityTimer:
 Return
 }
 
-cleanupTimer:
-	if ( A_TimeIdle > getPklInfo( "cleanupTimeOut" ) * 1000 ) { 	; Timeout set in seconds (use TimeIdlePhysical?)
-		for ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin"
-					   , "RShift", "RCtrl", "RAlt", "RWin" ] {
-			if ( getKeyState( mod ) ) {
-				Return 									; If the key is being held down, leave everything be
+pklJanitorTic:
+	_pklCleanup()
+;	_pklActivity() 	; eD WIP
+Return
+
+_pklCleanup() {
+	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 	; The timeout in s is converted to ms
+	if ( A_TimeIdle > timeOut ) { 					 	; eD WIP: Use TimeIdlePhysical w/ mouse hook?
+		for ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
+					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
+			if ( getPklInfo( "cleanupDone" ) || ( getKeyState( mod ) ) ) { 	; eD WIP: && mod != "LCtrl" - Temp. clean up LCtrl anyway to alleviate the stuckness bug with AltGr
+				Return 									; If the key is being held down or we've already cleaned up, leave everything be
 			} else {
 				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
 			}
 		}
-;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 	; Remove mods (avoid stuck mods)
-;		Send {RShift Up}{RCtrl Up}{RAlt Up}{RWin Up} 	; --"--
+		setPklInfo( "cleanupDone", true )
+	} else if ( A_TimeIdlePhysical < timeOut ) { 		; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
+		setPklInfo( "cleanupDone", false ) 				; Recent keyboard activity reactivates the cleanup timer
 	}
-Return
+}
 
 ;;  -----------------------------------------------------------------------------------------------
 ;;
 ;;  Utility functions
-;;      These are minor utility functions used by other parts of PKL
+;;      These are minor utility functions used by other parts of EPKL
 ;
 
 pklMsgBox( msg, s = "", p = "", q = "", r = "" )
@@ -172,20 +179,20 @@ pklMsgBox( msg, s = "", p = "", q = "", r = "" )
 
 pklErrorMsg( text )
 {
-	MsgBox, 0x10, PKL ERROR, %text%`n`nError # %A_LastError%	; PKL Error type message box
+	MsgBox, 0x10, EPKL ERROR, %text%`n`nError # %A_LastError%	; Error type message box
 }
 
 pklWarning( text, time = 5 )
 {
-	MsgBox, 0x30, PKL WARNING, %text%, %time%					; PKL Warning type message box
+	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
 }
 
-pklDebug( text, time = 1 )
+pklDebug( text, time = 2 )
 {
-	MsgBox, 0x30, PKL DEBUG: , %text%, %time%					; PKL Warning type message box
+	MsgBox, 0x30, EPKL DEBUG: , %text%, %time%					; Warning type message box
 }
 
-pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a PKL menu hotkey (used in pkl_init)
+pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used in pkl_init)
 {
 	hkStr   := pklIniRead( hkIniName )
 	if ( hkStr <> "" ) {
@@ -262,6 +269,11 @@ loCase( str ) {
 
 upCase( str ) {
 	Return % Format( "{:U}", str )
+}
+
+bool( val ) { 												; Convert an entry to true or false (default)
+	val := loCase( val )
+	Return ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
 }
 
 convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP

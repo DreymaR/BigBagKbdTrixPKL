@@ -13,7 +13,7 @@ This is the source code README, briefly explaining how to compile PKL/EPKL with 
 Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
-* Daughter topics for implementations, including the [Big Bag for PKL/Windows][CmkPKL] one.
+* Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
 
 * The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).
 
@@ -24,14 +24,14 @@ Compiling
 * AHK compiler v1.1 Unicode is needed for EPKL; v1.0 and v1.1 in ANSI mode work for the original PKL.
 * There's a folder in Source that contains the v1.1 AHK compiler.
 * Choose the right Source\#.ahk file, EPKL or PKL_Orig.
-* Choose to compile into your main PKL folder.
+* Choose to compile into your main EPKL folder.
 * You may choose any name for the .exe and run it afterwards.
 * Choose Source\Resources\Main.ico as the custom icon file.
 
 Setup:
 ------
 
-1. Just compile right into your main PKL folder, or move the resulting .exe file there.
+1. Just compile right into your main EPKL folder, or move the resulting .exe file there.
 2. Adjust any extra settings in the layout.ini file in your layout folder.
    See the Colemak-eD_ISO layout.ini and baseLayout.ini files as examples.
 3. For generic EPKL settings, look in the Files folder, and the EPKL_Settings.ini file.

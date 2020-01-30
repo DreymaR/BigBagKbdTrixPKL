@@ -15,39 +15,50 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- TOFIX: Sticky shift doesn't work on the Ext_ tap-MoDK.
-;		- TOFIX: DK+Space or DK+DK don't release the accent anymore?!? The DK is kept active. Was broken in or before PKL_eD v0-4-7, possibly in v0-4-5 w/ parseSend()?
-;			- So the problem may be that parseSend() uses pkl_SendThis() in some places where it should've done the DK thing that pkl_Send() uses! Make that a sep. fn()?
-;			- Or is it something about CurrNumOfDKs (used to be a global, now KeyInfo)?
-;			- Or... the {Space} -> 32 conversion I took out?!?
-;			- pkl_Send() -> pkl_SendChr() ? - make sure space and others that should release DK get sent right. Should also work for ~#### points.
-;		- TOFIX: Remapping to LAlt doesn't work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
+;		- TOFIX: If a mapping is --, unmapping works but the rest of the line can't contain a comment or any such things as they'll get interpreted as mappings. Check first entry for --.
+;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
+;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
+;		- TOFIX: If starting without Help Image, showing it later doesn't work
 ;		- TOFIX: On the first help img minimizing, a taskbar icon sometimes appears on-screen or in tray. Showing the image once before resizing solved it... not...
+;		- TOFIX: First Extend after a refresh is slow, won't always take. Prepare it somehow?
+;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
+;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
+;		- WIP: Maintenance timer every 2-3 s or so
+;			- Check if no keys are held and no sticky timers counting, then send Up for those that aren't in use. If checking for inactivity first, it's easier.
+;			- Update the OS dead keys etc as necessary.
+;			- Replace activityPing() etc with A_TimeIdlePhysical in the maintenance loop? Or put it in the Janitor! The activityTimer goes every 20 s now.
+;			- Combine w/ other housekeeping...?
+;			- Clear out the old inactivity timer stuff and all its refreshes, and replace it with a check in the new maintenance timer. Make sure to check for both keys and mouse?
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
 ;			- Since these extra DKs won't show up in the normal layout, for now make a list of extra DKs for the HIG? Or, the HIG should use a DK list now instead of registering!
 ;			- Made the "onlyOneDK" of HIG settings into a CSV list so we can render a subset of DKs at will.
-;			- Plan: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
+;			- MoDK plan: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
 ;			- In EPKL_Settings.ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
 ;			- Redefine the dual-role Extend key as a generic tapOrMod key. Treating Extend fully as a mod, it can also be ToM (or sticky?).
-;			- TOFIX: ToM-tap gets transposed when typing fats, the key is sluggish. But if the tap time is set too low, the key can't be tapped instead.
-;				- Don't use the most common keys like STNE? These are more error-prone. Use keys like FU instead?
+;			- TOFIX: ToM-tap gets transposed when typing fast, the key is sluggish. But if the tap time is set too low, the key can't be tapped instead.
 ;				- To fix this, registered interruption. So if something is hit before the mod timer the ToM tap is handled immediately.
 ;				- However, Spc isn't handled correctly!? It still gets transposed.
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
-;		- WIP: Maintenance timer. Every 2 s(?)
-;			- Check if no keys are held and no sticky timers counting, then send Up for those that aren't in use. If checking for inactivity first, it's easier.
-;			- Update the OS dead keys etc as necessary.
-;			- Replace activityPing() etc with A_TimeIdlePhysical in the maintenance loop? The activityTimer goes every 20 s now.
-;			- Combine w/ other housekeeping...?
 ;;  eD TONEXT:
+;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
+;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
+;		- TODO: Mapping aliases for SC### codes. These are too technical for newcomers. Allow any Remap type like Co/QW/etc, e.g., CoTAB or Co_1 or CoRSH. Also QW_S (=Co_R) etc?
+;			- Or the VK codes in PKL_Tables.ini (split off that table then)? But those vary greatly in length which is uglyish.
+;			- Could detect Upper(SubStr(key,1,2)) != "SC" ) and remap if so. Must have entries like Co_A then.
+;			- DONE: Expanded the Co table to include the right-hand block, and made a QW counterpart for the QWERTY people.
+;		- TODO: Remap multi-cycles would be better for many simple swaps such as Mirror. Delimit w/ e.g., / or // (ignoring blanks) ?
+;		- TODO: Dialog GUI to produce EPKL_Layouts_Override.ini and EPKL_Settings_Override.ini files.
+;		- TODO: Replace today's handling of AltGr with an AltGr modifier? So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
+;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
+;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. Maybe that could be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM?
 ;		- TODO: Sensible aliases for OEM_# VK codes! They are confusing for the users. E.g., OEM_GR, OEM_CM, OEM_DT etc. This allows using one common BaseLayout.
-;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) and a lookup table.
+;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) and a lookup table. In the Tables file? Or simply use the Co## KLM codes as with SC, but translate to VK?
 ;			- Use a KbdType entry in the (base)layout.ini file too, and a @K syntax? That'd make the files easier to maintain for ANS/ISO. Use another char than @ since it's common in layouts? £ maybe?
 ;			- Maybe the layout files should have (in their information section?) all the layout info? So that the Settings mainly point to a file and the file sets the KbdType/ErgoMod/etc?
-;		- TODO: Direct one-character DK entries without prefix? So DK images can be made. Or make the Help Img Generator aware, but can't use too long entries.
-;		- TODO: Sticky AltGr. Would be nice since the AltGr symbols are often one-shot.
+;		- TODO: Make the Help Img Generator aware of prefix notation. But limit entry length.
+;		- TODO: Sticky AltGr. Would be nice since the AltGr symbols are often one-shot. The whole AltGr routine may need a rework anyway.
 ;		- Try out <one Shift>+<other Shift> = Caps? How to do that? Some kind of ToM, where the Shift is Shift when held but Caps when (Shift-)tapped?
 ;		- WIP: Import KLC. Use a layout header template.
 ;			- Could have a section of RegEx ccnversions with name tags in the template, which gets used and then cut out.
@@ -58,7 +69,6 @@
 ;				- Can we SplitBy words, like \nDEADKEY\t ?
 ;			- Then in the template there's something like $$tagName$$ where the result is to be inserted.
 ;			- For DK full names, the KEYNAME_DEAD entries could be converted (cut out ACCENT/SIGN, _ for spaces?, cut away parentheses, title case). Update my names accordingly?
-;		- Add the Curl variants w/o Angle. But make a matrix key template to use for them! Well, maybe that needs to be a separate KbdType...?
 ;		- Make pklParseSend() work for DK chaining (one DK releases another)!
 ;			- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this should this happen for @ entries?
 ;			- Removing that isn't enough though? And actually, should a dk chaining start anew? So, replicate the state and effect of a normal layout DK press.
@@ -72,36 +82,35 @@
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;		- Tried *.{Space} on Ext+/, which was interesting. But I think it'd be better non-chording, possibly on a MoDK sequence? E.g., tap Ext,i (on same finger as period).
-;		- TEST: Need to unset baselayout keys if defined in layout? Probably OK to just overwrite?
-;		- TEST: Is this necessary any more: 'img_DKeyDir     = ..\Cmk-eD_ANS\DeadkeyImg'? Or will the setting from the baseLayout just carry over? Maybe for the ergomodded variants?
+;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
 ;		- TEST: Layouts can now unmap keys and dead keys(?) by using a '-1' or 'vk' entry. Or disable by '--'. Tested. Document it!
 ;			- Augmenting/overriding dead key defs in layout.ini (and baseLayout.ini?). Entries of -1 should remove a mapping.
-;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
-;		- TEST: Deactivate each hotkey before setting it, to ensure it gets right if layout and baselayout differ in key type? But need to check if set then.
+;		- TEST: Need to unset baselayout keys if defined in layout? Probably OK to just overwrite?
+;		- TEST: Is this necessary any more: 'img_DKeyDir     = ..\Cmk-eD_ANS\DeadkeyImg'? Or will the setting from the baseLayout just carry over? Maybe for the ergomodded variants?
+;		- TEST: Deactivate each hotkey before setting it, to ensure it gets right if layout and baselayout differ in key type? But need to check if set then. Better: Read top-down?
 ;;  eD TODO:
-;		- Allow layout makers to use any Remap type like CO/VK/etc for keys? Could detect SubStr( key, 1, 2 ) != "SC" ) and remap if so. Must have entries like CO_A then.
-;			- If so, expand the CO table to include the right-hand block? Or just use TC/TQ for those.
-;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones.
-;		- Idea: Repeat key!? Type a key and then any key to get a double letter. Implement as a dead key releasing aa for a etc. Doesn't have to be active by default.
-;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019). 	;eD WIP: Problem w/ AltGr?
+;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones. (Same with Extend mappings.)
+;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
 ;			- New Text send mode for PowerStrings, if desired. Should handle line breaks without the brkMode setting.
 ;		- A proper Compose method, allowing IME-like behavior and much more?!
 ;			- This would allow "proper" Vietnamese, phonetic Kyrillic etc layouts instead of dead keys which work "the wrong way around".
 ;			- Must keep track of previous entries in a buffer then. Clear the buffer on special entries.
 ;			- To ensure it's fast, only check when the last typed glyph is the release glyph of a compose? E.g., you type a^ and the ^ triggers a search producing â.
 ;			- Ideally it should be able to take the same input format as Linux Compose more or less, so people we could import (parts of) its rich Compose tables.
-;		- Shift sensitive Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
 ;		- Could make the Japanese layout now, since dead keys support literals/ligatures!
 ;		- Hebrew layout. Eventually, Arabic too.
-;		- Mirrored one-hand typing as an Extend layer? Would need a separate Extend modifier for it I suppose? E.g., NumPad0 or Down for foot or right-arm switching.
+;		- Mirrored one-hand typing as Remap or Extend layer? Would need a separate Extend modifier for it I suppose? E.g., NumPad0 or Down for foot or right-arm switching.
 ;			- Mirroring is hard to implement as a remap, since it'd mostly consist of many two-key loops. Extend looks promising though, except it hogs the Ext key.
-;		- A settings panel instead of editing .ini files.
+;			- A better syntax for composite loops would remedy this. For instance, |  QU |  SC |  /  |  MN |  SL | for two separate swaps.
+;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;		- A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
-;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them?
+;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them? The LayStack can do CompactMode...
 ;;  eD ONHOLD:
-;		- Remove the executable from the .git repo to save space? It's now easy to compile with the Compile_EPKL.bat file.
+;		- Shift sensitive multi-Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
+;			- In most cases though, that'd be useful mostly for releasing more different glyphs. This is better done with dead keys, as these avoid heavy chording.
+;		- Idea: Repeat key!? Type a key and then any key to get a double letter. Implement as a dead key releasing aa for a etc. Doesn't have to be active by default.
 ;		- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
 ;			- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;		- Allow escaped semicolons (`;) in iniRead?
@@ -126,40 +135,52 @@
 ;	- EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
 ;	- EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
 ;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
-;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap.
-;		- The EPKL.exe binary file is no longer version controlled. It can be compiled using the .bat file but is also provided with each release.
-;		- Dead keys on Extend key tap. Examples: Tap {Extend, n} for parentheses with positioning. {Ext, z/Z} Undo/Redo. {Shift, Ext, letter} for kaomoji.
-;		- IniRead can now handle UTF-8 .ini files (but not UTF-16) allowing Unicode in all entries.
-;		- For InputRaw/Send/AHK/Blind/Unicode/DeadKey/PowerString entry prefixes, both the old %$*=~@& or →§αβ«Ð¶ (AltGr+Shift+I/S/A/B/U/D/P) work now.
-;		- Direct dead key entries in the format <#> = <entry>. If the char is an uppercase version, append a plus (<#>+).
-;		- Inactivity timeout setting (e.g., 2 s) to release any stuck modifiers. These can happen with advanced usage.
+;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
+;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
+;		- The downloadable release asset .zip file now contains all files needed to run EPKL. No Source/Other/Data nor .bat/.git. files.
+;		- The Kaomoji dead key now outshines the Extend layer with a related entry for each shifted letter/symbol, e.g., d( ^◇^)b vs (b￣◇￣)b.
+;		- An EPKL_Layouts_Default .ini file has been split off from EPKL_Settings.ini so the layout definitions have a file of their own.
+;		- If present, an EPKL_Layouts_Override.ini file will take precedence. In the future, this may be generated by a GUI panel.
+;		- Several mappings and settings common to most layouts are now in the Layouts_Default file. This includes the Extend modifier mapping.
+;		- The LayStack [ mainLay, baseLay, LayOver, LayDef ] can be used for most mappings and layout info, including Extend and DeadKey overrides.
+;		- Added Layout Type (eD or VK) and Other Mod (e.g., Sym) shortcuts to the Layouts.ini file.
+;		- The 'Sym' (;>' />=>- cycles) symbol key rotation mod I'm testing is available as a remap.
+;		- The CurlM/DHm variant of the Curl(DH) mod is available through the remap 'Curl-DHmMod'; it isn't available for most premade layouts though.
+;		- Added eD/VK Colemak Curl(DHm) only layouts. Used CurlM/DHm here, to support ortho boards. Ortho help images are on the TODO list.
+;		- Fixed: The Extend modifier in the BaseLayout didn't work so most layouts didn't get Extend before adding it to their layout.ini manually.
+;		- Fixed: From PKL[eD] v0-4-5, DK+Spc didn't release the base accent as Spc was prefixed. Now, (&)Spc and {Space} are turned into a space glyph.
+;		- Fixed: Some kaomoji with ^ or ` in them would get confused - (=･ω･^^=)丿 - due to insufficient handling of OS dead keys.
+;		- Fixed: Ensured that a quickly used Extend press isn't open for re-use as an Extend tap! Example: Ext+Space, then quickly E.
+;		- Fixed: The janitor timer kept resending mod up strokes every # s. Now it's once only after recent keyboard activity.
+;		- Minor: Made a bool() fn to use bool(pklIniRead()) instead of a dedicated pklIniBool().
+;		- Tested: The LAlt key (SC038) can work as Extend Modifier, just like any other key can. (Remapping another key to LAlt can still be tricky.)
 
 
-setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR]
-setPklInfo( "pklVers", "1.1.2" ) 											; EPKL Version (was PKL[eD] v0.4.8-v0.4.8, now EPKL v1.0.0-)
+setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
+setPklInfo( "pklVers", "1.1.3" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
-setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" )		; http://pkl.sourceforge.net/
+setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
 SendMode Event
-SetKeyDelay 3 																; The Send key delay wasn't set in PKL, defaulted to 10
+SetKeyDelay 3 												; The Send key delay wasn't set in PKL, defaulted to 10
 SetBatchLines, -1
-Process, Priority, , H
-Process, Priority, , R
+Process, Priority, , H 										; High process priority
+Process, Priority, , R 										; Real-time process priority
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables are largely replaced by the get/set info framework
-setKeyInfo( "CurrNumOfDKs", 0 ) 			; How many dead keys were pressed	(was 'CurrentDeadKeys')
-setKeyInfo( "CurrNameOfDK", 0 ) 			; Current dead key's name			(was 'CurrentDeadKeyName')
-setKeyInfo( "CurrBaseKey_", 0 ) 			; Current base key					(was 'CurrentBaseKey')
-;setKeyInfo( "HotKeyBuffer", 0 ) 			; Hotkey buffer for pkl_keypress	(was 'HotkeysBuffer')
-setPklInfo( "File_PklIni", "EPKL_Settings.ini"      ) 	; Defined globally  	(was 'pkl.ini')
-setPklInfo( "LayFileName", "layout.ini"             ) 	; --"--
-setPklInfo( "File_PklDic", "Files\PKL_Tables.ini"   ) 	; Info dictionary file, mostly from internal tables
-setPklInfo( "AdvancedMode", pklIniBool( "advancedMode", false ) )	; Extra debug info etc
+setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
+setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
+setKeyInfo( "CurrBaseKey_", 0 ) 				; Current base key 					(was 'CurrentBaseKey')
+;setKeyInfo( "HotKeyBuffer", 0 ) 				; Hotkey buffer for pkl_keypress 	(was 'HotkeysBuffer')
+setPklInfo( "File_PklSet", "EPKL_Settings"          ) 		; Used globally  		(was in 'pkl.ini')
+setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 		; Used globally  		(was in 'pkl.ini')
+setPklInfo( "LayFileName", "layout.ini"             ) 		; --"--
+setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 		; Info dictionary file, mostly from internal tables
 
 arg = %1% ; Layout from command line parameter
-initPklIni( arg ) 							; Read settings from pkl.ini
-initLayIni() 								; Read settings from layout.ini and layout part files
+initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
+initLayIni() 												; Read settings from layout.ini and layout part files
 activatePKL()
 Return  	; end main
 
@@ -275,13 +296,13 @@ changeActiveLayout:
 Return
 
 rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL Settings list changes
-	activeLay   := getLayInfo( "active" )			; Layout code (path) of the active layout
-	numLayouts  := getLayInfo( "numOfLayouts" )		; The number of listed layouts
+	activeLay   := getLayInfo( "active" ) 				; Layout code (path) of the active layout
+	numLayouts  := getLayInfo( "numOfLayouts" ) 		; The number of listed layouts
 	Loop % numLayouts {
 		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
 	}
-	changeLayout( "UseLayPos_" . actLayNum )		; Rerun the same layout, telling pkl_init to use position.
+	changeLayout( "UseLayPos_" . actLayNum ) 			; Rerun the same layout, telling pkl_init to use position.
 Return
 
 changeLayoutMenu:
@@ -310,7 +331,7 @@ Return
 
 epklDebugWIP:
 	pklDebug( "Running WIP routine specified in PKL_main", 1 )
-	importLayouts() 								; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 Return
 
 ; ####################### functions #######################

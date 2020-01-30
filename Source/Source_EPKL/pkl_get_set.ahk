@@ -1,7 +1,7 @@
 ﻿;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL get/set module
-;;      Static associative dictionaries for PKL info are used instead of most globals
+;;  EPKL get/set module
+;;      Static associative dictionaries for EPKL info are used instead of most globals
 ;
 /*
 	LayoutInfo entries:
@@ -66,12 +66,12 @@ getPklInfo( key, value = "", set = 0 )
 
 ;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  PKL locale module
+;;  EPKL locale module
 ;;      Functions to set up locale strings
 ;;      Used by initPklIni() in pkl_init.ahk
 ;
 
-pkl_locale_load( lang, compact = 0 )
+pkl_locale_load( lang )
 {
 	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too
 	if ( not initialized )
@@ -99,7 +99,7 @@ pkl_locale_load( lang, compact = 0 )
 	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeImgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
 	
 	file := lang . ".ini"
-	file := ( compact ) ? file : "Files\Languages\" . file
+	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
 	if ( not FileExist( file ) )					; If the language file isn't found, we'll just use the defaults
 		Return
 	sect := iniReadSection( file, "pkl" )

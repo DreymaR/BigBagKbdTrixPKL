@@ -22,25 +22,26 @@ iniReadSection( file, section )
 ;;  -----------------------------------------------------------------------------------------------
 ;;
 ;;  Read a (pkl).ini value
-;;      Usage: val := pklIniRead( <key>, [default], [inifile|shortstr], [section], [altfile|str], [stripcomments] )
+;;      Usage: val := pklIniRead( <key>, [default], [inifile(s)|shortstr], [section], [stripcomments] )
 ;;      Special key values return a section list or the contents of a section
 ;;      Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
-pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "", strip = 1 )
+pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 {
 	if ( not key )
 		Return
-	for ix, theFile in [ iniFile, altFile ] 							; Read from iniFile. Failing that, altFile.
+	layStck := ( iniFile == "LayStk" ) ? true : false
+	if ( layStck ) { 													; The LayStack is a special case,
+		iniFile := getPklInfo( "LayStack" ) 							; going through all 4 layout files.
+		iniDirs := getPklInfo( "DirStack" )
+	}
+	if ( ! IsObject( iniFile ) ) 										; Turn single-file calls into arrays
+		iniFile := [ iniFile ]
+	for ix, theFile in iniFile 											; Read from iniFile. Failing that, altFile.
 	{
-		if        ( theFile == "LayIni" ) {
-			hereDir := getLayInfo( "layDir" )							; ".\" syntax for the main layout dir
-		} else if ( theFile == "BasIni" ) {
-			hereDir := getLayInfo( "basDir" )							; ".\" syntax for the base layout dir
-		} else {
-			hereDir := "."
-		}
+		hereDir := ( layStck ) ? iniDirs[ix] : "." 						; LayStack files may use own home dirs
 		if ( ( not inStr( theFile, "." ) ) and FileExist( getPklInfo( "File_" . theFile ) ) )	; Special files
-			theFile := getPklInfo( "File_" . theFile )					; (These include PklIni, LayIni, PklDic)
+			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
 		if        ( key == "__List" ) { 								; Specify key = -1 for a section list
 			IniRead, val, %theFile% 									; (AHK v1.0.90+)
 		} else if ( key == "__Sect" ) { 								; Specify key = -2 to read a whole section
@@ -48,7 +49,7 @@ pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 		} else {
 			IniRead, val, %theFile%, %section%, %key%, %A_Space%		; IniRead uses a Space for blank defaults
 		}
-		if ( val )
+		if ( val ) 														; Once a value is found, break the for loop
 			Break
 	}	; end for
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
@@ -63,16 +64,9 @@ pklIniRead( key, default = "", iniFile = "PklIni", section = "pkl", altFile = ""
 	Return val
 }
 
-pklIniBool( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "" )	; Special .ini read for boolean values
+pklIniCSVs( key, default = "", iniFile = "PklSet", section = "pkl" )	; Read a CSV .ini entry into an array
 {
-	val := loCase( pklIniRead( key, default, iniFile, section, altFile ) )
-	val := ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false 	; Could use InStr( "yes|1|true"
-	Return val
-}
-
-pklIniCSVs( key, default = "", iniFile = "PklIni", section = "pkl", altFile = "" )	; Read a CSV .ini entry into an array
-{
-	val := pklIniRead( key, default, iniFile, section, altFile )		; The default could be, e.g., "400,300"
+	val := pklIniRead( key, default, iniFile, section ) 				; The default could be, e.g., "400,300"
 	val := StrSplit( val, ",", " `t" )
 	Return val
 }

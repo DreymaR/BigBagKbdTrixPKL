@@ -4,9 +4,9 @@ rem Licensed as MIT (full text: https://opensource.org/licenses/MIT)
 rem Modified for EPKL compilation by DreymaR, 2019-03
 
 SETLOCAL
-echo *********************************************
-echo *****   EPKL COMPILER (using AHK2EXE)   *****
-echo *********************************************
+echo **********************************************
+echo *****    EPKL COMPILER, using AHK2EXE    *****
+echo **********************************************
 echo.
 
 REM *** SET YOUR PATH TO THE AHK COMPILER HERE

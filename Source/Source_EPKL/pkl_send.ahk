@@ -29,8 +29,8 @@
 
 pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltGr states
 {
-	toggleAltGr := getAltGrState()
-	if ( toggleAltGr )
+	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up" 
+	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!?
 		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed:
 	prefix := ( inStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
@@ -46,7 +46,7 @@ pkl_CheckForDKs( ch )
 	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
 		SpaceWasSentForSystemDKs = 0
 		Return false
-	} else { 	; eD TOFIX: Why doesn't a Space key press get sent here? Because the ={Space} gets sent to pkl_ParseSend()!
+	} else {
 		setKeyInfo( "CurrBaseKey_", ch )			; DK(s) active, so record the pressed key as Base key
 		if ( SpaceWasSentForSystemDKs == 0 )		; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
