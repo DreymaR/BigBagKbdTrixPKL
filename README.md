@@ -29,8 +29,8 @@ Getting EPKL up and running
     - The format is: `layout = ‹1st layout folder›:‹1st menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc
 * Now, simply run EPKL.exe inside its main folder in any way you like!
 
-More Know-How-To
-----------------
+More Know-How
+-------------
 * This repo contains executables for EPKL as well as the original PKL, and source code for both.
 * The layouts are updated to EPKL format though, so they'd need some reconstruction for the old PKL.
 * The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings.ini][PklIni] holds general program settings.
@@ -172,7 +172,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 * In that folder's layout.ini file, edit the remap fields to represent the new settings.
     - Here, change `mapSC_layout = CmkCAW_ISO` to `mapSC_layout = Angle_ISO`.
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
-    - Here, `mapSC_extend = Angle_ISO` too since Angle is a "hard" ergo mod. (If using Curl-DH, you can move Ctrl+V by adding _ExtDV.)
+    - Here, `mapSC_extend = Angle_ISO` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move Ctrl+V by adding 'V-B,' in front.
 * Change any key mappings you want to tweak.
     - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
     - See the next section to learn more about key mapping syntax.

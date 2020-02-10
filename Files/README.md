@@ -116,7 +116,7 @@ DONE:
 	- 'Spc' and 'Tab' layout mappings, sending {Blind}{Key}. Makes for compact layout entries for the delimiting whitespace characters.
 	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' rather than the extend_key setting with a mapped key as before.
 	- Extend layers can be set as hard/soft in the _Extend file. Soft layers follow mnemonic letter mappings, hard ones are positional (like my Ext1/2).
-		- The Curl(DH) Ext+V may still be mnemonic/soft instead of positional/hard (^V on Ext+D). Use _ExtDV with AWide/Angle mods for mapSC_extend then.
+		- The Curl(DH) Ext+V may still be mnemonic/soft instead of positional/hard (^V on Ext+D). [v1.1.3: Use `mapSC_extend = V-B,` before AWide/Angle mods.]
 * EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 	- Fixed: HIG made a state8 image of semicolons. This was due to the SGCaps states (8:9) being added unnecessarily.  (つ_〃*)
 		- Also fixed some minor HIG bugs related to hex dead key values etc.
@@ -156,6 +156,11 @@ DONE:
 	- Fixed: The janitor timer kept resending mod up strokes every # s. Now it's once only after recent keyboard activity.
 	- Minor: Made a bool() fn to use bool(pklIniRead()) instead of a dedicated pklIniBool().
 	- Tested: The LAlt key (SC038) can work as Extend Modifier, just like any other key can. (Remapping another key to LAlt can still be tricky.)
+* EPKL v1.1.4α: Remap/mapping tweaks
+	- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
+	- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
+	- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
+	- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
 
 
 TODO:

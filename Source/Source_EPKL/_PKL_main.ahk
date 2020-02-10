@@ -15,12 +15,12 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- TOFIX: If a mapping is --, unmapping works but the rest of the line can't contain a comment or any such things as they'll get interpreted as mappings. Check first entry for --.
+;		- TOFIX: AltGr+Spc, in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space? Related to the NBSP mapping.
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
+;		- TOFIX: First Extend after a refresh is slow, won't always take until the second key press. Prepare it somehow?
 ;		- TOFIX: If starting without Help Image, showing it later doesn't work
 ;		- TOFIX: On the first help img minimizing, a taskbar icon sometimes appears on-screen or in tray. Showing the image once before resizing solved it... not...
-;		- TOFIX: First Extend after a refresh is slow, won't always take. Prepare it somehow?
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- WIP: Maintenance timer every 2-3 s or so
@@ -48,17 +48,16 @@
 ;			- Or the VK codes in PKL_Tables.ini (split off that table then)? But those vary greatly in length which is uglyish.
 ;			- Could detect Upper(SubStr(key,1,2)) != "SC" ) and remap if so. Must have entries like Co_A then.
 ;			- DONE: Expanded the Co table to include the right-hand block, and made a QW counterpart for the QWERTY people.
-;		- TODO: Remap multi-cycles would be better for many simple swaps such as Mirror. Delimit w/ e.g., / or // (ignoring blanks) ?
 ;		- TODO: Dialog GUI to produce EPKL_Layouts_Override.ini and EPKL_Settings_Override.ini files.
-;		- TODO: Replace today's handling of AltGr with an AltGr modifier? So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
+;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
 ;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
+;			- Also allow Sticky AltGr. Very nice since the AltGr mappings are usually one-shot.
 ;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. Maybe that could be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM?
 ;		- TODO: Sensible aliases for OEM_# VK codes! They are confusing for the users. E.g., OEM_GR, OEM_CM, OEM_DT etc. This allows using one common BaseLayout.
 ;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) and a lookup table. In the Tables file? Or simply use the Co## KLM codes as with SC, but translate to VK?
-;			- Use a KbdType entry in the (base)layout.ini file too, and a @K syntax? That'd make the files easier to maintain for ANS/ISO. Use another char than @ since it's common in layouts? £ maybe?
+;			- Use a KbdType entry in the (base)layout.ini file too, and a @K syntax? That'd make the files easier to maintain for ANS/ISO. Use another char than @ since it's common in layouts? § maybe?
 ;			- Maybe the layout files should have (in their information section?) all the layout info? So that the Settings mainly point to a file and the file sets the KbdType/ErgoMod/etc?
 ;		- TODO: Make the Help Img Generator aware of prefix notation. But limit entry length.
-;		- TODO: Sticky AltGr. Would be nice since the AltGr symbols are often one-shot. The whole AltGr routine may need a rework anyway.
 ;		- Try out <one Shift>+<other Shift> = Caps? How to do that? Some kind of ToM, where the Shift is Shift when held but Caps when (Shift-)tapped?
 ;		- WIP: Import KLC. Use a layout header template.
 ;			- Could have a section of RegEx ccnversions with name tags in the template, which gets used and then cut out.
@@ -81,15 +80,9 @@
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "St8|SGCap Modifier"? Can translate in _checkModName()
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;		- Tried *.{Space} on Ext+/, which was interesting. But I think it'd be better non-chording, possibly on a MoDK sequence? E.g., tap Ext,i (on same finger as period).
 ;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
-;		- TEST: Layouts can now unmap keys and dead keys(?) by using a '-1' or 'vk' entry. Or disable by '--'. Tested. Document it!
-;			- Augmenting/overriding dead key defs in layout.ini (and baseLayout.ini?). Entries of -1 should remove a mapping.
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
-;		- TEST: Need to unset baselayout keys if defined in layout? Probably OK to just overwrite?
-;		- TEST: Is this necessary any more: 'img_DKeyDir     = ..\Cmk-eD_ANS\DeadkeyImg'? Or will the setting from the baseLayout just carry over? Maybe for the ergomodded variants?
-;		- TEST: Deactivate each hotkey before setting it, to ensure it gets right if layout and baselayout differ in key type? But need to check if set then. Better: Read top-down?
 ;;  eD TODO:
 ;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones. (Same with Extend mappings.)
 ;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
@@ -101,9 +94,12 @@
 ;			- Ideally it should be able to take the same input format as Linux Compose more or less, so people we could import (parts of) its rich Compose tables.
 ;		- Could make the Japanese layout now, since dead keys support literals/ligatures!
 ;		- Hebrew layout. Eventually, Arabic too.
-;		- Mirrored one-hand typing as Remap or Extend layer? Would need a separate Extend modifier for it I suppose? E.g., NumPad0 or Down for foot or right-arm switching.
-;			- Mirroring is hard to implement as a remap, since it'd mostly consist of many two-key loops. Extend looks promising though, except it hogs the Ext key.
-;			- A better syntax for composite loops would remedy this. For instance, |  QU |  SC |  /  |  MN |  SL | for two separate swaps.
+;		- Mirrored one-hand typing as Remap, Extend or other layer?
+;			- For Extend, would need a separate Ext modifier for it? E.g., NumPad0 or Down for foot or right-arm switching. But is that too clunky?
+;			- SGCaps could work, but would require each layout to have SGC mappings to allow mirroring then. And a separate SGC modifier.
+;			- Layout switching is usually done by restarting EPKL which is too clunky. But if we could have a switch modifier that temporarily activates the next layout...?
+;			- This would require preloading more than one layout which takes a bit of reworking. Possibly... Allow an alt-set of the remap only, remapping on the fly w/ a mod?
+;			- Mirroring as a remap can now use minicycles of many two-key loops. For instance, |  QU |  SC /  MN |  SL | for two separate swaps.
 ;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;		- A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
 ;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them? The LayStack can do CompactMode...
@@ -137,27 +133,15 @@
 ;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-;		- The downloadable release asset .zip file now contains all files needed to run EPKL. No Source/Other/Data nor .bat/.git. files.
-;		- The Kaomoji dead key now outshines the Extend layer with a related entry for each shifted letter/symbol, e.g., d( ^◇^)b vs (b￣◇￣)b.
-;		- An EPKL_Layouts_Default .ini file has been split off from EPKL_Settings.ini so the layout definitions have a file of their own.
-;		- If present, an EPKL_Layouts_Override.ini file will take precedence. In the future, this may be generated by a GUI panel.
-;		- Several mappings and settings common to most layouts are now in the Layouts_Default file. This includes the Extend modifier mapping.
-;		- The LayStack [ mainLay, baseLay, LayOver, LayDef ] can be used for most mappings and layout info, including Extend and DeadKey overrides.
-;		- Added Layout Type (eD or VK) and Other Mod (e.g., Sym) shortcuts to the Layouts.ini file.
-;		- The 'Sym' (;>' />=>- cycles) symbol key rotation mod I'm testing is available as a remap.
-;		- The CurlM/DHm variant of the Curl(DH) mod is available through the remap 'Curl-DHmMod'; it isn't available for most premade layouts though.
-;		- Added eD/VK Colemak Curl(DHm) only layouts. Used CurlM/DHm here, to support ortho boards. Ortho help images are on the TODO list.
-;		- Fixed: The Extend modifier in the BaseLayout didn't work so most layouts didn't get Extend before adding it to their layout.ini manually.
-;		- Fixed: From PKL[eD] v0-4-5, DK+Spc didn't release the base accent as Spc was prefixed. Now, (&)Spc and {Space} are turned into a space glyph.
-;		- Fixed: Some kaomoji with ^ or ` in them would get confused - (=･ω･^^=)丿 - due to insufficient handling of OS dead keys.
-;		- Fixed: Ensured that a quickly used Extend press isn't open for re-use as an Extend tap! Example: Ext+Space, then quickly E.
-;		- Fixed: The janitor timer kept resending mod up strokes every # s. Now it's once only after recent keyboard activity.
-;		- Minor: Made a bool() fn to use bool(pklIniRead()) instead of a dedicated pklIniBool().
-;		- Tested: The LAlt key (SC038) can work as Extend Modifier, just like any other key can. (Remapping another key to LAlt can still be tricky.)
+;	- EPKL v1.1.4α: Remap/mapping tweaks
+;		- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
+;		- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
+;		- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
+;		- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.3" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.4α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 

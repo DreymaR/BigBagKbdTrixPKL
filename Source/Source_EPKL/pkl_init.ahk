@@ -168,52 +168,51 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		if ( key == "<NoKey>" ) || ( key == "shiftStates" ) 			; This could be mapped, but usually it's from pklIniKeyVal()
 			Continue
 		key     := scMapLay[ key ] ? scMapLay[ key ] : key 				; If there is a SC remapping, apply it 	; eD WIP: Also handle SC aliases like Co_TAB
-		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; eD WIP: If a key is at all defined, mark it as set
+		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
 			Continue
-		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; eD WIP: Skip marked keys for the rest of the LayStack
+		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
 		entries := RegExReplace( entries, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
 		entry   := StrSplit( entries, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr  := ( entry.MaxIndex() < 2 + shiftState.MaxIndex() ) 
+		numEntr := ( entry.MaxIndex() < 2 + shiftState.MaxIndex() ) 
 			? entry.MaxIndex() : 2 + shiftState.MaxIndex() 				; Comments make pseudo-entries, so truncate them
-;		extKey := "--" 													; For each layout file, look to mark a key as Extend key
-		if ( InStr( entry[1], "/" ) ) { 								; Check for Tap-or-Modifier keys (ToM):
-			tomEnts  := StrSplit( entry[1], "/" ) 						;   Their VK entry is of the form 'VK/ModName'.
-			entry[1] := tomEnts[1]
-			tapMod   := _checkModName( tomEnts[2] )
-			extKey := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as the Extend key (for ExtendIsPressed)
+		entry1  := ( numEntr > 0 ) ? entry[1] : ""
+		entry2  := ( numEntr > 1 ) ? entry[2] : ""
+		if ( InStr( entry1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
+			tomEnts := StrSplit( entry1, "/" ) 							;   Their VK entry is of the form 'VK/ModName'.
+			entry1  := tomEnts[1]
+			tapMod  := _checkModName( tomEnts[2] )
+			extKey  := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as the Extend key (for ExtendIsPressed)
 			setKeyInfo( key . "ToM", tapMod )
 		} else {
-			tapMod   := ""
+			tapMod  := ""
 		}
-		vkStr := "i)virtualkey|vk|vkey|-1" 								; RegEx needle for VKey entries, ignoring case
-		if ( numEntr == 1 ) && RegExMatch( entry[1], vkStr) { 			; Check the entry for VK/-1/etc (VK map the key to itself)
-			numEntr  := 2
-			entry[1] := "VK" . getVKeyCodeFromName( vkDic[key] )		; Find the right VK code for the key, from the Remap file
-			entry[2] := "VKey"
+		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 								; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
+		if RegExMatch( entry1, vkStr) { 								; If the first entry is a VKey one, VK map the key to itself ; ( numEntr == 1 ) && 
+			numEntr   := 2
+			entry1    := "VK" . getVKeyCodeFromName( vkDic[key] )		; Find the right VK code for the key, from the Remap file
+			entry2    := "VKey"
 		}
-		if ( numEntr < 2 ) { 											; An empty or one-entry key mapping will deactivate the key
+		if ( numEntr < 2 ) || ( entry1 == "--" ) { 						; An empty or one-entry key mapping will deactivate the key
 			Hotkey, *%key%   ,  doNothing 								; The *SC### format maps the key regardless of modifiers.
 			Hotkey, *%key% Up,  doNothing 								; eD WIP: Does a key Up doNothing help to unset better?
-			Continue 									; eD WIP: Is this working though? With base vs layout?
+			Continue 													; eD WIP: Is this working though? With base vs layout?
 		}
-		if ( InStr( "modifier", loCase(entry[2]) ) == 1 ) { 			; Entry 2 is either the Cap state (0-5), 'VK' or 'Modifier'
-			entry[1] := _checkModName( entry[1] ) 						; Modifiers are stored as their AHK or special names
-			extKey := ( entry[1] == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'
-			setKeyInfo( key . "vkey", entry[1] ) 						; Set VK as modifier name, e.g., "RShift", "AltGr" or "Extend"
-			entry[2] := -2 												; -2 = Modifier
+		if ( InStr( "modifier", loCase(entry2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'VK' or 'Modifier'
+			entry1    := _checkModName( entry1 ) 						; Modifiers are stored as their AHK or special names
+			extKey    := ( entry1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'
+			setKeyInfo( key . "vkey", entry1 ) 							; Set VK as modifier name, e.g., "RShift", "AltGr" or "Extend"
+			entry2  := -2 												; -2 = Modifier
 		} else {
-			vkcode := getVKeyCodeFromName( entry[1] )					; Translate to the two-digit VK## hex code (Uppercase)
-			vkcode := vkMapMec[ vkcode ] ? vkMapMec[ vkcode ] : vkcode	; Remap the VKey here before assignment.
-			setKeyInfo( key . "vkey", vkcode )							; Set VK code (hex ##) for the key
-			entry[2] := RegExMatch( entry[2], vkStr ) ? -1 : entry[2] 	; -1 = VKey
+			vkcode := getVKeyCodeFromName( entry1 ) 					; Translate to the two-digit VK## hex code (Uppercase)
+			vkcode := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 		; Remap the VKey here before assignment.
+			setKeyInfo( key . "vkey", vkcode ) 							; Set VK code (hex ##) for the key
+			entry2  := RegExMatch( entry2, vkStr ) ? -1 : entry2 		; -1 = VKey internally
 		}
-		setKeyInfo( key . "capSt", entry[2] ) 							; Set Caps state (0-5 for states; -1 VK; -2 Mod)
-;			Hotkey, *%key%   ,  Off 	; eD WIP: This crashes if hotkey isn't set. Check first? Or unnecessary?
-;			Hotkey, *%key% Up,  Off
+		setKeyInfo( key . "capSt", entry2 ) 							; Set Caps state (0-5 for states; -1 VK; -2 Mod)
 		if ( tapMod ) { 												; Tap-or-Modifier
 			Hotkey, *%key%   ,  tapOrModDown
 			Hotkey, *%key% Up,  tapOrModUp
-		} else if ( entry[2] == -2 ) {									; Set modifier keys, including Extend
+		} else if ( entry2 == -2 ) {									; Set modifier keys, including Extend
 			Hotkey, *%key%   ,  modifierDown
 			Hotkey, *%key% Up,  modifierUp
 		} else {
@@ -263,7 +262,6 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		extStck := layStck
 		if FileExist( extFile )
 			extStck.push( extFile ) 										; The LayStack overrides the dedicated file
-;		( 1 ) ? pklDebug( extStck[1] . "`n" . extStck[2] . "`n" . extStck[3] . "`n" . extStck[4] . "`n" . extStck[5], 4 )  ; eD DEBUG
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
 		for ix, thisFile in extStck 									; Go through the LayStack then the ExtendFile. eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
 		{																; Parse the Extend files
@@ -299,9 +297,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;;  -----------------------------------------------------------------------------------------------
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
-	;;  eD TODO: List both a base DK table file and an optional local one adding/overriding it?
-	;;           Or, always use a local deadkey.ini in addition if it exists?
-	;;           An overriding file could add a -1 entry to remove a dk entry found in the base file
+	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
+	;;  - A -- or -1 entry in a overriding LayStack file disables any corresponding entry in the base DK file.
 	;
 	Loop % 32 {															; Start with the default dead key table
 		key := "@" . Format( "{:02}", A_Index ) 						; Pad with zero if index < 10

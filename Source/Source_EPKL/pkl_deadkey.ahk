@@ -9,7 +9,8 @@
 		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkFile, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
 		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
-		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as  ~#### hex Unicode point 	; eD WIP
+		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
+		val := ( val == "--" ) ? -1 : val 					; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		if val is integer
 			val := Format( "{:i}", val ) 					; Converts hex to decimal so it's always treated as the same number

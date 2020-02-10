@@ -43,30 +43,34 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 				pklWarning( "Remap element '" . A_LoopField . "' not found", 3 )
 			thisType  := SubStr( thisCycle, 1, 2 )			; KLM map type, such as TC for TMK-like Colemak
 ;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
-			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and extra pipes
+			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and wrapping pipes
 			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
 		}	; end loop
 		if ( mapType == "SC" )								; Remap pdic from thisType to SC
-			mapDic := ReadKeyLayMapPDic( thisType, "SC", mapFile )
-		thisCycle := StrSplit( fullCycle, "|", " `t" )		; Parse cycle by pipe, and create mapping pdic
-		numSteps  := thisCycle.MaxIndex()
-		Loop % numSteps {									; Loop to get proper key codes
-			this := thisCycle[ A_Index ]
-			if ( mapType == "SC" ) {						; Remap from thisType to SC
-				thisCycle[ A_Index ] := mapDic[ this ]
-			} else if ( mapType == "VK" )  {				; Remap from VK name/code to VK code
-				thisCycle[ A_Index ] := getVKeyCodeFromName( this )
-			}	; end if
-		}	; end loop
-		Loop % numSteps {									; Loop to (re)write remap pdic
-			this := thisCycle[ A_Index ]					; This key's code gets remapped to...
-			this := ( mapType == "SC" ) ? rdic[ this ] : this	; When chaining maps, map the remapped key ( a→b→c )
-			that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
-			pdic[ this ] := that							; Map the (remapped?) code to the next one
-			tdic[ that ] := this							; Keep the reverse mapping for later cycles
-		}	; end loop (remap one full cycle)
-		for key, val in tdic 
-			rdic[ key ] := val								; Activate the lookup dict for the next cycle
+			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
+		themCycls   := StrSplit( fullCycle, "/", " `t" ) 	; Parse cycle to minicycles:  | a | b / c | d | e |
+		for ix, minCycl in themCycls { 	; eD WIP
+			thisCycle   := StrSplit( minCycl, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
+;			thisCycle   := StrSplit( fullCycle, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
+			numSteps    := thisCycle.MaxIndex()
+			Loop % numSteps { 								; Loop to get proper key codes
+				this := thisCycle[ A_Index ]
+				if ( mapType == "SC" ) { 					; Remap from thisType to SC
+					thisCycle[ A_Index ] := mapDic[ this ]
+				} else if ( mapType == "VK" )  { 			; Remap from VK name/code to VK code
+					thisCycle[ A_Index ] := getVKeyCodeFromName( this )
+				}	; end if
+			}	; end loop
+			Loop % numSteps { 								; Loop to (re)write remap pdic
+				this := thisCycle[ A_Index ] 				; This key's code gets remapped to...
+				this := ( mapType == "SC" ) ? rdic[ this ] : this 	; When chaining maps, map the remapped key ( a→b→c )
+				that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
+				pdic[ this ] := that 						; Map the (remapped?) code to the next one
+				tdic[ that ] := this 						; Keep the reverse mapping for later cycles
+			}	; end loop (remap one full cycle)
+			for key, val in tdic 
+				rdic[ key ] := val 							; Activate the lookup dict for the next cycle
+		}	; end loop (parse minicycles)
 	}	; end loop (parse CSV)
 ;; eD remapping cycle notes:
 ;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
