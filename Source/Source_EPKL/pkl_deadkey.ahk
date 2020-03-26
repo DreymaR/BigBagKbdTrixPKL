@@ -50,7 +50,7 @@ pkl_DeadKey( DK )
 		setKeyInfo( "CurrBaseKey_", 0 )
 ;		endk := "{" . Substr(ErrorLevel,8) . "}"			; eD: I found it strange that Esc and others shouldn't just cancel the dead key.
 ;		pkl_Send( DeadKeyChar )								; Forbidden keys would both release entry 0 and...
-;		if ( not InStr( "{Backspace}{Delete}{Escape}{F", endk ) )
+;		if not InStr( "{Backspace}{Delete}{Escape}{F", endk )
 ;			Send %endk%										; ...do their thing, so beware!
 		Return
 	}

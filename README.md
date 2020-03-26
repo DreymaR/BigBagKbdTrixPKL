@@ -170,7 +170,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak-eD](./Layouts/Colemak-eD) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
     - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
 * In that folder's layout.ini file, edit the remap fields to represent the new settings.
-    - Here, change `mapSC_layout = CmkCAW_ISO` to `mapSC_layout = Angle_ISO`.
+    - Here, change `mapSC_layout = Cmk-CAW_ISO` to `mapSC_layout = Angle_ISO`.
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
     - Here, `mapSC_extend = Angle_ISO` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move Ctrl+V by adding 'V-B,' in front.
 * Change any key mappings you want to tweak.

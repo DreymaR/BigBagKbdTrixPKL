@@ -5,7 +5,7 @@
 	
 	if ( 32 < ch ) {			;&& ch < 128 (using pre-Unicode AHK)
 		char := "{" . Chr(ch) . "}" 	; Normal char
-		if ( inStr( getDeadKeysInCurrentLayout(), Chr(ch) ) )
+		if InStr( getDeadKeysInCurrentLayout(), Chr(ch) )
 			char .= "{Space}"
 	} else if ( ch == 32 ) {
 		char = {Space}
@@ -33,7 +33,7 @@ pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltG
 	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!?
 		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed:
-	prefix := ( inStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
+	prefix := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
 	Send %prefix%%modif%%toSend%
 	if ( toggleAltGr )
 		setAltGrState( 1 )
@@ -59,7 +59,7 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 {
 ;	static parse := { "%" : "{Raw}" , "=" : "{Blind}" , "*" : "" }
 	prf := SubStr( entry, 1, 1 )
-	if ( not InStr( "→§αβ«Ð¶%$*=~@&", prf ) )
+	if not InStr( "→§αβ«Ð¶%$*=~@&", prf )
 		Return false											; Not a recognized prefix-entry form
 	sendPref := -1
 	ent := SubStr( entry, 2 )
@@ -149,7 +149,7 @@ pkl_PwrString( strName )											; Send named literal/ligature/powerstring fro
 	}
 	
 	theString := pklIniRead( strName, , strFile, "strings" )	; Read the named string's entry (w/ comment stripping)
-	if ( pkl_ParseSend( theString ) ) 							; Unified prefix-entry syntax; only for single line entries
+	if pkl_ParseSend( theString ) 								; Unified prefix-entry syntax; only for single line entries
 		Return
 	if ( SubStr( theString, 1, 11 ) == "<Multiline>" ) {		; Multiline string entry
 		Loop % SubStr( theString, 13 ) {

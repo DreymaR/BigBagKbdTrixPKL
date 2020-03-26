@@ -58,7 +58,7 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 				if ( mapType == "SC" ) { 					; Remap from thisType to SC
 					thisCycle[ A_Index ] := mapDic[ this ]
 				} else if ( mapType == "VK" )  { 			; Remap from VK name/code to VK code
-					thisCycle[ A_Index ] := getVKeyCodeFromName( this )
+					thisCycle[ A_Index ] := getVKeyCodeFromName( this ) 	; VK maps use VK## format codes
 				}	; end if
 			}	; end loop
 			Loop % numSteps { 								; Loop to (re)write remap pdic
@@ -149,11 +149,13 @@ Return
 
 _pklCleanup() {
 	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 	; The timeout in s is converted to ms
-	if ( A_TimeIdle > timeOut ) { 					 	; eD WIP: Use TimeIdlePhysical w/ mouse hook?
+	if ( A_TimeIdle > timeOut ) { 					 	; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
+		if getPklInfo( "cleanupDone" ) 					; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
+			Return
 		for ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
 					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
-			if ( getPklInfo( "cleanupDone" ) || ( getKeyState( mod ) ) ) { 	; eD WIP: && mod != "LCtrl" - Temp. clean up LCtrl anyway to alleviate the stuckness bug with AltGr
-				Return 									; If the key is being held down or we've already cleaned up, leave everything be
+			if getKeyState( mod ) {
+				Return 									; If the key is being held down, leave it be
 			} else {
 				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
 			}

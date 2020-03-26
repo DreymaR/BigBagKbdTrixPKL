@@ -93,7 +93,7 @@ for the current layout, or only state images?
 
 _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image by a pdic.
 {
-	if ( ! InStr( HIG.States, state ) ) 						; If this state isn't marked for rendering, skip it
+	if not InStr( HIG.States, state ) 							; If this state isn't marked for rendering, skip it
 		Return
 	stateImg        := ( HIG.imgName == "state" ) ? true : false
 	if ( SubStr( HIG.imgName, 1, 2 ) == "dk" ) { 				; "dk_<dkName>" for dead keys
@@ -121,7 +121,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
 				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				res := "dk_" . dkName
-			} else if ( RegExMatch( ents, "i).*(space|spc).*" ) ) { 	; Note: This shouldn't be necessary now, as Spc is stored as 32
+			} else if RegExMatch( ents, "i).*(space|spc).*" ) { 	; Note: This shouldn't be necessary now, as Spc is stored as 32
 				res := 32 										; Space may be stored as (&)spc or ={space}; if so, show it as a space
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", state ) ) {
 				res := "tm_" . res 								; Mark Tap-or-Mod keys, for state 0:1
@@ -137,7 +137,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 				Continue
 			dkv     := DeadKeyValue( dkName, base ) 			; Get the DeadKeyValue for the current state/key...
 			dkvp    := "¤" . dkv . "¤" 							; Pad to avoid matching, e.g., 123 to 1234
-			if ( not InStr( dkvs, "¤" . -dkv . "¤" ) ) 			; Negative DK s# entries mean don't mark this char
+			if not InStr( dkvs, "¤" . -dkv . "¤" ) 				; Negative DK s# entries mean don't mark this char
 				dkv := ( dkvp ~= dkvs ) ? "dc_" . dkv : dkv		; The DKV is in the base/mark list, so mark it for display
 			HIG.ImgDic[ dkName . "_" . state . CO ] := dkv 		; Store the release value for this DK/state/key
 			emptyBool := ( dkv ) ? false : emptyBool

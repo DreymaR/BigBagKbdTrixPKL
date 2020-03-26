@@ -69,7 +69,7 @@ DONE:
 	- DK images may still be kept in the layout dir (or a subdir to avoid clutter), as they are layout dependent
 	- DK imgs named ‹name›_dk‹#› for state ‹#› (add s6/7 where applicable?!)
 * Greek layout w/ tonos/dialytika in the acute/umlaut dead keys.
-* In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (altGrEqualsAltCtrl).
+* In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (CtrlAltlIsAltGr).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
   
@@ -182,7 +182,7 @@ TODO:
 
 * Some more dead key mappings:
 	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. See https://en.wikipedia.org/wiki/Greek_diacritics for tables.
-	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
+	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
 	- IPA on AltGr+Shift symbol keys?
 
 * Define Mirror layouts as remap cycles?

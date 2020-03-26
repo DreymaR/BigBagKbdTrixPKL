@@ -134,7 +134,7 @@
 		scaleImage := 1
 	}
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) ) {								; DeadKey image
+	if getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
 		thisDK  := getLayInfo( "dkImgDir" ) . "\" . getKeyInfo( "CurrNameOfDK" )
 		ssuf    := getLayInfo( "dkImgSuf" )								; DK image state suffix
 		dkS     := []
@@ -145,7 +145,7 @@
 		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
 		imgPath := thisDK . dkS0
 		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
-	} else if ( ExtendIsPressed() ) { 									; Extend image
+	} else if ExtendIsPressed() { 										; Extend image
 		imgPath := getLayInfo( "extendImg" )							; Default im.LayDir . "\extend.png"
 	} else {															; Shift state image
 		imgPath := im.LayDir . "\state" . state . ".png"

@@ -156,7 +156,7 @@ pkl_about()
 	layPage  := pklIniRead( "homepage"  , ""        , "LayIni", "information" )
 	lLocale  := pklIniRead( "localeID"  , "0409"    , "LayIni", "information" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
-	kbdType  := getLayInfo( "Ini_KbdType" ) . " / " . getLayInfo( "Ini_LayType" )
+	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 
 	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
@@ -180,7 +180,7 @@ pkl_about()
 	text .= "`n" . locCompany   . ": " . layComp
 	Gui, Add, Text, , %text% 								; Layout info
 	Gui, Add, Edit, , %layPage%
-	if ( getPklInfo( "AdvancedMode" ) ) {
+	if getPklInfo( "AdvancedMode" ) { 						; Advanced Mode shows more info
 		Gui, Add, Text, , ......................................................................
 		text := "Keyboard/Layout type from settings: "      . kbdType
 		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
@@ -198,7 +198,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 		icon := OnOff . ".ico"
 		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon )	; If not specified in layout file or in dir, use this
-		if ( FileExist( icoFile ) ) {
+		if FileExist( icoFile ) {
 			icoFil%ix%  := icoFile
 			icoNum%ix%  := 1
 		} else if ( A_IsCompiled ) {

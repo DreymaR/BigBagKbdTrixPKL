@@ -100,7 +100,7 @@ pkl_locale_load( lang )
 	
 	file := lang . ".ini"
 	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
-	if ( not FileExist( file ) )					; If the language file isn't found, we'll just use the defaults
+	if not FileExist( file ) 						; If the language file isn't found, we'll just use the defaults
 		Return
 	sect := iniReadSection( file, "pkl" )
 	Loop, Parse, sect, `r`n

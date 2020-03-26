@@ -40,7 +40,7 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 	for ix, theFile in iniFile 											; Read from iniFile. Failing that, altFile.
 	{
 		hereDir := ( layStck ) ? iniDirs[ix] : "." 						; LayStack files may use own home dirs
-		if ( ( not inStr( theFile, "." ) ) and FileExist( getPklInfo( "File_" . theFile ) ) )	; Special files
+		if ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
 		if        ( key == "__List" ) { 								; Specify key = -1 for a section list
 			IniRead, val, %theFile% 									; (AHK v1.0.90+)
