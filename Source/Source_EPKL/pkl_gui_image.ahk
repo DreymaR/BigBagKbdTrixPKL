@@ -110,7 +110,7 @@
 		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlShImg AltSubmit
 		Gui, 2: Show, NA, 							pklImgWin 			; eD WIP: Try to avoid the task bar?!
 		
-		SetTimer, showHelpImage, 200 									; Refresh the help image every 0.2 s
+		SetTimer, showHelpImage, 100 									; Refresh the help image every 0.2 s 	; eD WIP: Trying a faster refresh rate, to hopefully increase precision. Helps DKs, but not Tap-Ext?
 	} else if ( activate == -1 ) { 										; Deactivate image
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		SetTimer, showHelpImage, Off
@@ -181,6 +181,7 @@ _GetState() 															; Get the 0:1:6:7 shift state as in layout.ini and im
 {
 	state = 0
 	state += 1 * getKeyState( "Shift" )
+;	state += 2 * getKeyState( "Ctrl" )
 	state += 6 * getLayInfo( "hasAltGr" ) * AltGrIsPressed()
 	Return state
 }

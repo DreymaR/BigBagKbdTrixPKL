@@ -15,12 +15,15 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- WIP: Similar codes in layout.ini as in PKL Settings.ini for @K (and @C@E) ?
-;			- Use a KbdType entry in the (base)layout.ini file too, and a @K syntax? That'd make the files easier to maintain for ANS/ISO. Use another char than @ since it's common in layouts? § maybe?
-;			- The HIG should read the KbdType from layout.ini instead of the EPKL_Layouts file.
-;			- Maybe layout files could have (in their information section?) all the layout info? So that the Settings mainly point to a file and the LayStack actually sets the KbdType/ErgoMod/etc where needed?
+;		- TOFIX: -- remap mappings fail.
+;		- WIP: Sym mod for ANSI. Probably not for "lesser" ergo mods, as it's for the enthusiasts. Could do it for no-ergo for illustration (and safety because people will select it by accident).
+;		- WIP: Dial down the help image refresh timer a bit? Might that help with the initial DK image not always registering? Seems to help for Extend2, but not for Tap-Ext Kaomoji DK?
+;		- 
 ;		- Send help image on/off at startup? Could fix both the rogue Co icon window on first minimize, and the non-image if not present at first issues?
 ;		- Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
+;		- WIP/TOFIX: Redo the AltGr implementation.
+;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
+;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
 ;		- TOFIX: {Ext+S,<key>} rapidly sends a kaomoji. After this, Shift is stuck. Same with {Ext+T}! Is this the solution to the stuck Ctrl riddle?!? Unrelated to Sticky Mods.
 ;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext
 ;			- Key History: Looks like the mod is released but then re-presssed? Why?
@@ -28,10 +31,10 @@
 ;		- TOFIX: AltGr+Spc, in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space? Related to the NBSP mapping.
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
-;		- TOFIX: First Extend after a refresh is slow, won't always take until the second key press. Prepare it somehow?
+;		- TOFIX: First Extend after a refresh is slow, won't always take until the second key press. Prepare it somehow? Also, Ext+T+<key> after refresh sends only Ext+<key>?
 ;		- TOFIX: If starting without Help Image, showing it later doesn't work
 ;		- TOFIX: On the first help img minimizing, a taskbar icon sometimes appears on-screen or in tray. Showing the image once before resizing solved it... not...
-;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
+;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- WIP: Maintenance timer every 2-3 s or so
 ;			- Check if no keys are held and no sticky timers counting, then send Up for those that aren't in use. If checking for inactivity first, it's easier.
@@ -52,6 +55,7 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
 ;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
 ;		- TODO: Mapping aliases for SC### codes. These are too technical for newcomers. Allow any Remap type like Co/QW/etc, e.g., CoTAB or Co_1 or CoRSH. Also QW_S (=Co_R) etc?
@@ -62,6 +66,7 @@
 ;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
 ;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
 ;			- Also allow Sticky AltGr. Very nice since the AltGr mappings are usually one-shot.
+;			- Define a separate AHK hotkey for LCtrl+RAlt (=AltGr in Windows)? That might make things simpler.
 ;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. Maybe that could be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM?
 ;		- TODO: Sensible aliases for OEM_# VK codes! They are confusing for the users. E.g., OEM_GR, OEM_CM, OEM_DT etc. This allows using one common BaseLayout.
 ;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) which may be moved to the layout.ini itself for robustness.
@@ -142,14 +147,16 @@
 ;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-;	- EPKL v1.1.4α: (Re)mapping tweaks
+;	- EPKL v1.1.4α: Remap/mapping/setting tweaks. Dvorak and Sym mod layouts.
 ;		- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
 ;		- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
 ;		- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
 ;		- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
-;		- Three Sym mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). Choose between them in the Remap file.
+;		- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). Choose between them in the Remap file.
 ;		- Added Dvorak layouts, with suitable Curl/Angle/Wide ergo mods. These are my suggestions and not "official" variants for now.
-
+;		- Added a KbdType setting in layout.ini files. It overrides the one used in the layout selection.
+;		- Added @K codes for ANS/ISO in LayStack files, to simplify ISO/ANSI conversion. (For baseLayout, mapSC_, img_Extend#/DKeyDir/bgImage.)
+;		- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from layout.ini files. Still left in BaseLayout files as an example.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL

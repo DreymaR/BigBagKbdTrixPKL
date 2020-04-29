@@ -9,6 +9,7 @@
 	HelpImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
 	ZoomImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ZoomHelpImg"  ) )
 ;	MoveImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_MoveHelpImg"  ) ) 	; Don't show this to avoid clutter
+;	AboutMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowAbout"    ) ) 	; Don't show this to avoid clutter
 ;	DebugMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_DebugWIP"     ) )
 	
 	activeLayout    := getLayInfo( "active" )
@@ -158,6 +159,8 @@ pkl_about()
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
 	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
+	layFile  := getPklInfo( "File_LayIni" )
+	basFile  := getPklInfo( "File_BasIni" )
 
 	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
 	if ( pklProgURL != pklMainURL ) {
@@ -186,6 +189,7 @@ pkl_about()
 		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
 		text .= "`nCurrent Microsoft Windows Locale ID: "   . msLID
 		text .= "`nDead keys set for this Windows layout: " . dkStr
+		text .= "`nLayout/BaseLayout file paths:`n- "         . layFile . "`n- " . basFile
 		Gui, Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	Gui, Show

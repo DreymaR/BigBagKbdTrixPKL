@@ -211,7 +211,7 @@ pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used i
 	}	; end if
 }	; end fn
 
-getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
+getVKeyCodeFromName( name ) 	; Get the two-digit hex VK## code from a VK name
 {
 	name := upCase( name )
 	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
@@ -222,7 +222,7 @@ getVKeyCodeFromName( name )	; Get the two-digit hex VK## code from a VK name
 	Return name
 }
 
-getWinLocaleID()			; This was in the detect/get functions
+getWinLocaleID() 			; This was in the detect/get functions
 {
 	WinGet, WinID,, A
 	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
@@ -231,21 +231,27 @@ getWinLocaleID()			; This was in the detect/get functions
 	Return WinLocaleID
 }
 
-isInt( this ) {		; AHK cannot use "is <type>" in expressions so use a wrapper function
+isInt( this ) { 	; AHK cannot use "is <type>" in expressions so use a wrapper function
 	if this is integer
 		Return true
 }
 
-fileOrAlt( file, default, errMsg = "", errDur = 2 )		; Find a file/dir, or use the alternative
+fileOrAlt( file, default, errMsg = "", errDur = 2 ) 	; Find a file/dir, or use the alternative
 {
+	file := atKbdType( file ) 							; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
-	if ( errMsg ) && ( not FileExist( default ) )		; Issue a warning if neither file is found
+	if ( errMsg ) && ( not FileExist( default ) ) 		; Issue a warning if neither file is found
 		pklWarning( errMsg, errDur )
 	Return default
 }
 
-pklSplash( title, text, dur = 6 ) {		; Default display duration is in seconds
+atKbdType( str ) 	; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
+{
+	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
+}
+
+pklSplash( title, text, dur = 6 ) { 	; Default display duration is in seconds
 	SplashTextOff
 	SetTimer, KillSplash, Off
 	SplashTextOn, 300, 100, %title%, `n%text%
@@ -256,7 +262,7 @@ KillSplash:
 	SplashTextOff
 Return
 
-getPriority(procName="") {				; Utility function to get process priority, by SKAN from the AHK forums
+getPriority(procName="") { 				; Utility function to get process priority, by SKAN from the AHK forums
 	;;  https://autohotkey.com/board/topic/7984-ahk-functions-incache-cache-list-of-recent-items/page-3#entry75675
 	procList := { 16384 : "BelowNorm",    32 : "Normal"   , 32768 : "AboveNorm"
 				,    64 : "Low"      ,   128 : "High"     ,   256 : "Realtime"  }

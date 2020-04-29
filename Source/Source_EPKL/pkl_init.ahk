@@ -24,6 +24,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      )
 	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  )
 	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  )
+	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    )
 	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     )
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
@@ -43,18 +44,18 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	setPklInfo( "tapModTime", pklIniRead( "tapModTime" ) )				; Tap-or-Mod time
 	
 	theLays := pklIniRead( "layout", "", pklLays ) 						; Read the layouts string from EPKL_Layouts
-	layType := _pklLayRead( "LayType", "eD"                 ) 			; Layout type, mostly eD or VK
-	kbdType := _pklLayRead( "KbdType", "ISO"          , "_" ) 			; Keyboard type, _ISO/_ANS/_etc
-	localID := _pklLayRead( "LocalID", "<LocalID N/A>", "-" ) 			; Locale ID, e.g., "-Pl"
-	curlMod := _pklLayRead( "CurlMod", "<CurlMod N/A>"      ) 			; --, Curl, CurlM
-	ergoMod := _pklLayRead( "ErgoMod", "<ErgoMod N/A>"      ) 			; --, Angle, AWide...
-	othrMod := _pklLayRead( "OthrMod", "<OthrMod N/A>"      ) 			; --, Other mod suffix
+	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
+	kbdType := _pklLayRead( "KbdType", "ISO", "_"   ) 					; Keyboard type, _ISO/_ANS/_etc
+	localID := _pklLayRead( "LocalID",      , "-"   ) 					; Locale ID, e.g., "-Pl"
+	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl, CurlM
+	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
+	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
 	theLays := StrReplace( theLays, "@V",   "@K@C@E@O" ) 				; Shorthand .ini notation for layout variants
-	if ( curlMod || ergoMod || othrMod ) 								; If there are mods in use...
-		theLays := StrReplace( theLays, "@K", "@K_" ) 					; Use an underscore between KbdType and Mods
-	theLays := StrReplace( theLays, "@T",   layType ) 	; eD WIP: Make this a fn() and use it also for the LayStack? At least @K! Then replace ANS/ISO in the layout files.
+	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
+	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
+	theLays := StrReplace( theLays, "@T",   layType )
 	theLays := StrReplace( theLays, "@L",   localID )
-	theLays := StrReplace( theLays, "@K",   kbdType )
+	theLays := StrReplace( theLays, "@K",   kbdType ) 					; (Later on, will use atKbdType() for layout files)
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@E",   ergoMod )
 	theLays := StrReplace( theLays, "@O",   othrMod )
@@ -108,6 +109,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	setLayInfo( "Dir_LayIni"        , layDir  )
 	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
 	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
+	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: When baseLayout is unified for KbdType, remove this?
 	SplitPath, basePath, baseLay, baseDir
 	baseDir         := "Layouts\" . baseDir
 	baseLay         := "Layouts\" . basePath . ".ini"
@@ -142,15 +144,17 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		{
 			mapType := A_LoopField
 			mapList := pklIniRead( mapSects[ A_Index ],, "LayStk" ) 	; First, get the name of the map list
+			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
 			%mapType% := ReadRemaps( mapList, mapFile )					; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, mapFile )		; Parse the cycle list into a pdic of mappings
 		}
 		vkDic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a dictionary of SC to VK codes for VK mapping below
-		CVDic := ReadKeyLayMapPDic( "Co", "VK", mapFile )				; Make a dictionary of Co to VK codes for Co2VK mapping below 	; eD WIP: Convert ANS2ISO as needed? Or make both VK_ANS and VK_ISO KLM tables?
-		CSDic := ReadKeyLayMapPDic( "Co", "SC", mapFile )				; Make a dictionary of Co to SC codes for Co2SC mapping below 	; eD WIP
+;		CVDic := ReadKeyLayMapPDic( "Co", "VK", mapFile )				; Make a dictionary of Co to VK codes for Co2VK mapping below 	; eD WIP: Convert ANS2ISO as needed? Or make both VK_ANS and VK_ISO KLM tables?
+;		CSDic := ReadKeyLayMapPDic( "Co", "SC", mapFile )				; Make a dictionary of Co to SC codes for Co2SC mapping below 	; eD WIP. Make these only on demand, allowing for other codes than Co.
 		initialized := true
 	}
 	
+	setLayInfo( "Ini_KbdType", pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayStk" ) ) 	; A KbdType setting in layout.ini overrides the first Layout_ setting
 	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
 	shStates := RegExReplace( shStates, "[ `t]+" ) 						; Remove any whitespace
@@ -187,7 +191,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		} else {
 			tapMod  := ""
 		}
-		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 								; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
+		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 							; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
 		if RegExMatch( entry1, vkStr) { 								; If the first entry is a VKey one, VK map the key to itself ; ( numEntr == 1 ) && 
 			numEntr   := 2
 			entry1    := "VK" . getVKeyCodeFromName( vkDic[key] )		; Find the right VK code for the key's SC, from the Remap file
