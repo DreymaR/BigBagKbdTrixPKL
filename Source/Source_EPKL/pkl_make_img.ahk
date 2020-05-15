@@ -17,7 +17,7 @@ makeHelpImages()
 	HIG         := {} 											; This parameter object is passed to subfunctions
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := "Files\_eD_Remap.ini"
-	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the CO codes of the SVG template to SC
+	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
 	FormatTime, theNow,, yyyy-MM-dd_HHmm 						; Use A_Now (local time) for a folder time stamp
 	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . theNow
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
@@ -33,6 +33,13 @@ makeHelpImages()
 	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2B24, HIG.Ini ) 	; U+2B24 Black Large Circle
 	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25CC, HIG.Ini ) 	; U+25CC Dotted Circle
 	HIG.MkTpMod := pklIniRead( "tmTapOrModMark" , 0x25CC, HIG.Ini ) 	; U+25CC Dotted Circle
+	
+	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , HIG.Ini )
+	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , HIG.Ini )
+	imgDPI      := pklIniRead( "imgResDPI"                            , 96  , HIG.Ini )
+	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
+	HIG.inkOpts := " --export-type=""png""" 					; Prior to InkScape v1.0, the export command was "--export-png=" . pngFile for each file
+				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	
 	SetTimer, ChangeButtonNamesHIG, 100
 	MsgBox, 0x133, Make Help Images?, 
@@ -70,12 +77,14 @@ for the current layout, or only state images?
 	}
 	shiftStates := getLayInfo( "shiftStates" ) 					; may skip some, e.g., state 2 (Ctrl), by imgStates
 	HIG.imgType := ( onlyMakeDK ) ? "--" : "shift state" 		; If refreshing one DK, don't render state images
+	HIG.destDir := HIG.ImgDirs[ "root" ]
 	HIG.imgName := "state"
 	Loop, Parse, shiftStates, : 								; Shift state loop - also detects dead keys
 	{
 		_makeImgDicThenImg( HIG, A_LoopField )
 	}
 	HIG.imgType := "deadkey"
+	HIG.destDir := HIG.ImgDirs[ "dkey" ]
 	HIG.DKNames := ( onlyMakeDK ) ? StrSplit( onlyMakeDK, "," ) : HIG.DKNames
 	for key, dkName in HIG.DKNames 								; Dead key loop
 	{
@@ -87,6 +96,19 @@ for the current layout, or only state images?
 			_makeImgDicThenImg( HIG, A_LoopField )
 		}
 	}
+;		( 1 ) ? pklDebug( "`n`n`n`n`n`n`n`n`n`n`n`n" . HIG.InkPath . HIG.inkOpts . HIG.inkFile, 16 )  ; eD DEBUG
+;		Return 		; eD DEBUG
+	_callInkscape( HIG ) 										; Call InkScape with all the SVG files at once now
+	sleepTime := 5 												; Time to wait between each file check, in s
+	Loop, 6
+	{
+		if ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
+			Break
+		pklSplash( HIG.Title, "Waiting for images... " . A_Index * sleepTime . " s", 2 )
+		Sleep % sleepTime * 1000
+	}
+	FileMove % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
+	FileMove % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
 	pklSplash( HIG.Title, "Image generation done!", 2 )
 ;	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
@@ -117,7 +139,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 			emptyBool := ( ent ) ? false : emptyBool
 			if ( not ent ) {
 				Continue
-			} else if ( ent == "@" ) { 							; Was "dk"
+			} else if ( ent == "@" ) { 							; Entry is a DeadKey; was "dk"
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
 				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				res := "dk_" . dkName
@@ -151,32 +173,24 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 		pklSplash( HIG.Title, "Layout " . HIG.imgType . "`n" . preName . "state" . state . "`nempty - skipping.", 2 )
 		Return
 	} else {
-		pklSplash( HIG.Title, "Making " . HIG.imgType . " image for:`n" . preName . "state" . state . "`n", 4 )
-;		pklDebug( "DEBUG: Would've made help image for " preName . "state" . state . "`n", 20 )
-;		Return  	; eD DEBUG
+		pklSplash( HIG.Title, "Making " . HIG.imgType . " image for:`n" . preName . "state" . state . "`n", 3 )
 	}
 	;;  -----------------------------------------------------------------------------------------------
-	;:  _makeOneHelpImg( HIG, state ) 						; Generate an actual help image from a pdic using an Inkscape call
+	;:  _makeOneHelpImg( HIG, state ) 						; Generate a vector graphics (.SVG) help image from a template
 	;
 	if ( stateImg ) {
 		indx    := state
-		imName  := HIG.imgName . state
+		imgName := HIG.imgName . state
 	} else { 												; e.g., "dk_breve"
 		dkName  := SubStr( HIG.imgName, 4 )
 		indx    := dkName . "_" . state
 		ssuf    := getLayInfo( "dkImgSuf" ) 				; DK image state suffix
-		imName  := dkName . ssuf . state 					; e.g., "breve_s0"
+		imgName := dkName . ssuf . state 					; e.g., "breve_s0"
 	}
-	destDir     := ( stateImg ) ? "root" : "dkey"
-	tempFile    := HIG.ImgDirs[ "raw" ] . "\" . imName . ".svg"
-	destFile    := HIG.ImgDirs[destDir] . "\" . imName . ".png"
-	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , HIG.Ini )
-	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , HIG.Ini )
-	imgDPI      := pklIniRead( "imgResDPI"                            , 96  , HIG.Ini )
-	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
+	svgFile     := HIG.destDir . "\" . imgName . ".svg" 	; Was in HIG.ImgDirs["raw"] but multi-file call can't specify different destination paths
 	
 	try {
-		FileRead, templateFile, % HIG.OrigImg 				; eD NOTE: Use FileRead or Loop, Read, ? Nah, 160 kB isn't big.
+		FileRead, tempImg, % HIG.OrigImg 					; eD NOTE: Use FileRead or Loop, Read, ? Nah, 160 kB isn't big.
 	} catch {
 		pklErrorMsg( "Reading SVG template failed." )
 		Return
@@ -214,23 +228,26 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 			aChr := _svgChar( ch )
 			dChr := "" 										; The dead key layer entry is empty for non-DK keys
 		}
+		CO := RegExReplace( CO, "_(\w\w)", "${1}" ) 		; Co _## entries are missing the underscore in the SVG template
 		tstx := "</tspan></text>" 							; This always follows text elements in an SVG file
 		needle := ">\K" . CO . tstx . "(.*>)" . CO . tstx 	; The RegEx to search for (ignore the start w/ \K)
 		result := dChr . tstx . "${1}" . aChr . tstx 		; CO -> dChr, then next CO -> aChr
-		templateFile := RegExReplace( templateFile, needle , result )
+		tempImg := RegExReplace( tempImg, needle , result )
 	}
 ;	Return 		; eD DEBUG
 	try { 													; Save the changed image file in a temp folder
-		FileAppend, %templateFile%, %tempFile%, UTF-8 		; Inkscape SVG is UTF-8, w/ Linux line endings
+		FileAppend, %tempImg%, %svgFile%, UTF-8 			; Inkscape SVG is UTF-8, w/ Linux line endings
+		HIG.inkFile .= " " . svgFile 						; In InkScape v1.0, the "--file" option is gone, but multiple files can be used
 	} catch {
 		pklErrorMsg( "Writing temporary SVG file failed." )
 		Return
 	}
-	inkOptStr  := " --file=" . tempFile . " --export-png=" . destFile 
-				. " --export-area=" . areaStr . " --export-dpi=" . imgDPI
+}
+
+_callInkscape( ByRef HIG )
+{
 	try { 													; Call InkScape w/ cmd line options
-		RunWait % HIG.InkPath . inkOptStr 					; eD TODO: Can I use --shell to avoid many Inkscape restarts? How?
-		;Run % HIG.InkPath . " --shell" ??? 				; " --without-gui" does nothing on Windows I think.
+		RunWait % HIG.InkPath . HIG.inkOpts . HIG.inkFile 		; --without-gui is implicit for export commands.
 	} catch {
 		pklErrorMsg( "Running Inkscape failed." )
 		Return

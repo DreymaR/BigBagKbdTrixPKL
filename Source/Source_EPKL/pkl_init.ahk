@@ -61,7 +61,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	theLays := StrReplace( theLays, "@O",   othrMod )
 	layouts := StrSplit( theLays, ",", " " )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
-	setLayInfo( "numOfLayouts", numLayouts )							; Store the number of listed layouts
+	setLayInfo( "NumOfLayouts", numLayouts )							; Store the number of listed layouts
 	Loop % numLayouts {													; Store the layout dir names and menu names
 		nameParts := StrSplit( layouts[ A_Index ], ":" )
 		theCode := nameParts[1]
@@ -84,7 +84,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 		pklMsgBox( 1, "layouts .ini" ) 									; "You must set the layout file in the EPKL layouts .ini!"
 		ExitApp
 	}
-	setLayInfo( "active", theLayout )
+	setLayInfo( "ActiveLay", theLayout )
 	
 	nextLayoutIndex := 1												; Determine the next layout's index
 	Loop % numLayouts {
@@ -94,7 +94,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 		}
 	}
 	nextLayoutIndex := ( nextLayoutIndex > numLayouts ) ? 1 : nextLayoutIndex
-	setLayInfo( "nextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
+	setLayInfo( "NextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
 }	; end fn initPklIni()
 
   													;   ###############################################################
@@ -102,14 +102,16 @@ initLayIni() 										;   ######################### layout.ini  ###############
 { 													;   ###############################################################
 	static initialized  := false
 	
-	theLayout := getLayInfo( "active" )
+	theLayout := getLayInfo( "ActiveLay" )
 	layDir  := bool(pklIniRead("compactMode")) ? "." 
 			 : layDir := "Layouts\" . theLayout 						; If in compact mode, use main dir as layDir
 	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
 	setLayInfo( "Dir_LayIni"        , layDir  )
 	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
+	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?
+	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
-	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: When baseLayout is unified for KbdType, remove this?
+	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout?
 	SplitPath, basePath, baseLay, baseDir
 	baseDir         := "Layouts\" . baseDir
 	baseLay         := "Layouts\" . basePath . ".ini"
@@ -145,20 +147,24 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			mapType := A_LoopField
 			mapList := pklIniRead( mapSects[ A_Index ],, "LayStk" ) 	; First, get the name of the map list
 			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
-			%mapType% := ReadRemaps( mapList, mapFile )					; Parse the map list into a list of base cycles
-			%mapType% := ReadCycles( mapType, %mapType%, mapFile )		; Parse the cycle list into a pdic of mappings
+			%mapType% := ReadRemaps( mapList,            mapFile ) 		; Parse the map list into a list of base cycles
+			%mapType% := ReadCycles( mapType, %mapType%, mapFile ) 		; Parse the cycle list into a pdic of mappings
 		}
-		vkDic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a dictionary of SC to VK codes for VK mapping below
-;		CVDic := ReadKeyLayMapPDic( "Co", "VK", mapFile )				; Make a dictionary of Co to VK codes for Co2VK mapping below 	; eD WIP: Convert ANS2ISO as needed? Or make both VK_ANS and VK_ISO KLM tables?
-;		CSDic := ReadKeyLayMapPDic( "Co", "SC", mapFile )				; Make a dictionary of Co to SC codes for Co2SC mapping below 	; eD WIP. Make these only on demand, allowing for other codes than Co.
+		mapVK   := ReadRemaps( "ANS2ISO",         mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings
+		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
+		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
+		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile )				; Make a code dictionary QWERTY-2-VK mapping below
+;		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile )				; Make a code dictionary for Co-2-VK mapping below 	; eD WIP: Drop this, as the Co codes will map to their QWERTY counterparts... unintuitive.
+;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile )				; Make a code dictionary Co2SC mapping below 	; eD WIP. Make these only on demand, allowing for other codes than Co?
 		initialized := true
 	}
 	
-	setLayInfo( "Ini_KbdType", pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayStk" ) ) 	; A KbdType setting in layout.ini overrides the first Layout_ setting
+	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
+	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
 	shStates := RegExReplace( shStates, "[ `t]+" ) 						; Remove any whitespace
-	setLayInfo( "hasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
+	setLayInfo( "LayHasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
 	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator
 	shiftState := StrSplit( shStates, ":" )
 	
@@ -192,10 +198,10 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			tapMod  := ""
 		}
 		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 							; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
-		if RegExMatch( entry1, vkStr) { 								; If the first entry is a VKey one, VK map the key to itself ; ( numEntr == 1 ) && 
+		if RegExMatch( entry1, vkStr) { 								; If the first entry is a VKey synonym, VK map the key to itself
 			numEntr   := 2
-			entry1    := "VK" . getVKeyCodeFromName( vkDic[key] )		; Find the right VK code for the key's SC, from the Remap file
-			entry2    := "VKey"
+			entry1    := "VK" . getVKeyCodeFromName( SCVKdic[key] ) 	; Find the right VK code for the key's SC, from the Remap file
+			entry2    := "VKey" 										; Note: This is the QWERTY mapping of that SC###.
 		}
 		if ( numEntr < 2 ) || ( entry1 == "--" ) { 						; An empty or one-entry key mapping will deactivate the key
 			Hotkey, *%key%   ,  doNothing 								; The *SC### format maps the key regardless of modifiers.
@@ -208,10 +214,15 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			setKeyInfo( key . "vkey", entry1 ) 							; Set VK as modifier name, e.g., "RShift", "AltGr" or "Extend"
 			entry2  := -2 												; -2 = Modifier
 		} else {
+			KLM := RegExMatch( entry1, "i)^(QW)" ) ? SubStr( entry1, 1, 2 ) : false 	; Co/QW KLM remappings of VK codes 	; eD WIP: |Co
+			entry1  := ( KLM ) ? %KLM%VKdic[ SubStr( entry1, 3 ) ] : entry1 	; Use CoVK (Colemak) and QWVK (QWERTY) dictionaries
 			vkcode := getVKeyCodeFromName( entry1 ) 					; Translate to the two-digit VK## hex code (Uppercase)
-			vkcode := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 		; Remap the VKey here before assignment.
+			vkcode  := KLM && ( kbdType == "ISO" ) && mapVK[vkcode] 	; If necessary, convert ANSI-to-ISO
+					? mapVK[ vkcode ] : vkcode
+			vkcode := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 		; Remap the VKey here before assignment, if applicable.
 			setKeyInfo( key . "vkey", vkcode ) 							; Set VK code (hex ##) for the key
 			entry2  := RegExMatch( entry2, vkStr ) ? -1 : entry2 		; -1 = VKey internally
+;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entry1 . " / VK" . vkcode . "`n" )  ; eD DEBUG
 		}
 		setKeyInfo( key . "capSt", entry2 ) 							; Set Caps state (0-5 for states; -1 VK; -2 Mod)
 		if ( tapMod ) { 												; Tap-or-Modifier
@@ -248,8 +259,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			}
 		}	; end loop entries
 	}	; end loop (parse keymap)
-	if ( extKey ) && ( ! getLayInfo("extendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
-		setLayInfo( "extendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed
+	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
+		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed
 	}
 	}	; end loop (parse layoutFiles)
 	
@@ -260,7 +271,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;;  -----------------------------------------------------------------------------------------------
 	;;  Read and set Extend mappings and help image info
 	;
-	if getLayInfo( "extendKey" ) { 										; If there is an Extend key, set the Extend mappings.
+	if getLayInfo( "ExtendKey" ) { 										; If there is an Extend key, set the Extend mappings.
 ;		extFile  := fileOrAlt( pklIniRead( "extendFile",, "LayStk" )
 ;								, getPklInfo( "File_PklSet" ) )			; Default Extend file: pkl.ini 	; eD WIP: Deprecate - keep Ext info in the LayStack
 		extFile := pklIniRead( "extendFile",, "LayStk" )
@@ -411,7 +422,7 @@ _checkModName( key ) 								; Mod keys need only the first letters of their nam
 		if ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?
 			key := modName
 	}
-	if ( getLayInfo( "hasAltGr" ) && key == "RAlt" ) {
+	if ( getLayInfo( "LayHasAltGr" ) && key == "RAlt" ) {
 		Return "AltGr" 								; RAlt as AltGr
 	} else {
 		Return key 									; AHK modifier names, e.g., "RS" or "RSh" -> "RShift"

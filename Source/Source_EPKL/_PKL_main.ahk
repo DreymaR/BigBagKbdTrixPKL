@@ -15,9 +15,9 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- TOFIX: Does BaseLayout require an absolute path? Why?
+;		- TOFIX: Sticky Shift doesn't get reset on VK layouts, leading to MULtiple SHifted characters!
 ;		- TOFIX: -- remap mappings fail.
-;		- WIP: Sym mod for ANSI. Probably not for "lesser" ergo mods, as it's for the enthusiasts. Could do it for no-ergo for illustration (and safety because people will select it by accident).
-;		- WIP: Dial down the help image refresh timer a bit? Might that help with the initial DK image not always registering? Seems to help for Extend2, but not for Tap-Ext Kaomoji DK?
 ;		- 
 ;		- Send help image on/off at startup? Could fix both the rogue Co icon window on first minimize, and the non-image if not present at first issues?
 ;		- Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
@@ -55,6 +55,7 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: VK mappings don't happen on normal keys. Simple VK code states don't get translated to VK##. Only used when the key is VK mapped.
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
 ;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
@@ -147,17 +148,20 @@
 ;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-;	- EPKL v1.1.4α: Remap/mapping/setting tweaks. Dvorak and Sym mod layouts.
+;	- EPKL v1.1.4β: Mapping/setting tweaks. Dvorak and Sym mod layouts. HIG updated for Inkscape v1.0.
 ;		- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
 ;		- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
 ;		- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
 ;		- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
-;		- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). Choose between them in the Remap file.
+;		- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). ANSI probably needs both. Choose between them in the Remap file.
+;			- Premade Sym(QuMn) variants for VK/eD vanilla Colemak and Colemak-CAW.
 ;		- Added Dvorak layouts, with suitable Curl/Angle/Wide ergo mods. These are my suggestions and not "official" variants for now.
 ;		- Added a KbdType setting in layout.ini files. It overrides the one used in the layout selection.
-;		- Added @K codes for ANS/ISO in LayStack files, to simplify ISO/ANSI conversion. (For baseLayout, mapSC_, img_Extend#/DKeyDir/bgImage.)
+;		- Added @K codes for ANS/ISO in LayStack files, simplifying ISO/ANSI conversion. (For baseLayout, mapSC_, img_Extend#/DKeyDir/bgImage.)
 ;		- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from layout.ini files. Still left in BaseLayout files as an example.
-
+;		- The HIG (Help Image Generator) has been updated for Inkscape v1.0 that's finally out! All images are now created in one call, much faster.
+;			- Also tweaked the HIG for Co_## KLM key codes since the image template doesn't have the underscore for these codes.
+;		- Dialled down the help image refresh timer a bit. Seems to help for Extend2, but not for Tap-Ext Kaomoji DK nor the initial help image?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
 setPklInfo( "pklVers", "1.1.4α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
@@ -295,12 +299,12 @@ moveHelpImage:
 Return
 
 changeActiveLayout:
-	changeLayout( getLayInfo( "nextLayout" ) )
+	changeLayout( getLayInfo( "NextLayout" ) )
 Return
 
 rerunWithSameLayout:	; eD: Use the layout number instead of its code, to reflect any PKL Settings list changes
-	activeLay   := getLayInfo( "active" ) 				; Layout code (path) of the active layout
-	numLayouts  := getLayInfo( "numOfLayouts" ) 		; The number of listed layouts
+	activeLay   := getLayInfo( "ActiveLay" ) 			; Layout code (path) of the active layout
+	numLayouts  := getLayInfo( "NumOfLayouts" ) 		; The number of listed layouts
 	Loop % numLayouts {
 		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum

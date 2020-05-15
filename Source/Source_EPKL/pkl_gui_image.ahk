@@ -50,7 +50,7 @@
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
 		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
 								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
-		im.BgColor  := pklIniRead( "img_bgColor"  , "fefeff",   "LayStk" ) 	; BG color
+		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.Opacity  := pklIniRead( "img_opacity"  , 255         )
 		im.PosNr    := 5 													; Default position is bottom center (used to be "xCenter")
 		im.Zooms    := pklIniCSVs( "img_zooms"    , "100,150"   )
@@ -182,6 +182,6 @@ _GetState() 															; Get the 0:1:6:7 shift state as in layout.ini and im
 	state = 0
 	state += 1 * getKeyState( "Shift" )
 ;	state += 2 * getKeyState( "Ctrl" )
-	state += 6 * getLayInfo( "hasAltGr" ) * AltGrIsPressed()
+	state += 6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
 	Return state
 }

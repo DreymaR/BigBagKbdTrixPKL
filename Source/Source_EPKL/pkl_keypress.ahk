@@ -68,7 +68,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		Return
 	}	; end if VK
 	
-	if getLayInfo("hasAltGr") { 								; For AltGr layouts...
+	if getLayInfo("LayHasAltGr") { 								; For AltGr layouts...
 		if AltGrIsPressed() { 									; If AltGr is down...
 			sh := getKeyState("Shift")
 			if ( (capHK & 4) && getKeyState("CapsLock", "T") )
@@ -93,7 +93,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		} else {
 			_pkl_CtrlState( HKey, capHK, state, modif )			; Ctrl is down
 		}
-	}	; end if hasAltGr
+	}	; end if LayHasAltGr
 	if ( getKeyState("LWin") || getKeyState("RWin") )			; Win is down
 		modif .= "#"
 	
@@ -274,7 +274,7 @@ _setExtendState( set = 0 )									; Called from setModState
 	static extHeld      := 0
 	
 	if ( extendKey == -1 ) { 								; Initialize the extendKey static variables
-		extendKey       := getLayInfo( "extendKey" )
+		extendKey       := getLayInfo( "ExtendKey" )
 		extMod1         := getPklInfo( "extendMod1" )
 		extMod2         := getPklInfo( "extendMod2" )
 	}
@@ -293,7 +293,7 @@ _setExtendState( set = 0 )									; Called from setModState
 
 ExtendIsPressed() 											; Determine whether the Extend key is pressed
 {
-	ext := getLayInfo( "extendKey" )
+	ext := getLayInfo( "ExtendKey" )
 	Return % ( ext && getKeyState( ext, "P" ) ) ? true : false
 }
 
@@ -329,7 +329,7 @@ setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown
 		SetTimer, tomTimer, Off
 		setPklInfo( "tomKey", "" )
 		tomHeld[HKey] := 0
-		extUsed := ( HKey == getLayInfo( "extendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
+		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
 		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
 			processKeyPress( HKey )
 		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?

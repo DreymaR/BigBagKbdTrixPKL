@@ -6,20 +6,21 @@
 /*
 	LayoutInfo entries:
 	-------------------
-	active         := "" ; The active layout
-	dir            := "" ; The directory of the active layout
-	hasAltGr       := 0  ; Should Right Alt work as AltGr in the layout?
-	extendKey      := "" ; Extend modifier for navigation, editing, etc.
+	ActiveLay     := "" ; The active layout
+	dir           := "" ; The directory of the active layout (eD: Obsolete)
+	LayHasAltGr   := 0  ; Should Right Alt work as AltGr in the layout?
+	ExtendKey     := "" ; Extend modifier for navigation, editing, etc.
 	
-	nextLayout     := "" ; If you set multiple layouts, this is the next one.
-	                     ; see the "changeActiveLayout:" label!
-	numOfLayouts := 0  ; Array size
-	LayoutsXcode         ; layout code
-	LayoutsXname         ; layout name
-	Ico_On_File          ; Icon for On  (file)
-	Ico_On_Num_          ; --"--        (# in file)
-	Ico_OffFile          ; Icon for Off (file)
-	Ico_OffNum_          ; --"--        (# in file)
+	NextLayout    := "" ; If you set multiple layouts, this is the next one.
+	                    ; see the "changeActiveLayout:" label!
+	NumOfLayouts  := 0  ; Array size
+	LayoutsXcode        ; layout code
+	LayoutsXname        ; layout name
+	Ico_On_File         ; Icon for On  (file)
+	Ico_On_Num_         ; --"--        (# in file)
+	Ico_OffFile         ; Icon for Off (file)
+	Ico_OffNum_         ; --"--        (# in file)
+	...and more...
 */
 	
 setKeyInfo( key, value )

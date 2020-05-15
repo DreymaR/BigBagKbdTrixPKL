@@ -12,9 +12,9 @@
 ;	AboutMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowAbout"    ) ) 	; Don't show this to avoid clutter
 ;	DebugMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_DebugWIP"     ) )
 	
-	activeLayout    := getLayInfo( "active" )
+	activeLayout    := getLayInfo( "ActiveLay" )
 	activeLayName   := ""
-	numOfLayouts  := getLayInfo( "numOfLayouts" )
+	numOfLayouts  := getLayInfo( "NumOfLayouts" )
 	
 	aboutmeMenuItem := getPklInfo( "LocStr_9"  )			; pklLocaleString()
 	keyhistMenuItem := getPklInfo( "LocStr_KeyHistMenu" )

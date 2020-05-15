@@ -178,7 +178,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - See the next section to learn more about key mapping syntax.
     - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (OEM_102) for the sake of example.
     - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. OEM_102 is there, state 0/1 mapped to ö/Ö.
-    - To find the V key, see the `baseLayout = Colemak-eD\BaseLayout_Cmk-eD_@K` line and open that file. There's the V key, SC02f.
+    - To find the V key, see the `baseLayout = Colemak-eD\BaseLayout_Cmk-eD` line and open that file. There's the V key, SC02f.
     - Now, copy the V and OEM_102 keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
 * Now, if your `EPKL_Layouts` .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
