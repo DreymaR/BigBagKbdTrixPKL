@@ -148,7 +148,7 @@
 ;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-;	- EPKL v1.1.4β: Mapping/setting tweaks. Dvorak and Sym mod layouts. HIG updated for Inkscape v1.0.
+;	- EPKL v1.1.4: Mapping/setting tweaks. Dvorak and Sym mod layouts. HIG updated for Inkscape v1.0.
 ;		- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
 ;		- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
 ;		- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
@@ -164,7 +164,7 @@
 ;		- Dialled down the help image refresh timer a bit. Seems to help for Extend2, but not for Tap-Ext Kaomoji DK nor the initial help image?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.4α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.4β" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
