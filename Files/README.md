@@ -156,16 +156,22 @@ DONE:
 	- Fixed: The janitor timer kept resending mod up strokes every # s. Now it's once only after recent keyboard activity.
 	- Minor: Made a bool() fn to use bool(pklIniRead()) instead of a dedicated pklIniBool().
 	- Tested: The LAlt key (SC038) can work as Extend Modifier, just like any other key can. (Remapping another key to LAlt can still be tricky.)
-* EPKL v1.1.4α: Remap/mapping/setting tweaks. Dvorak and Sym mod layouts.
-	- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
-	- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
+* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
+	- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). ANSI uses both. Choose between them in the Remap file.
+		- Premade Sym(QuMn) variants for VK/eD Colemak vanilla and CAW.
+	- Dvorak layouts, with suitable Curl/Angle/Wide ergo mods. These are my suggestions and not "official" variants for now.
+	- The HIG (Help Image Generator) has been updated for Inkscape v1.0 that's finally out! All images are now created in one call, a lot faster.
+		- Also tweaked the HIG for Co_## KLM key codes since the image template doesn't have the underscore for these codes.
+	- My KLM QW_## codes found in the Remap file may replace VK codes in layouts.
+		- All BaseLayout files are now unified for KbdType by replacing ANS/ISO specific OEM_# VK codes with KLM ones.
+		- Added a KbdType setting in the layout files, overriding the one used in layout selection.
+		- KbdType @K codes for ANS/ISO in LayStack files, further simplifying ISO/ANSI conversion. (For baseLayout, mapSC_, img_Extend#/DKeyDir/bgImage.)
 	- Keys can now be disabled by '--' or VK mapped to themselves by VK(ey) as their first layout entry.
 	- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
-	- Added Dvorak layouts, with suitable Curl/Angle/Wide ergo mods. These are my suggestions and not "official" variants for now.
-	- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). Choose between them in the Remap file.
-	- Added a KbdType setting in layout.ini files. It overrides the one used in the layout selection.
-	- Added @K codes for ANS/ISO in LayStack files, to simplify ISO/ANSI conversion. (For baseLayout, mapSC_, img_Extend#/DKeyDir/bgImage.)
+	- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
+	- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
 	- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from layout.ini files. Still left in BaseLayout files as an example.
+	- Set the help image refresh timer a bit faster. Seems to help for Extend2, but not for Tap-Ext Kaomoji DK nor the initial help image?
 
 
 TODO:

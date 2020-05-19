@@ -153,8 +153,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		mapVK   := ReadRemaps( "ANS2ISO",         mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings
 		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
-		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile )				; Make a code dictionary QWERTY-2-VK mapping below
-;		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile )				; Make a code dictionary for Co-2-VK mapping below 	; eD WIP: Drop this, as the Co codes will map to their QWERTY counterparts... unintuitive.
+		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile )				; Make a code dictionary for QW-2-VK mapping below (Co is unintuitive since KLM VK names are QW based?) 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics? Need QWSC or CoSC too, later on.
 ;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile )				; Make a code dictionary Co2SC mapping below 	; eD WIP. Make these only on demand, allowing for other codes than Co?
 		initialized := true
 	}

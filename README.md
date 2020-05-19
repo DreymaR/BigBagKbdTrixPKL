@@ -101,15 +101,16 @@ Most of my layouts have a base layout defined; their layout section may then cha
 Here are some full key mappings followed by a legend:
 ```
 SC018 = Y       1     y     Y     --    ›     »     ; QWERTY oO
-SC019 = OEM_1   0     ;     :     --    @0a8  …     ; QWERTY pP - dk_umlaut (ANS/ISO_1/3)
+SC019 = QW_SC   0     ;     :     --    @0a8  …     ; QWERTY pP - dk_umlaut (ANS/ISO_1/3)
 ;SC   = VK      CS    S0    S1    S2    S6    S7    ; comments
 ```
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
-    - For SC, you can use an AHK key name instead. For full mappings I think you need the real VK name in the VK entry.
+    - For SC, you can use an AHK key name instead. For VK names you need real VK names or my KLM QW_## codes.
     - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
-    - Check out that the ISO/ANSI specific `OEM_#` key numbers are right for you, or remapped with a VK remap.
-    - _Example:_ `OEM_1` above is the semicolon key for ANSI, but ISO names the semicolon key `OEM_3`.
+    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's better to use my generic KLM QW_## codes.
+    - Look in the `_eD_Remap.ini` file for KLM QW_## key codes to use. `OEM_` codes may also be remapped with a VK remap.
+    - _Example:_ `QW_SC` is the semicolon key, which is `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
     - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it works as stated, if held down it's the modifier.
     - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
@@ -243,13 +244,13 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- The shiftStates layout entry is now in the [layouts] section of layout.ini, spaced out so entries have more room and are clearer.
 	- Since Space/Tab are used to delimit layout entries, there are now special '&Spc' and '&Tab' PowerString entries for them.
 	- Dead key abbreviations are now by code point instead of numbered, as in MSKLC. Example: The .klc entry 02c7@ is a caron DK; in EPKL it becomes @2c7.
-* EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
+* v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 	- Dead keys on Extend key tap. Examples: Tap {Extend, n} for parentheses with positioning. {Ext, z/Z} Undo/Redo. {Shift, Ext, letter} for kaomoji.
 	- Sticky Shift works to select Extend dead keys, and stays active. If you want the shift-P kaomoji tap {Shift, Ext} then P quickly. If not, wait.
 	- For InputRaw/Send/AHK/Blind/Unicode/DeadKey/PowerString entry prefixes, both the old %$*=~@& or →§αβ«Ð¶ (AltGr+Shift+ISABUDP) work now.
 	- Direct dead key entries in the format <#> = <entry> work too. If the char is an uppercase version, append a plus (<#>+).
 	- "Janitor" inactivity timeout setting (e.g., 2 s) to release any stuck modifiers. These can happen with advanced usage.
-* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
+* v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 	- The downloadable release asset .zip file now contains all files needed to run EPKL. No Source/Other/Data nor .bat/.git. files.
 	- The Kaomoji dead key now holds a related entry for each shifted letter/symbol, e.g., d( ^◇^)b vs (b￣◇￣)b.
 	- An EPKL_Layouts_Default .ini file has been split off from EPKL_Settings.ini so the layout definitions have a file of their own.
@@ -259,6 +260,16 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Added Layout Type (eD or VK) and Other Mod (e.g., Sym) shortcuts to the Layouts.ini file.
 	- Added eD/VK Colemak Curl(DHm) only layouts. Used CurlM/DHm here, to support ortho boards. Ortho help images are on the TODO list.
 	- Fixed: DeadKey+Spc didn't release the base accent as it should.
+* v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
+	- Three Sym(bol) mod variants: Improving quote/apostrophe (Qu), Minus/hyphen (Mn) or both (QuMn). ANSI uses both. Choose between them in the Remap file.
+		- Premade Sym(QuMn) variants for VK/eD Colemak vanilla and CAW.
+	- Dvorak layouts, with suitable Curl/Angle/Wide ergo mods. These are my suggestions and not "official" variants for now.
+	- The HIG (Help Image Generator) has been updated for Inkscape v1.0 that's finally out! All images are now created in one call, a lot faster.
+		- Also tweaked the HIG for Co_## KLM key codes since the image template doesn't have the underscore for these codes.
+	- My KLM QW_## codes found in the Remap file may replace VK codes in layouts.
+		- All BaseLayout files are now unified for KbdType by replacing ANS/ISO specific OEM_# VK codes with KLM ones.
+		- KbdType @K codes for ANS/ISO in LayStack files, further simplifying ISO/ANSI conversion.
+	- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
 
 
 TODO:
