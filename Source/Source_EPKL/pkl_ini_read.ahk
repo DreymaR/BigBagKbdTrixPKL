@@ -37,7 +37,7 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 	}
 	if ( ! IsObject( iniFile ) ) 										; Turn single-file calls into arrays
 		iniFile := [ iniFile ]
-	for ix, theFile in iniFile 											; Read from iniFile. Failing that, altFile.
+	For ix, theFile in iniFile 											; Read from iniFile. Failing that, altFile.
 	{
 		hereDir := ( layStck ) ? iniDirs[ix] : "." 						; LayStack files may use own home dirs
 		if ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
@@ -51,7 +51,7 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 		}
 		if ( val ) 														; Once a value is found, break the for loop
 			Break
-	}	; end for
+	}	; end For
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
 	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR)
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments

@@ -49,7 +49,8 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 		if ( mapType == "SC" )								; Remap pdic from thisType to SC
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
 		themCycls   := StrSplit( fullCycle, "/", " `t" ) 	; Parse cycle to minicycles:  | a | b / c | d | e |
-		for ix, minCycl in themCycls { 	; eD WIP
+		For ix, minCycl in themCycls
+		{
 			thisCycle   := StrSplit( minCycl, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
 ;			thisCycle   := StrSplit( fullCycle, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
 			numSteps    := thisCycle.MaxIndex()
@@ -68,9 +69,9 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 				pdic[ this ] := that 						; Map the (remapped?) code to the next one
 				tdic[ that ] := this 						; Keep the reverse mapping for later cycles
 			}	; end loop (remap one full cycle)
-			for key, val in tdic 
+			For key, val in tdic 
 				rdic[ key ] := val 							; Activate the lookup dict for the next cycle
-		}	; end loop (parse minicycles)
+		}	; end For (parse minicycles)
 	}	; end loop (parse CSV)
 ;; eD remapping cycle notes:
 ;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
@@ -152,7 +153,7 @@ _pklCleanup() {
 	if ( A_TimeIdle > timeOut ) { 					 	; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
 		if getPklInfo( "cleanupDone" ) 					; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
 			Return
-		for ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
+		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
 					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
 			if getKeyState( mod ) {
 				Return 									; If the key is being held down, leave it be
@@ -172,7 +173,7 @@ _pklCleanup() {
 ;;      These are minor utility functions used by other parts of EPKL
 ;
 
-pklMsgBox( msg, s = "", p = "", q = "", r = "" )
+pklMsgBox( msg, s = "", p = "", q = "", r = "" ) 		; Seems this is only used once in pkl_init now?
 {
 	msg := getPklInfo( "LocStr_" . msg )
 	Loop, Parse, % "spqr"
@@ -222,7 +223,7 @@ getVKeyCodeFromName( name ) 	; Get the two-digit hex VK## code from a VK name
 	Return name
 }
 
-getWinLocaleID() 			; This was in the detect/get functions
+getWinLocaleID() 											; Win LID; for Language use A_Language.
 {
 	WinGet, WinID,, A
 	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)

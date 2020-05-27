@@ -86,7 +86,7 @@ for the current layout, or only state images?
 	HIG.imgType := "deadkey"
 	HIG.destDir := HIG.ImgDirs[ "dkey" ]
 	HIG.DKNames := ( onlyMakeDK ) ? StrSplit( onlyMakeDK, "," ) : HIG.DKNames
-	for key, dkName in HIG.DKNames 								; Dead key loop
+	For key, dkName in HIG.DKNames 								; Dead key loop
 	{
 		if ( stateImgOnly )
 			Break
@@ -120,7 +120,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 	stateImg        := ( HIG.imgName == "state" ) ? true : false
 	if ( SubStr( HIG.imgName, 1, 2 ) == "dk" ) { 				; "dk_<dkName>" for dead keys
 		dkName      := SubStr( HIG.imgName, 4 )
-		For i, rel in [ 0, 1, 4, 5, 6, 7 ] 						; Loop through DK releases to be marked
+		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] 					; Loop through DK releases to be marked
 		{
 			dkv     := DeadKeyvalue( dkName, "s" . rel ) 		; Get the DeadKeyValue for the special entries...
 			if not dkv
@@ -164,7 +164,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 			HIG.ImgDic[ dkName . "_" . state . CO ] := dkv 		; Store the release value for this DK/state/key
 			emptyBool := ( dkv ) ? false : emptyBool
 		}	; end if imgName
-	}	; end for CO, SC
+	}	; end For CO, SC
 	
 	if ( HIG.imgType == "--" ) 									; Sometimes we just need the dictionary, like for single DK.
 		Return
@@ -266,9 +266,8 @@ _svgChar( ch ) 												; Convert character code to RegEx-able SVG text entry
 	escapeDic   :=  { "&"  : "&amp;"  , "'"  : "&apos;" , """" : "&quot;" 		; &'"<> for SVG XML compliance.
 					, "<"  : "&lt;"   , ">"  : "&gt;"   , "$"  : "$$"     } 	; $ -> $$ for use with RegExReplace.
 	txt := Chr( ch )
-	for key, val in escapeDic {
+	For key, val in escapeDic
 		txt := ( txt == key ) ? val : txt 					; Escape forbidden characters for XML/SVG and $ for RegEx
-	}
 	Return txt
 }
 

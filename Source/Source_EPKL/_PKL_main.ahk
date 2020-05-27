@@ -52,6 +52,7 @@
 ;				- However, Spc isn't handled correctly!? It still gets transposed.
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
+;		- WIP: Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;;  eD TONEXT:
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
@@ -134,6 +135,7 @@
 ;		- Go back on the Paste Extend key vs Ext1/2? It's ugly and a bit illogical since the layers are otherwise positional. But I get confused using Ext+D for Ctrl+V.
 ;		- Allow assigning several keys as Extend Modifier?
 ;		- An EPKL sample layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
+;		- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
 ;;  eD DONE:
 ;	- PKL[eD] v0.4.2: AHK v1.1; menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead(); layered help images.
 ;	- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
@@ -148,7 +150,9 @@
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	- EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
-;	- EPKL v1.1.5α:
+;	- EPKL v1.1.5α: Language tweaks
+;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
+;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -180,6 +184,11 @@ activatePKL()
 Return  	; end main
 
 ; ####################### labels #######################
+
+;LControl & RAlt::MsgBox You pressed AltGr 	; This works but mapping to RAlt produces "Invalid hotkey", why!?
+;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
+;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
+; eD WIP: Map AltGr to RAlt to prevent trouble?
 
 exitPKL:
 	ExitApp

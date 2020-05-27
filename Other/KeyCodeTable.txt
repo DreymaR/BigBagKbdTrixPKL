@@ -2,20 +2,20 @@
 ;;   KEY CODE TABLE FOR AHK INCLUDING PKL
 ;;   ~ Compiled by Eraicos and DreymaR, 2017-09
 ;;  ======================================================================
-;;  SC      VK_ code        Co      AutoHotkey Name     Description
-;;         (ANSI/ISO)      (KLM)
+;;  SC      VK_ code        KLM     AutoHotkey Name     Description
+;;         (ANSI/ISO)      (Co/QW)
 ;
 ;;  ======  Top row  =====================================================
 SC001 =  ;  ESCAPE          ESC     Escape (or Esc)     Escape
-SC03b =  ;  F1              F_1     F1                  F1
-SC03c =  ;  F2              F_2     F2                  F2
-SC03d =  ;  F3              F_3     F3                  F3
-SC03e =  ;  F4              F_4     F4                  F4
-SC03f =  ;  F5              F_5     F5                  F5
-SC040 =  ;  F6              F_6     F6                  F6
-SC041 =  ;  F7              F_7     F7                  F7
-SC042 =  ;  F8              F_8     F8                  F8
-SC043 =  ;  F9              F_9     F9                  F9
+SC03b =  ;  F1              _F1     F1                  F1
+SC03c =  ;  F2              _F2     F2                  F2
+SC03d =  ;  F3              _F3     F3                  F3
+SC03e =  ;  F4              _F4     F4                  F4
+SC03f =  ;  F5              _F5     F5                  F5
+SC040 =  ;  F6              _F6     F6                  F6
+SC041 =  ;  F7              _F7     F7                  F7
+SC042 =  ;  F8              _F8     F8                  F8
+SC043 =  ;  F9              _F9     F9                  F9
 SC044 =  ;  F10             F10     F10                 F10
 SC057 =  ;  F11             F11     F11                 F11
 SC058 =  ;  F12             F12     F12                 F12
@@ -28,7 +28,7 @@ SC15e =  ;                  PWR                         Power
 SC15f =  ;                  SLE     Sleep               Sleep
 SC163 =  ;                                              Wake
 ;;  ======  Number row  ==================================================
-SC029 =  ;  OEM_3/5         GR                          US QWERTY `~
+SC029 =  ;  OEM_3/5         _GR                         US QWERTY `~
 SC002 =  ;  1               _1                          US QWERTY 1!
 SC003 =  ;  2               _2                          US QWERTY 2@
 SC004 =  ;  3               _3                          US QWERTY 3#
@@ -39,51 +39,51 @@ SC008 =  ;  7               _7                          US QWERTY 7&
 SC009 =  ;  8               _8                          US QWERTY 8*
 SC00a =  ;  9               _9                          US QWERTY 9(
 SC00b =  ;  0               _0                          US QWERTY 0)
-SC00c =  ;  OEM_MINUS/PLUS  MN                          US QWERTY -_
-SC00d =  ;  OEM_PLUS/4      EQ                          US QWERTY =+
+SC00c =  ;  OEM_MINUS/PLUS  _MN                         US QWERTY -_
+SC00d =  ;  OEM_PLUS/4      _EQ                         US QWERTY =+
 SC00e =  ;  BACK            BSP     Backspace (or BS)   Backspace
 ;;  ======  Upper letter row  ============================================
 SC00f =  ;  TAB             TAB     Tab                 Tab
 SC010 =  ;  Q               _Q                          US QWERTY qQ
 SC011 =  ;  W               _W                          US QWERTY wW
-SC012 =  ;  E               _F                          US QWERTY eE
-SC013 =  ;  R               _P                          US QWERTY rR
-SC014 =  ;  T               _G                          US QWERTY tT
-SC015 =  ;  Y               _J                          US QWERTY yY
-SC016 =  ;  U               _L                          US QWERTY uU
-SC017 =  ;  I               _U                          US QWERTY iI
-SC018 =  ;  O               _Y                          US QWERTY oO
-SC019 =  ;  P               SC                          US QWERTY pP
-SC01a =  ;  OEM_4/6         LB                          US QWERTY [{
-SC01b =  ;  OEM_6/1         RB                          US QWERTY ]}
+SC012 =  ;  E               _F/_E                       US QWERTY eE
+SC013 =  ;  R               _P/_R                       US QWERTY rR
+SC014 =  ;  T               _G/_T                       US QWERTY tT
+SC015 =  ;  Y               _J/_Y                       US QWERTY yY
+SC016 =  ;  U               _L/_U                       US QWERTY uU
+SC017 =  ;  I               _U/_I                       US QWERTY iI
+SC018 =  ;  O               _Y/_O                       US QWERTY oO
+SC019 =  ;  P               _SC/_P                      US QWERTY pP
+SC01a =  ;  OEM_4/6         _LB                         US QWERTY [{
+SC01b =  ;  OEM_6/1         _RB                         US QWERTY ]}
 ;;  ======  Middle letter row  ===========================================
 SC03A =  ;  CAPITAL         CLK     CapsLock            Caps Lock
 SC01e =  ;  A               _A                          US QWERTY aA
-SC01f =  ;  S               _R                          US QWERTY sS
-SC020 =  ;  D               _S                          US QWERTY dD
-SC021 =  ;  F               _T                          US QWERTY fF
-SC022 =  ;  G               _D                          US QWERTY gG
+SC01f =  ;  S               _R/_S                       US QWERTY sS
+SC020 =  ;  D               _S/_D                       US QWERTY dD
+SC021 =  ;  F               _T/_F                       US QWERTY fF
+SC022 =  ;  G               _D/_G                       US QWERTY gG
 SC023 =  ;  H               _H                          US QWERTY hH
-SC024 =  ;  J               _N                          US QWERTY jJ
-SC025 =  ;  K               _E                          US QWERTY kK
-SC026 =  ;  L               _I                          US QWERTY lL
-SC027 =  ;  OEM_1/3         _O                          US QWERTY ;:
-SC028 =  ;  OEM_7           QU                          US QWERTY '"
-SC02b =  ;  OEM_5/2         BS                          US QWERTY \|
+SC024 =  ;  J               _N/_J                       US QWERTY jJ
+SC025 =  ;  K               _E/_K                       US QWERTY kK
+SC026 =  ;  L               _I/_L                       US QWERTY lL
+SC027 =  ;  OEM_1/3         _O/_SC                      US QWERTY ;:
+SC028 =  ;  OEM_7           _QU                         US QWERTY '"
+SC02b =  ;  OEM_5/2         _BS                         US QWERTY \|
 SC01c =  ;  RETURN          ENT     Enter (or Return)   Enter
 ;;  ======  Lower letter row  ============================================
 SC02a =  ;  LSHIFT          LSH     LShift              Left Shift
-SC056 =  ;  OEM_102         LG                          OEM_102
+SC056 =  ;  OEM_102         _LG                         OEM_102
 SC02c =  ;  Z               _Z                          US QWERTY zZ
 SC02d =  ;  X               _X                          US QWERTY xX
 SC02e =  ;  C               _C                          US QWERTY cC
 SC02f =  ;  V               _V                          US QWERTY vV
 SC030 =  ;  B               _B                          US QWERTY bB
-SC031 =  ;  N               _K                          US QWERTY nN
+SC031 =  ;  N               _K/_N                       US QWERTY nN
 SC032 =  ;  M               _M                          US QWERTY mM
-SC033 =  ;  OEM_COMMA       CM                          US QWERTY ,<
-SC034 =  ;  OEM_PERIOD      DT                          US QWERTY .>
-SC035 =  ;  OEM_2/MINUS     SL                          US QWERTY /?
+SC033 =  ;  OEM_COMMA       _CM                         US QWERTY ,<
+SC034 =  ;  OEM_PERIOD      _DT                         US QWERTY .>
+SC035 =  ;  OEM_2/MINUS     _SL                         US QWERTY /?
 SC036 =  ;  RSHIFT          RSH     RShift              Right Shift
 ;;  ======  Bottom row  ==================================================
 SC01d =  ;  LCONTROL        LCT     LControl (or LCtrl) Left Control
@@ -100,10 +100,10 @@ SC147 =  ;  HOME            HOM     Home                Home
 SC14f =  ;  END             END     End                 End
 SC149 =  ;  PRIOR           PGU     PgUp                Page Up
 SC151 =  ;  NEXT            PGD     PgDn                Page Down
-SC148 =  ;  UP              UP      Up                  Up Arrow
-SC14b =  ;  LEFT            LE      Left                Left Arrow
-SC150 =  ;  DOWN            DN      Down                Down Arrow
-SC14d =  ;  RIGHT           RI      Right               Right Arrow
+SC148 =  ;  UP              _UP     Up                  Up Arrow
+SC14b =  ;  LEFT            _LE     Left                Left Arrow
+SC150 =  ;  DOWN            _DN     Down                Down Arrow
+SC14d =  ;  RIGHT           _RI     Right               Right Arrow
 ;;  ======  Number pad  ==================================================
 SC052 =  ;  NUMPAD0         P_0     Numpad0             Num0
 SC04f =  ;  NUMPAD1         P_1     Numpad1             Num1

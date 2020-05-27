@@ -77,53 +77,46 @@ pkl_locale_load( lang )
 	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too
 	if ( not initialized )
 	{																	; Read/set default locale string list
-		Loop, 22														; Read default locale strings (numbered)
+		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] 	; Read defaults from the EPKL_Tables file
 		{
-			str := pklIniRead( "LocStr" . SubStr( "00" . A_Index, -1 ), "", "PklDic", "DefaultLocaleStr" ) ; Pad with zero if index < 10
-			str := strEsc( str )										; Replace \# escapes
-			setPklInfo( "LocStr_" . A_Index , str )
-		}
-		sect := iniReadSection( getPklInfo( "File_PklDic" ), "DefaultLocaleTxt" )	; Read default locale strings (key/value)
-		Loop, Parse, sect, `r`n
-		{
-			pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
-			setPklInfo( key, val )
-		}
+			sect := iniReadSection( getPklInfo( "File_PklDic" ), sectName )	; Read default locale strings (key/value)
+			Loop, Parse, sect, `r`n
+			{
+				pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
+				setPklInfo( key, val )
+			}
+		} 	; end For
 		initialized := true
 	}
 	
-	setPklInfo( "LocStr_RefreshMenu", pklIniRead( "refreshMenuText", "Refresh"        ) ) 	; eD TODO: Move these into the languages file
-	setPklInfo( "LocStr_ZoomImgMenu", pklIniRead( "zoomImgMenuText", "Zoom image"     ) )
-	setPklInfo( "LocStr_MoveImgMenu", pklIniRead( "moveImgMenuText", "Move image"     ) )
-	setPklInfo( "LocStr_KeyHistMenu", pklIniRead( "keyHistMenuText", "Key history..." ) )
-	setPklInfo( "LocStr_ImportsMenu", pklIniRead( "importsMenuText", "Import layouts..." ) )
-	setPklInfo( "LocStr_MakeImgMenu", pklIniRead( "makeImgMenuText", "Make help images...", pklIniRead( "imgGenIniFile" ) ) )
-	
 	file := lang . ".ini"
 	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
-	if not FileExist( file ) 						; If the language file isn't found, we'll just use the defaults
+	if not FileExist( file ) 								; If the language file isn't found, we'll just use the defaults
 		Return
-	sect := iniReadSection( file, "pkl" )
-	Loop, Parse, sect, `r`n
+	sect := iniReadSection( file, "pkl" ) 					; Read the main locale strings frome the PKL section
+	Loop, Parse, sect, `r`n 				; LocStr_ 00-22,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
 	{
-		pklIniKeyVal( A_Loopfield, key, val, 1 )	; A more compact way than before (but still in a loop)
-		if ( val != "" )
-			setPklInfo( "LocStr_" . key , val ) 	; pklLocaleStrings( key, val, 1 )
-	}
+		pklIniKeyVal( A_Loopfield, key, val, 1 ) 			; A more compact way than before (but still in a loop)
+		if ( val != "" ) {
+			key := ( key <= 9 ) 
+					? SubStr("00" . key, -1) : key 			; If key is #, zero pad it to 0# instead
+			setPklInfo( "LocStr_" . key , val ) 			; pklLocaleStrings( key, val, 1 )
+		}
+	} 	; end Loop
 	
-	sect := iniReadSection( file, "detectDeadKeys" )
+	sect := iniReadSection( file, "detectDeadKeys" ) 		; Read the locale strings for DK detection
 	Loop, Parse, sect, `r`n
 	{
 		pklIniKeyVal( A_Loopfield, key, val, 1 )
-		setPklInfo( "DetecDK_" . key, val ) 		; detectDeadKeys_SetLocaleTxt(
-	}
+		setPklInfo( "DetecDK_" . key, val ) 				; detectDeadKeys_SetLocaleTxt(
+	} 	; end Loop
 	
-	sect := iniReadSection( file, "keyNames" )
+	sect := iniReadSection( file, "keyNames" ) 				; Read the list of keys and mouse buttons
 	Loop, Parse, sect, `r`n
 	{
-		pklIniKeyVal( A_Loopfield, key, val, 0 )	; Read without character escapes
+		pklIniKeyVal( A_Loopfield, key, val, 0 ) 			; Read without character escapes
 		_setHotkeyText( key, val )
-	}
+	} 	; end Loop
 }
 
 _setHotkeyText( hk, localehk )
@@ -152,7 +145,7 @@ getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of h
 		, ">+"    : "RShift & " , ">^"    : "RCtrl & " , ">!"    : "RAlt & " , ">#"    : "RWin & "
 		,  "+"    :  "Shift & " ,  "^"    :  "Ctrl & " ,  "!"    :  "Alt & " ,  "#"    :  "Win & "
 		, "SC029" : "Tilde"     ,  "*"    : ""         ,  "$"    : ""        ,  "~"    : "" }
-	for key, val in strDic
+	For key, val in strDic
 		str := StrReplace( str, key, val )
 
 	str := RegExReplace( str, "(\w+)", "#[$1]" )
@@ -167,7 +160,7 @@ getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of h
 	; The shorter key names were moved down so they'll work on the Languages file.
 	strDic := {                      "Delete" : "Del"   ,    "Insert" : "Ins"   ,   "Control" : "Ctrl"
 		,    "Return" : "Enter" ,    "Escape" : "Esc"   , "BackSpace" : "Back"  , "Backspace" : "Back" }
-	for key, val in strDic
+	For key, val in strDic
 		str := StrReplace( str, key, val )
 	
 	Return str

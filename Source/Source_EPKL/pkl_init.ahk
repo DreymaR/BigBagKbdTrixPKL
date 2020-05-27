@@ -81,7 +81,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 		theLayout := getLayInfo( "layout1code" )
 	}
 	if ( theLayout == "" ) {
-		pklMsgBox( 1, "layouts .ini" ) 									; "You must set the layout file in the EPKL layouts .ini!"
+		pklMsgBox( "01", "layouts .ini" ) 								; "You must set the layout file in the EPKL layouts .ini!"
 		ExitApp
 	}
 	setLayInfo( "ActiveLay", theLayout )
@@ -128,12 +128,13 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	pklDirs := [ layDir , baseDir, "."       , "."        ]
 	layStck := [] 														; The LayStack is the stack of layout info files
 	dirStck := []
-	for ix, file in pklLays {
+	For ix, file in pklLays
+	{
 		if FileExist( file ) { 											; If the file exists...
 			layStck.push( file ) 										; ...add it to the LayStack
 			dirStck.push( pklDirs[ix] )
 		}
-	}	; end for
+	}	; end For
 	setPklInfo( "LayStack", layStck ) 									; Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
 	
@@ -167,7 +168,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator
 	shiftState := StrSplit( shStates, ":" )
 	
-	for ix, layFile in layStck 											; Loop parsing all the LayStack layout files
+	For ix, layFile in layStck 											; Loop parsing all the LayStack layout files
 	{
 	map := iniReadSection( layFile, "layout" )
 	extKey := pklIniRead( "extend_key","", layFile ) 					; Extend was in layout.ini [global]. Can map it directly now.
@@ -278,7 +279,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		if FileExist( extFile )
 			extStck.push( extFile ) 										; The LayStack overrides the dedicated file
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
-		for ix, thisFile in extStck 									; Go through the LayStack then the ExtendFile. eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
+		For ix, thisFile in extStck 									; Go through the LayStack then the ExtendFile. eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
 		{																; Parse the Extend files
 			Loop % 4 {													; Loop the multi-Extend layers
 				extN := A_Index
@@ -329,7 +330,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	if FileExist( dkFile )
 		dkStack.push( dkFile ) 											; The LayStack overrides the dedicated file
 	setLayInfo( "dkFile", dkStack )										; These files should contain the actual dk tables
-	for ix, thisFile in dkStack											; Go through both DK and Layout files for names
+	For ix, thisFile in dkStack											; Go through both DK and Layout files for names
 	{
 		map   := iniReadSection( thisFile, dknames ) 					; Make the dead key name lookup table
 		Loop, Parse, map, `r`n
@@ -417,7 +418,8 @@ _checkModName( key ) 								; Mod keys need only the first letters of their nam
 	static modNames := [ "LShift", "RShift", "CapsLock", "Extend", "SGCaps"
 						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin" ]
 	
-	for ix, modName in modNames {
+	For ix, modName in modNames
+	{
 		if ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?
 			key := modName
 	}

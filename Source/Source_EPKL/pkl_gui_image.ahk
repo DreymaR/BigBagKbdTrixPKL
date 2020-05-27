@@ -140,7 +140,8 @@
 		dkS     := []
 		dkS0    := ( ssuf ) ? ssuf . "0.png" :   ".png"					; Img file state 0 suffix
 		dkS[1]  := ( ssuf ) ? ssuf . "1.png" : "sh.png"					; Img file state 1 suffix
-		for ix, st in [ 6, 7, 8, 9 ] {									; Loop through the remaining states
+		For ix, st in [ 6, 7, 8, 9 ] 									; Loop through the remaining states
+		{
 			dkS[ st ] := ssuf . st . ".png"
 		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
 		imgPath := thisDK . dkS0
