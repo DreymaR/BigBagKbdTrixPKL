@@ -15,7 +15,8 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- TOFIX: Sticky Shift doesn't get reset on VK layouts, leading to MULtiple SHifted characters!
+;		- WIP: When Extend or tap-Extend is activated or released, send a mods up? Would this make us more robust against the stuck mods problem?
+;		- TOFIX: Sticky Shift doesn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
@@ -56,6 +57,10 @@
 ;;  eD TONEXT:
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
+;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
+;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
+;			- Also allow ToM/Sticky AltGr. Very very nice since AltGr mappings are usually one-shot.
+;			- Define a separate AHK hotkey for LCtrl+RAlt (=AltGr in Windows)? That might make things simpler.
 ;		- TODO: VK mappings don't happen on normal keys. Simple VK code states don't get translated to VK##. Only used when the key is VK mapped.
 ;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
 ;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
@@ -64,10 +69,6 @@
 ;			- Could detect Upper(SubStr(key,1,2)) != "SC" ) and remap if so. Must have entries like Co_A then. Or use Co_A_ to pad to 5 chars? But is, e.g., CoMN_ nice?
 ;			- DONE: Expanded the Co table to include the right-hand block, and made a QW counterpart for the QWERTY people.
 ;		- TODO: Dialog GUI to produce EPKL_Layouts_Override.ini and EPKL_Settings_Override.ini files.
-;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
-;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
-;			- Also allow Sticky AltGr. Very nice since the AltGr mappings are usually one-shot.
-;			- Define a separate AHK hotkey for LCtrl+RAlt (=AltGr in Windows)? That might make things simpler.
 ;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. Maybe that could be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM?
 ;		- TODO: Sensible aliases for OEM_# VK codes! They are confusing for the users. E.g., OEM_GR, OEM_CM, OEM_DT etc. This allows using one common BaseLayout.
 ;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) which may be moved to the layout.ini itself for robustness.
@@ -153,6 +154,7 @@
 ;	- EPKL v1.1.5α: Language tweaks
 ;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
 ;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
+;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
