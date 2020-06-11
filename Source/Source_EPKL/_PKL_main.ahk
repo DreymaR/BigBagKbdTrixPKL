@@ -16,14 +16,12 @@
 ;;  eD TOFIX/WIP:
 ;		- 
 ;		- WIP: When Extend or tap-Extend is activated or released, send a mods up? Would this make us more robust against the stuck mods problem?
+;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: Sticky Shift doesn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
-;		- TOFIX: On the first help img minimizing, a taskbar icon sometimes appears on-screen or in tray. Showing the image once before resizing didn't help...?
-;			- TOFIX: Also, if starting without Help Image, showing it later doesn't work
-;			- Send help image on/off at startup? Could fix both the rogue Co icon window on first minimize, and the non-image if not present at first issues?
 ;		- TOFIX: {Ext+S,<key>} rapidly sends a kaomoji. After this, Shift is stuck. Same with {Ext+T}! Is this the solution to the stuck Ctrl riddle?!? Unrelated to Sticky Mods.
 ;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext
 ;			- Key History: Looks like the mod is released but then re-presssed? Why?
@@ -32,7 +30,6 @@
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
 ;		- TOFIX: First Extend after a refresh is slow, won't always take until the second key press. Prepare it somehow? Also, Ext+T+<key> after refresh sends only Ext+<key>?
-;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- WIP: Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
 ;		- WIP: Maintenance timer every 2-3 s or so
@@ -155,10 +152,11 @@
 ;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
 ;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
 ;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
+;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.4" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.5α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 

@@ -375,8 +375,10 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	Menu, Tray, Icon,,, 1 							; Freeze the tray icon
 	
-	if bool(pklIniRead("showHelpImage",true))
-		pkl_showHelpImage( 1 ) 						; Show the help image
+	pkl_showHelpImage( 1 ) 							; Initialize/show the help mage...
+	Sleep, 10 										; The image flashes on startup if this is long
+	if ! bool(pklIniRead("showHelpImage",true))
+		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
 
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
