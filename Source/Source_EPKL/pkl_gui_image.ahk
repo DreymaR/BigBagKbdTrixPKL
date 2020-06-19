@@ -16,6 +16,7 @@
 ;;   4 = suspend off
 ;;   5 = zoom in/out
 ;;   6 = move between positions
+;;   7 = opaque/transparent
 ;;  
 	
 	static im           := {} 		; Only one static now. But: Not compatible with %var% notation!
@@ -51,7 +52,8 @@
 		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
 								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
-		im.Opacity  := pklIniRead( "img_opacity"  , 255         )
+		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
+		im.Opacity  := im.OpacIni 											; The actual image opacity (0-255; 255 is opaque)
 		im.PosNr    := 5 													; Default position is bottom center (used to be "xCenter")
 		im.Zooms    := pklIniCSVs( "img_zooms"    , "100,150"   )
 		im.ZoomNr   := 1
@@ -91,6 +93,9 @@
 		if ( ++im.PosNr > 6 )
 			im.PosNr := 1
 		scaleImage := 1
+	} else if ( activate == 7 ) { 	; Flip image between opaque and transparent (by opacity setting)
+		im.Opacity := ( im.Opacity == 255 ) ? im.OpacIni : 255
+		activate := 1 				; Ensure redrawing w/ new opacity
 	}
 	state := _GetState()
 	
@@ -104,7 +109,7 @@
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
 			WinSet, TransColor, % im.BgColor, pklImgWin
-		} 				; eD NOTE: Seems that vVv got transparent color to work with separate GUIs for front/back?
+		} 				; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
 		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlBgImg AltSubmit 		; Make image controls stored in Help##### variables
 		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlImage AltSubmit
 		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlShImg AltSubmit
@@ -143,7 +148,7 @@
 		For ix, st in [ 6, 7, 8, 9 ] 									; Loop through the remaining states
 		{
 			dkS[ st ] := ssuf . st . ".png"
-		}	; eD TOFIX: A state6 img w/ a state6 DK sometimes seems to break DK img display if we're too fast?
+		}	; A state6 img w/ a state6 DK may break DK img display if we're too fast. See 'SetTimer, showHelpImage'.
 		imgPath := thisDK . dkS0
 		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
 	} else if ExtendIsPressed() { 										; Extend image

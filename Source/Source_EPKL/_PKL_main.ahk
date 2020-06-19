@@ -26,6 +26,9 @@
 ;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext
 ;			- Key History: Looks like the mod is released but then re-presssed? Why?
 ;			- The rapidly pressed key interrupts the Extend routine, so the mod Up is never sent.
+;			- Make sure Extend mods aren't Sticky? Do we need to call _osmClear() for Ext mods up, if the Ext mod is a sticky mod? Or, in setModifierState, if Ext is down don't use the Sticky setting?!
+;			- An Extend tap will not trigger the Extend mod handling such as _setModState(). Where could we catch an Ext Up to make sure no mods are stuck/sticky?
+;			- setLayInfo( "extendUsed" ) isn't applied to Ext-mods?
 ;		- TOFIX: AltGr+Spc, in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space? Related to the NBSP mapping.
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
@@ -52,6 +55,7 @@
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;		- WIP: Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;;  eD TONEXT:
+;		- TODO: Allow the user to choose which monitor to display help images on? If you have a second monitor it may be less crowded and thus ideal for the help image. But how?
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
@@ -149,10 +153,12 @@
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	- EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
 ;	- EPKL v1.1.5α: Language tweaks
+;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
 ;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
 ;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
 ;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 ;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
+;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -185,10 +191,20 @@ Return  	; end main
 
 ; ####################### labels #######################
 
-;LControl & RAlt::MsgBox You pressed AltGr 	; This works but mapping to RAlt produces "Invalid hotkey", why!?
+;;  eD WIP: Map AltGr to RAlt to prevent trouble?!
+;;  The order of AltGr is always LCtrl then RAlt. Custom combos always have the * (wildcard) mod so they obey any mod state.
+;;  In order to make a combo hotkey for LCtrl&RAlt, we also need to handle the first key on its own (https://www.autohotkey.com/docs/Hotkeys.htm#combo)
+;;  "For standard modifier keys, normal hotkeys typically work as well or better than "custom" combinations. For example, <+s:: is recommended over LShift & s::."
+;;  Possible issue: These hotkeys are generated after the others, since initPklIni() is already run. Should this part be handled in the init part? What about any LCtrl hotkey in the layout?
+;#if GetKeyState( "LCtrl", "P" )
+;RAlt::
+;#if
+;LControl & RAlt:: 	; This works but mapping to RAlt produces "Invalid hotkey", why!? Also, it repeats.
+;<^>!:: 				; eD WIP: This isn't working?! Maybe an #if GetKeyState( "RAlt", "P" ) will do the trick?
+	pklDebug( "Gotcha, AltGr!", 0.5 )
+Return
 ;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
 ;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
-; eD WIP: Map AltGr to RAlt to prevent trouble?
 
 exitPKL:
 	ExitApp
@@ -293,6 +309,10 @@ Return
 
 moveHelpImage:
 	pkl_showHelpImage( 6 )
+Return
+
+opaqHelpImage:
+	pkl_showHelpImage( 7 )
 Return
 
 changeActiveLayout:

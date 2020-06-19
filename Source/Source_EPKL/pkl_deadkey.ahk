@@ -24,7 +24,7 @@
 
 pkl_DeadKey( DK )
 {
-	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active	; eD NOTE: Revert to global? No, because it's used in many files?
+	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?
 ;	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
 	CurrBaseKey_    := getKeyInfo( "CurrBaseKey_" )			; Current base/release key, set by pkl_Send()
 	DK              := getKeyInfo( "@" . DK )				; Find the dk's full name

@@ -17,15 +17,17 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 		lang := pklIniRead( SubStr( A_Language , -3 ), "", "PklDic", "LangStrFromLangID" )
 	pkl_locale_load( lang )
 	
+	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
 	pklSetHotkey( "suspendMeHotkey", "ToggleSuspend"       , "HK_Suspend"      )
 	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  )
 	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" )
 	pklSetHotkey( "exitMeNowHotkey", "ExitPKL"             , "HK_ExitApp"      )
-	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      )
+	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; Advanced Mode only
 	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  )
-	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  )
-	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    )
-	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     )
+	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; Hidden from menu
+	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; Hidden from menu
+	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    ) 	; Hidden from menu
+	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; Hidden from menu
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setPklInfo( "CtrlAltlIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )

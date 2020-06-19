@@ -257,7 +257,7 @@ SC002 = 1	1	1	!			; QWERTY 1!
 SC003 = 2	0	2	={Left}		; QWERTY 2@
 SC004 = 3	0	3	*{Right}	; QWERTY 3#
 SC005 = rshift	modifier		; QWERTY 4$
-SC006 = 5	0	dk1	dk2			; QWERTY 5% (EPKL: Use, e.g., @01 @02 for DKs)
+SC006 = 5	0	dk1	dk2			; QWERTY 5% (EPKL: DKs are named for instance @0b4 or @060)
 
 [deadkey1]
 ; 0 = unicode number of the "accent"

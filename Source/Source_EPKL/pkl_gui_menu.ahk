@@ -9,6 +9,7 @@
 	ShowImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
 	ZoomImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ZoomHelpImg"  ) )
 ;	MoveImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_MoveHelpImg"  ) ) 	; Don't show this to avoid clutter
+;	OpaqImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_OpaqHelpImg"  ) ) 	; Don't show this to avoid clutter
 ;	AboutMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowAbout"    ) ) 	; Don't show this to avoid clutter
 ;	DebugMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_DebugWIP"     ) ) 	; "Secret" Debug/WIP hotkey
 	
@@ -22,6 +23,7 @@
 	showImgMenuItem := getPklInfo( "LocStr_15" )
 	zoomImgMenuItem := getPklInfo( "LocStr_ZoomImage" )
 ;	moveImgMenuItem := getPklInfo( "LocStr_MoveImage" )
+;	opaqImgMenuItem := getPklInfo( "LocStr_OpaqImage" )
 	layoutsMenu     := getPklInfo( "LocStr_19" )
 	chngLayMenuItem := getPklInfo( "LocStr_18" )
 	refreshMenuItem := getPklInfo( "LocStr_RefreshMe" )
@@ -32,6 +34,7 @@
 	showImgMenuItem .= ( ShowImgHotkey ) ? _FixAmpInMenu( ShowImgHotkey ) : ""
 	zoomImgMenuItem .= ( ZoomImgHotkey ) ? _FixAmpInMenu( ZoomImgHotkey ) : ""
 ;	moveImgMenuItem .= ( MoveImgHotkey ) ? _FixAmpInMenu( MoveImgHotkey ) : ""
+;	opaqImgMenuItem .= ( OpaqImgHotkey ) ? _FixAmpInMenu( OpaqImgHotkey ) : ""
 	chngLayMenuItem .= ( ChngLayHotkey ) ? _FixAmpInMenu( ChngLayHotkey ) : ""
 	refreshMenuItem .= ( RefreshHotkey ) ? _FixAmpInMenu( RefreshHotkey ) : ""
 	suspendMenuItem .= ( SuspendHotkey ) ? _FixAmpInMenu( SuspendHotkey ) : ""
@@ -77,6 +80,7 @@
 	Menu, Tray, add, %showImgMenuItem%, showHelpImageToggle 				; Show image
 	Menu, Tray, add, %zoomImgMenuItem%, zoomHelpImage 						; Zoom image
 ;	Menu, Tray, add, %moveImgMenuItem%, moveHelpImage 						; Move image
+;	Menu, Tray, add, %opaqImgMenuItem%, opaqHelpImage 						; Opaque/transparent image
 	if ( numOfLayouts > 1 ) {
 		Menu, Tray, add, 													; (separator)
 		Menu, Tray, add, %layoutsMenu%, :changeLayout 						; Layouts
@@ -116,6 +120,7 @@
 	Menu, Tray, Icon,      %showImgMenuItem%,  shell32.dll , 174 		; showImgMenuItem icon - keyboard (116: film)
 	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImgMenuItem icon - spyglass
 ;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImgMenuItem icon - speeding window
+;	Menu, Tray, Icon,      %opaqImgMenuItem%,  shell32.dll ,  90 		; opaqImgMenuItem icon - double windows
 	if ( numOfLayouts > 1 ) {
 		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44 		; layoutsMenu     icon - star
 		Menu, Tray, Icon,  %chngLayMenuItem%,  shell32.dll , 138 		; chngLayMenuItem icon - forward arrow

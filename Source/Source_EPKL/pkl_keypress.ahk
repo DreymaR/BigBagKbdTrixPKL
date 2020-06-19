@@ -132,6 +132,7 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 		if ( xVal == mod && getKeyState( HKey, "P" ) ) { 	; If the key's Extend entry is a modifier 	; eD WIP: Instead, demand entries like "Shift Mod" in Extend tables and use a RegExMatch() here?
 			modPressed[mod] := HKey
 			Send % "{L" . mod . " Down}" 	; "{" . modKey[mod] . " Down}"
+			setLayInfo( "extendUsed", true ) 					; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 			Return
 		}
 		if ( theKey && !getKeyState( theKey, "P" ) ) { 			; eD TOFIX: Why doesn't mod up work if another key is pressed shortly after?
@@ -174,7 +175,7 @@ setModifierState( theMod, itsDown = 0 ) 					; Can be called from a hotkey or wi
 	}
 
 	if ( itsDown ) {
-		if ( InStr( osmKeys, theMod ) && theMod != getPklInfo( "osmKeyN" . osmN ) ) {	; eD WIP: Avoid the OSM if already held?
+		if ( InStr( osmKeys, theMod ) && theMod != getPklInfo( "osmKeyN" . osmN ) && ! ExtendIsPressed() ) {	; eD WIP: Avoid the OSM if already held? 	; eD WIP: Don't use Sticky mods when Ext is down?
 			osmN := Mod( osmN, getPklInfo( "osmMax" ) )+1 	; Switch between the OSM timers
 			
 			setPklInfo( "osmKeyN" . osmN, theMod ) 			; Marks the OSM as active
@@ -317,7 +318,7 @@ setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown
 	} else if ( set == -1 ) { 								; If the key is interrupted by another...
 		SetTimer, tomTimer, Off
 		setPklInfo( "tomKey", "" )
-		pklDebug( "caught ToM!", 0.5 ) 	; ED DEBUG
+		pklDebug( "caught interrupted ToM!", 0.5 ) 	; ED DEBUG: This isn't happening atm, as the lines that call it in processKeyPress() above are commented out
 		if getKeyState( HKey, "P" ) {
 			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )
