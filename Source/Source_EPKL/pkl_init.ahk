@@ -30,7 +30,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; Hidden from menu
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
-	setPklInfo( "CtrlAltlIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
+	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitAppTimeOut", 0 ) )

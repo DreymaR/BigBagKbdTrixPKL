@@ -108,26 +108,26 @@ setDeadKeysInCurrentLayout( deadkeys )
 	getDeadKeysInCurrentLayout( deadkeys, 1 )
 }
 
-getDeadKeysInCurrentLayout( newDeadkeys = "", set = 0 )
+getDeadKeysInCurrentLayout( newDKs = "", set = 0 )
 {				; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
-	static deadkeys := 0
+	static DKs := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
 	if ( DKsOfSysLayout == "-2" )
-		setPklInfo( "RAltAsAltGrLocale", true )
+		setKeyInfo( "RAltAsAltGrLocale", true ) 			; Set RAlt to act as AltGr using the EPKL_Tables 	; eD WIP: This seems wrong. Should do it separately, not mixed up with OS DKs?!
 	DKsOfSysLayout := ( InStr( DKsOfSysLayout, "-" ) == 1 ) ? "" : DKsOfSysLayout
 	if ( set == 1 ) {
-		if ( newDeadkeys == "auto" )
-			deadkeys := DKsOfSysLayout
-		else if ( newDeadkeys == "dynamic" )
-			deadkeys := 0
+		if ( newDKs == "auto" )
+			DKs := DKsOfSysLayout
+		else if ( newDKs == "none" || newDKs == "--" )
+			DKs := 0
 		else
-			deadkeys := newDeadkeys
+			DKs := newDKs
 		Return
 	}
-	if ( deadkeys == 0 )
+	if ( DKs == 0 )
 		Return DKsOfSysLayout 			; eD: replaced getDeadKeysOfSystemsActiveLayout()
 	else
-		Return deadkeys
+		Return DKs
 }
 
 /*

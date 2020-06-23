@@ -14,10 +14,10 @@
 ;;
 
 ;;  eD TOFIX/WIP:
-;		- 
+;		- WIP: Make ortho Curl-only Tarmak! Just GIMP the images.
+;		-
 ;		- WIP: When Extend or tap-Extend is activated or released, send a mods up? Would this make us more robust against the stuck mods problem?
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
-;		- TOFIX: Sticky Shift doesn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
@@ -120,8 +120,11 @@
 ;			- Mirroring as a remap can now use minicycles of many two-key loops. For instance, |  QU |  SC /  MN |  SL | for two separate swaps.
 ;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;		- A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
-;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them? The LayStack can do CompactMode...
+;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them?
+;			- The LayStack should do CompactMode. Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
+;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used.
 ;;  eD ONHOLD:
+;		- Remove all the CtrlAltIsAltGr stuff? If laptops don't have RAlt (>!), they can just map a key to AltGr Mod instead? Won't allow using <^<! as AltGr (<^>!) though...
 ;		- Shift sensitive multi-Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
 ;			- In most cases though, that'd be useful mostly for releasing more different glyphs. This is better done with dead keys, as these avoid heavy chording.
 ;		- Idea: Repeat key!? Type a key and then any key to get a double letter. Implement as a dead key releasing aa for a etc. Doesn't have to be active by default.
@@ -152,13 +155,15 @@
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	- EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
-;	- EPKL v1.1.5α: Language tweaks
+;	- EPKL v1.1.5α: Language tweaks, fixes
 ;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
 ;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
 ;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
 ;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 ;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
 ;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
+;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
+;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL

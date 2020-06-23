@@ -13,8 +13,12 @@ REM *** SET YOUR PATH TO THE AHK COMPILER HERE
 set src=Source\
 set ahk=AHK-Compiler_v1-1
 cd /d "%src%"
-echo Working from %src%
-rem echo.
+echo * Working from %src%
+
+REM *** SHUT DOWN ANY RUNNING EPKL.exe TO ALLOW OVERWRITING IT
+echo * Stopping any running EPKL instances...
+taskkill /IM EPKL.exe
+echo.
 
 REM *** COMPILE FOR UNICODE32
 rem echo Please choose binary base:
@@ -30,7 +34,7 @@ rem if "%ERRORLEVEL%" == "1" set binImg=%binImg1%
 rem if "%ERRORLEVEL%" == "2" set binImg=%binImg2%
 rem if "%ERRORLEVEL%" == "3" set binImg=%binImg3%
 set binImg=Unicode 32-bit
-echo Compiling as %binImg%
+echo * Compiling as %binImg%
 rem echo.
 set binImg=%ahk%\%binImg%.bin
 
@@ -38,17 +42,21 @@ REM *** USE MPRESS COMPRESSION IF AVAILABLE (MAY NOT MATTER?)
 rem choice /c yn /t 2 /d y /m "Do you want to compress file using MPRESS? Default in 2 sec.: yes."
 rem if "%ERRORLEVEL%" == "1" set doComp=1
 rem if "%ERRORLEVEL%" == "2" set doComp=0
-echo Compiling using MPRESS compression
-echo.
+echo * Compiling using MPRESS compression
+rem echo.
 set doComp=1
 
 REM *** %~dpn1 IS THE DRIVE-PATH-NAME OF DROPPED SCRIPT DIR
 rem if exist "%~dpn1.ico" set iconParam=/icon "%~dpn1.ico"
 set iconParam=/icon "Resources\Main.ico"
-rem echo.
 
 REM *** THE ORIGINAL SCRIPT WAS DRAG-N-DROP
-echo Compiling with %ahk% ...
+echo Compiling with %ahk%...
 rem ahk2exe /in %1 /out "%~dpn1.exe" %iconParam% /bin "%binImg%.bin" /mpress %doComp%endlocal
 %ahk%\ahk2exe /in "EPKL.ahk" /out "..\EPKL.exe" %iconParam% /bin "%binImg%" /mpress %doComp%
+echo.
+echo * Done compiling!
+echo Press any key to run EPKL or Ctrl+C to quit...
+pause >nul
+start %~dp0"EPKL.exe"
 ENDLOCAL

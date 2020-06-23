@@ -46,7 +46,7 @@ AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 ;ctrlAltIsAltGr  = no
 	static CtrlAltlIsAltGr := -1
 	if ( CtrlAltlIsAltGr == -1 ) {
-		CtrlAltlIsAltGr := getPklInfo( "CtrlAltlIsAltGr" ) || getPklInfo( "RAltAsAltGrLocale" )
+		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
 	}
 	Return getKeyState( "RAlt" ) || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
@@ -65,6 +65,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	
 	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK code.
 		Send % "{Blind}{VK" . getKeyInfo( HKey . "vkey" ) . "}"
+		_osmClearAll() 											; Clear any sticky mods
 		Return
 	}	; end if VK
 	
