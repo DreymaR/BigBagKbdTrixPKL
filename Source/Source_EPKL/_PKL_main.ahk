@@ -9,16 +9,22 @@
 #MaxThreads 20
 
 ;;
+;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout by Farkas Máté   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;;
 
 ;;  eD TOFIX/WIP:
-;		- WIP: Make ortho Curl-only Tarmak! Just GIMP the images.
-;		-
+;		- 
+;		- WIP: Make ortho Curl-only Tarmak! Both Curl and CurlM variants. Just GIMP the images. Clean up the compact images? Can use GIMP masks with cleaner keys. One mask to cut off, one image to replace.
+;		- WIP: Allow split locales? So either Be Ca or Fr would point to the BeCaFr variant. Make an alias table in Tables? BeCaFr = Be,Ca,Fr. But then the lookup is in reverse? Fix at read time.
+;			- If I instead analyze the existing variants, splitting BaHrRsSiBeCaFrBg... into atoms, some may fail? What if there is a special NoDe variant for instance?
+;			- Use a Table string of the existing locales, like BaHrRsSi,BeCaFr,Bg,BrPt,Cz,De,DkNo,EsLat,FiSe,Gr,Hu,It,Nl,Pl,Ru,Vi. May only need the compound ones? Ba/Hr/Rs/Si,Be/Ca/Fr,Br/Pt,Dk/No,Es/Lat,Fi/Se.
 ;		- WIP: When Extend or tap-Extend is activated or released, send a mods up? Would this make us more robust against the stuck mods problem?
+;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
+;		- TOFIX: The kaomoji DK image doesn't appear most of the time, instead the Extend image is shown. (The kaomoji still work.)
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
@@ -53,8 +59,9 @@
 ;				- However, Spc isn't handled correctly!? It still gets transposed.
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
-;		- WIP: Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;;  eD TONEXT:
+;		- TODO: EPKL_Settings_Override, in preparation for GUI settings. Make the settings file a [ Override, Default ] couplet like the Layouts files.
+;		- TODO: Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- TODO: Allow the user to choose which monitor to display help images on? If you have a second monitor it may be less crowded and thus ideal for the help image. But how?
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
 ;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
@@ -63,6 +70,8 @@
 ;			- Also allow ToM/Sticky AltGr. Very very nice since AltGr mappings are usually one-shot.
 ;			- Define a separate AHK hotkey for LCtrl+RAlt (=AltGr in Windows)? That might make things simpler.
 ;		- TODO: VK mappings don't happen on normal keys. Simple VK code states don't get translated to VK##. Only used when the key is VK mapped.
+;		- TODO: Make EPKL work with the .exe outside a .zip file? So you could download the release .zip, put the .exe outside, change then rezip any settings you want to, then the .exe will use the archive.
+;			- This may be desirable for people running EPKL from an URL. It's easier to handle two files than several folders.
 ;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
 ;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
 ;		- TODO: Mapping aliases for SC### codes. These are too technical for newcomers. Allow any Remap type like Co/QW/etc, e.g., CoTAB or Co_1 or CoRSH. Also QW_S (=Co_R) etc?
@@ -102,6 +111,7 @@
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
 ;;  eD TODO:
+;		- Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones. (Same with Extend mappings.)
 ;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
 ;			- New Text send mode for PowerStrings, if desired. Should handle line breaks without the brkMode setting.
@@ -124,6 +134,7 @@
 ;			- The LayStack should do CompactMode. Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 ;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used.
 ;;  eD ONHOLD:
+;		- Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;		- Remove all the CtrlAltIsAltGr stuff? If laptops don't have RAlt (>!), they can just map a key to AltGr Mod instead? Won't allow using <^<! as AltGr (<^>!) though...
 ;		- Shift sensitive multi-Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
 ;			- In most cases though, that'd be useful mostly for releasing more different glyphs. This is better done with dead keys, as these avoid heavy chording.
@@ -155,7 +166,7 @@
 ;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
 ;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	- EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
-;	- EPKL v1.1.5α: Language tweaks, fixes
+;	- EPKL v1.1.5α: Language tweaks, fixes, suspending apps.
 ;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
 ;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
 ;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
@@ -164,6 +175,10 @@
 ;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
 ;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
 ;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
+;		- The About hotkey is now shown in the tray menu, and toggles the About... GUI on/off.
+;		- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an example Override file you can copy/rename/edit. Then your changes are kept over updates.
+;		- You can now list "suspendingApps" in Settings that automatically suspend EPKL when active. Specify by exe (X), window class (C) or any other AHK title match method.
+;		- To see the AHK window class and other info about the currently active window, there's now a hotkey (default Ctrl+Shift+0).
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -179,6 +194,7 @@ Process, Priority, , R 										; Real-time process priority
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables are largely replaced by the get/set info framework
+;global 		suspendedByApp := false 			; Keeps track of whether the program was suspended by the pklJanitor's window detection
 setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 ) 				; Current base key 					(was 'CurrentBaseKey')
@@ -341,7 +357,17 @@ Return
 doNothing:
 Return
 
-ToggleSuspend:
+suspendOn:
+	Suspend, On
+	goto afterSuspend
+Return
+
+suspendOff:
+	Suspend, Off
+	goto afterSuspend
+Return
+
+suspendToggle:
 	Suspend
 	goto afterSuspend
 Return
@@ -351,11 +377,15 @@ afterSuspend:
 		pkl_showHelpImage( 3 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_OffFile" ), % getLayInfo( "Ico_OffNum_" )
 	} else {
-		activity_ping( 1 )
+		activity_ping( 1 ) 	; eD WIP: Replace all activity_ routines with the janitor
 		activity_ping( 2 )
 		pkl_showHelpImage( 4 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	}
+Return
+
+getWinInfo:
+	getWinInfo() 										; Show the active window's title/process(exe)/class
 Return
 
 epklDebugWIP:

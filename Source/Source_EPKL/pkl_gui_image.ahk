@@ -101,25 +101,25 @@
 	
 	if ( activate == 1 ) { 												; Activate the help image
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" ) 	; Tick off the Show Help Image menu item
-		Gui, 2:New, +AlwaysOnTop -Border -Caption +ToolWindow 			; Create GUI 2 for the images
+		GUI, HI:New, +AlwaysOnTop -Border -Caption +ToolWindow 			; Create a GUI for the help images
 					+LastFound +Owner, 				pklImgWin 			; Owner removes the task bar button?
-		Gui, 2:Margin, 0, 0
-		Gui, 2:Color, % im.BgColor
+		GUI, HI:Margin, 0, 0
+		GUI, HI:Color, % im.BgColor
 		if ( im.Opacity > 0 && im.Opacity < 256 ) {
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
 			WinSet, TransColor, % im.BgColor, pklImgWin
 		} 				; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
-		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlBgImg AltSubmit 		; Make image controls stored in Help##### variables
-		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlImage AltSubmit
-		Gui, 2: Add, Pic, xm +BackgroundTrans vCtrlShImg AltSubmit
-		Gui, 2: Show, NA, 							pklImgWin 			; eD WIP: Try to avoid the task bar?!
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg AltSubmit 		; Make image controls stored in Help##### variables
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlImage AltSubmit
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg AltSubmit
+		GUI, HI:Show, NA, 							pklImgWin
 		
-		SetTimer, showHelpImage, 100 									; Refresh the help image every 0.2 s 	; eD WIP: Trying a faster refresh rate, to hopefully increase precision. Helps DKs, but not Tap-Ext?
+		SetTimer, showHelpImage, 100 									; Refresh the help image every # ms (screen refresh usually takes ~17 ms)	; eD WIP: A faster refresh rate helps DKs, but not Tap-Ext?
 	} else if ( activate == -1 ) { 										; Deactivate image
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		SetTimer, showHelpImage, Off
-		Gui, 2:Destroy
+		GUI, HI:Destroy
 		Return
 	}
 	if ( im.Active == 0 )
@@ -177,10 +177,10 @@
 	
 	imgBgPath   := im.BgPath
 	imgShPath   := im.ShRoot . "\state" . state . ".png"
-	GuiControl, 2:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
-	GuiControl, 2:, CtrlImage, *w%imgW% *h%imgH% %imgPath%
-	GuiControl, 2:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%
-	Gui, 2: Show, x%imgX% y%imgY% AutoSize NA, 		pklImgWin 			; Use AutoSize NA to avoid stealing focus
+	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
+	GuiControl, HI:, CtrlImage, *w%imgW% *h%imgH% %imgPath%
+	GuiControl, HI:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%
+	GUI, HI: Show, x%imgX% y%imgY% AutoSize NA, 		pklImgWin 		; Use AutoSize NA to avoid stealing focus
 }
 
 _GetState() 															; Get the 0:1:6:7 shift state as in layout.ini and img names

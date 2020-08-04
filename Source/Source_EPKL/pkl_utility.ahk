@@ -131,22 +131,37 @@ activity_main(mode = 1, ping = 1, value = 0) {
 activityTimer:
 	if ( mode1timeout > 0 && A_TickCount - mode1ping > mode1timeout * 60000 ) {
 		if ( not A_IsSuspended ) {
-			gosub toggleSuspend
+			gosub suspendToggle
 			activity_ping( 2 )
 			Return
 		}
 	}
 	if ( mode2timeout > 0 && A_TickCount - mode2ping > mode2timeout * 60000 ) {
-		gosub ExitPKL
+		gosub exitPKL
 		Return
 	}
 Return
 }
 
 pklJanitorTic:
+	_pklSuspendByApp()
 	_pklCleanup()
 ;	_pklActivity() 	; eD WIP
 Return
+
+_pklSuspendByApp() { 								; Suspend EPKL if certain windows are active
+	static suspendedByApp := false 					; (Their attributes are in the Settings file)
+	
+	if WinActive( "ahk_group SuspendingApps" ) { 	; If a specified window is active...
+		if ( not suspendedByApp ) { 				; ...and not already A_IsSuspended...
+			suspendedByApp := true
+			gosub suspendOn
+		}
+	} else if ( suspendedByApp ) {
+		suspendedByApp := false
+		gosub suspendOff
+	}
+}
 
 _pklCleanup() {
 	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 	; The timeout in s is converted to ms
@@ -212,7 +227,19 @@ pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used i
 	}	; end if
 }	; end fn
 
-getVKeyCodeFromName( name ) 	; Get the two-digit hex VK## code from a VK name
+getWinInfo() 												; Get match info for the active window
+{ 															; This info is useful for setting SuspendingApps
+	WinGetClass, awClass, A
+	WinGet,      awProcs, ProcessName, A 					; Alternatives: ProcessName, ProcessPath
+	WinGetTitle, awTitle, A
+	pklDebug( "Active window properties:`n" 				; Add ID? PID? Probably not necessary.
+			. "`nClass: "   . awClass 						; Use w/ ahk_class match
+			. "`nExe:    "  . awProcs 						; Use w/ ahk_exe match
+			. "`nTitle:   " . awTitle 						; Use w/ direct title match
+			. "`n" , 10 )
+}
+
+getVKeyCodeFromName( name ) 								; Get the two-digit hex VK## code from a VK name
 {
 	name := upCase( name )
 	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
@@ -237,12 +264,12 @@ isInt( this ) { 	; AHK cannot use "is <type>" in expressions so use a wrapper fu
 		Return true
 }
 
-fileOrAlt( file, default, errMsg = "", errDur = 2 ) 	; Find a file/dir, or use the alternative
+fileOrAlt( file, default, errMsg = "", errDur = 2 ) 		; Find a file/dir, or use the alternative
 {
-	file := atKbdType( file ) 							; Replace '@K' w/ KbdType
+	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
-	if ( errMsg ) && ( not FileExist( default ) ) 		; Issue a warning if neither file is found
+	if ( errMsg ) && ( not FileExist( default ) ) 			; Issue a warning if neither file is found
 		pklWarning( errMsg, errDur )
 	Return default
 }
@@ -263,7 +290,7 @@ KillSplash:
 	SplashTextOff
 Return
 
-getPriority(procName="") { 				; Utility function to get process priority, by SKAN from the AHK forums
+getPriority(procName="") { 					; Utility function to get process priority, by SKAN from the AHK forums
 	;;  https://autohotkey.com/board/topic/7984-ahk-functions-incache-cache-list-of-recent-items/page-3#entry75675
 	procList := { 16384 : "BelowNorm",    32 : "Normal"   , 32768 : "AboveNorm"
 				,    64 : "Low"      ,   128 : "High"     ,   256 : "Realtime"  }

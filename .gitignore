@@ -1,15 +1,22 @@
 *_gitignore*
-*_bak*
+*_bak.???
+**/*_bak
 *_backup*
-*_old*
-*_WIP*
-*_tmp*
-*_temp*
-*Shortcut.*
+*_old.???
+**/*_old
+*_WIP.???
+**/*_WIP
+*_tmp.???
+**/*_tmp
+*_test.???
+**/*_test
+* Copy.???
+**/* Copy*
+*Shortcut.???
 *desktop.ini
-* Copy*
-Layouts/*/*ImgGen_*
-Layouts/*/*/*ImgGen_*
+EPKL_Layouts_Override.ini
+Layouts/**ImgGen_*
+Layouts/**/*ImgGen_*
 *PKL.exe
 EPKL_*able*.zip
 Notepad*_Session*

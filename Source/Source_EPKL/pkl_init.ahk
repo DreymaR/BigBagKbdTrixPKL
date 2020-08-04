@@ -1,5 +1,5 @@
 ﻿  													;   ###############################################################
-initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini ###########################
+initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
 { 													;   ###############################################################
 	pklIniFile := getPklInfo( "File_PklSet" ) . ".ini"
 	if not FileExist( pklIniFile ) {
@@ -18,16 +18,17 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	pkl_locale_load( lang )
 	
 	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
-	pklSetHotkey( "suspendMeHotkey", "ToggleSuspend"       , "HK_Suspend"      )
-	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  )
-	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" )
-	pklSetHotkey( "exitMeNowHotkey", "ExitPKL"             , "HK_ExitApp"      )
-	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; Advanced Mode only
-	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  )
-	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; Hidden from menu
-	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; Hidden from menu
-	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    ) 	; Hidden from menu
-	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; Hidden from menu
+	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  ) 	; 1
+	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" ) 	; 2
+	pklSetHotkey( "suspendMeHotkey", "suspendToggle"       , "HK_Suspend"      ) 	; `
+	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
+	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; 5 - Advanced Mode only
+	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 6
+	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 7 - Hidden from menu
+	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 8 - Hidden from menu
+	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    ) 	; a
+	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
+	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; = - Hidden from menu
 	
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
@@ -35,6 +36,13 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
 	activity_setTimeout( 2, pklIniRead( "exitAppTimeOut", 0 ) )
 	setPklInfo( "cleanupTimeOut", pklIniRead( "cleanupTimeOut" ) ) 		; Time idle before mods etc are cleaned up
+	For ix,suspApp in pklIniCSVs( "suspendingApps" )
+	{ 																	; Programs that suspend EPKL when active
+		shorthand := { "C " : "ahk_class " , "X " : "ahk_exe " }
+		For needle, newtxt in shorthand
+			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
+		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
+	}
 	
 	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; Sticky/One-Shot modifiers (CSV)
 	setPklInfo( "stickyTime", pklIniRead( "stickyTime" ) )				; --"--
@@ -56,7 +64,7 @@ initPklIni( layoutFromCommandLine ) 				;   ########################## epkl.ini 
 	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
 	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
 	theLays := StrReplace( theLays, "@T",   layType )
-	theLays := StrReplace( theLays, "@L",   localID )
+	theLays := StrReplace( theLays, "@L",   localID ) 	; eD WIP: Allow any one in a compound locale (like BrPt) to be used alone. Must be done in _pklLayRead() then?
 	theLays := StrReplace( theLays, "@K",   kbdType ) 					; (Later on, will use atKbdType() for layout files)
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@E",   ergoMod )
@@ -267,7 +275,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}	; end loop (parse layoutFiles)
 	
   													;   ###############################################################
-;initOtherInfo() 									;   ####################### other settings  #######################
+;initOtherInfo() 									;   ####################### Other settings  #######################
   													;   ###############################################################
 	
 	;;  -----------------------------------------------------------------------------------------------

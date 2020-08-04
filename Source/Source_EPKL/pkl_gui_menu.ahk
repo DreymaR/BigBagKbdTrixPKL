@@ -1,46 +1,35 @@
 ﻿pkl_set_tray_menu()
 {
-	ShowMoreInfo := getPklInfo( "AdvancedMode" )	; Show extra technical info and the Reset hotkey
+	ShowMoreInfo    := getPklInfo( "AdvancedMode" ) 	; Show extra technical info and the Reset hotkey
 	
-	ExitAppHotkey   := getReadableHotkeyString( getPklInfo( "HK_ExitApp"      ) )
-	ChngLayHotkey   := getReadableHotkeyString( getPklInfo( "HK_ChangeLayout" ) )
-	SuspendHotkey   := getReadableHotkeyString( getPklInfo( "HK_Suspend"      ) )
-	RefreshHotkey   := getReadableHotkeyString( getPklInfo( "HK_Refresh"      ) )
-	ShowImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowHelpImg"  ) )
-	ZoomImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_ZoomHelpImg"  ) )
-;	MoveImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_MoveHelpImg"  ) ) 	; Don't show this to avoid clutter
-;	OpaqImgHotkey   := getReadableHotkeyString( getPklInfo( "HK_OpaqHelpImg"  ) ) 	; Don't show this to avoid clutter
-;	AboutMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_ShowAbout"    ) ) 	; Don't show this to avoid clutter
-;	DebugMeHotkey   := getReadableHotkeyString( getPklInfo( "HK_DebugWIP"     ) ) 	; "Secret" Debug/WIP hotkey
+	layoutsMenu     := getPklInfo( "LocStr_19" ) 		; Menu text for the Layouts menu
+	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]		; Dummy legend menu item
+					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
+					,   "deadKey" : [ "12"        , ""             ]		; ---
+					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
+					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
+					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
+					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+`
+					,   "exitApp" : [ "11"        , "ExitApp"      ]		; ^+4
+					,   "refresh" : [ "RefreshMe" , "Refresh"      ]		; ^+5
+					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+6
+					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+7 - Don't show this to avoid clutter
+					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
+					,   "aboutMe" : [ "09"        , "ShowAbout"    ]		; ^+a
+					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
+					,   "debugMe" : [ ""          , "DebugWIP"     ] } 		; ^+= - Don't show the Debug/WIP hotkey
+	For item, val in menuItems
+	{
+		%item%MenuItem  := getPklInfo( "LocStr_" . val[1] ) 	; Menu item text - hotkey text is added on the next lines
+		hotkeyInMenu    := getReadableHotkeyString( getPklInfo( "HK_" . val[2] ) )
+		%item%MenuItem  .= ( hotkeyInMenu ) ? _FixAmpInMenu( hotkeyInMenu ) : ""
+	}
+	
+	setPklInfo( "LocStr_ShowHelpImgMenu", showImgMenuItem ) 	; Used in pkl_gui_image to recognize the Show Img menu item
 	
 	activeLayout    := getLayInfo( "ActiveLay" )
 	activeLayName   := ""
-	numOfLayouts  := getLayInfo( "NumOfLayouts" )
-	
-	aboutMeMenuItem := getPklInfo( "LocStr_09" )			; pklLocaleString()
-	keyHistMenuItem := getPklInfo( "LocStr_AHKeyHist" )
-	deadKeyMenuItem := getPklInfo( "LocStr_12" )
-	showImgMenuItem := getPklInfo( "LocStr_15" )
-	zoomImgMenuItem := getPklInfo( "LocStr_ZoomImage" )
-;	moveImgMenuItem := getPklInfo( "LocStr_MoveImage" )
-;	opaqImgMenuItem := getPklInfo( "LocStr_OpaqImage" )
-	layoutsMenu     := getPklInfo( "LocStr_19" )
-	chngLayMenuItem := getPklInfo( "LocStr_18" )
-	refreshMenuItem := getPklInfo( "LocStr_RefreshMe" )
-	suspendMenuItem := getPklInfo( "LocStr_10" )
-	exitAppMenuItem := getPklInfo( "LocStr_11" )
-;	importsMenuItem := getPklInfo( "LocStr_ImportKLC" )
-	makeImgMenuItem := getPklInfo( "LocStr_MakeImage" )
-	showImgMenuItem .= ( ShowImgHotkey ) ? _FixAmpInMenu( ShowImgHotkey ) : ""
-	zoomImgMenuItem .= ( ZoomImgHotkey ) ? _FixAmpInMenu( ZoomImgHotkey ) : ""
-;	moveImgMenuItem .= ( MoveImgHotkey ) ? _FixAmpInMenu( MoveImgHotkey ) : ""
-;	opaqImgMenuItem .= ( OpaqImgHotkey ) ? _FixAmpInMenu( OpaqImgHotkey ) : ""
-	chngLayMenuItem .= ( ChngLayHotkey ) ? _FixAmpInMenu( ChngLayHotkey ) : ""
-	refreshMenuItem .= ( RefreshHotkey ) ? _FixAmpInMenu( RefreshHotkey ) : ""
-	suspendMenuItem .= ( SuspendHotkey ) ? _FixAmpInMenu( SuspendHotkey ) : ""
-	exitAppMenuItem .= ( ExitAppHotkey ) ? _FixAmpInMenu( ExitAppHotkey ) : ""
-	setPklInfo( "LocStr_ShowHelpImgMenu", showImgMenuItem ) 	; Used in pkl_gui_image to recognize the Show Img menu item
-	
+	numOfLayouts    := getLayInfo( "NumOfLayouts" )
 	Loop % numOfLayouts { 										; Layouts menu list w/ icons
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
@@ -90,7 +79,7 @@
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; Refresh
 	}
-	Menu, Tray, add, %suspendMenuItem%, toggleSuspend						; Suspend
+	Menu, Tray, add, %suspendMenuItem%, suspendToggle						; Suspend
 	Menu, Tray, add, %exitAppMenuItem%, ExitPKL								; Exit
 	
 	pklAppName := getPklInfo( "pklName" )
@@ -110,31 +99,31 @@
 ;	}
 	
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
-	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMeMenuItem icon - about/question
+	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMe icon - about/question
 	if ( ShowMoreInfo ) {
-		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHistMenuItem icon - info
-		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKeyMenuItem icon - search
-		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 		; refreshMenuItem icon - refresh arrows
-		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImgMenuItem icon - painting on screen
+		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
+		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
+		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 		; refresh icon - refresh arrows
+		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImg icon - painting on screen
 	}
-	Menu, Tray, Icon,      %showImgMenuItem%,  shell32.dll , 174 		; showImgMenuItem icon - keyboard (116: film)
-	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImgMenuItem icon - spyglass
-;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImgMenuItem icon - speeding window
-;	Menu, Tray, Icon,      %opaqImgMenuItem%,  shell32.dll ,  90 		; opaqImgMenuItem icon - double windows
+	Menu, Tray, Icon,      %showImgMenuItem%,  shell32.dll , 174 		; showImg icon - keyboard (116: film)
+	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImg icon - spyglass
+;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImg icon - speeding window
+;	Menu, Tray, Icon,      %opaqImgMenuItem%,  shell32.dll ,  90 		; opaqImg icon - double windows
 	if ( numOfLayouts > 1 ) {
-		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44 		; layoutsMenu     icon - star
-		Menu, Tray, Icon,  %chngLayMenuItem%,  shell32.dll , 138 		; chngLayMenuItem icon - forward arrow
+		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44 		; layouts menu icon - star
+		Menu, Tray, Icon,  %chngLayMenuItem%,  shell32.dll , 138 		; chngLay icon - forward arrow
 	}
-	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110 		; suspendMenuItem icon - crossed circle
-	Menu, Tray, Icon,      %exitAppMenuItem%,  shell32.dll ,  28 		; exitAppMenuItem icon - power off
+	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110 		; suspend icon - crossed circle
+	Menu, Tray, Icon,      %exitAppMenuItem%,  shell32.dll ,  28 		; exitApp icon - power off
 ;	OnMessage( 0x404, "_AHK_NOTIFYICON" ) 								; Handle tray icon clicks. Using AHK defaults now.
 }
 
 pkl_about()
 {
-	msLID := getWinLocaleID() 								; The 4-digit Windows Locale ID
-	wLang := A_Language 									; The 4-digit Language code
-	dkStr := getDeadKeysInCurrentLayout() 					; The Windows layout's dead key string
+	msLID := getWinLocaleID() 									; The 4-digit Windows Locale ID
+	wLang := A_Language 										; The 4-digit Language code
+	dkStr := getDeadKeysInCurrentLayout() 						; The Windows layout's dead key string
 	dkStr := dkStr ? dkStr : "<none>"
 
 	pklAppName      := getPklInfo( "pklName" )
@@ -142,18 +131,19 @@ pkl_about()
 	pklProgURL      := getPklInfo( "pkl_URL" )
 	pklVersion      := getPklInfo( "pklVers" )
 	compiledAt      := getPklInfo( "pklComp" )
-
-	locUnknown      := getPklInfo( "LocStr_03" ) 			; "Unknown"
-	locActLayout    := getPklInfo( "LocStr_04" ) 			; "Active Layout"
-	locVersion      := getPklInfo( "LocStr_05" ) 			; "Version"
-	locLanguage     := getPklInfo( "LocStr_06" ) 			; "Language"
-	locCopyright    := getPklInfo( "LocStr_07" ) 			; "Copyright"
-	locCompany      := getPklInfo( "LocStr_08" ) 			; "Company"
-	locLicense      := getPklInfo( "LocStr_13" ) 			; "Licence: GPL v3"
-	locDisclaim     := getPklInfo( "LocStr_14" ) 			; Program disclaimer
-	locThanksTo     := getPklInfo( "LocStr_20" ) 			; "Thanks to"
-	locTransFile    := getPklInfo( "LocStr_21" ) 			; Translation file
-	locTransName    := getPklInfo( "LocStr_22" ) 			; Translator name
+	aboutTitle      := "About EPKL"
+	
+	locUnknown      := getPklInfo( "LocStr_03" ) 				; "Unknown"
+	locActLayout    := getPklInfo( "LocStr_04" ) 				; "Active Layout"
+	locVersion      := getPklInfo( "LocStr_05" ) 				; "Version"
+	locLanguage     := getPklInfo( "LocStr_06" ) 				; "Language"
+	locCopyright    := getPklInfo( "LocStr_07" ) 				; "Copyright"
+	locCompany      := getPklInfo( "LocStr_08" ) 				; "Company"
+	locLicense      := getPklInfo( "LocStr_13" ) 				; "Licence: GPL v3"
+	locDisclaim     := getPklInfo( "LocStr_14" ) 				; Program disclaimer
+	locThanksTo     := getPklInfo( "LocStr_20" ) 				; "Thanks to"
+	locTransFile    := getPklInfo( "LocStr_21" ) 				; Translation file
+	locTransName    := getPklInfo( "LocStr_22" ) 				; Translator name
 	
 	layName  := pklIniRead( "layoutName", locUnknown, "LayIni", "information" )
 	layVers  := pklIniRead( "version"   , locUnknown, "LayIni", "information" )
@@ -167,38 +157,43 @@ pkl_about()
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "layout.ini", "" )
 	basFile  :=             getPklInfo( "File_BasIni" )
-
-	Gui, Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
-	if ( pklProgURL != pklMainURL ) {
-		Gui, Add, Edit, , %pklProgURL%
-		Gui, Add, Text, , Based on Portable Keyboard Layout v0.4
+	
+	if WinActive( aboutTitle ) { 								; Toggle the GUI off if it's the active window
+		GUI, AW: Destroy
+		Return
 	}
-	Gui, Add, Edit, , %pklMainURL%
-	Gui, Add, Text, , ......................................................................
-	Gui, Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
-	Gui, Add, Text, , %locThanksTo%: Chris Mallet && The AHK Foundation
-	Gui, Add, Text, , %locDisclaim%
-	Gui, Add, Text, , %locLicense%
-	Gui, Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
-	Gui, Add, Text, , % ( locTransName == "[[Translator name]]" ) ? "" : "`n" . locTransFile . ": " . locTransName
-	Gui, Add, Text, , ......................................................................
+	GUI, AW:New, , %aboutTitle% 								; The About... window is the default GUI
+	GUI, AW:Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
+	if ( pklProgURL != pklMainURL ) {
+		GUI, AW:Add, Edit, , %pklProgURL%
+		GUI, AW:Add, Text, , Based on Portable Keyboard Layout v0.4
+	}
+	GUI, AW:Add, Edit, , %pklMainURL%
+	GUI, AW:Add, Text, , ......................................................................
+	GUI, AW:Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
+	GUI, AW:Add, Text, , %locThanksTo%: Chris Mallet && The AHK Foundation
+	GUI, AW:Add, Text, , %locDisclaim%
+	GUI, AW:Add, Text, , %locLicense%
+	GUI, AW:Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
+	GUI, AW:Add, Text, , % ( locTransName == "[[Translator name]]" ) ? "" : "`n" . locTransFile . ": " . locTransName
+	GUI, AW:Add, Text, , ......................................................................
 	text :=        locActLayout . ": " . layName
 	text .= "`n" . locVersion   . ": " . layVers
 	text .= "`n" . locLanguage  . ": " . layLang . " (++?)"
 	text .= "`n" . locCopyright . ": " . layCopy
 	text .= "`n" . locCompany   . ": " . layComp
-	Gui, Add, Text, , %text% 								; Layout info
-	Gui, Add, Edit, , %layPage%
-	if getPklInfo( "AdvancedMode" ) { 						; Advanced Mode shows more info
-		Gui, Add, Text, , ......................................................................
+	GUI, AW:Add, Text, , %text% 								; Layout info
+	GUI, AW:Add, Edit, , %layPage%
+	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
+		GUI, AW:Add, Text, , ......................................................................
 		text := "Keyboard/Layout type from settings: "      . kbdType
 		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
 		text .= "`nCurrent Windows Locale / Language ID: "   . msLID . " " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr
 		text .= "`nLayout/BaseLayout file paths:`n- "         . layFile . "`n- " . basFile
-		Gui, Add, Text, , %text% 							; Win Locale ID and OS layout DKs
+		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
-	Gui, Show
+	GUI, AW:Show
 }
 
 readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout

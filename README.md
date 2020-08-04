@@ -9,25 +9,27 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 * The [Big Bag main topic][CmkBBT] with better explanations and links.
 * Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
   
-* This repo contains **EPiKaL PKL** (**EPKL**) with several improvements over PKL.
-* It also implements most of my Big Bag for (E)PKL, as layout and other .ini files.
+* This repo is home to **EPiKaL PKL** (**EPKL**) with several improvements over the old PKL.
+* It also implements most of my Big Bag for EPKL, as layout and other files.
 
 Getting EPKL up and running
 ---------------------------
-* Download a full copy of this repo or just its executable resources.
+* Download a full copy of this repository or just its executable resources.
     - Under **[Release][GitRel] Assets**, there's a .ZIP file with the files needed to run EPKL.
     - If you also want the source code, press the GitHub Download/Clone button and then unzip the file you got.
-    - If you download or clone the repo, you need to run `Compile_EPKL.bat` to produce the EPKL.exe binary.
-* **FAST LANE:** If you simply want "just Colemak", rename the [Layouts_Override][LayOvr] file so EPKL uses defaults.
-    - Otherwise, see the next steps for how to set and/or edit the layout(s) you want.
+    - If you download/clone this repo, you need to run `Compile_EPKL.bat` to produce the `EPKL.exe` binary.
+    - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
+* **FAST LANE:** If you simply want "just Colemak" (and have a US/ANSI keyboard), just run EPKL.exe and type!
+    - If you do want changes, rename the [Layouts_Override][LayOvr] example file to `EPKL_Layouts_Override.ini`.
+    - Then, see the next steps for how to set and/or edit the layout(s) you want.
 * Choose a layout with your keyboard type, locale and Curl/Angle/Wide etc preferences, by shorthand or full name.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are some premade Locale variants, if you need to type in other languages. Check out which variants exist.
 * In your EPKL_Layouts .ini, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
-    - There's a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Entries in the override, if present, take precedence.
-    - My shortcuts use the KbdType (@K) etc values but you could also type the path to a layout folder out in full
-    - The format is: `layout = ‹1st layout folder›:‹1st menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc
-* Now, simply run EPKL.exe inside its main folder in any way you like!
+    - There's a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
+    - There are KbdType (@K) etc shortcuts, but you could also type the path to a layout folder out in full.
+    - The format is: `layout = ‹1st layout folder›:‹1st menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
+* Now, run EPKL.exe inside its main folder in any way you like! Check its tray menu in the lower screen corner.
 
 More Know-How
 -------------
@@ -46,7 +48,7 @@ More Know-How
 **Tweakable parameters:**
 The files may take a little tweaking to get what you want. There are several parameters:
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
-    - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY included.
+    - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY and Dvorak included.
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     - The _VK_ layouts just move the keys of your installed OS layout around, without other changes
     - The _[eD]_ layouts have their own Shift/AltGr mappings specified.
@@ -319,6 +321,6 @@ _Øystein "DreymaR" Gadmar, 2020_
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
 [EPKLRM]: ./Files/ (EPKL Files folder/README)
-[LayOvr]: ./EPKL_Layouts_Override.ini (Layouts_Override file)
+[LayOvr]: ./EPKL_Layouts_Override_Example.ini (Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (Layouts_Default file)
 [PklIni]: ./EPKL_Settings.ini (Settings file)
