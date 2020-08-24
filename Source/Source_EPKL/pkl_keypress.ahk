@@ -199,6 +199,13 @@ _setModState( theMod, itsDown = 1 )
 {
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( itsDown )
+;		if ( not itsDown ) {
+;			For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
+;						   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
+;				Send % "{" . mod . " Up}" 								; eD TOFIX: This doesn't help with Extend mods etc!
+;				_setModState( mod, 0 )
+;			}
+;		}
 	} else if ( theMod == "AltGr" ) {
 		setAltGrState( itsDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
 	} else {

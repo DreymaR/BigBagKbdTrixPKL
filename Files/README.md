@@ -172,6 +172,22 @@ DONE:
 	- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
 	- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from layout.ini files. Still left in BaseLayout files as an example.
 	- Set the help image refresh timer a bit faster. Seems to help for Extend2, but not for Tap-Ext Kaomoji DK nor the initial help image?
+* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
+	- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an Override_Example file you can copy/rename/edit. Thus, your changes are kept over updates.
+	- Added Tarmak-DH(m) alias Curl(M) for Ortho boards. There's a line in the EPKL_Layouts files for the Tarmak steps with DHm, but you can also use the shortcut syntax.
+	- You can now list "suspendingApps" in Settings that automatically suspend EPKL when active. Specify by exe (X), window class (C) or any other AHK title match method.
+	- To see the AHK window class and other info about the currently active window, there's now a hotkey (default Ctrl+Shift+0).
+	- The janitor timer now handles suspending and/or exiting by the suspendTimeOut and exitAppTimeout settings. As before, set these to 0 to ignore them.
+	- The About hotkey is now shown in the tray menu, and toggles the About... GUI on/off.
+	- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
+	- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
+	- Multi-ID locale variants can be addressed by their component. So for French, either Be Ca or Fr would point to the BeCaFr variant. Specified in the Tables file.
+	- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
+	- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
+	- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
+	- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
+	- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
+	- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 
 
 TODO:

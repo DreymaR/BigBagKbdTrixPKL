@@ -16,11 +16,7 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- WIP: Make ortho Curl-only Tarmak! Both Curl and CurlM variants. Just GIMP the images. Clean up the compact images? Can use GIMP masks with cleaner keys. One mask to cut off, one image to replace.
-;		- WIP: Allow split locales? So either Be Ca or Fr would point to the BeCaFr variant. Make an alias table in Tables? BeCaFr = Be,Ca,Fr. But then the lookup is in reverse? Fix at read time.
-;			- If I instead analyze the existing variants, splitting BaHrRsSiBeCaFrBg... into atoms, some may fail? What if there is a special NoDe variant for instance?
-;			- Use a Table string of the existing locales, like BaHrRsSi,BeCaFr,Bg,BrPt,Cz,De,DkNo,EsLat,FiSe,Gr,Hu,It,Nl,Pl,Ru,Vi. May only need the compound ones? Ba/Hr/Rs/Si,Be/Ca/Fr,Br/Pt,Dk/No,Es/Lat,Fi/Se.
-;		- WIP: When Extend or tap-Extend is activated or released, send a mods up? Would this make us more robust against the stuck mods problem?
+;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm.
 ;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
@@ -28,13 +24,15 @@
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
-;		- TOFIX: {Ext+S,<key>} rapidly sends a kaomoji. After this, Shift is stuck. Same with {Ext+T}! Is this the solution to the stuck Ctrl riddle?!? Unrelated to Sticky Mods.
-;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext
+;		- TOFIX: {Ext+S,<key>} rapidly sends a kaomoji. After this, Shift is stuck. Same with {Ext+T}! Is this the solution to the stuck Ctrl riddle?!?
+;			- With Sticky Mods (OSM) off, it still happens. So it isn't that.
+;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext.
 ;			- Key History: Looks like the mod is released but then re-presssed? Why?
 ;			- The rapidly pressed key interrupts the Extend routine, so the mod Up is never sent.
 ;			- Make sure Extend mods aren't Sticky? Do we need to call _osmClear() for Ext mods up, if the Ext mod is a sticky mod? Or, in setModifierState, if Ext is down don't use the Sticky setting?!
 ;			- An Extend tap will not trigger the Extend mod handling such as _setModState(). Where could we catch an Ext Up to make sure no mods are stuck/sticky?
 ;			- setLayInfo( "extendUsed" ) isn't applied to Ext-mods?
+;			- When Extend is released, send a mods up? No, doesn't seem to affect the problem at all. Tried both with Send {mod Up} and _setModState()
 ;		- TOFIX: AltGr+Spc, in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space? Related to the NBSP mapping.
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
@@ -44,9 +42,6 @@
 ;		- WIP: Maintenance timer every 2-3 s or so
 ;			- Check if no keys are held and no sticky timers counting, then send Up for those that aren't in use. If checking for inactivity first, it's easier.
 ;			- Update the OS dead keys etc as necessary.
-;			- Replace activityPing() etc with A_TimeIdlePhysical in the maintenance loop? Or put it in the Janitor! The activityTimer goes every 20 s now.
-;			- Combine w/ other housekeeping...?
-;			- Clear out the old inactivity timer stuff and all its refreshes, and replace it with a check in the new maintenance timer. Make sure to check for both keys and mouse?
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
 ;			- Since these extra DKs won't show up in the normal layout, for now make a list of extra DKs for the HIG? Or, the HIG should use a DK list now instead of registering!
 ;			- Made the "onlyOneDK" of HIG settings into a CSV list so we can render a subset of DKs at will.
@@ -153,36 +148,39 @@
 ;		- An EPKL sample layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
 ;		- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
 ;;  eD DONE:
-;	- PKL[eD] v0.4.2: AHK v1.1; menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead(); layered help images.
-;	- PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
-;	- PKL[eD] v0.4.4: Help Image Generator that uses Inkscape to create a set of help images from the current layout.
-;	- PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend.
-;	- PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
-;	- PKL[eD] v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
-;	- PKL[eD] v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify. Prefix-entry syntax in PowerStrings too.
-;	- EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
-;	- EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
-;	- EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
-;	- EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
-;	- EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-;	- EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
-;	- EPKL v1.1.5α: Language tweaks, fixes, suspending apps.
-;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
-;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
-;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
-;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
-;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
-;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
-;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
-;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
-;		- The About hotkey is now shown in the tray menu, and toggles the About... GUI on/off.
-;		- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an example Override file you can copy/rename/edit. Then your changes are kept over updates.
+;	* PKL[eD] v0.4.2: AHK v1.1; menu icons; array pdics (instead of HashTable); Unicode Send; UTF-8 compatible iniRead(); layered help images.
+;	* PKL[eD] v0.4.3: Key remaps, allowing ergo and other mods to be played over a few existing base layouts.
+;	* PKL[eD] v0.4.4: Help Image Generator that uses Inkscape to create a set of help images from the current layout.
+;	* PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend.
+;	* PKL[eD] v0.4.6: The base layout can hold default settings. Layout entries are now any-whitespace delimited.
+;	* PKL[eD] v0.4.7: Multi-Extend w/ 4 layers selectable by modifiers+Ext. Extend-tap-release. One-shot Extend layers.
+;	* PKL[eD] v0.4.8: Sticky/One-shot modifiers. Tap the modifier(s), then within a certain time hit the key to modify. Prefix-entry syntax in PowerStrings too.
+;	* EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
+;	* EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
+;	* EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
+;	* EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
+;	* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
+;	* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
+;	* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
+;		- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an Override_Example file you can copy/rename/edit. Thus, your changes are kept over updates.
+;		- Added Tarmak-DH(m) alias Curl(M) for Ortho boards. There's a line in the EPKL_Layouts files for the Tarmak steps with DHm, but you can also use the shortcut syntax.
 ;		- You can now list "suspendingApps" in Settings that automatically suspend EPKL when active. Specify by exe (X), window class (C) or any other AHK title match method.
 ;		- To see the AHK window class and other info about the currently active window, there's now a hotkey (default Ctrl+Shift+0).
+;		- The janitor timer now handles suspending and/or exiting by the suspendTimeOut and exitAppTimeout settings. As before, set these to 0 to ignore them.
+;		- The About hotkey is now shown in the tray menu, and toggles the About... GUI on/off.
+;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
+;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
+;		- Multi-ID locale variants can be addressed by their component. So for French, either Be Ca or Fr would point to the BeCaFr variant. Specified in the Tables file.
+;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
+;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
+;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
+;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
+;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
+;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.5α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.5" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
@@ -278,25 +276,21 @@ Return
 ;Return
 
 keyPressed: 			; *SC###
-;	activity_ping()
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
 Return
 
 keyReleased:			; *SC### UP
-	activity_ping()
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
 Return
 
 modifierDown:			; *SC###    (call fn as HKey to translate to VK name)
-;	activity_ping()
 	Critical
 	setModifierState(   getVKey( SubStr( A_ThisHotkey, 2     ) ), 1 )
 Return
 
 modifierUp:
-	activity_ping()
 	Critical
 	setModifierState(   getVKey( SubStr( A_ThisHotkey, 2, -3 ) ), 0 )
 Return
@@ -307,7 +301,6 @@ tapOrModDown: 			; *SC###
 Return
 
 tapOrModUp:
-	activity_ping()
 	Critical
 	setTapOrModState(   SubStr( A_ThisHotkey, 2, -3 ), 0 )
 Return
@@ -377,8 +370,6 @@ afterSuspend:
 		pkl_showHelpImage( 3 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_OffFile" ), % getLayInfo( "Ico_OffNum_" )
 	} else {
-		activity_ping( 1 ) 	; eD WIP: Replace all activity_ routines with the janitor
-		activity_ping( 2 )
 		pkl_showHelpImage( 4 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	}

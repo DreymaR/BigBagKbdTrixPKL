@@ -15,21 +15,21 @@ Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak
 Getting EPKL up and running
 ---------------------------
 * Download a full copy of this repository or just its executable resources.
-    - Under **[Release][GitRel] Assets**, there's a .ZIP file with the files needed to run EPKL.
-    - If you also want the source code, press the GitHub Download/Clone button and then unzip the file you got.
-    - If you download/clone this repo, you need to run `Compile_EPKL.bat` to produce the `EPKL.exe` binary.
+    - Under **[Release][GitRel] Assets**, there's a .ZIP file with the files needed to run EPKL. Unzip and run!
+    - For the latest commit (say, for a bugfix) with source code, instead `Download ZIP` by the green `Code` button.
+    - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
     - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
-* **FAST LANE:** If you simply want "just Colemak" (and have a US/ANSI keyboard), just run EPKL.exe and type!
-    - If you do want changes, rename the [Layouts_Override][LayOvr] example file to `EPKL_Layouts_Override.ini`.
-    - Then, see the next steps for how to set and/or edit the layout(s) you want.
+* **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
+    - If you do want to choose a variant, rename the Override_Example file to `EPKL_Layouts_Override.ini`.
+    - There can be a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
 * Choose a layout with your keyboard type, locale and Curl/Angle/Wide etc preferences, by shorthand or full name.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are some premade Locale variants, if you need to type in other languages. Check out which variants exist.
+    - There are different ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
 * In your EPKL_Layouts .ini, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
-    - There's a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
     - There are KbdType (@K) etc shortcuts, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹1st layout folder›:‹1st menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* Now, run EPKL.exe inside its main folder in any way you like! Check its tray menu in the lower screen corner.
+* Now, run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 
 More Know-How
 -------------
@@ -286,6 +286,16 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 		- All BaseLayout files are now unified for KbdType by replacing ANS/ISO specific OEM_# VK codes with KLM ones.
 		- KbdType @K codes for ANS/ISO in LayStack files, further simplifying ISO/ANSI conversion.
 	- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
+* v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
+	- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an Override_Example file you can copy/rename/edit. Thus, your changes are kept over updates.
+	- Added Tarmak-DH(m) alias Curl(M) for Ortho boards. There's a line in the EPKL_Layouts files for the Tarmak steps with DHm, but you can also use the shortcut syntax.
+	- You can now list "suspendingApps" in Settings that automatically suspend EPKL when active. Specify by exe (X), window class (C) or any other AHK title match method.
+	- To see the AHK window class and other info about the currently active window, there's now a hotkey (default Ctrl+Shift+0).
+	- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
+	- Multi-ID locale variants can be addressed by their component. So for French, either Be Ca or Fr would point to the BeCaFr variant. Specified in the Tables file.
+	- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
+	- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
+	- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
 
 
 TODO:

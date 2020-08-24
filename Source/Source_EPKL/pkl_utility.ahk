@@ -105,48 +105,14 @@ ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KL
 
 ;;  -----------------------------------------------------------------------------------------------
 ;;
-;;  EPKL activity module
-;;      Check for inactivity (no clicks/keypresses) in a given period
+;;  EPKL janitor/activity module
+;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app
 ;
-activity_ping(mode = 1) {	; eD WIP: Replace this with A_TimeIdlePhysical
-	activity_main(mode, 1)
-}
-
-activity_setTimeout(mode, timeout) {
-	activity_main(mode, 2, timeout)
-}
-
-activity_main(mode = 1, ping = 1, value = 0) {
-	static mode1ping := 0
-	static mode2ping := 0
-	static mode1timeout := 0
-	static mode2timeout := 0
-	if ( ping == 1 ) {
-		mode%mode%ping := A_TickCount
-	} else if ( ping == 2 ) {
-		mode%mode%timeout := value
-	}
-	Return
-
-activityTimer:
-	if ( mode1timeout > 0 && A_TickCount - mode1ping > mode1timeout * 60000 ) {
-		if ( not A_IsSuspended ) {
-			gosub suspendToggle
-			activity_ping( 2 )
-			Return
-		}
-	}
-	if ( mode2timeout > 0 && A_TickCount - mode2ping > mode2timeout * 60000 ) {
-		gosub exitPKL
-		Return
-	}
-Return
-}
 
 pklJanitorTic:
 	_pklSuspendByApp()
+	_pklActivity()
 	_pklCleanup()
-;	_pklActivity() 	; eD WIP
 Return
 
 _pklSuspendByApp() { 								; Suspend EPKL if certain windows are active
@@ -160,6 +126,17 @@ _pklSuspendByApp() { 								; Suspend EPKL if certain windows are active
 	} else if ( suspendedByApp ) {
 		suspendedByApp := false
 		gosub suspendOff
+	}
+}
+
+_pklActivity() {
+	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 	; Convert from min to ms
+	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 	; Convert from min to ms
+	idleTime := A_TimeIdle 								; eD WIP: Use TimeIdlePhysical instead?
+	if ( exitTime && idleTime > exitTime ) {
+		gosub exitPKL
+	} else if ( suspTime && not A_IsSuspended && idleTime > suspTime ) {
+		gosub suspendOn
 	}
 }
 
@@ -211,7 +188,7 @@ pklWarning( text, time = 5 )
 
 pklDebug( text, time = 2 )
 {
-	MsgBox, 0x30, EPKL DEBUG: , %text%, %time%					; Warning type message box
+	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%					; Info type message box (asterisk)
 }
 
 pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used in pkl_init)

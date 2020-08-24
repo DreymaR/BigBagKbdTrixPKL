@@ -80,7 +80,7 @@
 		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; Refresh
 	}
 	Menu, Tray, add, %suspendMenuItem%, suspendToggle						; Suspend
-	Menu, Tray, add, %exitAppMenuItem%, ExitPKL								; Exit
+	Menu, Tray, add, %exitAppMenuItem%, exitPKL								; Exit
 	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )

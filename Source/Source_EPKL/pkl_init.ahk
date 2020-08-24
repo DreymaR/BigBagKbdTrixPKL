@@ -33,9 +33,9 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
-	activity_setTimeout( 1, pklIniRead( "suspendTimeOut", 0 ) )
-	activity_setTimeout( 2, pklIniRead( "exitAppTimeOut", 0 ) )
-	setPklInfo( "cleanupTimeOut", pklIniRead( "cleanupTimeOut" ) ) 		; Time idle before mods etc are cleaned up
+	_pklSetInf( "cleanupTimeOut" ) 										; Time idle (sec) before mods etc are cleaned up
+	_pklSetInf( "suspendTimeOut" ) 										; Time idle (min) before program suspends itself
+	_pklSetInf( "exitAppTimeOut" ) 										; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" )
 	{ 																	; Programs that suspend EPKL when active
 		shorthand := { "C " : "ahk_class " , "X " : "ahk_exe " }
@@ -44,19 +44,35 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}
 	
-	setPklInfo( "stickyMods", pklIniRead( "stickyMods" ) )				; Sticky/One-Shot modifiers (CSV)
-	setPklInfo( "stickyTime", pklIniRead( "stickyTime" ) )				; --"--
+	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (CSV)
+	_pklSetInf( "stickyTime" ) 											; --"--
 	
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
 	setPklInfo( "extendMod1", ( extMods[1] ) ? extMods[1] : "" )
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
-	setPklInfo( "extendTaps", pklIniRead( "extendTaps" ) )				; --"--
-	setPklInfo( "tapModTime", pklIniRead( "tapModTime" ) )				; Tap-or-Mod time
+	_pklSetInf( "extendTaps" ) 											; --"--
+	_pklSetInf( "tapModTime" ) 											; Tap-or-Mod time
+	
+	polyLID := {}
+	For ix, LIDs in pklIniCSVs( "multiLocs",, "pklDic" ) 				; For layouts with compound LocalIDs, any of the components can be used alone
+	{
+		harmLID := StrReplace( LIDs, "/" )
+		For ix, LID in StrSplit( LIDs, "/" ) 							; The Tables file entry is a CSV list of slash-separated LIDs
+		{
+			polyLID["-" . LID] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
+		}
+	}
 	
 	theLays := pklIniRead( "layout", "", pklLays ) 						; Read the layouts string from EPKL_Layouts
 	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
 	kbdType := _pklLayRead( "KbdType", "ISO", "_"   ) 					; Keyboard type, _ISO/_ANS/_etc
-	localID := _pklLayRead( "LocalID",      , "-"   ) 					; Locale ID, e.g., "-Pl"
+;	if InStr( kbdType, "-" ) { 											; eD WIP: Trad/Orth/Splt/etc so we have ISO-Orth, ANS (=ANS-Trad) etc
+;		kbdType := StrSplit( kbdType, "-" ) 							; eD WIP: Use pklIniCSVs() to read it instead?
+;		kbdForm := kbdType[2]
+;		kbdType := kbdType[1] . "-" . kbdType[2]
+;	} 																	; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!?
+	LID     := _pklLayRead( "LocalID",      , "-"   ) 					; Locale ID, e.g., "-Pl"
+	localID := ( polyLID[LID] ) ? polyLID[LID] : LID 					;   (can be a single locale of a harmonized layout like BeCaFr)
 	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl, CurlM
 	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
@@ -118,7 +134,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
 	setLayInfo( "Dir_LayIni"        , layDir  )
 	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
-	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?
+	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now? 	; eD WIP: Add kbdForm as kbdType[2] ?
 	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
 	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout?
@@ -170,7 +186,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}
 	
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
-	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
+	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting 	; eD WIP: Add kbdForm as kbdType[2] ?
 	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
 	shStates := RegExReplace( shStates, "[ `t]+" ) 						; Remove any whitespace
@@ -393,9 +409,6 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
-	activity_ping(1) 								; Update the current ping time
-	activity_ping(2)
-	SetTimer, activityTimer, 20000 					; Check for timeouts every 20 s 	; eD WIP: Put this into cleanup?!
 	SetTimer, pklJanitorTic,  2000 					; Perform cleanup routine every 2 s
 	
 	if bool(pklIniRead("startSuspended")) {
@@ -413,6 +426,11 @@ changeLayout( nextLayout ) 							; Rerun EPKL with a specified layout
 		Run %A_ScriptName% /f %nextLayout%
 	else
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
+}
+
+_pklSetInf( pklInfo )
+{
+	setPklInfo( pklInfo, pklIniRead( pklInfo ) ) 	; Simple setting for EPKL_Settings entries
 }
 
 _pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods (used in pkl_init) and set Lay info
