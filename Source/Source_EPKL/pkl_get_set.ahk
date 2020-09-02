@@ -76,13 +76,10 @@ pkl_locale_load( lang )
 {
 	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too
 	if ( not initialized )
-	{																	; Read/set default locale string list
-		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] 	; Read defaults from the EPKL_Tables file
-		{
-			sect := iniReadSection( getPklInfo( "File_PklDic" ), sectName )	; Read default locale strings (key/value)
-			Loop, Parse, sect, `r`n
-			{
-				pklIniKeyVal( A_Loopfield, key, val, 1 )					; Extraction with \n escape replacement
+	{															; Read/set default locale string list
+		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] { 	; Read defaults from the EPKL_Tables file
+			For ix, row in iniReadSection( getPklInfo( "File_PklDic" ), sectName ) { 	; Read default locale strings (key/value)
+				pklIniKeyVal( row, key, val, 1 ) 				; Extraction with \n escape replacement
 				setPklInfo( key, val )
 			}
 		} 	; end For
@@ -91,32 +88,26 @@ pkl_locale_load( lang )
 	
 	file := lang . ".ini"
 	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
-	if not FileExist( file ) 								; If the language file isn't found, we'll just use the defaults
+	if not FileExist( file ) 									; If the language file isn't found, we'll just use the defaults
 		Return
-	sect := iniReadSection( file, "pkl" ) 					; Read the main locale strings frome the PKL section
-	Loop, Parse, sect, `r`n 				; LocStr_ 00-22,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
-	{
-		pklIniKeyVal( A_Loopfield, key, val, 1 ) 			; A more compact way than before (but still in a loop)
-		if ( val != "" ) {
+	For ix, row in iniReadSection( file, "pkl" ) { 				; Read the main locale strings frome the PKL section
+		pklIniKeyVal( row, key, val, 1 ) 						; A more compact way than before (but still in a loop)
+		if ( val != "" ) { 						; LocStr_ 00-22,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
 			key := ( key <= 9 ) 
-					? SubStr("00" . key, -1) : key 			; If key is #, zero pad it to 0# instead
-			setPklInfo( "LocStr_" . key , val ) 			; pklLocaleStrings( key, val, 1 )
+					? SubStr("00" . key, -1) : key 				; If key is #, zero pad it to 0# instead
+			setPklInfo( "LocStr_" . key , val ) 				; pklLocaleStrings( key, val, 1 )
 		}
-	} 	; end Loop
+	} 	; end For
 	
-	sect := iniReadSection( file, "detectDeadKeys" ) 		; Read the locale strings for DK detection
-	Loop, Parse, sect, `r`n
-	{
-		pklIniKeyVal( A_Loopfield, key, val, 1 )
-		setPklInfo( "DetecDK_" . key, val ) 				; detectDeadKeys_SetLocaleTxt(
-	} 	; end Loop
+	For ix, row in iniReadSection( file, "detectDeadKeys" ) { 	; Read the locale strings for DK detection
+		pklIniKeyVal( row, key, val, 1 )
+		setPklInfo( "DetecDK_" . key, val ) 					; detectDeadKeys_SetLocaleTxt(
+	} 	; end For
 	
-	sect := iniReadSection( file, "keyNames" ) 				; Read the list of keys and mouse buttons
-	Loop, Parse, sect, `r`n
-	{
-		pklIniKeyVal( A_Loopfield, key, val, 0 ) 			; Read without character escapes
+	For ix, row in iniReadSection( file, "keyNames" ) { 		; Read the list of keys and mouse buttons
+		pklIniKeyVal( row, key, val, 0 ) 						; Read without character escapes
 		_setHotkeyText( key, val )
-	} 	; end Loop
+	} 	; end For
 }
 
 _setHotkeyText( hk, localehk )

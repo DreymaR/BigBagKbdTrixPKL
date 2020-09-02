@@ -120,15 +120,14 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 	stateImg        := ( HIG.imgName == "state" ) ? true : false
 	if ( SubStr( HIG.imgName, 1, 2 ) == "dk" ) { 				; "dk_<dkName>" for dead keys
 		dkName      := SubStr( HIG.imgName, 4 )
-		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] 					; Loop through DK releases to be marked
-		{
+		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] { 					; Loop through DK releases to be marked
 			dkv     := DeadKeyvalue( dkName, "s" . rel ) 		; Get the DeadKeyValue for the special entries...
 			if not dkv
 				Continue
 			dkv     := "¤" . dkv . "¤" 							; Pad to avoid matching, e.g., 123 to 1234
 			dkvp    := ( dkvs ) ? "|" . dkv : dkv 				; For if in, use CSV?; for RegEx, "|"
 			dkvs    .= InStr( dkvs, dkv ) ? "" : dkvp 			; If not already there, add the DKVal entry
-		}
+		} 	; end For release
 	}
 	emptyBool       := true
 	for CO, SC in HIG.PngDic

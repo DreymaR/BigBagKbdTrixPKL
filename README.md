@@ -70,7 +70,7 @@ The files may take a little tweaking to get what you want. There are several par
 * In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
     - Mod remaps, help image specifications, Extend key, key mappings etc can be set in the LayStack .ini files.
     - Many layouts use a BaseLayout. Most mappings may be there, so the top layout.ini only has to change a few keys.
-* To learn more about remaps, see the _eD_Remap.ini file. They can even turn Colemak into QWERTY (oh no...!).
+* To learn more about remaps, see the [_eD_Remap.ini][MapIni] file. They can even turn Colemak into QWERTY (oh no...!).
 * There's a file for named literals/PowerStrings. These are useable by layouts, Extend and dead keys.
 * Also, a Dead Key file. DKs are mapped as @###. Pressing the key then a release glyph may produce something new!
     - There are help images for DKs, these can be very useful as they show what releases are in different shift states.
@@ -114,25 +114,25 @@ Key mappings
 ------------
 Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
   
-Here are some full key mappings followed by a legend:
+Here are some full key mappings with a legend:
 ```
-SC018 = Y       1     y     Y     --    ›     »     ; QWERTY oO
-SC019 = QW_SC   0     ;     :     --    @0a8  …     ; QWERTY pP - dk_umlaut (ANS/ISO_1/3)
-;SC   = VK      CS    S0    S1    S2    S6    S7    ; comments
+; SC  = VK      CS    S0    S1    S2    S6    S7    ; comments
+QW_O  = Y       1     y     Y     --    ›     »     ; SC018: QW oO
+QW_P  = QW_SC   0     ;     :     --    @0a8  …     ; SC019: QW pP - dk_umlaut (ANS/ISO_1/3)
 ```
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
-    - For SC, you can use an AHK key name instead. For VK names you need real VK names or my KLM QW_## codes.
+    - For SC, you can use an AHK key name instead. For VK names you need real Windows VK names.
+    - Instead of the technical SC or VK you may use my more intuitive KLM QW_## codes. See the [Remap file][MapIni].
     - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
-    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's better to use my generic KLM QW_## codes.
-    - Look in the `_eD_Remap.ini` file for KLM QW_## key codes to use. `OEM_` codes may also be remapped with a VK remap.
-    - _Example:_ `QW_SC` is the semicolon key, which is `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
+    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's better to use the generic KLM QW_## codes.
+    - _Example:_ The KLM code `QW_SC` is the semicolon key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
     - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it works as stated, if held down it's the modifier.
     - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
     - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
-    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@0a8` (umlaut DK).
+    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@0a8` (umlaut deadkey).
 * Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for each prefix):
     - → | %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
     - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
@@ -146,8 +146,8 @@ Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain 
 ```
 RWin    = Back      VirtualKey      ; RWin   -> Backspace
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-SC149   = NEXT      VirtualKey      ; PgUp   -> PgDn (use the proper VKEY name here)
-SC151   = PRIOR     VirtualKey      ; PgDn   -> PgUp (--"--)
+QWPGU   = NEXT      VirtualKey      ; PgUp   -> SC149: PgDn (use the proper VKEY name here)
+QWPGD   = PRIOR     VirtualKey      ; PgDn   -> SC151: PgUp (--"--)
 ```
 Entries are any-whitespace delimited (single Tab before v0.4.6).
 
@@ -155,9 +155,9 @@ Advanced Extending
 ------------------
 Here are some sample Extend key mappings:
 ```
-SC03A   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
-SC03A   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod: Backspace if tapped, Extend if held
-SC03A   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on tap, Extend on hold
+QWCLK   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
+QWCLK   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod: Backspace if tapped, Extend if held
+QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on tap, Extend on hold
 ```
 * These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
 * The above Extend modifier mappings may be in any LayStack .ini file, usually in [Layouts_Default][LayDef]
@@ -334,3 +334,4 @@ _Øystein "DreymaR" Gadmar, 2020_
 [LayOvr]: ./EPKL_Layouts_Override_Example.ini (Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (Layouts_Default file)
 [PklIni]: ./EPKL_Settings.ini (Settings file)
+[MapIni]: ./Files/_eD_Remap.ini (Remap file)

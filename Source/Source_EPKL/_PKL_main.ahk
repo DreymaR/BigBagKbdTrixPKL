@@ -16,7 +16,9 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- WIP: A help fn to make layout screenshots? Make the image large and opaque, then call GIMP (and instruct it to screenshot? Can I also instruct it to cutout? )
 ;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm.
+;		- TOFIX: The first Extend w/ modifier (S/T) will be unmodified. Pressing, e.g., Ext+S after startup fixes it.
 ;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
@@ -69,16 +71,8 @@
 ;			- This may be desirable for people running EPKL from an URL. It's easier to handle two files than several folders.
 ;		- TODO: Instead of CompactMode, allow the Layouts_Default (or _Override) to define a whole layout if desired. Specify LayType "Here" or suchlike?
 ;			- At any rate, all those mappings common to eD and VK layouts could just be in the Layouts_Default.ini file. That's all from the modifiers onwards.
-;		- TODO: Mapping aliases for SC### codes. These are too technical for newcomers. Allow any Remap type like Co/QW/etc, e.g., CoTAB or Co_1 or CoRSH. Also QW_S (=Co_R) etc?
-;			- Or the VK codes in PKL_Tables.ini (split off that table then)? But those vary greatly in length which is uglyish.
-;			- Could detect Upper(SubStr(key,1,2)) != "SC" ) and remap if so. Must have entries like Co_A then. Or use Co_A_ to pad to 5 chars? But is, e.g., CoMN_ nice?
-;			- DONE: Expanded the Co table to include the right-hand block, and made a QW counterpart for the QWERTY people.
 ;		- TODO: Dialog GUI to produce EPKL_Layouts_Override.ini and EPKL_Settings_Override.ini files.
 ;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. Maybe that could be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM?
-;		- TODO: Sensible aliases for OEM_# VK codes! They are confusing for the users. E.g., OEM_GR, OEM_CM, OEM_DT etc. This allows using one common BaseLayout.
-;			- Must be ISO/ANSI aware then. Use the KbdType setting (default ANS) which may be moved to the layout.ini itself for robustness.
-;			- Use a lookup table? In the Tables file?
-;			- Or simply use the Co## KLM codes as with SC, but translate to VK? This seems more robust.
 ;		- TODO: Make the Help Img Generator aware of prefix notation. But limit entry length.
 ;		- Try out <one Shift>+<other Shift> = Caps? How to do that? Some kind of ToM, where the Shift is Shift when held but Caps when (Shift-)tapped?
 ;		- WIP: Import KLC. Use a layout header template.
@@ -106,6 +100,9 @@
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
 ;;  eD TODO:
+;		- TODO: Co2SC and Co2VK dics, so Co KLM codes may be used in addition to QW ones? E.g., CoTAB, QW_1, CoRSH, QW_S (=Co_R) etc.
+;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
+;			- First one out: Layout selector? A set of choice panels, every time checking against a list of which layouts are present. Read in the list when a folder like Colemak-eD is chosen.
 ;		- Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones. (Same with Extend mappings.)
 ;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
@@ -123,12 +120,12 @@
 ;			- Layout switching is usually done by restarting EPKL which is too clunky. But if we could have a switch modifier that temporarily activates the next layout...?
 ;			- This would require preloading more than one layout which takes a bit of reworking. Possibly... Allow an alt-set of the remap only, remapping on the fly w/ a mod?
 ;			- Mirroring as a remap can now use minicycles of many two-key loops. For instance, |  QU |  SC /  MN |  SL | for two separate swaps.
-;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;		- A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
-;		- Lose CompactMode, StartSuspended etc? They seem to clutter up the settings file and I don't think people actually use them?
-;			- The LayStack should do CompactMode. Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
-;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used.
+;		- Lose CompactMode from the Settings file. The LayStack should do it.
+;			- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
+;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 ;;  eD ONHOLD:
+;		- Make a Setting for which fn to run as Debug, so I don't have to recompile to switch debug fn()? Maybe overmuch, as the debug fn often needs recompiling anyway?
 ;		- Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;		- Remove all the CtrlAltIsAltGr stuff? If laptops don't have RAlt (>!), they can just map a key to AltGr Mod instead? Won't allow using <^<! as AltGr (<^>!) though...
 ;		- Shift sensitive multi-Extend? When mapping for the NumPad layer, it'd be nice to have $/¢, €/£ etc. This allows many more potential mappings! 4×4-level Extend?!
@@ -177,10 +174,14 @@
 ;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
 ;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
 ;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
+;	* EPKL v1.1.6α: KLM scan codes.
+;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM QW### codes found in the Remap file. These are more intuitive and user friendly.
+;		- Replaced some Loop Parse commands with more modern For loops, and made iniReadSection() return a row array for For loops. Let pklIniCSVs() take a specified separator.
+;		- Added _Test\Colemak-eD_EsEl_ANS_CurlAngle for Spanish, on request from Discord user Elsamu. It has áóéíúñ on AltGr+aoeiun, and some tweaks to fit in other symbols.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.5" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.6α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 

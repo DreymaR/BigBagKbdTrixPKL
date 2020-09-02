@@ -6,73 +6,65 @@
 ;
 ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles (used in pkl_init)
 {
-	mapList     := pklIniRead( mapList, mapList, mapFile, "remaps" )	; Name -> actual list, or literal list
 	mapCycList  := ""
-	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%						; Parse lists by comma/CSV
-	{
+	For ix, alist in pklIniCSVs( mapList, mapList, mapFile, "remaps" ) { 	; Name -> actual list, or literal list
 		tmpCycle    := ""
-		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%				; Parse merges by plus sign
-		{
-			if ( SubStr( A_LoopField , 1, 1 ) == "^" ) {			; Cycle reference
-				theMap  := SubStr( A_LoopField , 2 )
+		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
+			if ( SubStr( list, 1, 1 ) == "^" ) { 				; Cycle reference
+				theMap  := SubStr( list, 2 )
 			} else {
-				theMap  := ReadRemaps( A_LoopField , mapFile )		; Ref. to another map -> Self recursion
+				theMap  := ReadRemaps( list, mapFile ) 			; Ref. to another map -> Self recursion
 			}
-			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap	; re-attach by +
-		}	; end loop
-		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle	; re-attach by CSV
-	}	; end loop
+			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap 	; re-attach by +
+		}	; end For list
+		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle 	; re-attach by CSV
+	}	; end For alist
 	Return mapCycList
 }	; end fn
 
 ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary of remaps (used in pkl_init)
 {
-	mapType := upCase( SubStr( mapType, 1, 2 ) ) 			; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
+	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
-	if ( mapType == "SC" )									; Create a fresh SC pdic from mapFile KeyLayMap
+	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
 		pdic := ReadKeyLayMapPDic( "SC", "SC", mapFile )
-	rdic    := pdic.Clone()									; Reverse dictionary (instead of if loop)?
-	tdic	:= {}											; Temporary dictionary used while mapping loops
-	Loop, Parse, mapList, CSV, %A_Space%%A_Tab%				; Parse cycle list by comma
-	{
+	rdic    := pdic.Clone()										; Reverse dictionary (instead of if loop)?
+	tdic	:= {}												; Temporary dictionary used while mapping loops
+	For ix, clist in StrSplit( mapList, ",", " `t" ) { 			; Parse cycle list by comma
 		fullCycle := ""
-		Loop, Parse, A_LoopField , +, %A_Space%%A_Tab%		; Parse and merge composite cycles by plus sign
-		{
-			thisCycle := pklIniRead( A_LoopField , "", mapFile, "RemapCycles" )
+		For ix, plist in StrSplit( clist, "+", " `t" ) { 		; Parse and merge composite cycles by plus sign
+			thisCycle := pklIniRead( plist , "", mapFile, "RemapCycles" )
 			if ( not thisCycle )
-				pklWarning( "Remap element '" . A_LoopField . "' not found", 3 )
-			thisType  := SubStr( thisCycle, 1, 2 )			; KLM map type, such as TC for TMK-like Colemak
+				pklWarning( "Remap element '" . plist . "' not found", 3 )
+			thisType  := SubStr( thisCycle, 1, 2 )				; KLM map type, such as TC for TMK-like Colemak
 ;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
 			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and wrapping pipes
 			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
-		}	; end loop
-		if ( mapType == "SC" )								; Remap pdic from thisType to SC
+		}	; end For plist
+		if ( mapType == "SC" )									; Remap pdic from thisType to SC
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
-		themCycls   := StrSplit( fullCycle, "/", " `t" ) 	; Parse cycle to minicycles:  | a | b / c | d | e |
-		For ix, minCycl in themCycls
-		{
-			thisCycle   := StrSplit( minCycl, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
-;			thisCycle   := StrSplit( fullCycle, "|", " `t" ) 	; Parse cycle by pipe, and create mapping pdic
+		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) { 	; Parse cycle to minicycles:  | a | b / c | d | e |
+			thisCycle   := StrSplit( minCycl, "|", " `t" ) 		; Parse cycle by pipe, and create mapping pdic
 			numSteps    := thisCycle.MaxIndex()
-			Loop % numSteps { 								; Loop to get proper key codes
+			Loop % numSteps { 									; Loop to get proper key codes
 				this := thisCycle[ A_Index ]
-				if ( mapType == "SC" ) { 					; Remap from thisType to SC
+				if ( mapType == "SC" ) { 						; Remap from thisType to SC
 					thisCycle[ A_Index ] := mapDic[ this ]
-				} else if ( mapType == "VK" )  { 			; Remap from VK name/code to VK code
+				} else if ( mapType == "VK" )  { 				; Remap from VK name/code to VK code
 					thisCycle[ A_Index ] := getVKeyCodeFromName( this ) 	; VK maps use VK## format codes
 				}	; end if
 			}	; end loop
-			Loop % numSteps { 								; Loop to (re)write remap pdic
-				this := thisCycle[ A_Index ] 				; This key's code gets remapped to...
+			Loop % numSteps { 									; Loop to (re)write remap pdic
+				this := thisCycle[ A_Index ] 					; This key's code gets remapped to...
 				this := ( mapType == "SC" ) ? rdic[ this ] : this 	; When chaining maps, map the remapped key ( a→b→c )
 				that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
-				pdic[ this ] := that 						; Map the (remapped?) code to the next one
-				tdic[ that ] := this 						; Keep the reverse mapping for later cycles
-			}	; end loop (remap one full cycle)
+				pdic[ this ] := that 							; Map the (remapped?) code to the next one
+				tdic[ that ] := this 							; Keep the reverse mapping for later cycles
+			}	; end Loop (remap one full cycle)
 			For key, val in tdic 
-				rdic[ key ] := val 							; Activate the lookup dict for the next cycle
-		}	; end For (parse minicycles)
-	}	; end loop (parse CSV)
+				rdic[ key ] := val 								; Activate the lookup dict for the next cycle
+		}	; end For minicycle
+	}	; end For clist (parse CSV)
 ;; eD remapping cycle notes:
 ;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
 ;; With rdic: 1<:[ b:a, c:b, a:c, d:d ] => 2>:[ r[b]:d, r[d]:b ] => 2>:[ a:d  , b:c, c:a, d:b   ]
@@ -83,23 +75,18 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KLMaps in a remap.ini file
 {
 	pdic := {}
-	Loop % 5 {											; Loop through KLM rows 0-4
-		keyRow := pklIniRead( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
-		valRow := pklIniRead( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap" )
-		valRow := StrSplit( valRow, "|", " `t" )
-		Loop, Parse, keyRow, |, %A_Space%%A_Tab%	; (Robust against keyRow shorter than valRow)
-		{
-			if ( A_Index > valRow.MaxIndex() )		; End of val row
+	Loop % 5 {													; Loop through KLM rows 0-4
+		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
+		valRow := pklIniCSVs( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; --"--
+		For ix, key in keyRow { 								; (Robust against keyRow shorter than valRow)
+			if ( ix > valRow.MaxIndex() ) 						; End of val row
 				Break
-			if ( not A_LoopField )					; Empty key entry (e.g., double pipes)
+			if ( not key ) 										; Empty key entry (e.g., double pipes)
 				Continue
-			key := A_LoopField
-			val := valRow[ A_Index ]
-			if ( keyType == "SC" ) 					; ensure upper case for SC###
-				key := upCase( key )
-			pdic[ key ] := upCase( val ) 			; e.g., pdic[ "SC001" ] := "SC001"
-		}	; end loop
-	}	; end loop
+			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC###
+			pdic[ key ] := upCase( valRow[ ix ] ) 				; e.g., pdic[ "SC001" ] := "SC001"
+		}	; end For key
+	}	; end Loop KLM rows
 	Return pdic
 }	; end fn
 
@@ -152,7 +139,7 @@ _pklCleanup() {
 			} else {
 				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
 			}
-		}
+		} 	; end For mod
 		setPklInfo( "cleanupDone", true )
 	} else if ( A_TimeIdlePhysical < timeOut ) { 		; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
 		setPklInfo( "cleanupDone", false ) 				; Recent keyboard activity reactivates the cleanup timer
@@ -168,9 +155,7 @@ _pklCleanup() {
 pklMsgBox( msg, s = "", p = "", q = "", r = "" ) 		; Seems this is only used once in pkl_init now?
 {
 	msg := getPklInfo( "LocStr_" . msg )
-	Loop, Parse, % "spqr"
-	{
-		it := A_LoopField
+	For ix, it in [ "s", "p", "q", "r" ] {
 		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
 	}
 	MsgBox % msg
@@ -193,15 +178,13 @@ pklDebug( text, time = 2 )
 
 pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used in pkl_init)
 {
-	hkStr   := pklIniRead( hkIniName )
-	if ( hkStr <> "" ) {
-		Loop, Parse, hkStr, `, 									; Parse by comma
-		{
-			Hotkey, %A_LoopField%, %gotoLabel%
-			if ( A_Index == 1 )
-				setPklInfo( pklInfoTag, A_LoopField )
-		}	; end loop
-	}	; end if
+	For ix, hkey in pklIniCSVs( hkIniName ) {
+		if ( hkey == "" )
+			Break
+		Hotkey, %hkey%, %gotoLabel%
+		if ( ix == 1 )
+			setPklInfo( pklInfoTag, hkey )
+	}	; end For hkey
 }	; end fn
 
 getWinInfo() 												; Get match info for the active window

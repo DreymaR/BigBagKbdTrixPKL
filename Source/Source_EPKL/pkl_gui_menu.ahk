@@ -12,10 +12,10 @@
 					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+`
 					,   "exitApp" : [ "11"        , "ExitApp"      ]		; ^+4
 					,   "refresh" : [ "RefreshMe" , "Refresh"      ]		; ^+5
-					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+6
-					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+7 - Don't show this to avoid clutter
-					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
-					,   "aboutMe" : [ "09"        , "ShowAbout"    ]		; ^+a
+					,   "aboutMe" : [ "09"        , "ShowAbout"    ]		; ^+6
+					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+7
+					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
+					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+9 - Don't show this to avoid clutter
 					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
 					,   "debugMe" : [ ""          , "DebugWIP"     ] } 		; ^+= - Don't show the Debug/WIP hotkey
 	For item, val in menuItems
@@ -198,8 +198,7 @@ pkl_about()
 
 readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
-	For ix, OnOff in [ "on", "off" ]
-	{
+	For ix, OnOff in [ "on", "off" ] {
 		icon := OnOff . ".ico"
 		SplitPath, layIni, , layDir 							; The icon files may be in the layout dir
 		layDir := ( layIni == "LayStk" ) ? getLayInfo( "Dir_LayIni" ) : layDir
@@ -215,7 +214,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 			icoFil%ix%  := "Resources\" . icon 					; If all else fails, look for a Resources\ .ico file
 			icoNum%ix%  := 1
 		}
-	}
+	} 	; end For OnOff
 	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }
 }
 
