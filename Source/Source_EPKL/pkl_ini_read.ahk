@@ -4,7 +4,7 @@
 ;;      Strips away blank and comment lines but not end-of-line comments
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
-iniReadSection( file, section )
+pklIniSect( file, section )
 {
 	try {
 		FileRead, fileTxt, *P65001 %file%							; A way to read UTF-8 files

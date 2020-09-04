@@ -139,7 +139,7 @@ _pklCleanup() {
 			} else {
 				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
 			}
-		} 	; end For mod
+		}	; end For mod
 		setPklInfo( "cleanupDone", true )
 	} else if ( A_TimeIdlePhysical < timeOut ) { 		; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
 		setPklInfo( "cleanupDone", false ) 				; Recent keyboard activity reactivates the cleanup timer

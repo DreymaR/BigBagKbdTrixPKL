@@ -120,13 +120,15 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 	static modPressed   := {}
 ;	static modKey       := {}
 	static returnTo     := -1
-	if ( returnTo == -1 )
+	if ( returnTo == -1 ) {
 		modPressed   := { Shift : ""      , Ctrl : ""     , Alt : ""    , Win : ""     }	; Array of Extend mod keys pressed
 ;		modKey       := { Shift : "RShift", Ctrl : "LCtrl", Alt : "LAlt", Win : "LWin" }	; Array of keys to send for mods 	; eD WIP: Any reason to use L vs R?
 		returnTo := StrSplit( getPklInfo( "extReturnTo" ), "/", " " )						; Array of layers to return to
+	}
 	
 	xLvl := getPklInfo( "extLvl" )
 	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
+;		( 1 ) ? pklDebug( "`n" . xLvl . "`n" . xVal, .5 )  ; eD DEBUG
 	if ( xVal == "" )
 		Return
 	for mod, theKey in modPressed { 							; Scan through mods. If one is active, send its keypress.
@@ -145,13 +147,13 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 		Send {LAlt Down}
 		modPressed["Alt"] := "RAlt"
 	}
-	_setExtendInfo( returnTo[ xLvl ] )
+	setExtendInfo( returnTo[ xLvl ] )
 	if not pkl_ParseSend( xVal ) 								; Unified prefix-entry syntax
 		Send {Blind}{%xVal%} 									; By default, take modifiers into account
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 }
 
-_setExtendInfo( xLvl = 1 ) 										; Update PKL info about the current Extend layer
+setExtendInfo( xLvl = 1 ) 										; Update PKL info about the current Extend layer
 {
 	setPklInfo( "extLvl", xLvl )
 	setLayInfo( "extendImg", getLayInfo( "extImg" . xLvl ) )
@@ -291,7 +293,7 @@ _setExtendState( set = 0 )									; Called from setModState
 	if ( set == 1 ) && ( ! extHeld ) { 						; Determine multi-Extend layer w/ extMods
 		xLvl  := getKeyState( extMod1, "P" ) ? 2 : 1 		; ExtMod1 -> ExtLvl +1
 		xLvl  += getKeyState( extMod2, "P" ) ? 2 : 0 		; ExtMod2 -> ExtLvl +2
-		_setExtendInfo( xLvl ) 								; Update Extend layer info
+		setExtendInfo( xLvl ) 								; Update Extend layer info
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
 		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
@@ -304,7 +306,7 @@ ExtendIsPressed() 											; Determine whether the Extend key is pressed
 {
 	ext := getLayInfo( "ExtendKey" )
 	Return % ( ext && getKeyState( ext, "P" ) ) ? true : false
-}
+}	; end fn
 
 setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown/Up labels
 { 															; This function handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys

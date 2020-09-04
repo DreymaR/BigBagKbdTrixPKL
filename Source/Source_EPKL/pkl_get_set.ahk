@@ -78,11 +78,11 @@ pkl_locale_load( lang )
 	if ( not initialized )
 	{															; Read/set default locale string list
 		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] { 	; Read defaults from the EPKL_Tables file
-			For ix, row in iniReadSection( getPklInfo( "File_PklDic" ), sectName ) { 	; Read default locale strings (key/value)
+			For ix, row in pklIniSect( getPklInfo( "File_PklDic" ), sectName ) { 	; Read default locale strings (key/value)
 				pklIniKeyVal( row, key, val, 1 ) 				; Extraction with \n escape replacement
 				setPklInfo( key, val )
 			}
-		} 	; end For
+		}	; end For
 		initialized := true
 	}
 	
@@ -90,24 +90,24 @@ pkl_locale_load( lang )
 	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
 	if not FileExist( file ) 									; If the language file isn't found, we'll just use the defaults
 		Return
-	For ix, row in iniReadSection( file, "pkl" ) { 				; Read the main locale strings frome the PKL section
+	For ix, row in pklIniSect( file, "pkl" ) { 					; Read the main locale strings frome the PKL section
 		pklIniKeyVal( row, key, val, 1 ) 						; A more compact way than before (but still in a loop)
 		if ( val != "" ) { 						; LocStr_ 00-22,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
 			key := ( key <= 9 ) 
 					? SubStr("00" . key, -1) : key 				; If key is #, zero pad it to 0# instead
 			setPklInfo( "LocStr_" . key , val ) 				; pklLocaleStrings( key, val, 1 )
 		}
-	} 	; end For
+	}	; end For
 	
-	For ix, row in iniReadSection( file, "detectDeadKeys" ) { 	; Read the locale strings for DK detection
+	For ix, row in pklIniSect( file, "detectDeadKeys" ) { 		; Read the locale strings for DK detection
 		pklIniKeyVal( row, key, val, 1 )
 		setPklInfo( "DetecDK_" . key, val ) 					; detectDeadKeys_SetLocaleTxt(
-	} 	; end For
+	}	; end For
 	
-	For ix, row in iniReadSection( file, "keyNames" ) { 		; Read the list of keys and mouse buttons
+	For ix, row in pklIniSect( file, "keyNames" ) { 			; Read the list of keys and mouse buttons
 		pklIniKeyVal( row, key, val, 0 ) 						; Read without character escapes
 		_setHotkeyText( key, val )
-	} 	; end For
+	}	; end For
 }
 
 _setHotkeyText( hk, localehk )

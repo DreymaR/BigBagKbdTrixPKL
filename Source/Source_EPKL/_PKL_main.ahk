@@ -16,9 +16,8 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- WIP: A help fn to make layout screenshots? Make the image large and opaque, then call GIMP (and instruct it to screenshot? Can I also instruct it to cutout? )
 ;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm.
-;		- TOFIX: The first Extend w/ modifier (S/T) will be unmodified. Pressing, e.g., Ext+S after startup fixes it.
+;			- Or, keep everything in kdbType, and adjust the reading of it to use the first and second substring?
 ;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
@@ -100,6 +99,7 @@
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
 ;;  eD TODO:
+;		- TODO: A help fn to make layout screenshots? Make the image large and opaque, then call GIMP (and instruct it to screenshot? Can I also instruct it to cutout? )
 ;		- TODO: Co2SC and Co2VK dics, so Co KLM codes may be used in addition to QW ones? E.g., CoTAB, QW_1, CoRSH, QW_S (=Co_R) etc.
 ;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;			- First one out: Layout selector? A set of choice panels, every time checking against a list of which layouts are present. Read in the list when a folder like Colemak-eD is chosen.
@@ -176,8 +176,9 @@
 ;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 ;	* EPKL v1.1.6α: KLM scan codes.
 ;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM QW### codes found in the Remap file. These are more intuitive and user friendly.
-;		- Replaced some Loop Parse commands with more modern For loops, and made iniReadSection() return a row array for For loops. Let pklIniCSVs() take a specified separator.
+;		- Replaced some Loop Parse commands with more modern For loops, and made pklIniSect() return a row array for For loops. Let pklIniCSVs() take a specified separator.
 ;		- Added _Test\Colemak-eD_EsEl_ANS_CurlAngle for Spanish, on request from Discord user Elsamu. It has áóéíúñ on AltGr+aoeiun, and some tweaks to fit in other symbols.
+;		- Fixed: The first Tap-or-Mod Extend key press didn't take if it was within the Tap-or-Mod term. An initializing call to setExtendInfo() solved the problem.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL

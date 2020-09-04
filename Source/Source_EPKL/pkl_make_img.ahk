@@ -127,7 +127,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 			dkv     := "¤" . dkv . "¤" 							; Pad to avoid matching, e.g., 123 to 1234
 			dkvp    := ( dkvs ) ? "|" . dkv : dkv 				; For if in, use CSV?; for RegEx, "|"
 			dkvs    .= InStr( dkvs, dkv ) ? "" : dkvp 			; If not already there, add the DKVal entry
-		} 	; end For release
+		}	; end For release
 	}
 	emptyBool       := true
 	for CO, SC in HIG.PngDic

@@ -214,7 +214,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 			icoFil%ix%  := "Resources\" . icon 					; If all else fails, look for a Resources\ .ico file
 			icoNum%ix%  := 1
 		}
-	} 	; end For OnOff
+	}	; end For OnOff
 	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }
 }
 

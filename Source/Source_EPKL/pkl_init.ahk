@@ -41,7 +41,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		For needle, newtxt in shorthand
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
-	} 	; end For suspApp
+	}	; end For suspApp
 	
 	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (CSV)
 	_pklSetInf( "stickyTime" ) 											; --"--
@@ -57,8 +57,8 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		harmLID := StrReplace( LIDs, "/" )
 		For ix, LID in StrSplit( LIDs, "/" ) { 							; The Tables file entry is a CSV list of slash-separated LIDs
 			polyLID["-" . LID] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
-		} 	; end For LID
-	} 	; end For LIDs
+		}	; end For LID
+	}	; end For LIDs
 	
 	theLays := pklIniRead( "layout", "", pklLays ) 						; Read the layouts string from EPKL_Layouts
 	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
@@ -171,7 +171,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
 			%mapType% := ReadRemaps( mapList,            mapFile ) 		; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, mapFile ) 		; Parse the cycle list into a pdic of mappings
-		} 	; end For mapType
+		}	; end For mapType
 		mapVK   := ReadRemaps( "ANS2ISO",         mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings
 		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
@@ -192,7 +192,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	shiftState := StrSplit( shStates, ":" )
 	
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
-	map := iniReadSection( layFile, "layout" )
+	map := pklIniSect( layFile, "layout" )
 	extKey := pklIniRead( "extend_key","", layFile ) 					; Extend was in layout.ini [global]. Can map it directly now.
 	( extKey ) ? map.Push( "`r`n" . extKey . " = Extend Modifier" ) 	; Define the Extend key. Lifts earlier req of a layout entry.
 	For ix, row in map { 												; Loop parsing the layout 'key = entries' lines
@@ -286,8 +286,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}	; end loop (parse keymap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
 		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed
-	} 	; end For row in map
-	} 	; end For layFile (parse layoutFiles)
+	}	; end For row in map
+	}	; end For layFile (parse layoutFiles)
 	
   													;   ###############################################################
 ;initOtherInfo() 									;   ####################### Other settings  #######################
@@ -309,7 +309,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				extN := A_Index
 				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4
 ;				thisSect := ( thisFile == getPklInfo( "File_PklSet" ) ) ? "extend" : thisSect
-				map := iniReadSection( thisFile, thisSect )
+				map := pklIniSect( thisFile, thisSect )
 				if ( map.Length() == 0 ) 								; If this map layer is empty, go on
 					Continue
 				For ix, row in map {
@@ -355,12 +355,12 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		dkStack.push( dkFile ) 											; The LayStack overrides the dedicated file
 	setLayInfo( "dkFile", dkStack )										; These files should contain the actual dk tables
 	For ix, thisFile in dkStack { 										; Go through both DK and Layout files for names
-		For ix, row in iniReadSection( thisFile, dknames ) { 			; Make the dead key name lookup table
+		For ix, row in pklIniSect( thisFile, dknames ) { 				; Make the dead key name lookup table
 			pklIniKeyVal( row, key, val )
 			if ( val )
 				setKeyInfo( key, val )									; e.g., "dk01" = "dk_dotbelow"
 		}
-	} 	; end For thisFile in dkStack
+	}	; end For thisFile in dkStack
 	dkImDir := fileOrAlt( pklIniRead( "img_DKeyDir", ".\DeadkeyImg" 	; Read/set DK image data
 									, "LayStk" ), layDir ) 				; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
@@ -400,7 +400,9 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 10 										; The image flashes on startup if this is long
 	if ! bool(pklIniRead("showHelpImage",true))
 		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
-
+	
+	setExtendInfo() 								; Prepare Extend info for the first time
+	
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
@@ -469,7 +471,7 @@ _checkModName( key ) 								; Mod keys need only the first letters of their nam
 	For ix, modName in modNames {
 		if ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?
 			key := modName
-	} 	; end For modName
+	}	; end For modName
 	if ( getLayInfo( "LayHasAltGr" ) && key == "RAlt" ) {
 		Return "AltGr" 								; RAlt as AltGr
 	} else {
