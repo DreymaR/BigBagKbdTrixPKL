@@ -3,15 +3,23 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ### [EPiKaL PortableKeyboardLayout][CmkPKL] for Windows, with layouts
 
+![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak-eD/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s0_EPKL.png)
+
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
-* The [Big Bag main topic][CmkBBT] with better explanations and links.
-* Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
+This is my Big Bag Of Tricks, obviously! That is, my many mods and tweaks and bells and whistles, mostly centered around the brilliant Colemak keyboard layout.
+* This repo is home to the **EPiKaL PKL** (**EPKL**) layout program, with several improvements over the old PKL.
+* It also implements most of my Big Bag "tricks" for EPKL, as layouts and other files.
+* Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
+	- The [Big Bag main topic][CmkBBT] with better explanations and links.
+	- Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
   
-* This repo is home to **EPiKaL PKL** (**EPKL**) with several improvements over the old PKL.
-* It also implements most of my Big Bag for EPKL, as layout and other files.
-
+These Aren't The Guides You're Looking For?
+-------------------------------------------
+EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
+**[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
+If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]  
+  
 Getting EPKL up and running
 ---------------------------
 * Download a full copy of this repository or just its executable resources.
@@ -26,24 +34,24 @@ Getting EPKL up and running
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are some premade Locale variants, if you need to type in other languages. Check out which variants exist.
     - There are different ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
-* In your EPKL_Layouts .ini, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
+* In your `EPKL_Layouts_Override.ini`, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
     - There are KbdType (@K) etc shortcuts, but you could also type the path to a layout folder out in full.
-    - The format is: `layout = ‹1st layout folder›:‹1st menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
+    - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
 * Now, run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
-
+  
 More Know-How
 -------------
-* This repo contains executables for EPKL as well as the original PKL, and source code for both.
-* The layouts are updated to EPKL format though, so they'd need some reconstruction for the old PKL.
+* This repo contains executables and source code for EPKL. Earlier, it also included the original PKL.
+* The layouts are updated to EPKL format, so they'd need some reconstruction for the old PKL.
 * The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings.ini][PklIni] holds general program settings.
 * The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
 * There's a "LayStack" for layout info priority. Mappings/settings at higher levels will take precedence:
-    - The `layout.ini` file in the chosen Layout folder gets the last word about, e.g., remaps
+    - The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
+    - The [EPKL_Layouts_Override][LayOvr], if present, can contain overriding layout choices etc
     - The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    - The [EPKL_Layouts_Override][LayOvr], if present, can contain non-default info about the layout choice etc
-    - The [EPKL_Layouts_Default][LayDef], finally, holds default and common settings/mappings
-    - Beyond this, specialized files may hold Extend or DeadKey mappings. See below.
-* In theory, you could put all the info needed for a whole layout into any one of these layout stack files.
+    - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
+    - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
+* In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
   
 **Tweakable parameters:**
 The files may take a little tweaking to get what you want. There are several parameters:
@@ -55,10 +63,11 @@ The files may take a little tweaking to get what you want. There are several par
     - You may mix mapping types freely in any layout.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
     - ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
+    - Brazilian ABNT boards are like ISO, but have two more keys. These can be remapped by their scan codes.
     - JIS (Japanese) etc are not supported so far. Sorry. Gomen-nasai. ごめんなさい.    ᏊᵕꈊᵕᏊ
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
-    - Curl(DH) is Colemak/Tarmak specific and for the most part should not affect Extend
+    - Curl(DH) is Colemak/Tarmak/Dvorak specific and for the most part should not affect Extend
     - The Curl(DH) mod does insert D between C and V though. There's a remap to let Extend+V still be Paste
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
     - The Extend modifier may even double as a Tap-or-Mod key so that when you tap it, something else happens.
@@ -79,16 +88,18 @@ The files may take a little tweaking to get what you want. There are several par
   
 **Hotkeys found in the EPKL_Settings file:**
 * Ctrl+Shift+1 – Display/hide help image
-* Ctrl+Shift+2 – Switch layout between the ones specified in the settings file
+* Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
 * Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may be Ctrl+Shift+` instead
 * Ctrl+Shift+4 – Exit EPKL
 * Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
-* Ctrl+Shift+6 – Zoom the help image in/out, to see it better or get it out of the way
-* Ctrl+Shift+7 – Move the help image between positions, as by mouseover
-* Ctrl+Shift+8 – Toggle help image transparency
+* Ctrl+Shift+6 – Show the About... dialog, with layout and other info
+* Ctrl+Shift+7 – Zoom the help image in/out, to see it better or get it out of the way
+* Ctrl+Shift+8 – Move the help image between positions, as by mouseover
+* Ctrl+Shift+9 – Toggle help image transparency
+* Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
   
 **Short EPKL Glossary**
-* **Extend** is a layer switch (the CapsLock key by default), typically giving access to navigation and NumPad etc layers
+* **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
 * A sticky modifier or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
 * **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
 * **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
@@ -109,12 +120,12 @@ The files may take a little tweaking to get what you want. There are several par
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
-
+  
 Key mappings
 ------------
 Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
   
-Here are some full key mappings with a legend:
+Here are some full shiftstate mappings with a legend:
 ```
 ; SC  = VK      CS    S0    S1    S2    S6    S7    ; comments
 QW_O  = Y       1     y     Y     --    ›     »     ; SC018: QW oO
@@ -127,7 +138,7 @@ Where:
     - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
     - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's better to use the generic KLM QW_## codes.
     - _Example:_ The KLM code `QW_SC` is the semicolon key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
-    - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it works as stated, if held down it's the modifier.
+    - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it's the VKey, if held down it's the modifier.
     - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
     - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
@@ -144,13 +155,14 @@ Where:
   
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
 ```
+QW_J    = N         VKey            ; QW jJ  -> nN
 RWin    = Back      VirtualKey      ; RWin   -> Backspace
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-QWPGU   = NEXT      VirtualKey      ; PgUp   -> SC149: PgDn (use the proper VKEY name here)
-QWPGD   = PRIOR     VirtualKey      ; PgDn   -> SC151: PgUp (--"--)
+QWPGU   = NEXT      VKey            ; PgUp   -> SC149: PgDn (use the proper VKEY name here)
+QWPGD   = PRIOR     VKey            ; PgDn   -> SC151: PgUp (--"--)
 ```
-Entries are any-whitespace delimited (single Tab before v0.4.6).
-
+Entries are any-whitespace delimited.
+  
 Advanced Extending
 ------------------
 Here are some sample Extend key mappings:
@@ -160,7 +172,7 @@ QWCLK   = BACK/Ext  VirtualKey      ; Caps   -> Tap-or-Mod: Backspace if tapped,
 QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on tap, Extend on hold
 ```
 * These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
-* The above Extend modifier mappings may be in any LayStack .ini file, usually in [Layouts_Default][LayDef]
+* The above Extend modifier mappings may be in any LayStack .ini file, such as [Layouts_Default][LayDef]
 * Holding designated modifiers, RShift and/or RAlt by default (specified in the [Settings][PklIni]), chooses Extend layers.
     - So, e.g., holding the Ext1 mod (RAlt) then the Ext key (Caps) activates the Extend2 layer (NumPad).
 * After selecting your Extend layer, you hold down only the Extend key (Caps by default) and start using Extend!
@@ -176,7 +188,7 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
     - "Tap-dance" {Shift,Ext,<key>} quickly using Sticky Shift, for a kaomoji. Wait before <key> for another.
     - Holding Ctrl then tapping Ext sends Win+Period, opening the Emoji picker.
     - AltGr+Ext-tap holds some commands to avoid hand contortion. Example: {AltGr+Ext,T} for Task Manager.
-
+  
 Layout variant tutorial
 -----------------------
 You can make your own version of, say, a locale layout with a certain (non-)ergonomic variant:
@@ -214,8 +226,8 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - You can download Inkscape for instance from PortableApps.com, and point to it in the [ImgGen_Settings](./Files/ImgGenerator/EPKL_ImgGen_Settings.ini) file.
     - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
-
-
+  
+  
 DONE:
 -----
 These are some of the changes in [EPKL] (PKL[eD] up to v1):
@@ -296,18 +308,18 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 	- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
 	- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
-
-
+  
+  
 TODO:
 -----
-I have more **[EPKL][EPKLRM]** changes on my wishlist, including:
-* A timer that checks whether the underlying Windows layout has changed (affects dead keys) - and fixes any stuck modifiers
+I have many more **[EPKL][EPKLRM]** improvements on my wishlist, including:
+* A timer that checks whether the underlying Windows layout has changed (affects dead keys)
 * Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * Chainable dead keys, allowing for instance a Mother-of-DKs key for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
-* One or more GUI settings panels instead of editing .ini files.
-* An import module for MSKLC layout files.
-
-
+* GUI panels for settings and layout choices instead of editing .ini files.
+* An import module for MSKLC layout files and other formats.
+  
+  
 Credits/sources
 ---------------
 #### ~ The original [PKL][PKLGit] written by [Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
@@ -316,7 +328,6 @@ Credits/sources
   
 _Finally, to all of you: Best of luck using EPKL!_
 _Øystein "DreymaR" Gadmar, 2020_
-
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (Old PKL on GitHub)
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (Old PKL on SourceForge)
@@ -328,6 +339,7 @@ _Øystein "DreymaR" Gadmar, 2020_
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
+[EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
 [EPKLRM]: ./Files/ (EPKL Files folder/README)

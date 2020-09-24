@@ -296,7 +296,7 @@ _setExtendState( set = 0 )									; Called from setModState
 		setExtendInfo( xLvl ) 								; Update Extend layer info
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
-		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
+;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
 		extHeld := 0
 	}	; end if
 	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)

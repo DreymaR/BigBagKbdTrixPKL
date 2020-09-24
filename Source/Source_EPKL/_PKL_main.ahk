@@ -16,8 +16,23 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
+;			- Write a layGUI = ... line with the settings from the GUI directly below [pkl], skirting the @# shortcuts. If such a line is present, overwrite it. Date tag in a comment, and explain in a ';;  ' comment before.
+;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
+;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
+;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak/Tm# etc. Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? As a default if not found, use the three first letters.
+;		- WIP: Use CurlMod = DH(m) instead of Curl(M)? It's shorter, more in touch with what people use etc. Then, maybe call the layouts, e.g., 'Cmk-eD_ANS_DH-AWide' instead of CurlAWide. Or just DHAWide?
+;			- Or make names more consistent? Like 4 letters per mod, Angl/CurlAnglWide/etc?
+;			- Possibly... even eradicate the CurlMod altogether, only using ErgoMod for the whole thing? Is that better? After all, Curl/DH _is_ an ergo mod!
+;		- WIP: Instead of Ext-mods being hard mods, make an extMods associative array variable. On Ext keypress, check it and implement (if mods not already pressed/OSM active).
+;			- On Ext down/up, clear all ExtMods.
+;			- Make it For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? But what about [ "CapsLock", "Extend", "SGCaps" ] then?
+;			- Hoping it won't break the cool Ext-tap dance for kaomoji etc.
 ;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm.
-;			- Or, keep everything in kdbType, and adjust the reading of it to use the first and second substring?
+;			- Or, keep everything in kdbType, and adjust the reading of it to use the first and second substring? Why though...?
+;		- Seems that {tap-Ext,i} very fast doesn't take (producing i instead of ing)? Unrelated to the ToM term.
+;		- TODO: EPKL_Settings_Override, in preparation for GUI settings. Make the settings file a [ Override, Default ] couplet like the Layouts files.
+;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
@@ -56,7 +71,6 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
-;		- TODO: EPKL_Settings_Override, in preparation for GUI settings. Make the settings file a [ Override, Default ] couplet like the Layouts files.
 ;		- TODO: Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- TODO: Allow the user to choose which monitor to display help images on? If you have a second monitor it may be less crowded and thus ideal for the help image. But how?
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
@@ -99,8 +113,7 @@
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
 ;;  eD TODO:
-;		- TODO: A help fn to make layout screenshots? Make the image large and opaque, then call GIMP (and instruct it to screenshot? Can I also instruct it to cutout? )
-;		- TODO: Co2SC and Co2VK dics, so Co KLM codes may be used in addition to QW ones? E.g., CoTAB, QW_1, CoRSH, QW_S (=Co_R) etc.
+;		- TODO: A help fn to make layout images? Make the image large and opaque, then make a screenshot w/ GIMP and crop it. Or can I use the Windows Snipping Tool (Win+Shift+S)?
 ;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
 ;			- First one out: Layout selector? A set of choice panels, every time checking against a list of which layouts are present. Read in the list when a folder like Colemak-eD is chosen.
 ;		- Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
@@ -175,10 +188,11 @@
 ;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
 ;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 ;	* EPKL v1.1.6α: KLM scan codes.
-;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM QW### codes found in the Remap file. These are more intuitive and user friendly.
+;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
 ;		- Replaced some Loop Parse commands with more modern For loops, and made pklIniSect() return a row array for For loops. Let pklIniCSVs() take a specified separator.
 ;		- Added _Test\Colemak-eD_EsEl_ANS_CurlAngle for Spanish, on request from Discord user Elsamu. It has áóéíúñ on AltGr+aoeiun, and some tweaks to fit in other symbols.
-;		- Fixed: The first Tap-or-Mod Extend key press didn't take if it was within the Tap-or-Mod term. An initializing call to setExtendInfo() solved the problem.
+;		- Fixed: The first Tap-or-Mod Extend key press didn't take if within the ToM timer term. An initializing call to setExtendInfo() solved the problem.
+;		- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
