@@ -7,7 +7,8 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-This is my Big Bag Of Tricks, obviously! That is, my many mods and tweaks and bells and whistles, mostly centered around the brilliant Colemak keyboard layout.
+This is my Big Bag Of Tricks, obviously! That is, my many mods and tweaks and bells and whistles. 
+It's mostly centered around the brilliant Colemak keyboard layout, and the incredibly useful Extend layers which work with any layout.
 * This repo is home to the **EPiKaL PKL** (**EPKL**) layout program, with several improvements over the old PKL.
 * It also implements most of my Big Bag "tricks" for EPKL, as layouts and other files.
 * Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
@@ -100,19 +101,20 @@ The files may take a little tweaking to get what you want. There are several par
   
 **Short EPKL Glossary**
 * **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
+* **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
 * A sticky modifier or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
 * **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
 * **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
     - DK sequence: You can tap several DKs to get new symbols (example: `{AltGr+=,=}` gives `≡`; `AltGr+{/,=}` then `=` gives `≢`)
     - DK chaining: One DK can release to another. This is not implemented in EPKL yet
-    - **MoDK** (Mother-of-DKs) is a key (here, Extend-tap) that leads to lots of DKs
+    - **MoDK** (Mother-of-DKs) is a key (here, on **tap-Extend**) that leads to lots of cool DKs
 * The **LayStack** is a stack of files that may hold layout definitions: Layouts_Default, Layouts_Override, BaseLayout and Layout.
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
   
 **Techy tips for EPKL:**
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
-* I usually put a shortcut to EPKL.exe in my Start Menu "Startup" folder so it starts on logon, per user.
+* I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
     - If the PortableApps menu is run on logon it can start up EPKL for you too.
 * Look in the various .ini files under Files and Layouts if you're interested! Much is explained there.
@@ -335,6 +337,7 @@ _Øystein "DreymaR" Gadmar, 2020_
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
+[StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)
 [PrtApp]: https://portableapps.com/ (PortableApps.com)
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)

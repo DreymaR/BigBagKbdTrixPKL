@@ -8,7 +8,7 @@
 		if InStr( getDeadKeysInCurrentLayout(), Chr(ch) )
 			char .= "{Space}"
 	} else if ( ch == 32 ) {
-		char = {Space}
+		char = ={Space}
 	} else if ( ch == 9 ) {
 		char = {Tab}
 	} else if ( ch > 0 && ch <= 26 ) {
@@ -20,9 +20,6 @@
 		char = ^{VKDC}	; Ctrl + \ (OEM_5) alias File Separator(?)
 	} else if ( ch == 29 ) {
 		char = ^{VKDD}	; Ctrl + ] (OEM_6) alias Group Separator(?)
-;	} else {			; Unicode character
-;		sendU(ch)
-;		Return
 	}
 	pkl_SendThis( modif, char )
 }
@@ -32,9 +29,14 @@ pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltG
 	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up" 
 	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!?
 		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
-	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed:
+	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed. Also, Space entries need to be sent {Blind}
 	prefix := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
-	Send %prefix%%modif%%toSend%
+;	prefix := ( toSend == "{Space}" ) ? "{Blind}" : prefix 		; eD WIP: Allow Shift+Spc to work - messes with Shift?!
+	if ( toSend == "={Space}" ) {
+		Send {Blind}{Space}
+	} else {
+		Send %prefix%%modif%%toSend%
+	}
 	if ( toggleAltGr )
 		setAltGrState( 1 )
 }

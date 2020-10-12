@@ -30,7 +30,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
 	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; = - Hidden from menu
 	
-	setDeadKeysInCurrentLayout( pklIniRead( "systemsDeadkeys" ) )
+	setDeadKeysInCurrentLayout( pklIniRead( "systemDeadKeys" ) )
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
 	_pklSetInf( "cleanupTimeOut" ) 										; Time idle (sec) before mods etc are cleaned up
@@ -270,7 +270,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks , Ord(ksE) )						; Convert to ASCII/Unicode ordinal number; was Asc()
 			} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
 				setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
-			} else if RegExMatch( ksE, "i).*(space|spc).*" ) { 			; Spc: Special space entry; can also use &Spc, ={Space}...
+			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
@@ -327,7 +327,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#
 		}	; end For thisFile (parse extStck)
-		setPklInfo( "extReturnTo", pklIniRead( "extReturnTo", "1/2/3/4", extStck ) ) 	; ReturnTo layers
+		setPklInfo( "extReturnTo", StrSplit( pklIniRead( "extReturnTo"
+							, "1/2/3/4", extStck ), "/", " " ) ) 		; ReturnTo layers for each Extend layer
 		Loop % 4 {
 			setLayInfo( "extImg" . A_Index								; Extend images
 				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), layDir . "\extend.png" ) )

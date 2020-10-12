@@ -135,9 +135,9 @@ _pklCleanup() {
 		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
 					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
 			if getKeyState( mod ) {
-				Return 									; If the key is being held down, leave it be
+				Return 									; If the key is being held down, leave it be, otherwise...
 			} else {
-				Send % "{" . mod . " Up}" 				; eD TOFIX: This doesn't help with Extend mods etc!?
+				Send % "{" . mod . " Up}" 				; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
 			}
 		}	; end For mod
 		setPklInfo( "cleanupDone", true )

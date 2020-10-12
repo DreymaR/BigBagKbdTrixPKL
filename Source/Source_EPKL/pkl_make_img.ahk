@@ -142,7 +142,7 @@ _makeImgDicThenImg( ByRef HIG, state ) 							; Function to create a help image 
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
 				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				res := "dk_" . dkName
-			} else if RegExMatch( ents, "i).*(space|spc).*" ) { 	; Note: This shouldn't be necessary now, as Spc is stored as 32
+			} else if RegExMatch( ents, "i).*(space|spc).*" ) { 	; Note: As Spc is stored as 32, this isn't needed for normal entries.
 				res := 32 										; Space may be stored as (&)spc or ={space}; if so, show it as a space
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", state ) ) {
 				res := "tm_" . res 								; Mark Tap-or-Mod keys, for state 0:1

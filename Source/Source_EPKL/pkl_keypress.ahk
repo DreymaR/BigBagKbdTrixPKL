@@ -95,8 +95,10 @@ _keyPressed( HKey ) 											; Process a HotKey press
 			_pkl_CtrlState( HKey, capHK, state, modif )			; Ctrl is down
 		}
 	}	; end if LayHasAltGr
-	if ( getKeyState("LWin") || getKeyState("RWin") )			; Win is down
+	if ( getKeyState("LWin") || getKeyState("RWin") ) 			; Win is down
 		modif .= "#"
+;	if ( getKeyState("LShift") || getKeyState("RShift") ) 		; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
+;		modif .= "+"
 	
 	Pri := getKeyInfo( HKey . state ) 							; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" )						; Actual entry by state, if using a prefix
@@ -117,39 +119,43 @@ _keyPressed( HKey ) 											; Process a HotKey press
 
 _extendKeyPress( HKey )											; Process an Extend modified key press
 {
-	static modPressed   := {}
-;	static modKey       := {}
-	static returnTo     := -1
-	if ( returnTo == -1 ) {
-		modPressed   := { Shift : ""      , Ctrl : ""     , Alt : ""    , Win : ""     }	; Array of Extend mod keys pressed
-;		modKey       := { Shift : "RShift", Ctrl : "LCtrl", Alt : "LAlt", Win : "LWin" }	; Array of keys to send for mods 	; eD WIP: Any reason to use L vs R?
-		returnTo := StrSplit( getPklInfo( "extReturnTo" ), "/", " " )						; Array of layers to return to
-	}
+	Critical
+	static extMods      := {} 									; Which Extend mods are in use
 	
 	xLvl := getPklInfo( "extLvl" )
 	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
-;		( 1 ) ? pklDebug( "`n" . xLvl . "`n" . xVal, .5 )  ; eD DEBUG
 	if ( xVal == "" )
 		Return
-	for mod, theKey in modPressed { 							; Scan through mods. If one is active, send its keypress.
-		if ( xVal == mod && getKeyState( HKey, "P" ) ) { 	; If the key's Extend entry is a modifier 	; eD WIP: Instead, demand entries like "Shift Mod" in Extend tables and use a RegExMatch() here?
-			modPressed[mod] := HKey
-			Send % "{L" . mod . " Down}" 	; "{" . modKey[mod] . " Down}"
+	if ( HKey == -1 ) { 										; Special call to reset the extMods
+		extMods := {}
+		Return
+	}
+	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) { 
+		if getKeyState( HKey, "P" ) { 							; Mark the extMod as pressed or not
+			extMods[mod] := HKey
 			setLayInfo( "extendUsed", true ) 					; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 			Return
-		}
-		if ( theKey && !getKeyState( theKey, "P" ) ) { 			; eD TOFIX: Why doesn't mod up work if another key is pressed shortly after?
-			Send % "{L" . mod . " Up}" 		; "{" . modKey[mod] . " Up}"
-			modPressed[mod] := ""
+		} else { 												; eD WIP: This may not get triggered? Do we need to set Up hotkeys for it?
+			extMods.Delete( mod )
 		}
 	}
-	if ( !modPressed["Alt"] && getKeyState( "RAlt", "P" ) ) { 	; eD WIP: If pressing RAlt, send LAlt???
-		Send {LAlt Down}
-		modPressed["Alt"] := "RAlt"
-	}
+	returnTo := getPklInfo( "extReturnTo" ) 					; Array of Ext layers to return to from the current one
 	setExtendInfo( returnTo[ xLvl ] )
+	modDown      := {} 											; Which Extend mods were depressed
+	For mod, HKey in extMods {
+		if getKeyState( HKey, "P" ) {
+			modDown[mod] := HKey
+			Send % "{" . mod . " Down}"
+		} else {
+			extMods.Delete( mod )
+		}
+	}
 	if not pkl_ParseSend( xVal ) 								; Unified prefix-entry syntax
 		Send {Blind}{%xVal%} 									; By default, take modifiers into account
+	For mod, HKey in modDown {
+		Send % "{" . mod . " Up}"
+	}
+	Critical, Off
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 }
 
@@ -290,12 +296,14 @@ _setExtendState( set = 0 )									; Called from setModState
 		extMod2         := getPklInfo( "extendMod2" )
 	}
 	
+;	_osmClearAll() 											; eD WIP: Don't mix ToM and Extend? Nope, this didn't work and landed us with a stuck Caps key!
 	if ( set == 1 ) && ( ! extHeld ) { 						; Determine multi-Extend layer w/ extMods
 		xLvl  := getKeyState( extMod1, "P" ) ? 2 : 1 		; ExtMod1 -> ExtLvl +1
 		xLvl  += getKeyState( extMod2, "P" ) ? 2 : 0 		; ExtMod2 -> ExtLvl +2
 		setExtendInfo( xLvl ) 								; Update Extend layer info
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
+		_extendKeyPress( -1 ) 								; ...remove any Ext modifiers to clean up.
 ;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
 		extHeld := 0
 	}	; end if

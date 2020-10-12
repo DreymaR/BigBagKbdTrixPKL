@@ -16,42 +16,37 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- TOFIX: Ext-Shift after rework sometimes doesn't take? How to reproduce?
+;		- WIP: Multi-BaseLayout stack! Use for, e.g., Ru/Bg.
+;		- TODO: Add a tip somewhere (test it properly first) that setting a negative margin for the help image may be used to show it on another monitor
+;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to a stuckness of some kind.
+;			- Make it so that if the hotkey queue overflows it's reset and you lose all of it? Maybe that's actually safer?
 ;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
 ;			- Write a layGUI = ... line with the settings from the GUI directly below [pkl], skirting the @# shortcuts. If such a line is present, overwrite it. Date tag in a comment, and explain in a ';;  ' comment before.
 ;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
 ;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
-;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak/Tm# etc. Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? As a default if not found, use the three first letters.
+;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak/Tm# etc. As a default if not found, use the three first letters.
+;			- Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? Too clunky maybe, and won't cover having multiple Tarmak layouts selected.
+;			- Maybe instead reorganize a bit, making Colemak-eD/VK subdirs under Colemak?
+;		-
+;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
+;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
 ;		- WIP: Use CurlMod = DH(m) instead of Curl(M)? It's shorter, more in touch with what people use etc. Then, maybe call the layouts, e.g., 'Cmk-eD_ANS_DH-AWide' instead of CurlAWide. Or just DHAWide?
 ;			- Or make names more consistent? Like 4 letters per mod, Angl/CurlAnglWide/etc?
 ;			- Possibly... even eradicate the CurlMod altogether, only using ErgoMod for the whole thing? Is that better? After all, Curl/DH _is_ an ergo mod!
-;		- WIP: Instead of Ext-mods being hard mods, make an extMods associative array variable. On Ext keypress, check it and implement (if mods not already pressed/OSM active).
-;			- On Ext down/up, clear all ExtMods.
-;			- Make it For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? But what about [ "CapsLock", "Extend", "SGCaps" ] then?
-;			- Hoping it won't break the cool Ext-tap dance for kaomoji etc.
-;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm.
+;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
 ;			- Or, keep everything in kdbType, and adjust the reading of it to use the first and second substring? Why though...?
-;		- Seems that {tap-Ext,i} very fast doesn't take (producing i instead of ing)? Unrelated to the ToM term.
 ;		- TODO: EPKL_Settings_Override, in preparation for GUI settings. Make the settings file a [ Override, Default ] couplet like the Layouts files.
-;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
-;		-
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- TOFIX: The kaomoji DK image doesn't appear most of the time, instead the Extend image is shown. (The kaomoji still work.)
 ;		- WIP/TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
-;		- TOFIX: {Ext+S,<key>} rapidly sends a kaomoji. After this, Shift is stuck. Same with {Ext+T}! Is this the solution to the stuck Ctrl riddle?!?
-;			- With Sticky Mods (OSM) off, it still happens. So it isn't that.
-;			- It doesn't happen with an Ext Mod mapping, but with MoDK and ToM Ext.
-;			- Key History: Looks like the mod is released but then re-presssed? Why?
-;			- The rapidly pressed key interrupts the Extend routine, so the mod Up is never sent.
-;			- Make sure Extend mods aren't Sticky? Do we need to call _osmClear() for Ext mods up, if the Ext mod is a sticky mod? Or, in setModifierState, if Ext is down don't use the Sticky setting?!
-;			- An Extend tap will not trigger the Extend mod handling such as _setModState(). Where could we catch an Ext Up to make sure no mods are stuck/sticky?
-;			- setLayInfo( "extendUsed" ) isn't applied to Ext-mods?
-;			- When Extend is released, send a mods up? No, doesn't seem to affect the problem at all. Tried both with Send {mod Up} and _setModState()
 ;		- TOFIX: AltGr+Spc, in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space? Related to the NBSP mapping.
 ;		- TOFIX: LCtrl gets stuck when using AltGr (typically for me, typing 'å'), and the timer can't release it because it's "physically" down.
 ;			- Tried diagnosing it with Key History. LCtrl is down both in GetKeyState( now ) and Hook's Logical/Physical states.
+;			- Maybe it's solved with the new Ext-mod implementation?
 ;		- TOFIX: First Extend after a refresh is slow, won't always take until the second key press. Prepare it somehow? Also, Ext+T+<key> after refresh sends only Ext+<key>?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- WIP: Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
@@ -71,6 +66,8 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: Since no hotkeys are set for normal key Up, Ext release and Ext mod release won't be registered? Should this be remedied?
+;		- Mod ensemple: For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? Also add [ "CapsLock", "Extend", "SGCaps" ] ?
 ;		- TODO: Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- TODO: Allow the user to choose which monitor to display help images on? If you have a second monitor it may be less crowded and thus ideal for the help image. But how?
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
@@ -138,6 +135,8 @@
 ;			- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 ;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 ;;  eD ONHOLD:
+;		- Hardcode Tab instead of using &Tab after all? It's consistent to have both the whitespace characters Spc & Tab hardcoded this way.
+;		- A dynamic key press indicator for the help images? Showing not just the modifier layer but every press. Will it be fast enough? Would need a position table for each KbdForm.
 ;		- Make a Setting for which fn to run as Debug, so I don't have to recompile to switch debug fn()? Maybe overmuch, as the debug fn often needs recompiling anyway?
 ;		- Allow Remaps to use @K so that the layouts don't have to?!? Too confusing?
 ;		- Remove all the CtrlAltIsAltGr stuff? If laptops don't have RAlt (>!), they can just map a key to AltGr Mod instead? Won't allow using <^<! as AltGr (<^>!) though...
@@ -187,16 +186,18 @@
 ;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
 ;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
 ;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
-;	* EPKL v1.1.6α: KLM scan codes.
+;	* EPKL v1.1.6: KLM scan codes. EPKL For Dummies. Extend fixes. AltGr layouts for Es/It locales.
 ;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
-;		- Replaced some Loop Parse commands with more modern For loops, and made pklIniSect() return a row array for For loops. Let pklIniCSVs() take a specified separator.
-;		- Added _Test\Colemak-eD_EsEl_ANS_CurlAngle for Spanish, on request from Discord user Elsamu. It has áóéíúñ on AltGr+aoeiun, and some tweaks to fit in other symbols.
-;		- Fixed: The first Tap-or-Mod Extend key press didn't take if within the ToM timer term. An initializing call to setExtendInfo() solved the problem.
 ;		- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
+;		- Fixed: The first Tap-or-Mod Extend key press didn't take if within the ToM timer term. An initializing call to setExtendInfo() solved the problem.
+;		- Fixed: Shift+Spc didn't send a shifted space, which should scroll up in most browser windows. Now, Spc is sent Blind.
+;		- Fixed: Extend mods such as `{Ext+S} = Shift` pressed quickly w/ ToM Ext often led to stuck mods. Now they're only depressed/released for each Extended key press.
+;		- Replaced some Loop Parse commands with more modern For loops, and made pklIniSect() return a row array for For loops. Let pklIniCSVs() take a specified separator.
+;		- Added EsAlt and ItAlt for users who prefer AltGr to DKs. Es/It have áéíóú/àèìòù on AltGr+aoeiu, and some tweaks to fit in other symbols. Es_ANS has ñ on AltGr+n.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.1.6α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.1.6" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
