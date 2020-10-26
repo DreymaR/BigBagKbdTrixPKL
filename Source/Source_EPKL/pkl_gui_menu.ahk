@@ -157,40 +157,41 @@ pkl_about()
 	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "layout.ini", "" )
 	basFile  :=             getPklInfo( "File_BasIni" )
+	menuSep  := "............................................................................................"
 	
 	if WinActive( aboutTitle ) { 								; Toggle the GUI off if it's the active window
 		GUI, AW: Destroy
 		Return
 	}
-	GUI, AW:New, , %aboutTitle% 								; The About... window is the default GUI
+	GUI, AW:New,       , %aboutTitle% 							; About... window (default GUI)
 	GUI, AW:Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
 	if ( pklProgURL != pklMainURL ) {
 		GUI, AW:Add, Edit, , %pklProgURL%
 		GUI, AW:Add, Text, , Based on Portable Keyboard Layout v0.4
 	}
 	GUI, AW:Add, Edit, , %pklMainURL%
-	GUI, AW:Add, Text, , ......................................................................
-	GUI, AW:Add, Text, , (c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
+	GUI, AW:Add, Text, , `n(c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
 	GUI, AW:Add, Text, , %locThanksTo%: Chris Mallet && The AHK Foundation
-	GUI, AW:Add, Text, , %locDisclaim%
-	GUI, AW:Add, Text, , %locLicense%
+	GUI, AW:Add, Text, , %locDisclaim%`n`n%locLicense%
 	GUI, AW:Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
 	GUI, AW:Add, Text, , % ( locTransName == "[[Translator name]]" ) ? "" : "`n" . locTransFile . ": " . locTransName
-	GUI, AW:Add, Text, , ......................................................................
-	text :=        locActLayout . ": " . layName
-	text .= "`n" . locVersion   . ": " . layVers
-	text .= "`n" . locLanguage  . ": " . layLang . " (++?)"
-	text .= "`n" . locCopyright . ": " . layCopy
-	text .= "`n" . locCompany   . ": " . layComp
+	GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
+	text := locActLayout . ": " . layName . "`n"
+	text .= locVersion   . ": " . layVers . "`n"
+	text .= locLanguage  . ": " . layLang . " (++?)`n"
+	text .= locCopyright . ": " . layCopy . "`n"
+	text .= locCompany   . ": " . layComp
 	GUI, AW:Add, Text, , %text% 								; Layout info
 	GUI, AW:Add, Edit, , %layPage%
 	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
-		GUI, AW:Add, Text, , ......................................................................
-		text := "Keyboard/Layout type from settings: "      . kbdType
+		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
+		text :=   "Keyboard/Layout type from settings: "    . kbdType
 		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
-		text .= "`nCurrent Windows Locale / Language ID: "   . msLID . " " . wLang
+		text .= "`n"
+		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr
-		text .= "`nLayout/BaseLayout file paths:`n- "         . layFile . "`n- " . basFile
+		text .= "`n"
+		text .= "`nLayout/BaseLayout file paths:`n- "       . layFile . "`n- " . basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	GUI, AW:Show

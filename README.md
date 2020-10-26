@@ -131,15 +131,15 @@ Here are some full shiftstate mappings with a legend:
 ```
 ; SC  = VK      CS    S0    S1    S2    S6    S7    ; comments
 QW_O  = Y       1     y     Y     --    ›     »     ; SC018: QW oO
-QW_P  = QW_SC   0     ;     :     --    @0a8  …     ; SC019: QW pP - dk_umlaut (ANS/ISO_1/3)
+QW_P  = vc_SC   0     ;     :     --    @0a8  …     ; SC019: QW pP - dk_umlaut (ANS/ISO_1/3)
 ```
 Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
-    - For SC, you can use an AHK key name instead. For VK names you need real Windows VK names.
-    - Instead of the technical SC or VK you may use my more intuitive KLM QW_## codes. See the [Remap file][MapIni].
+    - For SC, you could use an AHK key name instead. For VK you need the Windows VK names (or KLM codes).
+    - Instead of the technical SC or VK you may use my more intuitive KLM codes. See the [Remap file][MapIni].
     - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
-    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's better to use the generic KLM QW_## codes.
-    - _Example:_ The KLM code `QW_SC` is the semicolon key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
+    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's much better to use KLM vc_## codes.
+    - _Example:_ The KLM code `vc_SC` is the semicolon key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
     - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it's the VKey, if held down it's the modifier.
     - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.

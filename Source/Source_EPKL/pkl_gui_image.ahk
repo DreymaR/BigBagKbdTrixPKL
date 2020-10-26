@@ -39,7 +39,7 @@
 	static imgY
 	static imgW
 	static imgH
-	static CtrlImage 				; Image control handle
+	static CtrlKyImg 				; Image control handle
 	static CtrlBgImg 				; --"--
 	static CtrlShImg 				; --"--
 	static initialized  := false
@@ -110,9 +110,9 @@
 		} else if ( im.Opacity == -1 ) {
 			WinSet, TransColor, % im.BgColor, pklImgWin
 		} 				; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
-		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg AltSubmit 		; Make image controls stored in Help##### variables
-		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlImage AltSubmit
-		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg AltSubmit
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg ; AltSubmit 	; Make image controls stored in Help##### variables
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlKyImg ; AltSubmit
+		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit
 		GUI, HI:Show, NA, 							pklImgWin
 		
 		SetTimer, showHelpImage, 100 									; Refresh the help image every # ms (screen refresh usually takes ~17 ms)	; eD WIP: A faster refresh rate helps DKs, but not Tap-Ext?
@@ -177,7 +177,7 @@
 	imgBgPath   := im.BgPath
 	imgShPath   := im.ShRoot . "\state" . state . ".png"
 	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
-	GuiControl, HI:, CtrlImage, *w%imgW% *h%imgH% %imgPath%
+	GuiControl, HI:, CtrlKyImg, *w%imgW% *h%imgH% %imgPath%
 	GuiControl, HI:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%
 	GUI, HI: Show, x%imgX% y%imgY% AutoSize NA, 		pklImgWin 		; Use AutoSize NA to avoid stealing focus
 }

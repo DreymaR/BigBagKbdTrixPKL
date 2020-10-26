@@ -7,14 +7,14 @@
 processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Released labels
 {
 	Critical
-	global PklHotKeyBuffer
+	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
 	static timerCount = 0 										; # of keys queued for processing (0-29)? Or a counter?
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
-	PklHotKeyBuffer .= ThisHotkey . "¤" 						; Add this hotkey to the hotkey buffer, ¤ delimited
-	if ( ++timerCount >= 30 )
+	PklHotKeyBuffer .= ThisHotkey . "¤" 						; Add this hotkey to the hotkey buffer, ¤ delimited 	; eD WIP: Better with an array now? Set a max limit to the queue length?
+	if ( ++timerCount >= 30 ) 									; Resets the timer count on overflow. This does not affect the HotKeyBuffer size.
 		timerCount = 0
 	SetTimer, processKeyPress%timerCount%, -1 					; Set a 1 ms run-once processKeyPress# timer (key buffer)
 }
@@ -22,33 +22,16 @@ processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Rel
 runKeyPress() 													; Called from the PKL_main processKeyPress# labels
 {
 	Critical
-	global PklHotKeyBuffer
+	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
 	
 	pos := InStr( PklHotKeyBuffer, "¤" )
 	if ( pos <= 0 ) 	; <=
 		Return
-	ThisHotkey := SubStr( PklHotKeyBuffer, 1, pos - 1 )
+	ThisHotkey := SubStr( PklHotKeyBuffer, 1, pos - 1 ) 		; Chomp the buffer from the left
 	StringTrimLeft, PklHotKeyBuffer, PklHotKeyBuffer, %pos%
 	Critical, Off
+;	( StrLen( PklHotKeyBuffer ) > 6 ) ? pklDebug( "`n" . PklHotKeyBuffer, 2 )  ; eD DEBUG
 	_keyPressed( ThisHotkey ) 									; Pops one HKey from the buffer
-}
-
-AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
-{
-;;  The following was removed from EPKL_Settings.ini for clarity. The functionality is still here, for now.
-;;  ONHOLD: Remove CtrlAltlIsAltGr, enforcing <^>! (if laptops don't have >!, they'd have to remap to it)?
-;;  
-;;  Windows internally translates the AltGr (right Alt) key to LEFT Ctrl + RIGHT Alt.
-;;  If you enable this option, EPKL detects AltGr as (one of) Ctrl + (one of) Alt.
-;;  This is useful for notebook keyboards that do not have a right alt or AltGr key.
-;;  It is usually not recommended, because fortunately many programs know the
-;;  difference between AltGr and Alt+Ctrl.
-;ctrlAltIsAltGr  = no
-	static CtrlAltlIsAltGr := -1
-	if ( CtrlAltlIsAltGr == -1 ) {
-		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
-	}
-	Return getKeyState( "RAlt" ) || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
 _keyPressed( HKey ) 											; Process a HotKey press
@@ -122,16 +105,16 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 	Critical
 	static extMods      := {} 									; Which Extend mods are in use
 	
-	xLvl := getPklInfo( "extLvl" )
-	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
-	if ( xVal == "" )
-		Return
 	if ( HKey == -1 ) { 										; Special call to reset the extMods
 		extMods := {}
 		Return
 	}
+	xLvl := getPklInfo( "extLvl" )
+	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
+	if ( xVal == "" )
+		Return
 	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) { 
-		if getKeyState( HKey, "P" ) { 							; Mark the extMod as pressed or not
+		if ( getKeyState( HKey, "P" ) ) { 						; Mark the extMod as pressed or not 	; eD WIP: Tried  '&& not getLayInfo( "extendUsed" )' to avoid stealing presses, but then the mods stopped working?
 			extMods[mod] := HKey
 			setLayInfo( "extendUsed", true ) 					; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 			Return
@@ -198,11 +181,6 @@ setModifierState( theMod, itsDown = 0 ) 					; Can be called from a hotkey or wi
 	}
 }
 
-getVKey( HKey )
-{
-	return % getKeyInfo( HKey . "vkey" )
-}
-
 _setModState( theMod, itsDown = 1 )
 {
 	if ( theMod == "Extend" ) { 							; Extend
@@ -260,6 +238,24 @@ _osmClearAll() 												; Clear all active sticky mods
 	}
 }
 
+AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
+{
+;;  The following was removed from EPKL_Settings.ini for clarity. The functionality is still here, for now.
+;;  ONHOLD: Remove CtrlAltlIsAltGr, enforcing <^>! (if laptops don't have >!, they'd have to remap to it)?
+;;  
+;;  Windows internally translates the AltGr (right Alt) key to LEFT Ctrl + RIGHT Alt.
+;;  If you enable this option, EPKL detects AltGr as (one of) Ctrl + (one of) Alt.
+;;  This is useful for notebook keyboards that do not have a right alt or AltGr key.
+;;  It is usually not recommended, because fortunately many programs know the
+;;  difference between AltGr and Alt+Ctrl.
+;ctrlAltIsAltGr  = no
+	static CtrlAltlIsAltGr := -1
+	if ( CtrlAltlIsAltGr == -1 ) {
+		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
+	}
+	Return getKeyState( "RAlt" ) || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
+}
+
 setAltGrState( itsDown ) 									; The set fn calls get to reuse the static var.
 {
 	getAltGrState( itsDown, 1 )
@@ -280,8 +276,14 @@ getAltGrState( itsDown = 0, set = 0 )
 		Return AltGrState
 	}
 ;	( 1 ) ? pklDebug( "getAltGrState " . itsDown . " " . set )  ; eD DEBUG
-;	return	; eD DEBUG – When is this used?!? Only if there's no real AltGr in the OS layout?
+;	Return	; eD DEBUG – When is this used?!? Only if there's no real AltGr in the OS layout?
 }
+
+ExtendIsPressed() 											; Determine whether the Extend key is pressed. Used in _keyPressed() and pkl_gui_image
+{
+	ext := getLayInfo( "ExtendKey" )
+	Return % ( ext && getKeyState( ext, "P" ) ) ? true : false
+}	; end fn
 
 _setExtendState( set = 0 )									; Called from setModState
 { 															; This function handles Extend key tap or hold
@@ -308,12 +310,6 @@ _setExtendState( set = 0 )									; Called from setModState
 		extHeld := 0
 	}	; end if
 	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)
-}	; end fn
-
-ExtendIsPressed() 											; Determine whether the Extend key is pressed
-{
-	ext := getLayInfo( "ExtendKey" )
-	Return % ( ext && getKeyState( ext, "P" ) ) ? true : false
 }	; end fn
 
 setTapOrModState( HKey, set = 0 ) 							; Called from the PKL_main tapOrModDown/Up labels

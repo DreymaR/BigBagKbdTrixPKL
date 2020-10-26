@@ -16,11 +16,14 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- WIP: Transition to Cmk-DH(m) as the standard? Oh my... Do it in remaps, so the layout files use the same DH names as now. Rework images. Make new DK images too (they need an update anyway).
+;			- Keep the old state6:7 Curl images in folders, in case someone wants to keep using them.
+;			- Also check that the 6-on-the-left Wide mod is used for row-staggered boards and 6-on-the-right for matrix. I have no images with it, but in the files maybe? No, no Wide modded matrix boards.
+;		- 
 ;		- TOFIX: Ext-Shift after rework sometimes doesn't take? How to reproduce?
 ;		- WIP: Multi-BaseLayout stack! Use for, e.g., Ru/Bg.
-;		- TODO: Add a tip somewhere (test it properly first) that setting a negative margin for the help image may be used to show it on another monitor
-;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to a stuckness of some kind.
-;			- Make it so that if the hotkey queue overflows it's reset and you lose all of it? Maybe that's actually safer?
+;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to a stuckness of some kind. Afterwards, Extend is wonky.
+;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
 ;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
 ;			- Write a layGUI = ... line with the settings from the GUI directly below [pkl], skirting the @# shortcuts. If such a line is present, overwrite it. Date tag in a comment, and explain in a ';;  ' comment before.
 ;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
@@ -31,7 +34,7 @@
 ;		-
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
-;		- WIP: Use CurlMod = DH(m) instead of Curl(M)? It's shorter, more in touch with what people use etc. Then, maybe call the layouts, e.g., 'Cmk-eD_ANS_DH-AWide' instead of CurlAWide. Or just DHAWide?
+;		- WIP: Use CurlMod = DH instead of Curl? It's shorter, more in touch with what people use etc. Then, maybe call the layouts, e.g., 'Cmk-eD_ANS_DH-AWide' instead of CurlAWide. Or just DHAWide?
 ;			- Or make names more consistent? Like 4 letters per mod, Angl/CurlAnglWide/etc?
 ;			- Possibly... even eradicate the CurlMod altogether, only using ErgoMod for the whole thing? Is that better? After all, Curl/DH _is_ an ergo mod!
 ;		- WIP: Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
@@ -171,29 +174,18 @@
 ;	* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
 ;	* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
-;		- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an Override_Example file you can copy/rename/edit. Thus, your changes are kept over updates.
-;		- Added Tarmak-DH(m) alias Curl(M) for Ortho boards. There's a line in the EPKL_Layouts files for the Tarmak steps with DHm, but you can also use the shortcut syntax.
-;		- You can now list "suspendingApps" in Settings that automatically suspend EPKL when active. Specify by exe (X), window class (C) or any other AHK title match method.
-;		- To see the AHK window class and other info about the currently active window, there's now a hotkey (default Ctrl+Shift+0).
-;		- The janitor timer now handles suspending and/or exiting by the suspendTimeOut and exitAppTimeout settings. As before, set these to 0 to ignore them.
-;		- The About hotkey is now shown in the tray menu, and toggles the About... GUI on/off.
-;		- Image opacity hotkey (default Ctrl+Shift+8), toggling between opaque and transparent (by setting) help images.
-;		- Moved EPKL specific string settings to the language files. Added a few languages (Italian, Norwegian Bm/Nn).
-;		- Multi-ID locale variants can be addressed by their component. So for French, either Be Ca or Fr would point to the BeCaFr variant. Specified in the Tables file.
-;		- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
-;		- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
-;		- Fixed: Local on/off icons were broken since the LayStack (v1.1.3)
-;		- Fixed: Help image didn't work if not shown initially, and might become an icon on the first minimize. Now it's shown once and if necessary toggled off again.
-;		- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
-;		- Made Compile_EPKL.bat stop EPKL before compiling so the .exe can be overwritten, and rerun EPKL afterwards.
 ;	* EPKL v1.1.6: KLM scan codes. EPKL For Dummies. Extend fixes. AltGr layouts for Es/It locales.
 ;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
+;			- For VK entries, vc### is a synonym for the QW### KLM code. I felt that it makes sense to distinguish between SC and VK this way.
 ;		- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
 ;		- Fixed: The first Tap-or-Mod Extend key press didn't take if within the ToM timer term. An initializing call to setExtendInfo() solved the problem.
 ;		- Fixed: Shift+Spc didn't send a shifted space, which should scroll up in most browser windows. Now, Spc is sent Blind.
 ;		- Fixed: Extend mods such as `{Ext+S} = Shift` pressed quickly w/ ToM Ext often led to stuck mods. Now they're only depressed/released for each Extended key press.
 ;		- Replaced some Loop Parse commands with more modern For loops, and made pklIniSect() return a row array for For loops. Let pklIniCSVs() take a specified separator.
 ;		- Added EsAlt and ItAlt for users who prefer AltGr to DKs. Es/It have áéíóú/àèìòù on AltGr+aoeiu, and some tweaks to fit in other symbols. Es_ANS has ñ on AltGr+n.
+;		- Made the German and Scandinavian (De, DkNo & FiSe) Pan-Germanic, with easier access to each others' letters (De has ÆØÅ on AltGr+AOU; DkNo has ÄÖÜ etc).
+;		- Tweaked a few AltGr mappings in the Vi and Hu laoyuts to better take care of lost symbol mappings.
+;		- Added a setting that makes HIG delete its temporary files dir after generation. The options are 0=no, 1=paperbin, 2=delete.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -209,7 +201,8 @@ Process, Priority, , R 										; Real-time process priority
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables are largely replaced by the get/set info framework
-;global 		suspendedByApp := false 			; Keeps track of whether the program was suspended by the pklJanitor's window detection
+	global PklHotKeyBuffer 						; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+;	global UIsel 								; Variable for UI selection (use Control names to see which one) 	; eD WIP
 setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 ) 				; Current base key 					(was 'CurrentBaseKey')
@@ -397,8 +390,9 @@ getWinInfo:
 Return
 
 epklDebugWIP:
-	pklDebug( "Running WIP routine specified in PKL_main", 1 )
-	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+;	pklDebug( "Running experimental/WIP routine`n(specified in _PKL_main)", .8 )
+	pklSetUI() 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+;	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 Return
 
 ; ####################### functions #######################
@@ -406,6 +400,7 @@ Return
 #Include pkl_init.ahk
 #Include pkl_gui_image.ahk	; pkl_gui was too long; it's been split into help image and menu/about parts
 #Include pkl_gui_menu.ahk
+#Include pkl_gui_settings.ahk
 #Include pkl_keypress.ahk
 #Include pkl_send.ahk
 #Include pkl_deadkey.ahk

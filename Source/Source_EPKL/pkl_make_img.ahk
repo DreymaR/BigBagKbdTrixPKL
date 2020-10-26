@@ -41,11 +41,12 @@ makeHelpImages()
 	HIG.inkOpts := " --export-type=""png""" 					; Prior to InkScape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	
-	SetTimer, ChangeButtonNamesHIG, 100
+	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
 	MsgBox, 0x133, Make Help Images?, 
 (
 EPKL Help Image Generator
-============================
+—————————————————————————————
+
 Using Inkscape, make a help image for each Shift/AltGr state
 and dead key under a subfolder of the current layout folder.
 These may then be moved up to the folder for use with EPKL.
@@ -110,6 +111,12 @@ for the current layout, or only state images?
 	FileMove % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
 	FileMove % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
 	pklSplash( HIG.Title, "Image generation done!", 2 )
+	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0, HIG.Ini ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
+	if        ( delTmpFiles == 2 ) {
+		FileRemoveDir % HIG.ImgDirs["raw"], 1 					; Recurse = 1 to remove files inside dir
+	} else if ( delTmpFiles == 1 ) {
+		FileRecycle % HIG.ImgDirs["raw"]
+	}
 ;	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
 

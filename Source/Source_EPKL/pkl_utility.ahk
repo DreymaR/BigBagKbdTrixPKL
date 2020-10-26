@@ -4,8 +4,7 @@
 ;;      Functions to read and parse remap cycles for ergo mods and suchlike
 ;;      Used primarily in pkl_init.ahk
 ;
-ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles (used in pkl_init)
-{
+ReadRemaps( mapList, mapFile ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)
 	mapCycList  := ""
 	For ix, alist in pklIniCSVs( mapList, mapList, mapFile, "remaps" ) { 	; Name -> actual list, or literal list
 		tmpCycle    := ""
@@ -22,8 +21,7 @@ ReadRemaps( mapList, mapFile )				; Parse a remap string to a CSV list of cycles
 	Return mapCycList
 }	; end fn
 
-ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary of remaps (used in pkl_init)
-{
+ReadCycles( mapType, mapList, mapFile ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
 	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
@@ -72,8 +70,7 @@ ReadCycles( mapType, mapList, mapFile )		; Parse a remap string to a dictionary 
 	Return pdic
 }	; end fn
 
-ReadKeyLayMapPDic( keyType, valType, mapFile )	; Create a pdic from a pair of KLMaps in a remap.ini file
-{
+ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of KLMaps in a remap.ini file
 	pdic := {}
 	Loop % 5 {													; Loop through KLM rows 0-4
 		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
@@ -102,11 +99,11 @@ pklJanitorTic:
 	_pklCleanup()
 Return
 
-_pklSuspendByApp() { 								; Suspend EPKL if certain windows are active
-	static suspendedByApp := false 					; (Their attributes are in the Settings file)
+_pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
+	static suspendedByApp := false 								; (Their attributes are in the Settings file)
 	
-	if WinActive( "ahk_group SuspendingApps" ) { 	; If a specified window is active...
-		if ( not suspendedByApp ) { 				; ...and not already A_IsSuspended...
+	if WinActive( "ahk_group SuspendingApps" ) { 				; If a specified window is active...
+		if ( not suspendedByApp ) { 							; ...and not already A_IsSuspended...
 			suspendedByApp := true
 			gosub suspendOn
 		}
@@ -117,9 +114,9 @@ _pklSuspendByApp() { 								; Suspend EPKL if certain windows are active
 }
 
 _pklActivity() {
-	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 	; Convert from min to ms
-	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 	; Convert from min to ms
-	idleTime := A_TimeIdle 								; eD WIP: Use TimeIdlePhysical instead?
+	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 			; Convert from min to ms
+	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 			; Convert from min to ms
+	idleTime := A_TimeIdle 										; eD WIP: Use TimeIdlePhysical instead?
 	if ( exitTime && idleTime > exitTime ) {
 		gosub exitPKL
 	} else if ( suspTime && not A_IsSuspended && idleTime > suspTime ) {
@@ -128,21 +125,21 @@ _pklActivity() {
 }
 
 _pklCleanup() {
-	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 	; The timeout in s is converted to ms
-	if ( A_TimeIdle > timeOut ) { 					 	; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
-		if getPklInfo( "cleanupDone" ) 					; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
+	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 			; The timeout in s is converted to ms
+	if ( A_TimeIdle > timeOut ) { 					 			; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
+		if getPklInfo( "cleanupDone" ) 							; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
 			Return
 		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
 					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
 			if getKeyState( mod ) {
-				Return 									; If the key is being held down, leave it be, otherwise...
+				Return 											; If the key is being held down, leave it be, otherwise...
 			} else {
-				Send % "{" . mod . " Up}" 				; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
+				Send % "{" . mod . " Up}" 						; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
 			}
 		}	; end For mod
 		setPklInfo( "cleanupDone", true )
-	} else if ( A_TimeIdlePhysical < timeOut ) { 		; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
-		setPklInfo( "cleanupDone", false ) 				; Recent keyboard activity reactivates the cleanup timer
+	} else if ( A_TimeIdlePhysical < timeOut ) { 				; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
+		setPklInfo( "cleanupDone", false ) 						; Recent keyboard activity reactivates the cleanup timer
 	}
 }
 
@@ -152,8 +149,7 @@ _pklCleanup() {
 ;;      These are minor utility functions used by other parts of EPKL
 ;
 
-pklMsgBox( msg, s = "", p = "", q = "", r = "" ) 		; Seems this is only used once in pkl_init now?
-{
+pklMsgBox( msg, s = "", p = "", q = "", r = "" ) { 				; Seems this is only used once in pkl_init now?
 	msg := getPklInfo( "LocStr_" . msg )
 	For ix, it in [ "s", "p", "q", "r" ] {
 		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
@@ -161,23 +157,19 @@ pklMsgBox( msg, s = "", p = "", q = "", r = "" ) 		; Seems this is only used onc
 	MsgBox % msg
 }
 
-pklErrorMsg( text )
-{
-	MsgBox, 0x10, EPKL ERROR, %text%`n`nError # %A_LastError%	; Error type message box
+pklErrorMsg( text ) { 
+	MsgBox, 0x10, EPKL ERROR, %text%`n`nError # %A_LastError% 	; Error type message box
 }
 
-pklWarning( text, time = 5 )
-{
+pklWarning( text, time = 5 ) { 
 	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
 }
 
-pklDebug( text, time = 2 )
-{
+pklDebug( text, time = 2 ) { 
 	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%					; Info type message box (asterisk)
 }
 
-pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used in pkl_init)
-{
+pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) { 				; Set a menu hotkey (used in pkl_init)
 	For ix, hkey in pklIniCSVs( hkIniName ) {
 		if ( hkey == "" )
 			Break
@@ -187,9 +179,8 @@ pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) 				; Set a menu hotkey (used i
 	}	; end For hkey
 }	; end fn
 
-getWinInfo() 												; Get match info for the active window
-{ 															; This info is useful for setting SuspendingApps
-	WinGetClass, awClass, A
+getWinInfo() { 												; Get match info for the active window
+	WinGetClass, awClass, A 								; This info is useful for setting SuspendingApps
 	WinGet,      awProcs, ProcessName, A 					; Alternatives: ProcessName, ProcessPath
 	WinGetTitle, awTitle, A
 	pklDebug( "Active window properties:`n" 				; Add ID? PID? Probably not necessary.
@@ -199,8 +190,7 @@ getWinInfo() 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-getVKeyCodeFromName( name ) 								; Get the two-digit hex VK## code from a VK name
-{
+getVKeyCodeFromName( name ) { 								; Get the two-digit hex VK## code from a VK name
 	name := upCase( name )
 	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
 		name := SubStr( name, 3 )							; Keep only the ## here
@@ -210,8 +200,11 @@ getVKeyCodeFromName( name ) 								; Get the two-digit hex VK## code from a VK 
 	Return name
 }
 
-getWinLocaleID() 											; Win LID; for Language use A_Language.
-{
+getVKey( HKey ) { 											; Return the KeyInfo VK code for a hotkey
+	Return % getKeyInfo( HKey . "vkey" )
+}
+
+getWinLocaleID() { 											; Win LID; for Language use A_Language.
 	WinGet, WinID,, A
 	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
 	WinLocaleID := DllCall("GetKeyboardLayout", "Int", WinThreadID)
@@ -224,8 +217,7 @@ isInt( this ) { 	; AHK cannot use "is <type>" in expressions so use a wrapper fu
 		Return true
 }
 
-fileOrAlt( file, default, errMsg = "", errDur = 2 ) 		; Find a file/dir, or use the alternative
-{
+fileOrAlt( file, default, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative
 	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
@@ -234,8 +226,7 @@ fileOrAlt( file, default, errMsg = "", errDur = 2 ) 		; Find a file/dir, or use 
 	Return default
 }
 
-atKbdType( str ) 	; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
-{
+atKbdType( str ) { 	; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }
 

@@ -199,9 +199,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		pklIniKeyVal( row, key, entries, 0, 0 ) 		; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
 		if ( key == "<NoKey>" ) || ( key == "shiftStates" ) 			; This could be mapped, but usually it's from pklIniKeyVal()
 			Continue
-		KLM := _mapKLM( key, "SC" ) 	; Co/QW-2-SC KLM remapping, if applicable
-;		KLM := RegExMatch( key, "i)^(Co|QW)" ) ? SubStr( key, 1, 2 ) : false 	; Co/QW KLM remappings of SC
-;		key := ( KLM ) ? %KLM%SCdic[ SubStr( key, 3 ) ] : key 			; [Co|QW]SCdic (from Colemak/QWERTY KLM codes) dictionaries
+		KLM := _mapKLM( key, "SC" ) 									; Co/QW-2-SC KLM remapping, if applicable
 		key := scMapLay[ key ] ? scMapLay[ key ] : key 					; If there is a SC remapping, apply it
 		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
 			Continue
@@ -238,9 +236,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			setKeyInfo( key . "vkey", entr1 ) 							; Set VK as modifier name, e.g., "RShift", "AltGr" or "Extend"
 			entr2     := -2 											; -2 = Modifier
 		} else {
-			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable
-;			KLM := RegExMatch( entr1, "i)^(QW)" ) ? SubStr( entr1, 1, 2 ) : false 	; Co/QW KLM remappings of VK codes 	; eD WIP: |Co
-;			entr1   := ( KLM ) ? %KLM%VKdic[ SubStr( entr1, 3 ) ] : entr1 	; CoVKdic (Colemak) and QWVKdic (QWERTY) dictionaries
+			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
 			vkcode  := getVKeyCodeFromName( entr1 ) 					; Translate to the two-digit VK## hex code (Uppercase)
 			vkcode  := KLM && ( kbdType == "ISO" ) && mapVK[vkcode] 	; If necessary, convert ANSI-to-ISO
 					? mapVK[ vkcode ] : vkcode
@@ -450,15 +446,16 @@ _mapKLM( ByRef key, type )
 	static CoVKdic      := []
 	if ( not initialized ) {
 		mapFile := getPklInfo( "RemapFile" )
-		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes than Co?
-		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based?
+		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes too?
+		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.
 		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping
 		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
 		initialized := true
 	}
 	
-	KLM := RegExMatch( key, "i)^(Co|QW)" ) 
+	KLM := RegExMatch( key, "i)^(Co|QW|Vc)" ) 
 		? SubStr( key, 1, 2 ) : false 				; Co/QW-2-SC/VK KLM remappings
+	KLM := ( KLM == "vc" ) ? "QW" : KLM 			; The vc synonym (case sensitive!) for QW is used for VK codes
 	if ( KLM )
 		key := %KLM%%type%dic[ SubStr( key, 3 ) ] 	; [Co|QW][SC|VK]dic from Colemak/QWERTY KLM codes to SC/VK
 	Return KLM
