@@ -157,15 +157,15 @@ pklMsgBox( msg, s = "", p = "", q = "", r = "" ) { 				; Seems this is only used
 	MsgBox % msg
 }
 
-pklErrorMsg( text ) { 
+pklErrorMsg( text ) {
 	MsgBox, 0x10, EPKL ERROR, %text%`n`nError # %A_LastError% 	; Error type message box
 }
 
-pklWarning( text, time = 5 ) { 
+pklWarning( text, time = 5 ) {
 	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
 }
 
-pklDebug( text, time = 2 ) { 
+pklDebug( text, time = 2 ) {
 	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%					; Info type message box (asterisk)
 }
 
@@ -217,13 +217,13 @@ isInt( this ) { 	; AHK cannot use "is <type>" in expressions so use a wrapper fu
 		Return true
 }
 
-fileOrAlt( file, default, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative
+fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative
 	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
-	if ( errMsg ) && ( not FileExist( default ) ) 			; Issue a warning if neither file is found
+	if ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found
 		pklWarning( errMsg, errDur )
-	Return default
+	Return altFile
 }
 
 atKbdType( str ) { 	; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)

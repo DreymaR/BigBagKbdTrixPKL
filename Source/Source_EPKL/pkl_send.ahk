@@ -59,39 +59,49 @@ pkl_CheckForDKs( ch )
 
 pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
 {
-;	static parse := { "%" : "{Raw}" , "=" : "{Blind}" , "*" : "" }
-	prf := SubStr( entry, 1, 1 )
-	if not InStr( "→§αβ«Ð¶%$*=~@&", prf )
-		Return false											; Not a recognized prefix-entry form
-	sendPref := -1
-	ent := SubStr( entry, 2 )
-	if        ( prf == "%" || prf == "→" ) { 					; Literal/string by SendInput {Raw}
-		SendInput % "{Raw}" . ent
-	} else if ( prf == "$" || prf == "§" ) { 					; Literal/string by SendMessage
-		pkl_SendMessage( ent )
-	} else if ( ent == "{CapsLock}" ) {							; CapsLock toggle
-		togCap := getKeyState("CapsLock", "T") ? "Off" : "On"
+	psp     := SubStr( entry, 1, 1 ) 							; Look for a Parse syntax prefix
+	if not InStr( "%→$§*α=β~«@Ð&¶", psp ) 						; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
+		Return false
+	sendIt  := ( mode == "ParseOnly" ) ? false : true 			; Parse Only mode returns prefixes without sending
+	pfix    := -1 												; Prefix for the Send commands, such as {Blind}
+	enty    := SubStr( entry, 2 )
+	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Raw}
+		mode    := "Input"
+		pfix    := "{Raw}"
+	} else if ( psp == "$" || psp == "§" ) { 					; $§ : Literal/string by EPKL SendMessage
+		mode    := "SendMess"
+		pfix    := ""
+	} else if ( enty == "{CapsLock}" ) {						; CapsLock toggle. Stops further entries from misusing Caps?
+		togCap  := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
-	} else if ( prf == "*" || prf == "α" ) { 					; * : AHK special !+^#{} syntax, omitting {Raw}
-		sendPref := ""
-	} else if ( prf == "=" || prf == "β" ) { 					; = : Send {Blind} - as above w/ current mod state
-		sendPref := "{Blind}"
-	} else if ( prf == "~" || prf == "«" ) { 					; ~ : Send a hex Unicode point U+####
-		sendPref := ""
-		ent := "{U+" . ent . "}"
-	} else if ( prf == "@" || prf == "Ð" ) { 					; Named dead key (may vary between layouts!)
-		pkl_DeadKey( ent )
-	} else if ( prf == "&" || prf == "¶" ) { 					; Named literal/powerstring (may vary between layouts!)
-		pkl_PwrString( ent )
+	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special !+^#{} syntax, omitting {Raw}
+		pfix    := ""
+	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
+		pfix    := "{Blind}"
+	} else if ( psp == "~" || psp == "«" ) { 					; ~« : Hex Unicode point U+####
+		pfix    := ""
+		enty    := "{U+" . enty . "}"
+	} else if ( psp == "@" || psp == "Ð" ) { 					; @Ð : Named dead key (may vary between layouts!)
+		mode    := "DeadKey"
+		pfix    := ""
+	} else if ( psp == "&" || psp == "¶" ) { 					; &¶ : Named literal/powerstring (may vary between layouts!)
+		mode    := "PwrString"
+		pfix    := ""
 	}
-	if ( sendPref != -1 ) {
-		if ( mode == "SendThis" && ent ) { 						; eD WIP: Used pkl_SendThis(), now pkl_Send()
-			pkl_Send( "", sendPref . ent ) 						; Used by _keyPressed()
+	if ( sendIt && pfix != -1 ) { 								; Send if recognized and not ParseOnly
+		if ( enty && mode == "SendThis" ) { 					; eD WIP: Used pkl_SendThis(), now pkl_Send()
+			pkl_Send( "", pfix . enty ) 						; Used by _keyPressed()
+		} else if ( mode == "SendMess"  ) {
+			pkl_SendMessage( enty )
+		} else if ( mode == "DeadKey"   ) {
+			pkl_DeadKey( enty )
+		} else if ( mode == "PwrString" ) {
+			pkl_PwrString( enty )
 		} else {
-			SendInput % sendPref . ent
+			SendInput % pfix . enty
 		}
 	}
-	Return % prf												; Return the recognized prefix
+	Return % psp												; Return the recognized prefix
 }
 
 pkl_SendMessage( string )										; Send a string robustly by char messages, so that mods don't get stuck etc

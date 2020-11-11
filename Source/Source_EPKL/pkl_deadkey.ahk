@@ -4,7 +4,7 @@
 	if ( not val ) {
 		dkFile  := getLayInfo( "dkFile" )
 		chr := Chr( base )
-		upp := ( ( base > 64 ) && ( base < 91 ) ) ? "+" : "" 	; Mark upper case with a tag, as IniRead() lacks base letter case distinction
+		upp := ( ( 64 < base ) && ( base < 91 ) ) ? "+" : "" 	; Mark upper case with a tag, as IniRead() lacks base letter case distinction
 		cha := convertToANSI( chr ) 						; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
 		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkFile, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
@@ -73,10 +73,10 @@ pkl_DeadKey( DK )
 	dkEnt   := DeadKeyValue( DK, hx )						; Get the DK value/entry for this base key
 	
 	if ( dkEnt && (dkEnt + 0) == "" ) {						; Entry is a special string, like {Home}+{End} or prefix-entry
-		prefix := pkl_ParseSend( dkEnt )
-		if ( not prefix )				 					; If not a recognized prefix-entry...
+		psp := pkl_ParseSend( dkEnt )
+		if ( not psp ) 					 					; If not a recognized prefix-entry...
 			SendInput {Raw}%dkEnt%							; ...just send the entry by default.
-		if ( PVDK && prefix != "@" ) {						; eD WIP: Allow chained DKs too! This means not erasing PVDK?
+		if ( PVDK && psp != "@" ) { 						; eD WIP: Allow chained DKs too! This means not erasing PVDK?
 			PVDK := ""
 			setKeyInfo( "CurrNumOfDKs", 0 )							; But that's not enough. It gets stuck in pkl_ParseSend()
 		}

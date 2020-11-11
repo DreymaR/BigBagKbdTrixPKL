@@ -199,23 +199,24 @@ pkl_about()
 
 readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
-	For ix, OnOff in [ "on", "off" ] {
-		icon := OnOff . ".ico"
+	For ix, icon in [ "on.ico", "off.ico" ] {
 		SplitPath, layIni, , layDir 							; The icon files may be in the layout dir
-		layDir := ( layIni == "LayStk" ) ? getLayInfo( "Dir_LayIni" ) : layDir
-		icoFile := fileOrAlt( pklIniRead( "icons_OnOff", layDir . "\", layIni ) . icon
+		layDir  := ( layIni == "LayStk" ) ? getLayInfo( "Dir_LayIni" ) : layDir
+		dirIco  := layDir . "\" . icon
+		iniIco  := fileOrAlt( pklIniRead( "icons_OnOff",, layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon ) 	; If not specified in layout file or in dir, use this
-		if FileExist( icoFile ) {
-			icoFil%ix%  := icoFile
-			icoNum%ix%  := 1
+		icoNum%ix%  := 1
+		if FileExist( dirIco ) {
+			icoFil%ix%  := dirIco
+		} else if FileExist( iniIco ) {
+			icoFil%ix%  := iniIco
 		} else if ( A_IsCompiled ) { 							; If EPKL is compiled, can use internal icons from the .exe
 			icoFil%ix%  := A_ScriptName
-			icoNum%ix%  := ( OnOff == "on" ) ? 1 : 5 			; was 6/3 in original PKL.exe - keyboard and red 'S' icons
+			icoNum%ix%  := ( icon == "on.ico" ) ? 1 : 5 		; was 6/3 in original PKL.exe - keyboard and red 'S' icons
 		} else {
 			icoFil%ix%  := "Resources\" . icon 					; If all else fails, look for a Resources\ .ico file
-			icoNum%ix%  := 1
 		}
-	}	; end For OnOff
+	}	; end For icon
 	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }
 }
 

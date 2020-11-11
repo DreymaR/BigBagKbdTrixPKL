@@ -113,7 +113,7 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
 	if ( xVal == "" )
 		Return
-	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) { 
+	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) {
 		if ( getKeyState( HKey, "P" ) ) { 						; Mark the extMod as pressed or not 	; eD WIP: Tried  '&& not getLayInfo( "extendUsed" )' to avoid stealing presses, but then the mods stopped working?
 			extMods[mod] := HKey
 			setLayInfo( "extendUsed", true ) 					; Mark the Extend press as used (to avoid dual-use as ToM key etc)

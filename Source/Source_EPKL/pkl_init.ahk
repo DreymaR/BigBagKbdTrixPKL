@@ -70,7 +70,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 ;	} 																	; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!?
 	LID     := _pklLayRead( "LocalID",      , "-"   ) 					; Locale ID, e.g., "-Pl"
 	localID := ( polyLID[LID] ) ? polyLID[LID] : LID 					;   (can be a single locale of a harmonized layout like BeCaFr)
-	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl, CurlM
+	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl
 	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
 	theLays := StrReplace( theLays, "@V",   "@K@C@E@O" ) 				; Shorthand .ini notation for layout variants
@@ -186,10 +186,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting 	; eD WIP: Add kbdForm as kbdType[2] ?
 	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
-	shStates := RegExReplace( shStates, "[ `t]+" ) 						; Remove any whitespace
 	setLayInfo( "LayHasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
+	shStates := StrSplit( RegExReplace( shStates, "[ `t]+" ), ":" ) 	; Remove any whitespace and make it an array
 	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator
-	shiftState := StrSplit( shStates, ":" )
 	
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
 	map := pklIniSect( layFile, "layout" )
@@ -206,8 +205,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
 		entries := RegExReplace( entries, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
 		entry   := StrSplit( entries, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr := ( entry.MaxIndex() < 2 + shiftState.MaxIndex() ) 
-			? entry.MaxIndex() : 2 + shiftState.MaxIndex() 				; Comments make pseudo-entries, so truncate them
+		numEntr := ( entry.MaxIndex() < 2 + shStates.MaxIndex() ) 
+			? entry.MaxIndex() : 2 + shStates.MaxIndex() 				; Comments make pseudo-entries, so truncate them
 		entr1   := ( numEntr > 0 ) ? entry[1] : ""
 		entr2   := ( numEntr > 1 ) ? entry[2] : ""
 		if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
@@ -257,7 +256,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			Hotkey, *%key% Up,  doNothing 	 							; eD WIP: Only Down needed? - EPKL sends a lot of Down-Up presses. But if the key is redefined?
 		}	; end if entries
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
-			ks  := shiftState[ A_Index ]								; This shift state for this key
+			ks  := shStates[ A_Index ] 									; This shift state for this key
 			ksE := entry[ A_Index + 2 ]									; The value/entry for that state
 			if        ( StrLen( ksE ) == 0 ) {							; Empty entry; ignore
 				Continue
@@ -270,7 +269,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
-				if InStr( "→§αβ«Ð¶%$*=~@&", ksP ) {
+				if InStr( "%→$§*α=β~«@Ð&¶", ksP ) {
 					ksE := SubStr( ksE, 2 ) 							; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)

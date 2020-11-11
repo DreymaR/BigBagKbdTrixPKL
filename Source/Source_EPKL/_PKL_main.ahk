@@ -16,21 +16,23 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
-;		- WIP: Transition to Cmk-DH(m) as the standard? Oh my... Do it in remaps, so the layout files use the same DH names as now. Rework images. Make new DK images too (they need an update anyway).
-;			- Keep the old state6:7 Curl images in folders, in case someone wants to keep using them.
-;			- Also check that the 6-on-the-left Wide mod is used for row-staggered boards and 6-on-the-right for matrix. I have no images with it, but in the files maybe? No, no Wide modded matrix boards.
-;		- 
+;		- TOFIX: Can't remap, say, QW_LB to vc_RB VK? Sjabu at the Discord noticed. Can remap it to a letter. Seems I can remap to all VK codes except OEM_ ones? Using the OEM_ code seems to work. Also QW_ code?
+;		- TOFIX: Something's odd with the D key! Þ works with LShift, but Ð only works with RShift?! Somehow, Ð is wrongly defined in my OS layout so it could be that.
+;		- TOFIX: Remapping to ESC VKey doesn't work? Other VKey mappings work.
 ;		- TOFIX: Ext-Shift after rework sometimes doesn't take? How to reproduce?
-;		- WIP: Multi-BaseLayout stack! Use for, e.g., Ru/Bg.
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to a stuckness of some kind. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
+;		- 
 ;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
 ;			- Write a layGUI = ... line with the settings from the GUI directly below [pkl], skirting the @# shortcuts. If such a line is present, overwrite it. Date tag in a comment, and explain in a ';;  ' comment before.
 ;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
+;			- Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
 ;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
 ;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak/Tm# etc. As a default if not found, use the three first letters.
 ;			- Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? Too clunky maybe, and won't cover having multiple Tarmak layouts selected.
 ;			- Maybe instead reorganize a bit, making Colemak-eD/VK subdirs under Colemak?
+;		- WIP: Multi-BaseLayout stack! Use for, e.g., Ru/Bg.
+;		- WIP: Make the HIG work for non-standard state layer entries like it does for DK now? Consider naChr vs ·¶·-like marks.
 ;		-
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
@@ -69,12 +71,12 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: Make EPKL able to hold more than one layout in memory at once?! This would make dual layouts smoother, and using layouts as layers (Greek, mirroring etc) possible.
 ;		- TODO: Since no hotkeys are set for normal key Up, Ext release and Ext mod release won't be registered? Should this be remedied?
 ;		- Mod ensemple: For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? Also add [ "CapsLock", "Extend", "SGCaps" ] ?
 ;		- TODO: Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- TODO: Allow the user to choose which monitor to display help images on? If you have a second monitor it may be less crowded and thus ideal for the help image. But how?
 ;		- TOFIX: Does BaseLayout require an absolute path? Why?
-;		- TOFIX: DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- TODO: Replace today's handling of AltGr with an AltGr modifier. So you'd have to map typically RAlt = AltGr Modifier, but then all the song-and-dance of today would be gone.
 ;			- Note that we both need to handle the AltGr EPKL modifier and whether the OS layout has an AltGr key producing LCtrl+RAlt on a RAlt press.
 ;			- Also allow ToM/Sticky AltGr. Very very nice since AltGr mappings are usually one-shot.
@@ -138,6 +140,7 @@
 ;			- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 ;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 ;;  eD ONHOLD:
+;		- DK+DK releases both versions of the base glyphs. Is this desirable?
 ;		- Hardcode Tab instead of using &Tab after all? It's consistent to have both the whitespace characters Spc & Tab hardcoded this way.
 ;		- A dynamic key press indicator for the help images? Showing not just the modifier layer but every press. Will it be fast enough? Would need a position table for each KbdForm.
 ;		- Make a Setting for which fn to run as Debug, so I don't have to recompile to switch debug fn()? Maybe overmuch, as the debug fn often needs recompiling anyway?
@@ -174,10 +177,11 @@
 ;	* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 ;	* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
 ;	* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
-;	* EPKL v1.1.6: KLM scan codes. EPKL For Dummies. Extend fixes. AltGr layouts for Es/It locales.
+;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM scan codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
+;		- Colemak-DH(m) (M on the home row) is now the Curl(DH) standard. The 2017 DH standard (K on the home row) is now named DHk in the Remap file. Files are updated.
+;		- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
 ;		- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
 ;			- For VK entries, vc### is a synonym for the QW### KLM code. I felt that it makes sense to distinguish between SC and VK this way.
-;		- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
 ;		- Fixed: The first Tap-or-Mod Extend key press didn't take if within the ToM timer term. An initializing call to setExtendInfo() solved the problem.
 ;		- Fixed: Shift+Spc didn't send a shifted space, which should scroll up in most browser windows. Now, Spc is sent Blind.
 ;		- Fixed: Extend mods such as `{Ext+S} = Shift` pressed quickly w/ ToM Ext often led to stuck mods. Now they're only depressed/released for each Extended key press.
@@ -186,6 +190,9 @@
 ;		- Made the German and Scandinavian (De, DkNo & FiSe) Pan-Germanic, with easier access to each others' letters (De has ÆØÅ on AltGr+AOU; DkNo has ÄÖÜ etc).
 ;		- Tweaked a few AltGr mappings in the Vi and Hu laoyuts to better take care of lost symbol mappings.
 ;		- Added a setting that makes HIG delete its temporary files dir after generation. The options are 0=no, 1=paperbin, 2=delete.
+;		- Local icons for Ru, Bg etc weren't working if there was an icons_OnOff entry in the LayStack. Now, local on/off icons take precedence.
+;		- Help Image Generator reworked. It can now take non-numeric entries. For DKs, it marks strings as ellipses and prefix syntax as for instance '·¶·'.
+;		- Currency dead key reworked. Several symbols added, most duplicates removed.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
