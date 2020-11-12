@@ -452,7 +452,7 @@ _mapKLM( ByRef key, type )
 		initialized := true
 	}
 	
-	KLM := RegExMatch( key, "i)^(Co|QW|Vc)" ) 
+	KLM := RegExMatch( key, "i)^(Co|QW|vc)" ) 
 		? SubStr( key, 1, 2 ) : false 				; Co/QW-2-SC/VK KLM remappings
 	KLM := ( KLM == "vc" ) ? "QW" : KLM 			; The vc synonym (case sensitive!) for QW is used for VK codes
 	if ( KLM )

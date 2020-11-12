@@ -29,7 +29,9 @@ Getting EPKL up and running
     - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
     - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
-    - If you do want to choose a variant, rename the Override_Example file to `EPKL_Layouts_Override.ini`.
+    - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
+    - ...in the [Layouts Default file][LayDef] find the `;QWCLK = BACK` etc line and remove that semicolon.
+* If you do want to choose a variant, rename the Override_Example file to `EPKL_Layouts_Override.ini`.
     - There can be a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
 * Choose a layout with your keyboard type, locale and Curl/Angle/Wide etc preferences, by shorthand or full name.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
@@ -88,7 +90,7 @@ The files may take a little tweaking to get what you want. There are several par
 * Help images aren't available with every board and mod combo, as there are so many of them. See below.
   
 **Hotkeys found in the EPKL_Settings file:**
-* Ctrl+Shift+1 – Display/hide help image
+* Ctrl+Shift+1 – Display/hide the help image
 * Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
 * Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may be Ctrl+Shift+` instead
 * Ctrl+Shift+4 – Exit EPKL
@@ -160,7 +162,7 @@ Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain 
 QW_J    = N         VKey            ; QW jJ  -> nN
 RWin    = Back      VirtualKey      ; RWin   -> Backspace
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-QWPGU   = NEXT      VKey            ; PgUp   -> SC149: PgDn (use the proper VKEY name here)
+QWPGU   = NEXT      VKey            ; PgUp   -> SC149: PgDn (used the proper VKEY name here)
 QWPGD   = PRIOR     VKey            ; PgDn   -> SC151: PgUp (--"--)
 ```
 Entries are any-whitespace delimited.
@@ -310,6 +312,19 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 	- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
 	- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
+* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
+	- Colemak-DH(m) (M on the home row) is now the Curl(DH) standard. The 2017 DH standard (K on the home row) is now named DHk in the Remap file. Files are updated.
+	- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
+	- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
+		- For VK entries, vc### is a synonym for the QW### KLM code. I felt that it makes sense to distinguish between SC and VK this way.
+	- Fixed: Shift+Spc didn't send a shifted space, which should scroll up in most browser windows. Now, Spc is sent Blind.
+	- Fixed: Extend mods such as `{Ext+S} = Shift` pressed quickly w/ ToM Ext often led to stuck mods. Now they're only depressed/released for each Extended key press.
+	- Added EsAlt and ItAlt for users who prefer AltGr to DKs. Es/It have áéíóú/àèìòù on AltGr+aoeiu, and some tweaks to fit in other symbols. Es_ANS has ñ on AltGr+n.
+	- Made the German and Scandinavian (De, DkNo & FiSe) Pan-Germanic, with easier access to each others' letters (De has ÆØÅ on AltGr+AOU; DkNo has ÄÖÜ etc).
+	- Help Image Generator reworked. It can now take non-numeric entries. For DKs, it marks strings as ellipses and prefix syntax as for instance '·¶·'.
+	- Currency dead key reworked. Several symbols added, most duplicates removed.
+	- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
+	- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
   
   
 TODO:

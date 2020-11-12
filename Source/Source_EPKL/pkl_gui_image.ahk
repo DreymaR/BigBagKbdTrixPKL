@@ -115,7 +115,7 @@
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit
 		GUI, HI:Show, NA, 							pklImgWin
 		
-		SetTimer, showHelpImage, 100 									; Refresh the help image every # ms (screen refresh usually takes ~17 ms)	; eD WIP: A faster refresh rate helps DKs, but not Tap-Ext?
+		SetTimer, showHelpImage, 170 									; Refresh the help image every # ms (screen refresh usually takes ~17 ms)
 	} else if ( activate == -1 ) { 										; Deactivate image
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		SetTimer, showHelpImage, Off
