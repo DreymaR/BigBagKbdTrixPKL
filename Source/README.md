@@ -5,7 +5,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
-![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak-eD/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)  
+![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)  
   
 Source code info
 ----------------
@@ -163,7 +163,7 @@ DONE:
 	- New: Hungarian Cmk[eD] locale variant.
 	- New: Zoom and Move hotkeys for the help image, cycling between image sizes and positions. Set e.g., imgZoom = 60,100,150 (%) in EPKL_Settings.
 	- Tutorial on making a layout variant in README. How to make and activate a layout, changing locale, remaps and a keys mappings.
-	- Moved the BaseLayout files up one tree level. In layout.ini, use its file path from Layouts w/o extension, e.g., Colemak-VK\BaseLayout_Cmk-VK-ISO
+	- Moved the BaseLayout files up one tree level. In layout.ini, use its file path from Layouts w/o extension, e.g., Colemak\BaseLayout_Cmk-VK-ISO
 	- 'Spc' and 'Tab' layout mappings, sending {Blind}{Key}. Makes for compact layout entries for the delimiting whitespace characters.
 	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' rather than the extend_key setting with a mapped key as before.
 	- Extend layers can be set as hard/soft in the _Extend file. Soft layers follow mnemonic letter mappings, hard ones are positional (like my Ext1/2).

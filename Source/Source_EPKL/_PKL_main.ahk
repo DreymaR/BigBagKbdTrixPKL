@@ -17,7 +17,7 @@
 ;;  eD TOFIX/WIP:
 ;		- 
 ;		- TOFIX: Ext-Shift after rework sometimes doesn't take or lets up? How to reproduce?
-;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to a stuckness of some kind. Afterwards, Extend is wonky.
+;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
 ;		- 
 ;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
@@ -25,11 +25,11 @@
 ;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
 ;			- Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
 ;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
-;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak/Tm# etc. As a default if not found, use the three first letters.
-;			- Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? Too clunky maybe, and won't cover having multiple Tarmak layouts selected.
-;			- Maybe instead reorganize a bit, making Colemak-eD/VK subdirs under Colemak?
+;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak#/Tm# etc. As a default if not found, use the three first letters.
+;			- Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? Too clunky maybe, and won't cover having multiple Tarmak layouts selected. Tarmak#=Tm# instead?
 ;		- WIP: Multi-BaseLayout stack! Use for, e.g., Ru/Bg.
 ;		- WIP: Make the HIG work for non-standard state layer entries like it does for DK now? Consider naChr vs ·¶·-like marks.
+;		- WIP: Consider a remap for each Ext layer? Would make things messier, but allows separate Ext1 and Ext2 maps (for Sl/Bs switch).
 ;		-
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
@@ -113,7 +113,7 @@
 ;;  eD TODO:
 ;		- TODO: A help fn to make layout images? Make the image large and opaque, then make a screenshot w/ GIMP and crop it. Or can I use the Windows Snipping Tool (Win+Shift+S)?
 ;		- Settings GUI panels instead of editing EPKL_Settings and EPKL_Layout .ini files. It could generate an override file so the default one is untouched.
-;			- First one out: Layout selector? A set of choice panels, every time checking against a list of which layouts are present. Read in the list when a folder like Colemak-eD is chosen.
+;			- First one out: Layout selector? A set of choice panels, every time checking against a list of which layouts are present. Read in the list when a folder like Colemak is chosen.
 ;		- Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- For Jap layout etc, allow dk tables in the main layout.ini as well as the dk file. Let layout.ini tables overwrite dk file ones. (Same with Extend mappings.)
 ;		- AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
@@ -192,6 +192,9 @@
 ;		- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 ;		- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
 ;	* EPKL v1.2.0α: Layout Picker UI.
+;		- The ß§/þÞ/ŋŊ ligatures from the Colemak[eD] AltGr layers were added to the RingAbove-Lig dead key as spares.
+;		- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
+;		- Moved Cmk-eD/VK as subdirs under a common Colemak folder, like the way the other layouts are organized.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL

@@ -43,7 +43,7 @@ pkl_DeadKey( DK )
 	
 	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs ) 			; Increase the # of registered DKs, both as variable and KeyInfo
 	setKeyInfo( "CurrNameOfDK", DK )
-	SetTimer, showHelpImageOnce, -35 						; Refresh the img once if active (screen refresh usually takes ~17 ms). A showHelpImage() call loses releases.
+	SetTimer, showHelpImageOnce, -35 						; Refresh the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
 	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Esc}	; eD: Added {Esc}
 	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys from the next-key input
 	{

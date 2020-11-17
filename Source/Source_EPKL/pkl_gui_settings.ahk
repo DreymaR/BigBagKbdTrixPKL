@@ -5,7 +5,7 @@
 	pklAppName  := getPklInfo( "pklName" )
 	winTitle    := "EPKL Settings"
 	anyTxt      := "<any>"
-	layTypes    := [ anyTxt, "Colemak-eD", "Colemak-VK", "Dvorak", "QUARTZ", "QWERTY", "Tarmak" ] 	; eD WIP: Read this from the dir instead
+	layTypes    := [ anyTxt, "Colemak", "Dvorak", "QUARTZ", "QWERTY", "Tarmak" ] 	; eD WIP: Read this from the dir instead
 	kbdTypes    := [ anyTxt, "ANS", "ISO" ]
 	
 	layName  := pklIniRead( "layoutName", locUnknown, "LayIni", "information" )
