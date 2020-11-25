@@ -121,7 +121,7 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 	
 	if ( set == 1 ) {
 		setKeyInfo( "HKtxt_" . hk, localehk )
-		localizedHotkeys .= " " . hk
+		localizedHotkeys    .= " " . hk
 	} else {
 		if ( hk == "all" )
 			Return localizedHotkeys

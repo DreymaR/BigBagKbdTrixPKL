@@ -31,16 +31,18 @@ Getting EPKL up and running
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
     - ...in the [Layouts Default file][LayDef] find the `;QWCLK = BACK` etc line and remove that semicolon.
-* If you do want to choose a variant, rename the Override_Example file to `EPKL_Layouts_Override.ini`.
-    - There can be a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
-* Choose a layout with your keyboard type, locale and Curl/Angle/Wide etc preferences, by shorthand or full name.
+* Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
+* To choose a layout variant, select the Layouts/Settings menu option. The EPKL Settings User Interface pops up.
+* Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
-    - There are some premade Locale variants, if you need to type in other languages. Check out which variants exist.
-    - There are different ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
+    - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist.
+    - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
+* If you want to choose layouts manually instead, rename the Override_Example file to `EPKL_Layouts_Override.ini`.
+    - There can be a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
 * In your `EPKL_Layouts_Override.ini`, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
     - There are KbdType (@K) etc shortcuts, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* Now, run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
+* To use the chosen layout(s) and settings, select the Refresh EPKL menu option.
   
 More Know-How
 -------------
@@ -62,8 +64,8 @@ The files may take a little tweaking to get what you want. There are several par
     - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY and Dvorak included.
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     - The _VK_ layouts just move the keys of your installed OS layout around, without other changes
-    - The _[eD]_ layouts have their own Shift/AltGr mappings specified.
-    - You may mix mapping types freely in any layout.
+    - The _[eD]_ layouts have their own Shift/AltGr state mappings specified.
+    - You may actually mix mapping types freely in any layout.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
     - ISO boards have a `VK_102` key between `Z` and `LShift`. Some `OEM_` key codes differ from ANSI ones.
     - Brazilian ABNT boards are like ISO, but have two more keys. These can be remapped by their scan codes.
@@ -87,7 +89,7 @@ The files may take a little tweaking to get what you want. There are several par
 * Also, a Dead Key file. DKs are mapped as @###. Pressing the key then a release glyph may produce something new!
     - There are help images for DKs, these can be very useful as they show what releases are in different shift states.
     - I haven't made images for all variants though, so there may be minor discrepancies.
-* Help images aren't available with every board and mod combo, as there are so many of them. See below.
+* Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
   
 **Hotkeys found in the EPKL_Settings file:**
 * Ctrl+Shift+1 – Display/hide the help image
@@ -104,15 +106,19 @@ The files may take a little tweaking to get what you want. There are several par
 **Short EPKL Glossary**
 * **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
 * **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
+    - After selecting an Extend layer this way, keep only the Extend key pressed down to maintain it
 * A sticky modifier or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
+    - There's a setting in the Settings file for how quickly the OSM times out, in milliseconds
 * **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
 * **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
     - DK sequence: You can tap several DKs to get new symbols (example: `{AltGr+=,=}` gives `≡`; `AltGr+{/,=}` then `=` gives `≢`)
     - DK chaining: One DK can release to another. This is not implemented in EPKL yet
-    - **MoDK** (Mother-of-DKs) is a key (here, on **tap-Extend**) that leads to lots of cool DKs
+    - **MoDK** (Mother-of-DKs) is a ToM key (here, on **tap-Extend**) that leads to lots of cool DKs
 * The **LayStack** is a stack of files that may hold layout definitions: Layouts_Default, Layouts_Override, BaseLayout and Layout.
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
+    - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
+    - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
   
 **Techy tips for EPKL:**
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
@@ -215,7 +221,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - Now, copy the V and OEM_102 keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
 * Now, if your `EPKL_Layouts` .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
-    - Here, set LayType/KbdType/LocalID/CurlMod/ErgoMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
+    - Here, set LayType/LayVari/KbdType/CurlMod/ErgoMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
     - If you prefer to use another existing layout line in the file, comment out the `layout = ` line with `;` and activate another.
     - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
 * After making layout changes, refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
@@ -325,6 +331,15 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Currency dead key reworked. Several symbols added, most duplicates removed.
 	- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 	- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
+* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
+	- Layout/Settings GUI panel. Only the Layout Picker is finished for now. Key Mapping and General Settings tabs are planned.
+		- The Layout Picker can be used to select any existing layout variant combo in the Layouts folder.
+		- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
+		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
+		- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
+		- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
   
   
 TODO:

@@ -73,7 +73,7 @@ DONE:
 * If using a layout from the command line, the notation "UseLayPos_#" will run layout # in the layout list set in EPKL_Layouts.
 	- This also makes Refresh robust against layout changes in EPKL_Layouts.
 * Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
-* Shorthand notation in EPKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@E resp. (@V for all at once).
+* Shorthand notation in EPKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@E resp. (@A for all at once).
 * Path shortcut for layout.ini entries, allowing ".\" instead of full path from EPKL root.  
   
 **MENUS/IMAGES**
@@ -106,7 +106,7 @@ DONE:
 * Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or layout.ini). The old way should still work though.
 * Made Extend substitutes for Launch_Media/Search/App1/App2, as AHK multimedia launcher keys aren't working in Win 10.
 * Scan code modular remapping, making ergo and other variants much easier. Separate key permutation cycles, and remaps combining/translating them.
-	- In layout.ini, specify any remap combinations using the names (and syntax) found in the [remaps] section of the Remap.ini file.
+	- In layout.ini, specify any remap combinations using the names (and syntax) found in the [Remaps] section of the Remap.ini file.
 	- The _layout remap specifies a full remapping, while the _extend remap is only for those keys you want to move for Extend ("hard" remaps).
 	- Uses my KeyLayoutDefinition (KLD) mapping format.
 	- KLD is good for remaps, but too compact for main layout or Extend definitions. (Besides, Aldo Gunsing has a conversion tool for those.)
@@ -257,6 +257,20 @@ DONE:
 	- Currency dead key reworked. Several symbols added, most duplicates removed.
 	- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 	- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
+* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
+	- Layout/Settings GUI panel. Only the Layout Picker is finished for now. Key Mapping and General Settings tabs are planned.
+		- The Layout Picker can be used to select any existing layout variant combo in the Layouts folder.
+		- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
+		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
+		- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
+		- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+	- The ß§/þÞ/ŋŊ ligatures from the Colemak-eD AltGr layers were added to the RingAbove-Lig dead key as spares.
+	- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\MainLay\3LA-LT[-LayVar]_KbT[_Mods]`).
+	- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
+	- The layout shortcuts for EPKL_Layouts files were tweaked somewhat, renaming `@L` to `@V` (for Variant) and making the underscore before `@K` explicit.
+	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+		- Some Nyfee Colemak-DH mods are added for test purposes. His mods move some keys including `Z W X C F K` and the Bracket/Minus/Equals keys.
+	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
   
   
 TODO:

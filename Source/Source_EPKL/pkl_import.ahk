@@ -49,12 +49,8 @@ _importOneLayout( IMP )								; Function to import one layout via a template .i
 	static temp
 	static initialized  := false
 	if ( not initialized ) {
-		try {
-			FileRead, theFile, %importFile%
-		} catch {
-			pklErrorMsg( "Reading template failed." )
+		if not theFile := pklFileRead( importFile, "template" )
 			Return
-		}
 		initialized := true
 	}
 	
@@ -62,10 +58,6 @@ _importOneLayout( IMP )								; Function to import one layout via a template .i
 ;	result := "${1}" 			; 
 	theFile := RegExReplace( theFile, needle , result )
 ;	Return 		; eD DEBUG
-	try {												; Save
-		FileAppend, %theFile%, %tempFile%, UTF-8	; 
-	} catch {
-		pklErrorMsg( "Writing temporary file failed." )
+	if not pklFileWrite( theFile, tempFile, "temporary file" )
 		Return
-	}
 }

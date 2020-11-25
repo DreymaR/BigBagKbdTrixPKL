@@ -17,8 +17,7 @@ makeHelpImages() {
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := "Files\_eD_Remap.ini"
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
-	FormatTime, theNow,, yyyy-MM-dd_HHmm 						; Use A_Now (local time) for a folder time stamp
-	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . theNow
+	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . thisMinute()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\ImgGenerator\EPKL_ImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
@@ -213,12 +212,8 @@ _makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help image 
 	}
 	svgFile     := HIG.destDir . "\" . imgName . ".svg" 		; Was in HIG.ImgDirs["raw"] but multi-file call can't specify different destination paths
 	
-	try {
-		FileRead, tempImg, % HIG.OrigImg 						; eD NOTE: Use FileRead or Loop, Read, ? Nah, 160 kB isn't big.
-	} catch {
-		pklErrorMsg( "Reading SVG template failed." )
+	if not tempImg := pklFileRead( HIG.OrigImg, "SVG template" )
 		Return
-	}
 	for CO, SC in HIG.PngDic
 	{
 		idKey   := indx . CO
@@ -260,13 +255,10 @@ _makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help image 
 		tempImg := RegExReplace( tempImg, needle , result )
 	}
 ;	Return 		; eD DEBUG
-	try { 														; Save the changed image file in a temp folder
-		FileAppend, %tempImg%, %svgFile%, UTF-8 				; Inkscape SVG is UTF-8, w/ Linux line endings
-		HIG.inkFile .= " " . svgFile 							; In InkScape v1.0, the "--file" option is gone, but multiple files can be used
-	} catch {
-		pklErrorMsg( "Writing temporary SVG file failed." )
+	if not pklFileWrite( tempImg, svgFile 						; Save the changed image file in a temp folder
+						, "temporary SVG file" ) 				; Note: Inkscape SVG is UTF-8, w/ Linux line endings
 		Return
-	}
+	HIG.inkFile .= " " . svgFile 								; In InkScape v1.0, the "--file" option is gone, but multiple files can be used
 }
 
 _oneChr( ent ) { 												; Get a single-character entry in various formats (number, hex, prefix syntax)

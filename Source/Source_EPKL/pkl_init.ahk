@@ -17,6 +17,17 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		lang := pklIniRead( SubStr( A_Language , -3 ), "", "PklDic", "LangStrFromLangID" )
 	pkl_locale_load( lang )
 	
+	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" ) 	; CSV list of main layout name abbreviations
+	shortLayDic := {} 													;     (Default: First 3 letters)
+	For ix, entr in shortLays {
+		split := StrSplit( entr, "/" )
+		if ( split.maxIndex() != 2 )
+			Continue
+		shortLayDic[ split[1] ] := split[2]
+	}
+	setPklInfo( "shortLays", shortLayDic )
+	
+	
 	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
 	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  ) 	; 1
 	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" ) 	; 2
@@ -53,7 +64,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	_pklSetInf( "tapModTime" ) 											; Tap-or-Mod time
 	
 	polyLID := {}
-	For ix, LIDs in pklIniCSVs( "multiLocs",, "pklDic" ) { 				; For layouts with compound LocalIDs, any of the components can be used alone
+	For ix, LIDs in pklIniCSVs( "multiLocs",, "pklDic" ) { 				; For layouts with compound Locale IDs, any of the components can be used alone
 		harmLID := StrReplace( LIDs, "/" )
 		For ix, LID in StrSplit( LIDs, "/" ) { 							; The Tables file entry is a CSV list of slash-separated LIDs
 			polyLID["-" . LID] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
@@ -62,22 +73,22 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	
 	theLays := pklIniRead( "layout", "", pklLays ) 						; Read the layouts string from EPKL_Layouts
 	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
-	kbdType := _pklLayRead( "KbdType", "ISO", "_"   ) 					; Keyboard type, _ISO/_ANS/_etc
+	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, _ISO/_ANS/_etc 	; eD WIP: Removed , "_"
 ;	if InStr( kbdType, "-" ) { 											; eD WIP: Trad/Orth/Splt/etc so we have ISO-Orth, ANS (=ANS-Trad) etc
 ;		kbdType := StrSplit( kbdType, "-" ) 							; eD WIP: Use pklIniCSVs() to read it instead?
 ;		kbdForm := kbdType[2]
 ;		kbdType := kbdType[1] . "-" . kbdType[2]
 ;	} 																	; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!?
-	LID     := _pklLayRead( "LocalID",      , "-"   ) 					; Locale ID, e.g., "-Pl"
+	theLays := StrReplace( theLays, "@A",   "@K@C@E@O" ) 				; Shorthand .ini notation for layout variants
+	LID     := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl"
 	localID := ( polyLID[LID] ) ? polyLID[LID] : LID 					;   (can be a single locale of a harmonized layout like BeCaFr)
 	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl
 	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
-	theLays := StrReplace( theLays, "@V",   "@K@C@E@O" ) 				; Shorthand .ini notation for layout variants
 	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
 	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
 	theLays := StrReplace( theLays, "@T",   layType )
-	theLays := StrReplace( theLays, "@L",   localID ) 	; eD WIP: Allow any one in a compound locale (like BrPt) to be used alone. Must be done in _pklLayRead() then?
+	theLays := StrReplace( theLays, "@V",   localID ) 					; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
 	theLays := StrReplace( theLays, "@K",   kbdType ) 					; (Later on, will use atKbdType() for layout files)
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@E",   ergoMod )
@@ -292,18 +303,16 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) { 										; If there is an Extend key, set the Extend mappings.
-;		extFile  := fileOrAlt( pklIniRead( "extendFile",, "LayStk" )
-;								, getPklInfo( "File_PklSet" ) )			; Default Extend file: pkl.ini 	; eD WIP: Deprecate - keep Ext info in the LayStack
-		extFile := pklIniRead( "extendFile",, "LayStk" )
+		extFile := pklIniRead( "extendFile",, "LayStk" ) 	; getPklInfo( "File_PklSet" ) ; Deprecated Extend file: pkl.ini
 		extStck := layStck
 		if FileExist( extFile )
-			extStck.push( extFile ) 										; The LayStack overrides the dedicated file
+			extStck.push( extFile ) 									; The LayStack overrides the dedicated file
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
 		For ix, thisFile in extStck { 									; Parse the LayStack then the ExtendFile. 	; eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
 			Loop % 4 {													; Loop the multi-Extend layers
 				extN := A_Index
 				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4
-;				thisSect := ( thisFile == getPklInfo( "File_PklSet" ) ) ? "extend" : thisSect
+;				thisSect := ( thisFile == getPklInfo( "File_PklSet" ) ) ? "extend" : thisSect 	; Deprecated
 				map := pklIniSect( thisFile, thisSect )
 				if ( map.Length() == 0 ) 								; If this map layer is empty, go on
 					Continue
@@ -406,7 +415,7 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	
 	if bool(pklIniRead("startSuspended")) {
 		Suspend
-		gosub afterSuspend
+		Gosub afterSuspend
 	}
 }	; end fn
 

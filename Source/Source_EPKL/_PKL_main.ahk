@@ -20,9 +20,11 @@
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
 ;		- 
-;		- TODO: GUI layout settings panel. Use a 'layGUI =' setting that overrides any 'layout =' ones.
-;			- Write a layGUI = ... line with the settings from the GUI directly below [pkl], skirting the @# shortcuts. If such a line is present, overwrite it. Date tag in a comment, and explain in a ';;  ' comment before.
-;			- For the layGUI line, use the existing Layout_Override file if present, or create one.
+;		- TODO: The other UI Settings tabs (Keys and Settings).
+;			- For Keys, read the KLM name rows from the Remap file (already pipe delimited, so just read until the double pipe and RegExReplace out whitespace).
+;			- Select row then code to remap, then the same for the VK code. Then mapping type (radio buttons). Finally, an editable field to edit any state mappings etc.
+;			- For mods, use a selector with | |L|R| and another with |Shift|Ctrl|Alt|Win|. Gray out if not using the Mod or ToM selection.
+;			- In Settings, maybe the hotkeys? And which mods are sticky plus the timer. OS layout DKs?
 ;			- Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
 ;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
 ;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak#/Tm# etc. As a default if not found, use the three first letters.
@@ -191,10 +193,20 @@
 ;		- Currency dead key reworked. Several symbols added, most duplicates removed.
 ;		- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 ;		- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
-;	* EPKL v1.2.0α: Layout Picker UI.
-;		- The ß§/þÞ/ŋŊ ligatures from the Colemak[eD] AltGr layers were added to the RingAbove-Lig dead key as spares.
+;	* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
+;		- Layout/Settings GUI panel. Only the Layout Picker is finished for now. Key Mapping and General Settings tabs are planned.
+;			- The Layout Picker can be used to select any existing layout variant combo in the Layouts folder.
+;			- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
+;			- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
+;			- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
+;			- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+;		- The ß§/þÞ/ŋŊ ligatures from the Colemak-eD AltGr layers were added to the RingAbove-Lig dead key as spares.
+;		- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\MainLay\3LA-LT[-LayVar]_KbT[_Mods]`).
+;		- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
+;		- The layout shortcuts for EPKL_Layouts files were tweaked somewhat, renaming `@L` to `@V` (for Variant) and making the underscore before `@K` explicit.
+;		- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+;			- Some Nyfee Colemak-DH mods are added for test purposes. His mods move some keys including `Z W X C F K` and the Bracket/Minus/Equals keys.
 ;		- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
-;		- Moved Cmk-eD/VK as subdirs under a common Colemak folder, like the way the other layouts are organized.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -220,6 +232,7 @@ setPklInfo( "File_PklSet", "EPKL_Settings"          ) 		; Used globally  		(was 
 setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 		; Used globally  		(was in 'pkl.ini')
 setPklInfo( "LayFileName", "layout.ini"             ) 		; --"--
 setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 		; Info dictionary file, mostly from internal tables
+Gosub setUIGlobals 								; Set the globals needed for the settings UI (is this necessary?)
 
 arg = %1% ; Layout from command line parameter
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
@@ -404,8 +417,9 @@ Return
 
 epklDebugWIP:
 ;	pklDebug( "Running experimental/WIP routine`n(specified in _PKL_main)", .8 )
-	pklSetUI() 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 ;	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+changeSettings:
+	pklSetUI() 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 Return
 
 ; ####################### functions #######################

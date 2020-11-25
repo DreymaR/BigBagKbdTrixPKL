@@ -7,6 +7,7 @@
 					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
 					,   "deadKey" : [ "12"        , ""             ]		; ---
 					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
+					,   "setting" : [ "SettingUI" , ""             ]		; ---
 					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
 					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
 					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+`
@@ -59,6 +60,7 @@
 	}
 	
 	Menu, Tray, add, %aboutMeMenuItem%, showAbout 							; About
+	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
 		Menu, Tray, add, %deadKeyMenuItem%, detectDeadKeysInCurrentLayout 	; Detect DKs
@@ -100,6 +102,7 @@
 	
 	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
 	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMe icon - about/question
+	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 317: Blue cogs)
 	if ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
 		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
@@ -185,10 +188,10 @@ pkl_about()
 	GUI, AW:Add, Edit, , %layPage%
 	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
 		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
-		text :=   "Keyboard/Layout type from settings: "    . kbdType
-		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
-		text .= "`n"
-		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
+;		text :=   "Keyboard/Layout type from settings: "    . kbdType
+;		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
+;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
+		text := "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr
 		text .= "`n"
 		text .= "`nLayout/BaseLayout file paths:`n- "       . layFile . "`n- " . basFile
@@ -233,7 +236,7 @@ _FixAmpInMenu( menuItem )
 		if ( lParam == 0x205 ) { 			; WM_RBUTTONUP
 			Return
 		} else if ( lParam == 0x201 ) { 	; WM_LBUTTONDOWN
-			gosub ToggleSuspend				; This suspends EPKL on tray icon single-click
+			Gosub ToggleSuspend				; This suspends EPKL on tray icon single-click
 		}
 	}
 */

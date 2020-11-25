@@ -5,8 +5,10 @@
 ;;      Used primarily in pkl_init.ahk
 ;
 ReadRemaps( mapList, mapFile ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)
-	mapCycList  := ""
-	For ix, alist in pklIniCSVs( mapList, mapList, mapFile, "remaps" ) { 	; Name -> actual list, or literal list
+	iniStck := getPklInfo( "LayStack" ) 			; Allow a [Remaps] section in the LayStack too
+	iniStck.InsertAt( 1, mapFile ) 	; Push( mapFile )
+	mapCycList  := "" 								; Name -> actual list, or literal list
+	For ix, alist in pklIniCSVs( mapList, mapList, iniStck, "Remaps" ) {
 		tmpCycle    := ""
 		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
 			if ( SubStr( list, 1, 1 ) == "^" ) { 				; Cycle reference
@@ -22,6 +24,8 @@ ReadRemaps( mapList, mapFile ) { 					; Parse a remap string to a CSV list of cy
 }	; end fn
 
 ReadCycles( mapType, mapList, mapFile ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
+	iniStck := getPklInfo( "LayStack" ) 			; Allow a [RemapCycles] section in the LayStack too
+	iniStck.InsertAt( 1, mapFile ) 	; Push( mapFile )
 	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
@@ -31,7 +35,7 @@ ReadCycles( mapType, mapList, mapFile ) { 			; Parse a remap string to a dict. o
 	For ix, clist in StrSplit( mapList, ",", " `t" ) { 			; Parse cycle list by comma
 		fullCycle := ""
 		For ix, plist in StrSplit( clist, "+", " `t" ) { 		; Parse and merge composite cycles by plus sign
-			thisCycle := pklIniRead( plist , "", mapFile, "RemapCycles" )
+			thisCycle := pklIniRead( plist , "", iniStck, "RemapCycles" )
 			if ( not thisCycle )
 				pklWarning( "Remap element '" . plist . "' not found", 3 )
 			thisType  := SubStr( thisCycle, 1, 2 )				; KLM map type, such as TC for TMK-like Colemak
@@ -105,11 +109,11 @@ _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 	if WinActive( "ahk_group SuspendingApps" ) { 				; If a specified window is active...
 		if ( not suspendedByApp ) { 							; ...and not already A_IsSuspended...
 			suspendedByApp := true
-			gosub suspendOn
+			Gosub suspendOn
 		}
 	} else if ( suspendedByApp ) {
 		suspendedByApp := false
-		gosub suspendOff
+		Gosub suspendOff
 	}
 }
 
@@ -118,9 +122,9 @@ _pklActivity() {
 	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 			; Convert from min to ms
 	idleTime := A_TimeIdle 										; eD WIP: Use TimeIdlePhysical instead?
 	if ( exitTime && idleTime > exitTime ) {
-		gosub exitPKL
+		Gosub exitPKL
 	} else if ( suspTime && not A_IsSuspended && idleTime > suspTime ) {
-		gosub suspendOn
+		Gosub suspendOn
 	}
 }
 
@@ -163,6 +167,10 @@ pklErrorMsg( text ) {
 
 pklWarning( text, time = 5 ) {
 	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
+}
+
+pklInfo( text, time = 4 ) {
+	MsgBox, 0x40, EPKL INFO: , %text%, %time%					; Info type message box (asterisk)
 }
 
 pklDebug( text, time = 2 ) {
@@ -212,7 +220,7 @@ getWinLocaleID() { 											; Win LID; for Language use A_Language.
 	Return WinLocaleID
 }
 
-isInt( this ) { 	; AHK cannot use "is <type>" in expressions so use a wrapper function
+isInt( this ) { 							; AHK cannot use "is <type>" in expressions so use a wrapper function
 	if this is integer
 		Return true
 }
@@ -226,11 +234,11 @@ fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or us
 	Return altFile
 }
 
-atKbdType( str ) { 	; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
+atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }
 
-pklSplash( title, text, dur = 6 ) { 	; Default display duration is in seconds
+pklSplash( title, text, dur = 6 ) { 		; Default display duration is in seconds
 	SplashTextOff
 	SetTimer, KillSplash, Off
 	SplashTextOn, 300, 100, %title%, `n%text%
@@ -267,6 +275,16 @@ bool( val ) { 												; Convert an entry to true or false (default)
 	Return ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
 }
 
+hasValue( haystack, needle ) { 								; Check if an array object has a certain value
+	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
+		Return false
+	For ix, value in haystack {
+		if ( value == needle )
+			Return ix
+	}
+	Return false
+}
+
 convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP
 	dum := "--" 											; The string is written as ANSI/CP0
 	VarSetCapacity( dum, StrPut( str, "UTF-8" ) ) 			; Ensure var capacity
@@ -281,4 +299,37 @@ convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; e
 ; 		* ((codePg="utf-16"||codePg="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
 	len := StrPut( str, &dum, "CP0" ) 						; Copy/convert string (returns length in chars)
 	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
+}
+
+pklFileRead( file, name = "" ) { 							; Read a file
+	name := ( name ) ? name : file
+	try { 													; eD NOTE: Use Loop, Read, ? Nah, 160 kB or so isn't big.
+		FileRead, content, *P65001 %file% 					; "*P65001 " is a way to read UTF-8 files
+	} catch {
+		pklErrorMsg( "Failed to read `n  " . name )
+		Return false
+	}
+	Return content
+}
+
+pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
+	name := ( name ) ? name : file
+	try {
+		FileAppend, %content%, %file%, UTF-8
+	} catch {
+		pklErrorMsg( "Failed writing to `n  " . file )
+		Return false
+	}
+	Return true
+}
+
+thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
+	FormatTime, theNow,, yyyy-MM-dd_HH-mm
+	Return theNow
+}
+
+joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a string
+	For ix, el in array
+		out .= sep . el
+	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
 }
