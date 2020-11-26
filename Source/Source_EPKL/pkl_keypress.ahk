@@ -240,7 +240,7 @@ _osmClearAll() 												; Clear all active sticky mods
 
 AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 {
-;;  The following was removed from EPKL_Settings.ini for clarity. The functionality is still here, for now.
+;;  The following was removed from the Settings .ini for clarity. The functionality is still here, for now.
 ;;  ONHOLD: Remove CtrlAltlIsAltGr, enforcing <^>! (if laptops don't have >!, they'd have to remap to it)?
 ;;  
 ;;  Windows internally translates the AltGr (right Alt) key to LEFT Ctrl + RIGHT Alt.

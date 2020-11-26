@@ -1,12 +1,19 @@
 ﻿  													;   ###############################################################
 initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
 { 													;   ###############################################################
-	pklIniFile := getPklInfo( "File_PklSet" ) . ".ini"
-	if not FileExist( pklIniFile ) {
-		MsgBox, %pklIniFile% file NOT FOUND`nSorry. The program will exit.
+	setFile := getPklInfo( "File_PklSet" )
+	setStck := []
+	For ix, type in [ "", "_Override", "_Default" ] {
+		file := setFile . type . ".ini"
+		if FileExist( file ) 											; If the file exists...
+			setStck.push( file ) 										; ...add it to the SetStack
+	}	; end For type
+	if ( setStck.Length() == 0 ) {
+		MsgBox, %setFile% file NOT FOUND`nSorry. EPKL will exit.
 		ExitApp
 	}
-	setPklInfo( "File_PklSet", pklIniFile )
+	setPklInfo( "SetStack", setStck ) 									; Settings_Override, Settings_Default
+;	setPklInfo( "File_PklSet", setFile . ".ini" ) 	; eD WIP: Instead of this, will use a Default/Override stack
 	setPklInfo( "AdvancedMode", bool(pklIniRead("advancedMode")) ) 		; Extra debug info etc
 	pklLays := getPklInfo( "File_PklLay" ) 								; EPKL_Layouts
 	pklLays := [ pklLays . "_Override.ini", pklLays . "_Default.ini" ] 	; Now an array of override and default
@@ -303,7 +310,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) { 										; If there is an Extend key, set the Extend mappings.
-		extFile := pklIniRead( "extendFile",, "LayStk" ) 	; getPklInfo( "File_PklSet" ) ; Deprecated Extend file: pkl.ini
+		extFile := pklIniRead( "extendFile",, "LayStk" ) 				; Deprecated Extend file: pkl.ini (EPKL_Settings)
 		extStck := layStck
 		if FileExist( extFile )
 			extStck.push( extFile ) 									; The LayStack overrides the dedicated file
@@ -311,8 +318,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		For ix, thisFile in extStck { 									; Parse the LayStack then the ExtendFile. 	; eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
 			Loop % 4 {													; Loop the multi-Extend layers
 				extN := A_Index
-				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4
-;				thisSect := ( thisFile == getPklInfo( "File_PklSet" ) ) ? "extend" : thisSect 	; Deprecated
+				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4 	; Deprecated: [extend] in pkl.ini
 				map := pklIniSect( thisFile, thisSect )
 				if ( map.Length() == 0 ) 								; If this map layer is empty, go on
 					Continue

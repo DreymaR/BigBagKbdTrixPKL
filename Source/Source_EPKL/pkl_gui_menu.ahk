@@ -92,7 +92,7 @@
 	try {
 		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem )
 	} catch {
-		pklWarning( "EPKL_Settings.ini:`nNon-existing menu item specified as default!?" )
+		pklWarning( "EPKL_Settings .ini:`nNon-existing menu item specified as default!?" )
 	}
 ;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chngLayMenuItem%

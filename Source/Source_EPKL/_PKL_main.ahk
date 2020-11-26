@@ -16,16 +16,13 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- TODO: The other UI Settings tabs (Settings).
+;			- In Settings, maybe the hotkeys? And which mods are sticky plus the timer. OS layout DKs?
+;			- Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
 ;		- TOFIX: Ext-Shift after rework sometimes doesn't take or lets up? How to reproduce?
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
 ;		- 
-;		- TODO: The other UI Settings tabs (Keys and Settings).
-;			- For Keys, read the KLM name rows from the Remap file (already pipe delimited, so just read until the double pipe and RegExReplace out whitespace).
-;			- Select row then code to remap, then the same for the VK code. Then mapping type (radio buttons). Finally, an editable field to edit any state mappings etc.
-;			- For mods, use a selector with | |L|R| and another with |Shift|Ctrl|Alt|Win|. Gray out if not using the Mod or ToM selection.
-;			- In Settings, maybe the hotkeys? And which mods are sticky plus the timer. OS layout DKs?
-;			- Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
 ;		- Add @M for MainLay? Colemak, Tarmak, Dvorak, QWERTY (,QUARTZ). Make sure it can look for both @M-@T and @M folders.
 ;			- Use a table in Tables like shortLays = Colemak/Cmk, Dvorak/Dvk, Tarmak#/Tm# etc. As a default if not found, use the three first letters.
 ;			- Use a CSV format for Tarmak,1 = Tm1 thus replacing Tm# with Tm1 etc.? Too clunky maybe, and won't cover having multiple Tarmak layouts selected. Tarmak#=Tm# instead?
@@ -58,7 +55,7 @@
 ;			- Made the "onlyOneDK" of HIG settings into a CSV list so we can render a subset of DKs at will.
 ;			- MoDK plan: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
-;			- In EPKL_Settings.ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
+;			- In the EPKL_Settings .ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
 ;			- Redefine the dual-role Extend key as a generic tapOrMod key. Treating Extend fully as a mod, it can also be ToM (or sticky?).
 ;			- TOFIX: ToM-tap gets transposed when typing fast, the key is sluggish. But if the tap time is set too low, the key can't be tapped instead.
 ;				- To fix this, registered interruption. So if something is hit before the mod timer the ToM tap is handled immediately.
@@ -194,12 +191,16 @@
 ;		- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 ;		- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
 ;	* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
-;		- Layout/Settings GUI panel. Only the Layout Picker is finished for now. Key Mapping and General Settings tabs are planned.
-;			- The Layout Picker can be used to select any existing layout variant combo in the Layouts folder.
+;		- Layout/Settings GUI panel. The Layout Picker and Key Mapper are finished for now. A General Settings tab is also planned.
+;		- The Layout Picker UI can be used to select any existing layout variant combo in the Layouts folder.
 ;			- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
 ;			- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
 ;			- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
 ;			- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+;		- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
+;			- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
+;			- For modifiers, you can select a side or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
+;			- The mapping is written into the Layouts_Override file. If that key is also mapped in your (Base)Layout.ini, copy the line to layout.ini or it won't work.
 ;		- The ß§/þÞ/ŋŊ ligatures from the Colemak-eD AltGr layers were added to the RingAbove-Lig dead key as spares.
 ;		- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\MainLay\3LA-LT[-LayVar]_KbT[_Mods]`).
 ;		- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
@@ -207,6 +208,7 @@
 ;		- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
 ;			- Some Nyfee Colemak-DH mods are added for test purposes. His mods move some keys including `Z W X C F K` and the Bracket/Minus/Equals keys.
 ;		- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
+;		- Instead of just EPKL_Settings.ini, we can now use a Settings Override/Default stack like with the Layouts files.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
