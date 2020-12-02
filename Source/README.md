@@ -257,25 +257,35 @@ DONE:
 	- Currency dead key reworked. Several symbols added, most duplicates removed.
 	- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 	- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
-* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
-	- Layout/Settings GUI panel. The Layout Picker and Key Mapper are finished for now. A General Settings tab is also planned.
+* EPKL v1.2.0: Layout/Settings UI.
+	- Layout/Settings GUI panel to help newcomers get into several of the powerful options EPKL offers.
 	- The Layout Picker UI can be used to select any existing layout variant combo in the Layouts folder.
 		- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
-		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
+		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the `_Example` file.
 		- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
-		- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+		- Old UI generated lines of the same type are commented out and if there are many of them (>4) the oldest ones get deleted.
 	- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
 		- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
-		- For modifiers, you can select a side or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
-		- The mapping is written into the Layouts_Override file. If that key is also mapped in your (Base)Layout.ini, copy the line to layout.ini or it won't work.
+		- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
+		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, copy the line to `layout.ini` or it won't work.
+	- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
+		- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
+		- To allow the Settings UI to work, EPKL can now use a Settings Override/Default stack (like with the Layouts files) instead of just `EPKL_Settings.ini`.
 	- The ß§/þÞ/ŋŊ ligatures from the Colemak-eD AltGr layers were added to the RingAbove-Lig dead key as spares.
 	- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\MainLay\3LA-LT[-LayVar]_KbT[_Mods]`).
 	- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
 	- The layout shortcuts for EPKL_Layouts files were tweaked somewhat, renaming `@L` to `@V` (for Variant) and making the underscore before `@K` explicit.
-	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
-		- Some Nyfee Colemak-DH mods are added for test purposes. His mods move some keys including `Z W X C F K` and the Bracket/Minus/Equals keys.
 	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
-	- Instead of just EPKL_Settings.ini, we can now use a Settings Override/Default stack like with the Layouts files.
+  
+	- Added a `LayMain(\3LA)` setting and `@M` shortcut for the main layout in the Layouts files. It may specify a 3-Letter Abbreviation (3LA) for subfolder names.
+	- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
+	- Renamed the KLM key code `_DT` (OEM_PERIOD) to `_PD` and `_EQ` (OEM_PLUS) to `_PL` for better compatibility with the actual VK names. Also updated the HIG files.
+	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
+	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+		- LayStack Remaps and cycles will only be checked for if their sections are present in `layout.ini`. This is to avoid slowing down other layouts.
+		- The Nyfee Colemak-DH mods were added to test LayStack remaps. His mods move `Z W X C F K (V)` and the Bracket/Minus/Equals keys.
+	- Testing a "None-VK" throughput layout for Extend etc. For now, it's a QWERTY layout at heart, using mostly 'VKey' mappings. Ergomaps would work on it.
+		- However, all it does for now is to map to the QW codes in the _eD_Remap file: It won't pass through the underlying OS layout. So it may not be useful.
   
   
 TODO:

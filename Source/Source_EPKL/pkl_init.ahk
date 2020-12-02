@@ -1,7 +1,10 @@
 ﻿  													;   ###############################################################
 initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
 { 													;   ###############################################################
-	setFile := getPklInfo( "File_PklSet" )
+	;; ================================================================================================
+	;;  Find and read from the Settings file(s)
+	;
+	setFile := getPklInfo( "File_PklSet" ) 								; The default file name will still be available.
 	setStck := []
 	For ix, type in [ "", "_Override", "_Default" ] {
 		file := setFile . type . ".ini"
@@ -13,27 +16,16 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		ExitApp
 	}
 	setPklInfo( "SetStack", setStck ) 									; Settings_Override, Settings_Default
-;	setPklInfo( "File_PklSet", setFile . ".ini" ) 	; eD WIP: Instead of this, will use a Default/Override stack
+;	setPklInfo( "File_PklSet", setFile . ".ini" ) 	; eD WIP: Instead of this, we now use the Default/Override SetStack
 	setPklInfo( "AdvancedMode", bool(pklIniRead("advancedMode")) ) 		; Extra debug info etc
 	pklLays := getPklInfo( "File_PklLay" ) 								; EPKL_Layouts
 	pklLays := [ pklLays . "_Override.ini", pklLays . "_Default.ini" ] 	; Now an array of override and default
 	setPklInfo( "Arr_PklLay", pklLays )
 	
-	lang := pklIniRead( "language", "auto" ) 							; Load locale strings
+	lang := pklIniRead( "menuLanguage", "auto" ) 						; Load locale strings
 	if ( lang == "auto" )
 		lang := pklIniRead( SubStr( A_Language , -3 ), "", "PklDic", "LangStrFromLangID" )
 	pkl_locale_load( lang )
-	
-	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" ) 	; CSV list of main layout name abbreviations
-	shortLayDic := {} 													;     (Default: First 3 letters)
-	For ix, entr in shortLays {
-		split := StrSplit( entr, "/" )
-		if ( split.maxIndex() != 2 )
-			Continue
-		shortLayDic[ split[1] ] := split[2]
-	}
-	setPklInfo( "shortLays", shortLayDic )
-	
 	
 	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
 	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  ) 	; 1
@@ -70,37 +62,62 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	_pklSetInf( "extendTaps" ) 											; --"--
 	_pklSetInf( "tapModTime" ) 											; Tap-or-Mod time
 	
-	polyLID := {}
-	For ix, LIDs in pklIniCSVs( "multiLocs",, "pklDic" ) { 				; For layouts with compound Locale IDs, any of the components can be used alone
-		harmLID := StrReplace( LIDs, "/" )
-		For ix, LID in StrSplit( LIDs, "/" ) { 							; The Tables file entry is a CSV list of slash-separated LIDs
-			polyLID["-" . LID] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
-		}	; end For LID
-	}	; end For LIDs
-	
-	theLays := pklIniRead( "layout", "", pklLays ) 						; Read the layouts string from EPKL_Layouts
+	;; ================================================================================================
+	;;  Find and read from the Layouts file(s)
+	;
+	theLays :=  pklIniRead( "layout", "", pklLays ) 					; Read the layouts string from EPKL_Layouts
+	layMain := _pklLayRead( "LayMain", "Colemak"    ) 					; Main Layout: Colemak, Tarmak, Dvorak etc
+	shortLays   := pklIniCSVs( "shortLays", "Colemak\Cmk", "PklDic" ) 	; CSV list of main layout name abbreviations
+	shortLayDic := {} 													;     (Default: First 3 letters)
+	For ix, entr in shortLays {
+		split := StrSplit( entr, "\" )
+		if ( split.maxIndex() != 2 )
+			Continue
+		shortLayDic[ split[1] ] := split[2]
+	}
+	setPklInfo( "shortLays", shortLayDic )
+	if InStr( layMain, "\" ) { 											; The LayMain may be on the form 'Layout\3LA' already...
+		split   := StrSplit( layMain, "\" )
+		layMain := split[1]
+		lay3LA  := split[2]
+	} else { 															; ...or not, in which case we look up or generate the 3LA.
+		lay3LA  := ( shortLayDic[ layMain ] ) ? shortLayDic[ layMain ]
+											  : SubStr( layMain, 1, 3 )
+	}
 	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
+	layVari := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl", or other variant such as Tarmak steps
+	polyLID := {}
+	For ix, LVars in pklIniCSVs( "multiLocs",, "pklDic" ) { 			; For layouts with compound Locale IDs, any component can be used alone
+		harmLID := StrReplace( LVars, "/" ) 							; The Harmonized Locale ID is a compound of its components, like BeCaFr
+		For ix, var in StrSplit( LVars, "/" ) { 						; The Tables file entry is a CSV list of slash-separated variants
+			polyLID["-" . var] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
+		}	; end For LVar
+	}	; end For LVars
+	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari 		;   (can be a single locale of a harmonized layout like BeCaFr)
 	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, _ISO/_ANS/_etc 	; eD WIP: Removed , "_"
 ;	if InStr( kbdType, "-" ) { 											; eD WIP: Trad/Orth/Splt/etc so we have ISO-Orth, ANS (=ANS-Trad) etc
 ;		kbdType := StrSplit( kbdType, "-" ) 							; eD WIP: Use pklIniCSVs() to read it instead?
-;		kbdForm := kbdType[2]
-;		kbdType := kbdType[1] . "-" . kbdType[2]
-;	} 																	; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!?
-	theLays := StrReplace( theLays, "@A",   "@K@C@E@O" ) 				; Shorthand .ini notation for layout variants
-	LID     := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl"
-	localID := ( polyLID[LID] ) ? polyLID[LID] : LID 					;   (can be a single locale of a harmonized layout like BeCaFr)
+;		kbdForm := kbdType[2] 						; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!
+;		kbdType := kbdType[1]
+;	}
 	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl
 	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
-	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
-	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
+	
+	theLays := StrReplace( theLays, "@Ł",   "@M-@T@V"  ) 				; Shorthand .ini notation for main layout, type and variant
+	theLays := StrReplace( theLays, "@Ç",   "@K@C@E@O" ) 				; Shorthand .ini notation for keyboard type and layout mods
+	theLays := StrReplace( theLays, ":@M",  ":" . layMain ) 			; Replaces @M w/ LayMain in menu names, given that they start with @M
+	theLays := StrReplace( theLays, "@M",   layMain . "\" . lay3LA ) 	; Replaces @M w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
+	theLays := StrReplace( theLays, "@3",   lay3LA  )
 	theLays := StrReplace( theLays, "@T",   layType )
 	theLays := StrReplace( theLays, "@V",   localID ) 					; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
+	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
+	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
 	theLays := StrReplace( theLays, "@K",   kbdType ) 					; (Later on, will use atKbdType() for layout files)
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@E",   ergoMod )
 	theLays := StrReplace( theLays, "@O",   othrMod )
-	layouts := StrSplit( theLays, ",", " " )							; Split the CSV layout list
+	layouts := StrSplit( theLays, ",", " `t" )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "NumOfLayouts", numLayouts )							; Store the number of listed layouts
 	Loop % numLayouts {													; Store the layout dir names and menu names
@@ -122,7 +139,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		theLayout := getLayInfo( "layout1code" )
 	}
 	if ( theLayout == "" ) {
-		pklMsgBox( "01", "layouts .ini" ) 								; "You must set the layout file in the EPKL layouts .ini!"
+		pklMsgBox( "01", "layouts .ini" ) 								; "You must set the layout file in the EPKL_Layouts .ini!"
 		ExitApp
 	}
 	setLayInfo( "ActiveLay", theLayout )
@@ -141,6 +158,9 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
   													;   ###############################################################
 initLayIni() 										;   ######################### layout.ini  #########################
 { 													;   ###############################################################
+	;; ================================================================================================
+	;;  Find and read from the layout.ini file and, if applicable, BaseLayout/LayStack
+	;
 	static initialized  := false
 	
 	theLayout := getLayInfo( "ActiveLay" )
@@ -177,18 +197,26 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}	; end For file
 	setPklInfo( "LayStack", layStck ) 									; Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
+	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
+	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	
 	mapFile := pklIniRead( "remapsFile",, "LayStk" ) 					; Layout remapping for ergo mods, ANSI/ISO conversion etc.
 	if ( not initialized ) && ( FileExist( mapFile ) ) 					; Ensure the tables are read only once
 	{																	; Read/set remap dictionaries
 		setPklInfo( "RemapFile", mapFile )
+		mapStck := layStck.Clone() 										; Allow a [Remaps] section in the LayStack too. Or only in layout.ini?!?
+		mapStck.Push( mapFile ) 	;.InsertAt( 1, mapFile ) 			; By pushing mapFile at the end of the stack, maps may be overridden.
+;		setPklInfo( "RemapStck", mapStck ) 								; For local maps, look in mapFile then the LayStack
+		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file.
+		remStck := InStr( secList, "Remaps" ) ? mapStck : mapFile 		; Only check the whole LayStack if [Remaps] is in secList, to save startup time.
+		cycStck := InStr( secList, "RemapCycles" ) ? mapStck : mapFile 	; InStr() is case insensitive.
 		mapTypes    := [ "scMapLay"    , "scMapExt"    , "vkMapMec"     ] 	; Map types: Main remap, Extend/"hard" remap, VK remap
 		mapSects    := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ] 	; Section names in the .ini file
 		For ix, mapType in mapTypes {
 			mapList := pklIniRead( mapSects[ A_Index ],, "LayStk" ) 	; First, get the name of the map list
 			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
-			%mapType% := ReadRemaps( mapList,            mapFile ) 		; Parse the map list into a list of base cycles
-			%mapType% := ReadCycles( mapType, %mapType%, mapFile ) 		; Parse the cycle list into a pdic of mappings
+			%mapType% := ReadRemaps( mapList,            remStck ) 		; Parse the map list into a list of base cycles
+			%mapType% := ReadCycles( mapType, %mapType%, cycStck ) 		; Parse the cycle list into a pdic of mappings
 		}	; end For mapType
 		mapVK   := ReadRemaps( "ANS2ISO",         mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings
 		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
@@ -196,12 +224,10 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes than Co?
 		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based?
 		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping
-		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+;		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
 		initialized := true
 	}
 	
-	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
-	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting 	; eD WIP: Add kbdForm as kbdType[2] ?
 	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
 	setLayInfo( "LayHasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
@@ -306,7 +332,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
   													;   ###############################################################
 	
-	;;  -----------------------------------------------------------------------------------------------
+	;; ================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) { 										; If there is an Extend key, set the Extend mappings.
@@ -345,7 +371,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		}	; end loop ext#
 	}	; end if ( extendKey )
 	
-	;;  -----------------------------------------------------------------------------------------------
+	;; ================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -382,7 +408,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 						, mainLay )										; Default literals/powerstring file: layout.ini
 	setLayInfo( "strFile", strFile )									; This file should contain the string tables 	; eD WIP: Allow the whole LayStack instead?
 	
-	;;  -----------------------------------------------------------------------------------------------
+	;; ================================================================================================
 	;;  Read and set layout on/off icons and the tray menu
 	;
 	ico := readLayoutIcons( "LayStk" )
@@ -411,6 +437,8 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 10 										; The image flashes on startup if this is long
 	if ! bool(pklIniRead("showHelpImage",true))
 		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
+	setPklInfo( "img_HideStates" 					; Convert from CSV to colon-limited
+		, StrReplace( pklIniRead( "img_HideStates" ), ",", ":" ) )
 	
 	setExtendInfo() 								; Prepare Extend info for the first time
 	
@@ -463,7 +491,7 @@ _mapKLM( ByRef key, type )
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes too?
 		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.
 		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping
-		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+;		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
 		initialized := true
 	}
 	

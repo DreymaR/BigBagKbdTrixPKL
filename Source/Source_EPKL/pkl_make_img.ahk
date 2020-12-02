@@ -1,5 +1,4 @@
-﻿;;  -----------------------------------------------------------------------------------------------
-;;
+﻿;; ================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;      Calls InkScape with a .SVG template to generate a set of .PNG help images
 ;;      Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
@@ -15,17 +14,17 @@
 makeHelpImages() {
 	HIG         := {} 											; This parameter object is passed to subfunctions
 	HIG.Title   :=  "EPKL Help Image Generator"
-	remapFile   := "Files\_eD_Remap.ini"
+	remapFile   := getPklInfo( "RemapFile" ) 					; _eD_Remap.ini
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
 	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . thisMinute()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
-	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\ImgGenerator\EPKL_ImgGen_Settings.ini" )
+	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\HelpImgGenerator\EPKL_HelpImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
 	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Refresh specified DK imgs (easier to test this var w/o using pklIniCSVs)
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." : ""
 	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
-	HIG.OrigImg := pklIniRead( "OrigImgFile"    ,       , HIG.Ini )
+	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
 	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25AF, HIG.Ini ) 	; U+25AF White Rectangle
 	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2B24, HIG.Ini ) 	; U+2B24 Black Large Circle
@@ -191,7 +190,7 @@ _makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help image 
 	
 	if ( HIG.imgMake == "--" ) 									; Sometimes we just need the dictionary, like for single DK.
 		Return
-	;;  -----------------------------------------------------------------------------------------------
+	;; ================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "

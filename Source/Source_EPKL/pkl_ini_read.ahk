@@ -1,5 +1,4 @@
-﻿;;  -----------------------------------------------------------------------------------------------
-;;
+﻿;; ================================================================================================
 ;;  Read a section of an .ini file
 ;;      Strips away blank and comment lines but not end-of-line comments
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
@@ -15,8 +14,7 @@ pklIniSect( file, section ) 										; Read an .ini section as a line array
 	Return StrSplit( secTxt, "`n", "`r" ) 							; Return an array of lines
 }
 
-;;  -----------------------------------------------------------------------------------------------
-;;
+;; ================================================================================================
 ;;  Read a (pkl).ini value
 ;;      Usage: val := pklIniRead( <key>, [default], [inifile(s)|shortstr], [section], [stripcomments] )
 ;;      Special key values return a section list or the contents of a section
@@ -39,9 +37,9 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 		hereDir := ( layStck ) ? iniDirs[ix] : "." 						; LayStack files may  use own home dirs
 		if ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
-		if        ( key == "__List" ) { 								; Specify key = -1 for a section list
+		if        ( key == "__List" ) { 								; Use key = __List for a section list
 			IniRead, val, %theFile% 									; (AHK v1.0.90+)
-		} else if ( key == "__Sect" ) { 								; Specify key = -2 to read a whole section
+		} else if ( key == "__Sect" ) { 								; Use key = __Sect to read a whole section
 			IniRead, val, %theFile%, %section% 							; (AHK v1.0.90+)
 		} else {
 			IniRead, val, %theFile%, %section%, %key%, %A_Space%		; IniRead uses a Space for blank defaults
@@ -68,8 +66,7 @@ pklIniCSVs( key, default = "", iniFile = "PklSet", section = "pkl"
 	Return StrSplit( val, sch, ich ) 									; Split by sch, ignore ich
 }
 
-;;  -----------------------------------------------------------------------------------------------
-;;
+;; ================================================================================================
 ;;  Helper functions for .ini file handling
 ;
 pklIniKeyVal( row, ByRef key, ByRef val, esc=0, com=1 ) 	; Because PKL doesn't always use IniRead? Why though?

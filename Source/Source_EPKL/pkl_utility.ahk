@@ -1,20 +1,17 @@
-﻿;;  -----------------------------------------------------------------------------------------------
-;;
+﻿;; ================================================================================================
 ;;  Remap module
 ;;      Functions to read and parse remap cycles for ergo mods and suchlike
 ;;      Used primarily in pkl_init.ahk
 ;
-ReadRemaps( mapList, mapFile ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)
-	iniStck := getPklInfo( "LayStack" ) 			; Allow a [Remaps] section in the LayStack too
-	iniStck.InsertAt( 1, mapFile ) 	; Push( mapFile )
-	mapCycList  := "" 								; Name -> actual list, or literal list
-	For ix, alist in pklIniCSVs( mapList, mapList, iniStck, "Remaps" ) {
-		tmpCycle    := ""
+ReadRemaps( mapList, mapStck ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)
+	mapCycList  := "" 											; Name -> actual list, or literal list
+	For ix, alist in pklIniCSVs( mapList, mapList, mapStck, "Remaps" ) { 	; mapFile
+		tmpCycle    := "" 							; Above, mapList is default to use a map unless it refers to another
 		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
-			if ( SubStr( list, 1, 1 ) == "^" ) { 				; Cycle reference
-				theMap  := SubStr( list, 2 )
-			} else {
-				theMap  := ReadRemaps( list, mapFile ) 			; Ref. to another map -> Self recursion
+			if ( SubStr( list, 1, 1 ) == "^" ) { 				; A cycle reference...
+				theMap  := SubStr( list, 2 ) 					; ...adds the cycle the list refers to directly
+			} else { 											; eD WIP: Use if InStr( alist, "+" ) somewhere?
+				theMap  := ReadRemaps( list, mapStck ) 			; Refers to another map -> Self recursion
 			}
 			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap 	; re-attach by +
 		}	; end For list
@@ -23,9 +20,8 @@ ReadRemaps( mapList, mapFile ) { 					; Parse a remap string to a CSV list of cy
 	Return mapCycList
 }	; end fn
 
-ReadCycles( mapType, mapList, mapFile ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
-	iniStck := getPklInfo( "LayStack" ) 			; Allow a [RemapCycles] section in the LayStack too
-	iniStck.InsertAt( 1, mapFile ) 	; Push( mapFile )
+ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
+	mapFile := IsObject( mapStck ) ? mapStck[mapStck.MaxIndex()] : mapStck 		; Use a file stack, or just one file
 	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
@@ -35,7 +31,7 @@ ReadCycles( mapType, mapList, mapFile ) { 			; Parse a remap string to a dict. o
 	For ix, clist in StrSplit( mapList, ",", " `t" ) { 			; Parse cycle list by comma
 		fullCycle := ""
 		For ix, plist in StrSplit( clist, "+", " `t" ) { 		; Parse and merge composite cycles by plus sign
-			thisCycle := pklIniRead( plist , "", iniStck, "RemapCycles" )
+			thisCycle := pklIniRead( plist , "", mapStck, "RemapCycles" ) 	; mapFile
 			if ( not thisCycle )
 				pklWarning( "Remap element '" . plist . "' not found", 3 )
 			thisType  := SubStr( thisCycle, 1, 2 )				; KLM map type, such as TC for TMK-like Colemak
@@ -91,8 +87,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 	Return pdic
 }	; end fn
 
-;;  -----------------------------------------------------------------------------------------------
-;;
+;; ================================================================================================
 ;;  EPKL janitor/activity module
 ;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app
 ;
@@ -147,8 +142,7 @@ _pklCleanup() {
 	}
 }
 
-;;  -----------------------------------------------------------------------------------------------
-;;
+;; ================================================================================================
 ;;  Utility functions
 ;;      These are minor utility functions used by other parts of EPKL
 ;
@@ -220,11 +214,6 @@ getWinLocaleID() { 											; Win LID; for Language use A_Language.
 	Return WinLocaleID
 }
 
-isInt( this ) { 							; AHK cannot use "is <type>" in expressions so use a wrapper function
-	if this is integer
-		Return true
-}
-
 fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative
 	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
 	if FileExist( file )
@@ -270,19 +259,14 @@ upCase( str ) {
 	Return % Format( "{:U}", str )
 }
 
+isInt( this ) { 											; AHK cannot use "is <type>" in expressions,
+	if this is integer 										;   so use this wrapper function instead
+		Return true
+}
+
 bool( val ) { 												; Convert an entry to true or false (default)
 	val := loCase( val )
 	Return ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false
-}
-
-hasValue( haystack, needle ) { 								; Check if an array object has a certain value
-	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
-		Return false
-	For ix, value in haystack {
-		if ( value == needle )
-			Return ix
-	}
-	Return false
 }
 
 convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP
@@ -326,6 +310,16 @@ pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
 thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
 	FormatTime, theNow,, yyyy-MM-dd_HH-mm
 	Return theNow
+}
+
+hasValue( haystack, needle ) { 								; Check if an array object has a certain value
+	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
+		Return false
+	For ix, value in haystack {
+		if ( value == needle )
+			Return ix
+	}
+	Return false
 }
 
 joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a string

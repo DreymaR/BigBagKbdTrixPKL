@@ -238,10 +238,16 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
   
   
+KNOWN ISSUES:
+-------------
+* ISO VK layouts send a standard set of VK codes, but many locales use different codes! VK layouts may shuffle some OEM_# keys for now.
+	- Known affected locales: UK, De, Fr, Be
+  
+  
 DONE:
 -----
 These are some of the changes in [EPKL] (PKL[eD] up to v1):
-* v0.4.0: Transition to AHK v1.1
+* PKL-eD v0.4.0: Transition to AHK v1.1
 	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
 	- Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
@@ -267,7 +273,7 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
-* v1.0.0: EPKL full release.
+* EPKL v1.0.0: EPKL full release.
 * v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
 	- A set of 30+ Kaomoji text faces were added to the Strings Extend3 layer, with help images.  d( ^◇^)b
 	- Extend layers can now be marked as hard/positional or soft/mnemonic. Extend1/2 are mostly hard, the kaomoji layer soft.
@@ -318,7 +324,7 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Added the Cmk-eD-Pl ANSI CAW Polish variant designed by Kuba Wiecheć, Colemak forum user Wiechciu. It swaps Z and V from ANSI Cmk-CAW, and adds żŻ to the Z key.
 	- Added the QUARTZ pangram layout (Quartz/glyph [job];vex'd cwm,finks.), as a joke! I used a Wide mod for it, but beware that this is NOT a good layout!  ╭(๑•﹏•)╮
 	- Fixed: Sticky Shift didn't get reset by the next typed key on VK layouts, leading to MULtiple SHifted characters.
-* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
+* v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 	- Colemak-DH(m) (M on the home row) is now the Curl(DH) standard. The 2017 DH standard (K on the home row) is now named DHk in the Remap file. Files are updated.
 	- Added a link to the useful "EPKL For Dummies!" guide by Torben Gundtofte-Bruun in the README. Also some images and text updates, and a new README for the Files.
 	- Like VK codes, SC### scan codes in layouts & Extend can be replaced by the KLM Co or QW codes found in the Remap file. These are more intuitive and user friendly.
@@ -331,30 +337,35 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Currency dead key reworked. Several symbols added, most duplicates removed.
 	- Fixed: Help images didn't always show on rapid dead key activation. Added a help image refresh (if the image is active) whenever a DK is activated.
 	- Tip: Help images can be shown on other monitors using an extended workspace, by adjusting the margins to negative values. See the Settings file.
-* EPKL v1.2.0α: Layout/Settings UI. Work-In-Progress.
-	- Layout/Settings GUI panel. The Layout Picker and Key Mapper are finished for now. A General Settings tab is also planned.
+* v1.2.0: Layout/Settings UI.
+	- Layout/Settings GUI panel to help newcomers get into several of the powerful options EPKL offers.
 	- The Layout Picker UI can be used to select any existing layout variant combo in the Layouts folder.
 		- When a Main Layout, Layout Type and Keyboard Type are chosen, existing Variants and Mods for that combo are shown.
-		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the _Example file.
+		- Upon submitting, if a Layouts_Override file isn't found one can be created based on the `_Example` file.
 		- A layout line is then written to the top of the `[pkl]` section of the Override file. This line will take precedence on the next Refresh.
-		- Old UI generated lines will get commented out and if there are many of them (>4) the oldest ones get deleted.
+		- Old UI generated lines of the same type are commented out and if there are many of them (>4) the oldest ones get deleted.
 	- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
 		- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
-		- For modifiers, you can select a side or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
-		- The mapping is written into the Layouts_Override file. If that key is also mapped in your (Base)Layout.ini, copy the line to layout.ini or it won't work.
-	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+		- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
+		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, copy the line to `layout.ini` or it won't work.
+	- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
+		- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
 	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
-	- Instead of just EPKL_Settings.ini, we can now use a Settings Override/Default stack like with the Layouts files.
+  
+	- Added a `LayMain(\3LA)` setting and `@M` shortcut for the main layout in the Layouts files. It may specify a 3-Letter Abbreviation (3LA) for subfolder names.
+	- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
+	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
+	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
   
   
 TODO:
 -----
 I have many more **[EPKL][EPKLRM]** improvements on my wishlist, including:
-* A timer that checks whether the underlying Windows layout has changed (affects dead keys)
+* A "janitor" timer that checks whether the underlying Windows layout has changed (affects dead keys)
 * Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * Chainable dead keys, allowing for instance a Mother-of-DKs key for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
-* GUI panels for settings and layout choices instead of editing .ini files.
 * An import module for MSKLC layout files and other formats.
+* State mapped layouts like eD don't actually send VK codes. Not sure if it matters.
   
   
 Credits/sources

@@ -1,5 +1,4 @@
-﻿;;  -----------------------------------------------------------------------------------------------
-;;
+﻿;; ================================================================================================
 ;;  EPKL key press
 ;;      Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
@@ -148,8 +147,7 @@ setExtendInfo( xLvl = 1 ) 										; Update PKL info about the current Extend l
 	setLayInfo( "extendImg", getLayInfo( "extImg" . xLvl ) )
 }
 
-;;  -----------------------------------------------------------------------------------------------
-;;
+;; ================================================================================================
 ;;  Set/get modifier key states
 ;;      Process states of mods. Used in PKL_main; #etAltGrState() also in PKL_send.
 ;

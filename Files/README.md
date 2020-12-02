@@ -92,13 +92,13 @@ The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
 KLM remapping codes used in the `_eD_Remap` file:
 ```
 ;;  This is a table of KeyLayoutMap (KLM) codes from the _eD_Remap.ini file. You can use QW### or Co### for EPKL Scan Code (SC) and Virtual Key (VK) names.
-;;  KLM codes are intuitive and make no difference between ANSI & ISO board types. Examples: QW_E, Co_F, QW_DT, QWSPC. For VK, QW codes make the most sense.
+;;  KLM codes are intuitive and make no difference between ANSI & ISO board types. Examples: QW_E, Co_F, QW_CM, QWSPC. For VK, vc=QW codes make the most sense.
 ;;  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX
 ;;  ||Esc   |F1    |F2    |F3    |F4    |F5    |F6    |F7    |F8    |F9    |F10   |F11   |F12   ||Back  |Menu  ||PrtSc |ScrLk |Pause ||NumLk |KP /  |KP *  |KP -  ||
 ;QW || ESC  | _F1  | _F2  | _F3  | _F4  | _F5  | _F6  | _F7  | _F8  | _F9  | F10  | F11  | F12  || BSP  | APP  || PSC  | SLK  | PAU  || NLK  | PDV  | PMU  | PMN  ||
 ;;  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX------+------+------+------XX
 ;;  ||`     |1     |2     |3     |4     |5     |6     |7     |8     |9     |0     |-     |=     ||LShft |RShft ||Ins   |Home  |PgUp  ||KP 7  |KP 8  |KP 9  |KP +  ||
-;QW || _GR  | _1   | _2   | _3   | _4   | _5   | _6   | _7   | _8   | _9   | _0   | _MN  | _EQ  || LSH  | RSH  || INS  | HOM  | PGU  || P_7  | P_8  | P_9  | PPL  ||
+;QW || _GR  | _1   | _2   | _3   | _4   | _5   | _6   | _7   | _8   | _9   | _0   | _MN  | _PL  || LSH  | RSH  || INS  | HOM  | PGU  || P_7  | P_8  | P_9  | PPL  ||
 ;;  XX------+------+------+------+------+------+------+------+------+------+------+------+------XX------+------XX------+------+------XX------+------+------+------XX
 ;;  ||Tab   |Q     |W     |E     |R     |T     |Y     |U     |I     |O     |P     |[     |]     ||LCtrl |RCtrl ||Del   |End   |PgDn  ||KP 4  |KP 5  |KP 6  |KPEnt ||
 ;QW || TAB  | _Q   | _W   | _E   | _R   | _T   | _Y   | _U   | _I   | _O   | _P   | _LB  | _RB  || LCT  | RCT  || DEL  | END  | PGD  || P_4  | P_5  | P_6  | PEN  ||
@@ -109,8 +109,8 @@ KLM remapping codes used in the `_eD_Remap` file:
 ;Co || CLK  | _A   | _R   | _S   | _T   | _D   | _H   | _N   | _E   | _I   | _O   | _QU  | _BS  || LWI  | RWI  || VLD  | _UP  | VLU  || P_1  | P_2  | P_3  | MUT  ||
 ;;  XX------+------+------+------+------+------+------+------+------+------+------+------+------XX------+------XX------+------+------XX------+------+------+------XX
 ;;  ||LS/GT |Z     |X     |C     |V     |B     |N     |M     |,     |.     |/     |Enter |Space ||LAlt  |RAlt  ||Left  |Down  |Right ||KP 0  |KP .  |Power |Sleep ||
-;QW || _LG  | _Z   | _X   | _C   | _V   | _B   | _N   | _M   | _CM  | _DT  | _SL  | ENT  | SPC  || LAL  | RAL  || _LE  | _DN  | _RI  || P_0  | PDT  | PWR  | SLP  ||
-;Co || _LG  | _Z   | _X   | _C   | _V   | _B   | _K   | _M   | _CM  | _DT  | _SL  | ENT  | SPC  || LAL  | RAL  || _LE  | _DN  | _RI  || P_0  | PDT  | PWR  | SLP  ||
+;QW || _LG  | _Z   | _X   | _C   | _V   | _B   | _N   | _M   | _CM  | _PD  | _SL  | ENT  | SPC  || LAL  | RAL  || _LE  | _DN  | _RI  || P_0  | PDC  | PWR  | SLP  ||
+;Co || _LG  | _Z   | _X   | _C   | _V   | _B   | _K   | _M   | _CM  | _PD  | _SL  | ENT  | SPC  || LAL  | RAL  || _LE  | _DN  | _RI  || P_0  | PDC  | PWR  | SLP  ||
 ;;  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX
 ```
   

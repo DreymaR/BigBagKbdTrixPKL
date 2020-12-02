@@ -54,8 +54,8 @@
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
 		im.Opacity  := im.OpacIni 											; The actual image opacity (0-255; 255 is opaque)
-		im.PosNr    := 5 													; Default position is bottom center (used to be "xCenter")
-		im.Zooms    := pklIniCSVs( "img_zooms"    , "100,150"   )
+		im.PosNr    := pklIniRead( "img_StartPos", 5 ) 						; Default position is bottom center (used to be "xCenter")
+		im.Zooms    := pklIniCSVs( "img_Zooms"    , "100,150"   )
 		im.ZoomNr   := 1
 		imgSizeWH   := pklIniCSVs( "img_sizeWH"   , "541,188",  "LayStk" ) 	; Image size in px, given as Width,Height
 		img_Scale   := pklIniRead( "img_scale"    , 100      ,  "LayStk" ) 	; Image scale factor, in % (may be float)
@@ -97,7 +97,7 @@
 		im.Opacity := ( im.Opacity == 255 ) ? im.OpacIni : 255
 		activate := 1 				; Ensure redrawing w/ new opacity
 	}
-	state := _GetState()
+	state := pklGetState()
 	
 	if ( activate == 1 ) { 												; Activate the help image
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" ) 	; Tick off the Show Help Image menu item
@@ -154,8 +154,10 @@
 		imgPath := getLayInfo( "extendImg" )							; Default im.LayDir . "\extend.png"
 	} else {															; Shift state image
 		imgPath := im.LayDir . "\state" . state . ".png"
+		imgPath := InStr( getPklInfo( "img_HideStates" ), state ) ? "" : imgPath 	; Hide specified states
 	}
-	imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
+	if ( imgPath )
+		imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
 	
 	if ( scaleImage ) {
 		imgW        := Ceil( im.Width_ * im.Zooms[ im.ZoomNr ] / 100 )
@@ -174,15 +176,19 @@
 	}
 	im.Prev     := imgPath
 	
+	if ( imgPath ) {
 	imgBgPath   := im.BgPath
 	imgShPath   := im.ShRoot . "\state" . state . ".png"
 	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
 	GuiControl, HI:, CtrlKyImg, *w%imgW% *h%imgH% %imgPath%
 	GuiControl, HI:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%
 	GUI, HI: Show, x%imgX% y%imgY% AutoSize NA, 		pklImgWin 		; Use AutoSize NA to avoid stealing focus
+	} else {
+		GUI, HI:Hide
+	}
 }
 
-_GetState() 															; Get the 0:1:6:7 shift state as in layout.ini and img names
+pklGetState() 															; Get the 0:1:6:7 shift state as in layout.ini and img names
 {
 	state = 0
 	state += 1 * getKeyState( "Shift" )

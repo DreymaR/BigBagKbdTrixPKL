@@ -15,6 +15,7 @@
 *Shortcut.???
 *desktop.ini
 EPKL_Layouts_Override.ini
+EPKL_Settings_Override.ini
 Layouts/**ImgGen_*
 Layouts/**/*ImgGen_*
 *PKL.exe

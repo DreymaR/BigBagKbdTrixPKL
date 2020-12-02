@@ -1,45 +1,47 @@
 ﻿setUIGlobals: 													; Declare globals (can't be done inside a function for "global globals")
 ;	global UI_Set 												; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed
 	global UI_Tab, UI_Btn1, UI_Btn2, UI_Btn3 					; GUI Control vars must be global (or static) to work
-	global UI_LayMain, UI_LayType, UI_LayKbTp, UI_LayVari, UI_LayMods, UI_LayFile, UI_LayMenu
+	global UI_LayMain, UI_LayType, UI_LayKbTp, UI_LayVari, UI_LayMods
 	global UI_KeyRowS, UI_KeyCodS, UI_KeyRowV, UI_KeyCodV, UI_KeyModL, UI_KeyModN, UI_KeyType
-	global UI_KeyKyLi, UI_KeyLine
+	global UI_SetThis, UI_SetThat, UI_SetComm, UI_SetLine
+	global UI_LayFile, UI_LayMenu, UI_KeyThis, UI_KeyLine
 	global ui_NA        := "<none>" 							; Value used in the UI functions (not a control variable)
-	global ui_Lay3LAs 	;, ui_SepLine, ui_WideTxt
-	global ui_KLMs   := []
+	global ui_KLMs      := []
+	global ui_Lay3LAs, ui_KLMp 	;, ui_SepLine, ui_WideTxt
 Return
 
+	;; ================================================================================================
+	;;  EPKL Settings UI module
+	;;  - For a list of AHK GUI Controls, see https://www.autohotkey.com/docs/commands/GuiControls.htm
+	;
 pklSetUI() { 													; EPKL Settings GUI
 	pklAppName  := getPklInfo( "pklName" )
 	winTitle    := "EPKL Settings"
 	if WinActive( winTitle ) { 									; Toggle the GUI off if it's the active window
 		GUI, UI: Destroy
 		Return
-	} 															; AHK GUI Controls: https://www.autohotkey.com/docs/commands/GuiControls.htm
-	ui_Lay3LAs  := getPklInfo( "shortLays" ) 					; Dictionary of 3-letter layout name abbreviation (3LA)
-	ui_SepLine  := "————————————————" . "————————————————" . "————————————————" 	; . "——"
-	ui_WideTxt  := "                                        " 	; Standard edit box text (for autosizing its width)
-	ui_WideTxt  .= ui_WideTxt . "    "
-	For ix, row in [ 1,2,3,4 ] { 								; Get the KLM codes for each keyboard row
-		keyRow  := pklIniRead( "QW" . row, "", getPklInfo( "RemapFile" ), "KeyLayoutMap" )
-		keyRow  := RegExReplace( keyRow, "[|]{2}.*", "|" ) 				; Delete any mappings after a double pipe
-		keyRow  := RegExReplace( keyRow, "[ `t]*" )
-		keyRow  := ( row == 1 ) ? keyRow . "BSP|" : keyRow 		; The KLM map has Backspace on row 0 beyond the ||.
-		ui_KLMs[ ix ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	 	; Split by pipe, row 1 is the Number row etc
 	}
-	footText    := "`n* Only the topmost active '<key> =' line in the section is used."
+	ui_SepLine  := "————————————————" . "————————————————" . "————————————————" . "————" . "————" . "————" ;. "————"
+	ui_WideTxt  := "                " . "                " . "                " . "    " . "    " ;. "    " . "    "
+	ui_WideTxt  .= ui_WideTxt . "" 								; Standard edit box text (for autosizing its width)
+	footText    := "`n* Only the topmost active ""<key> ="" line in the section is used."
 	footText    .= "`n* Lines starting with a semicolon are commented out (inactive)."
 	
+	GUI, UI:New,       , %winTitle%
+	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; AltSubmit gets tab # not name
+			, % "Layout||KeyMapper|Settings" 					; The first tab (double pipe) is default
+	
+	;; ================================================================================================
+	;;  Layout Picker UI
+	;
+	ui_Lay3LAs  := getPklInfo( "shortLays" ) 					; Dictionary of 3-letter layout name abbreviation (3LA)
 	mainLays    := _uiGetDir( "Layouts" ) 						; "Colemak", "Dvorak", "QUARTZ", "QWERTY", "Tarmak"
 	layTypes    := [ "eD"   , "VK"  ] 							; Starting values
 	kbdTypes    := [ "ANS"  , "ISO" ] 							; --"--
-	GUI, UI:New,       , %winTitle%
-	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; AltSubmit gets tab # not name
-			, % "Layout||Keys|Settings" 						; The first tab (double pipe) is default
 	
 	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
-					   , % "`nLayout Selector for " . pklAppName
-	GUI, UI:Add, Text, , % ui_SepLine 	; ————————————————————————————————————————————————
+					, % "`nLayout Selector for " . pklAppName
+					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
 	_uiAddSel(  "Main layout: "
 			,       "LayMain"   , "Choose1"     , mainLays              )
 	GUI, UI:Add, Text,      , % "Layout type:"
@@ -57,53 +59,91 @@ pklSetUI() { 													; EPKL Settings GUI
 			,       "LayFile"   , ""            , ui_WideTxt            ) 	; . "`n"
 	_uiAddEdt( "`nEPKL Layouts menu name. Edit it if you wish:"
 			,       "LayMenu"   , ""            , ui_WideTxt            )
-	GUI, UI:Add, Text,, % footText
+	GUI, UI:Add, Text,, % footText . "`n"
+						. "`n* VK layouts only move the keys around, eD maps each shift state."
 						. "`n* To get multiple layouts, submit twice then join the entries"
-						. "`n    in the Override file on one 'layout =' line with a comma." . "`n"
+						. "`n    in the Override file on one ""layout ="" line with a comma." . "`n"
 	GUI, UI:Add, Button, vUI_Btn1 gUIhitLayBtn, &Submit Override
 	
+	;; ================================================================================================
+	;;  Key Mapper UI
+	;
+	klmLi1  := "  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX  "
+	klmLi2  := "  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX------+------+------+------XX  "
+	klmLi3  := "  XX------+------+------+------+------+------+------+------+------+------+------+------+------XX------+------XX------+------+------XX------+------+------+------XX  "
+	klmLix  :=     [ 2,3,3,3,1 ] 								; What type of line comes after each row in the ASCII table
+	ui_KLMp := klmLi1 											; It starts off with a Line1
+	For ix, row in [ 0,1,2,3,4 ] { 								; Get the KLM codes for each keyboard row
+		rawRow  := pklIniRead( "QW" . row, "", getPklInfo( "RemapFile" ), "KeyLayoutMap" )
+		lix     := klmLix[ ix ]
+		ui_KLMp .= "`n  ||" . rawRow . "|  `n" . klmLi%lix% 	; Format the row to the ASCII table layout
+		keyRow  := RegExReplace( rawRow, "[|]{2}.*", "|" ) 		; Delete any mappings after a double pipe, as...
+		keyRow  := RegExReplace( keyRow, "[ `t]*" ) 			;   ...these are advanced and clutter up the selector
+		keyRow  := ( row == 1 ) ? keyRow . "BSP|" : keyRow 		; The KLM map has Backspace on row 0 beyond the ||.
+		if ( row > 0 ) 											; Only show row 1-4 in the DDLs
+			ui_KLMs[ row ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	; Split by pipe
+	}
 	GUI, UI:Tab, 2
 	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
-					   , % "`nKey mapping editor for " . pklAppName
-	GUI, UI:Add, Text, , % ui_SepLine 	; ————————————————————————————————————————————————
-	klmRows     := [ "Number", "Upper", "Home", "Lower" ] 		; Num,Upp,Hom,Low. Row 0-3 in the KLM.
+					, % "`nKey mapping editor for " . pklAppName
+					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
+	_uiAddSel(  "Mapping type: "
+			,       "KeyType"   , "Choose4 +AltSubmit", [ "VirtualKey", "State maps", "Modifier", "Tap-or-Mod", "MoDK" ], "xs y+m" )
+	klmRows     := [ "Number", "Upper", "Home", "Lower" ] 		; Num,Upp,Hom,Low. Row 1-4 in the KLM.
 	GUI, UI:Add, Text,          , % "SC Row:"
 	GUI, UI:Add, Text, x+60     , % "Map from QW Scan code:"
 	_uiAddSel(  "" 	;"Row: "
-			,       "KeyRowS"   , "Choose3 w70 +AltSubmit" , klmRows  , "xs y+m"  ) 	; Submits the row #
+			,       "KeyRowS"   , "Choose3 w70 +AltSubmit" , klmRows  , "xs y+m"  ) 	; Submits row #
 	_uiAddSel(  "" 	;"Scan code:"
 			,       "KeyCodS"   , "Choose1"     , [ "CLK" ], "x+30"    )
 	GUI, UI:Add, Text, xs y+m   , % "VK Row:"
 	GUI, UI:Add, Text, x+60     , % "Map to vc VKey code:"
 	_uiAddSel(  "" 	;"Row: "
-			,       "KeyRowV"   , "Choose1 w70 +AltSubmit" , klmRows  , "xs y+m"  ) 	; Submits the row #
+			,       "KeyRowV"   , "Choose1 w70 +AltSubmit" , klmRows  , "xs y+m"  ) 	; Submits row #
 	_uiAddSel(  "" 	;"VKey code:"
 			,       "KeyCodV"   , "Choose1"     , [ "BSP" ], "x+30"    )
 	GUI, UI:Add, Text, xs y+m   , % "L/R:"
-	GUI, UI:Add, Text, x+70     , % "Modifier:"
+	GUI, UI:Add, Text, x+80     , % "Modifier, if applicable:"
 	_uiAddSel(  "" 	;"L/R: "
-			,       "KeyModL"   , "Choose1 w70" , [" ","L","R"]  , "xs y+m"  ) 	; Submits the entry itself
+			,       "KeyModL"   , "Choose1 w70" , [ " " ]  , "xs y+m"  ) 	; Submits the entry itself
 	_uiAddSel(  "" 	;"Modifier:"
 			,       "KeyModN"   , "Choose1"     , [ "Ext", "Shift", "Ctrl", "Alt", "Win" ], "x+30"    )
-	_uiAddSel(  "Mapping type: "
-			,       "KeyType"   , "Choose4 +AltSubmit", [ "VirtualKey", "StateMaps", "Modifier", "Tap-or-Mod", "MoDK" ], "xs y+m" )
 	_uiAddEdt( "`nKey mapping for the Layouts_Override [layout] section:"
-			,       "KeyKyLi"   , ""            , ui_WideTxt, "xs y+m" )
+			,       "KeyThis"   , ""            , ui_WideTxt, "xs y+m" )
 	_uiAddEdt( "  =  "
 			,       "KeyLine"   , ""            , ui_WideTxt, "xs y+m" )
-	GUI, UI:Add, Text,, % footText
-						. "`n* For layout keys, move the mapping line to your layout.ini file." . "`n"
-	GUI, UI:Add, Button, vUI_Btn2 gUIhitKeyBtn, &Submit Key Mapping
+	GUI, UI:Add, Text,, % "" 									; Drop the footText here for clarity
+						. "`n* VKey mappings only move keys. ""Modifier"" maps are for Shift-type keys."
+						. "`n* State maps also specify the output for each modifier state."
+						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
+						. "`n* Press the Help button for a table of the key codes and other info."
+						. "`n* For layout keys, move the mapping line to your layout.ini file."
+						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere." . "`n"
+;						. "`n* If a key code isn't in the dropdown lists, edit the mapping lines."
+;						. "`n* Key mappings map a scan code (SC) to a virtual key (VK) code."
+	GUI, UI:Add, Button, vUI_Btn2 gUIhitKeyBtn  , &Submit Key Mapping
+	GUI, UI:Add, Button, x+200    gUIklmShow    , &Help
 	
+	;; ================================================================================================
+	;;  Settings UI
+	;
 	GUI, UI:Tab, 3
 	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
-					   , % "`nGeneral settings for " . pklAppName
-	GUI, UI:Add, Text, , % ui_SepLine 	; ————————————————————————————————————————————————
-	GUI, UI:Add, Text, , TODO/WIP: Here you'll be able to edit program settings.
-	GUI, UI:Add, Text, , For now, edit these in the EPKL_Settings .ini file.
-	GUI, UI:Add, Text, , % ui_SepLine 	; ————————————————————————————————————————————————
-	GUI, UI:Add, Text,, % footText
-						. "`n* There are more settings in the Settings_Default file." . "`n"
+					, % "`nGeneral settings for " . pklAppName
+					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
+	setThis := pklIniCSVs( "setInGUI", "showHelpImage, img_HideStates, advancedMode", "PklDic" )
+	_uiAddSel(  "Change this setting from Settings_Default: " 	;,"menuLanguage","stickyMods","stickyTime","systemDeadKeys","suspendTimeOut","exitAppTimeOut"
+			,       "SetThis"   , "Choose1 w160" , setThis  , "xs y+m" ) 	; Submits the entry itself
+	_uiAddEdt( "`nDefault value:"
+			,       "SetThat"   , "Disabled"       , ui_WideTxt, "xs y+m" )
+	_uiAddEdt( "`nLine comments etc for this option:"
+			,       "SetComm"   , "Disabled"       , ui_WideTxt, "xs y+m" ) 	; "cGray" lets you select/view the whole line
+	_uiAddEdt( "`n`nSubmit this to the Settings_Override [pkl] section:"
+			,       "SetLine"   , ""            , ui_WideTxt, "xs y+m" )
+	GUI, UI:Add, Text,, % footText . "`n"
+						. "`n* For Yes/No settings you may also use y/n, true/false or 1/0."
+						. "`n* There are more settings in the Settings_Default file."
+						. "`n* Also, settings are explained somewhat in that file."     . "`n`n"
 	GUI, UI:Add, Button, vUI_Btn3 gUIhitSetBtn, &Submit Settings
 	
 	GUI, UI:Show
@@ -113,6 +153,9 @@ pklSetUI() { 													; EPKL Settings GUI
 	Gosub UIselSet
 }
 
+	;; ================================================================================================
+	;;  UI Control sections
+	;
 UIhitTab: 														; When a tab is selected, make its button the default.
 	GUI, UI:Submit, Nohide 										; Not needed: 'GUI, +LastFound'? GuiControlGet,thisTab,,UI_Tab
 	GuiControl, +Default, UI_Btn%UI_Tab%
@@ -132,7 +175,7 @@ UIselLay: 														; Handle UI Layout selections
 		layDirs.Push( theDir )
 	}
 ;	GuiControlGet, ctrlID, Hwnd, UI_LayType 					; Get the HWND handle for the UI control
-;	ControlGet, layTypeUI, List,, ctrlID 						; Get the current content of the control, as a string 	; eD WIP: This didn't work?
+;	ControlGet, layTypeUI, List,, ctrlID 						; Get the current content of the control, as a string 	; This didn't work?
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   ) 		; Get the available Lay Types for the chosen MainLay
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list
 	needle      := need . UI_LayType
@@ -145,18 +188,21 @@ UIselLay: 														; Handle UI Layout selections
 	needle      := need . UI_LayType . layVariName . "_" . UI_LayKbTp
 	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle ) 		; Get the available Mods for the chosen MainLay/LayType/KbdType/LayVari
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
-	layModsName := ( UI_LayMods == ui_NA ) ? "" : "_" . UI_LayMods
-	layFileName := UI_LayMain . "\" . main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsName
+	layModsName := ( UI_LayMods != ui_NA ) ? UI_LayMods : ""
+	layModsPref := ( layModsName ) ? "_" : ""
+	layFileName := UI_LayMain . "\" . main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsPref . layModsName
 	_uiControl( "LayFile", layFileName )
-	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . layModsName 	; . "(" . UI_LayKbTp . ")"
+	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . " " . layModsName . "(" . UI_LayKbTp . ")"
 	_uiControl( "LayMenu", layMenuName )
 Return
 
 UIselKey: 														; Handle UI Key Mapping selections
 	GUI, UI:Submit, Nohide
-	_uiControl( "KeyCodS", "|" . ui_KLMs[ UI_KeyRowS ] )
-	_uiControl( "KeyCodV", "|" . ui_KLMs[ UI_KeyRowV ] )
-	_uiControl( "KeyKyLi", "QW" . UI_KeyCodS                    )
+	_uiControl( "KeyCodS", "|" . ui_KLMs[ UI_KeyRowS ]  )
+	_uiControl( "KeyCodV", "|" . ui_KLMs[ UI_KeyRowV ]  )
+	_uiControl( "KeyThis", "QW" . UI_KeyCodS            )
+	keyModL := ( UI_KeyModN == "Ext" ) ? "| |" : "| |L|R|"
+	_uiControl( "KeyModL", keyModL  )
 	modifer := ( UI_KeyModL == " " ) ? UI_KeyModN : UI_KeyModL . UI_KeyModN
 	vcVK    :=  "vc" . UI_KeyCodV
 	case    :=  UI_KeyType 										; eD TODO: The Switch command only appears with AHK v1.1.31+!
@@ -167,30 +213,68 @@ UIselKey: 														; Handle UI Key Mapping selections
 			:   ( case == 5 ) ? vcVK . "/" . modifer . " 	0   	@ex0	@ex1	@ex2	@ex6	@ex7"
 			:                   " --"
 	_uiControl( "KeyLine", mapping )
+	if InStr( "12", case ) { 									; These cases don't use the modifier controls
+		GuiControl, Disable , UI_KeyModL
+		GuiControl, Disable , UI_KeyModN
+	} else {
+		GuiControl, Enable  , UI_KeyModL
+		GuiControl, Enable  , UI_KeyModN
+	}
 Return
 
-UIselSet: 														; Handle UI Settings selections 	; eD WIP
+UIselSet: 														; Handle UI Settings selections
 	GUI, UI:Submit, Nohide
+	currVal := pklIniRead( UI_SetThis, "<N/A>"          ) 		; Read from SetStck. Strip EOL comments.
+	_uiControl( "SetLine", currVal )
+	settIni := getPklInfo( "File_PklSet" ) . "_Default.ini" 	; The Settings_Default file
+	settVal := pklIniRead( UI_SetThis, "<N/A>", settIni )
+	_uiControl( "SetThat", settVal )
+	settCom := pklIniRead( UI_SetThis, "<N/A>", settIni, , 0 ) 	; Read from default. Don't strip comments.
+	settCom := RegExReplace( settCom, "^" . settVal . "[ `t]*;[ `t]*" )
+	settCom := RegExReplace( settCom, "[`t]+"   , "  " )
+	settCom := RegExReplace( settCom, "[ ]{3,}" , "  " ) 		; Compactify whitespace
+	_uiControl( "SetComm", settCom )
+Return
+
+UIklmShow: 														; Show the KLM code table GUI
+	klmText :=   "- The shift states for state maps are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number and don't map the Ctrl state."
+			.  "`n- You can edit the key mapping lines directly to get your desired KLM codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists." . "`n"
+			.  "`n- Here is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW___"" Scan Codes and ""Map to vc___"" Virtual Key codes:"
+	GUI, KLM:New    , ToolWindow , Key Mapper Help & KLM Code Table
+	GUI, KLM:Add    , Text,      , % klmText . "`n"
+	GUI, KLM:Font   , s10        , Courier New
+	GUI, KLM:Add    , Text,      , % ui_KLMp . "`n"
+	GUI, KLM:Font 												; Restore the default system font
+	GUI, KLM:Add, Button, gUIklmHide Default, &Hide
+	GUI, KLM:Show   , x16 y16 									; Show the help window in the screen corner
+Return
+
+UIklmHide: 														; Hide the KLM code table GUI
+	GUI, KLM:Destroy
 Return
 
 UIhitLayBtn: 													; Submit Layout Override button pressed
 	GUI, UI:Submit, Nohide
 	layLine := UI_LayFile . ":" . UI_LayMenu
-	_uiWriteOverride( "layout"      , layLine       , "Layout Picker"
+	_uiWriteOverride(   "layout"    ,    layLine    , "Layout Picker"
 		, "pkl"     , getPklInfo( "File_PklLay" )   , "_Override_Example" )
 Return
 
 UIhitKeyBtn: 													; Submit Key Mapping button pressed
 	GUI, UI:Submit, Nohide
-	_uiWriteOverride( UI_KeyKyLi    , UI_KeyLine    , "Key Mapper"
+	_uiWriteOverride( UI_KeyThis    , UI_KeyLine    , "Key Mapper"
 		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example" )
 Return
 
 UIhitSetBtn: 													; Submit Settings button pressed
-	_uiWriteOverride( TODO_SetKey   , TODO_SetEntry , "Settings"
+	GUI, UI:Submit, Nohide
+	_uiWriteOverride( UI_SetThis    , UI_SetLine    , "Settings"
 		, "pkl"     , getPklInfo( "File_PklSet" )   , "_Default" )
 Return
 
+	;; ================================================================================================
+	;;  UI functions
+	;
 _uiControl( var, values ) { 									; Update an UI Control with new values and, if applicable, choice
 	var := "UI_" . var 											; Name of the global UI var
 	val := %var% 												; Content of the UI var
@@ -231,7 +315,7 @@ _uiGetDir( getDir, theVar = "" ) { 								; Get a list of a directory in an arr
 }
 
 _uiPipeIt( listArr, sort = 0, clear = 1 ) { 					; Convert an array to a pipe delimited list, e.g., for DDLs
-	For ix, elem in listArr { 									; eD WIP: IfObject?
+	For ix, elem in listArr { 									; eD WIP: Use IfObject to make it more robust?
 		pipe        := ( listStr ) ? "|" : ""
 		listStr     .= pipe . elem
 	} 	; end For
@@ -345,5 +429,5 @@ of the %ovrFile%.ini file?
 	tmpFile := RegExReplace( tmpFile, secStrt . "\R\K(.*)", layLine . "`r`n$1" )
 	if not pklFileWrite( tmpFile, ovrFile . ini )
 		Return
-	pklInfo( "Write successful. Refresh EPKL to use the chosen settings." )
+	pklInfo( "Write successful. Refresh EPKL to use the chosen settings.", 2 )
 } 	; end fn
