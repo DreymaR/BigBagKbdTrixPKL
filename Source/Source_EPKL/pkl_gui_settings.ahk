@@ -180,13 +180,13 @@ UIselLay: 														; Handle UI Layout selections
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list
 	needle      := need . UI_LayType
 	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, need   ) 		; Get the available Kbd Types for the chosen MainLay (and LayType?)
-	_uiControl( "KbdType", _uiPipeIt( kbdTyps, 1 ) )
+	_uiControl( "LayKbTp", _uiPipeIt( kbdTyps, 1 ) )
 	needle      := need . UI_LayType . ".*_" . UI_LayKbTp
-	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle ) 		; Get the available Layout Variants for the chosen MainLay/LayType/KbdType
+	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle ) 		; Get the available Layout Variants for the chosen MainLay/LayType/LayKbTp
 	_uiControl( "LayVari", _uiPipeIt( layVari, 1 ) )
 	layVariName := ( UI_LayVari == ui_NA ) ? "" : "-" . UI_LayVari
 	needle      := need . UI_LayType . layVariName . "_" . UI_LayKbTp
-	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle ) 		; Get the available Mods for the chosen MainLay/LayType/KbdType/LayVari
+	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle ) 		; Get the available Mods for the chosen MainLay/LayType/LayKbTp/LayVari
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
 	layModsName := ( UI_LayMods != ui_NA ) ? UI_LayMods : ""
 	layModsPref := ( layModsName ) ? "_" : ""
@@ -416,7 +416,6 @@ of the %ovrFile%.ini file?
 		rows := rows . "`r`n" . row
 	} 	; end For row
 	tmpFile := SubStr( rows, 3 ) 								; Lop off the initial line break
-;	( 1 ) ? pklDebug( "inSection line: " . inSect . "`nThis line: " . ix, 6 )
 /*
 	comMent := "[^\R;]*" . comText . "[^\R]*\R" 				; Matches one comment line from the start of the line to the line break
 	matchIt := tmpFile 											; Comment out any old layLines. Also limit their number to, say, 10!

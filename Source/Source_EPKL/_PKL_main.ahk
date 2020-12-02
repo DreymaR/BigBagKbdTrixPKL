@@ -21,6 +21,8 @@
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
 ;		- 
+;		- TOFIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
+;			- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
 ;		- WIP: Added locale ISO OEM_ code variants: The current KLM ISO model isn't compatible with all actual Euro layouts.
 ;			- Make VK variants? Or make kbdType variants? Use VK maps! ISO2UK maybe? Or ANS2UK, easier.
 ;			- AZERTY is a mess; it'll need its own BaseLayout (e.g., it has OEM_ in odd spots, lots of weird state mappings...).
@@ -40,7 +42,6 @@
 ;			- Allow mapSC_extend2 etc entries in the LayStack. If not specified, use the _extend one for all.
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
-;		- TOFIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer.
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
 ;		- TOFIX: Allow ..\BaseLayout in layout.ini – only LayMain\BaseLayout works now.
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
@@ -198,7 +199,6 @@
 ;		- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
 ;		- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
 ;		- The layout shortcuts for EPKL_Layouts files were tweaked somewhat, renaming `@L` to `@V` (for Variant) and making the underscore before `@K` explicit.
-
 ;		- Added a `LayMain(\3LA)` setting and `@M` shortcut for the main layout in the Layouts files. It may specify a 3-Letter Abbreviation (3LA) for subfolder names.
 ;		- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
 ;		- Renamed the KLM key code `_DT` (OEM_PERIOD) to `_PD` and `_EQ` (OEM_PLUS) to `_PL` for better compatibility with the actual VK names. Also updated the HIG files.
