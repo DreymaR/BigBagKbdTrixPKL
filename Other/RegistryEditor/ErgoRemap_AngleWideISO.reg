@@ -1,0 +1,44 @@
+REGEDIT4 
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout] 
+; - The below mappings can be selected by removing and adding ';' as desired. They are layout independent (QWERTY/Colemak/what-have-you).
+; - The next lines map the Wide-ISO-Slash ergonomic mod (using Colemak, the new right-hand half-rows are =7890- [JLUY;/ ]HNEIO' \KM,. )
+;     including the Angle-ISO mod ('ZXCVB_ <- _ZXCVB', where '_' is the VK_102 key) for the left wrist
+; - In this mod, the brackets are kept together in the middle, and the /? key put on the old ] key for intuitive accessibility.
+; - If you want ONLY the Wide mod, delete the "2c,00,56,00" etc line and subtract 6 from the entry # (20 -> 1a on the header line)
+; - If you want ONLY the Angle mod, delete all but the "2c,00,56,00" etc middle lines and change the entry # to 07 (= 6 + 1)
+; - The "0c,00,0d,00" line remaps the number row to =7890- . If undesired, remove it and subtract 6 from the entry #.
+; - If you desire the '2b1b' mod (more similar to the Wide-ANSI mod), swap the 35 on row 3 and the 2b on row 6 around.
+"Scancode Map"=hex:00,00,00,00,00,00,00,00,20,00,00,00,\
+  2c,00,56,00,2d,00,2c,00,2e,00,2d,00,2f,00,2e,00,30,00,2f,00,56,00,30,00,\
+  0c,00,0d,00,0b,00,0c,00,0a,00,0b,00,09,00,0a,00,08,00,09,00,0d,00,08,00,\
+  35,00,1b,00,19,00,1a,00,18,00,19,00,17,00,18,00,16,00,17,00,15,00,16,00,1a,00,15,00,\
+  28,00,2b,00,27,00,28,00,26,00,27,00,25,00,26,00,24,00,25,00,23,00,24,00,1b,00,23,00,\
+  34,00,35,00,33,00,34,00,32,00,33,00,31,00,32,00,2b,00,31,00,\
+  00,00,00,00
+; Key#1->map ,Key#2      ,Key#3      ,Key#4      ,Key#5      ,Key#6      ,Key#7      ,Key#8      ,\
+
+; - The next line removes and deletes the LOCAL_MACHINE mappings if you want to clean up and revert to an unmapped state
+;"Scancode Map"=-
+
+[HKEY_CURRENT_USER\Keyboard Layout]
+; - The CURRENT_USER mappings are for the logged-on user only (they will be stored for this user on logout)
+; - If per-user mappings are preferable, move the mappings down here and deactivate or remove the '=-' line below
+; - Be aware that if using BOTH LOCAL_MACHINE and CURRENT_USER mappings, the user mappings take precedence
+"Scancode Map"=-
+
+
+; - Numbers are LittleEndian (0x12345678 -> 78,56,34,12); below is an illustration of their meanings:
+; ----------------------------------------------------------------------------------------------------
+; Bytes      	Meaning
+; ----------------------------------------------------------------------------------------------------
+; 00 00 00 00	Version info (usually zero)
+; 00 00 00 00	Flags (usually zero)
+; 07 00 00 00	# of entries (# of mappings +1 for the terminator)
+; 2c 00 56 00	The VK_102(0056) key now sends a 'z'(002c) code
+; 2d 00 2c 00	The 'z'(002c) key now sends a 'x'(002d) code
+; 2e 00 2d 00	The 'x'(002d) key now sends a 'c'(002e) code
+; 2f 00 2e 00	The 'c'(002e) key now sends a 'v'(002f) code
+; 30 00 2f 00	The 'v'(002f) key now sends a 'b'(0030) code
+; 56 00 30 00	The 'b'(0030) key now sends a VK_102(0056) code
+; 00 00 00 00	Null terminator (always zero)

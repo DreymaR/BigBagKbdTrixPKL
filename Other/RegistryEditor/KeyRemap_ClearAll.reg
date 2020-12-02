@@ -1,0 +1,23 @@
+REGEDIT4 
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout] 
+; The next line removes all scancode remappings
+"Scancode Map"=-
+
+[HKEY_CURRENT_USER\Keyboard Layout]
+"Scancode Map"=-
+
+; Numbers are LittleEndian (0x12345678 -> 78,56,34,12)
+; ---------------------------------------------------------------------
+; Bytes      	Meaning
+; ---------------------------------------------------------------------
+; 00 00 00 00	Version info (usually zero)
+; 00 00 00 00	Flags (usually zero)
+; 07 00 00 00	# of entries (# of mappings +1 for the terminator)
+; 2c 00 56 00	The VK_102(0056) key now sends a 'z'(002c) code
+; 2d 00 2c 00	The 'z'(002c) key now sends a 'x'(002d) code
+; 2e 00 2d 00	The 'x'(002d) key now sends a 'c'(002e) code
+; 2f 00 2e 00	The 'c'(002e) key now sends a 'v'(002f) code
+; 30 00 2f 00	The 'v'(002f) key now sends a 'b'(0030) code
+; 56 00 30 00	The 'b'(0030) key now sends a VK_102(0056) code
+; 00 00 00 00	Null terminator (always zero)
