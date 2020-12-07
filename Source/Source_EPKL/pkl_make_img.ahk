@@ -20,7 +20,7 @@ makeHelpImages() {
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\HelpImgGenerator\EPKL_HelpImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
-	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Refresh specified DK imgs (easier to test this var w/o using pklIniCSVs)
+	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." : ""
 	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]

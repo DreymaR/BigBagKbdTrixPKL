@@ -283,8 +283,16 @@ DONE:
 	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
 		- LayStack Remaps and cycles will only be checked for if their sections are present in `layout.ini`. This is to avoid slowing down other layouts.
 		- The Nyfee Colemak-DH mods were added to test LayStack remaps. His mods move `Z W X C F K (V)` and the Bracket/Minus/Equals keys.
-	- Testing a "None-VK" throughput layout for Extend etc. For now, it's a QWERTY layout at heart, using mostly 'VKey' mappings. Ergomaps would work on it.
-		- However, all it does for now is to map to the QW codes in the _eD_Remap file: It won't pass through the underlying OS layout. So it may not be useful.
+
+	- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
+	- Detection of current system layout VK codes through GetKeyVK().
+		- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
+		- Added "System-VK" throughput layouts for Extend etc. users using VKey mappings. Ergomaps would also work on it. One could also remap some keys with states.
+	- Non-Scandinavian installed ISO layouts such as the UK one, should now get the right VK codes detected for OEM_# symbol keys.
+		- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
+		- The old way of specifying VK remaps from the default KLM ANSI-based codes should still work, but shouldn't be neither necessary nor advisable anymore.
+		- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
+	- Fixed: If a remap (cycle?) wasn't mapped to a cycle, it could lead to an infinite loop in ReadRemaps().
   
   
 TODO:

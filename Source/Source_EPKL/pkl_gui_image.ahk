@@ -115,7 +115,7 @@
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit
 		GUI, HI:Show, NA, 							pklImgWin
 		
-		SetTimer, showHelpImage, 170 									; Refresh the help image every # ms (screen refresh takes 16.7 ms @ 60 Hz)
+		SetTimer, showHelpImage, 170 									; Redraw the help image every # ms (screen refresh takes 16.7 ms @ 60 Hz)
 	} else if ( activate == -1 ) { 										; Deactivate image
 		Menu, Tray, UnCheck, % getPklInfo( "LocStr_ShowHelpImgMenu" )
 		SetTimer, showHelpImage, Off

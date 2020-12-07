@@ -1,0 +1,10 @@
+[DEFAULT]
+BASEURL=http://sourceforge.net/project/showfiles.php?group_id=213088&abmode=1
+[InternetShortcut]
+URL=https://github.com/DreymaR/BigBagKbdTrixPKL
+IDList=
+IconFile=C:\Users\GadOE\Documents\GitHub\BigBagKbdTrixPKL\Files\ImgIcons\Gray_off.ico
+IconIndex=0
+HotKey=0
+[{000214A0-0000-0000-C000-000000000046}]
+Prop3=19,11

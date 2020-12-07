@@ -45,8 +45,8 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		Return
 	}	; end if extendKey
 	
-	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK code.
-		Send % "{Blind}{VK" . getKeyInfo( HKey . "vkey" ) . "}"
+	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK## code.
+		Send % "{Blind}{" . getKeyInfo( HKey . "vkey" ) . "}"
 		_osmClearAll() 											; Clear any sticky mods
 		Return
 	}	; end if VK
@@ -87,7 +87,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	if ( Pri == "" ) {
 		Return
 	} else if ( state == "vkey" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.
-		pkl_SendThis( modif, "{VK" . Pri . "}" ) 				; (Without this, Ctrl+Shift+# keys are broken.)
+		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken.) 	; eD WIP: Was {VK
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
 		pkl_Send( Pri, modif )
 	} else {

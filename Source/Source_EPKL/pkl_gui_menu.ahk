@@ -4,19 +4,19 @@
 	
 	layoutsMenu     := getPklInfo( "LocStr_19" ) 		; Menu text for the Layouts menu
 	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]		; Dummy legend menu item
+					,   "aboutMe" : [ "09"        , ""             ]		; ---
 					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
 					,   "deadKey" : [ "12"        , ""             ]		; ---
 					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
-					,   "setting" : [ "SettingUI" , ""             ]		; ---
 					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
 					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
-					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+`
+					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+3/`
 					,   "exitApp" : [ "11"        , "ExitApp"      ]		; ^+4
 					,   "refresh" : [ "RefreshMe" , "Refresh"      ]		; ^+5
-					,   "aboutMe" : [ "09"        , "ShowAbout"    ]		; ^+6
+					,   "setting" : [ "LaysSetts" , "SettingsUI"   ]		; ^+6
 					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+7
-					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
-					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+9 - Don't show this to avoid clutter
+					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
+					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+9 - Don't show this to avoid clutter
 					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
 					,   "debugMe" : [ ""          , "DebugWIP"     ] } 		; ^+= - Don't show the Debug/WIP hotkey
 	For item, val in menuItems
@@ -63,7 +63,7 @@
 	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
-		Menu, Tray, add, %deadKeyMenuItem%, detectDeadKeysInCurrentLayout 	; Detect DKs
+		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect DKs
 ;		Menu, Tray, add, %importsMenuItem%, importLayouts 					; Import Module
 		Menu, Tray, add, %makeImgMenuItem%, makeHelpImages 					; Help Image Generator
 		Menu, Tray, add, 													; (separator)
@@ -78,9 +78,7 @@
 		Menu, Tray, add, %chngLayMenuItem%, changeActiveLayout 				; Change layout
 	}
 	Menu, Tray, add,
-	if ( ShowMoreInfo ) {
-		Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 			; Refresh
-	}
+	Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 				; Refresh
 	Menu, Tray, add, %suspendMenuItem%, suspendToggle						; Suspend
 	Menu, Tray, add, %exitAppMenuItem%, exitPKL								; Exit
 	
@@ -106,9 +104,9 @@
 	if ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
 		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
-		Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 		; refresh icon - refresh arrows
 		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImg icon - painting on screen
 	}
+	Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 			; refresh icon - refresh arrows
 	Menu, Tray, Icon,      %showImgMenuItem%,  shell32.dll , 174 		; showImg icon - keyboard (116: film)
 	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImg icon - spyglass
 ;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImg icon - speeding window
@@ -126,7 +124,7 @@ pkl_about()
 {
 	msLID := getWinLocaleID() 									; The 4-digit Windows Locale ID
 	wLang := A_Language 										; The 4-digit Language code
-	dkStr := getDeadKeysInCurrentLayout() 						; The Windows layout's dead key string
+	dkStr := getCurrentWinLayDeadKeys() 						; The Windows layout's dead key string
 	dkStr := dkStr ? dkStr : "<none>"
 
 	pklAppName      := getPklInfo( "pklName" )
@@ -191,7 +189,7 @@ pkl_about()
 ;		text :=   "Keyboard/Layout type from settings: "    . kbdType
 ;		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
 ;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
-		text := "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
+		text :=   "Current Windows Locale / Language ID: "  . msLID . " " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr
 		text .= "`n"
 		text .= "`nLayout/BaseLayout file paths:`n- "       . layFile . "`n- " . basFile

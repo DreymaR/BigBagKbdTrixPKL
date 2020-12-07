@@ -20,23 +20,18 @@
 ;			- Select a word w/ Ext+S+T+N then let go of T and try Ext+S+I; the shift is lost.
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend is wonky.
 ;			- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Maybe that's actually safer?
-;		- 
 ;		- TOFIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
 ;			- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
-;		- WIP: Added locale ISO OEM_ code variants: The current KLM ISO model isn't compatible with all actual Euro layouts.
-;			- Make VK variants? Or make kbdType variants? Use VK maps! ISO2UK maybe? Or ANS2UK, easier.
-;			- AZERTY is a mess; it'll need its own BaseLayout (e.g., it has OEM_ in odd spots, lots of weird state mappings...).
-;				- Could make a "light eD version" of AZERTY, but users may well complain! Is it worth it? Probably only do a VK version.
-;			- KLM OEM key pos. :  GR/MN/PL  LB/RB  SC/QU/BS  LG/CM/PD/SL 	; LG=102
-;			- KLM ANS  --"--   :  _3/MN/PL  _4/_6  _1/_7/_5  LG/CM/PD/_2 	; Used by KLM default and some locales (US,Al,...)
-;			- KLM ISO  --"--   :  _5/PL/_4  _6/_1  _3/_7/_2  LG/CM/PD/MN 	; Used by the No locale
-;			- UK  ISO  --"--   :  _8/MN/PL  _4/_6  _1/_3/_7  _5/CM/PD/_2 	; Locale variant needed
-;			- De  ISO  --"--   :  _5/_4/_6  _1/PL  _3/_7/_2  LG/CM/PD/MN 	; _A/_Z swap enough for QWERTZ? No, some different OEM_ codes too.
-;			- Fr  ISO  --"--   :  _7/_4/PL  _6/_1  CM/_3/_5  LG/PD/_2/_8 	; _M/SC/CM swapped (in addition to _A/_Q, _W/_Z)
-;			- Be  ISO  --"--   :  _7/_4/MN  _6/_1  CM/_3/_5  LG/PD/_2/PL 	; _M/SC/CM swapped (Be Period, Comma and French)
-;			- ??  ISO  --"--   :  
-;		- TOFIX: If a remap (cycle?) isn't mapped to a cycle, it may lead to an infinite loop in the ReadRemaps() fn? Its pklIniCSVs uses mapList as default.
+;		- 
+;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
+;		- WIP: Add QWERTZ and AZERTY layouts? There are now remaps for them, and the rest should be doable with OEM VK detection.
+;		- WIP: Offer VK layouts based on the eD ones! Use only the state0/1 images then. Let the Layout Picker show VK if VK or other kinds are available.
+;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale variants!
+;			- With this, we could reduce the number of folders and more or less duplicate files a lot.
 ;		- WIP: Provide a swap-LAlt-n-Caps RegEdit script, and a reversal one. Maybe add some more codes in the comments, see my old RegEdit scripts.
+;		- WIP/TODO: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
+;			- markColors = #c00:_E/_N/_K, #990:_B/_T/_F, #009:_J     ; Tarmak2 colors
+;			- See https://forum.colemak.com/topic/1858-learn-colemak-in-steps-with-the-tarmak-layouts/p4/#p23659
 ;		- WIP: Make the HIG work for non-standard state layer entries like it does for DK now? Consider naChr vs ·¶·-like marks.
 ;		- WIP: Consider a remap for each Ext layer? Would make things messier, but allows separate Ext1 and Ext2 maps (for Sl/Bs switch).
 ;			- Allow mapSC_extend2 etc entries in the LayStack. If not specified, use the _extend one for all.
@@ -51,9 +46,7 @@
 ;		- TOFIX: The NBSP mapping (AltGr+Spc), in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- WIP: Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
-;		- WIP: In the Janitor timer: Update the OS dead keys etc as necessary.
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
-;			- Since these extra DKs won't show up in the normal layout, for now make a list of extra DKs for the HIG? Or, the HIG should use a DK list now instead of registering!
 ;			- MoDK idea: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
 ;			- In the EPKL_Settings .ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
@@ -63,9 +56,6 @@
 ;				- However, Spc isn't handled correctly!? It still gets transposed.
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
-;		- TODO: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
-;			- markColors = #c00:_E/_N/_K, #990:_B/_T/_F, #009:_J     ; Tarmak2 colors
-;			- See https://forum.colemak.com/topic/1858-learn-colemak-in-steps-with-the-tarmak-layouts/p4/#p23659
 ;;  eD TONEXT:
 ;		- Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
@@ -152,7 +142,7 @@
 ;			- In most cases though, that'd be useful mostly for releasing more different glyphs. This is better done with dead keys, as these avoid heavy chording.
 ;		- Idea: Repeat key!? Type a key and then any key to get a double letter. Implement as a dead key releasing aa for a etc. Doesn't have to be active by default.
 ;		- Do we need underlying vs wanted KbdType? I have an ISO board and want an ISO layout for it, but my MS layout is ANSI... (Likely, this won't happen to many...?)
-;			- For now, I have a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
+;			- I like a little hack that I hope doesn't bother anyone: The VK QWERTY ISO-AWide layout has its ANS2ISO remap commented out for my benefit.
 ;		- Allow escaped semicolons (`;) in iniRead?
 ;		- Remove the Layouts submenu? Make it optional by .ini?
 ;		- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
@@ -206,8 +196,16 @@
 ;		- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
 ;			- LayStack Remaps and cycles will only be checked for if their sections are present in `layout.ini`. This is to avoid slowing down other layouts.
 ;			- The Nyfee Colemak-DH mods were added to test LayStack remaps. His mods move `Z W X C F K (V)` and the Bracket/Minus/Equals keys.
-;		- Testing a "None-VK" throughput layout for Extend etc. For now, it's a QWERTY layout at heart, using mostly 'VKey' mappings. Ergomaps would work on it.
-;			- However, all it does for now is to map to the QW codes in the _eD_Remap file: It won't pass through the underlying OS layout. So it may not be useful.
+
+;		- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
+;		- Detection of current system layout VK codes through GetKeyVK().
+;			- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
+;			- Added "System-VK" throughput layouts for Extend etc. users using VKey mappings. Ergomaps would also work on it. One could also remap some keys with states.
+;		- ISO system layouts would have the wrong VK codes for OEM_# symbol keys before. Now this should work for non-Scandinavian installed ISO layouts, such as the UK one.
+;			- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
+;			- The old way of specifying VK remaps from the default KLM ANSI-based codes should still work, but shouldn't be neither necessary nor advisable anymore.
+;			- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
+;		- Fixed: If a remap (cycle?) wasn't mapped to a cycle, it could lead to an infinite loop in ReadRemaps().
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
@@ -258,18 +256,6 @@ Return  	; end main
 ;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
 ;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
 
-exitPKL:
-	ExitApp
-Return
-
-keyHistory:
-	KeyHistory
-Return
-
-detectDeadKeysInCurrentLayout:
-	setDeadKeysInCurrentLayout( detectDeadKeysInCurrentLayout() )
-Return
-
 processKeyPress0:
 processKeyPress1:
 processKeyPress2:
@@ -318,14 +304,14 @@ keyReleased:			; *SC### UP
 	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
 Return
 
-modifierDown:			; *SC###    (call fn as HKey to translate to VK name)
+modifierDown:			; *SC###    (call fn as HKey to translate to modifier name)
 	Critical
-	setModifierState(   getVKey( SubStr( A_ThisHotkey, 2     ) ), 1 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2     ) . "vkey" ), 1 ) 	; eD WIP: Use "vmod" instead of "vkey" for modifiers?
 Return
 
 modifierUp:
 	Critical
-	setModifierState(   getVKey( SubStr( A_ThisHotkey, 2, -3 ) ), 0 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ), 0 ) 	; eD WIP: --"--
 Return
 
 tapOrModDown: 			; *SC###
@@ -338,53 +324,62 @@ tapOrModUp:
 	setTapOrModState(   SubStr( A_ThisHotkey, 2, -3 ), 0 )
 Return
 
-showAbout:
+showAbout: 													; Menu "About..."
 	pkl_about()
+Return
+
+changeSettings: 											; Menu "Layouts/Settings..."
+	pklSetUI()
+Return
+
+keyHistory: 												; Menu "AHK Key History..."
+	KeyHistory
+Return
+
+detectCurrentWinLayDeadKeys: 								; Menu "Detect dead keys..."
+	setCurrentWinLayDeadKeys( detectCurrentWinLayDeadKeys() )
 Return
 
 showHelpImage:
 	pkl_showHelpImage()
 Return
 
-showHelpImageOnce: 										; Used as a one-time refresh when necessary
+showHelpImageOnce: 											; Used as a one-time refresh when necessary
 	pkl_showHelpImage()
 Return
 
-showHelpImageToggle:
+showHelpImageToggle: 										; Menu "Display help image"
 	pkl_showHelpImage( 2 )
 Return
 
-zoomHelpImage:
+zoomHelpImage: 												; Menu "Zoom help image"
 	pkl_showHelpImage( 5 )
 Return
 
-moveHelpImage:
+moveHelpImage: 												; Hotkey "Move help image"
 	pkl_showHelpImage( 6 )
 Return
 
-opaqHelpImage:
+opaqHelpImage: 												; Hotkey "Opaque/Transparent image"
 	pkl_showHelpImage( 7 )
 Return
 
-changeActiveLayout:
+changeActiveLayout: 										; Menu "Change layout"
 	changeLayout( getLayInfo( "NextLayout" ) )
 Return
 
-rerunWithSameLayout: 									; Use the layout # instead of its code, to reflect any PKL Settings list changes
-	activeLay   := getLayInfo( "ActiveLay" ) 			; Layout code (path) of the active layout
-	numLayouts  := getLayInfo( "NumOfLayouts" ) 		; The number of listed layouts
+rerunWithSameLayout: 										; Use the layout # instead of its code, to reflect any PKL Settings list changes
+	activeLay   := getLayInfo( "ActiveLay" ) 				; Layout code (path) of the active layout
+	numLayouts  := getLayInfo( "NumOfLayouts" ) 			; The number of listed layouts
 	Loop % numLayouts {
 		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
 	}
-	changeLayout( "UseLayPos_" . actLayNum ) 			; Rerun the same layout, telling pkl_init to use position.
+	changeLayout( "UseLayPos_" . actLayNum ) 				; Rerun the same layout, telling pkl_init to use position.
 Return
 
-changeLayoutMenu:
+changeLayoutMenu: 											; Menu "Layouts"
 	changeLayout( getLayInfo( "layout" . A_ThisMenuItemPos . "code" ) )
-Return
-
-doNothing:
 Return
 
 suspendOn:
@@ -397,7 +392,7 @@ suspendOff:
 	Goto afterSuspend
 Return
 
-suspendToggle:
+suspendToggle: 												; Menu "Suspend"
 	Suspend
 	Goto afterSuspend
 Return
@@ -412,15 +407,21 @@ afterSuspend:
 	}
 Return
 
+exitPKL: 													; Menu "Exit"
+	ExitApp
+Return
+
+doNothing:
+Return
+
 getWinInfo:
 	getWinInfo() 										; Show the active window's title/process(exe)/class
 Return
 
-epklDebugWIP:
-;	pklDebug( "Running experimental/WIP routine`n(specified in _PKL_main)", .8 )
+epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .8 )
 ;	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
-changeSettings:
-	pklSetUI() 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
+	debugShowCurrentWinLayOEMs()
 Return
 
 ; ####################### functions #######################
