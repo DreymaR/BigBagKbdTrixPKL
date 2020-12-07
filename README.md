@@ -94,13 +94,13 @@ The files may take a little tweaking to get what you want. There are several par
 **Hotkeys found in the EPKL_Settings file:**
 * Ctrl+Shift+1 – Display/hide the help image
 * Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
-* Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may be Ctrl+Shift+` instead
+* Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may also be Ctrl+Shift+`.
 * Ctrl+Shift+4 – Exit EPKL
 * Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
-* Ctrl+Shift+6 – Show the About... dialog, with layout and other info
+* Ctrl+Shift+6 – Show the Layouts/Settings... dialog
 * Ctrl+Shift+7 – Zoom the help image in/out, to see it better or get it out of the way
-* Ctrl+Shift+8 – Move the help image between positions, as by mouseover
-* Ctrl+Shift+9 – Toggle help image transparency
+* Ctrl+Shift+8 – Toggle help image transparency
+* Ctrl+Shift+9 – Move the help image between positions, as by mouseover
 * Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
   
 **Short EPKL Glossary**
@@ -355,6 +355,14 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
 	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
 	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
+
+	- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
+	- Detection of current system layout VK codes through GetKeyVK().
+		- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
+		- Added "System-VK" throughput layouts for Extend etc. users using VKey mappings. Ergomaps would also work on it. One could also remap some keys with states.
+	- Non-Scandinavian installed ISO layouts such as the UK one, should now get the right VK codes detected for OEM_# symbol keys.
+		- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
+		- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
   
   
 TODO:
@@ -389,9 +397,9 @@ _Øystein "DreymaR" Gadmar, 2020_
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
-[KeyTab]: ./Other/KeyCodeTable.txt (./Other/KeyCodeTable.txt)
+[KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
 [EPKLRM]: ./Files/ (EPKL Files folder/README)
-[LayOvr]: ./EPKL_Layouts_Override_Example.ini (Layouts_Override example file)
-[LayDef]: ./EPKL_Layouts_Default.ini (Layouts_Default file)
-[PklIni]: ./EPKL_Settings_Default.ini (Settings file)
-[MapIni]: ./Files/_eD_Remap.ini (Remap file)
+[LayOvr]: ./EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
+[LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
+[PklIni]: ./EPKL_Settings_Default.ini (EPKL Settings file)
+[MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)

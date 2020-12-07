@@ -10,8 +10,10 @@ ReadRemaps( mapList, mapStck ) { 					; Parse a remap string to a CSV list of cy
 		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
 			if ( SubStr( list, 1, 1 ) == "^" ) { 				; A cycle reference...
 				theMap  := SubStr( list, 2 ) 					; ...adds the cycle the list refers to directly
-			} else { 											; eD WIP: Use if InStr( alist, "+" ) somewhere?
+			} else if ( alist != mapList ) { 					; This should safeguard against infinite loops
 				theMap  := ReadRemaps( list, mapStck ) 			; Refers to another map -> Self recursion
+			} else {
+				theMap  := ""
 			}
 			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap 	; re-attach by +
 		}	; end For list
@@ -49,7 +51,7 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 				if ( mapType == "SC" ) { 						; Remap from thisType to SC
 					thisCycle[ A_Index ] := mapDic[ this ]
 				} else if ( mapType == "VK" )  { 				; Remap from VK name/code to VK code
-					thisCycle[ A_Index ] := getVKeyCodeFromName( this ) 	; VK maps use VK## format codes
+					thisCycle[ A_Index ] := getVKnrFromName( this ) 	; VK maps use VK## format codes
 				}	; end if
 			}	; end loop
 			Loop % numSteps { 									; Loop to (re)write remap pdic
@@ -71,7 +73,7 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 }	; end fn
 
 ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of KLMaps in a remap.ini file
-	pdic := {}
+	pdic    := {}
 	Loop % 5 {													; Loop through KLM rows 0-4
 		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
 		valRow := pklIniCSVs( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; --"--
@@ -80,8 +82,11 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 				Break
 			if ( not key ) 										; Empty key entry (e.g., double pipes)
 				Continue
-			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC###
-			pdic[ key ] := upCase( valRow[ ix ] ) 				; e.g., pdic[ "SC001" ] := "SC001"
+			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC### key
+			key := ( keyType == "VK" ) ? getVKnrFromName( key ) : key
+			val := upCase( valRow[ ix ] )
+			val := ( valType == "VK" ) ? getVKnrFromName( val ) : val
+			pdic[ key ] := val 									; e.g., pdic[ "SC001" ] := "VK1B"
 		}	; end For key
 	}	; end Loop KLM rows
 	Return pdic
@@ -192,18 +197,28 @@ getWinInfo() { 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-getVKeyCodeFromName( name ) { 								; Get the two-digit hex VK## code from a VK name
-	name := upCase( name )
-	if ( RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {		; Check if the name is already VK##
-		name := SubStr( name, 3 )							; Keep only the ## here
-	} else {
-		name := pklIniRead( "VK_" . name, "00", "PklDic", "VKeyCodeFromName" )
+detectCurrentWinLayOEMs() { 								; Find the VK values for the current Win layout's OEM keys
+	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_##
+	qVKdic  := getPklInfo( "QWVKdic" ) 						; VK QW_## = vc_##
+	oemDic  := {}  ;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; "SC0" . SCs[ix]
+	For ix, oem in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] {
+		oem := "_" . oem
+		qvk := qVKdic[ oem ] 								; Map from a KLM (ANSI) VK## code
+		ovk := "VK" . Format( "{:X}", GetKeyVK( qSCdic[ oem ] ) )
+		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
+;	( oem == "_GR" ) ? pklDebug( "OEM: " . oem . "`nSC: " . qSCdic[oem] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
 	}
-	Return name
+	Return oemDic
 }
 
-getVKey( HKey ) { 											; Return the KeyInfo VK code for a hotkey
-	Return % getKeyInfo( HKey . "vkey" )
+getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK name
+	name := upCase( name )
+	if ( not RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
+;		Return name 	; name := SubStr( name, 3 ) 		; Used to keep only the ## here
+;	} else {
+		name := "VK" . pklIniRead( "VK_" . name, "00", "PklDic", "VKeyCodeFromName" )
+	}
+	Return name
 }
 
 getWinLocaleID() { 											; Win LID; for Language use A_Language.
@@ -326,4 +341,19 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 	For ix, el in array
 		out .= sep . el
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
+}
+
+debugShowCurrentWinLayOEMs() { 								; eD DEBUG: Display the VK values for the current Win layout's OEM keys
+;	qwSCdic := getPklInfo( "QWSCdic" ) 						; detectCurrentWinLayOEMs maps KLM OEM VK## values to current layout ones.
+	mapFile := getPklInfo( "RemapFile" )
+	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
+	lin := "`n————" . "————" . "————" 						; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
+	str := "For layout LID: " . getWinLocaleID() . lin . "`nKLM`tqVK`toVK" . lin
+	oemDic  := detectCurrentWinLayOEMs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_##
+	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
+		klm := SubStr( VKQWdic[ oem ], 2) 					;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
+		str .= Format( "`n{}`t{}`t{}", klm, SubStr(oem,3), SubStr(ovk,3) ) 	; GetKeyName(sc), GetKeyVK(sc), SubStr(sc,3) )
+		str .= InStr( "VKC0|VKE2", oem ) ? lin : "" 		; "VKBD|VKDB|VKE2"
+	}
+	pklDebug( str, 60 )
 }

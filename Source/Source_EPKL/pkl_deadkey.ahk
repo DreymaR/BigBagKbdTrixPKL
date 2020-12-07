@@ -43,7 +43,7 @@ pkl_DeadKey( DK )
 	
 	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs ) 			; Increase the # of registered DKs, both as variable and KeyInfo
 	setKeyInfo( "CurrNameOfDK", DK )
-	SetTimer, showHelpImageOnce, -35 						; Refresh the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
+	SetTimer, showHelpImageOnce, -35 						; Redraw the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
 	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Esc}	; eD: Added {Esc}
 	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys from the next-key input
 	{
@@ -104,12 +104,12 @@ pkl_DeadKey( DK )
 	}
 }
 
-setDeadKeysInCurrentLayout( deadkeys )
+setCurrentWinLayDeadKeys( deadkeys )
 {
-	getDeadKeysInCurrentLayout( deadkeys, 1 )
+	getCurrentWinLayDeadKeys( deadkeys, 1 )
 }
 
-getDeadKeysInCurrentLayout( newDKs = "", set = 0 )
+getCurrentWinLayDeadKeys( newDKs = "", set = 0 )
 {				; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static DKs := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
@@ -154,9 +154,9 @@ TODO: A better version without Send/Clipboard (I don't have any ideas)
 ------------------------------------------------------------------------
 */
 
-detectDeadKeysInCurrentLayout()
+detectCurrentWinLayDeadKeys()
 {
-	DeadKeysInCurrentLayout := ""
+	CurrentWinLayDKs := ""
 	
 	notepadMode = 0
 	txt := getPklInfo( "DetecDK_" .  "MSGBOX_TITLE" )
@@ -184,7 +184,7 @@ detectDeadKeysInCurrentLayout()
 		Send {%cha%}{Space}+{Left}^{Ins}
 		ClipWait
 		ifNotEqual clipboard, %A_Space%
-			DeadKeysInCurrentLayout = %DeadKeysInCurrentLayout%%ch%
+			CurrentWinLayDKs = %CurrentWinLayDKs%%ch%
 		++ordinal
 		if ( ordinal >= 0x80 )
 			break
@@ -193,7 +193,7 @@ detectDeadKeysInCurrentLayout()
 	Send +{Home}{Del}
 	txt := getPklInfo( "DetecDK_" . "DEADKEYS" )
 	Send {Raw}%txt%:%A_Space%
-	Send {Raw}%DeadKeysInCurrentLayout%
+	Send {Raw}%CurrentWinLayDKs%
 	Send {Enter}
 	
 	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
@@ -206,5 +206,5 @@ detectDeadKeysInCurrentLayout()
 		Send !{F4}
 		Send {Right}				; Select "Don't save"
 	
-	Return DeadKeysInCurrentLayout
+	Return CurrentWinLayDKs
 }

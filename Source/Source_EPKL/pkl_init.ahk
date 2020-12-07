@@ -30,17 +30,17 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
 	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  ) 	; 1
 	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" ) 	; 2
-	pklSetHotkey( "suspendMeHotkey", "suspendToggle"       , "HK_Suspend"      ) 	; ` - 3 didn't work well?
+	pklSetHotkey( "suspendMeHotkey", "suspendToggle"       , "HK_Suspend"      ) 	; 3/` - 3 didn't work well?
 	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
-	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; 5 - Advanced Mode only
-	pklSetHotkey( "showAboutHotkey", "showAbout"           , "HK_ShowAbout"    ) 	; 6
+	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; 5
+	pklSetHotkey( "settingUIHotkey", "changeSettings"      , "HK_SettingsUI"   ) 	; 6
 	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 7
-	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 8 - Hidden from menu
-	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 9 - Hidden from menu
+	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 8 - Hidden from menu
+	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 9 - Hidden from menu 	; eD WIP: Use this for something better?
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
 	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; = - Hidden from menu
 	
-	setDeadKeysInCurrentLayout( pklIniRead( "systemDeadKeys" ) )
+	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
 	_pklSetInf( "cleanupTimeOut" ) 										; Time idle (sec) before mods etc are cleaned up
@@ -218,13 +218,15 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			%mapType% := ReadRemaps( mapList,            remStck ) 		; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, cycStck ) 		; Parse the cycle list into a pdic of mappings
 		}	; end For mapType
-		mapVK   := ReadRemaps( "ANS2ISO",         mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings
-		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes than Co?
-		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based?
-		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping
-;		CoVKdic := ReadKeyLayMapPDic( "Co", "VK", mapFile ) 	; KLM code dictionary for Co-2-VK mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+		setPklInfo( "QWSCdic", QWSCdic )
+		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.
+		setPklInfo( "QWVKdic", QWVKdic )
+		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
+;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
+		mapVK   := detectCurrentWinLayOEMs() 							; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
 		initialized := true
 	}
 	
@@ -265,7 +267,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 							; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
 		if RegExMatch( entr1, vkStr) { 									; If the first entry is a VKey synonym, VK map the key to itself
 			numEntr   := 2
-			entr1     := "VK" . getVKeyCodeFromName( SCVKdic[key] ) 	; Find the right VK code for the key's SC, from the Remap file
+			entr1     := "VK" . Format( "{:X}", GetKeyVK( key ) ) 		; Find the right VK code for the key's SC, from the active layout.
 			entr2     := "VKey" 										; Note: This is the QWERTY mapping of that SC###.
 		}
 		if ( numEntr < 2 ) || ( entr1 == "--" ) { 						; An empty or one-entry key mapping will deactivate the key
@@ -280,7 +282,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			entr2     := -2 											; -2 = Modifier
 		} else {
 			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
-			vkcode  := getVKeyCodeFromName( entr1 ) 					; Translate to the two-digit VK## hex code (Uppercase)
+			vkcode  := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
 			vkcode  := KLM && ( kbdType == "ISO" ) && mapVK[vkcode] 	; If necessary, convert ANSI-to-ISO
 					? mapVK[ vkcode ] : vkcode
 			vkcode  := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 	; Remap the VKey here before assignment, if applicable.

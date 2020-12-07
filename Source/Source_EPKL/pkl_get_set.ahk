@@ -90,7 +90,7 @@ pkl_locale_load( lang )
 		Return
 	For ix, row in pklIniSect( file, "pkl" ) { 					; Read the main locale strings frome the PKL section
 		pklIniKeyVal( row, key, val, 1 ) 						; A more compact way than before (but still in a loop)
-		if ( val != "" ) { 						; LocStr_ 00-22,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
+		if ( val != "" ) { 						; LocStr_ 00-22,LaysSetts,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
 			key := ( key <= 9 ) 
 					? SubStr("00" . key, -1) : key 				; If key is #, zero pad it to 0# instead
 			setPklInfo( "LocStr_" . key , val ) 				; pklLocaleStrings( key, val, 1 )

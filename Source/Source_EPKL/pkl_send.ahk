@@ -5,7 +5,7 @@
 	
 	if ( 32 < ch ) {			;&& ch < 128 (using pre-Unicode AHK)
 		char := "{" . Chr(ch) . "}" 	; Normal char
-		if InStr( getDeadKeysInCurrentLayout(), Chr(ch) )
+		if InStr( getCurrentWinLayDeadKeys(), Chr(ch) )
 			char .= "{Space}"
 	} else if ( ch == 32 ) {
 		char = ={Space}
