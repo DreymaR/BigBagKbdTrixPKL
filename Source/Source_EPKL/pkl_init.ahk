@@ -218,15 +218,17 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			%mapType% := ReadRemaps( mapList,            remStck ) 		; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, cycStck ) 		; Parse the cycle list into a pdic of mappings
 		}	; end For mapType
+		setPklInfo( "scMapLay", scMapLay )
 		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
-		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other codes than Co?
+		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other code tables?
 		setPklInfo( "QWSCdic", QWSCdic )
 		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.
 		setPklInfo( "QWVKdic", QWVKdic )
-		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
 ;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
 ;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		mapVK   := detectCurrentWinLayOEMs() 							; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
+		setPklInfo( "oemVKdic", mapVK )
 		initialized := true
 	}
 	
@@ -283,10 +285,10 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		} else {
 			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
 			vkcode  := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
-			vkcode  := KLM && ( kbdType == "ISO" ) && mapVK[vkcode] 	; If necessary, convert ANSI-to-ISO
-					? mapVK[ vkcode ] : vkcode
+			vkcode  := ( kbdType == "ISO" && mapVK[vkcode] ) 			; If necessary, convert ANSI-to-ISO 	;KLM && 
+					? mapVK[ vkcode ] : vkcode 							; eD WIP: Should we map from VK (vkcode) or SC (key) here?
 			vkcode  := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 	; Remap the VKey here before assignment, if applicable.
-			setKeyInfo( key . "vkey", vkcode ) 							; Set VK code (hex ##) for the key
+			setKeyInfo( key . "vkey", vkcode ) 							; Set VK## code for the key
 			entr2   := RegExMatch( entr2, vkStr ) ? -1 : entr2 			; -1 = VKey internally
 ;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . vkcode . "`n" )  ; eD DEBUG
 		}

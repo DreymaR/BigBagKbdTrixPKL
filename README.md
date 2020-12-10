@@ -7,9 +7,11 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-This is my Big Bag Of Tricks, obviously! That is, my many mods and tweaks and bells and whistles. 
-It's mostly centered around the brilliant Colemak keyboard layout, and the incredibly useful Extend layers which work with any layout.
-* This repo is home to the **EPiKaL PKL** (**EPKL**) layout program, with several improvements over the old PKL.
+* This is the Big Bag Of Tricks, obviously! That is, my many layout mods and tweaks and bells and whistles. 
+* It's mostly centered around the brilliant Colemak keyboard layout, with my own `[eD]` AltGr layers and dead keys,...
+* ...ergonomic mods both for Colemak, the Tarmak learning layouts and other layouts,...
+* ...and the incredibly useful Extend layers which work with any layout.
+* This GitHub repository is home to the **EPiKaL PKL** (**EPKL**) layout program, with several improvements over the old PKL.
 * It also implements most of my Big Bag "tricks" for EPKL, as layouts and other files.
 * Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 	- The [Big Bag main topic][CmkBBT] with better explanations and links.
@@ -30,7 +32,7 @@ Getting EPKL up and running
     - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
-    - ...in the [Layouts Default file][LayDef] find the `;QWCLK = BACK` etc line and remove that semicolon.
+    - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon.
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 * To choose a layout variant, select the Layouts/Settings menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
@@ -46,8 +48,7 @@ Getting EPKL up and running
   
 More Know-How
 -------------
-* This repo contains executables and source code for EPKL. Earlier, it also included the original PKL.
-* The layouts are updated to EPKL format, so they'd need some reconstruction for the old PKL.
+* EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
 * The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings][PklIni] holds general program settings.
 * The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
 * There's a "LayStack" for layout info priority. Mappings/settings at higher levels will take precedence:
@@ -355,7 +356,6 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
 	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
 	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
-
 	- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 	- Detection of current system layout VK codes through GetKeyVK().
 		- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
@@ -363,6 +363,8 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Non-Scandinavian installed ISO layouts such as the UK one, should now get the right VK codes detected for OEM_# symbol keys.
 		- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
 		- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
+
+	- Fixed: Some Ext-Shift presses would get lost, especially after having pressed Ext-Ctrl.
   
   
 TODO:

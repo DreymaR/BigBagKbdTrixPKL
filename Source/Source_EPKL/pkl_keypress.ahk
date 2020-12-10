@@ -41,7 +41,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	
 	if ExtendIsPressed() { 										; If there is an Extend key and it's pressed...
 		_osmClearAll() 											; ...clear any sticky mods, then...
-		_extendKeyPress( HKey ) 								; ...process the Extend key press.
+		extendKeyPress( HKey ) 									; ...process the Extend key press.
 		Return
 	}	; end if extendKey
 	
@@ -87,7 +87,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	if ( Pri == "" ) {
 		Return
 	} else if ( state == "vkey" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.
-		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken.) 	; eD WIP: Was {VK
+		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken.)
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
 		pkl_Send( Pri, modif )
 	} else {
@@ -99,13 +99,13 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	_osmClearAll() 												; If another key is pressed while a OSM is active, cancel the OSM
 }	; end fn _KeyPressed										; eD WIP: Should _osmClearAll() be used more places above?
 
-_extendKeyPress( HKey )											; Process an Extend modified key press
+extendKeyPress( HKey )											; Process an Extend modified key press
 {
 	Critical
-	static extMods      := {} 									; Which Extend mods are in use
+	static extMods  := {}
 	
 	if ( HKey == -1 ) { 										; Special call to reset the extMods
-		extMods := {}
+		extMods := {} 											; Which Extend mods are in use
 		Return
 	}
 	xLvl := getPklInfo( "extLvl" )
@@ -113,29 +113,26 @@ _extendKeyPress( HKey )											; Process an Extend modified key press
 	if ( xVal == "" )
 		Return
 	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) {
-		if ( getKeyState( HKey, "P" ) ) { 						; Mark the extMod as pressed or not 	; eD WIP: Tried  '&& not getLayInfo( "extendUsed" )' to avoid stealing presses, but then the mods stopped working?
-			extMods[mod] := HKey
-			setLayInfo( "extendUsed", true ) 					; Mark the Extend press as used (to avoid dual-use as ToM key etc)
-			Return
-		} else { 												; eD WIP: This may not get triggered? Do we need to set Up hotkeys for it?
-			extMods.Delete( mod )
+		if ( getKeyState( HKey, "P" ) ) { 						; Mark the extMod as pressed
+			extMods[HKey] := mod
+;		} else { 												; eD WIP: This doesn't get triggered unless as Up hotkey is set!
+;			extMods.Delete( HKey )
 		}
+		setLayInfo( "extendUsed", true ) 						; Mark the Extend press as used (to avoid dual-use as ToM key etc)
+		Return
 	}
 	returnTo := getPklInfo( "extReturnTo" ) 					; Array of Ext layers to return to from the current one
 	setExtendInfo( returnTo[ xLvl ] )
-	modDown      := {} 											; Which Extend mods were depressed
-	For mod, HKey in extMods {
-		if getKeyState( HKey, "P" ) {
-			modDown[mod] := HKey
+	For HKey, mod in extMods { 									; Which Extend mods are depressed?
+		if getKeyState( HKey, "P" )
 			Send % "{" . mod . " Down}"
-		} else {
-			extMods.Delete( mod )
-		}
 	}
 	if not pkl_ParseSend( xVal ) 								; Unified prefix-entry syntax
 		Send {Blind}{%xVal%} 									; By default, take modifiers into account
-	For mod, HKey in modDown {
+	For HKey, mod in extMods {
 		Send % "{" . mod . " Up}"
+		if not getKeyState( HKey, "P" )
+			extMods.Delete( HKey )
 	}
 	Critical, Off
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
@@ -183,13 +180,6 @@ _setModState( theMod, itsDown = 1 )
 {
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( itsDown )
-;		if ( not itsDown ) {
-;			For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
-;						   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
-;				Send % "{" . mod . " Up}" 								; eD TOFIX: This doesn't help with Extend mods etc!
-;				_setModState( mod, 0 )
-;			}
-;		}
 	} else if ( theMod == "AltGr" ) {
 		setAltGrState( itsDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
 	} else {
@@ -303,7 +293,7 @@ _setExtendState( set = 0 )									; Called from setModState
 		setExtendInfo( xLvl ) 								; Update Extend layer info
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
-		_extendKeyPress( -1 ) 								; ...remove any Ext modifiers to clean up.
+		extendKeyPress( -1 ) 								; ...remove any Ext modifiers to clean up.
 ;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
 		extHeld := 0
 	}	; end if

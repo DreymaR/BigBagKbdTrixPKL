@@ -99,8 +99,9 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 
 pklJanitorTic:
 	_pklSuspendByApp()
-	_pklActivity()
-	_pklCleanup()
+	_pklJanitorActivity()
+	_pklJanitorLocaleVK()
+	_pklJanitorCleanup()
 Return
 
 _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
@@ -117,7 +118,7 @@ _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 	}
 }
 
-_pklActivity() {
+_pklJanitorActivity() {
 	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 			; Convert from min to ms
 	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 			; Convert from min to ms
 	idleTime := A_TimeIdle 										; eD WIP: Use TimeIdlePhysical instead?
@@ -128,19 +129,26 @@ _pklActivity() {
 	}
 }
 
-_pklCleanup() {
+_pklJanitorLocaleVK() { 										; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
+	if ( A_TimeIdle < 2000 ) 									; Don't do this if the comp isn't unused for at least 2 s
+		Return
+	oldLID  := getPklInfo( "previousLocaleID" )
+	newLID  := getWinLocaleID()
+	if ( oldLID != newLid ) {
+;		( 1 ) ? pklDebug( "System layout LID change: " . oldLID . "->" . newLID, 1 )  ; eD DEBUG
+		setPklInfo( "oemVKdic", detectCurrentWinLayOEMs() )
+		; eD WIP: Renew the OEM VK mappings here! Rethink strategy? Need to map based on the values you want, based on KLM/SC codes.
+	}
+	setPklInfo( "previousLocaleID", newLID )
+}
+
+_pklJanitorCleanup() {
 	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 			; The timeout in s is converted to ms
 	if ( A_TimeIdle > timeOut ) { 					 			; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
 		if getPklInfo( "cleanupDone" ) 							; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
 			Return
-		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
-					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
-			if getKeyState( mod ) {
-				Return 											; If the key is being held down, leave it be, otherwise...
-			} else {
-				Send % "{" . mod . " Up}" 						; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
-			}
-		}	; end For mod
+		if not ExtendIsPressed()
+			extendKeyPress( -1 ) 								; Clean up any loose Ext mods
 		setPklInfo( "cleanupDone", true )
 	} else if ( A_TimeIdlePhysical < timeOut ) { 				; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
 		setPklInfo( "cleanupDone", false ) 						; Recent keyboard activity reactivates the cleanup timer
@@ -197,14 +205,17 @@ getWinInfo() { 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-detectCurrentWinLayOEMs() { 								; Find the VK values for the current Win layout's OEM keys
-	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_##
+detectCurrentWinLayOEMs() { 								; Find the VK values for the current Win layout's OEM keys 	; eD WIP: Map from SC, so we can keep track of how OEM keys should be mapped.
+	scMap   := getPklInfo( "scMapLay" ) 					; The pdic used to remap SC for the layout
+;		( 1 ) ? pklDebug( "`nSC remap for MN: " . scMap["SC00C"] . "`nSC remap for GR: " . scMap["SC029"], 1 )  ; eD DEBUG
+	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_## 							; NOTE: Must keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
 	qVKdic  := getPklInfo( "QWVKdic" ) 						; VK QW_## = vc_##
 	oemDic  := {}  ;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; "SC0" . SCs[ix]
 	For ix, oem in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] {
 		oem := "_" . oem
+		qsc := qSCdic[ oem ]
 		qvk := qVKdic[ oem ] 								; Map from a KLM (ANSI) VK## code
-		ovk := "VK" . Format( "{:X}", GetKeyVK( qSCdic[ oem ] ) )
+		ovk := Format( "VK{:X}", GetKeyVK( qsc ) ) 	; VK##
 		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
 ;	( oem == "_GR" ) ? pklDebug( "OEM: " . oem . "`nSC: " . qSCdic[oem] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
 	}
@@ -347,13 +358,14 @@ debugShowCurrentWinLayOEMs() { 								; eD DEBUG: Display the VK values for the
 ;	qwSCdic := getPklInfo( "QWSCdic" ) 						; detectCurrentWinLayOEMs maps KLM OEM VK## values to current layout ones.
 	mapFile := getPklInfo( "RemapFile" )
 	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
+;	SCQWdic := ReadKeyLayMapPDic( "SC", "QW", mapFile ) 	; KLM SC-2-QW code translation dictionary
 	lin := "`n————" . "————" . "————" 						; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
-	str := "For layout LID: " . getWinLocaleID() . lin . "`nKLM`tqVK`toVK" . lin
+	str := "For layout LID: " . getWinLocaleID() . lin . "`nKLM`tqVK`tVK" . lin
 	oemDic  := detectCurrentWinLayOEMs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_##
 	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
 		klm := SubStr( VKQWdic[ oem ], 2) 					;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
 		str .= Format( "`n{}`t{}`t{}", klm, SubStr(oem,3), SubStr(ovk,3) ) 	; GetKeyName(sc), GetKeyVK(sc), SubStr(sc,3) )
-		str .= InStr( "VKC0|VKE2", oem ) ? lin : "" 		; "VKBD|VKDB|VKE2"
+		str .= InStr( "_GR|_LG", VKQWdic[oem] ) ? lin : "" 	; "VKC0|VKE2" "VKBD|VKDB|VKE2"
 	}
 	pklDebug( str, 60 )
 }
