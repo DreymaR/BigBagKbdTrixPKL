@@ -70,23 +70,25 @@ The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
 ```
 ;;  The purpose of this power(!)string is to improve Colemak's daemon summoning capabilities. \m/
 ;;  See https://forum.colemak.com/topic/2460-improving-colemaks-demon-summoning-abilities/
-666-01  = "\n             ______             \n"
-666-02  =   " Col    .d$$$******$$$$c.  mak  \n"
-666-03  =   " \e/ .d$P"            "$$c \-/  \n"
-666-04  =   "    $$$$$.     C     .$$$*$.    \n"
-666-05  =   "  .$$ 4$L*$$.     .$$Pd$  '$b   \n"
-666-06  =   "  $F   *$. "$$e.e$$" 4$F   ^$b  \n"
-666-07  =   " d$     $$   z$$$e   $$     '$. \n"
-666-08  =   " $P  m  `$L$$P` `"$$d$"   k  $$ \n"
-666-09  =   " $$     e$$F   C   4$$b.     $$ \n"
-666-10  =   " $b  .$$" $$   o  .$$ "4$b.  $$ \n"
-666-11  =   " $$e$P"    $b     d$`    "$$c$F \n"
-666-12  =   " '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  \n"
-666-13  =   "  "$c.      4$.  $$       .$$   \n"
-666-14  =   "   ^$$.  DH  $$ d$"  AW  d$P    \n"
-666-15  =   "     "$$c.   `$b$F    .d$P"     \n"
-666-16  =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
-666-17  =   "           `^^^^^^^`            \n"
+Pnt     = <Multiline> 17 		; A 17 line string, defined below
+
+Pnt-01  = "\n             ______             \n"
+Pnt-02  =   " Col    .d$$$******$$$$c.  mak  \n"
+Pnt-03  =   " \e/ .d$P"            "$$c \-/  \n"
+Pnt-04  =   "    $$$$$.     C     .$$$*$.    \n"
+Pnt-05  =   "  .$$ 4$L*$$.     .$$Pd$  '$b   \n"
+Pnt-06  =   "  $F   *$. "$$e.e$$" 4$F   ^$b  \n"
+Pnt-07  =   " d$     $$   z$$$e   $$     '$. \n"
+Pnt-08  =   " $P  m  `$L$$P` `"$$d$"   k  $$ \n"
+Pnt-09  =   " $$     e$$F   C   4$$b.     $$ \n"
+Pnt-10  =   " $b  .$$" $$   o  .$$ "4$b.  $$ \n"
+Pnt-11  =   " $$e$P"    $b     d$`    "$$c$F \n"
+Pnt-12  =   " '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  \n"
+Pnt-13  =   "  "$c.      4$.  $$       .$$   \n"
+Pnt-14  =   "   ^$$.  DH  $$ d$"  AW  d$P    \n"
+Pnt-15  =   "     "$$c.   `$b$F    .d$P"     \n"
+Pnt-16  =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
+Pnt-17  =   "           `^^^^^^^`            \n"
 ```
   
 KLM remapping codes used in the `_eD_Remap` file:

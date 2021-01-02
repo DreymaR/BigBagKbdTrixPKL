@@ -11,40 +11,40 @@
 ;;   0 = display, if activated earlier
 ;;   1 = activate
 ;;  -1 = deactivate
-;;   2 = toggle
+;;   2 = toggle image
 ;;   3 = suspend on
-;;   4 = suspend off
+;;  -3 = suspend off
 ;;   5 = zoom in/out
 ;;   6 = move between positions
 ;;   7 = opaque/transparent
 ;;  
 	
-	static im           := {} 		; Only one static now. But: Not compatible with %var% notation!
-;	static im.Active    := 0 		; Whether the GUI is currently active; needed for toggling etc
+	static im           := {} 			; Only one static now. But: Not compatible with %var% notation!
+;	static im.Active    := 0 			; Whether the GUI is currently active; needed for toggling etc
 ;	static im.ActiveBeforeSuspend := 0
-;	static im.Prev 					; The previous image file; if it hasn't changed, don't redraw
+;	static im.Prev 						; The previous image file; if it hasn't changed, don't redraw
 ;	static im.PosXs     := []
 ;	static im.PosYs     := []
-;	static im.PosNr     := 5 		; Default image position is bottom center (used to be "xCenter")
-;	static im.Zooms     := [] 		; Default [ 100, 150 ]
+;	static im.PosNr     := 5 			; Default image position is bottom center (used to be "xCenter")
+;	static im.Zooms     := [] 			; Default [ 100, 150 ]
 ;	static im.ZoomNr    := 1
-;	static im.Mrg       := [] 		; [ left, right, top, low, HorzPushPx ] image margins/gutters
-;	static im.HorZone 				; Part of image width that activates horizontal push, in %
+;	static im.Mrg       := [] 			; [ left, right, top, low, HorzPushPx ] image margins/gutters
+;	static im.HorZone 					; Part of image width that activates horizontal push, in %
 ;	static im.LayDir
-;	static im.BgPath 				; Background image file
-;	static im.ShRoot 				; Shift image directory
-;	static im.BgColor 				; Image GUI background color is set from the (base)layout.ini
-;	static im.Opacity 				; Global image opacity: 0 is invisible, 255 opaque
-	static imgX 					; Keep these for %var% use with the Gui commands
+;	static im.BgPath 					; Background image file
+;	static im.ShRoot 					; Shift image directory
+;	static im.BgColor 					; Image GUI background color is set from the (base)layout.ini
+;	static im.Opacity 					; Global image opacity: 0 is invisible, 255 opaque
+	static imgX 						; Keep these for %var% use with the Gui commands
 	static imgY
 	static imgW
 	static imgH
-	static CtrlKyImg 				; Image control handle
-	static CtrlBgImg 				; --"--
-	static CtrlShImg 				; --"--
+	static CtrlKyImg 					; Image control handle
+	static CtrlBgImg 					; --"--
+	static CtrlShImg 					; --"--
 	static initialized  := false
 	
-	if ( not initialized ) 															; First-time initialization
+	if ( not initialized ) 				; First-time initialization
 	{
 		im.LayDir   := getLayInfo( "Dir_LayIni" )
 		im.BgPath  := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
@@ -70,32 +70,32 @@
 		initialized := true
 	}	; end first-time initialization
 	
-	if ( activate == 2 ) 			; Toggle
+	if ( activate == 2 ) 				; Toggle
 		activate    := 1 - 2 * im.Active
-	if ( activate == 1 ) { 			; Activate
+	if        ( activate == 1 ) { 		; Activate
 		im.Active   := 1
-	} else if ( activate == -1 ) { 	; Deactivate
+	} else if ( activate == -1 ) { 		; Deactivate
 		im.Active   := 0
-	} else if ( activate == 3 ) { 	; Suspend on
+	} else if ( activate ==  3 ) { 		; Suspend on
 		im.ActiveBeforeSuspend := im.Active
 		activate    := -1
 		im.Active   := 0
-	} else if ( activate == 4 ) { 	; Suspend off
+	} else if ( activate == -3 ) { 		; Suspend off
 		if ( im.ActiveBeforeSuspend == 1 && im.Active != 1) {
 			activate    := 1
 			im.Active   := 1
 		}
-	} else if ( activate == 5 ) { 	; Zoom in/out
+	} else if ( activate == 5 ) { 		; Zoom in/out
 		if ( ++im.ZoomNr > im.Zooms.maxIndex() )
 			im.ZoomNr := 1
 		scaleImage := 1
-	} else if ( activate == 6 ) { 	; Move image +1 position
+	} else if ( activate == 6 ) { 		; Move image +1 position
 		if ( ++im.PosNr > 6 )
 			im.PosNr := 1
 		scaleImage := 1
-	} else if ( activate == 7 ) { 	; Flip image between opaque and transparent (by opacity setting)
+	} else if ( activate == 7 ) { 		; Flip image between opaque and transparent (by opacity setting)
 		im.Opacity := ( im.Opacity == 255 ) ? im.OpacIni : 255
-		activate := 1 				; Ensure redrawing w/ new opacity
+		activate := 1 					; Ensure redrawing w/ new opacity
 	}
 	state := pklGetState()
 	
@@ -109,7 +109,7 @@
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
 			WinSet, TransColor, % im.BgColor, pklImgWin
-		} 				; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
+		} 								; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg ; AltSubmit 	; Make image controls stored in Help##### variables
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlKyImg ; AltSubmit
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit

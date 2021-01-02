@@ -6,22 +6,23 @@
 processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Released labels
 {
 	Critical
-	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
-	static timerCount = 0 										; # of keys queued for processing (0-29)? Or a counter?
+	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 32 pressesd keys in ###KeyPress() fns
+	static keyTimerCounter = 0 									; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
 	PklHotKeyBuffer .= ThisHotkey . "¤" 						; Add this hotkey to the hotkey buffer, ¤ delimited 	; eD WIP: Better with an array now? Set a max limit to the queue length?
-	if ( ++timerCount >= 30 ) 									; Resets the timer count on overflow. This does not affect the HotKeyBuffer size.
-		timerCount = 0
-	SetTimer, processKeyPress%timerCount%, -1 					; Set a 1 ms run-once processKeyPress# timer (key buffer)
+	if ( ++keyTimerCounter > 31 ) { 							; Resets the timer count on overflow. This does not affect the HotKeyBuffer size. 	; eD WIP: What does this affect?
+		keyTimerCounter = 0
+	}
+	SetTimer, processKeyPress%keyTimerCounter%, -1 				; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
 }
 
 runKeyPress() 													; Called from the PKL_main processKeyPress# labels
 {
 	Critical
-	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 32 pressesd keys in ###KeyPress() fns
 	
 	pos := InStr( PklHotKeyBuffer, "¤" )
 	if ( pos <= 0 ) 	; <=
@@ -103,6 +104,10 @@ extendKeyPress( HKey )											; Process an Extend modified key press
 {
 	Critical
 	static extMods  := {}
+	static modList := { "" 										; Dictionary of modifiers vs their AHK codes
+		.  "LShift" : "<+"  , "LCtrl" : "<^"  , "LAlt" : "<!"  , "LWin" : "<#"
+		,  "RShift" : ">+"  , "RCtrl" : ">^"  , "RAlt" : ">!"  , "RWin" : ">#"
+		,   "Shift" :  "+"  ,  "Ctrl" :  "^"  ,  "Alt" :  "!"  ,  "Win" :  "#" }
 	
 	if ( HKey == -1 ) { 										; Special call to reset the extMods
 		extMods := {} 											; Which Extend mods are in use
@@ -123,17 +128,22 @@ extendKeyPress( HKey )											; Process an Extend modified key press
 	}
 	returnTo := getPklInfo( "extReturnTo" ) 					; Array of Ext layers to return to from the current one
 	setExtendInfo( returnTo[ xLvl ] )
-	For HKey, mod in extMods { 									; Which Extend mods are depressed?
-		if getKeyState( HKey, "P" )
-			Send % "{" . mod . " Down}"
-	}
-	if not pkl_ParseSend( xVal ) 								; Unified prefix-entry syntax
-		Send {Blind}{%xVal%} 									; By default, take modifiers into account
+	pref := ""
+	if not pkl_ParseSend( xVal ) { 								; Unified prefix-entry syntax
+		For HKey, mod in extMods { 								; Which Extend mods are depressed?
+			if getKeyState( HKey, "P" ) {
+				pref .= modList[mod]
+;				Sleep % 16										; eD WIP: Take a little break here to avoid overflow? Doesn't seem to solve anything.
+;				Send % "{" . mod . " Down}"
+			}
+		} 	; end For
+		Send {Blind}%pref%{%xVal%} 								; By default, take modifiers into account
+	} 	; end if
 	For HKey, mod in extMods {
-		Send % "{" . mod . " Up}"
-		if not getKeyState( HKey, "P" )
+;		Send % "{" . mod . " Up}"
+		if ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
-	}
+	} 	; end For
 	Critical, Off
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 }
@@ -294,7 +304,7 @@ _setExtendState( set = 0 )									; Called from setModState
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
 		extendKeyPress( -1 ) 								; ...remove any Ext modifiers to clean up.
-;		Send {LShift Up}{LCtrl Up}{LAlt Up}{LWin Up} 		; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
+		Send {Shift Up}{Ctrl Up}{Alt Up}{Win Up} 			; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
 		extHeld := 0
 	}	; end if
 	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)

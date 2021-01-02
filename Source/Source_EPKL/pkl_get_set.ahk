@@ -72,7 +72,7 @@ getPklInfo( key, value = "", set = 0 )
 
 pkl_locale_load( lang )
 {
-	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too
+	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too 	; eD WIP: Does that really work, or matter?
 	if ( not initialized )
 	{															; Read/set default locale string list
 		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] { 	; Read defaults from the EPKL_Tables file
@@ -127,12 +127,15 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 	}
 }
 
-getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of hotkey names
+getReadableHotkeyString( str ) 			; Replace hard-to-read, hard-to-print parts of hotkey names
 {
-	strDic := {                   "<^>!"  : "AltGr & "
-		, "<+"    : "LShift & " , "<^"    : "LCtrl & " , "<!"    : "LAlt & " , "<#"    : "LWin & "
-		, ">+"    : "RShift & " , ">^"    : "RCtrl & " , ">!"    : "RAlt & " , ">#"    : "RWin & "
-		,  "+"    :  "Shift & " ,  "^"    :  "Ctrl & " ,  "!"    :  "Alt & " ,  "#"    :  "Win & "
+	strDic := {              "<^>!" : "AltGr"
+		,  "<+" : "LShift"  ,  "<^" : "LCtrl"  ,  "<!" : "LAlt"  ,  "<#" : "LWin"
+		,  ">+" : "RShift"  ,  ">^" : "RCtrl"  ,  ">!" : "RAlt"  ,  ">#" : "RWin" }
+	For key, val in strDic
+		str := StrReplace( str, key, val . " & " )
+	strDic := { ""
+		.  "+"    :  "Shift & " ,  "^"    :  "Ctrl & " ,  "!"    :  "Alt & " ,  "#"    :  "Win & "
 		, "SC029" : "Tilde"     ,  "*"    : ""         ,  "$"    : ""        ,  "~"    : "" }
 	For key, val in strDic
 		str := StrReplace( str, key, val )
@@ -145,12 +148,9 @@ getReadableHotkeyString( str )		; Replace hard-to-read, hard-to-print parts of h
 		str := StrReplace( str, "#[" . A_LoopField . "]", _getHotkeyText( A_LoopField ) )	;StringReplace, str, str, #[%A_LoopField%], %lhk%, 1
 	}
 	str := RegExReplace( str, "#\[(\w+)\]", "$1" )
-	
-	; The shorter key names were moved down so they'll work on the Languages file.
 	strDic := {                      "Delete" : "Del"   ,    "Insert" : "Ins"   ,   "Control" : "Ctrl"
 		,    "Return" : "Enter" ,    "Escape" : "Esc"   , "BackSpace" : "Back"  , "Backspace" : "Back" }
-	For key, val in strDic
+	For key, val in strDic 				; The shorter key names were moved down so they'll work on the Languages file.
 		str := StrReplace( str, key, val )
-	
 	Return str
 }

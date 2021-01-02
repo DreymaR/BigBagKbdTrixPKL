@@ -149,6 +149,14 @@ _pklJanitorCleanup() {
 			Return
 		if not ExtendIsPressed()
 			extendKeyPress( -1 ) 								; Clean up any loose Ext mods
+		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
+					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
+			if getKeyState( mod ) {
+				Return 											; If the key is being held down, leave it be, otherwise...
+			} else {
+				Send % "{" . mod . " Up}" 						; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
+			}
+		}	; end For mod 	; eD WIP: Try to do without the keyup spam now, as stuck mods aren't prevalent after the Extend mod rework? But I've still had it happen.
 		setPklInfo( "cleanupDone", true )
 	} else if ( A_TimeIdlePhysical < timeOut ) { 				; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
 		setPklInfo( "cleanupDone", false ) 						; Recent keyboard activity reactivates the cleanup timer

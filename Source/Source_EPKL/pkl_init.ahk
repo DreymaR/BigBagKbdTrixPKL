@@ -94,7 +94,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		}	; end For LVar
 	}	; end For LVars
 	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari 		;   (can be a single locale of a harmonized layout like BeCaFr)
-	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, _ISO/_ANS/_etc 	; eD WIP: Removed , "_"
+	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, _ISO/_ANS(I)/_etc 	; eD WIP: Removed , "_"
 ;	if InStr( kbdType, "-" ) { 											; eD WIP: Trad/Orth/Splt/etc so we have ISO-Orth, ANS (=ANS-Trad) etc
 ;		kbdType := StrSplit( kbdType, "-" ) 							; eD WIP: Use pklIniCSVs() to read it instead?
 ;		kbdForm := kbdType[2] 						; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!
@@ -169,7 +169,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
 	setLayInfo( "Dir_LayIni"        , layDir  )
 	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
-	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now? 	; eD WIP: Add kbdForm as kbdType[2] ?
+	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?
+	kbdType := _AnsiAns( kbdType )
 	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
 	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout?
@@ -198,6 +199,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	setPklInfo( "LayStack", layStck ) 									; Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
+	kbdType := _AnsiAns( kbdType )
 	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
 	
 	mapFile := pklIniRead( "remapsFile",, "LayStk" ) 					; Layout remapping for ergo mods, ANSI/ISO conversion etc.
@@ -285,8 +287,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		} else {
 			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
 			vkcode  := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
-			vkcode  := ( kbdType == "ISO" && mapVK[vkcode] ) 			; If necessary, convert ANSI-to-ISO 	;KLM && 
-					? mapVK[ vkcode ] : vkcode 							; eD WIP: Should we map from VK (vkcode) or SC (key) here?
+			vkcode  := ( mapVK[vkcode] ) ? mapVK[ vkcode ] : vkcode 	; If necessary, convert VK_OEM_# key codes 	; kbdType == "ISO" && 
 			vkcode  := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 	; Remap the VKey here before assignment, if applicable.
 			setKeyInfo( key . "vkey", vkcode ) 							; Set VK## code for the key
 			entr2   := RegExMatch( entr2, vkStr ) ? -1 : entr2 			; -1 = VKey internally
@@ -477,10 +478,15 @@ _pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods (used in p
 {
 	pklLays := getPklInfo( "Arr_PklLay" )
 	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
+	val := ( type = "KbdType" ) ? _AnsiAns( val ) : val
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
 	val := ( val == "--" ) ? "" : prefix . val		; Replace -- with nothing, otherwise use prefix
 	val := ( InStr( val, "<", 0 ) ) ? false : val 	; If the value is <N/A> or similar, return boolean false
 	Return val
+}
+
+_AnsiAns( kbdt ) { 									; You're allowed to use ANSI as a more well-known synonym to the ANS KbdType
+	Return ( kbdt = "ANSI" ) ? "ANS" : kbdt
 }
 
 _mapKLM( ByRef key, type )

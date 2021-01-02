@@ -7,12 +7,13 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-* This is the Big Bag Of Tricks, obviously! That is, my many layout mods and tweaks and bells and whistles. 
+* This is the **Big Bag Of Tricks**, obviously! That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout, with my own `[eD]` AltGr layers and dead keys,...
 * ...ergonomic mods both for Colemak, the Tarmak learning layouts and other layouts,...
 * ...and the incredibly useful Extend layers which work with any layout.
-* This GitHub repository is home to the **EPiKaL PKL** (**EPKL**) layout program, with several improvements over the old PKL.
-* It also implements most of my Big Bag "tricks" for EPKL, as layouts and other files.
+* This GitHub repository is home to the **EPiKaL PKL** layout program, with several improvements over the old PKL.
+* Most of my Big Bag "tricks" are implemented for EPKL, as layouts and other files.
+* Some non-EPKL BigBag stuff can be found in the Other folder.
 * Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
 	- The [Big Bag main topic][CmkBBT] with better explanations and links.
 	- Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
@@ -27,28 +28,30 @@ Getting EPKL up and running
 ---------------------------
 * Download a full copy of this repository or just its executable resources.
     - Under **[Release][GitRel] Assets**, there's a .ZIP file with the files needed to run EPKL. Unzip and run!
-    - For the latest commit (say, for a bugfix) with source code, instead `Download ZIP` by the green `Code` button.
+    - For the newest updated Git **commit** with source code, instead **[Download ZIP][GitCom]** from the green `Code` button.
     - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
     - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
     - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon.
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
-* To choose a layout variant, select the Layouts/Settings menu option. The EPKL Settings User Interface pops up.
+* To choose a layout variant, select the **Layouts/Settings...** menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist.
     - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
+* To use the chosen layout(s) and settings, select the Refresh EPKL menu option.
+* By default, help images show up when modifiers are pressed. Change the `img_HideStates` setting from `0` to `-` to always show images.
+* This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, maybe via 'show hidden icons'.
+![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
+  
+More Know-How
+-------------
 * If you want to choose layouts manually instead, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
     - There can be a [Layouts_Default][LayDef] and a [Layouts_Override][LayOvr] file. Override entries take precedence.
 * In your `EPKL_Layouts_Override.ini`, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
     - There are KbdType (@K) etc shortcuts, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* To use the chosen layout(s) and settings, select the Refresh EPKL menu option.
-  
-More Know-How
--------------
-* EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
 * The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings][PklIni] holds general program settings.
 * The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
 * There's a "LayStack" for layout info priority. Mappings/settings at higher levels will take precedence:
@@ -60,7 +63,7 @@ More Know-How
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
   
 **Tweakable parameters:**
-The files may take a little tweaking to get what you want. There are several parameters:
+The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
 * Colemak vs QWERTY vs what-have-you, obviously. Choose wisely!
     - This repo by default contains mainly Colemak(-DH) and Tarmak layouts, with QWERTY and Dvorak included.
 * Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
@@ -91,6 +94,8 @@ The files may take a little tweaking to get what you want. There are several par
     - There are help images for DKs, these can be very useful as they show what releases are in different shift states.
     - I haven't made images for all variants though, so there may be minor discrepancies.
 * Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
+* The Layout/Settings dialog can change layout, key mappings and a selection of settings. Here's a mapping example:
+![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
 **Hotkeys found in the EPKL_Settings file:**
 * Ctrl+Shift+1 – Display/hide the help image
@@ -122,6 +127,8 @@ The files may take a little tweaking to get what you want. There are several par
     - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
   
 **Techy tips for EPKL:**
+* EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
+    - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
@@ -241,11 +248,10 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
   
 KNOWN ISSUES:
 -------------
-* ISO VK layouts send a standard set of VK codes, but many locales use different codes! VK layouts may shuffle some OEM_# keys for now.
-	- Known affected locales: UK, De, Fr, Be
+* ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be...
   
   
-DONE:
+VERSION HISTORY:
 -----
 These are some of the changes in [EPKL] (PKL[eD] up to v1):
 * PKL-eD v0.4.0: Transition to AHK v1.1
@@ -363,8 +369,9 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- Non-Scandinavian installed ISO layouts such as the UK one, should now get the right VK codes detected for OEM_# symbol keys.
 		- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
 		- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
-
 	- Fixed: Some Ext-Shift presses would get lost, especially after having pressed Ext-Ctrl.
+
+	- Updated the non-Wide Sym and ANSI CAWS to the latest versions. ISO and ANSI are the same now. The non-Wide variants swap brackets with minus/plus.
   
   
 TODO:
@@ -374,7 +381,6 @@ I have many more **[EPKL][EPKLRM]** improvements on my wishlist, including:
 * Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * Chainable dead keys, allowing for instance a Mother-of-DKs key for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
 * An import module for MSKLC layout files and other formats.
-* State mapped layouts like eD don't actually send VK codes. Not sure if it matters.
   
   
 Credits/sources
@@ -397,6 +403,7 @@ _Øystein "DreymaR" Gadmar, 2020_
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
+[GitCom]: https://github.com/DreymaR/BigBagKbdTrixPKL/archive/master.zip (Latest EPKL commit download)
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
