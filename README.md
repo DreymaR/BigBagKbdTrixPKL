@@ -15,8 +15,8 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 * Most of my Big Bag "tricks" are implemented for EPKL, as layouts and other files.
 * Some non-EPKL BigBag stuff can be found in the Other folder.
 * Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
-	- The [Big Bag main topic][CmkBBT] with better explanations and links.
-	- Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
+    - The [Big Bag main topic][CmkBBT] with better explanations and links.
+    - Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
   
 These Aren't The Guides You're Looking For?
 -------------------------------------------
@@ -43,7 +43,8 @@ Getting EPKL up and running
 * To use the chosen layout(s) and settings, select the Refresh EPKL menu option.
 * By default, help images show up when modifiers are pressed. Change the `img_HideStates` setting from `0` to `-` to always show images.
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, maybe via 'show hidden icons'.
-![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
+  
+    ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
   
 More Know-How
 -------------
@@ -95,7 +96,8 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - I haven't made images for all variants though, so there may be minor discrepancies.
 * Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
 * The Layout/Settings dialog can change layout, key mappings and a selection of settings. Here's a mapping example:
-![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
+  
+    ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
 **Hotkeys found in the EPKL_Settings file:**
 * Ctrl+Shift+1 – Display/hide the help image
@@ -354,7 +356,8 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
 		- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
 		- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
-		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, copy the line to `layout.ini` or it won't work.
+		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, write the line to `layout.ini` or it won't work.
+		- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 	- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
 		- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
 	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-CAWS-ISO. Less intuitive for (C)AWide Ext2.
@@ -362,7 +365,6 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 	- If not set directly, the 3-Letter Abbreviation is found from the Tables file. Failing that, the three first letters of LayMain are used.
 	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
 	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
-	- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 	- Detection of current system layout VK codes through GetKeyVK().
 		- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
 		- Added "System-VK" throughput layouts for Extend etc. users using VKey mappings. Ergomaps would also work on it. One could also remap some keys with states.
@@ -370,7 +372,6 @@ These are some of the changes in [EPKL] (PKL[eD] up to v1):
 		- If the underlying system layout is changed while running EPKL, for now you should Refresh EPKL to get the codes reread correctly.
 		- QWERTZ and especially AZERTY are special in that they require some letter remaps too. There are remaps for them in the Remaps file but no layouts using those.
 	- Fixed: Some Ext-Shift presses would get lost, especially after having pressed Ext-Ctrl.
-
 	- Updated the non-Wide Sym and ANSI CAWS to the latest versions. ISO and ANSI are the same now. The non-Wide variants swap brackets with minus/plus.
   
   

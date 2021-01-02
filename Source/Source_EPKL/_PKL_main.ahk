@@ -191,7 +191,8 @@
 ;		- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
 ;			- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
 ;			- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
-;			- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, copy the line to `layout.ini` or it won't work.
+;			- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, write the line to `layout.ini` or it won't work.
+;			- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 ;		- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
 ;			- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
 ;			- To allow the Settings UI to work, EPKL can now use a Settings Override/Default stack (like with the Layouts files) instead of just `EPKL_Settings.ini`.
@@ -207,7 +208,6 @@
 ;		- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
 ;			- LayStack Remaps and cycles will only be checked for if their sections are present in `layout.ini`. This is to avoid slowing down other layouts.
 ;			- The Nyfee Colemak-DH mods were added to test LayStack remaps. His mods move `Z W X C F K (V)` and the Bracket/Minus/Equals keys.
-;		- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 ;		- Detection of current system layout VK codes through GetKeyVK().
 ;			- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
 ;			- Added "System-VK" throughput layouts for Extend etc. users using VKey mappings. Ergomaps would also work on it. One could also remap some keys with states.
@@ -218,14 +218,13 @@
 ;		- Fixed: If a remap (cycle?) wasn't mapped to a cycle, it could lead to an infinite loop in ReadRemaps().
 ;		- Fixed: Some Ext-Shift presses would get lost, especially after having pressed Ext-Ctrl.
 ;			- Reworked extendKeyPress() to avoid this. Also let the Janitor clean up idle Ext-mods to be sure.
-
 ;		- Reworked Extend modifiers further, to send with the AHK prefixes `+^!#` instead of holding down modifier keys. Seems smoother. Also, releasing Ext sends mods up.
 ;		- Updated the non-Wide Sym and ANSI CAWS to the latest versions. ISO and ANSI are the same now. The non-Wide variants swap brackets with minus/plus.
 ;		- Cz (Czech) ANSI variants. With no ISO key for Ůů, it was mapped to AltGr+Uu. There's optionally a map line to swap J and Z if desired, but it's non-standard.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.2.0β" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.2.0" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
