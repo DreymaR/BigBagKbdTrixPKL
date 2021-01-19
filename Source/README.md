@@ -127,8 +127,24 @@ DONE:
 **OTHER/NOTES**
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
   
-**PKL[eD] VERSION INFO**
-* PKL[eD] v0.4.5: Literals/Ligatures/Powerstrings specified by the '&‹entry›' syntax for layouts/Extend/deadkey entries. Can be defined as multiline.
+**PKL[eD] VERSION HISTORY**
+* PKL[eD] v0.4.0: Transition to AHK v1.1
+	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
+	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
+	- Sensible dead key names for images and entries (e.g., @14 -> tilde) in a central file that layouts can point to.
+	- A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
+* PKL[eD] v0.4.1: Transition to AHK v1.1 Unicode, using native Unicode Send and UTF-8 compatible files. Menu icons.
+	- Array pdics instead of the old HashTable code
+	- A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
+* PKL[eD v0.4.2: Help image layers, opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
+	- Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
+* PKL[eD] v0.4.3: Scan and virtual key code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
+	- Ergo and other mods can be played over a few existing base layouts.
+* PKL[eD] v0.4.4: Help Image Generator that uses Inkscape (separate download) to generate a set of help images from the current layout.
+	- A shorthand notation in EPKL_Layouts.ini to specify KbdType (ISO/ANSI), CurlMod and ErgoMod with the layouts.
+* PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend.
+	- Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
+	- The "&" prefix denotes literals/powerstrings found in a separate file. These may span more than one line.
 	- There's a string file specified in the layout.ini, by default it's Files\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
@@ -153,24 +169,23 @@ DONE:
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
   
-**DETAILED EPKL VERSION INFO**
-* EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
+**EPKL VERSION HISTORY:**
+* EPKL v1.0.0: Name change to EPiKaL PKL.
+	- Moved ./PKL_eD -> ./Files folder. Languages are now under Files.
 	- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
 * EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
 	- Fixed: DK images were gone due to an error in the EPKL_Settings .ini. DK images also didn't work for some layouts.
 	- Fixed: Sticky/One-Shot mods stayed active when selecting Extend, affecting strings if sent within the OSM timer even when sent with %.
-	- New: A set of Kaomoji text faces in the Strings Extend layer. Help images included.  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
+	- New: A set of 30+ Kaomoji text faces in the Strings Extend3 layer. Help images included.  ♪～└[∵┌]└[･▥･]┘[┐∵]┘～♪
 	- New: Hungarian Cmk[eD] locale variant.
 	- New: Zoom and Move hotkeys for the help image, cycling between image sizes and positions. Set e.g., imgZoom = 60,100,150 (%) in EPKL_Settings.
 	- Tutorial on making a layout variant in README. How to make and activate a layout, changing locale, remaps and a keys mappings.
-	- Moved the BaseLayout files up one tree level. In layout.ini, use its file path from Layouts w/o extension, e.g., Colemak\BaseLayout_Cmk-VK-ISO
 	- 'Spc' and 'Tab' layout mappings, sending {Blind}{Key}. Makes for compact layout entries for the delimiting whitespace characters.
-	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' rather than the extend_key setting with a mapped key as before.
+	- Direct Extend key mapping, e.g., for CapsLock use 'SC03A = Extend Modifier' instead of the old extend_key setting.
 	- Extend layers can be set as hard/soft in the _Extend file. Soft layers follow mnemonic letter mappings, hard ones are positional (like my Ext1/2).
 		- The Curl(DH) Ext+V may still be mnemonic/soft instead of positional/hard (^V on Ext+D). [v1.1.3: Use `mapSC_extend = V-B,` before AWide/Angle mods.]
+	- BaseLayout files are now at the same tree level as layout folders instead of inside one of them.
 * EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
-	- Fixed: HIG made a state8 image of semicolons. This was due to the SGCaps states (8:9) being added unnecessarily.  (つ_〃*)
-		- Also fixed some minor HIG bugs related to hex dead key values etc.
 	- New: Tap-or-Modifier a.k.a. Dual-Role Modifier keys. Work-in-progress, not working well for rapidly typed keys yet.
 		- To make a ToM key, specify its VK layout entry as VK/Mod, where 'Mod' is a modifier name. The rest of the line can be any valid entry.
 		- The Help Image Generator can mark ToM keys (state 0 and 1) with a background symbol.
@@ -178,17 +193,19 @@ DONE:
 	- Modifiers can be referred to by the first letters of their name so, e.g., 'LS' and 'LSh' both point to LShift. Also, VK or VKey = VirtualKey.
 	- Unicode points can be sent by the ~ prefix; a ~#### entry sends the U+#### character as used in MSKLC file entries.
 	- The shiftStates layout entry is now in the [layouts] section of layout.ini, spaced out so entries have more room and are clearer.
-	- Instead of the special Spc and Tab entries, use &Spc and &Tab, defined in the PowerStrings file.
+	- Since Space/Tab are used to delimit layout entries, there are now special '&Spc' and '&Tab' PowerString entries for them.
 	- Dead key abbreviations are now by code point instead of numbered, as in MSKLC. Example: The .klc entry 02c7@ is a caron DK; in EPKL it becomes @2c7.
 	- Added a Compile_EPKL.bat file that compiles the source code by running AHK2Exe with default settings.
+	- Fixed: HIG made a state8 image of semicolons. This was due to the SGCaps states (8:9) being added unnecessarily.  (つ_〃*)
+		- Also fixed some minor HIG bugs related to hex dead key values etc.
 * EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
-	- The EPKL.exe binary file is no longer version controlled. It can be compiled using the .bat file but is also provided with each release.
 	- Dead keys on Extend key tap. Examples: Tap {Extend, n} for parentheses with positioning. {Ext, z/Z} Undo/Redo. {Shift, Ext, letter} for kaomoji.
 	- Sticky Shift works to select Extend dead keys, and stays active. If you want the shift-P kaomoji tap {Shift, Ext} then P quickly. If not, wait.
-	- IniRead can now handle UTF-8 .ini files (but not UTF-16) allowing Unicode in all entries.
 	- For InputRaw/Send/AHK/Blind/Unicode/DeadKey/PowerString entry prefixes, both the old %$*=~@& or →§αβ«Ð¶ (AltGr+Shift+ISABUDP) work now.
 	- Direct dead key entries in the format <#> = <entry> work too. If the char is an uppercase version, append a plus (<#>+).
 	- "Janitor" inactivity timeout setting (e.g., 2 s) to release any stuck modifiers. These can happen with advanced usage.
+	- IniRead can now handle UTF-8 .ini files (but not UTF-16) allowing Unicode in all entries.
+	- The EPKL.exe binary file is no longer version controlled. It can be compiled using the .bat file but is also provided with each release.
 * EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
 	- The downloadable release asset .zip file now contains all files needed to run EPKL. No Source/Other/Data nor .bat/.git. files.
 	- The Kaomoji dead key now outshines the Extend layer with a related entry for each shifted letter/symbol, e.g., d( ^◇^)b vs (b￣◇￣)b.
@@ -297,11 +314,18 @@ DONE:
 	- Reworked Extend modifiers further, to send with the AHK prefixes `+^!#` instead of holding down modifier keys. Seems smoother. Also, releasing Ext sends mods up.
 	- Updated the non-Wide Sym and ANSI CAWS to the latest versions. ISO and ANSI are the same now. The non-Wide variants swap brackets with minus/plus.
 	- Cz (Czech) ANSI variants. With no ISO key for Ůů, it was mapped to AltGr+Uu. There's optionally a map line to swap J and Z if desired, but it's non-standard.
+* EPKL v1.2.1: WIP
+	- Added (Curl)AngleSym Colemak-eD variants. The non-Wide Sym variant now keeps Plus/Equal next to 0 and brackets above another as in the Wide variants.
   
   
 TODO:
 -----
-* Dead key chaining (one DK may release another). EPKL allows the @## syntax but it doesn't work as it should yet. Because it resets PVDK?
+* A "janitor" timer that checks whether the underlying Windows layout has changed (affects dead keys)
+* Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
+* An import module for MSKLC layout files and other formats.
+* Dead key chaining, allowing one DK to release another.
+	- EPKL allows the @## syntax but it doesn't work as it should yet. Because it resets PVDK?
+	- Chainable dead keys would allow a true Mother-of-DKs for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
 * Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
 * Add to unmapped dead key functionality
 	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.

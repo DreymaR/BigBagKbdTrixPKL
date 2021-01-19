@@ -68,27 +68,26 @@ Co_BS = Browser_Favorites
   
 The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
 ```
+Pent    = <Multiline> 17 		; A 17 line string, defined below
 ;;  The purpose of this power(!)string is to improve Colemak's daemon summoning capabilities. \m/
 ;;  See https://forum.colemak.com/topic/2460-improving-colemaks-demon-summoning-abilities/
-Pnt     = <Multiline> 17 		; A 17 line string, defined below
-
-Pnt-01  = "\n             ______             \n"
-Pnt-02  =   " Col    .d$$$******$$$$c.  mak  \n"
-Pnt-03  =   " \e/ .d$P"            "$$c \-/  \n"
-Pnt-04  =   "    $$$$$.     C     .$$$*$.    \n"
-Pnt-05  =   "  .$$ 4$L*$$.     .$$Pd$  '$b   \n"
-Pnt-06  =   "  $F   *$. "$$e.e$$" 4$F   ^$b  \n"
-Pnt-07  =   " d$     $$   z$$$e   $$     '$. \n"
-Pnt-08  =   " $P  m  `$L$$P` `"$$d$"   k  $$ \n"
-Pnt-09  =   " $$     e$$F   C   4$$b.     $$ \n"
-Pnt-10  =   " $b  .$$" $$   o  .$$ "4$b.  $$ \n"
-Pnt-11  =   " $$e$P"    $b     d$`    "$$c$F \n"
-Pnt-12  =   " '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  \n"
-Pnt-13  =   "  "$c.      4$.  $$       .$$   \n"
-Pnt-14  =   "   ^$$.  DH  $$ d$"  AW  d$P    \n"
-Pnt-15  =   "     "$$c.   `$b$F    .d$P"     \n"
-Pnt-16  =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
-Pnt-17  =   "           `^^^^^^^`            \n"
+Pent-01 = "\n             ______             \n"
+Pent-02 =   " Col    .d$$$******$$$$c.  mak  \n"
+Pent-03 =   " \e/ .d$P"            "$$c \-/  \n"
+Pent-04 =   "    $$$$$.     C     .$$$*$.    \n"
+Pent-05 =   "  .$$ 4$L*$$.     .$$Pd$  '$b   \n"
+Pent-06 =   "  $F   *$. "$$e.e$$" 4$F   ^$b  \n"
+Pent-07 =   " d$     $$   z$$$e   $$     '$. \n"
+Pent-08 =   " $P  m  `$L$$P` `"$$d$"   k  $$ \n"
+Pent-09 =   " $$     e$$F   C   4$$b.     $$ \n"
+Pent-10 =   " $b  .$$" $$   o  .$$ "4$b.  $$ \n"
+Pent-11 =   " $$e$P"    $b     d$`    "$$c$F \n"
+Pent-12 =   " '$P$$$$$$$$$$$$$$$$$$$$$$$$$$  \n"
+Pent-13 =   "  "$c.      4$.  $$       .$$   \n"
+Pent-14 =   "   ^$$.  DH  $$ d$"  AW  d$P    \n"
+Pent-15 =   "     "$$c.   `$b$F    .d$P"     \n"
+Pent-16 =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
+Pent-17 =   "           `^^^^^^^`            \n"
 ```
   
 KLM remapping codes used in the `_eD_Remap` file:
