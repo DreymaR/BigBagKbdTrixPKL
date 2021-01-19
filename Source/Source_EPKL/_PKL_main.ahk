@@ -16,6 +16,7 @@
 
 ;;  eD TOFIX/WIP:
 ;		- 
+;		- WIP: Add a "Revert to default" button to the settings UI?
 ;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;		- The main README is too long. Have the update history and TODO in the source folder only? Put the layout tutorial in a Layouts README?
