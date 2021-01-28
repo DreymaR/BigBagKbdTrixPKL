@@ -94,7 +94,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 
 ;; ================================================================================================
 ;;  EPKL janitor/activity module
-;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app
+;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app, perform cleanup etc.
 ;
 
 pklJanitorTic:

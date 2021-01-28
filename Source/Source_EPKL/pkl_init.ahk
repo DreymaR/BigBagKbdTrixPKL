@@ -450,7 +450,7 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
-	SetTimer, pklJanitorTic,  2000 					; Perform cleanup routine every 2 s
+	SetTimer, pklJanitorTic,  1000 					; Perform cleanup routine every 1 s
 	
 	if bool(pklIniRead("startSuspended")) {
 		Suspend

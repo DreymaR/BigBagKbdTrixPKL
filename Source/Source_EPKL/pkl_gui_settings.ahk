@@ -5,6 +5,7 @@
 	global UI_KeyRowS, UI_KeyCodS, UI_KeyRowV, UI_KeyCodV, UI_KeyModL, UI_KeyModN, UI_KeyType
 	global UI_SetThis, UI_SetThat, UI_SetComm, UI_SetLine
 	global UI_LayFile, UI_LayMenu, UI_KeyThis, UI_KeyLine
+	global UI_Reset     := false
 	global ui_NA        := "<none>" 							; Value used in the UI functions (not a control variable)
 	global ui_KLMs      := []
 	global ui_Lay3LAs, ui_KLMp 	;, ui_SepLine, ui_WideTxt
@@ -63,7 +64,8 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* VK layouts only move the keys around, eD maps each shift state."
 						. "`n* To get multiple layouts, submit twice then join the entries"
 						. "`n    in the Override file on one ""layout ="" line with a comma." . "`n"
-	GUI, UI:Add, Button, vUI_Btn1 gUIhitLayBtn, &Submit Override
+	GUI, UI:Add, Button, xs y500  vUI_Btn1  gUIhitLayBtn, &Submit Override
+	GUI, UI:Add, Button, xs+260 yp          gUIrevLay   , &Reset
 	
 	;; ================================================================================================
 	;;  Key Mapper UI
@@ -121,9 +123,10 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere." . "`n"
 ;						. "`n* If a key code isn't in the dropdown lists, edit the mapping lines."
 ;						. "`n* Key mappings map a scan code (SC) to a virtual key (VK) code."
-	GUI, UI:Add, Button, vUI_Btn2 gUIhitKeyBtn  , &Submit Key Mapping
-	GUI, UI:Add, Button, x+45     gUIhitKey2Lay , &Write to layout.ini
-	GUI, UI:Add, Button, x+75     gUIklmShow    , &Help
+	GUI, UI:Add, Button, xs y500  vUI_Btn2  gUIhitKeyBtn, &Submit Key Mapping
+	GUI, UI:Add, Button, x+20               gUIhitKeyLay, &Write to layout.ini
+	GUI, UI:Add, Button, xs+320 yp          gUIklmShow  , &Help 	; Note: Using absolute pos., specify both x & y
+	GUI, UI:Add, Button, xs+260 yp          gUIrevKey   , &Reset
 	
 	;; ================================================================================================
 	;;  Settings UI
@@ -145,7 +148,8 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* For Yes/No settings you may also use y/n, true/false or 1/0."
 						. "`n* There are more settings in the Settings_Default file."
 						. "`n* Also, settings are explained somewhat in that file."     . "`n`n"
-	GUI, UI:Add, Button, vUI_Btn3 gUIhitSetBtn, &Submit Settings
+	GUI, UI:Add, Button, xs y500  vUI_Btn3  gUIhitSetBtn, &Submit Settings
+	GUI, UI:Add, Button, xs+260 yp          gUIrevSet   , &Reset
 	
 	GUI, UI:Show
 	Gosub UIhitTab
@@ -265,7 +269,7 @@ UIhitKeyBtn: 													; Submit Key Mapping button pressed
 		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example" )
 Return
 
-UIhitKey2Lay: 													; Submit Key Mapping to layout.ini button pressed
+UIhitKeyLay: 													; Submit Key Mapping to layout.ini button pressed
 	GUI, UI:Submit, Nohide
 	_uiWriteOverride( UI_KeyThis    , UI_KeyLine    , "Key Mapper"
 		, "layout"  , "Layouts\" . getLayInfo( "ActiveLay" ) . "\layout", "" )
@@ -275,6 +279,25 @@ UIhitSetBtn: 													; Submit Settings button pressed
 	GUI, UI:Submit, Nohide
 	_uiWriteOverride( UI_SetThis    , UI_SetLine    , "Settings"
 		, "pkl"     , getPklInfo( "File_PklSet" )   , "_Default" )
+Return
+
+UIrevLay: 														; Reverse any UI setting by deleting its UI entries
+	UI_Reset := true
+	gosub UIhitLayBtn
+	gosub UIselLay
+Return
+
+UIrevKey: 														; Reverse any UI setting by deleting its UI entries
+	UI_Reset := true
+	gosub UIhitKeyBtn
+;	gosub UIhitKeyLay 											; eD WIP: How to handle this?
+	gosub UIselKey
+Return
+
+UIrevSet: 														; Reverse any UI setting by deleting its UI entries
+	UI_Reset := true
+	gosub UIhitSetBtn
+	gosub UIselSet
 Return
 
 	;; ================================================================================================
@@ -349,14 +372,16 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 
 _uiWriteOverride( key, layLine, module = "Settings" 			; Write a line to Override. If necessary, make the file first.
 	, section = "pkl", ovrFile = "EPKL_Settings", tplFile = "" ) {
-	maxEntr := 4 												; Delete old UI entries with the same key over this number.
+	revert  := UI_Reset
+	UI_Reset := false
 	A_SC    := ";"
 	ini     := ".ini"
 	tplFile := ( tplFile ) ? ovrFile . tplFile : ""
-	ovrFile .= ( tplFile ) ? "_Override" : ""
-	if ( tplFile && not FileExist( ovrFile . ini ) ) {
-		makeFile := false
-		MsgBox, 0x031, Make Override file?, 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+	ovrFile .= ( tplFile ) ? "_Override" : "" 					; If there isn't a template, use the main file as its override
+	if not FileExist ( ovrFile . ini ) { 						; If there isn't an Override file...
+		if ( tplFile && not revert ) {
+			makeFile := false
+			MsgBox, 0x031, Make Override file?, 				; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 EPKL %module% Submit
 —————————————————————————————
@@ -365,23 +390,37 @@ No "%ovrFile%" detected.
 
 Would you like to create one from %tplFile%.ini?
 )
-		IfMsgBox, Cancel 										; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
+			IfMsgBox, Cancel 									; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
+				Return
+			IfMsgBox, OK
+				makeFile := true
+			if makeFile {
+				if not tmpFile := pklFileRead( tplFile . ini )
+					Return
+				laySect := "`r`n[layout]`r`n"
+				laySect := InStr( tmpFile, laySect ) ? laySect : ""
+				tmpFile := RegExReplace( tmpFile, "s)\R\[pkl\]\R\K.*" )
+				tmpFile .= laySect
+				if not pklFileWrite( tmpFile, ovrFile . ini )
+					Return
+			} 	; end if makeFile
+		} else {
 			Return
-		IfMsgBox, OK
-			makeFile := true
-		if makeFile {
-			if not tmpFile := pklFileRead( tplFile . ini )
-				Return
-			laySect := "`r`n[layout]`r`n"
-			laySect := InStr( tmpFile, laySect ) ? laySect : ""
-			tmpFile := RegExReplace( tmpFile, "s)\R\[pkl\]\R\K.*" ) 	;(\R\[layout\]\R).*", "$1" )
-			tmpFile .= laySect
-			if not pklFileWrite( tmpFile, ovrFile . ini )
-				Return
-		} 	; end if makeFile
-	} 	; end if FileExist ovrFile
-	makeLine := false
-	MsgBox, 0x031, Write Override line?, 						; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+		} 	; end if tplFile
+	} 	; end if not FileExist ovrFile
+	makeLine := false 											; Make the new line and tidy up old ones
+	if revert {
+		MsgBox, 0x031, Reset Override?,
+(
+EPKL %module% Reset
+—————————————————————————————
+
+Revert this setting to default: %key%
+
+in the [%section%] section of %ovrFile%.ini?
+)
+	} else {
+		MsgBox, 0x031, Write Override line?, 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 EPKL %module% Submit
 —————————————————————————————
@@ -391,6 +430,7 @@ Write this line to the [%section%] section of
 
 %key% = %layLine%
 )
+	} 	; end if revert
 	IfMsgBox, Cancel 											; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
 		Return
 	IfMsgBox, OK
@@ -400,7 +440,8 @@ Write this line to the [%section%] section of
 	if not tmpFile := pklFileRead( ovrFile . ini ) 				; The standard IniWrite writes to the end of the section. We want the start.
 		Return
 	FileDelete, % ovrFile . ini 								; In order to rewrite the file and not just append to it, it must be deleted.
-	comText := A_SC . " Generated by the EPKL " . module . " UI, " 	; Start with a semicolon
+	maxEntr := revert ? 0 : 4 									; Delete old UI entries with the same key over this number.
+	comText := A_SC . " Generated by the EPKL " . module . " UI, "
 	inSect  := false
 	rows    := ""
 	count   := 0
@@ -419,11 +460,21 @@ Write this line to the [%section%] section of
 		} 	; end if inSect
 		rows := rows . "`r`n" . row
 	} 	; end For row
-	tmpFile := SubStr( rows, 3 ) 								; Lop off the initial line break
-	layLine := key . " = " . layLine . " `t`t" . comText . thisMinute()
-	secStrt := "s)\R\[" . section . "\]" 						; s: Match including line breaks
-	tmpFile := RegExReplace( tmpFile, secStrt . "\R\K(.*)", layLine . "`r`n$1" )
+	tmpFile := SubStr( rows, 3 ) 								; Lop off the initial line break from 'rows =' above
+	if not revert {
+		layLine := key . " = " . layLine . " `t`t" . comText . thisMinute()
+		secStrt := "s)\R\[" . section . "\]" 					; s: Match including line breaks
+		tmpFile := RegExReplace( tmpFile, secStrt . "\R\K(.*)", layLine . "`r`n$1" )
+	}
 	if not pklFileWrite( tmpFile, ovrFile . ini )
 		Return
-	pklInfo( "Write successful. Refresh EPKL to use the chosen settings.", 2 )
+;	pklInfo( "Write successful.`n`nRefreshing EPKL with the chosen settings.", 3 )
+	MsgBox, 0x031, Refresh EPKL?,		 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+(
+Write successful.
+
+Refresh EPKL now to use the chosen setting?
+)
+	IfMsgBox, OK
+		gosub rerunWithSameLayout
 } 	; end fn
