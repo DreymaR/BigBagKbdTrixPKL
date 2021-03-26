@@ -5,8 +5,8 @@
 	global UI_KeyRowS, UI_KeyCodS, UI_KeyRowV, UI_KeyCodV, UI_KeyModL, UI_KeyModN, UI_KeyType
 	global UI_SetThis, UI_SetThat, UI_SetComm, UI_SetLine
 	global UI_LayFile, UI_LayMenu, UI_KeyThis, UI_KeyLine
-	global UI_Reset     := false
 	global ui_NA        := "<none>" 							; Value used in the UI functions (not a control variable)
+	global ui_Reset     := false 								; Boolean for the GUI Reset button
 	global ui_KLMs      := []
 	global ui_Lay3LAs, ui_KLMp 	;, ui_SepLine, ui_WideTxt
 Return
@@ -54,7 +54,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddSel(  "Variant/Locale, if any: "
 			,       "LayVari"   , "Choose1"     , [ ui_NA ] , "xs y+m"  )
 	_uiAddSel( "Mods, if any: " 								; Make a box wider than the previous one: "wp+100"
-			,       "LayMods"   , "Choose1"     , [ "AWide" ]           ) 	; ui_NA
+			,       "LayMods"   , "Choose1"     , [ ui_NA ]             ) 	; "AWide" 	; eD WIP: A default here may fail on the first selection if a nonexisting combo is chosen
 	
 	_uiAddEdt( "`nIn the Layouts_Override [pkl] section: layout = "
 			,       "LayFile"   , ""            , ui_WideTxt            ) 	; . "`n"
@@ -65,7 +65,7 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* To get multiple layouts, submit twice then join the entries"
 						. "`n    in the Override file on one ""layout ="" line with a comma." . "`n"
 	GUI, UI:Add, Button, xs y500  vUI_Btn1  gUIhitLayBtn, &Submit Override
-	GUI, UI:Add, Button, xs+260 yp          gUIrevLay   , &Reset
+	GUI, UI:Add, Button, xs+250 yp          gUIrevLay   , &Reset
 	
 	;; ================================================================================================
 	;;  Key Mapper UI
@@ -115,18 +115,19 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddEdt( "  =  "
 			,       "KeyLine"   , ""            , ui_WideTxt, "xs y+m" )
 	GUI, UI:Add, Text,, % "" 									; Drop the footText here for clarity
-						. "`n* VKey mappings only move keys. ""Modifier"" maps are for Shift-type keys."
-						. "`n* State maps also specify the output for each modifier state."
+						. "`n* Press the Help button for a key code table and other useful info."
+						. "`n* For layout-defined keys, use the ""Write to layout.ini"" button."
+						. "`n"
+						. "`n* VKey mappings only move keys. Modifier mappings are for Shift-type keys."
+						. "`n* State maps specify the output for each modifier state."
 						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
-						. "`n* Press the Help button for a table of the key codes and other info."
-						. "`n* For layout keys, move the mapping line to your layout.ini file."
-						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere." . "`n"
-;						. "`n* If a key code isn't in the dropdown lists, edit the mapping lines."
-;						. "`n* Key mappings map a scan code (SC) to a virtual key (VK) code."
+						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
+						. "`n"
+	spc := A_Space . A_Space
 	GUI, UI:Add, Button, xs y500  vUI_Btn2  gUIhitKeyBtn, &Submit Key Mapping
 	GUI, UI:Add, Button, x+20               gUIhitKeyLay, &Write to layout.ini
-	GUI, UI:Add, Button, xs+320 yp          gUIklmShow  , &Help 	; Note: Using absolute pos., specify both x & y
-	GUI, UI:Add, Button, xs+260 yp          gUIrevKey   , &Reset
+	GUI, UI:Add, Button, xs+310 yp          gUIklmShow  , %spc%&Help%spc% 	; Note: Using absolute pos., specify both x & y
+	GUI, UI:Add, Button, xs+250 yp          gUIrevKey   , &Reset
 	
 	;; ================================================================================================
 	;;  Settings UI
@@ -149,13 +150,13 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* There are more settings in the Settings_Default file."
 						. "`n* Also, settings are explained somewhat in that file."     . "`n`n"
 	GUI, UI:Add, Button, xs y500  vUI_Btn3  gUIhitSetBtn, &Submit Settings
-	GUI, UI:Add, Button, xs+260 yp          gUIrevSet   , &Reset
+	GUI, UI:Add, Button, xs+250 yp          gUIrevSet   , &Reset
 	
 	GUI, UI:Show
-	Gosub UIhitTab
-	Gosub UIselLay
-	Gosub UIselKey
 	Gosub UIselSet
+	Gosub UIselKey
+	Gosub UIselLay 		; eD WIP: Why does selection updating work only after the first selection?
+	Gosub UIhitTab
 }
 
 	;; ================================================================================================
@@ -239,12 +240,16 @@ UIselSet: 														; Handle UI Settings selections
 	_uiControl( "SetComm", settCom )
 Return
 
-UIklmShow: 														; Show the KLM code table GUI
-	klmText :=   "- The shift states for state maps are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number and don't map the Ctrl state."
-			.  "`n- You can edit the key mapping lines directly to get your desired KLM codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists." . "`n"
-			.  "`n- Here is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW___"" Scan Codes and ""Map to vc___"" Virtual Key codes:"
+UIklmShow: 														; Show the KLM code table GUI and other info
+	klmText :=   ""
+			.   "- EPKL maps keys from their Scan codes. QW_ codes denote QWERTY locations. Keys may be moved by mod remaps such as ergo mods. Here, remap the unmodded location."
+			. "`n- Example: Standard Colemak has G on the top row, where Colemak-DH has B. To remap this key for Cmk-DH, refer to it by its vanilla position QW_B or Co_B."
+			. "`n- The shift states for state maps are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number and don't map the Ctrl state."
+			. "`n"
+			. "`n- Below is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW"" Scan Codes and ""Map to vc"" Virtual Key codes."
+			. "`n- You can edit the key mapping lines directly to any valid key codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists."
 	GUI, KLM:New    , ToolWindow , Key Mapper Help & KLM Code Table
-	GUI, KLM:Add    , Text,      , % klmText . "`n"
+	GUI, KLM:Add    , Text,      , % klmText 	;. "`n"
 	GUI, KLM:Font   , s10        , Courier New
 	GUI, KLM:Add    , Text,      , % ui_KLMp . "`n"
 	GUI, KLM:Font 												; Restore the default system font
@@ -282,20 +287,20 @@ UIhitSetBtn: 													; Submit Settings button pressed
 Return
 
 UIrevLay: 														; Reverse any UI setting by deleting its UI entries
-	UI_Reset := true
+	ui_Reset := true
 	gosub UIhitLayBtn
 	gosub UIselLay
 Return
 
 UIrevKey: 														; Reverse any UI setting by deleting its UI entries
-	UI_Reset := true
+	ui_Reset := true
 	gosub UIhitKeyBtn
 ;	gosub UIhitKeyLay 											; eD WIP: How to handle this?
 	gosub UIselKey
 Return
 
 UIrevSet: 														; Reverse any UI setting by deleting its UI entries
-	UI_Reset := true
+	ui_Reset := true
 	gosub UIhitSetBtn
 	gosub UIselSet
 Return
@@ -372,15 +377,15 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 
 _uiWriteOverride( key, layLine, module = "Settings" 			; Write a line to Override. If necessary, make the file first.
 	, section = "pkl", ovrFile = "EPKL_Settings", tplFile = "" ) {
-	revert  := UI_Reset
-	UI_Reset := false
+	revert  := ui_Reset
+	ui_Reset := false
 	A_SC    := ";"
 	ini     := ".ini"
 	tplFile := ( tplFile ) ? ovrFile . tplFile : ""
 	ovrFile .= ( tplFile ) ? "_Override" : "" 					; If there isn't a template, use the main file as its override
-	if not FileExist ( ovrFile . ini ) { 						; If there isn't an Override file...
+	if not FileExist( ovrFile . ini ) { 						; If there isn't an Override file...
+		( 1 ) ? pklDebug( "`ntpl: " . tplFile . "`novr: " . ovrFile, 4 )  ; eD DEBUG
 		if ( tplFile && not revert ) {
-			makeFile := false
 			MsgBox, 0x031, Make Override file?, 				; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 EPKL %module% Submit
@@ -390,6 +395,7 @@ No "%ovrFile%" detected.
 
 Would you like to create one from %tplFile%.ini?
 )
+			makeFile := false
 			IfMsgBox, Cancel 									; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
 				Return
 			IfMsgBox, OK
@@ -474,6 +480,9 @@ Write this line to the [%section%] section of
 Write successful.
 
 Refresh EPKL now to use the chosen setting?
+
+You can also refresh it later by the tray menu,
+or by the Refresh hotkey (default Ctrl+Shift+5).
 )
 	IfMsgBox, OK
 		gosub rerunWithSameLayout

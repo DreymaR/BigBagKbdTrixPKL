@@ -15,16 +15,33 @@
 ;
 
 ;;  eD TOFIX/WIP:
+;		- WIP: 
+;		- TOFIX: 
+;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
+;			- Kindly sponsored by Rasta at the Colemak Discord!
+;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
+;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
+;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
+;		- WIP: New help images for my RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/f/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
+;			- TOFIX: HIG DK images have placeholder boxes all over, again... State imgs are still normal.
+;		- TOFIX: Need to update the HIG main layers to the same sophistication as the DK layers. Digraphs such as on the He layout aren't shown right by the HIG.
+;		- WIP: Heb BaseLayout. See document.
+;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
+;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
 ;		- 
-;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
-;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
-;		- The main README is too long. Have the update history and TODO in the source folder only? Put the layout tutorial in a Layouts README?
-;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend may get wonky.
-;			- Using arrow on repeat does nothing wrong. Arrow w/ Ext-Shift or Ctrl makes the Ext-mod stuck after ~5 s. Arrow w/ Ext-Shift+Ctrl makes the arrow stuck, requires a reset.
+;		- WIP: Add CAWS variants for the ISO locales
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-;		- 
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
+;		- Is the main README still too long? Put the layout tutorial in a Layouts README?
+;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend may get wonky.
+;			- Using arrow on repeat does nothing wrong. Arrow w/ Ext-Shift or Ctrl makes the Ext-mod stuck after ~5 s. Arrow w/ Ext-Shift+Ctrl makes the arrow stuck, requires a reset.
+;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
+;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
+;			- It works well! But then after a while it stops working?
+;		- 
+;		- TODO: A way to send A_Priorkey. Could have a special PowerString for it or smth? Or even more fancy, a most-common-n-gram key? Specify a table, default to repeating. Cmk example: QU, UE, SC, And/The/Ing/Ous.
+;			- Actually, using A_Priorkey could lead to a generic follower-key syntax? Opposite of a leader key. Could be used for great effect.
 ;		- WIP: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
 ;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!
@@ -53,6 +70,10 @@
 ;		- TOFIX: The NBSP mapping (AltGr+Spc), in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- TOFIX: If Win+v (Paste Clipboard) is pressed, the clipboard is often closed again unless Win is released very fast. This is probably due to some odd LCtrl key down-up that occur for some reason.
+;		- TOFIX: Layout settings don't initially default to type/variant/mod!
+;			- Happens if I select the He locale variant w/ AWide as the default mod, and the default AWide mod doesn't exist for He. Same w/ Tarmak-eD_ANS with no Tarmak-eD_ISO present.
+;			- If cycling by arrow keys from Colemak to, e.g., QUARTZ and back, VK and variants won't show. But KbdType and Mods do, and if selected the others return.
+;			- After selecting a valid combo once, defaulting works as expected afterwards.
 ;		- WIP: Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
 ;		- WIP: Make the HIG work for non-standard state layer entries like it does for DK now? Consider naChr vs ·¶·-like marks.
 ;		- WIP: Consider a remap for each Ext layer? Would make things messier, but allows separate Ext1 and Ext2 maps (for Sl/Bs switch).
@@ -68,6 +89,7 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: Add ABNT keys to the HIG template?
 ;		- TODO: Record macro? Or just a way to set entries for a certain DK layer in the Settings UI? Say, the Ext-tap layer(s). Could have backup DK layers and a Reset button.
 ;		- TODO: Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
@@ -109,10 +131,6 @@
 ;				- Placing all my DKs on MoDK sequences will fill up a layer. So maybe only the most interesting ones? But how to make it mnemonic?
 ;				- Example: Tap-dance {Ext,t,n} -> ñ; {Ext,a,A} -> Á; {Ext,0-9} IPA DKs.
 ;				- For good measure, could have different @MD# on different states of the same key! Wow. The ToM formalism should support this actually!
-;		- Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - or 4 more states than the current 4, disregarding Ctrl.
-;			- The states themselves are already implemented? So what remains is a sensible switch. "St8|SGCap Modifier"? Can translate in _checkModName()
-;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc key that could serve as switch.)
-;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
@@ -220,11 +238,15 @@
 ;		- Cz (Czech) ANSI variants. With no ISO key for Ůů, it was mapped to AltGr+Uu. There's optionally a map line to swap J and Z if desired, but it's non-standard.
 ;	* EPKL v1.2.1: WIP
 ;		- Added (Curl)AngleSym Colemak-eD variants. The non-Wide Sym variant now keeps Plus/Equal next to 0 and brackets above another as in the Wide variants.
-
 ;		- Added Nyfee's ColemaQ mod and NotGate's ISRT alias IndyRad layout, as ANSI Cmk-CA mods in the `_Test` folder. Nyfee's mod has his own Sym mod included.
 ;		- Added the Cmk-DpgH mod using SteveP's `D>P>G` loop which leaves the left hand bottom row alone. It's considered a secondary and somewhat inferior variant.
 ;		- Added Michael Dickens' MTGAP layout as an eD base layout, and some ergo mods for it. There are many MTGAP variants; I used the "main 30 keys" one.
 ;		- Added a Reset button to Layouts/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
+
+;		- Separate BaseLayout for the Greek (Gr) and Kyrillic (Ru) scripts. This removes the need for full mappings in layout files. Bg keeps the necessary mappings.
+;		- Fixed: Minor bug in which the Settings GUI wouldn't try to make a new Override file but just lead to a file read error instead.
+;		- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/f/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
+;		- Added Nyfee's latest Colemak-QI mod as a `_Test` layout like before.
 
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL

@@ -261,7 +261,7 @@ atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper 
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }
 
-pklSplash( title, text, dur = 6 ) { 		; Default display duration is in seconds
+pklSplash( title, text, dur = 4.0 ) { 		; Default display duration is in seconds
 	SplashTextOff
 	SetTimer, KillSplash, Off
 	SplashTextOn, 300, 100, %title%, `n%text%

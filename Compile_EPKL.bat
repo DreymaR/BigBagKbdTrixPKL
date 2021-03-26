@@ -15,9 +15,9 @@ set ahk=AHK-Compiler_v1-1
 cd /d "%src%"
 echo * Working from %src%
 
-REM *** SHUT DOWN ANY RUNNING EPKL.exe TO ALLOW OVERWRITING IT
-echo * Stopping any running EPKL instances...
-taskkill /IM EPKL.exe
+REM *** SHUT DOWN ANY RUNNING EPKL.exe AND SUBPROCESSES TO ALLOW OVERWRITING IT
+echo * Stopping any running EPKL processes...
+taskkill /F /IM EPKL.exe /T
 echo.
 
 REM *** COMPILE FOR UNICODE32

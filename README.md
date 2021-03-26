@@ -38,30 +38,45 @@ Getting EPKL up and running
 * To choose a layout variant, select the **Layouts/Settings...** menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
-    - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist.
+    - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist – they'll likely be eD variants.
     - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
-* To use the chosen layout(s) and settings, select the Refresh EPKL menu option.
-* By default, help images show up when modifiers are pressed. Change the `img_HideStates` setting from `0` to `-` to always show images.
+* Help images by default show up when modifiers are pressed. On the `Settings` tab, change `img_HideStates` from `0` to `-` to always show images.
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, if necessary via the 'Show hidden icons' caret.
   
     ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
   
 More Know-How
 -------------
-* If you want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
-    - There can be both [Layouts_Default][LayDef] and [Layouts_Override][LayOvr] files. Override entries take precedence.
-* In your Layouts_Override file, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
-    - There are KbdType (@K) and other abbreviations, but you could also type the path to a layout folder out in full.
-    - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings][PklIni] holds general program settings.
-* The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
-* There's a "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
-    - The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
-    - The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
-    - The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
-    - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
-* In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
+**A Short EPKL Glossary**
+* **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
+    - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][CmkBBT]!
+* **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
+    - After selecting an Extend layer this way, keep only the Extend key pressed down to maintain it
+* A **Sticky Modifier** or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
+    - There's a setting in the Settings file for how quickly the OSM times out, in milliseconds
+* **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
+    - ToM has its own timer setting which is typically shorter than the Sticky Mods timer
+* **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
+    - DK sequence: You can tap several DKs to get new symbols (example: `{AltGr+=,=}` gives `≡`; `AltGr+{/,=}` then `=` gives `≢`)
+    - DK chaining: One DK can release to another. This is not implemented in EPKL yet
+    - **MoDK** (Mother-of-DKs) is a ToM key (here, on **tap-Extend**) that leads to lots of cool DKs
+* **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
+    - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
+* The **LayStack** is a stack of files that may hold layout definitions: Layouts_Default, Layouts_Override, BaseLayout and Layout
+* **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
+    - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
+  
+**Hotkeys defined in the EPKL_Settings file:**
+* Ctrl+Shift+1 – Display/hide the help image (it may also hide itself by shift state)
+* Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
+* Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may also be Ctrl+Shift+`.
+* Ctrl+Shift+4 – Exit EPKL
+* Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
+* Ctrl+Shift+6 – Show the Layouts/Settings... dialog
+* Ctrl+Shift+7 – Zoom the help image in/out, to see it better or get it out of the way
+* Ctrl+Shift+8 – Toggle help image transparency
+* Ctrl+Shift+9 – Move the help image between positions, as by mouseover
+* Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
   
 **Tweakable parameters:**
 The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
@@ -100,39 +115,10 @@ The layouts and setup files may take a little tweaking to get what you want. The
   
     ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
-**Hotkeys found in the EPKL_Settings file:**
-* Ctrl+Shift+1 – Display/hide the help image
-* Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
-* Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may also be Ctrl+Shift+`.
-* Ctrl+Shift+4 – Exit EPKL
-* Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
-* Ctrl+Shift+6 – Show the Layouts/Settings... dialog
-* Ctrl+Shift+7 – Zoom the help image in/out, to see it better or get it out of the way
-* Ctrl+Shift+8 – Toggle help image transparency
-* Ctrl+Shift+9 – Move the help image between positions, as by mouseover
-* Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
-  
-**Short EPKL Glossary**
-* **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
-* **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
-    - After selecting an Extend layer this way, keep only the Extend key pressed down to maintain it
-* A sticky modifier or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
-    - There's a setting in the Settings file for how quickly the OSM times out, in milliseconds
-* **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
-* **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
-    - DK sequence: You can tap several DKs to get new symbols (example: `{AltGr+=,=}` gives `≡`; `AltGr+{/,=}` then `=` gives `≢`)
-    - DK chaining: One DK can release to another. This is not implemented in EPKL yet
-    - **MoDK** (Mother-of-DKs) is a ToM key (here, on **tap-Extend**) that leads to lots of cool DKs
-* The **LayStack** is a stack of files that may hold layout definitions: Layouts_Default, Layouts_Override, BaseLayout and Layout.
-* **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
-    - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
-* **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
-    - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
-  
 **Techy tips for EPKL:**
 * EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
     - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
-* EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.  
+* EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
     - If the PortableApps menu is run on logon it can start up EPKL for you too.
@@ -141,6 +127,22 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
+  
+**The LayStack explained further**
+* If you want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
+    - There can be both [Layouts_Default][LayDef] and [Layouts_Override][LayOvr] files. Override entries take precedence.
+* In your Layouts_Override file, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
+    - There are KbdType (@K) and other abbreviations, but you could also type the path to a layout folder out in full.
+    - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
+* The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings][PklIni] holds general program settings.
+* The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
+* There's a "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
+    - The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
+    - The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
+    - The `BaseLayout` .ini file usually found under each layout type may define most of the layout
+    - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
+    - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
+* In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
   
 Key mappings
 ------------
@@ -242,10 +244,11 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - ...edit the image settings, replacing AWide/CAWide/CAngle with 'Angle' to get normal ISO_Angle images without German letters, or...
     - ...make new help images in an image editor by copying and combining from the ones you need. I use Gimp for such tasks.
 * If you do want to generate a set of help images from your layout you must get Inkscape and run the EPKL Help Image Generator (HIG).
+    - You can download Inkscape for instance from [PortableApps.com]{InkPrt], or install it properly. Make sure it's version 1.0 or newer.
+    - Point to your Inkscape in the [ImgGen_Settings](./Files/ImgGenerator/EPKL_ImgGen_Settings.ini) file.
+    - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
     - To see the "Create help images..." menu option, advancedMode must be on in [EPKL_Settings][PklIni].
     - The HIG will make images for the currently active layout.
-    - You can download Inkscape for instance from PortableApps.com, and point to it in the [ImgGen_Settings](./Files/ImgGenerator/EPKL_ImgGen_Settings.ini) file.
-    - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
   
   
@@ -283,6 +286,7 @@ _Øystein "DreymaR" Gadmar, 2020_
 [EPKLRM]: https://github.com/DreymaR/BigBagKbdTrixPKL/tree/master/Source (EPKL advanced README)
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
+[InkPrt]: https://portableapps.com/apps/graphics_pictures/inkscape_portable (Inkscape v1.0 at PortableApps.com)
 [KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
 [LayOvr]: ./EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
