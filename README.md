@@ -87,7 +87,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The _[eD]_ layouts have their own Shift/AltGr state mappings specified.
     - Actually, you may mix mapping types freely in any layout.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-    - ISO boards have a `VK_102` key between `Z` and `LShift`.
+    - ISO boards have a `OEM_102` key between `Z` and `LShift`.
     - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. The boards send the same scan codes though.
     - Brazilian ABNT boards are like ISO, but have two more keys. These can be remapped by their scan codes.
     - JIS (Japanese) etc are not supported so far. Sorry. Gomen-nasai. ごめんなさい.    ᏊᵕꈊᵕᏊ
@@ -228,10 +228,10 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 * Change any key mappings you want to tweak.
     - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
     - See the next section to learn more about key mapping syntax.
-    - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (OEM_102) for the sake of example.
-    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. OEM_102 is there, state 0/1 mapped to ö/Ö.
+    - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (`OEM_102`) for the sake of example.
+    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `OEM_102` is there, state 0/1 mapped to ö/Ö.
     - To find the V key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. There's the V key, SC02f.
-    - Now, copy the V and OEM_102 keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
+    - Now, copy the V and `OEM_102` keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
 * Now, if your `EPKL_Layouts` .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
     - Here, set LayType/LayVari/KbdType/CurlMod/ErgoMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).

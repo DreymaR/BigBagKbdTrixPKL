@@ -262,14 +262,17 @@ atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper 
 }
 
 pklSplash( title, text, dur = 4.0 ) { 		; Default display duration is in seconds
-	SplashTextOff
-	SetTimer, KillSplash, Off
-	SplashTextOn, 300, 100, %title%, `n%text%
+	SetTimer, KillSplash, Off 				; TrayTip and SplashText are hard to kill? SplashText is also deprecated.
+	Gui, pklSp:New, ToolWindow -SysMenu, %title% 	; GUI window w/ title, no buttons
+	Gui, pklSp:Margin, 24 					; Horizontal margin to allow the whole window title to be shown
+	Gui, PklSp:Font, s12 w500 				; Font size and weight (400 normal, 700 bold)
+	Gui, pklSp:Add, Text,, %text%
+	Gui, pklSp:Show 		;	TrayTip %title%, `n%text%, dur, 0x11 	;SplashTextOn, 300, 100, %title%, `n%text%
 	SetTimer, KillSplash, % -1000 * dur
 }
 
 KillSplash:
-	SplashTextOff
+	Gui, pklSp: Destroy 					;TrayTip 	;SplashTextOff
 Return
 
 getPriority(procName="") { 					; Utility function to get process priority, by SKAN from the AHK forums
