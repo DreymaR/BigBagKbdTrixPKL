@@ -276,7 +276,7 @@ hig_parseEntry( ByRef HIG, ent ) { 								; Parse a state or DK mapping for hel
 		ent := "·" . psp . "·" 									; Show the prefixed entry as the prefix flanked by mid-dots
 	} 	; end if psp 									; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
 	if ( ent && not psp ) {
-		ent := ( (ent + 0) == "" && StrLen( ent ) > 2 ) 		; eD WIP: Must not mark "dc_" keys here! Add if else to the above? 	; eD WIP: Do this in the image generating fn instead?
+		ent := ( (ent + 0) == "" && StrLen( ent ) > 3 ) 		; eD WIP: Must not mark "dc_" keys here! Add if else to the above? 	; eD WIP: Do this in the image generating fn instead?
 				? HIG.MkEllip : ent 							; Entry is a string, like {Home}+{End} or prefix-entry. Marked as a (midline?) ellipse.
 	}
 	naChr   := Chr( HIG.MkNaChr ) 								; Not-a-char mark, default U+25AF Rect.

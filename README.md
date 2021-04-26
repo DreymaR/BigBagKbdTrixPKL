@@ -255,6 +255,8 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 KNOWN ISSUES:
 -------------
 * ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be...
+* Windows intercepts certain key combinations like Ctrl+Alt+Del and Win+L so these may work oddly with state remaps like eD.
+    - A workaround for this is to map a shortcut to `α#e` for accessing Win+E on Colemak. For Ext-tap, there's one on `{Ext,w}`.
   
   
 DONE/TODO:

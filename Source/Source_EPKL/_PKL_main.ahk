@@ -195,7 +195,7 @@
 ;	* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
 ;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 ;	* EPKL v1.2.0: Layout/Settings UI.
-;	* EPKL v1.2.1: WIP
+;	* EPKL v1.2.1α: WIP
 ;		- Added a Reset button to Layouts/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
 ;		- Separate BaseLayout for the Greek (Gr) and Kyrillic (Ru) scripts. This removes the need for full mappings in layout files. Bg keeps the necessary mappings.
 ;		- Fixed: Minor bug in which the Settings GUI wouldn't try to make a new Override file but just lead to a file read error instead.
@@ -205,14 +205,15 @@
 ;		- Added Michael Dickens' MTGAP layout as an eD base layout, and some ergo mods for it. There are many MTGAP variants; I used the "main 30 keys" one.
 ;		- April's Foal! The Foalmak layout is an April Fool's joke layout by Semi at the Colemak Discord. It's still better than QWERTY, heh. And it's got nice images!
 ;		- Added Nyfee's new Colemak-QI mod as a Colemak variant, CAS & CAWS modded. Also the "extra mile" QI;x mod as `_Test` layouts like before.
-
 ;		- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/v/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
 ;		- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 ;		- HIG updated so shift state help images show parseable entries like bigrams correctly.
 
+;		- New mappings for Ext-tap wfpblu. {Ext-tap,w} opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
+
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.2.0" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
+setPklInfo( "pklVers", "1.2.1α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
 setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
 setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
