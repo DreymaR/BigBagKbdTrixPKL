@@ -14,18 +14,24 @@
 ;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
+;;  ####################### user area #######################
+; :*:'3e::obgadmar@gmail.com 	; eD WIP: Hotstring (replace text with other)
+
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
-;		- TOFIX: 
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post.
+;		- 
+;		- TOFIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
 ;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
 ;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
-;		- 
+;		- TODO: Make a state mapping that can send the key's VKey blind for that state. Say, `##` or such. Could also send modifiers? Maybe it could be default for state 0/1.
+;			- Not sure if that might increase game compatibility in any way?
+;		- TODO: Hotstrings? May have to wait for AHK v1.1.28 to use the Hotstring() fn? Or is there somewhere in this script we could insert definitions?
 ;		- WIP: Add CAWS variants for the ISO locales
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
@@ -208,14 +214,17 @@
 ;		- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/v/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
 ;		- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 ;		- HIG updated so shift state help images show parseable entries like bigrams correctly.
+;		- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
 
-;		- New mappings for Ext-tap wfpblu. {Ext-tap,w} opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
+;		- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
 
 
-setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; PKL[edition DreymaR] -> EPKL
-setPklInfo( "pklVers", "1.2.1α" ) 											; EPKL Version (was PKL[eD] until v0.4.8)
-setPklInfo( "pklComp", "DreymaR" ) 											; Compilation info, if used
-setPklInfo( "pkl_URL", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
+;;  ####################### main      #######################
+
+setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
+setPklInfo( "pklVers", "1.2.1α" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
+setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
+setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
 SendMode Event
 SetKeyDelay 3 												; The Send key delay wasn't set in PKL, defaulted to 10
@@ -241,9 +250,10 @@ arg = %1% ; Layout from command line parameter
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
 initLayIni() 												; Read settings from layout.ini and layout part files
 activatePKL()
+
 Return  	; end main
 
-; ####################### labels #######################
+;;  ####################### labels    #######################
 
 ;;  eD WIP: Map AltGr to RAlt to prevent trouble?!
 ;;  The order of AltGr is always LCtrl then RAlt. Custom combos always have the * (wildcard) mod so they obey any mod state.
@@ -430,7 +440,7 @@ epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug ho
 	debugShowCurrentWinLayOEMs()
 Return
 
-; ####################### functions #######################
+;;  ####################### functions #######################
 
 #Include pkl_init.ahk
 #Include pkl_gui_image.ahk	; pkl_gui was too long; it's been split into help image and menu/about parts
@@ -445,7 +455,7 @@ Return
 #Include pkl_import.ahk 	; Import module, converting MSKLC layouts to EPKL format
 #Include pkl_make_img.ahk	; Help image generator, calling Inkscape with an SVG template
 
-; #######################  modules  #######################
+;;  #######################  modules  #######################
 
 ; #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
 ; #Include ext_MenuIcons.ahk ; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated

@@ -327,7 +327,9 @@ DONE:
 	- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/f/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
 	- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 	- HIG updated so shift state help images show parseable entries like bigrams correctly.
+	- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
   
+	- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
   
   
 TODO:

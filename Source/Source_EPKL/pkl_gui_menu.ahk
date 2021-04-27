@@ -129,9 +129,9 @@ pkl_about()
 
 	pklAppName      := getPklInfo( "pklName" )
 	pklMainURL      := "https://github.com/Portable-Keyboard-Layout"
-	pklProgURL      := getPklInfo( "pkl_URL" )
+	pklProgURL      := getPklInfo( "pklHome" )
 	pklVersion      := getPklInfo( "pklVers" )
-	compiledAt      := getPklInfo( "pklComp" )
+	compiledOn      := getPklInfo( "pklComp" )
 	aboutTitle      := "About EPKL"
 	
 	locUnknown      := getPklInfo( "LocStr_03" ) 				; "Unknown"
@@ -165,7 +165,7 @@ pkl_about()
 		Return
 	}
 	GUI, AW:New,       , %aboutTitle% 							; About... window (default GUI)
-	GUI, AW:Add, Text, , %pklAppName% v%pklVersion% (%compiledAt%)
+	GUI, AW:Add, Text, , %pklAppName% v%pklVersion%
 	if ( pklProgURL != pklMainURL ) {
 		GUI, AW:Add, Edit, , %pklProgURL%
 		GUI, AW:Add, Text, , Based on Portable Keyboard Layout v0.4
@@ -189,10 +189,10 @@ pkl_about()
 ;		text :=   "Keyboard/Layout type from settings: "    . kbdType
 ;		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
 ;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
-		text :=   "Current Windows Locale / Language ID: "  . msLID . " " . wLang
-		text .= "`nDead keys set for this Windows layout: " . dkStr
-		text .= "`n"
-		text .= "`nLayout/BaseLayout file paths:`n- "       . layFile . "`n- " . basFile
+		text :=   "EPKL.exe compiled on: "                  . compiledOn            . "`n"
+		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
+		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"
+		text .= "`nLayout/BaseLayout file paths:`n- " . layFile . "`n- " . basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	GUI, AW:Show
