@@ -27,7 +27,7 @@
 pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltGr states
 {
 	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up" 
-	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!?
+	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
 		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed. Also, Space entries need to be sent {Blind}
 	prefix := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""

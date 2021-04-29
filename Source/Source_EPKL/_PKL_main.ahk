@@ -27,10 +27,11 @@
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post.
 ;		- 
 ;		- TOFIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
+;			- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first time Send is called for each target keyboard layout (earlier)."
+;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
+;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
 ;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
 ;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
-;		- TODO: Make a state mapping that can send the key's VKey blind for that state. Say, `##` or such. Could also send modifiers? Maybe it could be default for state 0/1.
-;			- Not sure if that might increase game compatibility in any way?
 ;		- TODO: Hotstrings? May have to wait for AHK v1.1.28 to use the Hotstring() fn? Or is there somewhere in this script we could insert definitions?
 ;		- WIP: Add CAWS variants for the ISO locales
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
@@ -215,8 +216,9 @@
 ;		- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 ;		- HIG updated so shift state help images show parseable entries like bigrams correctly.
 ;		- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
-
 ;		- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
+
+;		- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
 
 
 ;;  ####################### main      #######################

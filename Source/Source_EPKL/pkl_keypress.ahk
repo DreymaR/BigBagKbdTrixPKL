@@ -89,6 +89,8 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		Return
 	} else if ( state == "vkey" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.
 		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken.)
+	} else if ( Pri == -1 ) { 									; This state is sent as a VKey
+		Send % "{Blind}{" . Ent . "}"
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
 		pkl_Send( Pri, modif )
 	} else {

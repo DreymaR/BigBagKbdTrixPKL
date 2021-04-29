@@ -268,11 +268,12 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		} else {
 			tapMod  := ""
 		}
+		keyVK := "VK" . Format( "{:X}", GetKeyVK( key ) ) 				; Find the right VK code for the key's SC, from the active layout.
 		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 							; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
 		if RegExMatch( entr1, vkStr) { 									; If the first entry is a VKey synonym, VK map the key to itself
 			numEntr   := 2
-			entr1     := "VK" . Format( "{:X}", GetKeyVK( key ) ) 		; Find the right VK code for the key's SC, from the active layout.
-			entr2     := "VKey" 										; Note: This is the QWERTY mapping of that SC###.
+			entr1     := keyVK 											; The right VK code for the key's SC, from the active layout.
+			entr2     := "VKey" 										; Note: This is the KLM vc=QWERTY mapping of that SC###.
 		}
 		if ( numEntr < 2 ) || ( entr1 == "--" ) { 						; An empty or one-entry key mapping will deactivate the key
 			Hotkey, *%key%   ,  doNothing 								; The *SC### format maps the key regardless of modifiers.
@@ -286,12 +287,12 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			entr2     := -2 											; -2 = Modifier
 		} else {
 			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
-			vkcode  := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
-			vkcode  := ( mapVK[vkcode] ) ? mapVK[ vkcode ] : vkcode 	; If necessary, convert VK_OEM_# key codes 	; kbdType == "ISO" && 
-			vkcode  := vkMapMec[vkcode] ? vkMapMec[vkcode] : vkcode 	; Remap the VKey here before assignment, if applicable.
-			setKeyInfo( key . "vkey", vkcode ) 							; Set VK## code for the key
-			entr2   := RegExMatch( entr2, vkStr ) ? -1 : entr2 			; -1 = VKey internally
-;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . vkcode . "`n" )  ; eD DEBUG
+			mpdVK  := getVKnrFromName( entr1 ) 							; Translate to the four-digit VK## hex code (Uppercase)
+			mpdVK  := ( mapVK[mpdVK] ) ? mapVK[ mpdVK ] : mpdVK 		; If necessary, convert VK_OEM_# key codes 	; kbdType == "ISO" && 
+			mpdVK  := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
+			setKeyInfo( key . "vkey", mpdVK ) 							; Set the (mapped) VK## code for the key
+			entr2   := RegExMatch( entr2, vkStr ) ? -1 : entr2 			; -1 = VKey internally, if entr2 is "VKey" or similar
+;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . mpdVK . "`n" )  ; eD DEBUG
 		}
 		setKeyInfo( key . "capSt", entr2 ) 								; Set Caps state (0-5 for states; -1 VK; -2 Mod)
 		if ( tapMod ) { 												; Tap-or-Modifier
@@ -306,14 +307,17 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		}	; end if entries
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
 			ks  := shStates[ A_Index ] 									; This shift state for this key
-			ksE := entry[ A_Index + 2 ]									; The value/entry for that state
-			if        ( StrLen( ksE ) == 0 ) {							; Empty entry; ignore
+			ksE := entry[ A_Index + 2 ] 								; The value/entry for that state
+			if        ( StrLen( ksE ) == 0 ) { 							; Empty entry; ignore
 				Continue
-			} else if ( StrLen( ksE ) == 1 ) {							; Single character entry:
+			} else if ( StrLen( ksE ) == 1 ) { 							; Single character entry:
 ;				setKeyInfo( key . ks . "s", "+" ) 						; eD WIP: Mark set states as '+' and empty as '-', to read the LayStack top-down? No, mark the keys.
-				setKeyInfo( key . ks , Ord(ksE) )						; Convert to ASCII/Unicode ordinal number; was Asc()
+				setKeyInfo( key . ks , Ord(ksE) ) 						; Convert to ASCII/Unicode ordinal number; was Asc()
 			} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
 				setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
+			} else if ( ksE == "##" ) {
+				setKeyInfo( key . ks , -1 ) 							; Send this state {Blind} as its VK## 	; eD WIP
+				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
@@ -323,8 +327,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
-				setKeyInfo( key . ks      , ksP )						; "key<state>"  is the entry prefix
-				setKeyInfo( key . ks . "s", ksE )						; "key<state>s" is the entry itself
+				setKeyInfo( key . ks      , ksP ) 						; "key<state>"  is the entry prefix
+				setKeyInfo( key . ks . "s", ksE ) 						; "key<state>s" is the entry itself
 			}
 		}	; end loop entries
 	}	; end loop (parse keymap)
