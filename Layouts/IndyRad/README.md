@@ -14,10 +14,12 @@ NotGate's IndyRad/ISRT layout
     - It's also compatible with the standard Wide and Sym mods I've used elsewhere, so they're added.
 - About the name: NotGate calls the layout ISRT but I found that boring. So I searched, and found:
     - [http://www.isrt.org.in/][IndSRT] - the Indian Society of Radiographers & Technologists! IndyRad!  (✿◠‿◠)
+<br><br>
 
-	|![EPKL help image for IndyRad-eD-CAWS on an ISO board](./Ind-eD_ISO_CurlAWideSym/state0.png)|
-	|-
-	_The ISRT-CAWS layout on an ISO board_
+|![EPKL help image for IndyRad-eD-CAWS on an ISO board](./Ind-eD_ISO_CurlAWideSym/state0.png)|
+|                :---:                |
+|_The ISRT-CAWS layout on an ISO board_|
+
   
 
 NotGate's recent version history:
