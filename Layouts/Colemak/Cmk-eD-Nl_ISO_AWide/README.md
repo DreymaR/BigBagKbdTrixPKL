@@ -16,7 +16,16 @@ Colemak-Nl Netherlands/Dutch locale layout
 ------------------------------------------
 For Dutch locale Colemak, at the least we need accents easily accessible. There's also the ĳ digraph, but it's often written as a bigram (ij) instead. However, the J position in Colemak is bad.
 - **Cmk-eD-Nl**
-	![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](../Cmk-eD-Nl_ISO_AWide/state0.png)
-	![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, shifted state](../Cmk-eD-Nl_ISO_AWide/state1.png)
-	![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, AltGr state](../Cmk-eD-Nl_ISO_AWide/state6.png)
+<br>
 
+	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](../Cmk-eD-Nl_ISO_AWide/state0.png)|
+	|   :---:   |
+	|_Colemak-eD-Nl_ISO_AWide, unshifted state. Note the `ĳ` digraph on the ISO key._|
+
+	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, shifted state](../Cmk-eD-Nl_ISO_AWide/state1.png)|
+	|   :---:   |
+	|_Colemak-eD-Nl_ISO_AWide, shifted state. Note the `Ĳ` digraph on the ISO key._|
+
+	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, AltGr state](../Cmk-eD-Nl_ISO_AWide/state6.png)|
+	|   :---:   |
+	|_Colemak-eD-Nl_ISO_AWide, AltGr state. Note the `ij` bigram on `AltGr+i`._|

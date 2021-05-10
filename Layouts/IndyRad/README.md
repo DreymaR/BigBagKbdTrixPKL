@@ -17,7 +17,7 @@ NotGate's IndyRad/ISRT layout
 <br><br>
 
 |![EPKL help image for IndyRad-eD-CAWS on an ISO board](./Ind-eD_ISO_CurlAWideSym/state0.png)|
-|                :---:                |
+|   :---:   |
 |_The ISRT-CAWS layout on an ISO board_|
 
   
