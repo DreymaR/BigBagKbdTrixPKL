@@ -13,9 +13,11 @@ NotGate's IndyRad/ISRT layout
     - Therefore, on a row-staggered board it should also include an Angle mod.
     - It's also compatible with the standard Wide and Sym mods I've used elsewhere, so they're added.
 - About the name: NotGate calls the layout ISRT but I found that boring. So I searched, and found:
-    - http://www.isrt.org.in/ - the Indian Society of Radiographers and Technologists! IndyRad!  (✿◠‿◠)
+    - [http://www.isrt.org.in/][IndSRT] - the Indian Society of Radiographers & Technologists! IndyRad!  (✿◠‿◠)
 
-	![EPKL help image for IndyRad-eD-CAWS on an ISO board](./ind-eD_ISO_CurlAWideSym/state0.png)
+	|![EPKL help image for IndyRad-eD-CAWS on an ISO board](./Ind-eD_ISO_CurlAWideSym/state0.png)|
+	|-
+	_The ISRT-CAWS layout on an ISO board_
   
 
 NotGate's recent version history:
@@ -54,3 +56,4 @@ Remaps from Cmk-DH:
 ```
 
 [NotGte]: https://notgate.github.io/layout/ (NotGate's layout page, home of the ISRT layout)
+[IndSRT]: http://www.isrt.org.in/ (Indian Society of Radiographers & Technologists)
