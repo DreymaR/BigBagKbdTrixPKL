@@ -27,20 +27,17 @@ For Italian locale Colemak, at the least we need the letters é and àèìòù e
 	|_Colemak-eD-It_ISO_AWide, shifted state_|
 
 	<br>
-- **Cmk-eD-EsLat**: This is good both for Spanish and Italian, using dead keys on brackets for the four main accents. Feel free to replace ñ on the ISO key; on ANSI boards it's no problem.
+- **Cmk-eD-EsLat**: This is good both for Spanish and Italian, using dead keys on brackets for the main accents. Feel free to replace ñ on the ISO key; on ANSI boards it's no problem.
 	<br>
 
 	|![EPKL help image for Colemak-eD-EsLat AngleWide on an ANSI board, unshifted state](../Cmk-eD-EsLat_ANS_AWide/state0.png)|
 	|   :---:   |
 	|_Colemak-eD-EsLat_ANS_AWide, unshifted state_|
 
-	|![EPKL help image for Colemak-eD-EsLat AngleWide on an ANSI board, shifted state](../Cmk-eD-EsLat_ANS_AWide/state1.png)|
-	|   :---:   |
-	|_Colemak-eD-EsLat_ANS_AWide, shifted state_|
-
 	<br>
 - **Cmk-eD-ItAlt**: An alternative for those who prefer using AltGr. The letters àèìòù are easy to remember on AltGr+aeiou; é gets the neighboring AltGr+n (and/or the ISO key on ISO boards).
 	<br>
 
 	![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](../Cmk-eD-ItAlt_ANS_CurlAngle/Cmk-ItAlt_ANS-CA_s6_EPKL.png)
+	<br>
 	_Colemak-eD-ItAlt_ANS_CurlAngle, AltGr state_

@@ -1,7 +1,7 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for Colemak-eD-Nl-CAWS on an ISO board](../Cmk-eD-Nl_ISO_CurlAWideSym/Cmk-Nl_ISO_s0_EPKL.png)
+![EPKL help image for Colemak-eD-Nl-CAWS on an ISO board](../Cmk-eD-Nl_ISO_CurlAWideSym/Cmk-eD-Nl_ISO-CAWS_s0_EPKL.png)
   
   
 Colemak[eD] locale layouts
@@ -15,17 +15,17 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Colemak-Nl Netherlands/Dutch locale layout
 ------------------------------------------
 For Dutch locale Colemak, at the least we need accents easily accessible. There's also the ĳ digraph, but it's often written as a bigram (ij) instead. However, the J position in Colemak is bad.
-- **Cmk-eD-Nl**
+- **Cmk-eD-Nl** has accents on the bracket keys. The ĳ digraph is on the ISO key if you have it, and there's also an ij bigram on AltGr+i.
 <br>
 
-	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](../Cmk-eD-Nl_ISO_AWide/state0.png)|
-	|   :---:   |
-	|_Colemak-eD-Nl_ISO_AWide, unshifted state. Note the `ĳ` digraph on the ISO key._|
+|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](../Cmk-eD-Nl_ISO_AWide/state0.png)|
+|   :---:   |
+|_Colemak-eD-Nl_ISO_AWide, unshifted state. Note the `ĳ` digraph on the ISO key._|
 
-	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, shifted state](../Cmk-eD-Nl_ISO_AWide/state1.png)|
-	|   :---:   |
-	|_Colemak-eD-Nl_ISO_AWide, shifted state. Note the `Ĳ` digraph on the ISO key._|
+|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, shifted state](../Cmk-eD-Nl_ISO_AWide/state1.png)|
+|   :---:   |
+|_Colemak-eD-Nl_ISO_AWide, shifted state. Note the `Ĳ` digraph on the ISO key._|
 
-	|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, AltGr state](../Cmk-eD-Nl_ISO_AWide/state6.png)|
-	|   :---:   |
-	|_Colemak-eD-Nl_ISO_AWide, AltGr state. Note the `ij` bigram on `AltGr+i`._|
+|![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, AltGr state](../Cmk-eD-Nl_ISO_AWide/state6.png)|
+|   :---:   |
+|_Colemak-eD-Nl_ISO_AWide, AltGr state. Note the `ij` bigram on `AltGr+i`._|
