@@ -47,8 +47,8 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	_pklSetInf( "suspendTimeOut" ) 										; Time idle (min) before program suspends itself
 	_pklSetInf( "exitAppTimeOut" ) 										; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" ) { 					; Programs that suspend EPKL when active
-		shorthand := { "C " : "ahk_class " , "X " : "ahk_exe " }
-		For needle, newtxt in shorthand
+		shorthand := { "C " : "ahk_class " , "X " : "ahk_exe " , "T " : "" }
+		For needle, newtxt in shorthand 								; C/X/[T] matches by window Class/Exe/Title
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}	; end For suspApp
@@ -221,7 +221,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			%mapType% := ReadCycles( mapType, %mapType%, cycStck ) 		; Parse the cycle list into a pdic of mappings
 		}	; end For mapType
 		setPklInfo( "scMapLay", scMapLay )
-		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
+;		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )				; Make a code dictionary for SC-2-VK mapping below
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other code tables?
 		setPklInfo( "QWSCdic", QWSCdic )
 		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.

@@ -22,7 +22,10 @@ These Aren't The Guides You're Looking For?
 -------------------------------------------
 EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
 **[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
-If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]  
+If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]
+  
+Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
+The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
   
 Getting EPKL up and running
 ---------------------------

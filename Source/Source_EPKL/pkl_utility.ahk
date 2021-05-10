@@ -219,11 +219,11 @@ detectCurrentWinLayOEMs() { 								; Find the VK values for the current Win lay
 	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_## 							; NOTE: Must keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
 	qVKdic  := getPklInfo( "QWVKdic" ) 						; VK QW_## = vc_##
 	oemDic  := {}  ;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; "SC0" . SCs[ix]
-	For ix, oem in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] {
+	For ix, oem in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] { 	; eD WIP: Run through the whole SCdic instead?
 		oem := "_" . oem
 		qsc := qSCdic[ oem ]
 		qvk := qVKdic[ oem ] 								; Map from a KLM (ANSI) VK## code
-		ovk := Format( "VK{:X}", GetKeyVK( qsc ) ) 	; VK##
+		ovk := Format( "VK{:X}", GetKeyVK( qsc ) ) 			; VK## format
 		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
 ;	( oem == "_GR" ) ? pklDebug( "OEM: " . oem . "`nSC: " . qSCdic[oem] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
 	}

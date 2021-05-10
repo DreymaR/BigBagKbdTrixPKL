@@ -19,6 +19,8 @@
 
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
+;		- WIP: Make README.md for the Layouts and selected layout folders, so they may be showcased on the GitHub site.
+;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the silly comment format.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
@@ -219,6 +221,7 @@
 ;		- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
 
 ;		- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
+;			- Added a `BaseLayout_Cmk-eD-NoVK.ini` file with only direct state mappings. If the VK mappings cause you any trouble, point your `layout.ini` to this one.
 
 
 ;;  ####################### main      #######################

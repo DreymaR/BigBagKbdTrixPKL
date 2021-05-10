@@ -155,6 +155,11 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", shSt ) ) {
 				rel := ent
 				tag := "ToMKey" 								; Mark Tap-or-Mod keys, for state 0:1
+			} else if ( ent == -1 ) { 							; VKey state entry
+				key := GetKeyName( SubStr( ents, 3 ) )
+				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}" 			; Upper/Lower case
+				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
+				tag := ""
 			} else {
 				rel := hig_parseEntry( HIG, ents ) 				; Prepare the entry for display
 				tag := ""
