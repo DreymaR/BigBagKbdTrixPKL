@@ -155,7 +155,7 @@ pkl_about()
 	lLocale  := pklIniRead( "localeID"  , "0409"    , "LayIni", "information" )
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
 	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
-	ergoMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
+	hardMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "layout.ini", "" )
 	basFile  :=             getPklInfo( "File_BasIni" )
 	menuSep  := "............................................................................................"
@@ -187,7 +187,7 @@ pkl_about()
 	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
 		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
 ;		text :=   "Keyboard/Layout type from settings: "    . kbdType
-;		text .= "`nCurl/Ergo/Other mod from settings: "     . ergoMod
+;		text .= "`nCurl/Ergo/Other mod from settings: "     . hardMod
 ;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
 		text :=   "EPKL.exe compiled on: "                  . compiledOn            . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang

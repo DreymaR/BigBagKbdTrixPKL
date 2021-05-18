@@ -1,7 +1,7 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for the test layout Colemak-QI;x](Cmk-eD-QIx_ANS_CurlAngleSym/Colemak-QIx_ANS-CAS_EPKL.png)  
+![EPKL help image for the test layout Colemak-QI;x](Cmk-eD-QIx/Colemak-QIx_ANS-CAS_EPKL.png)  
   
   
 _Test folder info
@@ -23,4 +23,4 @@ To use any of these layouts, there are two main ways you can go:
     - In any folder without a special abbreviation, just use the first three letters of its name.
 - You could also point to it in an active `layout = ` line in your `EPKL_Layouts_Override.ini` file under the `[pkl]` section. 
     - If you haven't got one, copy-paste one from the `EPKL_Layouts_Override_Example` file.
-    - Example: `layout = _Test\Cmk-eD-QIx_ANS_CurlAngleSym:Cmk-TestLayout` for the Colemak-QI;x ANSI mod.
+    - Example: `layout = _Test\Cmk-eD-QIx\Cmk-eD-QIx_ANS_CurlAngleSym:Cmk-TestLayout` for the Colemak-QI;x ANSI mod.

@@ -102,7 +102,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The Extend modifier may even double as a Tap-or-Mod key so that when you tap it, something else happens.
     - The most advanced way of using this may be the Mother-of-DeadKeys which allows really fancy "tap dances"!
     - Holding down Shift and/or AltGr while first holding or while tapping the Ext key affects which Ext layer you get.
-* In EPKL_Layouts you can use shorthand (@#) for KbdType/CurlMod/ErgoMod etc, or set the layout folder path directly.
+* In EPKL_Layouts you can use shorthand (@#) for KbdType/CurlMod/HardMod etc, or set the layout folder path directly.
     - For Extend set an Extend file and a working Extend modifier. The latter needs to be mapped to a key.
     - My _eD_Extend mappings file is in the Files folder. Look inside it to learn more.
 * In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
@@ -225,7 +225,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak](./Layouts/Colemak) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
     - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
 * In that folder's layout.ini file, edit the remap fields to represent the new settings.
-    - Here, change `mapSC_layout = Cmk-CAW_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
+    - Here, change `mapSC_layout = Cmk-CAW-_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
     - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move Ctrl+V by adding 'V-B,' in front.
 * Change any key mappings you want to tweak.
@@ -237,7 +237,7 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - Now, copy the V and `OEM_102` keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
 * Now, if your `EPKL_Layouts` .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
-    - Here, set LayType/LayVari/KbdType/CurlMod/ErgoMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
+    - Here, set LayType/LayVari/KbdType/CurlMod/HardMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
     - If you prefer to use another existing layout line in the file, comment out the `layout = ` line with `;` and activate another.
     - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
 * After making layout changes, refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.

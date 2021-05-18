@@ -100,22 +100,23 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 ;		kbdForm := kbdType[2] 						; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!
 ;		kbdType := kbdType[1]
 ;	}
-	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl
-	ergoMod := _pklLayRead( "ErgoMod"               ) 					; --, Angle, AWide...
-	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix
+	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl/DH mod
+	hardMod := _pklLayRead( "HardMod"               ) 					; --, Hard mod - Angle, AWide...
+	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix like Sym
 	
-	theLays := StrReplace( theLays, "@Ł",   "@M-@T@V"  ) 				; Shorthand .ini notation for main layout, type and variant
-	theLays := StrReplace( theLays, "@Ç",   "@K@C@E@O" ) 				; Shorthand .ini notation for keyboard type and layout mods
-	theLays := StrReplace( theLays, ":@M",  ":" . layMain ) 			; Replaces @M w/ LayMain in menu names, given that they start with @M
-	theLays := StrReplace( theLays, "@M",   layMain . "\" . lay3LA ) 	; Replaces @M w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
+	theLays := StrReplace( theLays, "@Ʃ",   "@L-@T@V"  ) 				; Shorthand .ini notation for main layout, type and variant
+	theLays := StrReplace( theLays, "@Ç",   "@K@C@H@O" ) 				; Shorthand .ini notation for KbdType[_]ErgoMods; not in use
+	theLays := StrReplace( theLays, "@E",     "@C@H@O" ) 				; Shorthand .ini notation for the full ergomods battery
+	theLays := StrReplace( theLays, ":@L",  ":" . layMain ) 			; Replaces @L w/ LayMain in menu names, given that they start with @L
+	theLays := StrReplace( theLays, "@L",   layMain . "\" . lay3LA ) 	; Replaces @L w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
 	theLays := StrReplace( theLays, "@3",   lay3LA  )
 	theLays := StrReplace( theLays, "@T",   layType )
 	theLays := StrReplace( theLays, "@V",   localID ) 					; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
-	kbdTypU := ( curlMod || ergoMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" iff Mods are active
-	theLays := StrReplace( theLays, "@K@","@K" . kbdTypU . "@" ) 		; --"--
-	theLays := StrReplace( theLays, "@K",   kbdType ) 					; (Later on, will use atKbdType() for layout files)
+	kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
+	theLays := StrReplace( theLays, "@K@","@K" . kbdTypJ . "@" ) 		; --"--
+	theLays := StrReplace( theLays, "@K",   kbdType ) 					; Later on, EPKL will use atKbdType() for layout files instead of this one
 	theLays := StrReplace( theLays, "@C",   curlMod )
-	theLays := StrReplace( theLays, "@E",   ergoMod )
+	theLays := StrReplace( theLays, "@H",   hardMod )
 	theLays := StrReplace( theLays, "@O",   othrMod )
 	layouts := StrSplit( theLays, ",", " `t" )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()

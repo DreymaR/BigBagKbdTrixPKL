@@ -6,7 +6,7 @@
 #MaxThreadsBuffer
 #MaxThreadsPerHotkey  3
 #MaxHotkeysPerInterval 300
-#MaxThreads 20
+#MaxThreads 30
 
 ;
 ;;  EPiKaL PKL - EPKL
@@ -15,12 +15,17 @@
 ;
 
 ;;  ####################### user area #######################
-; :*:'3e::obgadmar@gmail.com 	; eD WIP: Hotstring (replace text with other)
+; :*:'3o::https://www.colemak.org 	; eD WIP: Hotstring (replace text with other)
 
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
-;		- WIP: Make README.md for the Layouts and selected layout folders, so they may be showcased on the GitHub site.
-;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the silly comment format.
+;		- WIP: Harmonize Ext and folder mod names? And/or make a shorthand for the @E=@C@H@O battery in addition to @K in layout files? And also the short variant like CAW(S)?
+;			- Could expand, e.g., CurlAWide to CurlAngleWide for the layout name only? Or use long names like CurlAWideSym consistently?
+;			- Make long names more consistent? Like 4 letters per mod, CurlAnglWideSyms ? Nah, too anal. Better to keep with CurlAWideSym, and that's long enough really.
+;			- Use CAngle or CA--, etc? CAngle is more intuitive, but CA more consistent with CAW(S). 
+
+;		- WIP: Try out not pressing LCtrl for AltGr (as in pkl_keypress.ahk now!) in a test branch! But commit the other stuff in main first, without this.
+;		- TOFIX: {AltGr+3,AltGr+1,u} produces a Space before the ự now?! Doesn't happen to other chained DKs such as {AltGr+=,AltGr+/,=} (not identical to). What gives?!
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
@@ -28,17 +33,18 @@
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post.
 ;		- 
+;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
+;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
+;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
+;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
+;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
+;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
+;			- Or just detect every single VK code from the OS layout? It'd fix all our VK troubles...
 ;		- TOFIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
 ;			- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first time Send is called for each target keyboard layout (earlier)."
 ;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 ;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
-;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
-;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
 ;		- TODO: Hotstrings? May have to wait for AHK v1.1.28 to use the Hotstring() fn? Or is there somewhere in this script we could insert definitions?
-;		- WIP: Add CAWS variants for the ISO locales
-;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
-;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-;			- Or just detect every single VK code from the OS layout? It'd fix all our VK troubles...
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
 ;		- Is the main README still too long? Put the layout tutorial in a Layouts README?
 ;		- TOFIX: After reworking the Ext-mods, spamming modded Ext presses leads to stuckness. Afterwards, Extend may get wonky.
@@ -69,7 +75,6 @@
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
-;		- TOFIX: Allow ..\BaseLayout in layout.ini – only LayMain\BaseLayout works now.
 ;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
@@ -83,7 +88,7 @@
 ;			- After selecting a valid combo once, defaulting works as expected afterwards.
 ;		- WIP: Rework the modifier Up/Down routine? A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
 ;		- WIP: Make the HIG work for non-standard state layer entries like it does for DK now? Consider naChr vs ·¶·-like marks.
-;		- WIP: Consider a remap for each Ext layer? Would make things messier, but allows separate Ext1 and Ext2 maps (for Sl/Bs switch).
+;		- WIP: Consider a remap for each Ext layer? Would make things messier, but allows separate Ext1 and Ext2 maps, e.g., for the SL-BS switch.
 ;			- Allow mapSC_extend2 etc entries in the LayStack. If not specified, use the _extend one for all.
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
 ;			- MoDK idea: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
@@ -96,13 +101,11 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: Redo the @Ʃ_@Ç formalism, adding @K to @E(@C@H@O) by a hyphen instead of an underscore? Would that be a benefit in any way? Or just a lot of work? Better for the vanilla variant.
 ;		- TODO: Add ABNT keys to the HIG template?
 ;		- TODO: Record macro? Or just a way to set entries for a certain DK layer in the Settings UI? Say, the Ext-tap layer(s). Could have backup DK layers and a Reset button.
 ;		- TODO: Allow a BaseLayout stack, Base1,Base2,... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. Possible to extract the pic from pkl_gui_image?
-;		- TODO: Use CurlMod = DH instead of Curl? It's shorter, more in touch with what people use etc. Then, maybe call the layouts, e.g., 'Cmk-eD_ANS_DH-AWide' instead of CurlAWide. Or just DHAWide?
-;			- Or make names more consistent? Like 4 letters per mod, Angl/CurlAnglWide/etc?
-;			- Possibly... even eradicate the CurlMod altogether, only using ErgoMod for the whole thing? Is that better? After all, Curl/DH _is_ an ergo mod!
 ;		- TODO: Make EPKL able to hold more than one layout in memory at once?! This would make dual layouts smoother, and using layouts as layers (Greek, mirroring etc) possible.
 ;		- TODO: Since no hotkeys are set for normal key Up, Ext release and Ext mod release won't be registered? Should this be remedied?
 ;		- Mod ensemple: For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? Also add [ "CapsLock", "Extend", "SGCaps" ] ?
@@ -137,7 +140,7 @@
 ;				- See Jaroslaw's MoDK topic in the Forum: https://forum.colemak.com/topic/2501-my-current-programming-symbols-layout/#p22527
 ;				- Placing all my DKs on MoDK sequences will fill up a layer. So maybe only the most interesting ones? But how to make it mnemonic?
 ;				- Example: Tap-dance {Ext,t,n} -> ñ; {Ext,a,A} -> Á; {Ext,0-9} IPA DKs.
-;				- For good measure, could have different @MD# on different states of the same key! Wow. The ToM formalism should support this actually!
+;				- For good measure, could have different DKs on different states of the same key! Wow. The ToM formalism should support this actually!
 ;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 ;		- TODO: The key processing timers generate autorepeat? Is this desirable? It messes with the ToM keys? Change it so the hard down sends only down and not down/up keys?
@@ -166,6 +169,7 @@
 ;			- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 ;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 ;;  eD ONHOLD:
+;		- Allow ..\BaseLayout in layout.ini? Only LayMain\BaseLayout works now. However, may interfere with variant subfolders.
 ;		- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Is that actually safer? No, don't think so?
 ;			- Need a way to count the hotkeys then, without spending much resources. The size of pklHotKeyBuffer should be an indication, as it's usually 'SC###¤' repeated.
 ;			- Only necessary to intervene on hotkey #31? Then stop the first 16 or so timers and flush the corresponding pklHotKeyBuffer entries.
@@ -219,9 +223,17 @@
 ;		- HIG updated so shift state help images show parseable entries like bigrams correctly.
 ;		- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
 ;		- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
-
 ;		- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
+;			- In particular, if you run a self-made MSKLC layout underneath in which letter and/or `OEM_` VK codes are wrong, the result will be odd.
 ;			- Added a `BaseLayout_Cmk-eD-NoVK.ini` file with only direct state mappings. If the VK mappings cause you any trouble, point your `layout.ini` to this one.
+
+;		- Moved layout variants into their own folders to reduce clutter, and for better variant documentation placement. Updated the Layout/Settings GUI accordingly.
+;		- Added a full set of CAWS locale variants.
+;		- Added DK images for ANS AWide and CAWS, in addition to the existing vanilla and CAW. For ISO, we already have Angle, AWide, CAW and CAWS.
+;		- Reworked the `@` layout codes. ErgoMod/`@E` is now HardMod/`@H`, as Curl/DH and Sym are also ergonomic mods. MainLay is now `@L` and the ergo mod ensemble `@E`.
+;		- Tidied up some complex remaps like `SL-BS,V-B` for Ext. Made `Ext-CAW(S)_@K` remaps instead. Ext1/2 images were also renamed/copied to be simpler and more consistent.
+;		- The SL-BS swap is good for `Extend-CAWS_ISO`, bringing the WheelLeft/Right keys together. Since Ext1 and Ext2 use the same remap, it wasn't done for AWide/CAW.
+;		- Background image files were renamed more consistently.
 
 
 ;;  ####################### main      #######################
@@ -299,7 +311,7 @@ processKeyPress20:
 processKeyPress21:
 processKeyPress22:
 processKeyPress23:
-processKeyPress24: 	; eD WIP: What's the ideal size of this cycle?
+processKeyPress24: 	; eD WIP: What's the ideal size of this cycle? Does #MaxThreads apply?
 processKeyPress25:
 processKeyPress26:
 processKeyPress27:

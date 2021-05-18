@@ -54,7 +54,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddSel(  "Variant/Locale, if any: "
 			,       "LayVari"   , "Choose1"     , [ ui_NA ] , "xs y+m"  )
 	_uiAddSel( "Mods, if any: " 								; Make a box wider than the previous one: "wp+100"
-			,       "LayMods"   , "Choose1"     , [ ui_NA ]             ) 	; "AWide" 	; eD WIP: A default here may fail on the first selection if a nonexisting combo is chosen
+			,       "LayMods"   , "Choose1"     , [ ui_NA ]             ) 	; A default here may fail on the first selection if a nonexisting combo is chosen
 	
 	_uiAddEdt( "`nIn the Layouts_Override [pkl] section: layout = "
 			,       "LayFile"   , ""            , ui_WideTxt            ) 	; . "`n"
@@ -155,7 +155,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Show
 	Gosub UIselSet
 	Gosub UIselKey
-	Gosub UIselLay 		; eD WIP: Why does selection updating work only after the first selection?
+	Gosub UIselLay
 	Gosub UIhitTab
 }
 
@@ -171,15 +171,28 @@ UIselLay: 														; Handle UI Layout selections
 	GUI, UI:Submit, Nohide
 	mainDir := "Layouts\" . UI_LayMain
 	main3LA := ( ui_Lay3LAs[UI_LayMain] ) ? ui_Lay3LAs[UI_LayMain] : SubStr( UI_LayMain, 1, 3 )
-	need        := main3LA . "-" 								; Needle for the MainLay
-	layDirs := []
+	need        := main3LA . "-" 								; Needle for the MainLay: '3LA-', e.g., 'Cmk-'
+	layPath := {} 												; Variant folders for locales etc may contain several mods
+	layDirs := [] 												; Layout folders hold the layouts themselves
 	For ix, theDir in _uiGetDir( mainDir ) { 					; Get a layout directory list for the chosen MainLay
-		if not RegExMatch( theDir, need . ".+_" )
+		ourDir := mainDir . "\" . theDir
+		if not RegExMatch( theDir, need ) 						; '3LA-<LayType>'
 			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
-		if not FileExist( mainDir . "\" . theDir . "\" . getPklInfo("LayFileName") )
+		For i2, subDir in _uiGetDir( ourDir ) { 				; Scan each subdir for variant folders
+			if not RegExMatch( subDir, need . ".+_" ) 			; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
+				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
+			if not FileExist( ourDir . "\" . subDir . "\" . getPklInfo("LayFileName") )
+				Continue 										; Layout folders contain a layout.ini file
+			layDirs.Push( subDir )
+			layPath[ subDir ] := theDir . "\"
+		} 	; end For subDir
+		if not RegExMatch( theDir, need . ".+_" ) 				; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
+			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
+		if not FileExist( ourDir . "\" . getPklInfo("LayFileName") )
 			Continue 											; Layout folders contain a layout.ini file
 		layDirs.Push( theDir )
-	}
+		layPath[ theDir ] := ""
+	} 	; end For theDir
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   ) 		; Get the available Lay Types for the chosen MainLay
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list
 	needle      := need . UI_LayType
@@ -194,8 +207,10 @@ UIselLay: 														; Handle UI Layout selections
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
 	layModsName := ( UI_LayMods != ui_NA ) ? UI_LayMods : ""
 	layModsPref := ( layModsName ) ? "_" : ""
-	layFileName := UI_LayMain . "\" . main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsPref . layModsName
-	_uiControl( "LayFile", layFileName )
+	layFolder   := main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsPref . layModsName
+	layPath     := layPath[ layFolder ]
+;	( 1 ) ? pklDebug( "`nDir:  " . layFolder . "`nPath: " . layPath , 1 )  ; eD DEBUG
+	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layFolder )
 	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . " " . layModsName . "(" . UI_LayKbTp . ")"
 	_uiControl( "LayMenu", layMenuName )
 Return
