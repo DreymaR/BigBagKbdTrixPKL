@@ -38,6 +38,6 @@ For Italian locale Colemak, at the least we need the letters é and àèìòù e
 - **Cmk-eD-ItAlt**: An alternative for those who prefer using AltGr. The letters àèìòù are easy to remember on AltGr+aeiou; é gets the neighboring AltGr+n (and/or the ISO key on ISO boards).
 	<br>
 
-	![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](./Cmk-eD-ItAlt_ANS_CurlAngle/Cmk-ItAlt_ANS-CA_s6_EPKL.png)
-	<br>
-	_Colemak-eD-ItAlt_ANS_CurlAngle, AltGr state_
+	|![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](./Cmk-ItAlt_ANS_CurlAngle/state6.png)|
+	|   :---:   |
+	|_Colemak-eD-ItAlt_ANS_CurlAngle, AltGr state_|
