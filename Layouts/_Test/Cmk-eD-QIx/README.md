@@ -124,9 +124,10 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
     | Y C L M K  Z F U , ; |
     | I S R t g  P n e A o |
     | Q V W d J  B h / . x |
+
+ISRT (homepage)   : 1.614   0.021   0.027   1.662   0.800     -0.016  -0.026  -0.025 !!! (6 swaps, 1 7-loop)
+That analysis was done on an earlier version of the Colemakmods analyzer! The one in the table above is up-to-date.
 ```
-```ISRT (homepage)   : 1.614   0.021   0.027   1.662   0.800     -0.016  -0.026  -0.025 !!! (6 swaps, 1 7-loop)```
-That analysis was done on an earlier version of the Colemakmods analyzer! The one above is up-to-date.
 <br>
 - Shai's 2nd mod:
 ```
