@@ -3,7 +3,6 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ![EPKL help image for Colemak-eD-QI;x on an ANSI board](./Colemak-QIx_ANS-CAS_EPKL.png)
   
-  
 Colemak Discord user Nyfee's "bleeding-edge" Colemak mods
 ---------------------------------------------------------
 - Colemak design philosophy keeps ZXCV in place, and tries to avoid keys swapping hands.
@@ -19,7 +18,7 @@ Colemak Discord user Nyfee's "bleeding-edge" Colemak mods
 - There were some predecessor mods named Hirou and XCept; these likely aren't in use anymore.
 
 
-### Colemak-QI by Nyfee, 2021-03:
+#### Colemak-QI by Nyfee, 2021-03:
 ```
 ---------------------------
  1 2 3 4 5  6 7 8 9 0  = [ 
@@ -31,7 +30,7 @@ Remaps from Cmk-DH-Sym:
         / W > F > L / P ⇔ M / B ⇔ K /
 ```
 
-### Colemak-QI;x by Nyfee, 2021-03:
+#### Colemak-QI;x by Nyfee, 2021-03:
 ```
 ---------------------------
  1 2 3 4 5  6 7 8 9 0  = [ 
@@ -43,7 +42,7 @@ Remaps from Cmk-DH-Sym:
 / W ⇔ C / W > F > L / P ⇔ M / B ⇔ K / CM ⇔ SL / Q > QU > SC /
 ```
 
-### ColemaQ(-F) by Nyfee, 2021-01:
+#### ColemaQ(-F) by Nyfee, 2021-01:
 ```
 ---------------------------
  1 2 3 4 5  6 7 8 9 0  = [ 
@@ -55,10 +54,9 @@ Remaps from Cmk-DH-Sym:
                     / V ⇔ K / CM ⇔ SL / Q > QU > SC / / F ⇔ G /
 ```
 
-<br>
+Colemakmods analysis of several "bleeding-edge" Colemak mods and more
+---------------------------------------------------------------------
 
-Colemakmods analysis of several "bleeding-edge" Colemak mods (and more)
------------------------------------------------------------------------
 - Analysis from https://colemakmods.github.io/mod-dh/analyze.html adding changes separately.
 - These steps are from the Colemak-QI mod by Nyfee, and proposed additions thereto.
 - ColemakMods analysis by ~Renato, 2021-04-03, on a 3×10 matrix; Δ rel. to Cmk-DH:
@@ -67,14 +65,14 @@ Colemakmods analysis of several "bleeding-edge" Colemak mods (and more)
 Cmk-DH+swaps/loops: bas.ef. sfb-ef. nfb-ef. tot.ef. SFB%      Δbas.e  Δsfb-e  Δtot.e
 =========================================================    ========================
 Cmk-DH            : 1.630   0.047   0.010   1.687   1.521      0       0       0
-			 +Q;  : 1.630   0.047   0.010   1.687   1.515      0.000   0.000   0.000  ???
-	  +WFL   +Q;  : 1.633   0.046   0.016   1.695   1.489     +0.003  -0.001  +0.008  ...
+             +Q;  : 1.630   0.047   0.010   1.687   1.515      0.000   0.000   0.000  ???
+      +WFL   +Q;  : 1.633   0.046   0.016   1.695   1.489     +0.003  -0.001  +0.008  ...
    +BK+WFL   +Q;  : 1.631   0.042   0.016   1.689   1.361     +0.001  -0.005  +0.002  ...
 +PM+BK+WFL   +Q;  : 1.624   0.039   0.017   1.681   1.268     -0.006  -0.008  -0.006  !!!
 +PM+BK+WFL+/,+Q;  : 1.639   0.029   0.020   1.689   0.938     +0.009  -0.018  +0.002  ?!?
 ```
 
-- ColemakMods analysis by DreymaR, 2021-04-06, as above:
+ColemakMods analysis by DreymaR, 2021-04-06, as above:
 ```
 +PM               : 1.623   0.053   0.011   1.687   1.729     -0.007  +0.008   0.000  ...
 +PM+BK            : 1.621   0.054   0.011   1.686   1.671     -0.009  +0.007  -0.001  ...
@@ -85,10 +83,10 @@ Cmk-DH            : 1.630   0.047   0.010   1.687   1.521      0       0       0
    +BK            : 1.628   0.052   0.009   1.690   1.597     -0.002  +0.005  +0.003
    +BK+WFL        : 1.631   0.042   1.689   0.016   1.367     +0.001  -0.005  +0.002
 +PM   +WFL        : 1.626   0.047   0.017   1.690   1.536     -0.004   0.000  +0.003
-	  +WFL        : 1.633   0.046   0.016   1.695   1.495     +0.003  -0.001  +0.008
+      +WFL        : 1.633   0.046   0.016   1.695   1.495     +0.003  -0.001  +0.008
 ```
 
-- ColemakMods 3×10 matrix analysis comparing different layouts/mods to Colemak-DH, 2021-04:
+ColemakMods 3×10 matrix analysis comparing different layouts/mods to Colemak-DH, 2021-04:
 ```
 Layout            : bas.ef. sfb-ef. nfb-ef. tot.ef. SFB%      Δbas.e  Δsfb-e  Δtot.e
 =========================================================    ========================
@@ -105,7 +103,7 @@ ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0
 HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0.038 ???
 ```
 (HandsDown layout: https://sites.google.com/alanreiser.com/handsdown)
-<br>
+  
 
 - The Cmk-QI PM/BK/WFL combo is most important in reducing both effort and SFBs at the same time.
 - The proposed Q-SC and W-C swaps show no analysis benefits here; their benefit is perceived.
@@ -114,9 +112,9 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 - In this analysis, simply swapping V and K and nothing else outperforms everything except ISRT!
     - In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
     - VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
-<br>
+  
 
-- Testing Cmk vs ISRT: Cmk home row, IndyRad upper/lower mappings ("**IndyPendant**"): Loses on base/near-bigram effort.
+Testing Cmk vs ISRT: Cmk home row, IndyRad upper/lower mappings ("**IndyPendant**"): Loses on base/near-bigram effort.
 ```
     | , L C M K  Z F u y ; |
     | a r s t g  P n e i o | (PM + Q, + WX.ZJVCFL)
@@ -125,7 +123,7 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 "IndyPendant"     : 1.643   0.024   0.028   1.696   0.777     +0.013  -0.023  +0.009 ?!?
 ```
 
-- In comparison: **NotGate's ISRT/IndyRad layout** (QU ignored for analysis; use w/ Sym mod).
+In comparison: **NotGate's ISRT/IndyRad layout** (QU ignored for analysis; use w/ Sym mod).
 ```
     | Y C L M K  Z F U , ; |
     | I S R t g  P n e A o |
@@ -142,11 +140,9 @@ That analysis was done on an earlier version of the Colemakmods analyzer! The on
     | z x c d K  B h , . / |
 ```
 
-<br>
   
 ![EPKL help image for ColemaQ on an ANSI board](./ColemaQ_ANS-CAS_EPKL.png)
   
-<br>
 
 My Personal Take On the ColemaQ Mod
 -----------------------------------

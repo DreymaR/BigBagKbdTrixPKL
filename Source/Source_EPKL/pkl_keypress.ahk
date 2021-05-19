@@ -249,11 +249,11 @@ AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 ;;  It is usually not recommended, because fortunately many programs know the
 ;;  difference between AltGr and Alt+Ctrl.
 ;ctrlAltIsAltGr  = no
-	static CtrlAltlIsAltGr := -1
-	if ( CtrlAltlIsAltGr == -1 ) {
-		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
-	}
-	Return getKeyState( "RAlt" ) || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
+;	static CtrlAltlIsAltGr := -1
+;	if ( CtrlAltlIsAltGr == -1 ) {
+;		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
+;	}
+	Return getKeyState( "RAlt" ) ; eD WIP AltGr: Removed || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
 setAltGrState( itsDown ) 									; The set fn calls get to reuse the static var.
@@ -267,7 +267,7 @@ getAltGrState( itsDown = 0, set = 0 )
 	if ( set == 1 ) {
 		if ( itsDown == 1 ) {
 			AltGrState = 1
-			Send {LCtrl Down}{RAlt Down}
+			Send {RAlt Down} 	; eD WIP AltGr: Removed {LCtrl Down}{RAlt Down}
 		} else {
 			AltGrState = 0
 			Send {RAlt Up}{LCtrl Up}
