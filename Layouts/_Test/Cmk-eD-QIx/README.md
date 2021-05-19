@@ -56,12 +56,13 @@ Remaps from Cmk-DH-Sym:
 ```
 
 <br>
+
 Colemakmods analysis of several "bleeding-edge" Colemak mods (and more)
 -----------------------------------------------------------------------
-Analysis from https://colemakmods.github.io/mod-dh/analyze.html adding changes separately.
+- Analysis from https://colemakmods.github.io/mod-dh/analyze.html adding changes separately.
 - These steps are from the Colemak-QI mod by Nyfee, and proposed additions thereto.
-
 - ColemakMods analysis by ~Renato, 2021-04-03, on a 3×10 matrix; Δ rel. to Cmk-DH:
+
 ```
 Cmk-DH+swaps/loops: bas.ef. sfb-ef. nfb-ef. tot.ef. SFB%      Δbas.e  Δsfb-e  Δtot.e
 =========================================================    ========================
@@ -72,6 +73,7 @@ Cmk-DH            : 1.630   0.047   0.010   1.687   1.521      0       0       0
 +PM+BK+WFL   +Q;  : 1.624   0.039   0.017   1.681   1.268     -0.006  -0.008  -0.006  !!!
 +PM+BK+WFL+/,+Q;  : 1.639   0.029   0.020   1.689   0.938     +0.009  -0.018  +0.002  ?!?
 ```
+
 - ColemakMods analysis by DreymaR, 2021-04-06, as above:
 ```
 +PM               : 1.623   0.053   0.011   1.687   1.729     -0.007  +0.008   0.000  ...
@@ -104,6 +106,7 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 ```
 (HandsDown layout: https://sites.google.com/alanreiser.com/handsdown)
 <br>
+
 - The Cmk-QI PM/BK/WFL combo is most important in reducing both effort and SFBs at the same time.
 - The proposed Q-SC and W-C swaps show no analysis benefits here; their benefit is perceived.
 - The SL-CM swap reduces SFB% quite a lot, but base+near-bigram efforts increase just as much.
@@ -112,14 +115,16 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
     - In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
     - VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
 <br>
-- Testing Cmk vs ISRT: Cmk home row, IndyRad upper/lower mappings ("IndyPendant"): Loses on base/near-bigram effort.
+
+- Testing Cmk vs ISRT: Cmk home row, IndyRad upper/lower mappings ("**IndyPendant**"): Loses on base/near-bigram effort.
 ```
     "IndyPendant"     : 1.643   0.024   0.028   1.696   0.777     +0.013  -0.023  +0.009 ?!?
     | , L C M K  Z F u y ; |
     | a r s t g  P n e i o | (PM + Q, + WX.ZJVCFL)
     | . W V d J  B h / Q X |
 ```
-- In comparison: NotGate's ISRT/IndyRad layout (QU ignored for analysis; use w/ Sym mod).
+
+- In comparison: **NotGate's ISRT/IndyRad layout** (QU ignored for analysis; use w/ Sym mod).
 ```
     | Y C L M K  Z F U , ; |
     | I S R t g  P n e A o |
@@ -128,8 +133,8 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 ISRT (homepage)   : 1.614   0.021   0.027   1.662   0.800     -0.016  -0.026  -0.025 !!! (6 swaps, 1 7-loop)
 That analysis was done on an earlier version of the Colemakmods analyzer! The one in the table above is up-to-date.
 ```
-<br>
-- Shai's 2nd mod:
+
+- **Shai's 2nd mod:**
 ```
     | q w f M V  j l u y ; |
     | a r s t g  P n e i o | (PM + VBK)
