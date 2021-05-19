@@ -1,8 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](./Cmk-ItAlt_ANS_s6_EPKL.png)
-  
   
 Colemak-Kurl: The V-K swap for Cmk-DH
 -------------------------------------
@@ -13,7 +11,8 @@ Colemak-Kurl: The V-K swap for Cmk-DH
 - ...what's the point in the end, in avoiding some awkward bigrams to create others?
 - Note that some of the newest analysis tries to include such "LSB" Lateral-Stretch Bigrams.
 
-	<br>
-	|![EPKL help image for Colemak-KurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD_ANS_KurlAWideSym/state0.png)|
-	|   :---:   |
-	|_Colemak-eD_ISO_KurlAWideSym, unshifted state_|
+<br>
+
+|![EPKL help image for Colemak-KurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD_ANS_KurlAWideSym/state0.png)|
+|   :---:   |
+|_Colemak-eD_ISO_KurlAWideSym, unshifted state_|
