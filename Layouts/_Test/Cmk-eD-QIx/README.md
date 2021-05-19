@@ -118,10 +118,11 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 
 - Testing Cmk vs ISRT: Cmk home row, IndyRad upper/lower mappings ("**IndyPendant**"): Loses on base/near-bigram effort.
 ```
-    "IndyPendant"     : 1.643   0.024   0.028   1.696   0.777     +0.013  -0.023  +0.009 ?!?
     | , L C M K  Z F u y ; |
     | a r s t g  P n e i o | (PM + Q, + WX.ZJVCFL)
     | . W V d J  B h / Q X |
+
+"IndyPendant"     : 1.643   0.024   0.028   1.696   0.777     +0.013  -0.023  +0.009 ?!?
 ```
 
 - In comparison: **NotGate's ISRT/IndyRad layout** (QU ignored for analysis; use w/ Sym mod).
@@ -142,7 +143,9 @@ That analysis was done on an earlier version of the Colemakmods analyzer! The on
 ```
 
 <br>
+  
 ![EPKL help image for ColemaQ on an ANSI board](./ColemaQ_ANS-CAS_EPKL.png)
+  
 <br>
 
 My Personal Take On the ColemaQ Mod
