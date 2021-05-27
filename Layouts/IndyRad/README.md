@@ -24,7 +24,7 @@ NotGate's IndyRad/ISRT layout
 |   :---:   |
 |_The ISRT-CAWS layout on an ISO board_|
 
-  
+<br>
 
 NotGate's recent version history:
 ---------------------------------

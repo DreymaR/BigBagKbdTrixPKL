@@ -28,12 +28,14 @@ The Dvorak layout
 The Dvorak Curl-ID ergo mod
 ---------------------------
 - The Dvorak CurlAngle mod follows the same principles as the [Colemak Curl-DH][BB_CAW] mod.
-- That is, it deprioritizes the middle column and brings two important keys (here, U and D) down.
-- Like Colemak-DH, this lets the hand home position follow a relaxed and natural curve.
-- Like its cousin, it should be used with an Angle mod (bottom left half-row) on row-staggered boards.
+    - That is, it deprioritizes the middle column and brings two important keys (here, U and D) down.
+    - This lets the hand home position (AOEIU DHTNS) follow a natural, relaxed curve.
+    - Like Cmk-DH, it should be used with an Angle mod (bottom left half-row) on row-staggered boards.
+    - The Angle mods let you keep a straight left wrist while typing. See the image below.
+    - Like Cmk-DH, this mod doesn't change any fingerings.
+
 - The Dvk-Curl-ID mod brings the common I to a home position, and DU to the comfortable "Curl" positions.
 - It also fixes the bad F placement in standard Dvorak. The less common XKMB are moved as a result.
-- Like Colemak-DH this mod doesn't change any fingerings.
 - Since it's such a light mod however, it doesn't address other known problems such as LS on the pinky.
 - Dvk-Curl-ID scores substantially better than plain Dvorak in analysis and impression.
 - Speaking for myself, however, I'd still recommend using a more modern optimized layout like Colemak.
