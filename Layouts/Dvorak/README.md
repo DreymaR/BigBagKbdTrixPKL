@@ -1,7 +1,11 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
+<br>
+
 ![EPKL help image for Dvorak-AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-AWide_EPKL.png)
+
+_The Dvorak layout with [Angle+Wide ergonomic mods][BB_AWi] on an ANSI board_
 
 <br>
 
@@ -11,19 +15,13 @@ The Dvorak layout
 - It's more ergonomic than QWERTY by far, and a decent choice despite being quite old now.
 - The Dvorak layout features high hand alternation (L-R-L-R...) but less rolls than Colemak.
 - There are still some issues with it in my opinion, see below.
-- With EPKL, it can be used with the usual Angle and Wide ergonomic mods added.
+- With EPKL, it can be used with the usual Angle and Wide ergonomic mods added, as seen above.
 
 <br>
 
 |![EPKL help image for Dvorak on an ANSI board](./Dvk-eD_ANS/state0.png)|
 |   :---:   |
 |_The unmodified Dvorak layout on an ANSI board_|
-
-<br>
-
-|![EPKL help image for Dvorak on an ANSI board](./Dvk-eD_ANS_AWide/state0.png)|
-|   :---:   |
-|_The Dvorak layout with [Angle+Wide ergonomic mods][BB_AWi] on an ANSI board_|
 
 <br>
 
@@ -43,6 +41,7 @@ The Dvorak Curl-ID ergo mod
 <br>
 
 ![EPKL help image for Dvorak-Curl(ID)AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-CurlAWide_EPKL.png)
+
 _The Dvorak Curl-ID AngleWide layout, alias Dvorak-CAW, on an ANSI keyboard_
 
 
