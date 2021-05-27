@@ -50,7 +50,7 @@ Getting EPKL up and running
   
 More Know-How
 -------------
-**A Short EPKL Glossary**
+#### A Short EPKL Glossary
 * **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
     - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][CmkBBT]!
 * **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
@@ -69,7 +69,7 @@ More Know-How
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
     - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
   
-**Hotkeys defined in the EPKL_Settings file:**
+#### Hotkeys defined in the EPKL_Settings file:
 * Ctrl+Shift+1 – Display/hide the help image (it may also hide itself by shift state)
 * Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
 * Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may also be Ctrl+Shift+`.
@@ -81,7 +81,7 @@ More Know-How
 * Ctrl+Shift+9 – Move the help image between positions, as by mouseover
 * Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
   
-**Tweakable parameters:**
+#### Tweakable parameters:
 The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
 * Colemak vs QWERTY vs what-have-you, obviously. Choose your main layout wisely!
     - This repo by default contains Colemak(-DH) and Tarmak layouts, but also QWERTY and Dvorak.
@@ -118,7 +118,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
   
     ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
-**Techy tips for EPKL:**
+#### Techy tips for EPKL:
 * EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
     - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
@@ -131,7 +131,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
   
-**The LayStack explained further**
+#### The LayStack explained further
 * If you want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
     - There can be both [Layouts_Default][LayDef] and [Layouts_Override][LayOvr] files. Override entries take precedence.
 * In your Layouts_Override file, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
@@ -274,7 +274,7 @@ Credits/sources
 #### ~ Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors.
   
 _Finally, to all of you: Best of luck using EPKL!_
-_Øystein "DreymaR" Gadmar, 2020_
+_Øystein "DreymaR" Bech_
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (Old PKL on GitHub)
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (Old PKL on SourceForge)

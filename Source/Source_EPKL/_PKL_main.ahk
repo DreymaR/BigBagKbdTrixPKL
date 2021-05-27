@@ -20,6 +20,7 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;		- TOFIX: Is something fishy now? Sometimes, Ctrl still gets stuck?
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
