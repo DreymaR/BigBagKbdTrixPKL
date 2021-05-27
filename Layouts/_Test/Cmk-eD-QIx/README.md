@@ -102,6 +102,7 @@ ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0
 "IndyPendant"     : 1.643   0.024   0.028   1.696   0.777     +0.013  -0.023  +0.009 ?!?
 HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0.038 ???
 ```
+(Shai's Cmk mods: https://forum.colemak.com/topic/2644-shais-colemak-mod/)
 (HandsDown layout: https://sites.google.com/alanreiser.com/handsdown)
   
 

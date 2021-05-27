@@ -6,14 +6,14 @@
 processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Released labels
 {
 	Critical
-	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 32 pressesd keys in ###KeyPress() fns
+	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	static keyTimerCounter = 0 									; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
-	PklHotKeyBuffer .= ThisHotkey . "¤" 						; Add this hotkey to the hotkey buffer, ¤ delimited 	; eD WIP: Better with an array now? Set a max limit to the queue length?
-	if ( ++keyTimerCounter > 31 ) { 							; Resets the timer count on overflow. This does not affect the HotKeyBuffer size. 	; eD WIP: What does this affect?
+	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
+	if ( ++keyTimerCounter > 31 ) { 							; Resets the timer count on overflow. This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
 		keyTimerCounter = 0
 	}
 	SetTimer, processKeyPress%keyTimerCounter%, -1 				; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
@@ -22,15 +22,13 @@ processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Rel
 runKeyPress() 													; Called from the PKL_main processKeyPress# labels
 {
 	Critical
-	global PklHotKeyBuffer 										; Keeps track of the buffer of up to 32 pressesd keys in ###KeyPress() fns
+	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	
-	pos := InStr( PklHotKeyBuffer, "¤" )
-	if ( pos <= 0 ) 	; <=
+	if HotKeyBuffer.Length() == 0
 		Return
-	ThisHotkey := SubStr( PklHotKeyBuffer, 1, pos - 1 ) 		; Chomp the buffer from the left
-	StringTrimLeft, PklHotKeyBuffer, PklHotKeyBuffer, %pos%
+	ThisHotkey := HotKeyBuffer[ 1 ] 							; Chomp the buffer from the left
+	HotKeyBuffer.Remove( 1,1 )
 	Critical, Off
-;	( StrLen( PklHotKeyBuffer ) > 6 ) ? pklDebug( "`n" . PklHotKeyBuffer, 2 )  ; eD DEBUG
 	_keyPressed( ThisHotkey ) 									; Pops one HKey from the buffer
 }
 
@@ -267,10 +265,12 @@ getAltGrState( itsDown = 0, set = 0 )
 	if ( set == 1 ) {
 		if ( itsDown == 1 ) {
 			AltGrState = 1
-			Send {RAlt Down} 	; eD WIP AltGr: Removed {LCtrl Down}{RAlt Down}
+;			Send {LCtrl Up} 								; eD WIP: Does this help?
+			Send {RAlt Down} 								; eD WIP: Removed {LCtrl Down}{RAlt Down}
 		} else {
 			AltGrState = 0
-			Send {RAlt Up}{LCtrl Up}
+			Send {RAlt Up}
+			Send {LCtrl Up}
 		}
 	} else {
 		Return AltGrState

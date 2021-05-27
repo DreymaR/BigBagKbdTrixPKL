@@ -20,8 +20,9 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Try out not pressing LCtrl for AltGr (as in pkl_keypress.ahk now!) in a test branch! But commit the other stuff in main first, without this.
-;		- TOFIX: {AltGr+3,AltGr+1,u} produces a Space before the ự now?! Happens to ậ as well, but not {AltGr+=,AltGr+/,=} (not identical to). What gives?!
+;		- TOFIX: Is something fishy now? Sometimes, Ctrl still gets stuck?
+;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
+;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
@@ -29,10 +30,10 @@
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post.
 ;		- 
+;		- WIP: Try out not pressing LCtrl for AltGr (as in pkl_keypress.ahk now!) in a test branch! But commit the other stuff in main first, without this.
+;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
 ;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
-;		- WIP: Mirrored Colemak BaseLayouts. AltGr layer is mirror mappings. What about mods? Remember F# etc. Discord user Renato has tried this out.
-;			- Separate base for Cmk-DH seems the only way. Combine freely with Angle and Wide though?
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
 ;			- Or just detect every single VK code from the OS layout? It'd fix all our VK troubles...
@@ -234,6 +235,11 @@
 ;		- The SL-BS swap is good for `Extend-CAWS_ISO`, bringing the WheelLeft/Right keys together. Since Ext1 and Ext2 use the same remap, it wasn't done for AWide/CAW.
 ;		- Background image files were renamed more consistently.
 
+;		- Replaced the global PklHotKeyBuffer queue string with a global array.
+;		- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini`, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
+;		- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
+;			- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
+
 
 ;;  ####################### main      #######################
 
@@ -250,7 +256,7 @@ Process, Priority, , R 										; Real-time process priority
 SetWorkingDir, %A_ScriptDir%
 
 ; Global variables are largely replaced by the get/set info framework
-	global PklHotKeyBuffer 						; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+	global HotKeyBuffer = [] 					; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
 ;	global UIsel 								; Variable for UI selection (use Control names to see which one) 	; eD WIP
 setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
