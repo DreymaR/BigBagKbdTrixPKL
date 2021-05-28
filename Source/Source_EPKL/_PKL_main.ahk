@@ -21,7 +21,6 @@
 ;		- WIP: 
 
 ;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
-;		- TOFIX: Is something fishy now? Sometimes, Ctrl still gets stuck?
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
@@ -239,6 +238,8 @@
 ;		- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini`, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
 ;		- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 ;			- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
+
+;		- Added `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. Hoping this'll avoid both a stuck `LCtrl` and menu line activation from `RAlt`.
 
 
 ;;  ####################### main      #######################

@@ -11,9 +11,11 @@ _The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO boar
 
 The MTGAP layout
 ----------------
-- This layout scores well in modern analysis.
+- The [MTGAP][MTGAP] layout scores well in modern analysis.
 - It's a more radical layout than Colemak, changing everything around – even shift layers.
-- With EPKL, it can be used with the usual Angle and Sym ergonomic mods added, as seen above.
+- There are actually several variants of it for different board configurations.
+- EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
+- This layout can be used with the usual BigBag Angle and Sym ergonomic mods added, as seen above.
 
 <br>
 

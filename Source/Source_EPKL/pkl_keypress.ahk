@@ -265,18 +265,17 @@ getAltGrState( itsDown = 0, set = 0 )
 	if ( set == 1 ) {
 		if ( itsDown == 1 ) {
 			AltGrState = 1
-;			Send {LCtrl Up} 								; eD WIP: Does this help?
-			Send {RAlt Down} 								; eD WIP: Removed {LCtrl Down}{RAlt Down}
+			Send {LCtrl Down}{RAlt Down}
+			Sleep 15 										; The shortest actual sleep allowed is 10 ms (15.6 ms on some systems) due to OS granularity
+			Send {LCtrl Up} 								; eD WIP: Will this help against both menu line activation (RAlt alone) and LCtrl getting stuck?
 		} else {
 			AltGrState = 0
-			Send {RAlt Up}
-			Send {LCtrl Up}
+			Send {RAlt Up}{LCtrl Up}
 		}
 	} else {
 		Return AltGrState
 	}
-;	( 1 ) ? pklDebug( "getAltGrState " . itsDown . " " . set )  ; eD DEBUG
-;	Return	; eD DEBUG – When is this used?!? Only if there's no real AltGr in the OS layout?
+;	( 1 ) ? pklDebug( "getAltGrState " . itsDown . " " . set )  ; eD DEBUG – When exactly is this used? Only if there's no real AltGr in the OS layout?
 }
 
 ExtendIsPressed() 											; Determine whether the Extend key is pressed. Used in _keyPressed() and pkl_gui_image

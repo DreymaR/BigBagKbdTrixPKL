@@ -344,6 +344,8 @@ DONE:
 	- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 		- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
   
+	- Added `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. Hoping this'll avoid both a stuck `LCtrl` and menu line activation from `RAlt`.
+  
   
 TODO:
 -----
