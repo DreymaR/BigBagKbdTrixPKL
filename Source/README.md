@@ -343,7 +343,7 @@ DONE:
 	- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini`, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
 	- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 		- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
-  <br />
+  
 	- The AHK Send command sends active modifiers up before a sent character/string, and down/up after. This could be what has caused a stuck `LCtrl` when using `AltGr` fast.
 		- Specifically, after an `AltGr` key press AHK sends both `LCtrl` and then `LCtrl+Ralt` down/up. If this happens too fast, they may get jumbled.
 		- Tried adding `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. But this did not fix the problem.
