@@ -101,7 +101,7 @@ pklJanitorTic:
 	_pklSuspendByApp()
 	_pklJanitorActivity()
 	_pklJanitorLocaleVK()
-	_pklJanitorCleanup()
+;	_pklJanitorCleanup() 	; eD WIP: Testing EPKL without the idle keyups
 Return
 
 _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active

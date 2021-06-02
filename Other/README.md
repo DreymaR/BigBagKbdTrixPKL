@@ -6,6 +6,9 @@ Other files info
 In this folder are some files that aren't used by EPKL but may still be interesting.
   
 - The Key code table is a list of keys and their various names. See the [Remap file][MapIni] for what EPKL uses.
+- To see what keys are pressed and what output results, you can use the EPKL "AHK Key History..." menu.
+	- The AutoHotkey Key History menu item is shown only if advancedMode is set to yes in the EPKL_Settings.
+	- Even more info is seen on the [Keyboard Event Viewer][KbdEvt] page. It's a very informative tool.
 - There's a Registry Editor folder that may be used to change Windows low-level settings. Do this only with great care!
 	- It contains .reg files that should run with the MS RegEdit system program to modify the Windows Registry.
 	- RegEdit files that remap keys, do so at the lowest level possible which will work everywhere such as in games.
@@ -23,6 +26,7 @@ In this folder are some files that aren't used by EPKL but may still be interest
 	- KbdEdit has a nice [online manual][KbdEdt] too. There's a VK code table there and much more.
 
 [MapIni]: ../Files/_eD_Remap.ini (EPKL Remap file)
+[KbdEvt]: https://w3c.github.io/uievents/tools/key-event-viewer.html (Keyboard Event Viewer on GitHub Pages)
 [ShrpKy]: https://www.randyrants.com/category/sharpkeys/ (RandyRants' SharpKeys program)
 [MSKLCg]: https://msklc-guide.github.io/ (Henri's MSKLC Guide)
 [KbdEdt]: http://www.kbdedit.com/manual/manual_index.html (KbdEdit online manual)

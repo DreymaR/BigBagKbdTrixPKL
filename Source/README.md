@@ -327,7 +327,7 @@ DONE:
 	- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/f/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
 	- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 	- HIG updated so shift state help images show parseable entries like bigrams correctly.
-	- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
+	- New mappings for Ext-tap `wfpblu`. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
 	- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
 	- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
 		- In particular, if you run a self-made MSKLC layout underneath in which letter and/or `OEM_` VK codes are wrong, the result will be odd.
@@ -343,10 +343,14 @@ DONE:
 	- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini`, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
 	- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 		- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
+  <br />
+	- The AHK Send command sends active modifiers up before a sent character/string, and down/up after. This could be what has caused a stuck `LCtrl` when using `AltGr` fast.
+		- Specifically, after an `AltGr` key press AHK sends both `LCtrl` and then `LCtrl+Ralt` down/up. If this happens too fast, they may get jumbled.
+		- Tried adding `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. But this did not fix the problem.
+		- Using the AHK v1.1.27 `{Text}` mode avoids the first `LCtrl`, so it is now used whenever a single character is sent.
+	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
   
-	- Added `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. Hoping this'll avoid both a stuck `LCtrl` and menu line activation from `RAlt`.
-  
-  
+
 TODO:
 -----
 * A "janitor" timer that checks whether the underlying Windows layout has changed (affects dead keys)
@@ -368,12 +372,8 @@ TODO:
 	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. See https://en.wikipedia.org/wiki/Greek_diacritics for tables.
 	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
 	- IPA on AltGr+Shift symbol keys?
-* Define Mirror layouts as remap cycles?
-	- Should be able to mirror any layout then?
-	- Make sure to apply mirroring last?
-* Option to have layouts on the main menu like vVv has: "Layout submenu if more than..." setting?
   
-  
+
 INFO: Some documentation notes
 ------------------------------
 * Virtual key code links:

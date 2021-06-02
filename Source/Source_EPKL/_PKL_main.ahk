@@ -20,15 +20,18 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Put some BaseLayouts in their locale variant folders? Useful for Greek and Heb, but maybe not for Rulemak since Bulmak will get more awkward?
+;		- TOFIX: Some weird bug w/ Ext+V now?!? Makes me miss my pastes on Reddit (specifically? ... is it a site shortcut that messes me up then?), then the Back key stopped working?
 ;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
+;			- May have to clean up the state calculation in _keyPressed()
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;		- WIP: Heb BaseLayout. See its file and the Forum Locale post.
+;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 ;		- 
 ;		- WIP: Try out not pressing LCtrl for AltGr (as in pkl_keypress.ahk now!) in a test branch! But commit the other stuff in main first, without this.
 ;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
@@ -222,7 +225,7 @@
 ;		- Added some symbols to the RingAbov-Lig (ring symbols), Stroke-Bar (ballot boxes on s/v/x), Macron (trigrams on 0-7) and DotAbove (dice on 1-6) dead keys.
 ;		- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 ;		- HIG updated so shift state help images show parseable entries like bigrams correctly.
-;		- New mappings for Ext-tap wfpblu. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
+;		- New mappings for Ext-tap `wfpblu`. `{Ext-tap,w}` opens Windows Explorer; useful since the Win+E shortcut may be compromised in Colemak due to a hardwired Win+L.
 ;		- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
 ;		- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
 ;			- In particular, if you run a self-made MSKLC layout underneath in which letter and/or `OEM_` VK codes are wrong, the result will be odd.
@@ -239,7 +242,11 @@
 ;		- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 ;			- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
 
-;		- Added `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. Hoping this'll avoid both a stuck `LCtrl` and menu line activation from `RAlt`.
+;		- The AHK Send command sends active modifiers up before a sent character/string, and down/up after. This could be what has caused a stuck `LCtrl` when using `AltGr` fast.
+;			- Specifically, after an `AltGr` key press AHK sends both `LCtrl` and then `LCtrl+Ralt` down/up. If this happens too fast, they may get jumbled.
+;			- Tried adding `{LCtrl Up}` to getAltGrState(), ~15 ms after `{LCtrl Down}{RAlt Down}`. But this did not fix the problem.
+;			- Using the AHK v1.1.27 `{Text}` mode avoids the first `LCtrl`, so it is now used whenever a single character is sent.
+;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 
 
 ;;  ####################### main      #######################
@@ -250,7 +257,7 @@ setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 
 SendMode Event
-SetKeyDelay 3 												; The Send key delay wasn't set in PKL, defaulted to 10
+SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10. What is the actual possible lowest value, and what's most robust? How about -1 vs 0 vs 1?
 SetBatchLines, -1
 Process, Priority, , H 										; High process priority
 Process, Priority, , R 										; Real-time process priority

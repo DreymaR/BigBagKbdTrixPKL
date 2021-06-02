@@ -3,42 +3,43 @@
 	if pkl_CheckForDKs( ch )
 		Return
 	
-	if ( 32 < ch ) {			;&& ch < 128 (using pre-Unicode AHK)
-		char := "{" . Chr(ch) . "}" 	; Normal char
-		if InStr( getCurrentWinLayDeadKeys(), Chr(ch) )
-			char .= "{Space}"
+	blind := false 				; Send {Blind}?
+	if ( ch > 32 ) {			;&& ch < 128 (using pre-Unicode AHK)
+		this    := "{Text}" . Chr(ch) 	;"{" . Chr(ch) . "}" 	; Normal char
+;	if InStr( getCurrentWinLayDeadKeys(), Chr(ch) )
+;		this    .= "{Space}" 	; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
-		char = ={Space}
+		blind   := true
+		this    := "{Space}"
 	} else if ( ch == 9 ) {
-		char = {Tab}
+		this    := "{Tab}"
 	} else if ( ch > 0 && ch <= 26 ) {
 		; http://en.wikipedia.org/wiki/Control_character#How_control_characters_map_to_keyboards
-		char := "^" . Chr( ch + 64 )	; Send Ctrl char
+		this    := "^" . Chr( ch + 64 )	; Send Ctrl char
 	} else if ( ch == 27 ) {
-		char = ^{VKDB}	; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
+		this    := "^{VKDB}" 	; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
 	} else if ( ch == 28 ) {
-		char = ^{VKDC}	; Ctrl + \ (OEM_5) alias File Separator(?)
+		this    := "^{VKDC}" 	; Ctrl + \ (OEM_5) alias File Separator(?)
 	} else if ( ch == 29 ) {
-		char = ^{VKDD}	; Ctrl + ] (OEM_6) alias Group Separator(?)
+		this    := "^{VKDD}" 	; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
-	pkl_SendThis( modif, char )
+	blind   := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? true : blind 	; Send Blind for Alt key presses
+	prefix  := ( blind ) ? "{Blind}" : ""
+;	( prefix != "" ) ? pklDebug( "`nPrefix: '" . prefix . "'`nThis: '" . this . "'", .6 )  ; eD DEBUG
+	Send %prefix%%modif%%this% 	; pkl_SendThis( modif, this ) 	; Modif is only used for explicit mod mappings. 	; eD WIP: This is what leads to sending of unnecessary modifiers?! It's Send itself that does it.
 }
 
-pkl_SendThis( modif, toSend )	; Actually send a char/string, processing Alt/AltGr states
+pkl_SendThis( modif, this ) 	; Actually send a char/string
 {
-	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up" 
-	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
-		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
+;	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
+;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
+;		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
 	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed. Also, Space entries need to be sent {Blind}
 	prefix := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
-;	prefix := ( toSend == "{Space}" ) ? "{Blind}" : prefix 		; eD WIP: Allow Shift+Spc to work - messes with Shift?!
-	if ( toSend == "={Space}" ) {
-		Send {Blind}{Space}
-	} else {
-		Send %prefix%%modif%%toSend%
-	}
-	if ( toggleAltGr )
-		setAltGrState( 1 )
+;	prefix := ( this == "{Space}" ) ? "{Blind}" : prefix 		; eD WIP: Allow Shift+Spc to work - messes with Shift?!
+	Send %prefix%%modif%%this%
+;	if ( toggleAltGr )
+;		setAltGrState( 1 )
 }
 
 pkl_CheckForDKs( ch )
@@ -89,7 +90,7 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 		pfix    := ""
 	}
 	if ( sendIt && pfix != -1 ) { 								; Send if recognized and not ParseOnly
-		if ( enty && mode == "SendThis" ) { 					; eD WIP: Used pkl_SendThis(), now pkl_Send()
+		if ( enty && mode == "SendThis" ) { 
 			pkl_Send( "", pfix . enty ) 						; Used by _keyPressed()
 		} else if ( mode == "SendMess"  ) {
 			pkl_SendMessage( enty )

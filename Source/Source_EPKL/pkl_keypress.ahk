@@ -53,7 +53,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	if getLayInfo("LayHasAltGr") { 								; For AltGr layouts...
 		if AltGrIsPressed() { 									; If AltGr is down...
 			sh := getKeyState("Shift")
-			if ( (capHK & 4) && getKeyState("CapsLock", "T") )
+			if ( (capHK & 4) && getKeyState("CapsLock", "T") ) 	; The CapState property of a key determines whether CapsLock affects Shift
 				sh := 1 - sh
 			state := 6 + sh 									; eD WIP: The state calc. is a mess. Prepare for SGCaps in the mix by simplifying this mess?
 		} else {
@@ -69,7 +69,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	} else { 													; For non-AltGr layouts...
 		if getKeyState("Alt") { 								; Alt is down
 			modif .= "!"
-			if ( getKeyState("RCtrl") || ( getKeyState("LCtrl") && !getKeyState("RAlt") ) )
+			if ( ( getKeyState("RCtrl") || ( getKeyState("LCtrl") ) && !getKeyState("RAlt") ) )
 				modif .= "^"
 			state := _pkl_CapsState( capHK )					; CapsLock on?
 		} else {
@@ -86,7 +86,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	if ( Pri == "" ) {
 		Return
 	} else if ( state == "vkey" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.
-		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken.)
+		pkl_SendThis( modif, "{" . Pri . "}" ) 					; (Without this, Ctrl+Shift+# keys are broken. Why?)
 	} else if ( Pri == -1 ) { 									; This state is sent as a VKey
 		Send % "{Blind}{" . Ent . "}"
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
@@ -133,14 +133,11 @@ extendKeyPress( HKey )											; Process an Extend modified key press
 		For HKey, mod in extMods { 								; Which Extend mods are depressed?
 			if getKeyState( HKey, "P" ) {
 				pref .= modList[mod]
-;				Sleep % 16										; eD WIP: Take a little break here to avoid overflow? Doesn't seem to solve anything.
-;				Send % "{" . mod . " Down}"
 			}
 		} 	; end For
 		Send {Blind}%pref%{%xVal%} 								; By default, take modifiers into account
 	} 	; end if
 	For HKey, mod in extMods {
-;		Send % "{" . mod . " Up}"
 		if ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
 	} 	; end For
@@ -159,7 +156,7 @@ setExtendInfo( xLvl = 1 ) 										; Update PKL info about the current Extend l
 ;;      Process states of mods. Used in PKL_main; #etAltGrState() also in PKL_send.
 ;
 
-setModifierState( theMod, itsDown = 0 ) 					; Can be called from a hotkey or with an AHK mod key name
+setModifierState( theMod, keyDown = 0 ) 					; Can be called from a hotkey or with an AHK mod key name
 {
 	static osmKeys      := -1
 	static osmTime      := 0
@@ -171,7 +168,7 @@ setModifierState( theMod, itsDown = 0 ) 					; Can be called from a hotkey or wi
 		setPklInfo( "osmMax", 3 ) 							; Allow 3 concurrent OSM
 	}
 
-	if ( itsDown ) {
+	if ( keyDown ) {
 		if ( InStr( osmKeys, theMod ) && theMod != getPklInfo( "osmKeyN" . osmN ) && ! ExtendIsPressed() ) {	; eD WIP: Avoid the OSM if already held? 	; eD WIP: Don't use Sticky mods when Ext is down?
 			osmN := Mod( osmN, getPklInfo( "osmMax" ) )+1 	; Switch between the OSM timers
 			
@@ -186,15 +183,16 @@ setModifierState( theMod, itsDown = 0 ) 					; Can be called from a hotkey or wi
 	}
 }
 
-_setModState( theMod, itsDown = 1 )
+_setModState( theMod, keyDown = 1 )
 {
 	if ( theMod == "Extend" ) { 							; Extend
-		_setExtendState( itsDown )
+		_setExtendState( keyDown )
 	} else if ( theMod == "AltGr" ) {
-		setAltGrState( itsDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
+;		setAltGrState( keyDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
+		setKeyInfo( "ModState_AltGr", keyDown )
 	} else {
-		UD := ( itsDown ) ? "Down" : "Up"
-		setKeyInfo( "ModState_" . theMod, itsDown ) 		; Standard modifier
+		UD := ( keyDown ) ? "Down" : "Up"
+		setKeyInfo( "ModState_" . theMod, keyDown ) 		; Standard modifier
 		Send {%theMod% %UD%} 								; NOTE: This autorepeats. Is that desirable?
 	}
 }
@@ -254,29 +252,28 @@ AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 	Return getKeyState( "RAlt" ) ; eD WIP AltGr: Removed || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
-setAltGrState( itsDown ) 									; The set fn calls get to reuse the static var.
-{
-	getAltGrState( itsDown, 1 )
-}
+;setAltGrState( keyDown ) 									; The set fn calls get to reuse the static var. 	; eD WIP: Can we just use the normal _setModState() now?
+;{
+;	getAltGrState( keyDown, 1 )
+;}
 
-getAltGrState( itsDown = 0, set = 0 )
-{
-	static AltGrState   := 0
-	if ( set == 1 ) {
-		if ( itsDown == 1 ) {
-			AltGrState = 1
-			Send {LCtrl Down}{RAlt Down}
-			Sleep 15 										; The shortest actual sleep allowed is 10 ms (15.6 ms on some systems) due to OS granularity
-			Send {LCtrl Up} 								; eD WIP: Will this help against both menu line activation (RAlt alone) and LCtrl getting stuck?
-		} else {
-			AltGrState = 0
-			Send {RAlt Up}{LCtrl Up}
-		}
-	} else {
-		Return AltGrState
-	}
-;	( 1 ) ? pklDebug( "getAltGrState " . itsDown . " " . set )  ; eD DEBUG – When exactly is this used? Only if there's no real AltGr in the OS layout?
-}
+;getAltGrState( keyDown = 0, set = 0 )
+;{
+;	static AltGrState   := 0
+;	if ( set == 1 ) {
+;		AltGrState := ( keyDown ) ? 1 : 0
+; ;		if ( keyDown == 1 ) {
+; ;			AltGrState = 1
+; ;			Send {LCtrl Down}{RAlt Down}
+; ;		} else {
+; ;			AltGrState = 0
+; ;			Send {RAlt Up}{LCtrl Up}
+; ;		}
+;	} else {
+;		Return AltGrState
+;	}
+; ;	( 1 ) ? pklDebug( "getAltGrState " . keyDown . " " . set )  ; eD DEBUG – When exactly is this used? Only if there's no real AltGr in the OS layout?
+;}
 
 ExtendIsPressed() 											; Determine whether the Extend key is pressed. Used in _keyPressed() and pkl_gui_image
 {
@@ -304,8 +301,8 @@ _setExtendState( set = 0 )									; Called from setModState
 		setExtendInfo( xLvl ) 								; Update Extend layer info
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
-		extendKeyPress( -1 ) 								; ...remove any Ext modifiers to clean up.
-		Send {Shift Up}{Ctrl Up}{Alt Up}{Win Up} 			; ...remove modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
+		extendKeyPress( -1 ) 								; ...remove any Ext modifiers, and also...
+		Send {Shift Up}{Ctrl Up}{Alt Up} 					; ...remove physical modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
 		extHeld := 0
 	}	; end if
 	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)
