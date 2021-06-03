@@ -1,13 +1,15 @@
-﻿pkl_Send( ch, modif = "" )		; Process a single char/str with mods for send, w/ OS DK & special char handling
+﻿pkl_Send( ch, modif = "" ) 				; Process a single char/str with mods for send, w/ OS DK & special char handling
 {
 	if pkl_CheckForDKs( ch )
 		Return
 	
-	blind := false 				; Send {Blind}?
-	if ( ch > 32 ) {			;&& ch < 128 (using pre-Unicode AHK)
-		this    := "{Text}" . Chr(ch) 	;"{" . Chr(ch) . "}" 	; Normal char
-;	if InStr( getCurrentWinLayDeadKeys(), Chr(ch) )
-;		this    .= "{Space}" 	; Send an extra space to release OS dead keys
+	blind   := false 					; Send {Blind}?
+	char    := Chr(ch)
+	if ( ch > 32 ) { 					; ch > 128 works with Unicode AHK
+		this    := AltGrIsPressed() ? "{Text}" . char 	; Send as Text for AltGr layers. Doesn't work with the Win key.
+		                            : "{" . char . "}" 	; Normal char
+	if InStr( getCurrentWinLayDeadKeys(), char )
+		this    .= "{Space}" 			; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
 		blind   := true
 		this    := "{Space}"
@@ -17,19 +19,19 @@
 		; http://en.wikipedia.org/wiki/Control_character#How_control_characters_map_to_keyboards
 		this    := "^" . Chr( ch + 64 )	; Send Ctrl char
 	} else if ( ch == 27 ) {
-		this    := "^{VKDB}" 	; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
+		this    := "^{VKDB}" 			; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
 	} else if ( ch == 28 ) {
-		this    := "^{VKDC}" 	; Ctrl + \ (OEM_5) alias File Separator(?)
+		this    := "^{VKDC}" 			; Ctrl + \ (OEM_5) alias File Separator(?)
 	} else if ( ch == 29 ) {
-		this    := "^{VKDD}" 	; Ctrl + ] (OEM_6) alias Group Separator(?)
+		this    := "^{VKDD}" 			; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
 	blind   := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? true : blind 	; Send Blind for Alt key presses
 	prefix  := ( blind ) ? "{Blind}" : ""
 ;	( prefix != "" ) ? pklDebug( "`nPrefix: '" . prefix . "'`nThis: '" . this . "'", .6 )  ; eD DEBUG
-	Send %prefix%%modif%%this% 	; pkl_SendThis( modif, this ) 	; Modif is only used for explicit mod mappings. 	; eD WIP: This is what leads to sending of unnecessary modifiers?! It's Send itself that does it.
+	Send %prefix%%modif%%this% 			; pkl_SendThis( modif, this ) 	; Modif is only used for explicit mod mappings. 	; eD WIP: This is what leads to sending of unnecessary modifiers?! It's Send itself that does it.
 }
 
-pkl_SendThis( modif, this ) 	; Actually send a char/string
+pkl_SendThis( modif, this ) 			; Actually send a char/string
 {
 ;	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
 ;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?

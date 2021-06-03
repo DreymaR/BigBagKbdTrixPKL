@@ -1,10 +1,8 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-|![EPKL help image for Colemak-eD-He AWide on an ISO board, unshifted state](./Cmk-eD-He_ISO_AWide/state0.png)|
-|   :---:   |
-|_Colemak-eD-He_ISO_AWide, unshifted state._|
-<br>
+![EPKL help image for Colemak-eD-He Angle-ISO](./Cmk-Heb_ISO-Angle_s0_EPKL.png)
+  
 
 Colemak[eD] locale layouts
 --------------------------
