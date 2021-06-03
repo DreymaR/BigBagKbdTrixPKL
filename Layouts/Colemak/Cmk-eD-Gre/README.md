@@ -1,11 +1,8 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-|![EPKL help image for Colemak-eD-Gr AWide on an ISO board, unshifted state](./Cmk-eD-Gr_ISO_AWide/state0.png)|
-|   :---:   |
-|_Colemak-eD-Gr_ISO_AWide, unshifted state._|
-
-<br>
+![EPKL help image for Colemak-Gre ISO-AngleWide](./Cmk-Gre_ISO-AWide_s0_EPKL.png)
+  
 
 Colemak[eD] locale layouts
 --------------------------
@@ -17,8 +14,8 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 
 <br>
 
-Colemak-Gr Greek phonetic layout variant
-----------------------------------------
+Colemak-Gre Greek phonetic layout variant
+-----------------------------------------
 - For the Greek phonetic layout, some choices were made 
 - It's for the most part similarly mapped as the Greek dead key usually found on AltGr+5
 - The two diaeresis letters Ϋϋ/Ϊϊ are added to Q and the ISO key, to ease input
@@ -26,10 +23,10 @@ Colemak-Gr Greek phonetic layout variant
 
 <br>
 
-|![EPKL help image for Colemak-eD-Gr CAWS on an ISO board, unshifted state](./Cmk-eD-Gr_ISO_CurlAWideSym/state0.png)|
+|![EPKL help image for Colemak-eD-Gre CAWS on an ISO board, unshifted state](./Cmk-eD-Gre_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-Gr_ISO_CAWS, unshifted state._|
+|_Colemak-eD-Gre_ISO_CAWS, unshifted state._|
 
-|![EPKL help image for Colemak-eD-Gr CAWS on an ISO board, AltGr state](./Cmk-eD-Gr_ISO_CurlAWideSym/state6.png)|
+|![EPKL help image for Colemak-eD-Gre CAWS on an ISO board, AltGr state](./Cmk-eD-Gre_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-Gr_ISO_CAWS, AltGr state._|
+|_Colemak-eD-Gre_ISO_CAWS, AltGr state._|
