@@ -350,6 +350,8 @@ DONE:
 		- However, Text mode doesn't work with Win+Key shortcuts, so it's only used for single-glyph mappings on AltGr layers.
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
   
+	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
+  
 
 TODO:
 -----

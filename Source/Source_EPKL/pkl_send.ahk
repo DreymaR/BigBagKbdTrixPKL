@@ -137,12 +137,14 @@ _strSendMode( string, strMode )
 {
 	if ( not string )
 		Return true
-	if        ( strMode == "Input"     ) {				; Send by the standard SendInput {Raw} method
-		SendInput {Raw}%string%							; - May take time, and any modifiers released meanwhile will get stuck!
-	} else if ( strMode == "Message"   ) {				; Send by SendMessage WM_CHAR system calls
-		pkl_SendMessage( string )						; - Robust as it waits for sending to finish, but a little slow.
-	} else if ( strMode == "Paste" ) {					; Send by pasting from the Clipboard, preserving its content.
-		pkl_SendClipboard( string )						; - Quick, but may fail if the timing is off. Best for non-parsed send.
+	if        ( strMode == "Input"     ) { 				; Send by the standard SendInput {Raw} method
+		SendInput {Raw}%string% 						; - May take time, and any modifiers released meanwhile will get stuck!
+	} else if ( strMode == "Text"      ) { 				; Send by the SendInput {Text} method (AHK v1.1.27+)
+		SendInput {Text}%string% 						; - More reliable? Only backtick characters are translated.
+	} else if ( strMode == "Message"   ) { 				; Send by SendMessage WM_CHAR system calls
+		pkl_SendMessage( string ) 						; - Robust as it waits for sending to finish, but a little slow.
+	} else if ( strMode == "Paste" ) { 					; Send by pasting from the Clipboard, preserving its content.
+		pkl_SendClipboard( string ) 					; - Quick, but may fail if the timing is off. Best for non-parsed send.
 	} else {
 		pklWarning( "Send mode '" . strMode . "' unknown.`nString '" . string . "' not sent." )
 		Return false

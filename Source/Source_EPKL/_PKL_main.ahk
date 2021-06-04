@@ -20,8 +20,11 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+;		- WIP: Try out a swap-side layout instead of the mirrored one? More strain on weak fingers, but fewer SFBs I should think.
+;			- Is the brain equally good at side-swapping and mirroring?
 ;		- WIP: Put some BaseLayouts in their locale variant folders? Useful for Greek and Heb, but maybe not for Rulemak since Bulmak will get more awkward?
-;		- TOFIX: Some weird bug w/ Ext+V now?!? Makes me miss my pastes on Reddit (specifically? ... is it a site shortcut that messes me up then?), then the Back key stopped working?
+;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
 ;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
@@ -31,9 +34,8 @@
 ;			- May have to clean up the state calculation in _keyPressed()
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 ;		- 
-;		- WIP: Try out not pressing LCtrl for AltGr (as in pkl_keypress.ahk now!) in a test branch! But commit the other stuff in main first, without this.
+;		- WIP: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
 ;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
 ;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
@@ -248,6 +250,7 @@
 ;			- However, Text mode doesn't work with Win+Key shortcuts, so it's only used for single-glyph mappings on AltGr layers.
 ;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 
+;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 
 ;;  ####################### main      #######################
 
