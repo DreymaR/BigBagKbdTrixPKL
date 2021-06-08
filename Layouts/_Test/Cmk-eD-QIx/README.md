@@ -2,6 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ![EPKL help image for Colemak-eD-QI on an ANSI board](./Colemak-QI_ANS-CAS_EPKL.png)
+
 _The "bleeding-edge" Nyfee mod Colemak-QI_
   
 
@@ -57,6 +58,7 @@ Remaps from Cmk-DH-Sym:
 ```
 
 ![EPKL help image for Colemak-eD-QI;x on an ANSI board](./Colemak-QIx_ANS-CAS_EPKL.png)
+
 _The "bleeding-edge" Nyfee mod Colemak-QI;x_
   
 
@@ -109,6 +111,7 @@ ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0
 HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0.038 ???
 ```
 (Shai's Cmk mods: https://forum.colemak.com/topic/2644-shais-colemak-mod/)
+
 (HandsDown layout: https://sites.google.com/alanreiser.com/handsdown)
   
 
@@ -149,6 +152,7 @@ That analysis was done on an earlier version of the Colemakmods analyzer! The on
 
   
 ![EPKL help image for ColemaQ-F on an ANSI board](./ColemaQ-F_ANS-CAS_EPKL.png)
+
 _The older "bleeding-edge" ColemaQ-F mod. Without the optional G-F swap it's simply ColemaQ._
   
 
