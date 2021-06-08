@@ -1,7 +1,7 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for Colemak-eD-EsAlt on an ANSI board, the AltGr state](./Cmk-eD-EsAlt_ANS_s6_EPKL.png)
+![EPKL help image for Colemak-eD-EsLat AWide on an ISO board](./Cmk-eD-EsLat_ISO-AWi_s0_EPKL.png)
 <br><br>
 
 
