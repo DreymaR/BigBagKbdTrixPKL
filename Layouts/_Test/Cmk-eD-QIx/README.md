@@ -1,8 +1,10 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for Colemak-eD-QI;x on an ANSI board](./Colemak-QIx_ANS-CAS_EPKL.png)
+![EPKL help image for Colemak-eD-QI on an ANSI board](./Colemak-QI_ANS-CAS_EPKL.png)
+_The "bleeding-edge" Nyfee mod Colemak-QI_
   
+
 Colemak Discord user Nyfee's "bleeding-edge" Colemak mods
 ---------------------------------------------------------
 - Colemak design philosophy keeps ZXCV in place, and tries to avoid keys swapping hands.
@@ -53,6 +55,10 @@ Remaps from Cmk-DH-Sym:
 Remaps from Cmk-DH-Sym:
                     / V ⇔ K / CM ⇔ SL / Q > QU > SC / / F ⇔ G /
 ```
+
+![EPKL help image for Colemak-eD-QI;x on an ANSI board](./Colemak-QIx_ANS-CAS_EPKL.png)
+_The "bleeding-edge" Nyfee mod Colemak-QI;x_
+  
 
 Colemakmods analysis of several "bleeding-edge" Colemak mods and more
 ---------------------------------------------------------------------
@@ -142,7 +148,8 @@ That analysis was done on an earlier version of the Colemakmods analyzer! The on
 ```
 
   
-![EPKL help image for ColemaQ on an ANSI board](./ColemaQ_ANS-CAS_EPKL.png)
+![EPKL help image for ColemaQ-F on an ANSI board](./ColemaQ-F_ANS-CAS_EPKL.png)
+_The older "bleeding-edge" ColemaQ-F mod. Without the optional G-F swap it's simply ColemaQ._
   
 
 My Personal Take On the ColemaQ Mod
