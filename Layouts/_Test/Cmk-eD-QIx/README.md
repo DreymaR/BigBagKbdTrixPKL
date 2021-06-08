@@ -4,7 +4,8 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ![EPKL help image for Colemak-eD-QI on an ANSI board](./Colemak-QI_ANS-CAS_EPKL.png)
 
 _The "bleeding-edge" Nyfee mod Colemak-QI_
-  
+<br><br>
+
 
 Colemak Discord user Nyfee's "bleeding-edge" Colemak mods
 ---------------------------------------------------------
@@ -56,11 +57,14 @@ Remaps from Cmk-DH-Sym:
 Remaps from Cmk-DH-Sym:
                     / V ⇔ K / CM ⇔ SL / Q > QU > SC / / F ⇔ G /
 ```
+<br><br>
+
 
 ![EPKL help image for Colemak-eD-QI;x on an ANSI board](./Colemak-QIx_ANS-CAS_EPKL.png)
 
 _The "bleeding-edge" Nyfee mod Colemak-QI;x_
-  
+<br><br>
+
 
 Colemakmods analysis of several "bleeding-edge" Colemak mods and more
 ---------------------------------------------------------------------
@@ -113,7 +117,6 @@ HandsDown noQU-SC : 1.689   0.039  -0.002   1.725   1.255     +0.059  -0.008  +0
 (Shai's Cmk mods: https://forum.colemak.com/topic/2644-shais-colemak-mod/)
 
 (HandsDown layout: https://sites.google.com/alanreiser.com/handsdown)
-  
 
 - The Cmk-QI PM/BK/WFL combo is most important in reducing both effort and SFBs at the same time.
 - The proposed Q-SC and W-C swaps show no analysis benefits here; their benefit is perceived.
@@ -149,12 +152,14 @@ That analysis was done on an earlier version of the Colemakmods analyzer! The on
     | a r s t g  P n e i o | (PM + VBK)
     | z x c d K  B h , . / |
 ```
+<br><br>
 
-  
+
 ![EPKL help image for ColemaQ-F on an ANSI board](./ColemaQ-F_ANS-CAS_EPKL.png)
 
 _The older "bleeding-edge" ColemaQ-F mod. Without the optional G-F swap it's simply ColemaQ._
-  
+<br><br>
+
 
 My Personal Take On the ColemaQ Mod
 -----------------------------------
