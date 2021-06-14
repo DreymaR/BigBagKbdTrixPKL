@@ -11,7 +11,7 @@ _The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO boar
 
 The MTGAP layout
 ----------------
-- The [MTGAP][MTGAPp] layout designed by [Michael Dickens][MTGaP_] scores well in modern analysis.
+- The [MTGAP][MTGAPm] layout designed by [Michael Dickens][MTGaPp] scores well in modern analysis.
 - It's a more radical layout than Colemak, changing everything around – even shift layers.
 - There are actually several variants of it for different board configurations.
 - EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
@@ -37,6 +37,6 @@ alternation (notice the positions of TH, NE, ST and the fairly unusual feature o
 |_Shifted MTGAP help image on an ANSI board_|
 
 
-[MTGAPp]: https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/ (The MTGAP project)
-[MTGaP_]: (**M**ichael "**T**he **G**lorious **a**nd **P**owerful")
+[MTGAPm]: https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/ (The MTGAP project)
+[MTGaPp]: https://mdickens.me/ (**M**ichael "**T**he **G**lorious **a**nd **P**owerful")
 [BB_Erg]: https://dreymar.colemak.org/ergo-mods.html (DreymaR's Big Bag of Tricks on ergo mods)
