@@ -322,6 +322,12 @@ convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; e
 	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
 }
 
+formatUni( chr ) { 											; Format a character as a hex string
+	chr     := Ord( chr ) 									; Unicode ordinal value
+	pad     := ( chr > 0x10000 ) ? "" : "04" 				; Pad with zeros iff ord < 0x10000, as done in X11 keysymdef.h
+	Return  Format( "0x{:" . pad . "x}", chr ) 				; Format as a Unicode hex string 0x#### (4+ digits)
+}
+
 pklFileRead( file, name = "" ) { 							; Read a file
 	name := ( name ) ? name : file
 	try { 													; eD NOTE: Use Loop, Read, ? Nah, 160 kB or so isn't big.

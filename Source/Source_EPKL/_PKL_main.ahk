@@ -22,7 +22,18 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Compose table importer. 
+;			- Use the actual /usr/share/X11/locale/en_US.UTF-8/Compose file: It has a zillion entries, near-instant joy.
+;				- Have to translate non-letter glyph names and U####. Key names are found in the keysymdef.h file.
+;				- Typical Compose file entry:   <Multi_key> <o> <c>              	: "©"   copyright # COPYRIGHT SIGN
+;				- Typical keysymdef.h entry:    #define XK_o                             0x006f  /* U+006F LATIN SMALL LETTER O */
+;			- So we could translate the X11 Compose entries to Unicode points that will be the keys for the _eD_Compose.ini file.
+;		- TODO: To avoid role conflicts between, say, a local Completion key and a global Compose key, allow multiple such keys using different table combos?
+;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
+;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
+
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
@@ -53,9 +64,6 @@
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
 ;		- 
-;		- TODO: A way to send A_Priorkey. Could have a special PowerString for it or smth? 
-;			- Or even more fancy, a most-common-n-gram key? Specify a table, default to repeating. Cmk example: QU, UE, SC, And/The/Ing/Ous.
-;			- Actually, using A_Priorkey could lead to a generic follower-key syntax? Opposite of a leader key. Could be used for great effect.
 ;		- WIP: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
 ;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!
@@ -207,7 +215,7 @@
 ;	* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
 ;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 ;	* EPKL v1.2.0: Layout/Settings UI.
-;	* EPKL v1.2.1: WIP
+;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;		- Moved layout variants into their own folders to reduce clutter, and for better variant documentation placement. Updated the Layout/Settings GUI accordingly.
 ;		- Layout additions:
 ;			- Added Nyfee's ColemaQ mod and NotGate's ISRT alias IndyRad layout, as ANSI Cmk-CA mods in the `_Test` folder. Nyfee's mod has his own Sym mod included.
@@ -249,11 +257,22 @@
 ;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 ;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 
+;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
+;		- Compose/Completion key: Set any state mapping to `©©` to use it for composing up to four previously sent characters using specified tables.
+;			- The ISO key's unshifted state has been set as a Compose key by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
+;			- The Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`.
+;			- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
+;			- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
+;			- This way you can produce, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+;			- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
+;			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion/Ous.
+;			- By default the method will look for the longest possible sequences first. You can set this behavior in the Compose file.
+
 
 ;;  ####################### main      #######################
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.2.1β" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
+setPklInfo( "pklVers", "1.3.0β" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 

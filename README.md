@@ -1,32 +1,27 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-### [EPiKaL PortableKeyboardLayout][CmkPKL] for Windows, with layouts
+### **EPiKaL PortableKeyboardLayout** for Windows, with layouts
+  
 
-![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s0_EPKL.png)
+![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Cmk-ISO-CAWS_s0_EPKL.png)
+  
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-* This is the **Big Bag Of Tricks**, obviously! That is, my many layout mods and tweaks and bells and whistles. 
+* This is the [**Big Bag Of Tricks**][BBTind], obviously! That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout, with my own `[eD]` AltGr layers and dead keys,...
 * ...**ergonomic mods** both for **Colemak**, the **Tarmak** learning layouts and **other layouts**,...
-* ...and the incredibly useful **Extend** layers which work with any layout.
-* This GitHub repository is home to the **EPiKaL PKL** layout program, with several improvements over the old PKL.
+* ...and the incredibly useful [**Extend**][BBText] layers which work with any layout.
+* This GitHub repository is home to the **EPiKaL PKL** layout program, with lots of improvements over the old PKL.
 * Most of my Big Bag "tricks" are implemented for EPKL, as layouts and other files.
-* Some non-EPKL BigBag stuff can be found in the Other folder.
-* Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
-    - The [**Big Bag main topic**][CmkBBT] with better explanations and links.
-    - Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
+* Some non-EPKL BigBag stuff can be found in the Other folder, such as other keyboard tools.
+* Some non-BigBag stuff can be found in EPKL too, such as support for several other layouts.
+* Info about DreymaR's Big Bag of Keyboard Trickery is mainly found on the [BigBag site at dreymar.colemak.org][BBTind].
+    - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
+    - In the [old Forum BigBag][CmkBBT] there's a specific [topic for EPKL/Windows][CmkPKL] too. It's old though.
   
-These Aren't The Guides You're Looking For?
--------------------------------------------
-EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
-**[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
-If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]
-  
-Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
-The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
-  
+
 Getting EPKL up and running
 ---------------------------
 * Download a full copy of this repository or just its executable resources.
@@ -46,13 +41,25 @@ Getting EPKL up and running
 * Help images by default show up when modifiers are pressed. On the `Settings` tab, change `img_HideStates` from `0` to `-` to always show images.
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, if necessary via the 'Show hidden icons' caret.
   
+
     ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
   
+
+These Aren't The Guides You're Looking For?
+-------------------------------------------
+EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
+**[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
+If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]
+  
+Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
+The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
+  
+
 More Know-How
 -------------
 #### A Short EPKL Glossary
 * **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
-    - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][CmkBBT]!
+    - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][BBText]!
 * **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
     - After selecting an Extend layer this way, keep only the Extend key pressed down to maintain it
 * A **Sticky Modifier** or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
@@ -69,6 +76,7 @@ More Know-How
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
     - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
   
+
 #### Hotkeys defined in the EPKL_Settings file:
 * Ctrl+Shift+1 – Display/hide the help image (it may also hide itself by shift state)
 * Ctrl+Shift+2 – Switch between the layouts specified in the Layouts file(s)
@@ -81,6 +89,7 @@ More Know-How
 * Ctrl+Shift+9 – Move the help image between positions, as by mouseover
 * Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
   
+
 #### Tweakable parameters:
 The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
 * Colemak vs QWERTY vs what-have-you, obviously. Choose your main layout wisely!
@@ -116,8 +125,10 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
 * The Layout/Settings dialog can change layout, key mappings and a selection of settings. Here's a mapping example:
   
+
     ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
+
 #### Techy tips for EPKL:
 * EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
     - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
@@ -131,6 +142,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
   
+
 #### The LayStack explained further
 * If you want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
     - There can be both [Layouts_Default][LayDef] and [Layouts_Override][LayOvr] files. Override entries take precedence.
@@ -147,11 +159,12 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
   
+
 Key mappings
 ------------
 Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
-  
-Here are some full shiftstate mappings with a legend:
+
+Here are some full shift-state mappings with a legend:
 ```
 ; SC  = VK      CS    S0    S1    S2    S6    S7    ; comments
 QW_O  = Y       1     y     Y     --    ›     »     ; SC018: QW oO
@@ -178,7 +191,14 @@ Where:
     - « | ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
     - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab...
+* A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
+* A state mapping of `©©` uses a Linux/X11-type Compose method, replacing the 1–4 last written characters with something else.
+    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é
+    - The key can also be used for "dynamic completions", adding to instead of deleting the original sequence
+    - See the [EPKL Compose file][CmpIni] for more info
+* A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
   
+
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
 ```
 QW_J    = N         VKey            ; QW jJ  -> nN, a simple VK remapping
@@ -186,9 +206,11 @@ RWin    = BACK      VirtualKey      ; RWin   -> Backspace
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
 SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name (the old way)
 QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more intuitive KLM codes
+QW_U    = VKey                      ; System mapped key. Uses whatever is on the system layout.
 ```
 Entries are any-whitespace delimited.
   
+
 Advanced Extending
 ------------------
 Here are some sample Extend key mappings:
@@ -215,6 +237,7 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
     - Holding Ctrl then tapping Ext sends Win+Period, opening the Emoji picker.
     - AltGr+Ext-tap holds some commands to avoid hand contortion. Example: {AltGr+Ext,T} for Task Manager.
   
+
 Layout variant tutorial
 -----------------------
 You can make your own version of, say, a locale layout with a certain (non-)ergonomic variant:
@@ -254,25 +277,26 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - The HIG will make images for the currently active layout.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
   
-  
+
 KNOWN ISSUES:
 -------------
 * ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be...
 * Windows intercepts certain key combinations like Ctrl+Alt+Del and Win+L so these may work oddly with state remaps like eD.
     - A workaround for this is to map a shortcut to `α#e` for accessing Win+E on Colemak. For Ext-tap, there's one on `{Ext,w}`.
   
-  
+
 DONE/TODO:
 ----------
 For more info about past and future EPKL history, see the **[EPKL Advanced README][EPKLRM]** in the Source folder.
   
-  
+
 Credits/sources
 ---------------
 #### ~ The original [PKL][PKLGit] written by [Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
-#### ~ [EPKL][CmkPKL], formerly PKL[edition DreymaR] by DreymaR, 2017-
+#### ~ [EPKL][EPKLgh], formerly [PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-
 #### ~ Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors.
   
+
 _Finally, to all of you: Best of luck using EPKL!_
 _Øystein "DreymaR" Bech_
 
@@ -280,12 +304,15 @@ _Øystein "DreymaR" Bech_
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (Old PKL on SourceForge)
 [PKLAHK]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (Old PKL on the AutoHotkey forums)
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
+[BBTind]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
+[BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)
 [PrtApp]: https://portableapps.com/ (PortableApps.com)
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
+[EPKLgh]: https://github.com/DreymaR/BigBagKbdTrixPKL/ (EPKL on GitHub)
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
 [GitCom]: https://github.com/DreymaR/BigBagKbdTrixPKL/archive/master.zip (Latest EPKL commit download)
 [EPKLRM]: https://github.com/DreymaR/BigBagKbdTrixPKL/tree/master/Source (EPKL advanced README)
@@ -297,3 +324,4 @@ _Øystein "DreymaR" Bech_
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
 [PklIni]: ./EPKL_Settings_Default.ini (EPKL Settings file)
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
+[CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)

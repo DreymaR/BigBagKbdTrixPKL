@@ -125,7 +125,7 @@ DONE:
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
   
 **OTHER/NOTES**
-* There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_Send(0) somehow prevents it...
+* There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_CheckForDKs( 0 ) somehow prevents it...
   
 **PKL[eD] VERSION HISTORY**
 * PKL[eD] v0.4.0: Transition to AHK v1.1
@@ -314,7 +314,7 @@ DONE:
 	- Reworked Extend modifiers further, to send with the AHK prefixes `+^!#` instead of holding down modifier keys. Seems smoother. Also, releasing Ext sends mods up.
 	- Updated the non-Wide Sym and ANSI CAWS to the latest versions. ISO and ANSI are the same now. The non-Wide variants swap brackets with minus/plus.
 	- Cz (Czech) ANSI variants. With no ISO key for Ůů, it was mapped to AltGr+Uu. There's optionally a map line to swap J and Z if desired, but it's non-standard.
-* EPKL v1.2.1: WIP
+* EPKL v1.3.0: Compose/Completion and Repeat keys.
 	- Moved layout variants into their own folders to reduce clutter, and for better variant documentation placement. Updated the Layout/Settings GUI accordingly.
 	- Layout additions:
 		- Added Nyfee's ColemaQ mod and NotGate's ISRT alias IndyRad layout, as ANSI Cmk-CA mods in the `_Test` folder. Nyfee's mod has his own Sym mod included.
@@ -355,6 +355,17 @@ DONE:
 		- Fixed: Earlier, if Win+v (Paste Clipboard) was pressed, the clipboard would often close again unless Win were released very fast.
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
+  
+	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
+	- Compose/Completion key: Set any state mapping to `©©` to use it for composing up to four previously sent characters using specified tables.
+		- The ISO key's unshifted state has been set as a Compose key by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
+		- The Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`.
+		- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
+		- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
+		- This way you can produce, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+		- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
+		- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion/Ous.
+		- By default the method will look for the longest possible sequences first. You can set this behavior in the Compose file.
   
 
 TODO:

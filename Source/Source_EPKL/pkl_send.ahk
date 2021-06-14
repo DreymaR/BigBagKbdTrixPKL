@@ -1,18 +1,15 @@
-﻿pkl_Send( ch, modif = "" ) 				; Process a single char/str with mods for send, w/ OS DK & special char handling
-{
+﻿pkl_Send( ch, modif = "" ) { 			; Process a single char/str with mods for send, w/ OS DK & special char handling
 	if pkl_CheckForDKs( ch )
 		Return
 	
-	blind   := false 					; Send {Blind}?
 	char    := Chr(ch)
 	if ( ch > 32 ) { 					; ch > 128 works with Unicode AHK
-		this    := AltGrIsPressed() ? "{Text}" . char 	; Send as Text for AltGr layers. Doesn't work with the Win key.
+		this    := AltGrIsPressed() ? "{Text}" . char 	; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
 		                            : "{" . char . "}" 	; Normal char
 	if InStr( getCurrentWinLayDeadKeys(), char )
 		this    .= "{Space}" 			; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
-		blind   := true
-		this    := "{Space}"
+		this    := "{Blind}{Space}" 	; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
 	} else if ( ch == 9 ) {
 		this    := "{Tab}"
 	} else if ( ch > 0 && ch <= 26 ) {
@@ -25,27 +22,49 @@
 	} else if ( ch == 29 ) {
 		this    := "^{VKDD}" 			; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
-	blind   := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? true : blind 	; Send Blind for Alt key presses
-	prefix  := ( blind ) ? "{Blind}" : ""
-;	( prefix != "" ) ? pklDebug( "`nPrefix: '" . prefix . "'`nThis: '" . this . "'", .6 )  ; eD DEBUG
-	Send %prefix%%modif%%this% 			; pkl_SendThis( modif, this ) 	; Modif is only used for explicit mod mappings. 	; eD WIP: This is what leads to sending of unnecessary modifiers?! It's Send itself that does it.
+	pkl_SendThis( modif, this ) 		; Modif is only used for explicit mod mappings.
 }
 
-pkl_SendThis( modif, this ) 			; Actually send a char/string
-{
-;	toggleAltGr := ( getAltGrState() ) ? true : false 	; eD WIP:  && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
+pkl_SendThis( modif, this, resetLast = false ) { 			; Actually send a char/string
+	that    := StrReplace( this, "{Space}" ) 				; Strip off any spaces sent to release OS deadkeys
+	if ( StrLen( that ) == 3 ) { 							; Single-char keys are on the form "{¤}"
+		LastKeys := getKeyInfo( "LastKeys" )
+		LastKeys.Push( that )
+		LastKeys.RemoveAt( 1 )
+		setKeyInfo( "LastKeys", LastKeys )
+	}
+;	toggleAltGr := ( getAltGrState() ) ? true : false 	; && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
 ;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
-;		setAltGrState( 0 )		; Release LCtrl+RAlt temporarily if applicable
-	; Alt + F to File menu doesn't work without Blind if the Alt button is pressed. Also, Space entries need to be sent {Blind}
-	prefix := ( InStr( modif, "!" ) && getKeyState("Alt") ) ? "{Blind}" : ""
-;	prefix := ( this == "{Space}" ) ? "{Blind}" : prefix 		; eD WIP: Allow Shift+Spc to work - messes with Shift?!
-	Send %prefix%%modif%%this%
+;		setAltGrState( 0 )				; Release LCtrl+RAlt temporarily if applicable
+	Send %modif%%this% 					; eD WIP: This Send is what leads to unnecessary/stuck modifiers with AltGr! Workaround: Send AltGr presses as Text.
 ;	if ( toggleAltGr )
 ;		setAltGrState( 1 )
 }
 
-pkl_CheckForDKs( ch )
-{
+pkl_Composer() { 											; A post-hoc Compose method: Press a key mapped with ©©, and the preceding sequence will be composed
+	LastKeys    := getKeyInfo( "LastKeys" ) 				; Format:  ["{¤}","{¤}","{¤}","{¤}"]
+	lengths     := getKeyInfo( "composeLens" ) 				; Example: [ 1 , 2 , 3 , 4 ]
+	key         := ""
+	for ix, chr in LastKeys { 								; Build a 4-char key to match the Compose table
+		chr     := formatUni( SubStr( chr, 2, 1 ) ) 		; Single-char keys are on the form "{¤}". Format as 0x#### hex string (4+ digits).
+		kys     .= "_" . chr 								; LastKeys on the form _0x#### repeated 4 times
+	}
+	for ix, len in lengths { 								; Normally we compose up to 4 characters
+		keyArr  := getKeyInfo( "composes" . len )
+		key     := SubStr( kys, 1 + InStr( kys, "_", , 0, len ) ) 	; The rightmost len chars of kys
+		if ( keyArr.HasKey( key ) ) {
+			val := keyArr[key]
+			bsp := len * SubStr( val, 1, 1 ) 				; The first char of the entry is whether to send Backs (eating patterns)
+			str := SubStr( val, 2 )
+			SendInput {Backspace %bsp%}{Text}%str% 			; Send Back according to key length. Undo won't work as it may remove several characters per press.
+			setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 	; Reset the last-keys-pressed buffer
+			Break 											; If a longer match is found, don't look for shorter ones
+		}
+	} 	; end loop
+;	( len <= 3 ) ? pklDebug( "kys: " . kys . "`nlen: '" . len . "`n`nkey: " . key . "`nval: '" . val . "'`n`nkeyArr[e`]: " . keyArr["0x0065_0x0060"] . "`nLastKeys[34]: " . LastKeys[3] . LastKeys[4], 3 )  ; eD DEBUG
+}
+
+pkl_CheckForDKs( ch ) {
 	static SpaceWasSentForSystemDKs = 0
 	
 	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
@@ -60,8 +79,7 @@ pkl_CheckForDKs( ch )
 	}
 }
 
-pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
-{
+pkl_ParseSend( entry, mode = "Input" ) { 						; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
 	psp     := SubStr( entry, 1, 1 ) 							; Look for a Parse syntax prefix
 	if not InStr( "%→$§*α=β~«@Ð&¶", psp ) 						; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
 		Return false
@@ -107,8 +125,8 @@ pkl_ParseSend( entry, mode = "Input" )							; Parse/Send Keypress/Extend/DKs/St
 	Return % psp												; Return the recognized prefix
 }
 
-pkl_SendMessage( string )										; Send a string robustly by char messages, so that mods don't get stuck etc
-{																; SendInput/PostMessage don't wait for the send to finish; SendMessage does
+pkl_SendMessage( string ) { 									; Send a string robustly by char messages, so that mods don't get stuck etc
+																; SendInput/PostMessage don't wait for the send to finish; SendMessage does
 	Critical													; Source: https://autohotkey.com/boards/viewtopic.php?f=5&t=36973
 	WinGet, hWnd, ID, A 										; Note: Seems to be faster than SendInput for long strings only?
 	ControlGetFocus, vClsN, ahk_id%hWnd% 	; "If this line doesn't work, try omitting vCtlClsN to send directly to the window"
@@ -116,8 +134,7 @@ pkl_SendMessage( string )										; Send a string robustly by char messages, so
 		SendMessage, 0x102, % Ord( A_LoopField ), 1, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_CHAR sends a character input message
 }
 
-pkl_SendClipboard( string ) 									; Send a string quickly via the Clipboard (may fail if the clipboard is big)
-{
+pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard (may fail if the clipboard is big)
 	Critical
 	clipSaved := ClipboardAll									; Save the entire contents of the clipboard to a variable
 ;	Clipboard := Clipboard										; Cast the clipboard content as text (use expression to avoid trimming)
@@ -133,8 +150,7 @@ pkl_SendClipboard( string ) 									; Send a string quickly via the Clipboard (
 	VarSetCapacity( clipSaved, 0 )								; Could probably just use := "" here, especially for large contents.
 }
 
-_strSendMode( string, strMode )
-{
+_strSendMode( string, strMode ) {
 	if ( not string )
 		Return true
 	if        ( strMode == "Input"     ) { 				; Send by the standard SendInput {Raw} method
@@ -152,8 +168,7 @@ _strSendMode( string, strMode )
 	Return true
 }
 
-pkl_PwrString( strName )											; Send named literal/ligature/powerstring from a file
-{
+pkl_PwrString( strName ) { 										; Send named literal/ligature/powerstring from a file
 	static strFile := -1
 	static strMode
 	static brkMode

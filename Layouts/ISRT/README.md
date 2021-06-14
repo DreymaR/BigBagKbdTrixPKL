@@ -7,20 +7,21 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 <br>
 
-NotGate's IndyRad/ISRT layout
------------------------------
+NotGate's ISRT alias the "IndyRad" layout
+-----------------------------------------
 - Discord user [NotGate's ISRT - or as I call it, IndyRad][NotGte] - layout, implemented as a Cmk mod.
-    - ISRT isn't a mod of Cmk, but a sibling layout that turned out quite similar to Cmk-DH.
+    - ISRT isn't really a mod of Cmk, but a sibling layout that turned out quite similar to Cmk-DH.
     - Because of said similiarity, it was practically implemented here as a Cmk-DH "mod".
     - ISRT includes the Curl principle insofar as it uses the same D and H positions as Cmk-DH.
     - Therefore, on a row-staggered board it should also include an Angle mod.
     - It's also compatible with the standard Wide and Sym mods I've used elsewhere, so they're added.
-- About the name: NotGate calls the layout ISRT but I found that boring. So I searched, and found:
+- About the name: NotGate simply named the layout ISRT but I found that boring. So I searched, and found:
     - [http://www.isrt.org.in/][IndSRT] - the Indian Society of Radiographers & Technologists! IndyRad!  (✿◠‿◠)
+    - No one seem to be using that name though. Too bad, as I see the layout's name misspelled as IRST instead...
 
 <br>
 
-|![EPKL help image for IndyRad-eD-CAWS on an ISO board](./Ind-eD_ISO_CurlAWideSym/state0.png)|
+|![EPKL help image for IndyRad-eD-CAWS on an ISO board](./ISR-eD_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
 |_The ISRT-CAWS layout on an ISO board_|
 

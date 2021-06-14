@@ -1,9 +1,9 @@
 ﻿;; ================================================================================================
 ;;  Read a section of an .ini file
-;;      Strips away blank and comment lines but not end-of-line comments
+;;      Strips away blank and comment lines but not end-of-line comments by default
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
-pklIniSect( file, section ) 										; Read an .ini section as a line array
+pklIniSect( file, section = "pkl", strip = 0 ) 						; Read an .ini section as a line array
 {
 	if not fileTxt := pklFileRead( file ) 							; Use "*P65001 <file>" to read UTF-8 .ini files
 		ExitApp, 35
@@ -11,6 +11,7 @@ pklIniSect( file, section ) 										; Read an .ini section as a line array
 	RegExMatch( fileTxt, needle, secTxt )							; is) = IgnoreCase, DotAll. \K = LookBehind.
 	secTxt := RegExReplace( secTxt, "`am)^[ `t]*;.*" )				; Strip comment lines (multiline mode, any \R)
 	secTxt := RegExReplace( secTxt, "\R([ `t]*\R)+", "`r`n" )		; Strip empty and whitespace lines
+	secTxt := ( strip ) ? strCom( secTxt ) : secTxt 				; Strip end-of-line comments, if set
 	Return StrSplit( secTxt, "`n", "`r" ) 							; Return an array of lines
 }
 

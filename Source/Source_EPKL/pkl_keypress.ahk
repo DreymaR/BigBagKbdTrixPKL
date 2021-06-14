@@ -27,13 +27,15 @@ runKeyPress() 													; Called from the PKL_main processKeyPress# labels
 	if HotKeyBuffer.Length() == 0
 		Return
 	ThisHotkey := HotKeyBuffer[ 1 ] 							; Chomp the buffer from the left
-	HotKeyBuffer.Remove( 1,1 )
+	HotKeyBuffer.RemoveAt( 1 )
 	Critical, Off
 	_keyPressed( ThisHotkey ) 									; Pops one HKey from the buffer
 }
 
 _keyPressed( HKey ) 											; Process a HotKey press
 {
+	static LastKey  := "" 										; Used by the Repeat key
+	
 	modif := ""
 	state := 0
 	capHK := getKeyInfo( HKey . "capSt" ) 						; Caps state (0-5 as MSKLC; -1 VK; -2 Mod)
@@ -80,6 +82,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		modif .= "#"
 ;	if ( getKeyState("LShift") || getKeyState("RShift") ) 		; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
 ;		modif .= "+"
+	modif := InStr( modif, "!" ) ? "{Blind}" . modif : modif 	; Alt+F to File menu etc doesn't work without Blind if the Alt button is pressed.
 	
 	Pri := getKeyInfo( HKey . state ) 							; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" )						; Actual entry by state, if using a prefix
@@ -98,6 +101,13 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		}
 	}	; end if Pri
 	_osmClearAll() 												; If another key is pressed while a OSM is active, cancel the OSM
+	if ( Pri == -3 ) { 											; Repeat previous key
+		_keyPressed( LastKey )
+	} else if ( Pri == -4 ) { 									; Compose/Completion key
+		pkl_Composer()
+	} else {
+		LastKey := HKey
+	}
 }	; end fn _KeyPressed										; eD WIP: Should _osmClearAll() be used more places above?
 
 extendKeyPress( HKey )											; Process an Extend modified key press

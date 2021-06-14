@@ -317,10 +317,14 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
 				setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
 			} else if ( ksE == "##" ) {
-				setKeyInfo( key . ks , -1 ) 							; Send this state {Blind} as its VK## 	; eD WIP
+				setKeyInfo( key . ks , -1 ) 							; Send this state {Blind} as its VK##
 				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
+			} else if ( ksE == "®®" ) {
+				setKeyInfo( key . ks , -3 ) 							; Repeat previous key
+			} else if ( ksE == "©©" ) {
+				setKeyInfo( key . ks , -4 ) 							; Compose/Multi key – compose previous key(s) 	; eD WIP
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
 				if InStr( "%→$§*α=β~«@Ð&¶", ksP ) {
@@ -341,6 +345,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
   													;   ###############################################################
 ;initOtherInfo() 									;   ####################### Other settings  #######################
   													;   ###############################################################
+	init_Composer() 													; Initialise the EPKL Compose tables 	; eD WIP
 	
 	;; ================================================================================================
 	;;  Read and set Extend mappings and help image info

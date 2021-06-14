@@ -11,11 +11,13 @@ _The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO boar
 
 The MTGAP layout
 ----------------
-- The [MTGAP][MTGAP] layout scores well in modern analysis.
+- The [MTGAP][MTGAP] layout designed by Michael Dickens scores well in modern analysis.
 - It's a more radical layout than Colemak, changing everything around – even shift layers.
 - There are actually several variants of it for different board configurations.
 - EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
 - This layout can be used with the usual BigBag Angle and Sym ergonomic mods added, as seen above.
+    - The ANSI Angle-Z mod will displace Q to the middle. The Wide mods will displace X to the middle.
+    - Those are rare letters, but some bigrams like QU and XC may get trickier that way.
 
 <br>
 

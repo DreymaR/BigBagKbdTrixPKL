@@ -2,7 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ![EPKL help image for Colemak-eD-Heb Angle-ISO](./Cmk-Heb_ISO-Angle_s0_EPKL.png)
-  
+<br>
 
 Colemak[eD] locale layouts
 --------------------------
@@ -31,6 +31,26 @@ Colemak-Heb Hebrew phonetic layout variant
 |![EPKL help image for Colemak-eD-Heb CAWS on an ISO board, AltGr state](./Cmk-eD-Heb_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
 |_Colemak-eD-Heb_ISO_CAWS, AltGr state._|
+
+<br>
+
+More Hebrew script resources
+----------------------------
+Here are the Biblical-SIL layout states, for reference. The images contain Unicode codes for all relevant glyphs, both for modern and ancient/Biblical Hebrew.
+<br>
+
+![Biblical Hebrew SIL layout, state 0](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state0.png)
+<br>
+
+![Biblical Hebrew SIL layout, state 1](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state1.png)
+<br>
+
+![Biblical Hebrew SIL layout, state 6](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state6.png)
+<br>
+
+![Biblical Hebrew SIL layout, state 7](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state7.png)
+<br>
+
 
 [HebFor]: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971 (HebMak discussed on the Colemak Forum)
 [HebLay]: ../BaseLayout_Cmk-eD-Heb.ini (the Colemak-eD-Heb EPKL BaseLayout file)

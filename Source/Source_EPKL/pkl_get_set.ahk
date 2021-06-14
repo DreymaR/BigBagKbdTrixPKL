@@ -154,3 +154,50 @@ getReadableHotkeyString( str ) 			; Replace hard-to-read, hard-to-print parts of
 		str := StrReplace( str, key, val )
 	Return str
 }
+
+;; ================================================================================================
+;;  EPKL Composer module
+;;      Set up compose string tables from a file
+;;      The tables are used by pkl_Composer() in pkl_send.ahk
+;;      Called in pkl_init.ahk
+;
+
+init_Composer() { 											; Initialize the EPKL Compose tables
+	setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 			; Used by the Compose/Completion key, via pkl_SendThis()
+	
+	mapFile := pklIniRead( "cmposrFile",, "LayStk" )
+	lengths := pklIniCSVs( "lengths"   ,,  mapFile ) 		; An array of the sequence lengths to look for
+	setKeyInfo( "composeLens", lengths ) 					; Example: [ 1 , 2 , 3 , 4 ]
+	for ix, len in lengths { 								; Look for sequences of length for instance 1–4
+		keyArr%len% := {} 									; eD WIP: Will ~5000 lines lead to a slow startup?
+		for ix, sect in pklIniCSVs( "tables", , mapFile ) { 	; [ "dyn", "x11" ]
+			sendBS      := 1
+			if ( SubStr( sect, 1, 1 ) == "+" ) { 			; Non-eating Compose sections are marked with a "+" sign
+				sect    := SubStr( sect, 2 )
+				sendBS  := 0 								; Don't send Backspaces before the compose entry
+			}
+			sect        := "compose_" len . "_" . sect
+			for ix, row in pklIniSect( mapFile, sect ) {
+				pklIniKeyVal( row, key, val ) 				; Compose table key,val pairs
+				if ( not SubStr( key, 1, 2 ) == "0x" ) { 	; The key is a sequence of characters instead of a sequence of hex strings
+					kys := ""
+					kyt := ""
+					for ix, chr in StrSplit( key ) { 
+						if ( ix == 1 ) { 
+							cht := Format( "{:U}", chr ) 	; Also make an entry for the Titlecase version of the string key (if different)
+						} else {
+							cht := chr
+						} 	; end if ch1
+						kys .= "_" . formatUni( chr )
+						kyt .= "_" . formatUni( cht )
+					} 	; end for chr
+					key := SubStr( kys, 2 )
+					kyt := SubStr( kyt, 2 )
+					keyArr%len%[kyt] := sendBS . val
+				} 	; end if 0x####
+				keyArr%len%[key] := sendBS . val
+			} 	; end for row
+		} 	; end for sect
+		setKeyInfo( "composes" . len, keyArr%len% )
+	} 	; end for lengths
+}

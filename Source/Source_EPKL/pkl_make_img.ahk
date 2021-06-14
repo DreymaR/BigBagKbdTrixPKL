@@ -27,11 +27,16 @@ makeHelpImages() {
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
 	HIG.Debug   := pklIniRead( "DebugMode"      , false , HIG.Ini ) 	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
 	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" , HIG.Ini ) 	; Debug: Show info on this idKey during image generation.
-	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25AF, HIG.Ini ) 	; U+25AF White Rectangle
-	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2B24, HIG.Ini ) 	; U+2B24 Black Large Circle
-	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25CC, HIG.Ini ) 	; U+25CC Dotted Circle
-	HIG.MkTpMod := pklIniRead( "tmTapOrModMark" , 0x25CC, HIG.Ini ) 	; U+25CC Dotted Circle
-	HIG.MkEllip := 0x22EF 												; U+22EF Midline horizontal ellipsis (⋯)
+	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af, HIG.Ini ) 	; U+25AF  White Rectangle
+	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24, HIG.Ini ) 	; U+2B24  Black Large Circle
+	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25cc, HIG.Ini ) 	; U+25CC  Dotted Circle
+	HIG.MkTpMod := pklIniRead( "k_TapOrModMark" , 0x25cc, HIG.Ini ) 	; U+25CC  Dotted Circle
+	HIG.ChRepet := pklIniRead( "k_RepeatItChar" ,0x1f504, HIG.Ini ) 	;
+	HIG.MkRepet := pklIniRead( "k_RepeatItMark" ,0x1f504, HIG.Ini ) 	; U+1F504 Anticlockwise Downwards and Upwards Open Circle Arrows
+	HIG.ChComps := pklIniRead( "k_ComposerChar" , 0x24b8, HIG.Ini ) 	; U+24B8  Circled Latin Capital Letter C
+	HIG.MkComps := pklIniRead( "k_ComposerMark" , 0x25cf, HIG.Ini ) 	; U+25CF  Black Circle (goes with the © symbol?)
+;	HIG.MkOther := pklIniRead( "k_OtherKeyMark" , 0x25cf, HIG.Ini ) 	; U+25CF  Black Circle
+	HIG.MkEllip :=                                0x22ef 				; U+22EF  Midline horizontal ellipsis
 	
 	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , HIG.Ini )
 	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , HIG.Ini )
@@ -154,12 +159,18 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 				rel := 32 										; Space may be stored as (&)spc or ={space}; if so, show it as a space
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", shSt ) ) {
 				rel := ent
-				tag := "ToMKey" 								; Mark Tap-or-Mod keys, for state 0:1
+				tag := HIG.MkTpMod  							; Mark Tap-or-Mod keys, for state 0:1
 			} else if ( ent == -1 ) { 							; VKey state entry
 				key := GetKeyName( SubStr( ents, 3 ) )
 				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}" 			; Upper/Lower case
 				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
 				tag := ""
+			} else if ( ent == -3 ) { 							; Repeat key
+				rel := Chr( HIG.ChRepet )
+				tag := HIG.MkRepet
+			} else if ( ent == -4 ) { 							; Compose/Context key
+				rel := Chr( HIG.ChComps )
+				tag := HIG.MkComps
 			} else {
 				rel := hig_parseEntry( HIG, ents ) 				; Prepare the entry for display
 				tag := ""
@@ -228,9 +239,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 			mark := hig_combAcc( chrVal ) ? HIG.MkDkCmb : HIG.MkDkBas
 			aChr := hig_svgChar( chrVal )
 			dChr := Chr( mark ) 								; Mark for DK base chars: Default U+2B24 Black Large Circle
-		} else if ( chrTag == "ToMKey" ) { 						; Tap-or-Mod key
+		} else if ( InStr( chrTag, "0x" ) == 1 ) { 				; Direct Unicode point tag
 			aChr := hig_svgChar( chrVal )
-			dChr := Chr( HIG.MkTpMod )
+			dChr := hig_svgChar( chrTag )
 ;		} else if ( chrTag == "--" ) {
 ;			aChr := Chr( HIG.MkNaChr ) 							; Replace nonprintables (marked in pdic)
 ;			dChr := ""

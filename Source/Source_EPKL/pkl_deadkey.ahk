@@ -83,7 +83,6 @@ pkl_DeadKey( DK )
 		}
 ;		setKeyInfo( "CurrNumOfDKs", 0 ) 	; eD WIP - doesn't prevent stuckness (nor does "CurrBaseKey_", 0 ?)
 		pkl_CheckForDKs( 0 ) 								; eD WIP: This prevents the dead key from being stuck.
-;		pkl_Send( 0 ) 	; eD WIP: This somehow prevents the dead key from being stuck (pkl_SendThis doesn't).
 	} else if ( dkEnt && PVDK == "" ) {
 		pkl_Send( dkEnt )									; Send the normal single-character final entry
 	} else {
