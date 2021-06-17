@@ -16,7 +16,7 @@ makeHelpImages() {
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := getPklInfo( "RemapFile" ) 					; _eD_Remap.ini
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
-	imgRoot     := getLayInfo( "Dir_LayIni" ) . "\ImgGen_" . thisMinute()
+	imgRoot     := getPklInfo( "Dir_LayIni" ) . "\ImgGen_" . thisMinute()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\HelpImgGenerator\EPKL_HelpImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render

@@ -104,7 +104,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	if ( Pri == -3 ) { 											; Repeat previous key
 		_keyPressed( LastKey )
 	} else if ( Pri == -4 ) { 									; Compose/Completion key
-		pkl_Composer()
+		pkl_Composer( Ent )
 	} else {
 		LastKey := HKey
 	}

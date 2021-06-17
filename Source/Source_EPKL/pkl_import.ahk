@@ -1,10 +1,10 @@
 ﻿;; ================================================================================================
 ;;  EPKL Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
-;;      Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
-;;      Uses a template with a set of regular expression (RegEx) entries to generate the layout.ini file.
+;;    - Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
+;;    - Uses a template with a set of regular expression (RegEx) entries to generate the layout.ini file.
 ;
 
-importLayouts()
+importLayouts() 	; eD TODO
 {
 	IMP                 := {}
 	IMP.Name            := "EPKL Import Module"
@@ -59,4 +59,23 @@ _importOneLayout( IMP )								; Function to import one layout via a template .i
 ;	Return 		; eD DEBUG
 	if not pklFileWrite( theFile, tempFile, "temporary file" )
 		Return
+}
+
+
+;; ================================================================================================
+;;  EPKL Compose Import module: Turn any X11-libs Compose file into an EPKL Compose table.
+;;    - Works from the Files\Composer directory, turning any ??? files in _Inbox into .ini files.
+;;    - Uses a template with a set of regular expression (RegEx) entries to generate the .ini file.
+;;    - Uses an X11 keysymdef.h file to translate keysym names into Unicode points.
+;
+
+importCompose() 	; eD WIP
+{
+	pklDebug( "WIP" )
+;;  - Ask for permission first
+;;  - Look for a keysymdef.ini file. If not found, try to make one. Use a file picker dialog maybe?
+;;  - Look for a compose_###.h file in _Inbox, and read it in. Is there a 5000 lines limit?
+;;  - Remove comments? Leave some? Reduce multiple empty lines to single ones.
+;;  - Convert by parsing lines w/ RegExReplace() statements
+;;  - Save w/ a time stamp?
 }

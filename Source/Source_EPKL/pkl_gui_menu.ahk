@@ -60,7 +60,7 @@
 	}
 	
 	Menu, Tray, add, %aboutMeMenuItem%, showAbout 							; About
-	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
+	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layout/Settings UI
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
 		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect DKs
@@ -202,7 +202,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
 	For ix, icon in [ "on.ico", "off.ico" ] {
 		SplitPath, layIni, , layDir 							; The icon files may be in the layout dir
-		layDir  := ( layIni == "LayStk" ) ? getLayInfo( "Dir_LayIni" ) : layDir
+		layDir  := ( layIni == "LayStk" ) ? getPklInfo( "Dir_LayIni" ) : layDir
 		dirIco  := layDir . "\" . icon
 		iniIco  := fileOrAlt( pklIniRead( "icons_OnOff",, layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon ) 	; If not specified in layout file or in dir, use this

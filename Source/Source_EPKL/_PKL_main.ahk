@@ -22,17 +22,20 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
+;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
+
 ;		- WIP: Compose table importer. 
 ;			- Use the actual /usr/share/X11/locale/en_US.UTF-8/Compose file: It has a zillion entries, near-instant joy.
 ;				- Have to translate non-letter glyph names and U####. Key names are found in the keysymdef.h file.
 ;				- Typical Compose file entry:   <Multi_key> <o> <c>              	: "©"   copyright # COPYRIGHT SIGN
 ;				- Typical keysymdef.h entry:    #define XK_o                             0x006f  /* U+006F LATIN SMALL LETTER O */
 ;			- So we could translate the X11 Compose entries to Unicode points that will be the keys for the _eD_Compose.ini file.
-;		- TODO: To avoid role conflicts between, say, a local Completion key and a global Compose key, allow multiple such keys using different table combos?
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
 ;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
 
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
 ;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
@@ -58,26 +61,26 @@
 ;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 ;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
-;		- Is the main README still too long? Put the layout tutorial in a Layouts README?
+;		- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README?
 ;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. 
 ;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
 ;		- 
-;		- WIP: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
+;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
 ;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!
 ;			- With this, we could reduce the number of folders and more or less duplicate files a lot.
-;		- WIP: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
+;		- TODO: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
 ;			- markColors = #c00:_E/_N/_K, #990:_B/_T/_F, #009:_J     ; Tarmak2 colors
 ;			- markColors = <CSV of marking specs>, similar to the remaps. Could have Tarmak1,Tarmak2,Tarmak3,#009:_J ?
 ;			- See https://forum.colemak.com/topic/1858-learn-colemak-in-steps-with-the-tarmak-layouts/p4/#p23659
 ;			- Allow a section in layout.ini too!
 ;			- Mark differently by state, as in the Tarmak images
-;		- WIP: Make state images and DK image dirs ISO/ANSI aware?! Generate both in the HIG each time. Make layouts that can handle both. 
+;		- TODO: Make state images and DK image dirs ISO/ANSI aware?! Generate both in the HIG each time. Make layouts that can handle both. 
 ;			- How to handle special mappings? Could have [layout_###] sections.
-;		- WIP: Add QWERTZ and AZERTY layouts? There are now remaps for them, and the rest should be doable with OEM VK detection.
-;		- WIP: Provide a swap-LAlt-n-Caps RegEdit script, and a reversal one. Maybe add some more codes in the comments, see my old RegEdit scripts.
+;		- TODO: Add QWERTZ and AZERTY layouts? There are now remaps for them, and the rest should be doable with OEM VK detection.
+;		- TODO: Provide a swap-LAlt-n-Caps RegEdit script, and a reversal one. Maybe add some more codes in the comments, see my old RegEdit scripts.
 ;		- TOFIX: Setting a hotkey to, e.g., <^<+6 (LeftCtrl & LeftShift & 6) doesn't work.
 ;		- TOFIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
 ;			- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
@@ -90,7 +93,7 @@
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
 ;		- TOFIX: The NBSP mapping (AltGr+Spc), in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
-;		- WIP: Rework the modifier Up/Down routine? 
+;		- TODO: Rework the modifier Up/Down routine? 
 ;			- A function pklSetMods( set = 0, mods = [ "mod1", "mod2", ... (can be just "all")], side = [ "L", "R" ] ) could be nice? pkl_keypress, pkl_deadkey, in pkl_utility
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
 ;			- MoDK idea: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
@@ -103,6 +106,7 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 ;;  eD TONEXT:
+;		- TODO: Keylogging for gathering typing stats. Which stats? 1-2-3-grams, characters-before-backspace...
 ;		- TODO: Try out a swap-side layout instead of the mirrored one? More strain on weak fingers, but fewer SFBs I should think.
 ;			- Is the brain equally good at side-swapping and mirroring?
 ;		- TODO: Hotstrings? May have to wait for AHK v1.1.28 to use the Hotstring() fn? Or is there somewhere in this script we could insert definitions?
@@ -228,7 +232,7 @@
 ;			- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 ;			- Added a full set of CAWS locale variants.
 ;			- Added (Curl)AngleSym Colemak-eD variants. The non-Wide Sym variant now keeps Plus/Equal next to 0 and brackets above another as in the Wide variants.
-;		- Added a Reset button to Layouts/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
+;		- Added a Reset button to Layout/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
 ;		- Separate BaseLayout for the Greek (Gre) and Kyrillic (Kyr, Ru/Bg) scripts. This removes the need for full mappings in layout files. Bg keeps the necessary mappings.
 ;		- Fixed: Minor bug in which the Settings GUI wouldn't try to make a new Override file but just lead to a file read error instead.
 ;		- Fixed: After the Ext-mods rework, spamming modded Ext presses led to stuckness (~5 s for Ext+S+N). Afterwards, Extend got wonky, w/ Ext+S+T+N the arrow was stuck.
@@ -256,17 +260,18 @@
 ;			- Fixed: Earlier, if Win+v (Paste Clipboard) was pressed, the clipboard would often close again unless Win were released very fast.
 ;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 ;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
-
 ;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-;		- Compose/Completion key: Set any state mapping to `©©` to use it for composing up to four previously sent characters using specified tables.
-;			- The ISO key's unshifted state has been set as a Compose key by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
-;			- The Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`.
+
+;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
+;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
+;			- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
 ;			- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
 ;			- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
-;			- This way you can produce, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+;				- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
 ;			- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
-;			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion/Ous.
-;			- By default the method will look for the longest possible sequences first. You can set this behavior in the Compose file.
+;				- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
+;			- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
+;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
 
 
 ;;  ####################### main      #######################
@@ -394,7 +399,7 @@ showAbout: 													; Menu "About..."
 	pkl_about()
 Return
 
-changeSettings: 											; Menu "Layouts/Settings..."
+changeSettings: 											; Menu "Layout/Settings..."
 	pklSetUI()
 Return
 
@@ -486,8 +491,9 @@ Return
 
 epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .8 )
-;	importLayouts() 									; eD WIP/DEBUG: This entry is activated by the Debug hotkey
-	debugShowCurrentWinLayOEMs()
+;	importLayouts() 									; eD WIP: Import a MSKLC layout file to EPKL format
+	importCompose() 									; eD WIP: Import an X11 Compose file to EPKL format
+;	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 Return
 
 ;;  ####################### functions #######################
@@ -502,7 +508,7 @@ Return
 #Include pkl_utility.ahk	; Various functions such as pkl_activity.ahk were merged into this file
 #Include pkl_get_set.ahk
 #Include pkl_ini_read.ahk
-#Include pkl_import.ahk 	; Import module, converting MSKLC layouts to EPKL format
+#Include pkl_import.ahk 	; Import module, converting MSKLC layouts to EPKL format, and other import/conversion
 #Include pkl_make_img.ahk	; Help image generator, calling Inkscape with an SVG template
 
 ;;  #######################  modules  #######################

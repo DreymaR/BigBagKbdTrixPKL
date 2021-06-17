@@ -127,7 +127,7 @@ _getHotkeyText( hk, localehk = "", set = 0 )
 	}
 }
 
-getReadableHotkeyString( str ) 			; Replace hard-to-read, hard-to-print parts of hotkey names
+getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print parts of hotkey names
 {
 	strDic := {              "<^>!" : "AltGr"
 		,  "<+" : "LShift"  ,  "<^" : "LCtrl"  ,  "<!" : "LAlt"  ,  "<#" : "LWin"
@@ -162,42 +162,71 @@ getReadableHotkeyString( str ) 			; Replace hard-to-read, hard-to-print parts of
 ;;      Called in pkl_init.ahk
 ;
 
-init_Composer() { 											; Initialize the EPKL Compose tables
-	setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 			; Used by the Compose/Completion key, via pkl_SendThis()
+init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys 	; eD WIP
+	static initialized := false
 	
-	mapFile := pklIniRead( "cmposrFile",, "LayStk" )
-	lengths := pklIniCSVs( "lengths"   ,,  mapFile ) 		; An array of the sequence lengths to look for
-	setKeyInfo( "composeLens", lengths ) 					; Example: [ 1 , 2 , 3 , 4 ]
-	for ix, len in lengths { 								; Look for sequences of length for instance 1–4
-		keyArr%len% := {} 									; eD WIP: Will ~5000 lines lead to a slow startup?
-		for ix, sect in pklIniCSVs( "tables", , mapFile ) { 	; [ "dyn", "x11" ]
+	mapFile := pklIniRead( "cmposrFile", , "LayStk" ) 			; eD TODO: Allow searches in BasIni and LayIni as well?! Lay > Bas > Compose, as usual
+	if ( not initialized ) { 									; First-time initialization
+		setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 			; Used by the Compose/Completion key, via pkl_SendThis()
+		lengths := pklIniCSVs( "lengths", "4,3,2,1",  mapFile ) 	; An array of the sequence lengths to look for. By default 1–4, longest first.
+		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
+		initialized := true
+	} 	; end if init
+	if compKeys.IsEmpty()
+		Return
+	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
+	cmpKeyTabs  := {} 											; Array of tables for each ©-key
+	for ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
+;		if compKeys.HasKey( cmpKey ) 								; This key occurs in several mappings on one layout, so don't define it again
+;			Return
+;		pklInfo( "init_Composer( " . cmpKey . " )" ) 	; eD DEBUG
+		
+		tables      := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
+		for ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
-			if ( SubStr( sect, 1, 1 ) == "+" ) { 			; Non-eating Compose sections are marked with a "+" sign
-				sect    := SubStr( sect, 2 )
-				sendBS  := 0 								; Don't send Backspaces before the compose entry
+			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
+				sct     := SubStr( sct, 2 )
+				tables[ ix ] := sct 								; Rewrite this tables entry without the "+" sign.
+				sendBS  := 0 										; Don't send Backspaces before the compose entry
 			}
-			sect        := "compose_" len . "_" . sect
-			for ix, row in pklIniSect( mapFile, sect ) {
-				pklIniKeyVal( row, key, val ) 				; Compose table key,val pairs
-				if ( not SubStr( key, 1, 2 ) == "0x" ) { 	; The key is a sequence of characters instead of a sequence of hex strings
-					kys := ""
+			if usedTables.HasKey( sct ) {
+				Continue 											; This table was already read in, so proceed to the next one for this key
+			} else {
+				usedTables[ sct ] := sendBS 						; compTables[ section ] contains the sendBS info for that table section
+			}
+			for ix, len in lengths { 								; Look for sequences of length for instance 1–4
+				keyArr%len% := {} 									; These reside in their own arrays, to reduce lookup time etc.
+			} 	; end for lengths
+			for ix, row in pklIniSect( mapFile, "compose_" . sct ) {
+				pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
+				if ( not SubStr( key, 1, 2 ) == "0x" ) { 			; The key is a sequence of characters instead of a sequence of hex strings
 					kyt := ""
+					kys := ""
 					for ix, chr in StrSplit( key ) { 
 						if ( ix == 1 ) { 
-							cht := Format( "{:U}", chr ) 	; Also make an entry for the Titlecase version of the string key (if different)
+							cht := Format( "{:U}", chr ) 			; Also make an entry for the Titlecase version of the string key (if different)
 						} else {
 							cht := chr
 						} 	; end if ch1
-						kys .= "_" . formatUni( chr )
 						kyt .= "_" . formatUni( cht )
+						kys .= "_" . formatUni( chr )
 					} 	; end for chr
+					kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
 					key := SubStr( kys, 2 )
-					kyt := SubStr( kyt, 2 )
-					keyArr%len%[kyt] := sendBS . val
 				} 	; end if 0x####
-				keyArr%len%[key] := sendBS . val
+				dum := StrReplace( key, "0x",, len ) 				; Trick to count the number of "0x", i.e., the pattern length
+				keyArr%len%[key] := val
+				if ( kyt )
+					keyArr%len%[kyt] := val
 			} 	; end for row
-		} 	; end for sect
-		setKeyInfo( "composes" . len, keyArr%len% )
-	} 	; end for lengths
+			for ix, len in lengths { 								; Look for sequences of length for instance 1–4
+				setLayInfo( "comps_" . sct . len, keyArr%len% )
+			} 	; end for lengths
+		} 	; end for sct in tables
+		cmpKeyTabs[ cmpKey ] := tables 								; For each named key, specify its required tables
+	} 	; end for cmpKey in compKeys
+	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
+	setLayInfo( "composeTables" , usedTables )
+;	test := getLayInfo( "composeTables" )
+;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . test[sct] . "/" . usedTables[sct] . "`nBS[dynCmk] = " . test["dynCmk"] . "`nBS[x11] = " . test["x11"], 3 )  ; eD DEBUG
 }

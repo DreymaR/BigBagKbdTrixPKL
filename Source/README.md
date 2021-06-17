@@ -327,7 +327,7 @@ DONE:
 		- Added the ĳĲ digraphs and ijIJ bigrams to the Nl layouts, on the `OEM_102` "ISO" key and AltGr+iI, respectively.
 		- Added a full set of CAWS locale variants.
 		- Added (Curl)AngleSym Colemak-eD variants. The non-Wide Sym variant now keeps Plus/Equal next to 0 and brackets above another as in the Wide variants.
-	- Added a Reset button to Layouts/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
+	- Added a Reset button to Layout/Settings. It deletes all UI-made lines for the current setting in the Override file, including commented-out UI lines.
 	- Separate BaseLayout for the Greek (Gre) and Kyrillic (Kyr, Ru/Bg) scripts. This removes the need for full mappings in layout files. Bg keeps the necessary mappings.
 	- Fixed: Minor bug in which the Settings GUI wouldn't try to make a new Override file but just lead to a file read error instead.
 	- Fixed: After the Ext-mods rework, spamming modded Ext presses led to stuckness (~5 s for Ext+S+N). Afterwards, Extend got wonky, w/ Ext+S+T+N the arrow was stuck.
@@ -355,18 +355,20 @@ DONE:
 		- Fixed: Earlier, if Win+v (Paste Clipboard) was pressed, the clipboard would often close again unless Win were released very fast.
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
-  
 	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-	- Compose/Completion key: Set any state mapping to `©©` to use it for composing up to four previously sent characters using specified tables.
-		- The ISO key's unshifted state has been set as a Compose key by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
-		- The Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`.
+  
+	- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
+		- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
+		- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
 		- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
 		- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
-		- This way you can produce, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+			- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
 		- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
-		- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion/Ous.
-		- By default the method will look for the longest possible sequences first. You can set this behavior in the Compose file.
+			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
+		- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
+		- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
   
+
 
 TODO:
 -----

@@ -168,7 +168,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	layDir  := bool(pklIniRead("compactMode")) ? "." 
 			 : layDir := "Layouts\" . theLayout 						; If in compact mode, use main dir as layDir
 	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
-	setLayInfo( "Dir_LayIni"        , layDir  )
+	setPklInfo( "Dir_LayIni"        , layDir  )
 	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
 	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?
 	kbdType := _AnsiAns( kbdType )
@@ -179,10 +179,10 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	baseDir         := "Layouts\" . baseDir
 	baseLay         := "Layouts\" . basePath . ".ini"
 	if FileExist( baseLay ) {
-		setLayInfo( "Dir_BasIni"    , baseDir )
+		setPklInfo( "Dir_BasIni"    , baseDir )
 		setPklInfo( "File_BasIni"   , baseLay ) 						; The base layout file path
 	} else if ( basePath ) {
-		setLayInfo( "Dir_BasIni"    , "" )
+		setPklInfo( "Dir_BasIni"    , "" )
 		setPklInfo( "File_BasIni"   , "" )
 		pklWarning( "File '" . baseLay . "' not found!" ) 				; "File not found" iff base is defined but not present
 	}
@@ -241,6 +241,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	shStates := StrSplit( RegExReplace( shStates, "[ `t]+" ), ":" ) 	; Remove any whitespace and make it an array
 	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator
 	
+	compKeys := [] 														; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
 	map := pklIniSect( layFile, "layout" )
 	extKey := pklIniRead( "extend_key","", layFile ) 					; Extend was in layout.ini [global]. Can map it directly now.
@@ -307,8 +308,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			Hotkey, *%key% Up,  doNothing 	 							; eD WIP: Only Down needed? - EPKL sends a lot of Down-Up presses. But if the key is redefined?
 		}	; end if entries
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
-			ks  := shStates[ A_Index ] 									; This shift state for this key
-			ksE := entry[ A_Index + 2 ] 								; The value/entry for that state
+			ks      := shStates[ A_Index ] 								; This shift state for this key
+			ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
+			ks2     := SubStr( ksE, 2 )
 			if        ( StrLen( ksE ) == 0 ) { 							; Empty entry; ignore
 				Continue
 			} else if ( StrLen( ksE ) == 1 ) { 							; Single character entry:
@@ -322,13 +324,15 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else if ( ksE == "®®" ) {
-				setKeyInfo( key . ks , -3 ) 							; Repeat previous key
-			} else if ( ksE == "©©" ) {
-				setKeyInfo( key . ks , -4 ) 							; Compose/Multi key – compose previous key(s) 	; eD WIP
+				setKeyInfo( key . ks , -3 ) 							; ®® entry: Repeat previous key
+			} else if ( InStr( ksE, "©" ) == 1 ) {
+				setKeyInfo( key . ks , -4 ) 							; ©### entry: Named Compose/Completion key – compose previous key(s)
+				setKeyInfo( key . ks . "s", ks2 )
+				compKeys.Push( ks2 )
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
 				if InStr( "%→$§*α=β~«@Ð&¶", ksP ) {
-					ksE := SubStr( ksE, 2 ) 							; = : Send {Blind} - use current mod state
+					ksE := ks2 											; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
@@ -345,7 +349,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
   													;   ###############################################################
 ;initOtherInfo() 									;   ####################### Other settings  #######################
   													;   ###############################################################
-	init_Composer() 													; Initialise the EPKL Compose tables 	; eD WIP
+	
+	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
 	;; ================================================================================================
 	;;  Read and set Extend mappings and help image info

@@ -38,5 +38,5 @@ alternation (notice the positions of TH, NE, ST and the fairly unusual feature o
 
 
 [MTGAPm]: https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/ (The MTGAP project)
-[MTGaPp]: https://mdickens.me/ (**M**ichael "**T**he **G**lorious **a**nd **P**owerful")
+[MTGaPp]: https://mdickens.me/ (*M*ichael "*T*he *G*lorious *A*nd *P*owerful")
 [BB_Erg]: https://dreymar.colemak.org/ergo-mods.html (DreymaR's Big Bag of Tricks on ergo mods)

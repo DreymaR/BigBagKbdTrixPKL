@@ -25,9 +25,9 @@
 	pkl_SendThis( modif, this ) 		; Modif is only used for explicit mod mappings.
 }
 
-pkl_SendThis( modif, this, resetLast = false ) { 			; Actually send a char/string
-	that    := StrReplace( this, "{Space}" ) 				; Strip off any spaces sent to release OS deadkeys
-	if ( StrLen( that ) == 3 ) { 							; Single-char keys are on the form "{¤}"
+pkl_SendThis( modif, this, resetLast = false ) { 				; Actually send a char/string
+	that    := StrReplace( this, "{Space}" ) 					; Strip off any spaces sent to release OS deadkeys
+	if ( StrLen( that ) == 3 ) { 								; Single-char keys are on the form "{¤}"
 		LastKeys := getKeyInfo( "LastKeys" )
 		LastKeys.Push( that )
 		LastKeys.RemoveAt( 1 )
@@ -41,45 +41,63 @@ pkl_SendThis( modif, this, resetLast = false ) { 			; Actually send a char/strin
 ;		setAltGrState( 1 )
 }
 
-pkl_Composer() { 											; A post-hoc Compose method: Press a key mapped with ©©, and the preceding sequence will be composed
-	LastKeys    := getKeyInfo( "LastKeys" ) 				; Format:  ["{¤}","{¤}","{¤}","{¤}"]
-	lengths     := getKeyInfo( "composeLens" ) 				; Example: [ 1 , 2 , 3 , 4 ]
-	key         := ""
-	for ix, chr in LastKeys { 								; Build a 4-char key to match the Compose table
-		chr     := formatUni( SubStr( chr, 2, 1 ) ) 		; Single-char keys are on the form "{¤}". Format as 0x#### hex string (4+ digits).
-		kys     .= "_" . chr 								; LastKeys on the form _0x#### repeated 4 times
+pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key mapped with ©###, and the preceding sequence will be composed
+	compKeys    := getLayInfo( "composeKeys" ) 					; Array of the compose tables for each ©-key in use
+	tables      := compKeys[ compKey ] 							; Array of the compose tables in use for this compKey
+	if ( tables[1] == "" ) { 									; Is this ©-key empty?
+		pklWarning( "An empty/undefined Compose key was pressed." )
+		Return
 	}
-	for ix, len in lengths { 								; Normally we compose up to 4 characters
-		keyArr  := getKeyInfo( "composes" . len )
-		key     := SubStr( kys, 1 + InStr( kys, "_", , 0, len ) ) 	; The rightmost len chars of kys
-		if ( keyArr.HasKey( key ) ) {
-			val := keyArr[key]
-			bsp := len * SubStr( val, 1, 1 ) 				; The first char of the entry is whether to send Backs (eating patterns)
-			str := SubStr( val, 2 )
-			SendInput {Backspace %bsp%}{Text}%str% 			; Send Back according to key length. Undo won't work as it may remove several characters per press.
-			setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 	; Reset the last-keys-pressed buffer
-			Break 											; If a longer match is found, don't look for shorter ones
-		}
-	} 	; end loop
-;	( len <= 3 ) ? pklDebug( "kys: " . kys . "`nlen: '" . len . "`n`nkey: " . key . "`nval: '" . val . "'`n`nkeyArr[e`]: " . keyArr["0x0065_0x0060"] . "`nLastKeys[34]: " . LastKeys[3] . LastKeys[4], 3 )  ; eD DEBUG
+	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["{¤}","{¤}","{¤}","{¤}"]
+	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
+	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
+	for sct, bs in compTables {
+		test .= "`n" . sct . ": " . bs
+	}
+;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . compTables[sct] . "`n" . test, 2 )  ; eD DEBUG
+	key         := ""
+	for ix, chr in LastKeys { 									; Build a 4-char key to match the Compose table
+		chr     := formatUni( SubStr( chr, 2, 1 ) ) 			; Single-char keys are on the form "{¤}". Format as 0x#### hex string (4+ digits).
+		kys     .= "_" . chr 									; LastKeys on the form _0x#### repeated 4 times
+	}
+	for ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
+		for ix, sct in tables {
+			keyArr  := getLayInfo( "comps_" . sct . len ) 		; Key arrays are marked both by ©-key names and lengths
+			key     := SubStr( kys
+				, 1 + InStr( kys, "_", , 0, len ) ) 			; The rightmost len chars of kys
+			if ( keyArr.HasKey(key) ) {
+				val := keyArr[key]
+				bsp := len * compTables[ sct ] 					; The first char of the entry is whether to send Backs (eating patterns)
+				SendInput {Backspace %bsp%} 					; Send Back according to key length. Undo won't work as it may remove several characters per press.
+				ent := val
+				if not pkl_ParseSend( ent ) 					; Unified prefix-entry syntax
+					SendInput {Text}%ent% 						; Send the entry as {Text} by default
+				setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 	; Reset the last-keys-pressed buffer
+;	( len <= 4 ) ? pklDebug( "kys: " . kys . "`nlen: '" . len . "`n`nkey: " . key . "`nval: '" . val . "'`n`ntest: BS[" . sct . "] = " . compTables[sct], 3 )  ; eD DEBUG
+				Return 											; If a longer match is found, don't look for shorter ones
+			} 	; end if keyArr
+		} 	; end for sections
+	} 	; end for lengths
 }
 
 pkl_CheckForDKs( ch ) {
 	static SpaceWasSentForSystemDKs = 0
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {		; No active DKs
+	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {					; No active DKs
 		SpaceWasSentForSystemDKs = 0
 		Return false
 	} else {
-		setKeyInfo( "CurrBaseKey_", ch )			; DK(s) active, so record the pressed key as Base key
-		if ( SpaceWasSentForSystemDKs == 0 )		; If there is an OS dead key that needs a Spc sent, do it
+		setKeyInfo( "CurrBaseKey_", ch )						; DK(s) active, so record the pressed key as Base key
+		if ( SpaceWasSentForSystemDKs == 0 )					; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
 		SpaceWasSentForSystemDKs = 1
 		Return true
 	}
 }
 
-pkl_ParseSend( entry, mode = "Input" ) { 						; Parse/Send Keypress/Extend/DKs/Strings w/ prefix
+pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
+	if ( StrLen( entry ) < 2 ) 									; The entry must have at least a prefix plus something
+		Return false
 	psp     := SubStr( entry, 1, 1 ) 							; Look for a Parse syntax prefix
 	if not InStr( "%→$§*α=β~«@Ð&¶", psp ) 						; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
 		Return false

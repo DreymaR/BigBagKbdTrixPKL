@@ -46,7 +46,7 @@
 	
 	if ( not initialized ) 				; First-time initialization
 	{
-		im.LayDir   := getLayInfo( "Dir_LayIni" )
+		im.LayDir   := getPklInfo( "Dir_LayIni" )
 		im.BgPath  := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
 		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 

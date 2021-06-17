@@ -33,7 +33,7 @@ Getting EPKL up and running
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
     - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon.
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
-* To choose a layout variant, select the **Layouts/Settings...** menu option. The EPKL Settings User Interface pops up.
+* To choose a layout variant, select the **Layout/Settings...** menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist – they'll likely be eD variants.
@@ -43,6 +43,24 @@ Getting EPKL up and running
   
 
     ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
+  
+
+"Can I map the Caps key to Backspace?"
+--------------------------------------
+Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power?
+Or, how about the multilayer "MoDK" tap-Extend with even more wonders?! See below for how that works.
+  
+
+If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
+- **By Menu:** From the Layout/Settings menu's KeyMapper tab, make a `VK`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it. Allow EPKL to restart.
+- **By File:** In your `EPKL_Layouts_` .ini file (Default or, if present, Override), find or make these lines under the `[layout]` section.
+```
+;QWCLK = BACK    	VKey 		; SC03a: CapsLock as Backspace (CAPITAL -> BACK)
+QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
+;QWCLK = BACK/Ext 	VKey 		; SC03a: CapsLock as a Tap-or-Mod key: Backspace on tap, Extend modifier on hold
+```
+- Add a semicolon before the line you don't want, and remove the one before the line you do want to use.
+- Note the bottom line there? You can actually have both: Backspace on tapping <kbd>Caps</kbd>, Extend on holding it!
   
 
 These Aren't The Guides You're Looking For?
@@ -58,16 +76,16 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 More Know-How
 -------------
 #### A Short EPKL Glossary
-* **Extend** is a layer switch, by default the CapsLock key, giving easy access to navigation and NumPad etc layers
+* **Extend** is a layer switch, by default the <kbd>CapsLock</kbd> key, giving easy access to navigation and NumPad etc layers
     - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][BBText]!
-* **Multi-Extend** means you'll get another Extend layer if you hold down, say, RShift and/or RAlt when pressing Extend
-    - After selecting an Extend layer this way, keep only the Extend key pressed down to maintain it
+* **Multi-Extend** means you'll get another Extend layer if you hold down, say, <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> when pressing <kbd>Extend</kbd>
+    - After selecting an Extend layer this way, keep only the <kbd>Extend</kbd> key pressed down to maintain it
 * A **Sticky Modifier** or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
     - There's a setting in the Settings file for how quickly the OSM times out, in milliseconds
 * **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
     - ToM has its own timer setting which is typically shorter than the Sticky Mods timer
-* **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on `{AltGr+‹symbol›}`.
-    - DK sequence: You can tap several DKs to get new symbols (example: `{AltGr+=,=}` gives `≡`; `AltGr+{/,=}` then `=` gives `≢`)
+* **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on <kbd>AltGr</kbd>+<kbd>‹symbol›</kbd>.
+    - DK sequence: You can tap several DKs to get new symbols (example: {<kbd>AltGr</kbd>+<kbd>=</kbd>,<kbd>=</kbd>} gives `≡`; <kbd>AltGr</kbd>+`{/,=}` then <kbd>=</kbd> gives `≢`)
     - DK chaining: One DK can release to another. This is not implemented in EPKL yet
     - **MoDK** (Mother-of-DKs) is a ToM key (here, on **tap-Extend**) that leads to lots of cool DKs
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
@@ -83,7 +101,7 @@ More Know-How
 * Ctrl+Shift+3 – Suspend EPKL; hit again to re-activate. It may also be Ctrl+Shift+`.
 * Ctrl+Shift+4 – Exit EPKL
 * Ctrl+Shift+5 – Refresh EPKL, if it gets stuck or something
-* Ctrl+Shift+6 – Show the Layouts/Settings... dialog
+* Ctrl+Shift+6 – Show the Layout/Settings... dialog
 * Ctrl+Shift+7 – Zoom the help image in/out, to see it better or get it out of the way
 * Ctrl+Shift+8 – Toggle help image transparency
 * Ctrl+Shift+9 – Move the help image between positions, as by mouseover
@@ -99,18 +117,18 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The _[eD]_ layouts have their own Shift/AltGr state mappings specified.
     - Actually, you may mix mapping types freely in any layout.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
-    - ISO boards have a `OEM_102` key between `Z` and `LShift`.
-    - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. The boards send the same scan codes though.
-    - Brazilian ABNT boards are like ISO, but have two more keys. These can be remapped by their scan codes.
+    - ISO boards have a <kbd>OEM_102</kbd> key between <kbd>Z</kbd> and <kbd>LShift</kbd>. It often holds `<>` or `-_`.
+    - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. These boards send the same scan codes though.
+    - Brazilian ABNT boards are like ISO, but have two extra <kbd>ABNT</kbd> keys. These can be remapped by their scan codes.
     - JIS (Japanese) etc are not supported so far. Sorry. Gomen-nasai. ごめんなさい.    ᏊᵕꈊᵕᏊ
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
     - Curl(DH) is Colemak/Tarmak/Dvorak specific and for the most part should not affect Extend
-    - The Curl(DH) mod does insert D between C and V though. There's a remap to let Extend+V still be Paste
+    - The Curl(DH) mod does insert <kbd>D</kbd> between <kbd>C</kbd> and <kbd>V</kbd> though. There's a remap to let <kbd>Extend</kbd>+<kbd>V</kbd> still be Paste
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
     - The Extend modifier may even double as a Tap-or-Mod key so that when you tap it, something else happens.
     - The most advanced way of using this may be the Mother-of-DeadKeys which allows really fancy "tap dances"!
-    - Holding down Shift and/or AltGr while first holding or while tapping the Ext key affects which Ext layer you get.
+    - Holding down <kbd>Shift</kbd> and/or <kbd>AltGr</kbd> while first holding or while tapping the <kbd>Ext</kbd> key affects which Ext layer you get.
 * In EPKL_Layouts you can use shorthand (@#) for KbdType/CurlMod/HardMod etc, or set the layout folder path directly.
     - For Extend set an Extend file and a working Extend modifier. The latter needs to be mapped to a key.
     - My _eD_Extend mappings file is in the Files folder. Look inside it to learn more.
@@ -174,15 +192,15 @@ Where:
 * SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
     - For SC, you could use an AHK key name instead. For VK you need the Windows VK names (or KLM codes).
     - Instead of the technical SC or VK you may use my more intuitive KLM codes. See the [Remap file][MapIni].
-    - _Example:_ The above SC are for the `O` and `P` keys; these are mapped to their Colemak equivalents `Y` and `;`.
-    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's much better to use KLM vc_## codes.
-    - _Example:_ The KLM code `vc_SC` is the semicolon key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
+    - _Example:_ The above SC are for the <kbd>O</kbd> and <kbd>P</kbd> keys; these are mapped to their Colemak equivalents <kbd>Y</kbd> and <kbd>;</kbd>.
+    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's much better to use KLM `vc_##` codes.
+    - _Example:_ The KLM code `vc_SC` is the <kbd>;</kbd> key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
     - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it's the VKey, if held down it's the modifier.
-    - The VK code may be an AHK key name. For modifiers you may use only the first letters, so LSh -> LShift etc.
+    - The VK code may be an AHK key name. For modifiers you may use only the first letters, so `LSh` -> `LShift` etc.
 * CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
-    - _Example:_ For the `Y` key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
+    - _Example:_ For the <kbd>Y</kbd> key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
-    - _Example:_ Shift+AltGr+`y` sends the `»` glyph. AltGr+`;` has the special entry `@0a8` (umlaut deadkey).
+    - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
 * Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for each prefix):
     - → | %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
     - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
@@ -192,10 +210,10 @@ Where:
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
     - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab...
 * A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
-* A state mapping of `©©` uses a Linux/X11-type Compose method, replacing the 1–4 last written characters with something else.
+* A state mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the 1–4 last written characters with something else.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é
-    - The key can also be used for "dynamic completions", adding to instead of deleting the original sequence
-    - See the [EPKL Compose file][CmpIni] for more info
+    - The key can also be used for "dynamic" completions, adding to instead of deleting the original sequence
+    - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
 * A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
   
 
@@ -221,21 +239,21 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 ```
 * These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
 * The above Extend modifier mappings may be in any LayStack .ini file, such as [Layouts_Default][LayDef]
-* Holding designated modifiers, RShift and/or RAlt by default (specified in the [Settings][PklIni]), chooses Extend layers.
-    - So, e.g., holding the Ext1 mod (RAlt) then the Ext key (Caps) activates the Extend2 layer (NumPad).
-* After selecting your Extend layer, you hold down only the Extend key (Caps by default) and start using Extend!
+* Holding designated modifiers, <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> by default (specified in the [Settings][PklIni]), chooses Extend layers.
+    - So, e.g., holding the Ext1 mod (<kbd>RAlt</kbd>) then the <kbd>Extend</kbd> key activates the Extend2 layer (NumPad).
+* After selecting your Extend layer, you hold down only the <kbd>Ext</kbd> key (Caps by default) and start using Extend!
 * Extend layers (like Ext3/Ext4) can be set as one-shot so they fall back to another layer after each use.
     - This lets you for instance release a string then keep editing. But dead keys are better for that, see below.
 * Setting the Extend key as a Tap-or-Mod (ToM) key as above lets you tap it for, e.g., Backspace or hold for Extend.
-* Mother-of-DeadKeys (MoDK) is the most powerful option. Tapping Extend activates a dead key depending on shift state!
-    - Tapping Ext alone or with Shift/AltGr activates the dead keys "ex0/1/6/7". See the DeadKeys.ini file!
-    - In my default example, Ext-tap alone lets you activate symbols and commands easily.
-    - Shift+Ext-tap activates a kaomoji DK, similar to Ext3 but you don't have to hold down the Ext key! d( ^◇^)b
+* Mother-of-DeadKeys (MoDK) is the most powerful option. Tapping <kbd>Extend</kbd> activates a dead key depending on shift state!
+    - Tapping <kbd>Ext</kbd> alone or with <kbd>Shift</kbd>/<kbd>AltGr</kbd> activates the dead keys "ex0/1/6/7". See the [DeadKeys.ini][DKsIni] file!
+    - In my default example, <kbd>Ext</kbd>-tap alone lets you activate symbols and commands easily.
+    - <kbd>Shift</kbd>+<kbd>Ext</kbd>-tap activates a kaomoji DK, similar to Ext3 but you don't have to hold down the <kbd>Ext</kbd> key! d( ^◇^)b
     - Another advantage of DK layers over Extend layers is that you can make entries for any release char.
     - So, e.g., Ext3 has one kitty kaomoji (=^･ω･^=)丿 but dk_Ext_Kaomoji has one for k and one for K. (=ΦωΦ=)ʃ
-    - "Tap-dance" {Shift,Ext,<key>} quickly using Sticky Shift, for a kaomoji. Wait before <key> for another.
-    - Holding Ctrl then tapping Ext sends Win+Period, opening the Emoji picker.
-    - AltGr+Ext-tap holds some commands to avoid hand contortion. Example: {AltGr+Ext,T} for Task Manager.
+    - "Tap-dance" {<kbd>Shift</kbd>,<kbd>Ext</kbd>,<kbd>‹key›</kbd>} quickly using Sticky Shift, for a kaomoji. Wait before <kbd>‹key›</kbd> for another.
+    - Holding <kbd>Ctrl</kbd> then tapping <kbd>Ext</kbd> sends <kbd>Win</kbd>+<kbd>.</kbd>, opening the Emoji picker.
+    - <kbd>AltGr</kbd>+<kbd>Ext</kbd>-tap holds some commands to avoid hand contortion. Example: {<kbd>AltGr</kbd>+<kbd>Ext</kbd>,<kbd>T</kbd>} for Task Manager.
   
 
 Layout variant tutorial
@@ -250,20 +268,22 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 * In that folder's layout.ini file, edit the remap fields to represent the new settings.
     - Here, change `mapSC_layout = Cmk-CAW-_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
-    - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move Ctrl+V by adding 'V-B,' in front.
+    - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move <kbd>Ctrl</kbd>+<kbd>V</kbd> by adding 'V-B,' in front.
 * Change any key mappings you want to tweak.
     - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
     - See the next section to learn more about key mapping syntax.
-    - The mappings in the De layout are okay as they are, but let's say we want to swap V and Ö (`OEM_102`) for the sake of example.
+    - The mappings in the De layout are okay as they are, but let's say we want to swap <kbd>V</kbd> and <kbd>Ö</kbd> (`OEM_102`) for the sake of example.
     - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `OEM_102` is there, state 0/1 mapped to ö/Ö.
-    - To find the V key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. There's the V key, SC02f.
-    - Now, copy the V and `OEM_102` keys to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their SC### codes.
+    - To find the <kbd>V</kbd> key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. 
+    - There's the <kbd>V</kbd> key, with the scan code `SC02f` alias the more intuitive EPKL KLM code `QW_V` as key (before `=`).
+    - Now, copy the `V` and `OEM_102` key lines to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their scan codes.
     - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
-* Now, if your `EPKL_Layouts` .ini Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
-    - Here, set LayType/LayVari/KbdType/CurlMod/HardMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
+* Now, if your `EPKL_Layouts_Override.ini` Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
+    - From the Layout/Settings menu, you should be able to see and select it using the right options. Then you can let EPKL restart itself.
+    - Or, in the file set LayType/LayVari/KbdType/CurlMod/HardMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
     - If you prefer to use another existing layout line in the file, comment out the `layout = ` line with `;` and activate another.
     - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
-* After making layout changes, refresh EPKL with the Ctrl+Shift+5 hotkey. If that doesn't work, quit and restart EPKL.
+* After making layout changes, refresh EPKL with the <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> hotkey. If that doesn't work, quit and restart EPKL.
 * To get relevant help images without generating them with Inkscape:
     - Check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
     - Here, you might either keep the current De_ISO_CurlAWide settings to see the German special signs without making new images, or...
@@ -281,8 +301,8 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
 KNOWN ISSUES:
 -------------
 * ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be...
-* Windows intercepts certain key combinations like Ctrl+Alt+Del and Win+L so these may work oddly with state remaps like eD.
-    - A workaround for this is to map a shortcut to `α#e` for accessing Win+E on Colemak. For Ext-tap, there's one on `{Ext,w}`.
+* Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd> so these may work oddly with state remaps like eD.
+    - A workaround for this is to map a shortcut to `α#e` for accessing <kbd>Win</kbd>+<kbd>E</kbd> on Colemak. For Ext-tap, there's one on `{Ext,w}`.
   
 
 DONE/TODO:
@@ -324,4 +344,5 @@ _Øystein "DreymaR" Bech_
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
 [PklIni]: ./EPKL_Settings_Default.ini (EPKL Settings file)
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
+[DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)

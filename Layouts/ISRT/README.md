@@ -27,8 +27,11 @@ NotGate's ISRT alias the "IndyRad" layout
 
 <br>
 
-NotGate's recent version history:
----------------------------------
+NotGate's version history right before release:
+-----------------------------------------------
+This may not be central information, but the layout underwent some tweaks before release, making it easier to use Angle and Sym mods with ISRT.
+  
+
 #### ISRT, 2021-01-27 (Q-Y swap improves Y position and Angle-ANSI mod):
 ```
 ------------------------
@@ -40,7 +43,7 @@ Remaps from Cmk-DH:
 / a ⇔ i / w ⇔ c / f ⇔ l / p ⇔ m / b ⇔ k / r ⇔ s / y > q > z > j > v > x > SL > CM /
 ```
 
-#### ISRT, 2021-01-26 (uses P>K>B>M loop, QU untouched):
+#### ISRT, 2021-01-26 (P>K>B>M loop, Quote untouched):
 ```
 ------------------------
 | q c l m k  z f u , ; |
@@ -51,7 +54,7 @@ Remaps from Cmk-DH:
 / a ⇔ i / w ⇔ c / f ⇔ l / p > k > b > m / r ⇔ s / y > z > j > v > x > SL > CM /
 ```
 
-#### ISRT, pre 2021-01-26 (uses P-M & B-K swaps):
+#### ISRT, pre 2021-01-26 (P-M & B-K swaps):
 ```
 ---------------------------
 | q c l m k  z f u , ;  - |
