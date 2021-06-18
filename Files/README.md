@@ -2,15 +2,15 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ![EPKL help image, for the Extend1 layer](./ImgExtend/ISO_Ext1.png)  
-  
-  
+<br><br>
+
 Files info
 ----------
 This is where EPKL keeps non-layout files it needs. Unless you're an advanced user, you may not need to change anything in these files.
-  
+
 On the other hand, looking inside some of them should be useful if you want to understand more about how EPKL works!
-  
-  
+<br><br>
+
 Examples From The EPKL Files
 ----------------------------
 Some of the mappings for my tap-Extend Kaomoji layer in the `_eD_DeadKeys.ini` file:
@@ -36,7 +36,8 @@ Some of the mappings for my tap-Extend Kaomoji layer in the `_eD_DeadKeys.ini` f
 <;>     = → (ʘ言ʘ╬)                 		; ; - Shock
 <:>     = → (ʘ_ʘ;)                  		; : - --"--
 ```
-  
+<br><br>
+
 Extend1 mappings for the upper and home rows, from the `_eD_Extend.ini` file:
 ```
 QW_Q  = Esc
@@ -65,7 +66,8 @@ Co_O  = BackSpace
 Co_QU = AppsKey
 Co_BS = Browser_Favorites
 ```
-  
+<br><br>
+
 The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
 ```
 Pent    = <Multiline> 17 		; A 17 line string, defined below
@@ -89,7 +91,8 @@ Pent-15 =   "     "$$c.   `$b$F    .d$P"     \n"
 Pent-16 =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
 Pent-17 =   "           `^^^^^^^`            \n"
 ```
-  
+<br><br>
+
 KLM remapping codes used in the `_eD_Remap` file:
 ```
 ;;  This is a table of KeyLayoutMap (KLM) codes from the _eD_Remap.ini file. You can use QW### or Co### for EPKL Scan Code (SC) and Virtual Key (VK) names.
@@ -114,4 +117,3 @@ KLM remapping codes used in the `_eD_Remap` file:
 ;Co || _LG  | _Z   | _X   | _C   | _V   | _B   | _K   | _M   | _CM  | _PD  | _SL  | ENT  | SPC  || LAL  | RAL  || _LE  | _DN  | _RI  || P_0  | PDC  | PWR  | SLP  ||
 ;;  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX
 ```
-  

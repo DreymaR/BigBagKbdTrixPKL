@@ -58,9 +58,9 @@ Some layout links:
 - HandsDown layout: https://sites.google.com/alanreiser.com/handsdown
   
 
-- In this analysis, simply swapping V and K and nothing else outperforms everything except ISRT!
-    - In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
-    - VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
+In this analysis, simply swapping V and K and nothing else outperforms everything except ISRT!
+- In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
+- VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
   
 
 **NotGate's ISRT/IndyRad layout** (QU -> SC for analysis; use w/ Sym mod)

@@ -7,20 +7,22 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)  
   
+
 Source code info
 ----------------
 This is the source code README, briefly explaining how to compile PKL/EPKL with AHK2EXE.
 
 To this purpose, there's a [Compile_EPKL.bat][MakExe] file that makes and runs EPKL.exe.
   
-Info about DreymaR's Big Bag of keyboard trickery is mainly found on the Colemak forum:
-* The [Big Bag main topic][CmkBBT] with better explanations and links.
-* Daughter topics for implementations, including the [Big Bag for EPKL/Windows][CmkPKL] one.
+Info about DreymaR's Big Bag of keyboard trickery is found on:
+* The [Big Bag pages][BBTind] with better explanations and links
+* The old [Forum BigBag][CmkBBT], including the [Big Bag for EPKL/Windows][CmkPKL] topic
 
 The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).  
   
-Compiling
----------
+
+Compiling manually
+------------------
 * To compile the (E)PKL source code, use the Ahk2Exe compiler from the [AHK download page][AHKDld].
 * AHK compiler v1.1 Unicode is needed for EPKL; v1.0 and v1.1 in ANSI mode work for the original PKL.
 * There's a folder in Source that contains the v1.1 AHK compiler.
@@ -29,14 +31,17 @@ Compiling
 * You may choose any name for the .exe and run it afterwards.
 * Choose Source\Resources\Main.ico as the custom icon file.  
   
+
 Setup:
 ------
 1. Just compile right into your main EPKL folder, or move the resulting .exe file there.
 2. Adjust any extra settings in the layout.ini file in your layout folder.
    See the Colemak-eD_ISO layout.ini and baseLayout.ini files as examples.
-3. For generic EPKL settings, look in the Files folder, and the EPKL_Settings .ini file.  
+3. For generic EPKL settings, look in the Files folder, and the EPKL_Settings .ini file(s).
+   Or, you can use the EPKL Layout/Settings menu to change stuff.
+4. Changes should ideally go in `_Override.ini` files instead of the Default files.
   
-  
+
 _Best of luck!_
 _Øystein "DreymaR" Gadmar, 2018-_
 
@@ -46,6 +51,7 @@ _Øystein "DreymaR" Gadmar, 2018-_
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
 [AHKDld]: https://autohotkey.com/download/ (AutoHotkey download page)
 [MakExe]: ./Compile_EPKL.bat (Compile_EPKL batch file)
+[BBTind]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [EPKLRM]: ./Files/ (EPKL Files folder/README)  

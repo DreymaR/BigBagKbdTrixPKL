@@ -47,8 +47,11 @@ Getting EPKL up and running
 
 "Can I map the Caps key to Backspace?"
 --------------------------------------
-Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power?
+Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power? 
 Or, how about the multilayer "MoDK" tap-Extend with even more wonders?! See below for how that works.
+
+Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspace</kbd>. 
+<kbd>Ext</kbd>+<kbd>T</kbd>+<kbd>O</kbd> for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> deletes the previous word! 
   
 
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
@@ -61,6 +64,10 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 ```
 - Add a semicolon before the line you don't want, and remove the one before the line you do want to use.
 - Note the bottom line there? You can actually have both: Backspace on tapping <kbd>Caps</kbd>, Extend on holding it!
+- It's actually the default setting for the KeyMapper tab of the Layout/Settings dialog. Press the Submit button and you're on.
+  
+
+    ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
   
 
 These Aren't The Guides You're Looking For?
@@ -141,10 +148,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - There are help images for DKs, these can be very useful as they show what releases are in different shift states.
     - I haven't made images for all variants though, so there may be minor discrepancies.
 * Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
-* The Layout/Settings dialog can change layout, key mappings and a selection of settings. Here's a mapping example:
-  
-
-    ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
+* The Layout/Settings dialog can change layout, key mappings and a selection of settings quite easily.
   
 
 #### Techy tips for EPKL:

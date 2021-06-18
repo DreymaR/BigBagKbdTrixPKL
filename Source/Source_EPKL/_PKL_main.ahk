@@ -22,8 +22,8 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
-;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
+;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
+;			- Is EPKL causing any kind of lag now?!?
 
 ;		- WIP: Compose table importer. 
 ;			- Use the actual /usr/share/X11/locale/en_US.UTF-8/Compose file: It has a zillion entries, near-instant joy.
@@ -67,6 +67,8 @@
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
 ;		- 
+;		- WIP: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
+;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
 ;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!

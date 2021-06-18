@@ -4,7 +4,7 @@
 *_backup*
 *_old.???
 **/*_old
-*_WIP.???
+*_WIP.*
 **/*_WIP
 *_tmp.???
 **/*_tmp
@@ -21,3 +21,4 @@ Layouts/**/*ImgGen_*
 *PKL.exe
 EPKL_*able*.zip
 *Notepad*_Session*
+*/_Inbox/*

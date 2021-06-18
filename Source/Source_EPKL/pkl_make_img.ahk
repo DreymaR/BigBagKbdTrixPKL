@@ -48,7 +48,7 @@ makeHelpImages() {
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." : ""
 	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug : ""
 	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
-	MsgBox, 0x133, Make Help Images?, 
+	MsgBox, 0x133, Make Help Images?, 							; MsgBox type 0x3[Yes/No/Cancel] + 0x30[Warning] + 0x100[2nd button is default]
 (
 EPKL Help Image Generator
 —————————————————————————————
@@ -61,7 +61,7 @@ Do you want to make a full set of help images
 for the current layout, or only state images?
 (Many Inkscape calls will take a long time!)%makeMsgStr%
 )
-	IfMsgBox, Cancel 				; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
+	IfMsgBox, Cancel
 		Return
 	IfMsgBox, No 					; Make only the state images, not the full set with deadkey images
 		stateImgOnly := true
@@ -115,13 +115,13 @@ for the current layout, or only state images?
 	}
 	FileMove % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
 	FileMove % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
-	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?
 	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0, HIG.Ini ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
 	if        ( delTmpFiles == 2 ) {
 		FileRemoveDir % HIG.ImgDirs["raw"], 1 					; Recurse = 1 to remove files inside dir
 	} else if ( delTmpFiles == 1 ) {
 		FileRecycle % HIG.ImgDirs["raw"]
 	}
+	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?
 ;	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
 

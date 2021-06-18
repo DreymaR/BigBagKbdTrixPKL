@@ -399,19 +399,21 @@ _uiWriteOverride( key, layLine, module = "Settings" 			; Write a line to Overrid
 	tplFile := ( tplFile ) ? ovrFile . tplFile : ""
 	ovrFile .= ( tplFile ) ? "_Override" : "" 					; If there isn't a template, use the main file as its override
 	if not FileExist( ovrFile . ini ) { 						; If there isn't an Override file...
-		( 1 ) ? pklDebug( "`ntpl: " . tplFile . "`novr: " . ovrFile, 4 )  ; eD DEBUG
+;		( 1 ) ? pklDebug( "`ntpl: " . tplFile . "`novr: " . ovrFile, 4 )  ; eD DEBUG
 		if ( tplFile && not revert ) {
-			MsgBox, 0x031, Make Override file?, 				; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+			MsgBox, 0x021, Make Override file?, 				; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 EPKL %module% Submit
 —————————————————————————————
 
-No "%ovrFile%" detected.
+EPKL uses Override files for settings,
+to avoid messing with the Default files.
+No "%ovrFile%" was detected.
 
 Would you like to create one from %tplFile%.ini?
 )
 			makeFile := false
-			IfMsgBox, Cancel 									; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
+			IfMsgBox, Cancel
 				Return
 			IfMsgBox, OK
 				makeFile := true
@@ -431,7 +433,7 @@ Would you like to create one from %tplFile%.ini?
 	} 	; end if not FileExist ovrFile
 	makeLine := false 											; Make the new line and tidy up old ones
 	if revert {
-		MsgBox, 0x031, Reset Override?,
+		MsgBox, 0x021, Reset Override?,
 (
 EPKL %module% Reset
 —————————————————————————————
@@ -441,7 +443,7 @@ Revert this setting to default: %key%
 in the [%section%] section of %ovrFile%.ini?
 )
 	} else {
-		MsgBox, 0x031, Write Override line?, 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+		MsgBox, 0x021, Write Override line?, 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 EPKL %module% Submit
 —————————————————————————————
@@ -490,7 +492,7 @@ Write this line to the [%section%] section of
 	if not pklFileWrite( tmpFile, ovrFile . ini )
 		Return
 ;	pklInfo( "Write successful.`n`nRefreshing EPKL with the chosen settings.", 3 )
-	MsgBox, 0x031, Refresh EPKL?,		 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
+	MsgBox, 0x021, Refresh EPKL?,		 					; 0x100: 2nd button default. 0x20: Exclamation. 0x1: OK/Cancel
 (
 Write successful.
 
