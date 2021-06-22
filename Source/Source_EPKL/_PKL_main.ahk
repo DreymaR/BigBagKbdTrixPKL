@@ -1,4 +1,10 @@
-﻿#NoEnv
+﻿;
+;;  EPiKaL PKL - EPKL
+;;  Portable Keyboard Layout by Farkas Máté   [https://github.com/Portable-Keyboard-Layout]
+;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
+;
+
+#NoEnv
 #Persistent
 #NoTrayIcon
 #InstallKeybdHook
@@ -7,12 +13,6 @@
 #MaxThreadsPerHotkey  3
 #MaxHotkeysPerInterval 300
 #MaxThreads 30
-
-;
-;;  EPiKaL PKL - EPKL
-;;  Portable Keyboard Layout by Farkas Máté   [https://github.com/Portable-Keyboard-Layout]
-;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
-;
 
 ;;  ####################### user area #######################
 ;;  eD TOFIX: Can't define hotkeys/-strings here, as it prevents EPKL from working! Where, then?
@@ -264,6 +264,8 @@
 ;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 ;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
 
+;		- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
+
 ;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
 ;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
 ;			- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
@@ -282,6 +284,11 @@ setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
 setPklInfo( "pklVers", "1.3.0β" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
+setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
+setPklInfo( "pklHdrB", "`r`n"
+		. ";;  for Portable Keyboard Layout by Farkas Máté [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
+		. ";;  edition DreymaR (Øystein B Gadmar, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
+
 
 SendMode Event
 SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10. What is the actual possible lowest value, and what's most robust? How about -1 vs 0 vs 1?
@@ -494,7 +501,7 @@ Return
 epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .8 )
 ;	importLayouts() 									; eD WIP: Import a MSKLC layout file to EPKL format
-	importCompose() 									; eD WIP: Import an X11 Compose file to EPKL format
+	importComposer() 									; eD WIP: Import an X11 Compose file to EPKL format
 ;	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 Return
 

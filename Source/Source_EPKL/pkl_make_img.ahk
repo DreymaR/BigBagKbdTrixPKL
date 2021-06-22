@@ -73,7 +73,7 @@ for the current layout, or only state images?
 	pklSplash( HIG.Title, "Starting...", 2.5 ) 					;MsgBox, 0x41, %HIG.Title%, Starting..., 2.0
 	if ( HIG.Debug < 3 ) {
 		try {
-			for dirTag, theDir in HIG.ImgDirs 						; Make directories
+			For dirTag, theDir in HIG.ImgDirs 						; Make directories
 			{
 				if ( dirTag == "dkey" && ( stateImgOnly || onlyMakeDK ) )
 					Continue
@@ -140,7 +140,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 		}	; end For release
 	}
 	emptyBool   := true 										; Keep track of whether a state layer is empty
-	for CO, SC in HIG.PngDic
+	For CO, SC in HIG.PngDic
 	{
 		rel := ""
 		tag := ""
@@ -216,7 +216,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 	
 	if not tempImg := pklFileRead( HIG.OrigImg, "SVG template" )
 		Return
-	for CO, SC in HIG.PngDic
+	For CO, SC in HIG.PngDic
 	{
 		idKey   := indx . CO
 		chrVal  := HIG.ImgDic[ idKey       ]

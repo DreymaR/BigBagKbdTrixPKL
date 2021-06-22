@@ -1,8 +1,8 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-![EPKL help image for the test layout Colemak-QI;x](Cmk-eD-QIx/Colemak-QIx_ANS-CAS_EPKL.png)  
-  
+![EPKL help image for the experimental mod Colemak-QI;x](Layouts/Colemak/Cmk-eD-Qmods/Colemak-QIx_ANS-CAS_EPKL.png)
+<br><br>
 
 _Test folder info
 -----------------
@@ -12,19 +12,19 @@ If I wish to tuck something away because in my opinion it'd cause more confusion
 Some layouts require more testing, or their compatibility with my other mods and variants may be on the problematic side. There's already a lot of Colemak variants in the Colemak folder, for instance.
 
 Some strange layouts are still out in the main folder for fun, such as the joke layouts QUARTZ (Perfect Pangram layout) and Foalmak (April's Foals layout). I should hope it's easy enough for users to get those jokes.
-  
+<br>
 
 Implementation
 --------------
 To use any of these layouts, there are two main ways you can go:
 - If you want to see the layout in the Layout/Settings menu, copy it over to a fitting main `Layouts\` folder.
     - Keep in mind that normally the first three letters of the MainLayout and layout variant folder must match.
-    - Thus, if you put a variant inside the Colemak folder its folder name should begin with `Cmk` to be seen. 
+    - Thus, if you put a variant inside the Colemak folder its folder name should begin with `Cmk` to be seen.
     - In any folder without a special abbreviation, just use the first three letters of its name.
-- You could also point to it in an active `layout = ` line in your `EPKL_Layouts_Override.ini` file under the `[pkl]` section. 
+- You could also point to it in an active `layout = ` line in your `EPKL_Layouts_Override.ini` file under the `[pkl]` section.
     - If you haven't got one, copy-paste one from the `EPKL_Layouts_Override_Example` file.
     - Example: `layout = _Test\Cmk-eD-QIx\Cmk-eD-QIx_ANS_CurlAngleSym:Cmk-TestLayout` for the Colemak-QI;x ANSI mod.
-  
+<br>
 
 Simple Layout Analysis
 ----------------------
@@ -32,7 +32,7 @@ I've run some simple analysis, using the [ColemakMods Analyzer][CmmAna] with com
 - ColemakMods analysis was done on a 3×10 matrix with the upper right symbol kept as a semicolon if relevant, for fairness.
 - Changes in base, SFB and total (which also includes "near-finger" bigram effort) were reported as Δ rel. to Colemak-DH.
 - More analysis and observations regarding Nyfee's "Q" mods is found in the QI;x folder README.
-  
+<br>
 
 ```
 Layout            : bas.ef. sfb-ef. nfb-ef. tot.ef. SFB%      Δbas.e  Δsfb-e  Δtot.e
@@ -56,12 +56,12 @@ Some layout links:
 - NotGate's SIND: https://notgate.github.io/layout/experimental#sind
 - Shai's Cmk mods: https://forum.colemak.com/topic/2644-shais-colemak-mod/
 - HandsDown layout: https://sites.google.com/alanreiser.com/handsdown
-  
+<br>
 
 In this analysis, simply swapping V and K and nothing else outperforms everything except ISRT!
 - In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
 - VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
-  
+<br>
 
 **NotGate's ISRT/IndyRad layout** (QU -> SC for analysis; use w/ Sym mod)
 ```

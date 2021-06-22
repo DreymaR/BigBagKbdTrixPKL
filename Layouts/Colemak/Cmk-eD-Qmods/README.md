@@ -7,8 +7,8 @@ _The "bleeding-edge" Nyfee mod Colemak-QI_
 <br><br>
 
 
-Colemak Discord user Nyfee's "bleeding-edge" Colemak mods
----------------------------------------------------------
+Colemak Discord user Nyfee's "bleeding-edge" Colemak-Q mods
+-----------------------------------------------------------
 - Colemak design philosophy keeps ZXCV in place, and tries to avoid keys swapping hands.
 - These variants don't, with the purpose of squeezing out some more analyzer points and maybe layout quality.
 - The newest mods have scored quite well in analysis, possibly(!) beating Colemak-DH by a bit.
@@ -46,12 +46,12 @@ Remaps from Cmk-DH-Sym:
 / W ⇔ C / W > F > L / P ⇔ M / B ⇔ K / CM ⇔ SL / Q > QU > SC /
 ```
 
-#### ColemaQ(-F) by Nyfee, 2021-01:
+#### ColemaQ(-F) by Nyfee, 2021-01/03:
 ```
 ---------------------------
  1 2 3 4 5  6 7 8 9 0  = [ 
- ; w G p b  j l u y Q  - ] 
- a r s t F  m n e i o  ' \ 
+ ; w f p b  j l u y Q  - ] 
+ a r s t g  m n e i o  ' \ 
  z x c d K  V h / . ,      
 ---------------------------
 Remaps from Cmk-DH-Sym:
@@ -125,21 +125,21 @@ ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0
 <br><br>
 
 
-![EPKL help image for ColemaQ-F on an ANSI board](./ColemaQ-F_ANS-CAS_EPKL.png)
+![EPKL help image for ColemaQ on an ANSI board](./ColemaQ_ANS-CAS_EPKL.png)
 
-_The older "bleeding-edge" ColemaQ-F mod. Without the optional G-F swap it's simply ColemaQ._
+_The older "bleeding-edge" ColemaQ mod. Adding an optional G-F swap, it becomes ColemaQ-F._
 <br><br>
 
 
 My Personal Take On the ColemaQ Mod
 -----------------------------------
-**Note:** This was originally posted on the Colemak Discord, where unfortunately an unfinished version of it created a heated conflict with some of the mods' fans. My intention with it was an is just to discuss the claims that these mod elements are "objectively" better than Colemak-DH, claims that were made in the server channels on several occasions. I have nothing against these mods _per se_ but at the end of the day I do not see any real benefits with them either in sum, unlike many others.
+**Note:** This was originally posted on the Colemak Discord, where unfortunately an unfinished version of it created a heated conflict with some of the mods' defenders. My intention with it was an is just to discuss the claims that these mod elements are "objectively" better than Colemak-DH, claims that were made in the server channels on several occasions. I have nothing against these mods _per se_ but at the end of the day I do not see any real benefits with them either in sum.
 
 I've been analyzing Nyfee's and other mods with the [Colemakmods analyzer][CM-Ana] as it's easy to use and yet provides some useful insights, trying to find out what's behind the enthusiasm. This analyzer has a base effort score based on positions and travel, a same-finger bigram (SFB) effort and a near-finger bigram effort that punishes rolls between weak fingers. It's a fairly simple model and its end totals may well be debated, but as mentioned it gives some good insights and pointers.
 
 The ColemaQ mod consists of 3–4 simple key swaps from Colemak-DH and these aren't directly connected so it's easy to discuss and analyze them separately to gain some idea of their individual effects.
 
-I had a big A-ha! moment when I tried the V-K swap in ColemaQ (the only part of it that the analyzer actually liked, and it made sense to test it) and it created at least as many problems as it solved, given that I view the KN SFB as a zero-problem because I find it extremely easy to alt-finger. I also alt-finger LK easily enough, so I didn't find the V-K swap useful in sum since it creates other issues in turn that the analyzer didn't pick up on. I noticed the VE and CK bigrams, which aren't same-finger bigrams nor weak-finger near-bigrams but involve stretches that felt unpleasant to me from middle to index fingers. Their Colemak-DH counterparts, VK and CE, are less frequent.
+I had a big A-ha! moment when I tried the V-K swap in ColemaQ (the only part of it that the analyzer actually liked, thus it made sense to test it out) and it created at least as many problems as it solved, given that I view the KN SFB as a zero-problem because I find it extremely easy to alt-finger. I also alt-finger LK easily enough, so I didn't find the V-K swap useful in sum since it creates other issues in turn that the analyzer didn't pick up on. I noticed the VE and CK bigrams, which aren't same-finger bigrams nor weak-finger near-bigrams but involve stretches that felt unpleasant to me from middle to index fingers. Their Colemak-DH counterparts, VK and CE, are less frequent.
 
 The Q; swap seems entirely subjective to me at this point. I know its fans find it good somehow. Neither the analyzer nor I see any point in it, beyond a very minute reduction in SFB%.
 

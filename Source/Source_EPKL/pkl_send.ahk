@@ -51,17 +51,17 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["{¤}","{¤}","{¤}","{¤}"]
 	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
 	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
-	for sct, bs in compTables {
+	For sct, bs in compTables {
 		test .= "`n" . sct . ": " . bs
 	}
 ;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . compTables[sct] . "`n" . test, 2 )  ; eD DEBUG
 	key         := ""
-	for ix, chr in LastKeys { 									; Build a 4-char key to match the Compose table
+	For ix, chr in LastKeys { 									; Build a 4-char key to match the Compose table
 		chr     := formatUni( SubStr( chr, 2, 1 ) ) 			; Single-char keys are on the form "{¤}". Format as 0x#### hex string (4+ digits).
 		kys     .= "_" . chr 									; LastKeys on the form _0x#### repeated 4 times
 	}
-	for ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
-		for ix, sct in tables {
+	For ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
+		For ix, sct in tables {
 			keyArr  := getLayInfo( "comps_" . sct . len ) 		; Key arrays are marked both by ©-key names and lengths
 			key     := SubStr( kys
 				, 1 + InStr( kys, "_", , 0, len ) ) 			; The rightmost len chars of kys

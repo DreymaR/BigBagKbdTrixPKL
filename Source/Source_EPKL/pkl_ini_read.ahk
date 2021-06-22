@@ -77,7 +77,11 @@ pklIniKeyVal( row, ByRef key, ByRef val, esc=0, com=1 ) 	; Because PKL doesn't a
 	val := Trim( SubStr( row,    pos+1 ))
 	val := ( com ) ? strCom( val ) : val 					; Comment stripping
 	val := ( esc ) ? strEsc( val ) : val 					; Character escapes
-	key := ( pos == 0 ) ? "<NoKey>" : key
+	if ( StrLen( row ) == 0 || SubStr( row, 1, 1 ) == ";" ) {
+		key := "<Blank>"
+	} else if ( pos == 0 ) {
+		key := "<NoKey>"
+	}
 }
 
 strCom( str )												; Remove end-of-line comments (whitespace then semicolon)

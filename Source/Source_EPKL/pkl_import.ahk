@@ -26,7 +26,7 @@ from MSKLC to EPKL format under this folder?
 	pklSplash( IMP.Name, "Starting...", 2 )
 	IMP.Inbox := [ "CmkCAWeD_WIP" ] 					; eD WIP: Make a list of the _Inbox dir .klc files from a dir cmd
 	try {
-		for dirTag, theDir in IMP.Inbox
+		For dirTag, theDir in IMP.Inbox
 		{
 			if ( 0 )
 				Continue
@@ -69,19 +69,20 @@ _importOneLayout( IMP )								; Function to import one layout via a template .i
 ;;    - Uses an X11 keysymdef.h file to translate keysym names into Unicode points.
 ;
 
-importCompose() 	; eD WIP
+importComposer() 	; eD WIP
 {
 	Cmp         := {} 											; Variables for the Compose Import module
 	Cmp.Title   := "Compose Import Module"
 	Cmp.Dir     := "Files\Composer\"
-	Cmp.SymFile := Cmp.Dir . "KeySymDef.ini" 					; KeySymDef.ini
-	Cmp.SymOrig := Cmp.Dir . "keysymdef.h" 	 					; keysymdef.h
-	Cmp.RegExes := Cmp.Dir . "RegEx_Composer.ini"
+	Cmp.InDir   := Cmp.Dir   . "_Inbox\"
+	Cmp.SymFile := Cmp.InDir . "KeySymDef.ini" 					; KeySymDef.ini
+	Cmp.SymOrig := Cmp.InDir . "keysymdef.h" 	 				; keysymdef.h
+	Cmp.RegExes := Cmp.Dir   . "RegEx_Composer.ini"
 	
 /*
 	MsgBox, 0x021, Convert Compose tables?,  					; 0x100: 2nd button default. 0x30: Warning. 0x1: OK/Cancel
 (
-EPKL Compose Import Module
+EPKL Composer Import Module
 —————————————————————————————
 
 From a compose.h file in Files\Composer\_Inbox,
@@ -93,7 +94,7 @@ Large files may take some time.
 	IfMsgBox, Cancel 				; MsgBox type is 0x3 (Yes/No/Cancel) + 0x30 (Warning) + 0x100 (2nd button is default)
 		Return
 */ 	; eD DEBUG: Skip for now, while testing RegEx
-	if not keySyms imp_convertFile( Cmp, Cmp.SymOrig, Cmp.SymFile, "KeySymDef" )
+	if not keySyms imp_convertFile( Cmp, Cmp.SymOrig, Cmp.SymFile, "KeySymDef", "Key symbol definition file for the EPKL" . Cmp.Title )
 ;		pklErrorMsg( "Original KeySym file not found!`nExiting " . Cmp.Title )
 		Return
 	
@@ -104,52 +105,52 @@ Large files may take some time.
 ;;  - Save w/ a time stamp?
 }
 
-imp_convertFile( Imp, inFile, outFile, regExSect ) { 			; Convert a file into another format using a series of RegExes
-	if not FileExist( outFile ) {
-		pklSplash( Imp.Title, "Creating " . inFile . " now...", 2.5 )
+imp_convertFile( Imp, inFile, outFile, regExSect, title = "Imported EPKL file" ) {
+	if not FileExist( outFile ) { 								; Convert a file into another format using a series of RegExes
+		pklSplash( Imp.Title, "Creating " . inFile . " now..."  , 2.5 )
 	} else {
 		FileDelete % outFile 									; FileWrite appends to files, so delete any outFile. Remove this eventually? It's mostonly here for debugging
 		pklSplash( Imp.Title, "Deleted "  . inFile . " first...", 2.5 )
 	} 	; end if FileExist outFile
 	ini         := ".ini"
 	CRLF        := "`r`n"
-	QU          := "" 	;"""" 										; Literal double quote for the log, if applied. Use ” instead?
-	SPCs        := "        " . "        " . "        " . "        " . "        " 	; 8×5 = 40 spaces for padding log entries with
+	QU          := "" 	;"""" 									; Literal double quote for the log, if applied. Use ” instead?
+	SC          := "`;"
+	COMM        := SC . SC . "  " 								; Start of a ;; comment line
+	SPC8        := "        "
+	SPCs        := SPC8 . SPC8 . SPC8 . SPC8 . SPC8 			; 8×5 = 40 spaces for padding log entries with
 	
 	if not fileStr := pklFileRead( inFile, inFile )
 		Return false
-	; eD WIP: m) is multiline mode. \K to drop everything matched so far. (?=...) lookahead. (?<=...) lookbehind.
+	rExLog  := ";;  The following RegExes were used in the conversion of this file:" . CRLF 
+			 . ";;  ===============================================================" . CRLF 
 	regExes := {}
-	rExLog  := ";;  These RegExes were used in the conversion of this file:" . CRLF 
-			 . ";;  =======================================================" . CRLF . CRLF
-	loopInx := 0
-	Loop {
-		key := SubStr( "00" . ++loopInx, 1, 3 ) 				; 001, 002 ... 999
-		val := pklIniCSVs( key, -1, Imp.RegExes, regExSect, "⇒" )
-		if ( val[1] == -1 )
-			Break
-		val[1] := SubStr( val[1], 2, -1 ) 						; Any character can be used as "quotes" around the entries.
-		val[2] := SubStr( val[2], 2, -1 ) 						; Note: Actual " at entry boundaries may get stripped by IniRead().
-		val[2] := StrReplace( val[2], "\r\n", CRLF ) 			; Can't read newlines from the file it seems? So here's a workaround.
-;			( 1 ) ? pklDebug( "key = " key . "`n'" . val[1] . "'`n'" . val[2] . "'", 1.5 )  ; eD DEBUG
-		fileStr := RegExReplace( fileStr, val[1], val[2] )
-		val1    := QU . SubStr( val[1] . QU . SPCs, 1, 40 ) 	; Pad val[1] with spaces
-		val2    := ( val[2] == CRLF ) ? QU . "\r\n" . QU : QU . val[2] . QU
-		rExLog  .= ";;  " . val1 . " ⇒ " . val2 . CRLF
-	}
-	fileStr := rExLog . ";" . CRLF . "[" . regExSect . "]" . CRLF . fileStr
+	For ix, row in pklIniSect( Imp.RegExes, regExSect ) { 		; Read the list of keys and mouse buttons
+		pklIniKeyVal( row, key, val, 0 ) 						; Read without character escapes yet, as they should only be performed for val[2]
+		if ( key == "<NoKey>" || key == "<Blank>" )
+			Continue
+		key     := SubStr( key . SPC8, 1, 8 ) . " :  "
+		val     := StrSplit( val, "→", " `t" ) 					; Split by the special character →, ignore whitespace
+		needle  := SubStr( val[1], 2, -1 ) 						; Any character can be used as "quotes" around the entries.
+		repTxt  := SubStr( val[2], 2, -1 ) 						; Note: Actual " at entry boundaries may get stripped by IniRead().
+		spcN    := StrLen( SPCs )
+		val_1   := ( StrLen( needle ) > spcN ) ? QU . needle . QU
+				 : QU . SubStr( needle . QU . SPCs, 1, spcN ) 	; Pad needle with spaces, iff shorter than SPCs
+		val_2   := QU . repTxt . QU
+		repTxt  := strEsc( repTxt ) 							; AHK can't read newlines from the file? Use escapes in repTxt.
+		if ( upCase( SubStr(key,1,2) ) == "SR" ) {
+			fileStr := StrReplace(   fileStr, needle, repTxt ) 	; Search-and-replace is simpler and faster than RegEx
+		} else { 		; RegEx syntax tips: m) is multiline mode. \K to drop everything matched so far. (?=…)/(?<=…) lookahead/-behind. (?!…) negative lookahead.
+			fileStr := RegExReplace( fileStr, needle, repTxt )
+		}
+		rExLog  .= COMM . key . val_1 . " → " . val_2 . CRLF
+	} 	; end for row in regExSection
+	header  := getPklInfo( "pklHdrA" ) . title . CRLF 
+			 . COMM . "This file was imported and converted from " . inFile . " by the " . Imp.Title . getPklInfo( "pklHdrB" )
+	header  .= rExLog . SC . CRLF . CRLF
+	fileStr := header . "[" . regExSect . "]" . CRLF . fileStr
 	if not pklFileWrite( fileStr, outFile )
 		Return false
 	pklSplash( Imp.Title, "Importing " . inFile . " done!", 2 )
-	
-;		for row in StrSplit( fileStr, "`r`n" ) { 	; eD WIP: Use a set of multiline RegExReplace instead?
-;		} 	; end for row
-;		for ix, needle in needles {
-;			fileStr := RegExReplace( fileStr, needle, results[ix] )
-;		}
-;		RegExReplace( fileStr, "\R", "`r`n") 					; Normalize line endings to Windows format
-;		needle  := ">\K" . CO . tstx . "(.*>)" . CO . tstx 		; The RegEx to search for (ignore the start w/ \K)
-;		result  := dChr . tstx . "${1}" . aChr . tstx 			; CO -> dChr, then next CO -> aChr
-;		tmpFile := RegExReplace( fileStr, needle , result )
 	Return true
 } 	; end importFile

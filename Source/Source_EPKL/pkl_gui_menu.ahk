@@ -60,7 +60,7 @@
 	}
 	
 	Menu, Tray, add, %aboutMeMenuItem%, showAbout 							; About
-	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layout/Settings UI
+	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
 		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect DKs

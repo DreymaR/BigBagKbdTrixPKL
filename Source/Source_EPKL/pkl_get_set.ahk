@@ -176,13 +176,13 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		Return
 	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
 	cmpKeyTabs  := {} 											; Array of tables for each ©-key
-	for ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
+	For ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
 ;		if compKeys.HasKey( cmpKey ) 								; This key occurs in several mappings on one layout, so don't define it again
 ;			Return
 ;		pklInfo( "init_Composer( " . cmpKey . " )" ) 	; eD DEBUG
 		
 		tables      := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
-		for ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
+		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
 			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
 				sct     := SubStr( sct, 2 )
@@ -194,17 +194,17 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			} else {
 				usedTables[ sct ] := sendBS 						; compTables[ section ] contains the sendBS info for that table section
 			}
-			for ix, len in lengths { 								; Look for sequences of length for instance 1–4
+			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				keyArr%len% := {} 									; These reside in their own arrays, to reduce lookup time etc.
 			} 	; end for lengths
-			for ix, row in pklIniSect( mapFile, "compose_" . sct ) {
+			For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 				pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
 				if ( not SubStr( key, 1, 2 ) == "0x" ) { 			; The key is a sequence of characters instead of a sequence of hex strings
 					kyt := ""
 					kys := ""
-					for ix, chr in StrSplit( key ) { 
+					For ix, chr in StrSplit( key ) { 
 						if ( ix == 1 ) { 
-							cht := Format( "{:U}", chr ) 			; Also make an entry for the Titlecase version of the string key (if different)
+							cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
 						} else {
 							cht := chr
 						} 	; end if ch1
@@ -219,7 +219,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 				if ( kyt )
 					keyArr%len%[kyt] := val
 			} 	; end for row
-			for ix, len in lengths { 								; Look for sequences of length for instance 1–4
+			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				setLayInfo( "comps_" . sct . len, keyArr%len% )
 			} 	; end for lengths
 		} 	; end for sct in tables

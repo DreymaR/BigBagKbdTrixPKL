@@ -6,7 +6,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
 ![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)  
-  
+<br>
 
 Source code info
 ----------------
@@ -19,7 +19,7 @@ Info about DreymaR's Big Bag of keyboard trickery is found on:
 * The old [Forum BigBag][CmkBBT], including the [Big Bag for EPKL/Windows][CmkPKL] topic
 
 The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).  
-  
+<br>
 
 Compiling manually
 ------------------
@@ -30,7 +30,7 @@ Compiling manually
 * Choose to compile into your main EPKL folder.
 * You may choose any name for the .exe and run it afterwards.
 * Choose Source\Resources\Main.ico as the custom icon file.  
-  
+<br>
 
 Setup:
 ------
@@ -55,8 +55,8 @@ _Øystein "DreymaR" Gadmar, 2018-_
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [EPKLRM]: ./Files/ (EPKL Files folder/README)  
-  
-  
+<br><br>
+
 WARNING: HARD HAT AREA!
 =======================
 
@@ -65,8 +65,8 @@ EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... 
 This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
 
 ~ Øystein B "DreymaR" Gadmar, 2020  
-  
-  
+<br>
+
 DONE:
 -----
 **GENERAL/SETTINGS**
@@ -81,14 +81,15 @@ DONE:
 * Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Shorthand notation in EPKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@H resp. (@A for all at once).
 * Path shortcut for layout.ini entries, allowing ".\" instead of full path from EPKL root.  
-  
+<br>
+
 **MENUS/IMAGES**
 * Edited menus and the About... dialog.
 * Added a KeyHistory shortcut for debugging etc. Make it configurable in EPKL_Settings (eD_DebugInfo).
 * Added a Refresh hotkey. Reruns EPKL in case something got stuck or similar.
 * You can specify in the EPKL_Settings .ini which tray menu item is the default (i.e., activated by double-clicking the tray icon)
 * Would tray menu shortcuts work? E.g., &About. Answer: The menu shows it, but unselectable by key(?).
-  
+
 * Multilayered help images so fingering can be in one image and letters/symbols in another (saves file space, adds options).
 	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images.
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
@@ -105,7 +106,8 @@ DONE:
 	- The SVG image template file is in the same location. You could use another template and specify it in the HIG settings file.
 	- If you don't want the dead keys marked in yellow for instance, you could save the SVG template with that layer hidden.
 	- You can make full layout images showing keys as well, by combining with a Files\ImgBackground image of choice. I use the GIMP for that.
-  
+<br>
+
 **MAPPINGS**
 * Updated and added several layouts, including locale and script variants.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
@@ -129,7 +131,8 @@ DONE:
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (CtrlAltlIsAltGr).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
 * A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
-  
+<br>
+
 **OTHER/NOTES**
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_CheckForDKs( 0 ) somehow prevents it...
   
@@ -174,7 +177,8 @@ DONE:
 	- Settings for which keys are OSM and the wait time. Stacking OSMs works (e.g., tap RShift, RCtrl, Left).
 	- NOTE: Mapping LCtrl or RAlt as a Modifier causes trouble w/ AltGr. So they shouldn't be used as sticky mods or w/ Extend if using AltGr.
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
-  
+<br>
+
 **EPKL VERSION HISTORY:**
 * EPKL v1.0.0: Name change to EPiKaL PKL.
 	- Moved ./PKL_eD -> ./Files folder. Languages are now under Files.
@@ -362,7 +366,9 @@ DONE:
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-  
+
+	- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
+
 	- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
 		- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
 		- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
@@ -373,8 +379,7 @@ DONE:
 			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 		- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
 		- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
-  
-
+<br>
 
 TODO:
 -----
@@ -397,7 +402,7 @@ TODO:
 	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. See https://en.wikipedia.org/wiki/Greek_diacritics for tables.
 	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
 	- IPA on AltGr+Shift symbol keys?
-  
+<br>
 
 INFO: Some documentation notes
 ------------------------------

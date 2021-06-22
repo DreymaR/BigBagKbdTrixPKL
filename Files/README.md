@@ -36,7 +36,7 @@ Some of the mappings for my tap-Extend Kaomoji layer in the `_eD_DeadKeys.ini` f
 <;>     = → (ʘ言ʘ╬)                 		; ; - Shock
 <:>     = → (ʘ_ʘ;)                  		; : - --"--
 ```
-<br><br>
+<br>
 
 Extend1 mappings for the upper and home rows, from the `_eD_Extend.ini` file:
 ```
@@ -66,7 +66,7 @@ Co_O  = BackSpace
 Co_QU = AppsKey
 Co_BS = Browser_Favorites
 ```
-<br><br>
+<br>
 
 The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
 ```
@@ -91,7 +91,7 @@ Pent-15 =   "     "$$c.   `$b$F    .d$P"     \n"
 Pent-16 =   " CAW   `4$$$c.$$$..e$$P"   [eD] \n"
 Pent-17 =   "           `^^^^^^^`            \n"
 ```
-<br><br>
+<br>
 
 KLM remapping codes used in the `_eD_Remap` file:
 ```

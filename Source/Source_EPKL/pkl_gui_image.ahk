@@ -1,44 +1,37 @@
-﻿pkl_showHelpImage( activate = 0 )
+﻿;; ================================================================================================
+;;  EPKL Image module: Display help images by shift state, also for dead keys and Extend layers.
+;;    - Separate background image and Shift/AltGr indicator overlay, configurable in layout.ini
+;;    - Transparent color for images (may work for the GUI window vs underlying windows now?)
+;;    - Overall image opacity
+;;    - Six positions with adjustable screen gutters and right/left push in addition to up/down
+;;    - Rescaling by hotkey
+;
+
+pkl_showHelpImage( activate = 0 )
 {
-;;  EPKL: Added and reworked help image functionality
-;;      - Separate background image and Shift/AltGr indicator overlay, configurable in layout.ini
-;;      - Transparent color for images (may work for the GUI window vs underlying windows now?)
-;;      - Overall image opacity
-;;      - Six positions with adjustable screen gutters and right/left push in addition to up/down
-;;      - Rescaling by hotkey
-;;  
 ;;  Parameter values:
-;;   0 = display, if activated earlier
-;;   1 = activate
-;;  -1 = deactivate
-;;   2 = toggle image
-;;   3 = suspend on
-;;  -3 = suspend off
-;;   5 = zoom in/out
-;;   6 = move between positions
-;;   7 = opaque/transparent
-;;  
+;;  Show    	 0 = display, if activated earlier
+;;  Init    	 1 = activate
+;;  Kill    	-1 = deactivate
+;;  Toggle  	 2 = toggle image
+;;  SuspOn  	 3 = suspend on
+;;  SuspOff 	-3 = suspend off
+;;  Zoom    	 5 = zoom in/out
+;;  Move    	 6 = move between positions
+;;  Opaq    	 7 = opaque/transparent
 	
 	static im           := {} 			; Only one static now. But: Not compatible with %var% notation!
 ;	static im.Active    := 0 			; Whether the GUI is currently active; needed for toggling etc
-;	static im.ActiveBeforeSuspend := 0
 ;	static im.Prev 						; The previous image file; if it hasn't changed, don't redraw
-;	static im.PosXs     := []
-;	static im.PosYs     := []
 ;	static im.PosNr     := 5 			; Default image position is bottom center (used to be "xCenter")
-;	static im.Zooms     := [] 			; Default [ 100, 150 ]
-;	static im.ZoomNr    := 1
 ;	static im.Mrg       := [] 			; [ left, right, top, low, HorzPushPx ] image margins/gutters
 ;	static im.HorZone 					; Part of image width that activates horizontal push, in %
-;	static im.LayDir
 ;	static im.BgPath 					; Background image file
 ;	static im.ShRoot 					; Shift image directory
 ;	static im.BgColor 					; Image GUI background color is set from the (base)layout.ini
 ;	static im.Opacity 					; Global image opacity: 0 is invisible, 255 opaque
-	static imgX 						; Keep these for %var% use with the Gui commands
-	static imgY
-	static imgW
-	static imgH
+	static imgX, imgY 					; Keep these for %var% use with the Gui commands
+	static imgW, imgH
 	static CtrlKyImg 					; Image control handle
 	static CtrlBgImg 					; --"--
 	static CtrlShImg 					; --"--
@@ -54,10 +47,22 @@
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
 		im.Opacity  := im.OpacIni 											; The actual image opacity (0-255; 255 is opaque)
-		im.PosNr    := pklIniRead( "img_StartPos", 5 ) 						; Default position is bottom center (used to be "xCenter")
+		im.PosDef   := imgPosDic( pklIniRead( "img_StartPos", "BM" ), 5 ) 	; Default position is bottom center (used to be "xCenter")
+		tmpPosArr   := pklIniCSVs( "img_Positions", "2,5" ) 				; Allowed image positions (used to be top/bottom middle)
+		im.PosArr   := []
+		For ix, pos in tmpPosArr {
+			pos     := imgPosDic( pos, false )
+			if ( pos && not hasValue( im.PosArr, pos ) ) {
+				im.PosArr.Push( pos )
+			}
+		}
+;		( 1 ) ? pklDebug( "Positions:`n" . joinArr( tmpPosArr, "_" ) . "`n" . joinArr( im.PosArr, "_" ), 2 )  ; eD DEBUG
+		im.PosDef   := hasValue( im.PosArr, im.PosDef ) ? im.PosDef : im.PosArr[1]
+		im.PosIx    := hasValue( im.PosArr, im.PosDef ) 					; Physical image positions are Nr, logical Ix
+		im.PosNr    := im.PosDef
 		im.Zooms    := pklIniCSVs( "img_Zooms"    , "100,150"   )
 		im.ZoomNr   := 1
-		imgSizeWH   := pklIniCSVs( "img_sizeWH"   , "541,188",  "LayStk" ) 	; Image size in px, given as Width,Height
+		imgSizeWH   := pklIniCSVs( "img_sizeWH"   , "812,282",  "LayStk" ) 	; Image size in px, given as Width,Height
 		img_Scale   := pklIniRead( "img_scale"    , 100      ,  "LayStk" ) 	; Image scale factor, in % (may be float)
 		im.Width_   := Ceil( img_Scale * imgSizeWH[1] / 100 )
 		im.Height   := Ceil( img_Scale * imgSizeWH[2] / 100 )
@@ -70,32 +75,31 @@
 		initialized := true
 	}	; end first-time initialization
 	
-	if ( activate == 2 ) 				; Toggle
+	if ( activate == 2 ) 												; Toggle image
 		activate    := 1 - 2 * im.Active
 	if        ( activate == 1 ) { 		; Activate
 		im.Active   := 1
-	} else if ( activate == -1 ) { 		; Deactivate
+	} else if ( activate == -1 ) { 										; Deactivate
 		im.Active   := 0
-	} else if ( activate ==  3 ) { 		; Suspend on
+	} else if ( activate ==  3 ) { 										; Suspend on
 		im.ActiveBeforeSuspend := im.Active
 		activate    := -1
 		im.Active   := 0
-	} else if ( activate == -3 ) { 		; Suspend off
+	} else if ( activate == -3 ) { 										; Suspend off
 		if ( im.ActiveBeforeSuspend == 1 && im.Active != 1) {
 			activate    := 1
 			im.Active   := 1
 		}
-	} else if ( activate == 5 ) { 		; Zoom in/out
+	} else if ( activate == 5 ) { 										; Zoom in/out
 		if ( ++im.ZoomNr > im.Zooms.maxIndex() )
-			im.ZoomNr := 1
-		scaleImage := 1
-	} else if ( activate == 6 ) { 		; Move image +1 position
-		if ( ++im.PosNr > 6 )
-			im.PosNr := 1
-		scaleImage := 1
-	} else if ( activate == 7 ) { 		; Flip image between opaque and transparent (by opacity setting)
-		im.Opacity := ( im.Opacity == 255 ) ? im.OpacIni : 255
-		activate := 1 					; Ensure redrawing w/ new opacity
+			im.ZoomNr   := 1
+		scaleImage  := 1
+	} else if ( activate == 6 ) { 										; Move image +1 position
+		im.PosIx    := ( im.PosIx == im.PosArr.MaxIndex() ) ? 1 : ++im.PosIx
+		scaleImage  := 1
+	} else if ( activate == 7 ) { 										; Flip image between opaque and transparent (by opacity setting)
+		im.Opacity  := ( im.Opacity == 255 ) ? im.OpacIni : 255
+		activate    := 1 												; Ensure redrawing w/ new opacity
 	}
 	state := pklGetState()
 	
@@ -129,14 +133,19 @@
 	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
 	if ( title == "pklImgWin" ) {
-		if ( mouseX - imgX < im.Mrg[5] ) {
-			im.PosNr := ( im.PosNr = 6 ) ? 1 : ++im.PosNr 				; Right (with wrap)
-		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) {
-			im.PosNr := ( im.PosNr = 1 ) ? 6 : --im.PosNr 				; Left   --"--
-		} else {
-			im.PosNr := ( im.PosNr > 3 ) ? im.PosNr - 3 : im.PosNr + 3	; Top/Bottom
+		max         := im.PosArr.MaxIndex()
+		if ( mouseX - imgX < im.Mrg[5] ) { 								; Push +1/right (with wrap)
+			im.PosIx    := ( im.PosIx = max ) ? 1 : ++im.PosIx
+		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) { 				; Push -1/left   --"--
+			im.PosIx    := ( im.PosIx = 1 ) ? max : --im.PosIx
+		} else { 														; Push up/down, if available
+			here        := im.PosArr[ im.PosIx ]
+			move        := ( here > 3 ) ? here - 3 : here + 3
+			movIx       := hasValue( im.PosArr, move )
+			im.PosIx    := movIx ? movIx 
+						 : ( im.PosIx = max ) ? 1 : ++im.PosIx 			; If up/down isn't possible, move +1 instead
 		}
-		scaleImage := 1
+		scaleImage  := 1
 	}
 	
 	if getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
@@ -165,12 +174,12 @@
 		im.Mrg[5]   := Floor( imgW * im.HorZone / 100 ) 				; Horz. push zone, in px
 		imgHorPos := [ im.Mrg[1], ( A_ScreenWidth - imgW )/2, A_ScreenWidth  - imgW - im.Mrg[2] ]	; Left/Mid/Right
 		imgVerPos := [ im.Mrg[3],                             A_ScreenHeight - imgH - im.Mrg[4] ]	; Top/bottom
-		Loop % 6 {
+		Loop % 6 { 														; Available rescaled image positions on screen
 			im.PosXs[ A_Index ] := imgHorPos[ 1 + Mod( ( A_Index - 1 ) , 3 ) ]
 			im.PosYs[ A_Index ] := imgVerPos[ Ceil( A_Index / 3 ) ]
 		}
-		imgX    := im.PosXs[ im.PosNr ]
-		imgY    := im.PosYs[ im.PosNr ]
+		imgX        := im.PosXs[ im.PosArr[ im.PosIx ] ]
+		imgY        := im.PosYs[ im.PosArr[ im.PosIx ] ]
 	} else if ( im.Prev == imgPath ) && ( ! activate ) {
 		Return 															; Only redraw the images if they changed
 	}
@@ -188,11 +197,23 @@
 	}
 }
 
-pklGetState() 															; Get the 0:1:6:7 shift state as in layout.ini and img names
-{
-	state = 0
+pklGetState() { 														; Get the 0:1:6:7 shift state as in layout.ini and img names
+	state  = 0
 	state += 1 * getKeyState( "Shift" )
 ;	state += 2 * getKeyState( "Ctrl" )
 	state += 6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
 	Return state
+}
+
+imgPosDic( pos, def = 0 ) { 											; Get a numerical image position from a T/B+L/M/R one, if needed
+	posDic  := { "TL" : 1, "TM" : 2, "TR" : 3
+			   , "BL" : 4, "BM" : 5, "BR" : 6 }
+	if hasValue( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...
+		posNr   := pos
+	} else if posDic.HasKey( pos ) { 									; ...or in the posDic conversion array...
+		posNr   := posDic[ pos ]
+	} else { 															; ...or not
+		posNr   := def
+	}
+	Return posNr
 }

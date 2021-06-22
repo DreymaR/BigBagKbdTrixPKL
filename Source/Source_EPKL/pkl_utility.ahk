@@ -296,9 +296,10 @@ upCase( str ) {
 	Return % Format( "{:U}", str )
 }
 
-isInt( this ) { 											; AHK cannot use "is <type>" in expressions,
-	if this is integer 										;   so use this wrapper function instead
+isInt( this ) { 											; AHK cannot use "is <type>" in expressions...
+	if this is integer  									; ...so use this wrapper function instead.
 		Return true
+	Return false 											; Else. May not be strictly necessary in AHK syntax.
 }
 
 bool( val ) { 												; Convert an entry to true or false (default)

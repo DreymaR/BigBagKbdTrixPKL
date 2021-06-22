@@ -248,8 +248,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	( extKey ) ? map.Push( "`r`n" . extKey . " = Extend Modifier" ) 	; Define the Extend key. Lifts earlier req of a layout entry.
 	For ix, row in map { 												; Loop parsing the layout 'key = entries' lines
 		pklIniKeyVal( row, key, entries, 0, 0 ) 		; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
-		if ( key == "<NoKey>" ) || ( key == "shiftStates" ) 			; This could be mapped, but usually it's from pklIniKeyVal()
-			Continue
+		if InStr( "<NoKey><Blank>shiftStates", key ) 					; This could be mapped, but usually it's from pklIniKeyVal()
+			Continue 													; The shiftStates entry is special, defining the layout's states
 		KLM := _mapKLM( key, "SC" ) 									; Co/QW-2-SC KLM remapping, if applicable
 		key := scMapLay[ key ] ? scMapLay[ key ] : key 					; If there is a SC remapping, apply it
 		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
