@@ -131,9 +131,9 @@ _The older "bleeding-edge" ColemaQ mod. Adding an optional G-F swap, it becomes 
 <br><br>
 
 
-My Personal Take On the ColemaQ Mod
------------------------------------
-**Note:** This was originally posted on the Colemak Discord, where unfortunately an unfinished version of it created a heated conflict with some of the mods' defenders. My intention with it was an is just to discuss the claims that these mod elements are "objectively" better than Colemak-DH, claims that were made in the server channels on several occasions. I have nothing against these mods _per se_ but at the end of the day I do not see any real benefits with them either in sum.
+My personal take on the ColemaQ mod(s)
+--------------------------------------
+**Note:** This was originally posted on the Colemak Discord, where unfortunately an unfinished version of it created a heated conflict with some of the mods' defenders. My intention with it was an is just to discuss the claims that these mod elements are "objectively" better than Colemak-DH, claims that were made in the server channels on several occasions. I have nothing against these mods _per se_ but at the end of the day I do not see any real benefits with them either in sum. Caveat emptor.
 
 I've been analyzing Nyfee's and other mods with the [Colemakmods analyzer][CM-Ana] as it's easy to use and yet provides some useful insights, trying to find out what's behind the enthusiasm. This analyzer has a base effort score based on positions and travel, a same-finger bigram (SFB) effort and a near-finger bigram effort that punishes rolls between weak fingers. It's a fairly simple model and its end totals may well be debated, but as mentioned it gives some good insights and pointers.
 
@@ -141,14 +141,19 @@ The ColemaQ mod consists of 3–4 simple key swaps from Colemak-DH and these are
 
 I had a big A-ha! moment when I tried the V-K swap in ColemaQ (the only part of it that the analyzer actually liked, thus it made sense to test it out) and it created at least as many problems as it solved, given that I view the KN SFB as a zero-problem because I find it extremely easy to alt-finger. I also alt-finger LK easily enough, so I didn't find the V-K swap useful in sum since it creates other issues in turn that the analyzer didn't pick up on. I noticed the VE and CK bigrams, which aren't same-finger bigrams nor weak-finger near-bigrams but involve stretches that felt unpleasant to me from middle to index fingers. Their Colemak-DH counterparts, VK and CE, are less frequent.
 
-The Q; swap seems entirely subjective to me at this point. I know its fans find it good somehow. Neither the analyzer nor I see any point in it, beyond a very minute reduction in SFB%.
+The Q; swap seems entirely subjective to me at this point. I know its fans find it good somehow. Neither the analyzer nor I see any point in it, beyond a very minute reduction in SFB%. It's said that the QU roll is nice, but the QU bigram isn't at all bad without the swap and it isn't common either.
 
-The Comma-Slash swap reduces SFB% like nobody's business, but it too comes with problems of its own: It overloads the right-hand pinky which puts the analyzer off it. And it makes further modding like Wide and Sym much more tricky, as trying to find a good home for comma on a Wide config isn't easy at all. Whether the analyzer is right in claiming that the increase in other effort nullifies the benefit of less SFBs, is open for discussion. I think it may be onto something, but it will depend on how strong and agile your pinkies are. Experienced typists and players of instruments like the piano may have very well-trained pinkies indeed, while people coming straight from typing on the QWERTY layout typically have underused and weak right-hand pinkies and have been known to complain about Colemak's higher pinky usage without any mods added to increase it further.
+The Comma-Slash swap reduces SFB% like nobody's business, but it too comes with problems of its own: It overloads the right-hand pinky which puts the analyzer off it. And it makes further modding like Wide and Sym much more tricky, as trying to find a good home for comma on a Wide config isn't easy at all. Whether the analyzer is right in claiming that the increase in other effort nullifies the benefit of less SFBs, is open for discussion. I think it may be onto something, but it will depend on how strong and agile your pinkies are. Experienced typists and players of instruments like the piano may have very well-trained pinkies indeed, while people coming straight from typing on the QWERTY layout typically have underused and weak right-hand pinkies and have been known to complain about Colemak's higher pinky usage even without any mods added to further increase pinky load.
 
 So, that's my personal impression. Other people's experience will vary – for instance, they may have a system that reduces their pinky symbol usage with layers so the pinky won't get too taxed, and they may not mind losing mod modularity.
 
 But: We've had people advertising this and similar mods as "objectively better" and I don't think that's warranted at all. So I wanted to address such claims with a caveat based on my observations. I hope beginners don't get mired down in a bunch of advanced, unclear choices that are too hard to make for them. That may put some newcomers off Colemak entirely, which would be very sad.
-  
+<br>
+
+|![EPKL help image for Colemak-eD-QI CurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD-QI_ISO_CurlAWideSym/state0.png)|
+|   :---:   |
+|_Colemak-eD-QI_ISO_CurlAWideSym, unshifted state. Note the <kbd>Compose/Completion</kbd> key in the middle._|
+
 
 [CM-Ana]: http://colemakmods.github.io/mod-dh/analyze.html (Colemakmods Layout Analysis Tool)
 [NotGte]: https://notgate.github.io/layout/ (NotGate's layout page, home of the ISRT layout)

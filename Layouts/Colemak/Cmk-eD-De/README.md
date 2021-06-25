@@ -19,7 +19,7 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Colemak-eD-De German phonetic layout variant
 --------------------------------------------
 - For German, `äöü` are readily available on bracket+ISO keys, similarly to the Scandinavian `æøå`.
-- To allow easier Pan-Germanic typing, Scandinavian æøå letters are added on <kbd>AltGr</kbd>+{ <kbd>A</kbd> / <kbd>ISO</kbd> / <kbd>U</kbd> }.
+- To allow easier Pan-Germanic typing, Scandinavian `æøå` letters are added on <kbd>AltGr</kbd>+{ <kbd>A</kbd> / <kbd>ISO</kbd> / <kbd>U</kbd> }.
 <br>
 
 |![EPKL help image for Colemak-eD-De CAWS on an ISO board, unshifted state](./Cmk-eD-De_ISO_CurlAWideSym/state0.png)|

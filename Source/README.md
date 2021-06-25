@@ -366,8 +366,10 @@ DONE:
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-
 	- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
+
+	- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
+	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
 
 	- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
 		- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
@@ -379,6 +381,8 @@ DONE:
 			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 		- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
 		- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
+		- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
+		- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
 <br>
 
 TODO:

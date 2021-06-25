@@ -323,10 +323,10 @@ convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; e
 	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
 }
 
-formatUni( chr ) { 											; Format a character as a hex string
+formatUni( chr ) { 											; Format a character as a hex string, without the "0x"/"U"/"~"
 	chr     := Ord( chr ) 									; Unicode ordinal value
 	pad     := ( chr > 0x10000 ) ? "" : "04" 				; Pad with zeros iff ord < 0x10000, as done in X11 keysymdef.h
-	Return  Format( "0x{:" . pad . "x}", chr ) 				; Format as a Unicode hex string 0x#### (4+ digits)
+	Return  Format( "{:" . pad . "x}", chr ) 				; Format as a Unicode hex string [0x]#### (4+ digits)
 }
 
 pklFileRead( file, name = "" ) { 							; Read a file

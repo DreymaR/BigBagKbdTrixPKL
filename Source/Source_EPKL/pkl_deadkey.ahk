@@ -76,7 +76,7 @@ pkl_DeadKey( DK )
 	if ( dkEnt && (dkEnt + 0) == "" ) {						; Entry is a special string, like {Home}+{End} or prefix-entry
 		psp := pkl_ParseSend( dkEnt )
 		if ( not psp ) 					 					; If not a recognized prefix-entry...
-			SendInput {Raw}%dkEnt%							; ...just send the entry by default.
+			SendInput {Text}%dkEnt%							; ...just send the entry as text by default.
 		if ( PVDK && psp != "@" ) { 						; eD WIP: Allow chained DKs too! This means not erasing PVDK?
 			PVDK := ""
 			setKeyInfo( "CurrNumOfDKs", 0 )							; But that's not enough. It gets stuck in pkl_ParseSend()

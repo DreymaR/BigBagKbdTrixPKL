@@ -4,16 +4,6 @@
 ;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
-#NoEnv
-#Persistent
-#NoTrayIcon
-#InstallKeybdHook
-#SingleInstance force
-#MaxThreadsBuffer
-#MaxThreadsPerHotkey  3
-#MaxHotkeysPerInterval 300
-#MaxThreads 30
-
 ;;  ####################### user area #######################
 ;;  eD TOFIX: Can't define hotkeys/-strings here, as it prevents EPKL from working! Where, then?
 ; :*:'3o::https://www.colemak.org 	; eD WIP: Hotstring (replace text with other)
@@ -21,9 +11,6 @@
 
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
-
-;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
-;			- Is EPKL causing any kind of lag now?!?
 
 ;		- WIP: Compose table importer. 
 ;			- Use the actual /usr/share/X11/locale/en_US.UTF-8/Compose file: It has a zillion entries, near-instant joy.
@@ -34,18 +21,26 @@
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
 ;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
 
+;		- TOFIX: Greek doesn't compose (and others, I guess). `α' ⇒ ά` doesn't happen, whether on the Greek layout nor by AltGr+Shift+A (the latter is sent as {Text} though).
+;			- `ʒc ⇒ ǯ` (AltGr+z), same thing.
+;		- TOFIX: Trying to compose DK output. Sending it via pkl_SendThis() didn't do it?
+;		- WIP: Instead of 0x####, use U#### entries for the Compose throughout? In line with the X compose file (but not keysymdef.h). Saves a space, too...
+
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
-;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
-;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
-;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
-;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
-;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
 ;			- May have to clean up the state calculation in _keyPressed()
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
+
+;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
+;			- Is EPKL causing any kind of lag now?!?
+;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
+;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
+;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
+;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
+;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- 
 ;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
@@ -263,8 +258,10 @@
 ;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 ;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 ;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-
 ;		- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
+
+;		- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
+;		- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
 
 ;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
 ;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
@@ -276,9 +273,21 @@
 ;				- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 ;			- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
 ;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
+;			- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
+;			- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
 
 
 ;;  ####################### main      #######################
+
+#NoEnv
+#Persistent
+#NoTrayIcon
+#InstallKeybdHook
+#SingleInstance force
+#MaxThreadsBuffer
+#MaxThreadsPerHotkey  3
+#MaxHotkeysPerInterval 300
+#MaxThreads 30
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
 setPklInfo( "pklVers", "1.3.0β" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
@@ -289,13 +298,13 @@ setPklInfo( "pklHdrB", "`r`n"
 		. ";;  for Portable Keyboard Layout by Farkas Máté [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
 		. ";;  edition DreymaR (Øystein B Gadmar, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
 
-
 SendMode Event
 SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10. What is the actual possible lowest value, and what's most robust? How about -1 vs 0 vs 1?
 SetBatchLines, -1
 Process, Priority, , H 										; High process priority
 Process, Priority, , R 										; Real-time process priority
 SetWorkingDir, %A_ScriptDir%
+StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
 
 ; Global variables are largely replaced by the get/set info framework
 	global HotKeyBuffer = [] 					; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns

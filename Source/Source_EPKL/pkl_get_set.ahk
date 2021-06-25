@@ -208,8 +208,8 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 						} else {
 							cht := chr
 						} 	; end if ch1
-						kyt .= "_" . formatUni( cht )
-						kys .= "_" . formatUni( chr )
+						kyt .= "_0x" . formatUni( cht )
+						kys .= "_0x" . formatUni( chr )
 					} 	; end for chr
 					kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
 					key := SubStr( kys, 2 )

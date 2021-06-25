@@ -1,15 +1,15 @@
-﻿pkl_Send( ch, modif = "" ) { 			; Process a single char/str with mods for send, w/ OS DK & special char handling
+﻿pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
 	if pkl_CheckForDKs( ch )
 		Return
 	
 	char    := Chr(ch)
 	if ( ch > 32 ) { 					; ch > 128 works with Unicode AHK
-		this    := AltGrIsPressed() ? "{Text}" . char 	; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
-		                            : "{" . char . "}" 	; Normal char
+		this    := "{" . char . "}" 	; Normal char
 	if InStr( getCurrentWinLayDeadKeys(), char )
 		this    .= "{Space}" 			; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
-		this    := "{Blind}{Space}" 	; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
+		this    := "{Space}"
+		modif   := "{Blind}" 			; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
 	} else if ( ch == 9 ) {
 		this    := "{Tab}"
 	} else if ( ch > 0 && ch <= 26 ) {
@@ -22,14 +22,21 @@
 	} else if ( ch == 29 ) {
 		this    := "^{VKDD}" 			; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
-	pkl_SendThis( modif, this ) 		; Modif is only used for explicit mod mappings.
+	if AltGrIsPressed()
+		this    := "{Text}" . char 		; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
+	pkl_SendThis( this, modif ) 		; Modif is only used for explicit mod mappings.
 }
 
-pkl_SendThis( modif, this, resetLast = false ) { 				; Actually send a char/string
-	that    := StrReplace( this, "{Space}" ) 					; Strip off any spaces sent to release OS deadkeys
-	if ( StrLen( that ) == 3 ) { 								; Single-char keys are on the form "{¤}"
+pkl_SendThis( this, modif = "", resetLast = false ) { 			; Actually send a char/string
+	tht := RegExReplace( this, "\{Space\}|\{Blind\}" ) 			; Strip off any spaces sent to release OS deadkeys, and other such stuff
+	if        ( this == "{Space}" ) { 							; Replace space so it's recognizeable for LastKeys
+		tht := { }
+	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) { 	; eD WIP: Why don't these and Space compose now?
+		tht := "{" . SubStr( this, len+1 ) . "}"
+	}
+	if ( StrLen( tht ) == 3 ) { 								; Single-char keys are on the form "{¤}"
 		LastKeys := getKeyInfo( "LastKeys" )
-		LastKeys.Push( that )
+		LastKeys.Push( tht )
 		LastKeys.RemoveAt( 1 )
 		setKeyInfo( "LastKeys", LastKeys )
 	}
@@ -56,9 +63,8 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 	}
 ;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . compTables[sct] . "`n" . test, 2 )  ; eD DEBUG
 	key         := ""
-	For ix, chr in LastKeys { 									; Build a 4-char key to match the Compose table
-		chr     := formatUni( SubStr( chr, 2, 1 ) ) 			; Single-char keys are on the form "{¤}". Format as 0x#### hex string (4+ digits).
-		kys     .= "_" . chr 									; LastKeys on the form _0x#### repeated 4 times
+	For ix, chr in LastKeys { 									; Build a 4-char key from LastKeys to match the Compose table
+		kys     .= "_0x" . formatUni( SubStr( chr, 2, 1 ) ) 	; Format 4 single-char "{¤}" keys as a 4×[_0x####] hex string (4+ digits).
 	}
 	For ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
 		For ix, sct in tables {
