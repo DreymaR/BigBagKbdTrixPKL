@@ -1,10 +1,11 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-  
+<br>
+
 Other files info
 ----------------
 In this folder are some files that aren't used by EPKL but may still be interesting.
-  
+
 - The Key code table is a list of keys and their various names. See the [Remap file][MapIni] for what EPKL uses.
 - To see what keys are pressed and what output results, you can use the EPKL "AHK Key History..." menu.
 	- The AutoHotkey Key History menu item is shown only if advancedMode is set to yes in the EPKL_Settings.

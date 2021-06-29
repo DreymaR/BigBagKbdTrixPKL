@@ -1,11 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-
 <br>
 
 ![EPKL help image for IndyRad-eD-CAS on an ANSI board](./NotGate-ISRT_ANS-CAS_EPKL.png)
-
-<br>
+<br><br>
 
 NotGate's ISRT alias the "IndyRad" layout
 -----------------------------------------
@@ -18,19 +16,17 @@ NotGate's ISRT alias the "IndyRad" layout
 - About the name: NotGate simply named the layout ISRT but I found that boring. So I searched, and found:
     - [http://www.isrt.org.in/][IndSRT] - the Indian Society of Radiographers & Technologists! IndyRad!  (✿◠‿◠)
     - No one seem to be using that name though. Too bad, as I see the layout's name misspelled as IRST instead...
-
 <br>
 
 |![EPKL help image for IndyRad-eD-CAWS on an ISO board](./ISR-eD_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
 |_The ISRT-CAWS layout on an ISO board_|
-
 <br>
 
 NotGate's version history right before release:
 -----------------------------------------------
 This may not be central information, but the layout underwent some tweaks before release, making it easier to use Angle and Sym mods with ISRT.
-  
+<br>
 
 #### ISRT, 2021-01-27 (Q-Y swap improves Y position and Angle-ANSI mod):
 ```

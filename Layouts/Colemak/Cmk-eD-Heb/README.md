@@ -2,16 +2,16 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ![EPKL help image for Colemak-eD-Heb Angle-ISO](./Cmk-Heb_ISO-Angle_s0_EPKL.png)
-<br>
+<br><br>
 
 Colemak[eD] locale layouts
 --------------------------
 Most of the Cmk-eD locale variants use ISO keyboards with an AngleWide configuration to allow index finger access to the bracket and ISO_102 keys where I mostly put the needed locale letters.
-  
+
 This may be supplemented with Curl(DH) and Sym mods to provide Colemak-CAW(S) with locale letters. You could remove the Wide mod if desired, but then the right hand pinky may get overworked.
-  
+
 Some locales traditionally use ANSI keyboards though, and some prefer to use the AltGr key instead of dead keys. So there may be other variants available.
-<br>
+<br><br>
 
 Colemak-Heb Hebrew phonetic layout variant
 ------------------------------------------
@@ -32,23 +32,23 @@ Colemak-Heb Hebrew phonetic layout variant
 |   :---:   |
 |_Colemak-eD-Heb_ISO_CAWS, AltGr state._|
 
-<br>
+<br><br>
 
 More Hebrew script resources
 ----------------------------
 Here are the Biblical-SIL layout states, for reference. The images contain Unicode codes for all relevant glyphs, both for modern and ancient/Biblical Hebrew.
 <br>
 
-![Biblical Hebrew SIL layout, state 0](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state0.png)
+![Biblical Hebrew SIL layout, state 0](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state0.png)
 <br>
 
-![Biblical Hebrew SIL layout, state 1](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state1.png)
+![Biblical Hebrew SIL layout, state 1](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state1.png)
 <br>
 
-![Biblical Hebrew SIL layout, state 6](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state6.png)
+![Biblical Hebrew SIL layout, state 6](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state6.png)
 <br>
 
-![Biblical Hebrew SIL layout, state 7](./https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state7.png)
+![Biblical Hebrew SIL layout, state 7](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state7.png)
 <br>
 
 

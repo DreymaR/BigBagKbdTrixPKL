@@ -1,4 +1,4 @@
-﻿  													;   ###############################################################
+﻿													;   ###############################################################
 initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
 { 													;   ###############################################################
 	;; ================================================================================================
@@ -156,7 +156,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	setLayInfo( "NextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
 }	; end fn initPklIni()
 
-  													;   ###############################################################
+													;   ###############################################################
 initLayIni() 										;   ######################### layout.ini  #########################
 { 													;   ###############################################################
 	;; ================================================================================================
@@ -165,7 +165,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	static initialized  := false
 	
 	theLayout := getLayInfo( "ActiveLay" )
-	layDir  := bool(pklIniRead("compactMode")) ? "." 
+	layDir  := bool( pklIniRead("compactMode") ) ? "." 
 			 : layDir := "Layouts\" . theLayout 						; If in compact mode, use main dir as layDir
 	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
 	setPklInfo( "Dir_LayIni"        , layDir  )
@@ -333,7 +333,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
 				if InStr( "%→$§*α=β~«@Ð&¶", ksP ) {
 					ksE := ks2 											; = : Send {Blind} - use current mod state
-				} else {												; * : Omit {Raw}; use special !+^#{} AHK syntax
+				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
 				setKeyInfo( key . ks      , ksP ) 						; "key<state>"  is the entry prefix
@@ -346,9 +346,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}	; end For row in map
 	}	; end For layFile (parse layoutFiles)
 	
-  													;   ###############################################################
+													;   ###############################################################
 ;initOtherInfo() 									;   ####################### Other settings  #######################
-  													;   ###############################################################
+													;   ###############################################################
 	
 	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	

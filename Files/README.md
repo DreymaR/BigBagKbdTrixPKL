@@ -13,7 +13,23 @@ On the other hand, looking inside some of them should be useful if you want to u
 
 Examples From The EPKL Files
 ----------------------------
-Some of the mappings for my tap-Extend Kaomoji layer in the `_eD_DeadKeys.ini` file:
+A few of the several thousand(!) compose/completion sequences in the [`_eD_Compose.ini`](./_eD_Compose.ini) file:
+```
+noevil  = 🙈 🙉 🙊   				; U1f648/9/a # See/Hear/Speak-No-Evil Monkeys
+raise   = 🙌         				; U1f64c # Person Raising Both Hands In Celebration
+pray    = 🙏         				; U1f64f # Person with Folded Hands (Namaste)
+hmmm    = 🤔         				; U1f914 # Thinking Face
+hugs    = 🤗         				; U1f917 # Hugging Face
+rock    = 🤘         				; U1f918 # Sign of the Horns
+call    = 🤙         				; U1f919 # Call Me Hand
+fist    = 🤜         				; U1f91c # Right-Facing Fist
+love    = 🤟         				; U1f91f # I Love You Hand Sign
+kungfu  = 🥋         				; U1f94b # Martial Arts Uniform
+viper   = 🐍💨       				; U1f40d + U1f4a8 # Snake + Dash Symbol
+```
+<br>
+
+Some of the mappings for my tap-Extend Kaomoji layer in the [`_eD_DeadKeys.ini`](./_eD_DeadKeys.ini) file:
 ```
 <q>     = → (✿◠‿◠)                 		; q -†Kawaii qute "Flower girl" (eyes may show as boxes)
 <Q>+    = → (❁°‿°)                  		; Q - --"-- - alt. (❁´◡`)
@@ -38,7 +54,7 @@ Some of the mappings for my tap-Extend Kaomoji layer in the `_eD_DeadKeys.ini` f
 ```
 <br>
 
-Extend1 mappings for the upper and home rows, from the `_eD_Extend.ini` file:
+Extend1 mappings for the upper and home rows, from the [`_eD_Extend.ini`](./_eD_Extend.ini) file:
 ```
 QW_Q  = Esc
 QW_W  = WheelUp 2
@@ -68,7 +84,7 @@ Co_BS = Browser_Favorites
 ```
 <br>
 
-The crazy "PowerString 666" from the `_eD_PwrStrings.ini` file:
+The crazy "PowerString 666" from the [`_eD_PwrStrings.ini`](./_eD_PwrStrings.ini) file:
 ```
 Pent    = <Multiline> 17 		; A 17 line string, defined below
 ;;  The purpose of this power(!)string is to improve Colemak's daemon summoning capabilities. \m/
@@ -93,7 +109,7 @@ Pent-17 =   "           `^^^^^^^`            \n"
 ```
 <br>
 
-KLM remapping codes used in the `_eD_Remap` file:
+KLM remapping codes used in the [`_eD_Remap`](./_eD_Remap.ini) file:
 ```
 ;;  This is a table of KeyLayoutMap (KLM) codes from the _eD_Remap.ini file. You can use QW### or Co### for EPKL Scan Code (SC) and Virtual Key (VK) names.
 ;;  KLM codes are intuitive and make no difference between ANSI & ISO board types. Examples: QW_E, Co_F, QW_CM, QWSPC. For VK, vc=QW codes make the most sense.

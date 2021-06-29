@@ -73,7 +73,7 @@ Colemakmods analysis of several "bleeding-edge" Colemak mods and more
 - These steps are from the Colemak-QI mod by Nyfee, and proposed additions thereto.
 - ColemakMods analysis by ~Renato, 2021-04-03, on a 3×10 matrix.
 - Changes in base, SFB and total (which also includes "near-finger" bigram effort) were reported as Δ rel. to Colemak-DH.
-  
+<br>
 
 ```
 Cmk-DH+swaps/loops: bas.ef. sfb-ef. nfb-ef. tot.ef. SFB%      Δbas.e  Δsfb-e  Δtot.e
@@ -148,7 +148,7 @@ The Comma-Slash swap reduces SFB% like nobody's business, but it too comes with 
 So, that's my personal impression. Other people's experience will vary – for instance, they may have a system that reduces their pinky symbol usage with layers so the pinky won't get too taxed, and they may not mind losing mod modularity.
 
 But: We've had people advertising this and similar mods as "objectively better" and I don't think that's warranted at all. So I wanted to address such claims with a caveat based on my observations. I hope beginners don't get mired down in a bunch of advanced, unclear choices that are too hard to make for them. That may put some newcomers off Colemak entirely, which would be very sad.
-<br>
+<br><br>
 
 |![EPKL help image for Colemak-eD-QI CurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD-QI_ISO_CurlAWideSym/state0.png)|
 |   :---:   |

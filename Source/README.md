@@ -5,7 +5,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
-![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)  
+![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)
 <br>
 
 Source code info
@@ -13,12 +13,12 @@ Source code info
 This is the source code README, briefly explaining how to compile PKL/EPKL with AHK2EXE.
 
 To this purpose, there's a [Compile_EPKL.bat][MakExe] file that makes and runs EPKL.exe.
-  
+
 Info about DreymaR's Big Bag of keyboard trickery is found on:
 * The [Big Bag pages][BBTind] with better explanations and links
 * The old [Forum BigBag][CmkBBT], including the [Big Bag for EPKL/Windows][CmkPKL] topic
 
-The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).  
+The [EPKL][EPKLRM] source code is based on a decompiled PKL v0.4preview (formerly v0.3r85).
 <br>
 
 Compiling manually
@@ -54,7 +54,7 @@ _Øystein "DreymaR" Gadmar, 2018-_
 [BBTind]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
-[EPKLRM]: ./Files/ (EPKL Files folder/README)  
+[EPKLRM]: ./Files/ (EPKL Files folder/README)
 <br><br>
 
 WARNING: HARD HAT AREA!
@@ -64,7 +64,7 @@ EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... 
 
 This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
 
-~ Øystein B "DreymaR" Gadmar, 2020  
+~ Øystein B "DreymaR" Gadmar, 2020
 <br>
 
 DONE:
@@ -80,7 +80,7 @@ DONE:
 	- This also makes Refresh robust against layout changes in EPKL_Layouts.
 * Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
 * Shorthand notation in EPKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@H resp. (@A for all at once).
-* Path shortcut for layout.ini entries, allowing ".\" instead of full path from EPKL root.  
+* Path shortcut for layout.ini entries, allowing ".\" instead of full path from EPKL root.
 <br>
 
 **MENUS/IMAGES**
@@ -135,7 +135,8 @@ DONE:
 
 **OTHER/NOTES**
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_CheckForDKs( 0 ) somehow prevents it...
-  
+<br>
+
 **PKL[eD] VERSION HISTORY**
 * PKL[eD] v0.4.0: Transition to AHK v1.1
 	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
@@ -365,13 +366,11 @@ DONE:
 		- Fixed: Earlier, if Win+v (Paste Clipboard) was pressed, the clipboard would often close again unless Win were released very fast.
 	- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
-	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
 	- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
-
 	- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
 	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
-
-	- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
+	- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
+	- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up previously sent characters using specified tables.
 		- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
 		- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
 		- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
@@ -380,9 +379,14 @@ DONE:
 		- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
 			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 		- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
-		- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
+		- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything. Backslash escapes are allowed.
 		- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
 		- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
+		- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
+		- See the `_eD_Compose.ini` file for more examples and explanations.
+	- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
+		- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.
+		- The [keysyms.txt](https://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt) file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) uses proper Unicode.
 <br>
 
 TODO:
@@ -429,8 +433,8 @@ INFO: Some documentation notes
     - In the Extend section:
         - Don't have empty mappings in the Extend section. Comment these out.
         - By default {} is added to send keys by name. To escape these, use a prefix-entry or }‹any string›{.
-  
-  
+<br>
+
 **Entry format info from Farkas' sample.ini layout file:** (Note that EPKL now uses '@' for 'dk' entries etc)
 ```
 Scan code =
@@ -448,7 +452,7 @@ Scan code =
 			AltGr + Shift + Key == CapsLock + AltGr + Key
 	Output for each shift state (see http://www.autohotkey.com/docs/commands/Send.htm):
 		#       send utf-8 characters (one or more)
-		*####   send without {Raw} – that is, interpret key names (and ^+1#{} ?) in AHK style
+		*####   send without {Text} – that is, interpret key names (and ^+1#{} ?) in AHK style
 		=####   send {Blind} – that is, keep the modifier state intact
 		%####   utf ligature
 		--      disabled key/state entry

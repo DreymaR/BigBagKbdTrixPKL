@@ -169,7 +169,7 @@ detectCurrentWinLayDeadKeys()
 		Run Notepad
 		Sleep 2000
 		txt := getPklInfo( "DetecDK_" .  "EDITOR" )
-		SendInput {Raw}%txt%
+		SendInput {Text}%txt%
 		Send {Enter}
 	} else {
 		Send `n{Space}+{Home}{Del}
@@ -191,12 +191,12 @@ detectCurrentWinLayDeadKeys()
 	Send {Ctrl Up}{Shift Up}
 	Send +{Home}{Del}
 	txt := getPklInfo( "DetecDK_" . "DEADKEYS" )
-	Send {Raw}%txt%:%A_Space%
-	Send {Raw}%CurrentWinLayDKs%
+	Send {Text}%txt%:%A_Space%
+	Send {Text}%CurrentWinLayDKs%
 	Send {Enter}
 	
 	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
-	Send {Raw}%txt%:%A_Space%
+	Send {Text}%txt%:%A_Space%
 	WinLayoutID := getWinLocaleID() ; eD
 	Send %WinLayoutID%
 	Send {Enter}

@@ -30,7 +30,7 @@
 pkl_SendThis( this, modif = "", resetLast = false ) { 			; Actually send a char/string
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" ) 			; Strip off any spaces sent to release OS deadkeys, and other such stuff
 	if        ( this == "{Space}" ) { 							; Replace space so it's recognizeable for LastKeys
-		tht := { }
+		tht := "{ }"
 	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) { 	; eD WIP: Why don't these and Space compose now?
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
@@ -58,13 +58,10 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["{¤}","{¤}","{¤}","{¤}"]
 	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
 	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
-	For sct, bs in compTables {
-		test .= "`n" . sct . ": " . bs
-	}
-;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . compTables[sct] . "`n" . test, 2 )  ; eD DEBUG
-	key         := ""
+	key     := ""
 	For ix, chr in LastKeys { 									; Build a 4-char key from LastKeys to match the Compose table
-		kys     .= "_0x" . formatUni( SubStr( chr, 2, 1 ) ) 	; Format 4 single-char "{¤}" keys as a 4×[_0x####] hex string (4+ digits).
+		kys .= "_U" . formatUnicode( SubStr( chr, 2, 1 ) ) 		; Format 4 single-char "{¤}" keys as a 4×[_U####] hex string (4+ digits).
+;		debug   .= " , " . chr
 	}
 	For ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
 		For ix, sct in tables {
@@ -76,10 +73,13 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 				bsp := len * compTables[ sct ] 					; The first char of the entry is whether to send Backs (eating patterns)
 				SendInput {Backspace %bsp%} 					; Send Back according to key length. Undo won't work as it may remove several characters per press.
 				ent := val
-				if not pkl_ParseSend( ent ) 					; Unified prefix-entry syntax
+				if not pkl_ParseSend( ent ) { 					; Unified prefix-entry syntax
+					ent := strEsc( ent ) 						; Escape special chars with backslashes (not necessary for a single \ )
 					SendInput {Text}%ent% 						; Send the entry as {Text} by default
-				setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 	; Reset the last-keys-pressed buffer
-;	( len <= 4 ) ? pklDebug( "kys: " . kys . "`nlen: '" . len . "`n`nkey: " . key . "`nval: '" . val . "'`n`ntest: BS[" . sct . "] = " . compTables[sct], 3 )  ; eD DEBUG
+				}
+				nullArr := getKeyInfo( "NullKeys" )
+				setKeyInfo( "LastKeys", nullArr.Clone() ) 		; Reset the last-keys-pressed buffer. Note: Use Clone() here, or you'll make a link to NullKeys?
+;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG
 				Return 											; If a longer match is found, don't look for shorter ones
 			} 	; end if keyArr
 		} 	; end for sections
@@ -110,16 +110,16 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	sendIt  := ( mode == "ParseOnly" ) ? false : true 			; Parse Only mode returns prefixes without sending
 	pfix    := -1 												; Prefix for the Send commands, such as {Blind}
 	enty    := SubStr( entry, 2 )
-	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Raw}
+	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
 		mode    := "Input"
-		pfix    := "{Raw}"
+		pfix    := "{Text}"
 	} else if ( psp == "$" || psp == "§" ) { 					; $§ : Literal/string by EPKL SendMessage
 		mode    := "SendMess"
 		pfix    := ""
 	} else if ( enty == "{CapsLock}" ) {						; CapsLock toggle. Stops further entries from misusing Caps?
 		togCap  := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
-	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special !+^#{} syntax, omitting {Raw}
+	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special !+^#{} syntax, omitting {Text}
 		pfix    := ""
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		pfix    := "{Blind}"
@@ -156,6 +156,10 @@ pkl_SendMessage( string ) { 									; Send a string robustly by char messages, 
 	ControlGetFocus, vClsN, ahk_id%hWnd% 	; "If this line doesn't work, try omitting vCtlClsN to send directly to the window"
 	Loop, Parse, string
 		SendMessage, 0x102, % Ord( A_LoopField ), 1, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_CHAR sends a character input message
+;		SendMessage, 0x100, 0x0D, 0, %vClsN%, ahk_id%hWnd%		; 0x100 = WM_KEYDOWN. Sends a Windows key input message.
+;		SendMessage, 0x101, 0x0D, 0, %vClsN%, ahk_id%hWnd%		; 0x100 = WM_KEYUP, 0x0D = VK_RETURN = {Enter}.
+;		ControlSend, %vClsN%, +{Enter}							; Try ControlSend instead.
+;		Control, EditPaste, +{Enter}, %vClsN%					; Try Control, EditPaste instead.
 }
 
 pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard (may fail if the clipboard is big)
@@ -177,8 +181,8 @@ pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard
 _strSendMode( string, strMode ) {
 	if ( not string )
 		Return true
-	if        ( strMode == "Input"     ) { 				; Send by the standard SendInput {Raw} method
-		SendInput {Raw}%string% 						; - May take time, and any modifiers released meanwhile will get stuck!
+	if        ( strMode == "Input"     ) { 				; Send by the standard SendInput method. Used to be {Raw}.
+		SendInput {Text}%string% 						; - May take time, and any modifiers released meanwhile will get stuck!
 	} else if ( strMode == "Text"      ) { 				; Send by the SendInput {Text} method (AHK v1.1.27+)
 		SendInput {Text}%string% 						; - More reliable? Only backtick characters are translated.
 	} else if ( strMode == "Message"   ) { 				; Send by SendMessage WM_CHAR system calls
@@ -222,12 +226,6 @@ pkl_PwrString( strName ) { 										; Send named literal/ligature/powerstring f
 		{														; - This is more robust since apps use different breaks
 			if ( A_Index > 1 )
 				SendInput +{Enter}								; Send Shift+Enter, which should be robust for msg boards.
-;				WinGet, hWnd, ID, A 							; eD TRY: Use SendMessage to send Enter then wait for it to happen.
-;				ControlGetFocus, vClsN, ahk_id%hWnd%
-;				SendMessage, 0x100, 0x0D, 0, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_KEYDOWN. Sends a Windows key input message.
-;				SendMessage, 0x101, 0x0D, 0, %vClsN%, ahk_id%hWnd%	; 0x100 = WM_KEYUP, 0x0D = VK_RETURN = {Enter}.
-;				ControlSend, %vClsN%, +{Enter}					; Try ControlSend instead.
-;				Control, EditPaste, +{Enter}, %vClsN%			; Try Control, EditPaste instead.
 				Sleep 50										; Wait so the Enter gets time to work. Need ~50 ms?
 			if ( not _strSendMode( A_LoopField , strMode ) )	; Try to send by the chosen method
 				Break

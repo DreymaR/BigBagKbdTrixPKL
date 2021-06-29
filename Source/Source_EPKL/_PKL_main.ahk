@@ -12,19 +12,9 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Compose table importer. 
-;			- Use the actual /usr/share/X11/locale/en_US.UTF-8/Compose file: It has a zillion entries, near-instant joy.
-;				- Have to translate non-letter glyph names and U####. Key names are found in the keysymdef.h file.
-;				- Typical Compose file entry:   <Multi_key> <o> <c>              	: "©"   copyright # COPYRIGHT SIGN
-;				- Typical keysymdef.h entry:    #define XK_o                             0x006f  /* U+006F LATIN SMALL LETTER O */
-;			- So we could translate the X11 Compose entries to Unicode points that will be the keys for the _eD_Compose.ini file.
-;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
-;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
-
-;		- TOFIX: Greek doesn't compose (and others, I guess). `α' ⇒ ά` doesn't happen, whether on the Greek layout nor by AltGr+Shift+A (the latter is sent as {Text} though).
-;			- `ʒc ⇒ ǯ` (AltGr+z), same thing.
-;		- TOFIX: Trying to compose DK output. Sending it via pkl_SendThis() didn't do it?
-;		- WIP: Instead of 0x####, use U#### entries for the Compose throughout? In line with the X compose file (but not keysymdef.h). Saves a space, too...
+;		- WIP: Could I make Back remove the last character from the Compose queue too?
+;		- WIP: Could I push single-char Compose output to the LastKeys queue, thereby allowing compose chaining?
+;		- TODO: A compose of U####[#] could send the U+#### Unicode point!
 
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
@@ -38,11 +28,14 @@
 ;			- Is EPKL causing any kind of lag now?!?
 ;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
 ;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
-;		- TOFIX: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
+;		- TODO: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
 ;		- 
-;		- WIP: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
+;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
+;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
+;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
+;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- WIP: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
 ;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
@@ -56,13 +49,13 @@
 ;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 ;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
-;		- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README?
-;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. 
+;		- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
+;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Compose key!!!
 ;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
 ;		- 
-;		- WIP: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
+;		- TODO: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
 ;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
@@ -136,7 +129,7 @@
 ;		- TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. 
 ;			- Maybe that should be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM KbdTypes?
 ;		- TODO: Try out <one Shift>+<other Shift> = Caps? How to do that? Some kind of ToM, where the Shift is Shift when held but Caps when (Shift-)tapped?
-;		- WIP: Import KLC. Use a layout header template.
+;		- TODO: Import KLC. Use a layout header template.
 ;			- Could have a section of RegEx conversions with name tags in the template, which gets used and then cut out.
 ;			- Each such entry could have a tagName = ## SplitBy JoinBy <regex>
 ;				- Allow both RegExReplace and RegExMatch entries? The latter should use O) match objects?
@@ -257,13 +250,11 @@
 ;			- Fixed: Earlier, if Win+v (Paste Clipboard) was pressed, the clipboard would often close again unless Win were released very fast.
 ;		- Seems all the `LCtrl+RAlt` sending around `AltGr` in `pkl_SendThis() `wasn't necessary? It has been removed.
 ;		- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
-;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
 ;		- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
-
 ;		- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
 ;		- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
-
-;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up to four previously sent characters using specified tables.
+;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
+;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up previously sent characters using specified tables.
 ;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
 ;			- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
 ;			- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
@@ -272,9 +263,14 @@
 ;			- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
 ;				- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 ;			- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
-;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything.
+;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything. Backslash escapes are allowed.
 ;			- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
 ;			- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
+;			- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
+;			- See the `_eD_Compose.ini` file for more examples and explanations.
+;		- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
+;			- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.
+;			- The [keysyms.txt](https://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt) file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) uses proper Unicode.
 
 
 ;;  ####################### main      #######################
@@ -308,7 +304,7 @@ StringCaseSense, On 										; All string comparisons are case sensitive (AHK d
 
 ; Global variables are largely replaced by the get/set info framework
 	global HotKeyBuffer = [] 					; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
-;	global UIsel 								; Variable for UI selection (use Control names to see which one) 	; eD WIP
+;	global UIsel 								; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
 setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
 setKeyInfo( "CurrBaseKey_", 0 ) 				; Current base key 					(was 'CurrentBaseKey')
@@ -508,8 +504,8 @@ getWinInfo:
 Return
 
 epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
-	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .8 )
-;	importLayouts() 									; eD WIP: Import a MSKLC layout file to EPKL format
+	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .6 )
+;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 	importComposer() 									; eD WIP: Import an X11 Compose file to EPKL format
 ;	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 Return

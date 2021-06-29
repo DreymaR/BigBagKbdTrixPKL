@@ -167,9 +167,15 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	
 	mapFile := pklIniRead( "cmposrFile", , "LayStk" ) 			; eD TODO: Allow searches in BasIni and LayIni as well?! Lay > Bas > Compose, as usual
 	if ( not initialized ) { 									; First-time initialization
-		setKeyInfo( "LastKeys", [ "", "", "", "" ] ) 			; Used by the Compose/Completion key, via pkl_SendThis()
 		lengths := pklIniCSVs( "lengths", "4,3,2,1",  mapFile ) 	; An array of the sequence lengths to look for. By default 1–4, longest first.
 		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
+		keyArr  := []
+		Loop % Max( lengths* ) {
+			keyArr.Push( "{¤}" ) 								; Example: [ "", "", "", "" ] if 4 is the max compose length used
+			test .= A_Index
+		}
+		setKeyInfo( "NullKeys", keyArr )
+		setKeyInfo( "LastKeys", keyArr.Clone() ) 				; Used by the Compose/Completion key, via pkl_SendThis()
 		initialized := true
 	} 	; end if init
 	if compKeys.IsEmpty()
@@ -199,22 +205,22 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			} 	; end for lengths
 			For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 				pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
-				if ( not SubStr( key, 1, 2 ) == "0x" ) { 			; The key is a sequence of characters instead of a sequence of hex strings
+				if ( not InStr( key, "U" ) == 1 ) { 				; The key is a sequence of characters instead of a sequence of hex strings
 					kyt := ""
 					kys := ""
-					For ix, chr in StrSplit( key ) { 
+					For ix, chr in StrSplit( key ) { 				; Format the character string to a U####[_U####]* key
 						if ( ix == 1 ) { 
 							cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
 						} else {
 							cht := chr
 						} 	; end if ch1
-						kyt .= "_0x" . formatUni( cht )
-						kys .= "_0x" . formatUni( chr )
+						kyt .= "_U" . formatUnicode( cht )
+						kys .= "_U" . formatUnicode( chr )
 					} 	; end for chr
 					kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
 					key := SubStr( kys, 2 )
-				} 	; end if 0x####
-				dum := StrReplace( key, "0x",, len ) 				; Trick to count the number of "0x", i.e., the pattern length
+				} 	; end if U####
+				dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
 				keyArr%len%[key] := val
 				if ( kyt )
 					keyArr%len%[kyt] := val

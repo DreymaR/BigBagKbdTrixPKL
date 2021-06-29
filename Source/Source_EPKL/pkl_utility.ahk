@@ -323,37 +323,10 @@ convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; e
 	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
 }
 
-formatUni( chr ) { 											; Format a character as a hex string, without the "0x"/"U"/"~"
+formatUnicode( chr ) { 										; Format a character as a hex string, without the "0x"/"U"/"~"
 	chr     := Ord( chr ) 									; Unicode ordinal value
 	pad     := ( chr > 0x10000 ) ? "" : "04" 				; Pad with zeros iff ord < 0x10000, as done in X11 keysymdef.h
 	Return  Format( "{:" . pad . "x}", chr ) 				; Format as a Unicode hex string [0x]#### (4+ digits)
-}
-
-pklFileRead( file, name = "" ) { 							; Read a file
-	name := ( name ) ? name : file
-	try { 													; eD NOTE: Use Loop, Read, ? Nah, 160 kB or so isn't big.
-		FileRead, content, *P65001 %file% 					; "*P65001 " is a way to read UTF-8 files
-	} catch {
-		pklErrorMsg( "Failed to read `n  " . name )
-		Return false
-	}
-	Return content
-}
-
-pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
-	name := ( name ) ? name : file
-	try {
-		FileAppend, %content%, %file%, UTF-8
-	} catch {
-		pklErrorMsg( "Failed writing to `n  " . file )
-		Return false
-	}
-	Return true
-}
-
-thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
-	FormatTime, theNow,, yyyy-MM-dd_HH-mm
-	Return theNow
 }
 
 hasValue( haystack, needle ) { 								; Check if an array object has a certain value

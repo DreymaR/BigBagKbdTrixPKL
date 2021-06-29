@@ -68,7 +68,7 @@ pklIniCSVs( key, default = "", iniFile = "PklSet", section = "pkl"
 }
 
 ;; ================================================================================================
-;;  Helper functions for .ini file handling
+;;  Helper functions for .ini and other file handling
 ;
 pklIniKeyVal( row, ByRef key, ByRef val, esc=0, com=1 ) 	; Because PKL doesn't always use IniRead? Why though?
 {
@@ -98,4 +98,31 @@ strEsc( str )												; Replace \# character escapes in a string
 	str := StrReplace( str, "\b", "`b" )
 	str := StrReplace( str, "\\", "\"  )
 	Return str
+}
+
+pklFileRead( file, name = "" ) { 							; Read a file
+	name := ( name ) ? name : file
+	try { 													; eD NOTE: Use Loop, Read, ? Nah, 160 kB or so isn't big.
+		FileRead, content, *P65001 %file% 					; "*P65001 " is a way to read UTF-8 files
+	} catch {
+		pklErrorMsg( "Failed to read `n  " . name )
+		Return false
+	}
+	Return content
+}
+
+pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
+	name := ( name ) ? name : file
+	try {
+		FileAppend, %content%, %file%, UTF-8
+	} catch {
+		pklErrorMsg( "Failed writing to `n  " . file )
+		Return false
+	}
+	Return true
+}
+
+thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
+	FormatTime, theNow,, yyyy-MM-dd_HH-mm
+	Return theNow
 }

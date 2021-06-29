@@ -2,10 +2,10 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ### **EPiKaL PortableKeyboardLayout** for Windows, with layouts
-  
+<br><br>
 
-![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Cmk-ISO-CAWS_s0_EPKL.png)
-  
+![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Colemak-ISO-CAWS_s0_EPKL.png)
+<br><br>
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
@@ -20,7 +20,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 * Info about DreymaR's Big Bag of Keyboard Trickery is mainly found on the [BigBag site at dreymar.colemak.org][BBTind].
     - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
     - In the [old Forum BigBag][CmkBBT] there's a specific [topic for EPKL/Windows][CmkPKL] too. It's old though.
-  
+<br>
 
 Getting EPKL up and running
 ---------------------------
@@ -40,10 +40,10 @@ Getting EPKL up and running
     - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym etc.
 * Help images by default show up when modifiers are pressed. On the `Settings` tab, change `img_HideStates` from `0` to `-` to always show images.
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, if necessary via the 'Show hidden icons' caret.
-  
+<br>
 
     ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
-  
+<br><br>
 
 "Can I map the Caps key to Backspace?"
 --------------------------------------
@@ -52,7 +52,6 @@ Or, how about the multilayer "MoDK" tap-Extend with even more wonders?! See belo
 
 Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspace</kbd>. 
 <kbd>Ext</kbd>+<kbd>T</kbd>+<kbd>O</kbd> for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> deletes the previous word! 
-  
 
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
 - **By Menu:** From the Layout/Settings menu's KeyMapper tab, make a `VK`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it. Allow EPKL to restart.
@@ -65,20 +64,20 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 - Add a semicolon before the line you don't want, and remove the one before the line you do want to use.
 - Note the bottom line there? You can actually have both: Backspace on tapping <kbd>Caps</kbd>, Extend on holding it!
 - It's actually the default setting for the KeyMapper tab of the Layout/Settings dialog. Press the Submit button and you're on.
-  
+<br>
 
     ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
-  
+<br><br>
 
 These Aren't The Guides You're Looking For?
 -------------------------------------------
 EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
 **[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
 If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]
-  
+
 Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
 The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
-  
+<br>
 
 More Know-How
 -------------
@@ -100,7 +99,7 @@ More Know-How
 * The **LayStack** is a stack of files that may hold layout definitions: Layouts_Default, Layouts_Override, BaseLayout and Layout
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
     - These can be in the LayStack files for quick layout tweaks, or in a dedicated [Remap file][MapIni].
-  
+<br>
 
 #### Hotkeys defined in the EPKL_Settings file:
 * Ctrl+Shift+1 – Display/hide the help image (it may also hide itself by shift state)
@@ -113,7 +112,7 @@ More Know-How
 * Ctrl+Shift+8 – Toggle help image transparency
 * Ctrl+Shift+9 – Move the help image between positions, as by mouseover
 * Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
-  
+<br>
 
 #### Tweakable parameters:
 The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
@@ -149,7 +148,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - I haven't made images for all variants though, so there may be minor discrepancies.
 * Layout folders aren't premade for every variant, board and mod combo, as there are so many of them. See below.
 * The Layout/Settings dialog can change layout, key mappings and a selection of settings quite easily.
-  
+<br>
 
 #### Techy tips for EPKL:
 * EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
@@ -163,7 +162,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
-  
+<br>
 
 #### The LayStack explained further
 * If you want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
@@ -180,7 +179,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
     - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
-  
+<br>
 
 Key mappings
 ------------
@@ -206,7 +205,7 @@ Where:
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
     - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
 * Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for each prefix):
-    - → | %‹entry› : Send a literal string/ligature by the SendInput {Raw}‹entry› method (default)
+    - → | %‹entry› : Send a literal string/ligature by the SendInput {Text}‹entry› method (default)
     - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
     - α | *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# are modifiers, {} key names)
     - β | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
@@ -219,7 +218,7 @@ Where:
     - The key can also be used for "dynamic" completions, adding to instead of deleting the original sequence
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
 * A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
-  
+<br>
 
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
 ```
@@ -231,7 +230,7 @@ QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more int
 QW_U    = VKey                      ; System mapped key. Uses whatever is on the system layout.
 ```
 Entries are any-whitespace delimited.
-  
+<br>
 
 Advanced Extending
 ------------------
@@ -258,7 +257,7 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
     - "Tap-dance" {<kbd>Shift</kbd>,<kbd>Ext</kbd>,<kbd>‹key›</kbd>} quickly using Sticky Shift, for a kaomoji. Wait before <kbd>‹key›</kbd> for another.
     - Holding <kbd>Ctrl</kbd> then tapping <kbd>Ext</kbd> sends <kbd>Win</kbd>+<kbd>.</kbd>, opening the Emoji picker.
     - <kbd>AltGr</kbd>+<kbd>Ext</kbd>-tap holds some commands to avoid hand contortion. Example: {<kbd>AltGr</kbd>+<kbd>Ext</kbd>,<kbd>T</kbd>} for Task Manager.
-  
+<br>
 
 Layout variant tutorial
 -----------------------
@@ -300,26 +299,26 @@ You can make your own version of, say, a locale layout with a certain (non-)ergo
     - To see the "Create help images..." menu option, advancedMode must be on in [EPKL_Settings][PklIni].
     - The HIG will make images for the currently active layout.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
-  
+<br>
 
 KNOWN ISSUES:
 -------------
 * ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be...
 * Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd> so these may work oddly with state remaps like eD.
     - A workaround for this is to map a shortcut to `α#e` for accessing <kbd>Win</kbd>+<kbd>E</kbd> on Colemak. For Ext-tap, there's one on `{Ext,w}`.
-  
+<br>
 
 DONE/TODO:
 ----------
 For more info about past and future EPKL history, see the **[EPKL Advanced README][EPKLRM]** in the Source folder.
-  
+<br>
 
 Credits/sources
 ---------------
 #### ~ The original [PKL][PKLGit] written by [Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
 #### ~ [EPKL][EPKLgh], formerly [PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-
 #### ~ Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors.
-  
+<br>
 
 _Finally, to all of you: Best of luck using EPKL!_
 _Øystein "DreymaR" Bech_
