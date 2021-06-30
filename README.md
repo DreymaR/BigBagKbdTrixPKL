@@ -35,6 +35,10 @@ Getting EPKL up and running
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
     - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon.
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
+* To make EPKL start up automatically with Windows, [add a shortcut to it in the Startup folder][StrtUp]:
+    - Create a shortcut to EPKL.exe (drag it while holding down <kbd>Alt</kbd>, or right-click and choose).
+    - Press <kbd>Win</kbd>+<kbd>R</kbd> then type in `shell:startup` and hit <kbd>Enter</kbd> or press `OK`.
+    - Move your EPKL shortcut to the Startup folder that just opened up. That should do it!
 * To choose a layout variant, select the **Layout/Settings...** menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
@@ -81,6 +85,10 @@ If you find my info below and on the Big Bag pages too daunting and massive, do 
 
 Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
 The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
+<br>
+
+![EPKL layout dialog](./Other/Docs/EPKL_Layout-UI.png)
+
 <br><br>
 
 More Know-How
