@@ -1,7 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for the experimental mod Colemak-QI;x](../Colemak/Cmk-Qmods/Colemak-QIx_ANS-CAS_EPKL.png)
+
 <br><br>
 
 _Test folder info

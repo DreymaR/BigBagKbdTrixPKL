@@ -26,7 +26,7 @@ NotGate's ISRT alias the "IndyRad" layout
 NotGate's version history right before release:
 -----------------------------------------------
 This may not be central information, but the layout underwent some tweaks before release, making it easier to use Angle and Sym mods with ISRT.
-<br>
+<br><br>
 
 #### ISRT, 2021-01-27 (Q-Y swap improves Y position and Angle-ANSI mod):
 ```

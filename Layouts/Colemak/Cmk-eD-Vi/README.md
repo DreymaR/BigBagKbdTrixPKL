@@ -1,8 +1,11 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 |![Changed keys for Colemak-eD-Vi on an ANSI board](./Cmk-eD-Vi_ANS/Cmk-eD-Vi_ANS_ChangedKeys.png)|
-|-
+|   :---:   |
+|_A diagram over the keys affected by Colemak-eD-Vi_|
+
 <br><br>
 
 Colemak[eD] locale layouts
@@ -12,6 +15,7 @@ Most of the Cmk-eD locale variants use ISO keyboards with an AngleWide configura
 This may be supplemented with Curl(DH) and Sym mods to provide Colemak-CAW(S) with locale letters. You could remove the Wide mod if desired, but then the right hand pinky may get overworked.
 
 Some locales traditionally use ANSI keyboards though, and some prefer to use the AltGr key instead of dead keys. So there may be other variants available.
+<br><br>
 
 Colemak-Vi Tiếng Việt (Vietnam) locale layout variant
 -----------------------------------------------------
@@ -24,8 +28,8 @@ This layout variant aims to provide a Vietnamese Colemak that works well with EP
 
 |![EPKL help image for Colemak-eD-Vi on an ANSI board, AltGr state](./Cmk-eD-Vi_ANS/state6.png)|
 |   :---:   |
-|_Colemak-eD-Vi_ANS, AltGr state._|
+|_Colemak-eD-Vi_ANS, AltGr state_|
 
 |![EPKL help image for Colemak-eD-Vi on an ANSI board, Shift+AltGr state](./Cmk-eD-Vi_ANS/state7.png)|
 |   :---:   |
-|_Colemak-eD-Vi_ANS, Shift+AltGr state._|
+|_Colemak-eD-Vi_ANS, Shift+AltGr state_|

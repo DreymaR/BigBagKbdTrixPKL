@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br>
+<br><br>
 
 Colemak-Kurl: The V-K swap for Cmk-DH
 -------------------------------------
@@ -10,7 +10,6 @@ Colemak-Kurl: The V-K swap for Cmk-DH
 - The VE bigram also gets worse, and it's 3× as common as VK. These may be alt-fingered, but...
 - ...what's the point in the end, in avoiding some awkward bigrams to create others?
 - Note that some of the newest analysis tries to include such "LSB" Lateral-Stretch Bigrams.
-
 <br>
 
 |![EPKL help image for Colemak-KurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD_ANS_KurlAWideSym/state0.png)|

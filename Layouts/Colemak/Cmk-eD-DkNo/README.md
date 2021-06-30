@@ -1,5 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 <br>
 
@@ -21,18 +22,18 @@ Colemak-eD-DkNo/FiSe Scandinavian phonetic layout variants
 
 |![EPKL help image for Colemak-eD-DkNo CAWS on an ISO board, unshifted state](../Cmk-eD-DkNo/Cmk-eD-DkNo_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-DkNo_ISO_CAWS, unshifted state._|
+|_Colemak-eD-DkNo_ISO_CAWS, unshifted state_|
 
 |![EPKL help image for Colemak-eD-DkNo CAWS on an ISO board, AltGr state](../Cmk-eD-DkNo/Cmk-eD-DkNo_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-DkNo_ISO_CAWS, AltGr state._|
+|_Colemak-eD-DkNo_ISO_CAWS, AltGr state_|
 
 <br><br>
 
 |![EPKL help image for Colemak-eD-FiSe CAWS on an ISO board, unshifted state](../Cmk-eD-FiSe/Cmk-eD-FiSe_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-FiSe_ISO_CAWS, unshifted state._|
+|_Colemak-eD-FiSe_ISO_CAWS, unshifted state_|
 
 |![EPKL help image for Colemak-eD-FiSe CAWS on an ISO board, AltGr state](../Cmk-eD-FiSe/Cmk-eD-FiSe_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-FiSe_ISO_CAWS, AltGr state._|
+|_Colemak-eD-FiSe_ISO_CAWS, AltGr state_|

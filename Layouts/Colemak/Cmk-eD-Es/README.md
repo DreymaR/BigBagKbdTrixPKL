@@ -1,7 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for Colemak-eD-EsLat AWide on an ISO board](./Cmk-eD-EsLat_ISO-AWi_s0_EPKL.png)
+
 <br><br>
 
 Colemak[eD] locale layouts
@@ -22,6 +24,7 @@ For Spanish/Latin locale Colemak, at the least we need the letters áéíóú an
 |![EPKL help image for Colemak-eD-EsLat CurlAngleWideSym on an ISO board, unshifted state](../Cmk-eD-Es/Cmk-eD-EsLat_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
 |_Colemak-eD-EsLat_ISO_CAWS, unshifted state. Accent DKs in the middle. For ANSI boards, ñ is on AltGr+n._|
+
 <br>
 
 - **Cmk-eD-EsAlt**: An alternative for those who prefer using AltGr. The letters áéíóú are easy to remember on AltGr+aeiou; ñ gets AltGr+n (and/or the ISO key on ISO boards).

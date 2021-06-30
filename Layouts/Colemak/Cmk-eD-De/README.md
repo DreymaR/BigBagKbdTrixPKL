@@ -1,7 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for Colemak-eD-De ISO-AngleWide](./Cmk-eD-De_ISO-CAWS_s0_EPKL.png)
+
 <br><br>
 
 Colemak[eD] locale layouts
@@ -14,6 +16,7 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 <br><br>
 
 ![EPKL help image for Colemak-eD-De ISO-AngleWide, AltGr state](./Cmk-eD-De_ISO-CAWS_s6_EPKL.png)
+
 <br><br>
 
 Colemak-eD-De German phonetic layout variant
@@ -24,8 +27,8 @@ Colemak-eD-De German phonetic layout variant
 
 |![EPKL help image for Colemak-eD-De CAWS on an ISO board, unshifted state](./Cmk-eD-De_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-De_ISO_CAWS, unshifted state._|
+|_Colemak-eD-De_ISO_CAWS, unshifted state_|
 
 |![EPKL help image for Colemak-eD-De CAWS on an ISO board, AltGr state](./Cmk-eD-De_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-De_ISO_CAWS, AltGr state._|
+|_Colemak-eD-De_ISO_CAWS, AltGr state_|

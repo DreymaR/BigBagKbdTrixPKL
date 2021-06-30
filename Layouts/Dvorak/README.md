@@ -1,7 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-
-<br>
+<br><br>
 
 ![EPKL help image for Dvorak-AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-AWide_EPKL.png)
 
@@ -16,7 +15,6 @@ The Dvorak layout
 - The Dvorak layout features high hand alternation (L-R-L-R...) but less rolls than Colemak.
 - There are still some issues with it in my opinion, see below.
 - With EPKL, it can be used with the usual Angle and Wide ergonomic mods added, as seen above.
-
 <br>
 
 |![EPKL help image for Dvorak on an ANSI board](./Dvk-eD_ANS/state0.png)|
@@ -39,7 +37,6 @@ The Dvorak Curl-ID ergo mod
 - Since it's such a light mod however, it doesn't address other known problems such as LS on the pinky.
 - Dvk-Curl-ID scores substantially better than plain Dvorak in analysis and impression.
 - Speaking for myself, however, I'd still recommend using a more modern optimized layout like Colemak.
-
 <br>
 
 ![EPKL help image for Dvorak-Curl(ID)AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-CurlAWide_EPKL.png)

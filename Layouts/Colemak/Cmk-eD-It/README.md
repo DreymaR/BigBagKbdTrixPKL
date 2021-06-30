@@ -1,7 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](./Cmk-ItAlt_ANS_s6_EPKL.png)
+
 <br><br>
 
 
@@ -27,6 +29,7 @@ For Italian locale Colemak, at the least we need the letters é and àèìòù e
 |![EPKL help image for Colemak-eD-It AngleWide on an ISO board, shifted state](./Cmk-eD-It_ISO_AWide/state1.png)|
 |   :---:   |
 |_Colemak-eD-It_ISO_AWide, shifted state_|
+
 <br>
 
 - **Cmk-eD-EsLat**: This is good both for Spanish and Italian, using dead keys on brackets for the main accents. Feel free to replace ñ on the ISO key; on ANSI boards it's no problem.

@@ -1,7 +1,9 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for Colemak-eD-Nl-CAWS on an ISO board](./Cmk-eD-Nl_ISO-CAWS_s0_EPKL.png)
+
 <br><br>
 
 Colemak[eD] locale layouts

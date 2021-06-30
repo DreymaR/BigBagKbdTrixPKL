@@ -1,9 +1,11 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ![EPKL help image for Colemak-eD-QI on an ANSI board](./Colemak-QI_ANS-CAS_EPKL.png)
 
 _The "bleeding-edge" Nyfee mod Colemak-QI_
+
 <br><br>
 
 
@@ -20,7 +22,7 @@ Colemak Discord user Nyfee's "bleeding-edge" Colemak-Q mods
 - Cmk-QI supports the standard Sym and Wide mods. Cmk-QI;x has its own Sym and no Wide mod.
 - ColemaQ is a slightly older variant that consists of 3–4 simple key swaps. See below.
 - There were some predecessor mods named Hirou and XCept; these likely aren't in use anymore.
-
+<br><br>
 
 #### Colemak-QI by Nyfee, 2021-03:
 ```
@@ -112,7 +114,7 @@ Colemak-QI;x      : 1.640   0.029   0.019   1.688   0.938     +0.010  -0.018  +0
 Cmk-DH +VK only   : 1.630   0.041   0.009   1.679   1.311      0.000  -0.006  -0.008 !!?
 ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0.028 !!!
 ```
-  
+<br>
 
 - The Cmk-QI PM/BK/WFL combo is most important in reducing both effort and SFBs at the same time.
 - The proposed Q-SC and W-C swaps show no analysis benefits here; their benefit is perceived.
@@ -147,12 +149,12 @@ The Comma-Slash swap reduces SFB% like nobody's business, but it too comes with 
 
 So, that's my personal impression. Other people's experience will vary – for instance, they may have a system that reduces their pinky symbol usage with layers so the pinky won't get too taxed, and they may not mind losing mod modularity.
 
-But: We've had people advertising this and similar mods as "objectively better" and I don't think that's warranted at all. So I wanted to address such claims with a caveat based on my observations. I hope beginners don't get mired down in a bunch of advanced, unclear choices that are too hard to make for them. That may put some newcomers off Colemak entirely, which would be very sad.
+However, we've had people advertising this and similar mods as "objectively better" and I don't think that's warranted at all. So I wanted to address such claims with a caveat based on my observations. I hope beginners don't get mired down in a bunch of advanced, unclear choices that are too hard to make for them. That may put some newcomers off Colemak entirely, which would be very sad.
 <br><br>
 
 |![EPKL help image for Colemak-eD-QI CurlAngleWideSym on an ISO board, unshifted state](./Cmk-eD-QI_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-QI_ISO_CurlAWideSym, unshifted state. Note the <kbd>Compose/Completion</kbd> key in the middle._|
+|_Colemak-eD-QI_ISO_CurlAWideSym, unshifted state. Note the <kbd>Compose</kbd> key in the middle._|
 
 
 [CM-Ana]: http://colemakmods.github.io/mod-dh/analyze.html (Colemakmods Layout Analysis Tool)

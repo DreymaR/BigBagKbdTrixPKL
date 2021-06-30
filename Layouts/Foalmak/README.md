@@ -1,7 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-
-<br>
+<br><br>
 
 ![Foalmak help image](./Foalmak_EPKL.png)
 
@@ -18,7 +17,6 @@ The Foalmak April's Foals layout
     - "FOALS NEIGH" on the homerow
 -  April's Foal! Gallop over text pages like a herd of mustangs! Listen to the neighsayers!
 - This layout is recommended for typists who are horsing around. Also try rocking with QUARTZ.
-
 <br>
 
 ￣(=⌒ᆺ⌒=)￣

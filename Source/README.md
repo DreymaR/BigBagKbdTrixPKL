@@ -1,11 +1,13 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 ### [EPiKaL PKL][CmkPKL] for Windows
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
 ![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)
+
 <br>
 
 Source code info

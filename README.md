@@ -1,10 +1,12 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-
-### **EPiKaL PortableKeyboardLayout** for Windows, with layouts
 <br><br>
 
+### **EPiKaL PortableKeyboardLayout** for Windows, with layouts
+<br>
+
 ![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Colemak-ISO-CAWS_s0_EPKL.png)
+
 <br><br>
 
 [Θώθ][ThothW] – What Is This?
@@ -42,7 +44,8 @@ Getting EPKL up and running
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, if necessary via the 'Show hidden icons' caret.
 <br>
 
-    ![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
+![EPKL tray menu](./Other/Docs/EPKL_Tray-Menu.png)
+
 <br><br>
 
 "Can I map the Caps key to Backspace?"
@@ -66,7 +69,8 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 - It's actually the default setting for the KeyMapper tab of the Layout/Settings dialog. Press the Submit button and you're on.
 <br>
 
-    ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
+![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
+
 <br><br>
 
 These Aren't The Guides You're Looking For?
@@ -77,7 +81,7 @@ If you find my info below and on the Big Bag pages too daunting and massive, do 
 
 Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
 The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
-<br>
+<br><br>
 
 More Know-How
 -------------
@@ -179,7 +183,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
     - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
-<br>
+<br><br>
 
 Key mappings
 ------------
@@ -230,7 +234,7 @@ QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more int
 QW_U    = VKey                      ; System mapped key. Uses whatever is on the system layout.
 ```
 Entries are any-whitespace delimited.
-<br>
+<br><br>
 
 Advanced Extending
 ------------------
@@ -257,7 +261,7 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
     - "Tap-dance" {<kbd>Shift</kbd>,<kbd>Ext</kbd>,<kbd>‹key›</kbd>} quickly using Sticky Shift, for a kaomoji. Wait before <kbd>‹key›</kbd> for another.
     - Holding <kbd>Ctrl</kbd> then tapping <kbd>Ext</kbd> sends <kbd>Win</kbd>+<kbd>.</kbd>, opening the Emoji picker.
     - <kbd>AltGr</kbd>+<kbd>Ext</kbd>-tap holds some commands to avoid hand contortion. Example: {<kbd>AltGr</kbd>+<kbd>Ext</kbd>,<kbd>T</kbd>} for Task Manager.
-<br>
+<br><br>
 
 Layout variant tutorial
 -----------------------

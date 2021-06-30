@@ -1,9 +1,11 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
+<br><br>
 
 |![EPKL help image for Colemak-eD-Bg on an ANSI board, unshifted state](./Cmk-eD-Bg_ANS/state0.png)|
 |   :---:   |
-|_Colemak-eD-Bg_ANS, unshifted state._|
+|_Colemak-eD-Bg_ANS, unshifted state_|
+
 <br><br>
 
 Colemak[eD] locale layouts
@@ -13,7 +15,7 @@ Most of the Cmk-eD locale variants use ISO keyboards with an AngleWide configura
 This may be supplemented with Curl(DH) and Sym mods to provide Colemak-CAW(S) with locale letters. You could remove the Wide mod if desired, but then the right hand pinky may get overworked.
 
 Some locales traditionally use ANSI keyboards though, and some prefer to use the AltGr key instead of dead keys. So there may be other variants available.
-<br>
+<br><br>
 
 Colemak-Bg "Bulmak" Kyrillic phonetic layout variant
 ----------------------------------------------------
@@ -25,8 +27,8 @@ Colemak-Bg "Bulmak" Kyrillic phonetic layout variant
 
 |![EPKL help image for Colemak-eD-Bg CAWS on an ISO board, unshifted state](./Cmk-eD-Bg_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-Bg_ISO_CAWS, unshifted state._|
+|_Colemak-eD-Bg_ISO_CAWS, unshifted state_|
 
 |![EPKL help image for Colemak-eD-Bg CAWS on an ISO board, AltGr state](./Cmk-eD-Bg_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-Bg_ISO_CAWS, AltGr state._|
+|_Colemak-eD-Bg_ISO_CAWS, AltGr state_|
