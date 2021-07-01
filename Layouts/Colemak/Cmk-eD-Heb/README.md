@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-eD-Heb Angle-ISO](./Cmk-Heb_ISO-Angle_s0_EPKL.png)
 

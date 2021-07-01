@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 |![EPKL help image for Colemak-eD-Bg on an ANSI board, unshifted state](./Cmk-eD-Bg_ANS/state0.png)|
 |   :---:   |

@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 |![Changed keys for Colemak-eD-Vi on an ANSI board](./Cmk-eD-Vi_ANS/Cmk-eD-Vi_ANS_ChangedKeys.png)|
 |   :---:   |

@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-eD-Ru on an ANSI board](./Rulemak_ANS_EPKL.png)
 

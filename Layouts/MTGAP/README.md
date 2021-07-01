@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for MTGAP-AngleSym on an ISO board](./MTGAP_ISO-AS_EPKL.png)
 

@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Dvorak-AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-AWide_EPKL.png)
 

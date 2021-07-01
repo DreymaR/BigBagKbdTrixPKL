@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-eD-EsLat AWide on an ISO board](./Cmk-eD-EsLat_ISO-AWi_s0_EPKL.png)
 

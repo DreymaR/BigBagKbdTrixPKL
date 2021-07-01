@@ -1,8 +1,8 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
-![EPKL help image for Colemak-eD-De ISO-AngleWide](./Cmk-eD-De_ISO-CAWS_s0_EPKL.png)
+![EPKL help image for Colemak-eD-De ISO-CurlAngleWideSym](./Cmk-eD-De_ISO-CAWS_s0_EPKL.png)
 
 <br><br>
 
@@ -15,7 +15,7 @@ This may be supplemented with Curl(DH) and Sym mods to provide Colemak-CAW(S) wi
 Some locales traditionally use ANSI keyboards though, and some prefer to use the AltGr key instead of dead keys. So there may be other variants available.
 <br><br>
 
-![EPKL help image for Colemak-eD-De ISO-AngleWide, AltGr state](./Cmk-eD-De_ISO-CAWS_s6_EPKL.png)
+![EPKL help image for Colemak-eD-De ISO-CurlAngleWideSym, AltGr state](./Cmk-eD-De_ISO-CAWS_s6_EPKL.png)
 
 <br><br>
 
@@ -25,10 +25,10 @@ Colemak-eD-De German phonetic layout variant
 - To allow easier Pan-Germanic typing, Scandinavian `æøå` letters are added on <kbd>AltGr</kbd>+{ <kbd>A</kbd> / <kbd>ISO</kbd> / <kbd>U</kbd> }.
 <br>
 
-|![EPKL help image for Colemak-eD-De CAWS on an ISO board, unshifted state](./Cmk-eD-De_ISO_CurlAWideSym/state0.png)|
+|![EPKL help image for Colemak-eD-De AngleWide on an ISO board, unshifted state](./Cmk-eD-De_ISO_AWide/state0.png)|
 |   :---:   |
-|_Colemak-eD-De_ISO_CAWS, unshifted state_|
+|_Colemak-eD-De_ISO_AWide, unshifted state_|
 
-|![EPKL help image for Colemak-eD-De CAWS on an ISO board, AltGr state](./Cmk-eD-De_ISO_CurlAWideSym/state6.png)|
+|![EPKL help image for Colemak-eD-De AngleWide on an ISO board, AltGr state](./Cmk-eD-De_ISO_AWide/state6.png)|
 |   :---:   |
-|_Colemak-eD-De_ISO_CAWS, AltGr state_|
+|_Colemak-eD-De_ISO_AWide, AltGr state_|

@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image, for the Extend1 layer](./ImgExtend/ISO_Ext1.png)  
 

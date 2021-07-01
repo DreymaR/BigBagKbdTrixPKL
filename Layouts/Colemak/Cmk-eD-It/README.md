@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-eD-ItAlt on an ANSI board, the AltGr state](./Cmk-ItAlt_ANS_s6_EPKL.png)
 

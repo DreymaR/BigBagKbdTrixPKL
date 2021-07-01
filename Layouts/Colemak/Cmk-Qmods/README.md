@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-eD-QI on an ANSI board](./Colemak-QI_ANS-CAS_EPKL.png)
 

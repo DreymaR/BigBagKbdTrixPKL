@@ -1,6 +1,6 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
+<br>
 
 ![EPKL help image for Colemak-Gre ISO-AngleWide](./Cmk-Gre_ISO-AWide_s0_EPKL.png)
 
