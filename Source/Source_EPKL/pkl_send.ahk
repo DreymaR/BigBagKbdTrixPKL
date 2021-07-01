@@ -27,19 +27,15 @@
 	pkl_SendThis( this, modif ) 		; Modif is only used for explicit mod mappings.
 }
 
-pkl_SendThis( this, modif = "", resetLast = false ) { 			; Actually send a char/string
+pkl_SendThis( this, modif = "" ) { 								; Actually send a char/string. Also log the last sent character for Compose.
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" ) 			; Strip off any spaces sent to release OS deadkeys, and other such stuff
 	if        ( this == "{Space}" ) { 							; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
 	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) { 	; eD WIP: Why don't these and Space compose now?
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
-	if ( StrLen( tht ) == 3 ) { 								; Single-char keys are on the form "{¤}"
-		LastKeys := getKeyInfo( "LastKeys" )
-		LastKeys.Push( tht )
-		LastKeys.RemoveAt( 1 )
-		setKeyInfo( "LastKeys", LastKeys )
-	}
+	if ( StrLen( tht ) == 3 ) 									; Single-char keys are on the form "{¤}"
+		lastKeys( "push", tht )
 ;	toggleAltGr := ( getAltGrState() ) ? true : false 	; && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
 ;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
 ;		setAltGrState( 0 )				; Release LCtrl+RAlt temporarily if applicable
@@ -77,13 +73,12 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 					ent := strEsc( ent ) 						; Escape special chars with backslashes (not necessary for a single \ )
 					SendInput {Text}%ent% 						; Send the entry as {Text} by default
 				}
-				nullArr := getKeyInfo( "NullKeys" )
-				setKeyInfo( "LastKeys", nullArr.Clone() ) 		; Reset the last-keys-pressed buffer. Note: Use Clone() here, or you'll make a link to NullKeys?
-;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG
+				lastKeys( "null" )  							; Reset the last-keys-pressed buffer
 				Return 											; If a longer match is found, don't look for shorter ones
 			} 	; end if keyArr
 		} 	; end for sections
 	} 	; end for lengths
+;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG
 }
 
 pkl_CheckForDKs( ch ) {

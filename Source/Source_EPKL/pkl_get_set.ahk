@@ -162,7 +162,7 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 ;;      Called in pkl_init.ahk
 ;
 
-init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys 	; eD WIP
+init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys
 	static initialized := false
 	
 	mapFile := pklIniRead( "cmposrFile", , "LayStk" ) 			; eD TODO: Allow searches in BasIni and LayIni as well?! Lay > Bas > Compose, as usual
@@ -172,7 +172,6 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		keyArr  := []
 		Loop % Max( lengths* ) {
 			keyArr.Push( "{¤}" ) 								; Example: [ "", "", "", "" ] if 4 is the max compose length used
-			test .= A_Index
 		}
 		setKeyInfo( "NullKeys", keyArr )
 		setKeyInfo( "LastKeys", keyArr.Clone() ) 				; Used by the Compose/Completion key, via pkl_SendThis()
@@ -185,8 +184,6 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	For ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
 ;		if compKeys.HasKey( cmpKey ) 								; This key occurs in several mappings on one layout, so don't define it again
 ;			Return
-;		pklInfo( "init_Composer( " . cmpKey . " )" ) 	; eD DEBUG
-		
 		tables      := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
 		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
@@ -233,6 +230,20 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	} 	; end for cmpKey in compKeys
 	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
 	setLayInfo( "composeTables" , usedTables )
-;	test := getLayInfo( "composeTables" )
-;	( sct != "x" ) ? pklDebug( "BS[" . sct . "] = " . test[sct] . "/" . usedTables[sct] . "`nBS[dynCmk] = " . test["dynCmk"] . "`nBS[x11] = " . test["x11"], 3 )  ; eD DEBUG
+}
+
+lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previously sent characters for Compose
+	lastKeys := getKeyInfo( "LastKeys" )
+	if        ( cmd == "push" ) { 									; Push one key on the format "{¤}" to the lastKeys buffer
+		lastKeys.Push( chr )
+		lastKeys.RemoveAt( 1 )
+	} else if ( cmd == "pop1" ) { 									; Remove the last entry in lastKeys (after Backspace presses)
+		lastKeys.Pop() 												; (We aren't using the pop value for anything)
+		lastKeys.InsertAt( 1, "{¤}" )
+	} else if ( cmd == "null" ) { 									; Reset the last-keys-pressed buffer.
+		nullArr := getKeyInfo( "NullKeys" )
+		setKeyInfo( "LastKeys", nullArr.Clone() ) 					; Note: Use Clone() here, or you'll make a link to NullKeys?
+		Return
+	}
+	setKeyInfo( "LastKeys", lastKeys )
 }

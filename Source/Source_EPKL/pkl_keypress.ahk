@@ -47,7 +47,10 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	}	; end if extendKey
 	
 	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK## code.
-		Send % "{Blind}{" . getKeyInfo( HKey . "vkey" ) . "}"
+		theVKey := getKeyInfo( HKey . "vkey" )
+		if ( theVKey == "VK08" ) 								; Backspace was pressed, so...
+			lastKeys( "pop1" ) 									; ...remove the last entry in the compose queue
+		Send % "{Blind}{" . theVKey . "}"
 		_osmClearAll() 											; Clear any sticky mods
 		Return
 	}	; end if VK
@@ -140,6 +143,8 @@ extendKeyPress( HKey )											; Process an Extend modified key press
 	setExtendInfo( returnTo[ xLvl ] )
 	pref := ""
 	if not pkl_ParseSend( xVal ) { 								; Unified prefix-entry syntax
+		if ( loCase( xVal ) == "backspace" )
+			lastKeys( "pop1" )
 		For HKey, mod in extMods { 								; Which Extend mods are depressed?
 			if getKeyState( HKey, "P" ) {
 				pref .= modList[mod]

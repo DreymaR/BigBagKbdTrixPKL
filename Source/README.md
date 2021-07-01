@@ -342,6 +342,7 @@ DONE:
 		- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
 		- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
 		- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
+		- Backspace pops the last character from the Compose queue so you can correct a mistake and write the right sequence.
 		- See the `_eD_Compose.ini` file for more examples and explanations.
 	- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
 		- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.

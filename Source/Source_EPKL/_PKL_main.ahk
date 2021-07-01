@@ -12,10 +12,6 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Could I make Back remove the last character from the Compose queue too?
-;		- WIP: Could I push single-char Compose output to the LastKeys queue, thereby allowing compose chaining?
-;		- TODO: A compose of U####[#] could send the U+#### Unicode point!
-
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
@@ -30,11 +26,14 @@
 ;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
-;		- TODO: Some weird bug w/ Ext+V on Reddit?!? Makes me miss my pastes as a previous-page or something is sent ... is it a site shortcut that messes me up then?
-;		- 
-;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
+
+;		- TODO: Could I push single-char Compose output to the LastKeys queue, thereby allowing compose chaining?
+;		- TODO: A compose of U####[#] could send the U+#### Unicode point!
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
 ;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
+;		- TOFIX: The completion u → ue isn't working. It's only the one?
+
+;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
 ;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- WIP: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
@@ -224,6 +223,7 @@
 ;			- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
 ;			- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
 ;			- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
+;			- Backspace pops the last character from the Compose queue so you can correct a mistake and write the right sequence.
 ;			- See the `_eD_Compose.ini` file for more examples and explanations.
 ;		- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
 ;			- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.
@@ -288,7 +288,7 @@
 #MaxThreads 30
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.0β" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
+setPklInfo( "pklVers", "1.3.0" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
