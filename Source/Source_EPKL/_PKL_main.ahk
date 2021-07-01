@@ -210,6 +210,24 @@
 ;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
+;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
+;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up previously sent characters using specified tables.
+;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
+;			- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
+;			- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
+;			- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
+;				- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+;			- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
+;				- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
+;			- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
+;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything. Backslash escapes are allowed.
+;			- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
+;			- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
+;			- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
+;			- See the `_eD_Compose.ini` file for more examples and explanations.
+;		- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
+;			- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.
+;			- The [keysyms.txt](https://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt) file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) uses proper Unicode.
 ;		- Moved layout variants into their own folders to reduce clutter, and for better variant documentation placement. Updated the Layout/Settings GUI accordingly.
 ;		- Layout additions:
 ;			- Added Nyfee's ColemaQ mod and NotGate's ISRT alias IndyRad layout, as ANSI Cmk-CA mods in the `_Test` folder. Nyfee's mod has his own Sym mod included.
@@ -253,24 +271,8 @@
 ;		- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
 ;		- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
 ;		- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
-;		- Repeat key: Set any state mapping to `®®` to make that entry repeat the previous key. Good for avoiding same-finger bigrams.
-;		- Compose/Completion key: Set any state mapping to `©<name>` to use it for composing up previously sent characters using specified tables.
-;			- The ISO key's unshifted state has been set as a Compose key (`©Def`) by default, editable in `EPKL_Layouts_Default.ini` or the LayStack.
-;			- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
-;			- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
-;			- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
-;				- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
-;			- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
-;				- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
-;			- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
-;			- Compose key entries can be any Unicode text, or even use EPKL prefix-entry syntax to do pretty much anything. Backslash escapes are allowed.
-;			- Note: VK mapped keys and ## mapped states can't be used for composes, as EPKL can't know what their output is. E.g., `88 ⇒ ∞` w/ ## numbers.
-;			- The standard Linux X `en_US.UTF-8` compose file was imported to `Files\_eD_Compose.ini`. Only entries starting with `<Multi_key>` were used.
-;			- You can compose with any single-character input like dead key releases and AltGr mappings. So using the x11 compose, e.g., `~(α` ⇒ `ἇ`.
-;			- See the `_eD_Compose.ini` file for more examples and explanations.
-;		- Compose table import module: Converts actual Linux tables like /usr/share/X11/locale/en_US.UTF-8/compose (~5000 lines) to EPKL Compose.ini entries.
-;			- Composing Linux key sym names are translated to their U####[#] Unicode hex values as .ini keys, using a keysym file like the X keysymdef.h one.
-;			- The [keysyms.txt](https://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt) file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) uses proper Unicode.
+;		- In the `EPKL_HelpImgGen_Settings` file, the BrutalMode setting governs whether the EPKL HIG moves generated images straight into the layout folder.
+;			- If this setting is true, generated images may overwrite any existing ones. Also, the `ImgGen_` temporary folder is deleted after use.
 
 
 ;;  ####################### main      #######################

@@ -16,8 +16,10 @@ makeHelpImages() {
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := getPklInfo( "RemapFile" ) 					; _eD_Remap.ini
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
-	imgRoot     := getPklInfo( "Dir_LayIni" ) . "\ImgGen_" . thisMinute()
-	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . "\DeadkeyImg" }
+	layDir      := getPklInfo( "Dir_LayIni" )
+	dksDir      := "\DeadkeyImg"
+	imgRoot     := layDir . "\ImgGen_" . thisMinute()
+	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . dksDir }
 	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\HelpImgGenerator\EPKL_HelpImgGen_Settings.ini" )
 	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
 	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
@@ -26,6 +28,8 @@ makeHelpImages() {
 	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
 	HIG.Debug   := pklIniRead( "DebugMode"      , false , HIG.Ini ) 	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
+	HIG.Brutal  := pklIniRead( "BrutalMode"     , false , HIG.Ini ) 	; Brutal mode: If true, copy images to the layout folder, overwriting current ones
+	HIG.Brutal  := bool( HIG.Brutal )
 	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" , HIG.Ini ) 	; Debug: Show info on this idKey during image generation.
 	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af, HIG.Ini ) 	; U+25AF  White Rectangle
 	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24, HIG.Ini ) 	; U+2B24  Black Large Circle
@@ -45,8 +49,10 @@ makeHelpImages() {
 	HIG.inkOpts := " --export-type=""png""" 					; Prior to InkScape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	
-	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." : ""
-	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug : ""
+	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." 	: ""
+	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug 									: ""
+	makeMsgStr  .= ( HIG.Brutal ) ? "`n`nWARNING: BRUTAL MODE ON!"
+									. "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!" 					: ""
 	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
 	MsgBox, 0x133, Make Help Images?, 							; MsgBox type 0x3[Yes/No/Cancel] + 0x30[Warning] + 0x100[2nd button is default]
 (
@@ -105,7 +111,7 @@ for the current layout, or only state images?
 	if ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call InkScape
 		Return
 	hig_callInkscape( HIG ) 									; Call InkScape with all the SVG files at once now
-	sleepTime := 5 												; Time to wait between each file check, in s
+	sleepTime := 4 												; Time to wait between each file check, in s
 	Loop, 6
 	{
 		if ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
@@ -113,13 +119,19 @@ for the current layout, or only state images?
 		pklSplash( HIG.Title, "Waiting for images... " . A_Index * sleepTime . " s", 2.5 )
 		Sleep % sleepTime * 1000
 	}
-	FileMove % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
-	FileMove % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
+	FileMove    % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
+	FileMove    % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
 	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0, HIG.Ini ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
+	delTmpFiles := ( HIG.Brutal ) ? 2 : delTmpFiles
 	if        ( delTmpFiles == 2 ) {
-		FileRemoveDir % HIG.ImgDirs["raw"], 1 					; Recurse = 1 to remove files inside dir
+		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir
 	} else if ( delTmpFiles == 1 ) {
-		FileRecycle % HIG.ImgDirs["raw"]
+		FileRecycle     % HIG.ImgDirs["raw"]
+	}
+	if ( HIG.Brutal ) {
+		FileMove    % HIG.ImgDirs["root"] . "\*.png", % layDir
+		FileCopyDir % HIG.ImgDirs["dkey"]           , % layDir . dksDir, 1 	; Flag 1: Overwrite existing files
+		FileRemoveDir   % HIG.ImgDirs["root"], 1 				; Recurse = 1 to remove files inside dir
 	}
 	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?
 ;	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
