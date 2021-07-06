@@ -44,7 +44,8 @@ pklSetUI() { 													; EPKL Settings GUI
 					, % "`nLayout Selector for " . pklAppName
 					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
 	_uiAddSel(  "Main layout: "
-			,       "LayMain"   , "Choose1"     , mainLays              )
+			,       "LayMain"   , ""            , mainLays              )
+	GUIControl, ChooseString, UI_LayMain, % "Colemak" 			; We may have layouts before Colemak in the alphabet
 	GUI, UI:Add, Text,      , % "Layout type:"
 	GUI, UI:Add, Text, x+92 , % "Keyboard type:" 				; Unsure how this works at other resolutions?
 	_uiAddSel(  "" 	;"Layout type:" 							; Place at the x value of the previous section

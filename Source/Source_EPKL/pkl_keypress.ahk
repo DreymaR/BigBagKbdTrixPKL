@@ -19,7 +19,7 @@ processKeyPress( ThisHotkey ) 									; Called from the PKL_main keyPressed/Rel
 	SetTimer, processKeyPress%keyTimerCounter%, -1 				; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
 }
 
-runKeyPress() 													; Called from the PKL_main processKeyPress# labels
+runKeyPress() 													; Called from the PKL_main processKeyPress# timer labels
 {
 	Critical
 	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
@@ -105,7 +105,9 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	}	; end if Pri
 	_osmClearAll() 												; If another key is pressed while a OSM is active, cancel the OSM
 	if ( Pri == -3 ) { 											; Repeat previous key
-		_keyPressed( LastKey )
+		Loop % Ent {
+			_keyPressed( LastKey ) 								; NOTE: Holding down modifiers will affect this. Sticky mods won't.
+		}
 	} else if ( Pri == -4 ) { 									; Compose/Completion key
 		pkl_Composer( Ent )
 	} else {

@@ -47,6 +47,7 @@ pkl_showHelpImage( activate = 0 )
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
 		im.Opacity  := im.OpacIni 											; The actual image opacity (0-255; 255 is opaque)
+		im.HiddenS  := pklIniCSVs( "img_HideStates" ) 						; Shift state images to hide, as CSV
 		im.PosDef   := imgPosDic( pklIniRead( "img_StartPos", "BM" ), 5 ) 	; Default position is bottom center (used to be "xCenter")
 		tmpPosArr   := pklIniCSVs( "img_Positions", "2,5" ) 				; Allowed image positions (used to be top/bottom middle)
 		im.PosArr   := []
@@ -159,12 +160,15 @@ pkl_showHelpImage( activate = 0 )
 		}	; A state6 img w/ a state6 DK may break DK img display if we're too fast. See 'SetTimer, showHelpImage'.
 		imgPath := thisDK . dkS0
 		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
+		stateOn := "dk" . state 										; Never hide DK images?
 	} else if ExtendIsPressed() { 										; Extend image
 		imgPath := getLayInfo( "extendImg" )							; Default im.LayDir . "\extend.png"
+		stateOn := "ext"
 	} else {															; Shift state image
 		imgPath := im.LayDir . "\state" . state . ".png"
-		imgPath := InStr( getPklInfo( "img_HideStates" ), state ) ? "" : imgPath 	; Hide specified states
+		stateOn := state
 	}
+	imgPath := hasValue( im.HiddenS, stateOn ) ? "" : imgPath 			; Hide specified states
 	if ( imgPath )
 		imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
 	
@@ -186,8 +190,8 @@ pkl_showHelpImage( activate = 0 )
 	im.Prev     := imgPath
 	
 	if ( imgPath ) {
-	imgBgPath   := im.BgPath
-	imgShPath   := im.ShRoot . "\state" . state . ".png"
+	imgBgPath   := im.BgPath 											; Bg image
+	imgShPath   := im.ShRoot . "\state" . state . ".png" 				; Shift state markers
 	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
 	GuiControl, HI:, CtrlKyImg, *w%imgW% *h%imgH% %imgPath%
 	GuiControl, HI:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%

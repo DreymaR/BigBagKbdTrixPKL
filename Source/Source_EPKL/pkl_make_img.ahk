@@ -28,8 +28,7 @@ makeHelpImages() {
 	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
 	HIG.Debug   := pklIniRead( "DebugMode"      , false , HIG.Ini ) 	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
-	HIG.Brutal  := pklIniRead( "BrutalMode"     , false , HIG.Ini ) 	; Brutal mode: If true, copy images to the layout folder, overwriting current ones
-	HIG.Brutal  := bool( HIG.Brutal )
+	HIG.Brute   := pklIniRead( "Efficiency"     , 0     , HIG.Ini ) 	; Move images to layout folder if >=1, overwrite current ones if >=2.
 	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" , HIG.Ini ) 	; Debug: Show info on this idKey during image generation.
 	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af, HIG.Ini ) 	; U+25AF  White Rectangle
 	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24, HIG.Ini ) 	; U+2B24  Black Large Circle
@@ -51,8 +50,8 @@ makeHelpImages() {
 	
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." 	: ""
 	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug 									: ""
-	makeMsgStr  .= ( HIG.Brutal ) ? "`n`nWARNING: BRUTAL MODE ON!"
-									. "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!" 					: ""
+	makeMsgStr  .= ( HIG.Brute  ) ? "`n`nEFFICIENCY: IMAGES WILL BE MOVED TO THE LAYOUT FOLDER." 	: ""
+	makeMsgStr  .= ( HIG.Brute > 1 ) ? "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!" 				: ""
 	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
 	MsgBox, 0x133, Make Help Images?, 							; MsgBox type 0x3[Yes/No/Cancel] + 0x30[Warning] + 0x100[2nd button is default]
 (
@@ -122,15 +121,16 @@ for the current layout, or only state images?
 	FileMove    % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
 	FileMove    % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
 	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0, HIG.Ini ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
-	delTmpFiles := ( HIG.Brutal ) ? 2 : delTmpFiles
+	delTmpFiles := ( HIG.Brute >= 1 ) ? 2 : delTmpFiles
 	if        ( delTmpFiles == 2 ) {
 		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir
 	} else if ( delTmpFiles == 1 ) {
 		FileRecycle     % HIG.ImgDirs["raw"]
 	}
-	if ( HIG.Brutal ) {
-		FileMove    % HIG.ImgDirs["root"] . "\*.png", % layDir
-		FileCopyDir % HIG.ImgDirs["dkey"]           , % layDir . dksDir, 1 	; Flag 1: Overwrite existing files
+	if ( HIG.Brute >= 1 ) {
+		flg := ( HIG.Brute >= 2 ) ? 1 : 0 						; Flag 1: Overwrite existing files
+		FileMove    % HIG.ImgDirs["root"] . "\*.png", % layDir, flg
+		FileCopyDir % HIG.ImgDirs["dkey"] ,  % layDir . dksDir, flg
 		FileRemoveDir   % HIG.ImgDirs["root"], 1 				; Recurse = 1 to remove files inside dir
 	}
 	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?

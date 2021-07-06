@@ -6,7 +6,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
-![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-eD_ISO_CurlAWideSym/Cmk-ISO-CAWS_s3_EPKL.png)
+![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
 
 <br>
 
@@ -334,7 +334,7 @@ DONE:
 		- Compose tables are kept in a specified file, by default `Files\_eD_Compose.ini`. Each named key has a list of tables to use.
 		- As a Compose key, this is like a post-hoc version of the famous Linux Compose method. It's a very powerful tool for producing new output!
 		- Instead of pressing the Multi/Compose key before a sequence, in EPKL you press the sequence then Compose.
-			- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd>. The `e'` sequence is deleted first.
+			- You can get, say, <kbd>é</kbd> by pressing <kbd>e</kbd>,<kbd>'</kbd>,<kbd>Compose</kbd>. The `e'` sequence is deleted first.
 		- As a Completion key, the previous input is kept and added to. This is specified by the tables entry in the Compose file.
 			- This is handy for making common n-grams easier. Some Colemak examples are: E-comma, UE, SC, Que/And/The/Ion.
 		- By default the method will look for the longest possible sequences first. You can adjust this behavior in the Compose file.
@@ -392,6 +392,11 @@ DONE:
 	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
 	- In the `EPKL_HelpImgGen_Settings` file, the BrutalMode setting governs whether the EPKL HIG moves generated images straight into the layout folder.
 		- If this setting is true, generated images may overwrite any existing ones. Also, the `ImgGen_` temporary folder is deleted after use.
+* EPKL v1.3.1: WIP
+
+	- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
+	- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
+
 <br>
 
 TODO:

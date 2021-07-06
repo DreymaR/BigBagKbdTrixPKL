@@ -225,11 +225,13 @@ Where:
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
     - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab...
 * A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
+    - Note that since EPKL can't know what this produces, a `##` mapped key can't be used in composing sequences (see below).
 * A state mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the 1–4 last written characters with something else.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é
-    - The key can also be used for "dynamic" completions, adding to instead of deleting the original sequence
+    - The key can also be used for completions, adding to instead of deleting the original sequence
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
 * A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
+    - Mapping to `®#` where `#` is a hex number, repeats the key # times. Modifiers affect this but sticky mods don't.
 <br>
 
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.

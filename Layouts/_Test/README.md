@@ -101,5 +101,19 @@ The ER/RE pinky bigrams contribute to the poor NFB score. The strongest fingers 
     | z x c d K  B h , . / |
 ```
 
-
 [CmmAna]: https://colemakmods.github.io/mod-dh/analyze.html (Colemakmods Analyzer)
+
+<br><br>
+
+"IS COLEMAK-???/<YourLayoutHere> THE BEST LAYOUT?"
+==================================================
+
+No, it isn't. The best layout in all likelihood isn't made yet. And ultimately, the question is wrong.
+
+At some point you reach the level of optimization where it's very hard to know what's really better, and what's better for me and you are different things. What's better for anyone may even change depending on what we're doing at the time. I may chat a lot, write scientific papers in English or write letters in Norwegian; there's no one layout that's ideal for all those usages. Therefore, we may optimize as far as we can see a point to it but still: **There isn't actually one one-size-fits-all best layout**.
+
+At some point, the question doesn't even make sense. Typing additions like **Extend** and other helpful layers, **Compose/Completion** sequencing methods and **Sticky and/or home row modifiers** are a whole lot more useful to you than some key swaps in the end. What kind of **keyboard hardware** you're using may matter more than whether you're using so-and-so layout mod. At some point, squeezing out a few more analyzer points should become secondary to other typing improvements.
+
+Another question to ask yourself is that of convenience. The most optimized layouts aren't available on Windows or MacOS; but then again all those other useful layout tools aren't either so maybe that doesn't matter to you. If you have a programmable keyboard or something like the **EPKL** program, some skills and time to spend, you can have nearly any layout with the additions you want. But if you aren't there, you may find that your best option is in fact vanilla Colemak (lots of available options for several OSes and platform) or even the aged and long-toothed Dvorak (comes preinstalled on Windows).
+
+Colemak(-DH/-CAWS/-???) is a solid, balanced and useful choice, regardless. And that's my two bits.

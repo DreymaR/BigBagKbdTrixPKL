@@ -130,24 +130,24 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	}
 	
 	if ( layoutFromCommandLine ) {										; The cmd line layout could be not in theLays?
-		theLayout   := layoutFromCommandLine
-		if ( SubStr( theLayout, 1, 10 ) == "UseLayPos_" ) {				; Use layout # in list instead of full path
-			thePos      := SubStr( theLayout, 11 )
+		thisLay   := layoutFromCommandLine
+		if ( SubStr( thisLay, 1, 10 ) == "UseLayPos_" ) {				; Use layout # in list instead of full path
+			thePos      := SubStr( thisLay, 11 )
 			thePos      := ( thePos > numLayouts ) ? 1 : thePos
-			theLayout   := getLayInfo( "layout" . thePos . "code" )
+			thisLay   := getLayInfo( "layout" . thePos . "code" )
 		}
 	} else {
-		theLayout := getLayInfo( "layout1code" )
+		thisLay := getLayInfo( "layout1code" )
 	}
-	if ( theLayout == "" ) {
+	if ( thisLay == "" ) {
 		pklMsgBox( "01", "layouts .ini" ) 								; "You must set the layout file in the EPKL_Layouts .ini!"
 		ExitApp
 	}
-	setLayInfo( "ActiveLay", theLayout )
+	setLayInfo( "ActiveLay", thisLay )
 	
 	nextLayoutIndex := 1												; Determine the next layout's index
 	Loop % numLayouts {
-		if ( theLayout == getLayInfo( "layout" . A_Index . "code") ) {
+		if ( thisLay == getLayInfo( "layout" . A_Index . "code") ) {
 			nextLayoutIndex := A_Index + 1
 			break
 		}
@@ -164,20 +164,24 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;
 	static initialized  := false
 	
-	theLayout := getLayInfo( "ActiveLay" )
-	layDir  := bool( pklIniRead("compactMode") ) ? "." 
-			 : layDir := "Layouts\" . theLayout 						; If in compact mode, use main dir as layDir
-	mainLay := layDir . "\" . getPklInfo( "LayFileName" )				; The name of the main layout .ini file
-	setPklInfo( "Dir_LayIni"        , layDir  )
-	setPklInfo( "File_LayIni"       , mainLay )							; The main layout file path
-	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?
-	kbdType := _AnsiAns( kbdType )
-	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
-	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
-	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout?
+	laysDir := "Layouts\"
+	thisLay := getLayInfo( "ActiveLay" ) 								; For example, Colemak\Cmk-eD_ANS
+	mainDir := bool( pklIniRead("compactMode") ) ? "." 
+			 : laysDir . thisLay 										; If in compact mode, use the EPKL root dir as mainDir
+	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )				; The path of the main layout .ini file
+	setPklInfo( "Dir_LayIni"        , mainDir )
+	setPklInfo( "File_LayIni"       , mainLay )
+;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
+;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in layout.ini overrides the first Layout_ setting
+;	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
+;	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout
+	IniRead, basePath, % mainLay, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
 	SplitPath, basePath, baseLay, baseDir
-	baseDir         := "Layouts\" . baseDir
-	baseLay         := "Layouts\" . basePath . ".ini"
+	useDots         := ( InStr( basePath, "..\" ) == 1 ) ? true : false
+	baseDir         := ( useDots ) ? mainDir . "\.."         : laysDir . baseDir
+	baseLay         := ( useDots ) ? baseDir . "\" . baseLay : laysDir . basePath
+	baseLay         .= ".ini"
+;	pklDebug( "basePath: " . basePath . "`nbaseDir: " . baseDir . "`nbaseLay:    " . baseLay . "`n`nmainDir: " . mainDir . "`nmainLay:    " . mainLay, 30 )  ; eD DEBUG
 	if FileExist( baseLay ) {
 		setPklInfo( "Dir_BasIni"    , baseDir )
 		setPklInfo( "File_BasIni"   , baseLay ) 						; The base layout file path
@@ -188,7 +192,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	}
 	pklLays := getPklInfo( "Arr_PklLay" )
 	pklLays := [ mainLay, baseLay, pklLays[1], pklLays[2] ] 			; Could also concatenate w/, e.g., pklStck.push( pklLays* )
-	pklDirs := [ layDir , baseDir, "."       , "."        ]
+	pklDirs := [ mainDir, baseDir, "."       , "."        ]
 	layStck := [] 														; The LayStack is the stack of layout info files
 	dirStck := []
 	For ix, file in pklLays {
@@ -323,8 +327,11 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
-			} else if ( ksE == "®®" ) {
-				setKeyInfo( key . ks , -3 ) 							; ®® entry: Repeat previous key
+			} else if ( InStr( ksE, "®" ) == 1 ) {
+				setKeyInfo( key . ks , -3 ) 							; ®® or ®# entry: Repeat previous key (# times)
+				num := SubStr( ksE, 2 )
+				num := ( num == "®" ) ? 1 : Round( "0x" . num ) 		; # may be any hex number without "0x"
+				setKeyInfo( key . ks . "s", num )
 			} else if ( InStr( ksE, "©" ) == 1 ) {
 				setKeyInfo( key . ks , -4 ) 							; ©### entry: Named Compose/Completion key – compose previous key(s)
 				setKeyInfo( key . ks . "s", ks2 )
@@ -387,7 +394,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 							, "1/2/3/4", extStck ), "/", " " ) ) 		; ReturnTo layers for each Extend layer
 		Loop % 4 {
 			setLayInfo( "extImg" . A_Index								; Extend images
-				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), layDir . "\extend.png" ) )
+				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) )
 		}	; end loop ext#
 	}	; end if ( extendKey )
 	
@@ -419,7 +426,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		}
 	}	; end For thisFile in dkStack
 	dkImDir := fileOrAlt( pklIniRead( "img_DKeyDir", ".\DeadkeyImg" 	; Read/set DK image data
-									, "LayStk" ), layDir ) 				; Default DK img dir: Layout dir or DeadkeyImg
+									, "LayStk" ), mainDir ) 			; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
 	HIGfile := pklIniRead( "imgGenIniFile" )							; DK img state suffix was in LayIni
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf", "", HIGfile ) )	; DK img state suffix. Defaults to old ""/"sh".
@@ -457,8 +464,6 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 10 										; The image flashes on startup if this is long
 	if ! bool(pklIniRead("showHelpImage",true))
 		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
-	setPklInfo( "img_HideStates" 					; Convert from CSV to colon-limited
-		, StrReplace( pklIniRead( "img_HideStates" ), ",", ":" ) )
 	
 	setExtendInfo() 								; Prepare Extend info for the first time
 	
