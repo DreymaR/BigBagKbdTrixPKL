@@ -12,6 +12,10 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- TOFIX: After tidying up the Tarmak folder, variants like Tarmak\Tmk-VK-Tm0_ISO_Curl are available but they don't exist?!
+;			- Tarmak\Tmk-ISO_CurlDH-Angle\Tmk-VK-Tm1_ISO_Curl does exist. But no Tm0, and from Tm2 on it's CurlAngle
+;			- The problem may be that the Curl variant exists for Ortho?
+
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
@@ -27,10 +31,10 @@
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 
 ;		- TODO: Could I push single-char Compose output to the LastKeys queue, thereby allowing compose chaining?
-;		- TODO: A compose of U####[#] could send the U+#### Unicode point!
+;		- TODO: A compose of U####[#] could send the U+####[#] Unicode point!
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
-;			- To save time, don't look through the whole LayStack+1 for every entry on startup.
-;		- TOFIX: The completion u → ue isn't working. It's only the one?
+;			- To save time, don't look through the whole LayStack+1 for every entry on startup?
+;		- TOFIX: The completion u → ue or any test single-u composes aren't working. It's only that one letter? Any longer composes with u work fine.
 
 ;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
 ;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
@@ -208,11 +212,12 @@
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;	* EPKL v1.3.1: WIP
-
 ;		- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
 ;		- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 ;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
 ;		- Added the Boo (Dvorak-like modern) layout.
+
+;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
 
 ;;  ####################### main      #######################
 

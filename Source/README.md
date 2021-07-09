@@ -393,9 +393,12 @@ DONE:
 	- In the `EPKL_HelpImgGen_Settings` file, the BrutalMode setting governs whether the EPKL HIG moves generated images straight into the layout folder.
 		- If this setting is true, generated images may overwrite any existing ones. Also, the `ImgGen_` temporary folder is deleted after use.
 * EPKL v1.3.1: WIP
-
 	- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
 	- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
+	- The BaseLayout setting in layout.ini can now take a `..\` syntax.
+	- Added the Boo (Dvorak-like modern) layout.
+
+	- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
 
 <br>
 

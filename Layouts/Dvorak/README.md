@@ -25,7 +25,7 @@ The Dvorak layout
 
 The Dvorak Curl-ID ergo mod
 ---------------------------
-- The Dvorak CurlAngle mod follows the same principles as the [Colemak Curl-DH][BB_CAW] mod.
+- My Dvorak CurlAngle mod follows the same principles as the [Colemak Curl-DH][BB_CAW] mod.
     - That is, it deprioritizes the middle column and brings two important keys (here, U and D) down.
     - This lets the hand home position (AOEIU DHTNS) follow a natural, relaxed curve.
     - Like Cmk-DH, it should be used with an Angle mod (bottom left half-row) on row-staggered boards.
@@ -43,6 +43,16 @@ The Dvorak Curl-ID ergo mod
 
 _The Dvorak Curl-ID AngleWide layout, alias Dvorak-CAW, on an ANSI keyboard_
 
+<br>
+
+The Boo Layout
+--------------
+- Do you like and know Dvorak and want to keep as much of it as possible while still getting a modern layout?
+- I suggest taking a look at [the Boo layout][BooLay]. It's implemented in EPKL.
+- The Boo layout keeps several keys from Dvorak, notably AOE and the right-hand punctuation keys.
+- Other similarities and improvements are discussed in the Boo layout README.
+
 
 [BB_AWi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (DreymaR's Big Bag of Tricks on Angle+Wide ergo mods)
 [BB_CAW]: https://dreymar.colemak.org/ergo-mods.html#CurlDH (DreymaR's Big Bag of Tricks on the Curl-DH ergo mod)
+[BooLay]: ../Boo/ (The Boo layout in EPKL)

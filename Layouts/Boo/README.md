@@ -9,14 +9,11 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 The Boo layout
 --------------
 - This is a hand-made layout by Discord user Boo. It fares well even in modern analysis.
-- It has similarities to Dvorak, such as the `AOE` and `,.` placements, but much better stats.
-- Note that it has U on the same finger as E to reduce same-finger bigrams (SFB).
-- It also avoids placing I on the index finger like Dvorak has, for the same reason.
 - It contains its own Symbol mod by default, including the good hyphen placement of Dvorak.
 - For more info, see the [Boo Layout Page at github.io][BooLay].
 <br>
 
-![Boo!](./_Res/Ghost_Boo.png)
+![Boo!](./_Res/Ghost_Discord.png)
 
 <br><br>
 
@@ -24,4 +21,23 @@ The Boo layout
 |   :---:   |
 |_The Boo-AngleSym layout on an ISO board_|
 
+<br>
+
+Similarity to Dvorak
+--------------------
+- Boo has several similarities to Dvorak, such as the `AOE` and symbol key placements.
+- It still has much better stats due to observation of modern design philosophies.
+- Therefore, it may be a good choice for experienced Dvorak users who want a better layout?!
+- Note that it has U on the same finger as E to reduce same-finger bigrams (SFB).
+- It also avoids placing I on the index finger like Dvorak has, for the same reason.
+- As a result of the UE improvement, `, .` move one key to the left.
+- The LS and RN SFBs are avoided by the `L > R > N > H` remap.
+- The poor F position is fixed by a simple move, much like in [DreymaR's Dvorak-Curl-ID mod][Dvk-ID].
+<br>
+
+![Conservations and close displacements from Dvorak to the Boo layout](./_Res/Similarity_Dvorak-2-Boo.png)
+
+_Conserved keys (yellow) and close displacements (arrows) going from Dvorak to the Boo layout._
+
 [BooLay]: https://ballerboo.github.io/boolayout/ (The Boo layout page on github.io)
+[Dvk-ID]: ../Dvorak#the-dvorak-curl-id-ergo-mod (DreymaR's Dvorak Curl-ID ergo mod)
