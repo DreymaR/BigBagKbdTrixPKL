@@ -35,7 +35,7 @@ pkl_SendThis( this, modif = "" ) { 								; Actually send a char/string. Also l
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
 	if ( StrLen( tht ) == 3 ) 									; Single-char keys are on the form "{¤}"
-		lastKeys( "push", tht )
+		lastKeys( "push", SubStr( tht, 2, 1 ) )
 ;	toggleAltGr := ( getAltGrState() ) ? true : false 	; && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
 ;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
 ;		setAltGrState( 0 )				; Release LCtrl+RAlt temporarily if applicable
@@ -51,13 +51,32 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 		pklWarning( "An empty/undefined Compose key was pressed." )
 		Return
 	}
-	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["{¤}","{¤}","{¤}","{¤}"]
+	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["¤","¤","¤","¤"]
 	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
 	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
 	key     := ""
-	For ix, chr in LastKeys { 									; Build a 4-char key from LastKeys to match the Compose table
-		kys .= "_U" . formatUnicode( SubStr( chr, 2, 1 ) ) 		; Format 4 single-char "{¤}" keys as a 4×[_U####] hex string (4+ digits).
+	For ix, chr in LastKeys { 									; Build a n-char key from LastKeys to match the Compose table
+;		ch  := SubStr( chr, 2, 1 )
+		chs .= chr
+		kys .= "_U" . formatUnicode( chr ) 						; Format n single-char keys as a n×[_U####] hex string (4+ digits).
 ;		debug   .= " , " . chr
+	} 	; end for chr in LastKeys
+	uni := false
+	if ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
+		uni := 5
+	} else if ( SubStr( chs, -4, 1 ) == "U" ) {
+		uni := 4
+	}
+	if ( uni ) {
+		chs := SubStr( chs, 1 - uni )
+		if isHex( chs ) {
+			chr := chr( "0x" . chs )
+			uni += 1
+			SendInput {Backspace %uni%}
+			SendInput {Text}%chr%
+			lastKeys( "push", chr )
+			Return
+		}
 	}
 	For ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
 		For ix, sct in tables {
@@ -73,7 +92,11 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 					ent := strEsc( ent ) 						; Escape special chars with backslashes (not necessary for a single \ )
 					SendInput {Text}%ent% 						; Send the entry as {Text} by default
 				}
-				lastKeys( "null" )  							; Reset the last-keys-pressed buffer
+				if ( StrLen( ent ) == 1 ) {
+					lastKeys( "push", ent ) 					; Push single-char Compose releases to the queue for further composing
+				} else {
+				lastKeys( "null" )  							; Reset the last-keys-pressed buffer 	; eD WIP: If the output is single-char, push it instead!
+				}
 				Return 											; If a longer match is found, don't look for shorter ones
 			} 	; end if keyArr
 		} 	; end for sections

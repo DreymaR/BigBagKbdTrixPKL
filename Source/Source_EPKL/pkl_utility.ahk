@@ -302,6 +302,12 @@ isInt( this ) { 											; AHK cannot use "is <type>" in expressions...
 	Return false 											; Else. May not be strictly necessary in AHK syntax.
 }
 
+isHex( this ) { 											; AHK cannot use "is <type>" in expressions...
+	if this is xdigit   									; ...so use this wrapper function instead.
+		Return true
+	Return false
+}
+
 bool( val ) { 												; Convert an entry to true or false (default)
 	val := loCase( val )
 	Return ( val == "1" || val == "yes" || val == "y" || val == "true" ) ? true : false

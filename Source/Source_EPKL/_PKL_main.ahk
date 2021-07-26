@@ -30,11 +30,8 @@
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 
-;		- TODO: Could I push single-char Compose output to the LastKeys queue, thereby allowing compose chaining?
-;		- TODO: A compose of U####[#] could send the U+####[#] Unicode point!
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
 ;			- To save time, don't look through the whole LayStack+1 for every entry on startup?
-;		- TOFIX: The completion u → ue or any test single-u composes aren't working. It's only that one letter? Any longer composes with u work fine.
 
 ;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
 ;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
@@ -216,8 +213,10 @@
 ;		- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 ;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
 ;		- Added the Boo (Dvorak-like modern) layout.
-
 ;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
+
+;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gr-a` → `α` then `'` → `ά`.
+;		- Composing U####[#] where # are hex digits, sends the corresponding Unicode character
 
 ;;  ####################### main      #######################
 

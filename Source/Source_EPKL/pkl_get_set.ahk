@@ -202,7 +202,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			} 	; end for lengths
 			For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 				pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
-				if ( not InStr( key, "U" ) == 1 ) { 				; The key is a sequence of characters instead of a sequence of hex strings
+				if ( RegExMatch( key, "U[[:xdigit:]]{4}" ) != 1 ) { 	; The key is a sequence of characters instead of a sequence of hex strings
 					kyt := ""
 					kys := ""
 					For ix, chr in StrSplit( key ) { 				; Format the character string to a U####[_U####]* key
