@@ -230,7 +230,7 @@ Where:
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é
     - The key can also be used for completions, adding to instead of deleting the original sequence
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
-    - Composing U#### where #### is a 4-5 digit hex number, sends the corresponding Unicode character.
+    - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
 * A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
     - Mapping to `®#` where `#` is a hex number, repeats the key # times. Modifiers affect this but sticky mods don't.
 <br>

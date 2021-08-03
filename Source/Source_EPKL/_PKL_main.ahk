@@ -214,9 +214,8 @@
 ;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
 ;		- Added the Boo (Dvorak-like modern) layout.
 ;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
-
 ;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gr-a` → `α` then `'` → `ά`.
-;		- Composing U####[#] where # are hex digits, sends the corresponding Unicode character
+;		- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
 
 ;;  ####################### main      #######################
 

@@ -2,7 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
-![EPKL help image for Dvorak-AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-AWide_EPKL.png)
+![EPKL help image for Dvorak-AWide on an ANSI board](./_Res/Dvorak_ANS-AWide_EPKL.png)
 
 _The Dvorak layout with [Angle+Wide ergonomic mods][BB_AWi] on an ANSI board_
 
@@ -39,7 +39,7 @@ The Dvorak Curl-ID ergo mod
 - Speaking for myself, however, I'd still recommend using a more modern optimized layout like Colemak.
 <br>
 
-![EPKL help image for Dvorak-Curl(ID)AWide on an ANSI board](./Dvk-Images/Dvorak_ANS-CurlAWide_EPKL.png)
+![EPKL help image for Dvorak-Curl(ID)AWide on an ANSI board](./_Res/Dvorak_ANS-CurlAWide_EPKL.png)
 
 _The Dvorak Curl-ID AngleWide layout, alias Dvorak-CAW, on an ANSI keyboard_
 
