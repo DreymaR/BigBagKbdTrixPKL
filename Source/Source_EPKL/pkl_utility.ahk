@@ -99,6 +99,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 
 pklJanitorTic:
 	_pklSuspendByApp()
+	_pklSuspendByLID()
 	_pklJanitorActivity()
 	_pklJanitorLocaleVK()
 ;	_pklJanitorCleanup() 	; eD WIP: Testing EPKL without the idle keyups
@@ -114,6 +115,21 @@ _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 		}
 	} else if ( suspendedByApp ) {
 		suspendedByApp := false
+		Gosub suspendOff
+	}
+}
+
+_pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
+	static suspendedByLID := false 								; (They're specified by LID as seen in About...)
+
+	suspendingLIDs := getPklInfo( "suspendingLIDs" )
+	if inStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
+		if ( not suspendedByLID ) { 							; ...and not already A_IsSuspended...
+			suspendedByLID := true
+			Gosub suspendOn
+		}
+	} else if ( suspendedByLID ) {
+		suspendedByLID := false
 		Gosub suspendOff
 	}
 }
@@ -240,12 +256,12 @@ getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK nam
 	Return name
 }
 
-getWinLocaleID() { 											; Win LID; for Language use A_Language.
-	WinGet, WinID,, A
+getWinLocaleID() { 											; Actual Win LocID; for LangID use A_Language.
+	WinGet, WinID,, A 										; The ID of the active window
 	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
 	WinLocaleID := DllCall("GetKeyboardLayout", "Int", WinThreadID)
-	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16
-	Return WinLocaleID
+	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16 		; Only use the last four xdigits
+	Return Format( "{:04x}", WinLocaleID ) 					; Return as 4-xdigit; used to be decimal
 }
 
 fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative

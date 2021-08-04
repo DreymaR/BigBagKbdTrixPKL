@@ -122,8 +122,8 @@
 
 pkl_about()
 {
-	msLID := getWinLocaleID() 									; The 4-digit Windows Locale ID
-	wLang := A_Language 										; The 4-digit Language code
+	msLID := getWinLocaleID() 									; The 4-xdigit Windows Locale ID (usually decimal)
+	wLang := A_Language 										; The 4-xdigit Language code (often same as LID)
 	dkStr := getCurrentWinLayDeadKeys() 						; The Windows layout's dead key string
 	dkStr := dkStr ? dkStr : "<none>"
 
@@ -190,7 +190,7 @@ pkl_about()
 ;		text .= "`nCurl/Ergo/Other mod from settings: "     . hardMod
 ;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
 		text :=   "EPKL.exe compiled on: "                  . compiledOn            . "`n"
-		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " " . wLang
+		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"
 		text .= "`nLayout/BaseLayout file paths:`n- " . layFile . "`n- " . basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs

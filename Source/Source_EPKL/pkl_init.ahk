@@ -52,6 +52,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}	; end For suspApp
+	_pklSetInf( "suspendingLIDs" ) 										; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
 	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (CSV)
 	_pklSetInf( "stickyTime" ) 											; --"--

@@ -401,6 +401,8 @@ DONE:
 	- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gre-a` → `α` then `'` → `ά`.
 	- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
 
+	- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
+		- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
 <br>
 
 TODO:

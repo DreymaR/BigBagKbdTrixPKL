@@ -17,6 +17,7 @@
 ;			- The problem may be that the Curl variant exists for Ortho?
 
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
@@ -216,6 +217,9 @@
 ;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
 ;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gr-a` → `α` then `'` → `ά`.
 ;		- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
+
+;		- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
+;			- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
 
 ;;  ####################### main      #######################
 
@@ -450,8 +454,8 @@ Return
 epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
 	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .6 )
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
-	importComposer() 									; eD WIP: Import an X11 Compose file to EPKL format
-;	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
+;	importComposer() 									; eD WIP: Import an X11 Compose file to EPKL format
+	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 Return
 
 ;;  ####################### functions #######################

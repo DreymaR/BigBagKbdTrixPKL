@@ -197,8 +197,7 @@ detectCurrentWinLayDeadKeys()
 	
 	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
 	Send {Text}%txt%:%A_Space%
-	WinLayoutID := getWinLocaleID() ; eD
-	Send %WinLayoutID%
+	Send % getWinLocaleID()
 	Send {Enter}
 	
 	if ( notepadMode )
