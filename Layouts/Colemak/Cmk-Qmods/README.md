@@ -13,15 +13,15 @@ Colemak Discord user Nyfee's "bleeding-edge" Colemak-Q mods
 -----------------------------------------------------------
 - Colemak design philosophy keeps ZXCV in place, and tries to avoid keys swapping hands.
 - These variants don't, with the purpose of squeezing out some more analyzer points and maybe layout quality.
-- The newest mods have scored quite well in analysis, possibly(!) beating Colemak-DH by a bit.
+- The newest mods have scored quite well in analysis, in some cases beating Colemak-DH by a bit.
 - Cmk-QI releases the Cmk constraint of keys changing hands. ZXCV didn't need moving.
-- It was inspired by and takes some ideas from the [IndyRad/ISRT layout by NotGate][NotGte].
+- It was inspired by and takes some ideas from the [ISRT/"IndyRad" layout by NotGate][NotGte].
 - Cmk-QI;x is the "extra mile" variant. More changes, lower SFB% but uncertain gains.
     - QI;x adds SL-CM & Q-SC swaps to get SFB% down, and the purely subjective C-W swap.
     - It still ends up at about the same Colemakmods analysis score as Cmk-DH, no more.
 - Cmk-QI supports the standard Sym and Wide mods. Cmk-QI;x has its own Sym and no Wide mod.
-- ColemaQ is a slightly older variant that consists of 3–4 simple key swaps. See below.
-- There were some predecessor mods named Hirou and XCept; these likely aren't in use anymore.
+- [ColemaQ][CmQwww] is a slightly older variant that consists of 3–4 simple key swaps. See below.
+- There were a couple of predecessors named Hirou and XCept; these likely aren't in use anymore.
 <br><br>
 
 #### Colemak-QI by Nyfee, 2021-03:
@@ -157,6 +157,7 @@ However, we've had people advertising this and similar mods as "objectively bett
 |_Colemak-eD-QI_ISO_CurlAWideSym, unshifted state. Note the <kbd>Compose</kbd> key in the middle._|
 
 
+[CmQwww]: https://colemaq.github.io/ (ColemaQ web page)
 [CM-Ana]: http://colemakmods.github.io/mod-dh/analyze.html (Colemakmods Layout Analysis Tool)
 [NotGte]: https://notgate.github.io/layout/ (NotGate's layout page, home of the ISRT layout)
 [TestRM]: ../README.md (EPKL _Test folder README)

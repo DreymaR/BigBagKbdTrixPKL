@@ -1,6 +1,7 @@
 ﻿													;   ###############################################################
 initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
 { 													;   ###############################################################
+	
 	;; ================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
@@ -67,23 +68,25 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	;;  Find and read from the Layouts file(s)
 	;
 	theLays :=  pklIniRead( "layout", "", pklLays ) 					; Read the layouts string from EPKL_Layouts
-	layMain := _pklLayRead( "LayMain", "Colemak"    ) 					; Main Layout: Colemak, Tarmak, Dvorak etc
-	shortLays   := pklIniCSVs( "shortLays", "Colemak\Cmk", "PklDic" ) 	; CSV list of main layout name abbreviations
-	shortLayDic := {} 													;     (Default: First 3 letters)
-	For ix, entr in shortLays {
-		split := StrSplit( entr, "\" )
+	layMain := _pklLayRead( "LayMain", "Colemak\@3-@T@V" ) 				; Main Layout: Colemak, Tarmak, Dvorak etc.
+	split   := StrSplit( layMain, "\" ) 								; LayMain can also contain a subfolder.
+	layName := split[1]
+	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
+	shortLayDic := {} 													; CSV list of main layout name abbreviations
+	For ix, entr in shortLays { 										;     (Default: First 3 letters)
+		split := StrSplit( entr, "/" )
 		if ( split.maxIndex() != 2 )
 			Continue
 		shortLayDic[ split[1] ] := split[2]
 	}
 	setPklInfo( "shortLays", shortLayDic )
-	if InStr( layMain, "\" ) { 											; The LayMain may be on the form 'Layout\3LA' already...
-		split   := StrSplit( layMain, "\" )
+	if InStr( layMain, "/" ) { 											; The LayMain may be on the form 'Layout/3LA' already...
+		split   := StrSplit( layMain, "/" )
 		layMain := split[1]
 		lay3LA  := split[2]
 	} else { 															; ...or not, in which case we look up or generate the 3LA.
-		lay3LA  := ( shortLayDic[ layMain ] ) ? shortLayDic[ layMain ]
-											  : SubStr( layMain, 1, 3 )
+		lay3LA  := shortLayDic[ layName ]
+		lay3LA  := ( lay3LA ) ? lay3LA : SubStr( layMain, 1, 3 )
 	}
 	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
 	layVari := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl", or other variant such as Tarmak steps
@@ -95,12 +98,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		}	; end For LVar
 	}	; end For LVars
 	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari 		;   (can be a single locale of a harmonized layout like BeCaFr)
-	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, _ISO/_ANS(I)/_etc 	; eD WIP: Removed , "_"
-;	if InStr( kbdType, "-" ) { 											; eD WIP: Trad/Orth/Splt/etc so we have ISO-Orth, ANS (=ANS-Trad) etc
-;		kbdType := StrSplit( kbdType, "-" ) 							; eD WIP: Use pklIniCSVs() to read it instead?
-;		kbdForm := kbdType[2] 						; eD WIP: Hang on... If we use types with hyphens, we don't need to split and recombine them!
-;		kbdType := kbdType[1]
-;	}
+	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, ISO/ANS(I)/etc
 	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl/DH mod
 	hardMod := _pklLayRead( "HardMod"               ) 					; --, Hard mod - Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix like Sym
@@ -108,27 +106,37 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	theLays := StrReplace( theLays, "@Ʃ",   "@L-@T@V"  ) 				; Shorthand .ini notation for main layout, type and variant
 	theLays := StrReplace( theLays, "@Ç",   "@K@C@H@O" ) 				; Shorthand .ini notation for KbdType[_]ErgoMods; not in use
 	theLays := StrReplace( theLays, "@E",     "@C@H@O" ) 				; Shorthand .ini notation for the full ergomods battery
-	theLays := StrReplace( theLays, ":@L",  ":" . layMain ) 			; Replaces @L w/ LayMain in menu names, given that they start with @L
+	theLays := StrReplace( theLays, ":@L",  ":" . layName ) 			; Replaces @L w/ LayMain in menu names, given that they start with @L
 	theLays := StrReplace( theLays, "@L",   layMain . "\" . lay3LA ) 	; Replaces @L w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
 	theLays := StrReplace( theLays, "@3",   lay3LA  )
 	theLays := StrReplace( theLays, "@T",   layType )
 	theLays := StrReplace( theLays, "@V",   localID ) 					; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
 	kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
 	theLays := StrReplace( theLays, "@K@","@K" . kbdTypJ . "@" ) 		; --"--
-	theLays := StrReplace( theLays, "@K",   kbdType ) 					; Later on, EPKL will use atKbdType() for layout files instead of this one
+	theLays := StrReplace( theLays, "@K",   kbdType ) 					; Later on, EPKL will use atKbdType() for layout files instead of this one 	; . "_"
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@H",   hardMod )
 	theLays := StrReplace( theLays, "@O",   othrMod )
 	layouts := StrSplit( theLays, ",", " `t" )							; Split the CSV layout list
 	numLayouts := layouts.MaxIndex()
 	setLayInfo( "NumOfLayouts", numLayouts )							; Store the number of listed layouts
-	Loop % numLayouts {													; Store the layout dir names and menu names
-		nameParts := StrSplit( layouts[ A_Index ], ":" )
+	for ix, thisLay in layouts { 										; Store the layout dir names and menu names
+;		kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : ""
+;		needle  := kbdType .           curlMod . hardMod . othrMod 		; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
+;		newtxt  := kbdType . kbdTypJ . curlMod . hardMod . othrMod
+;		thisLay := RegExReplace( thisLay, needle, newtxt )
+		nameParts := StrSplit( thisLay, ":" )
 		theCode := nameParts[1]
-		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : nameParts[1]
+		theCode := RegExReplace( theCode, "_$"       ) 					; If the layout code ends with the KbdType, the trailing underscore is omitted
+		theCode := RegExReplace( theCode, "_\\", "\" ) 					; The trailing underscore may also figure in subpaths
+		if ( not theCode ) { 											; Empty entries cause an error, but any other layouts still work
+			theCode := "<N/A>"
+			pklWarning( "At least one layout entry is empty" )
+		}
+		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : theCode
 		setLayInfo( "layout" . A_Index . "code", theCode )
 		setLayInfo( "layout" . A_Index . "name", theName )
-	}
+	} 	; end for thisLay
 	
 	if ( layoutFromCommandLine ) {										; The cmd line layout could be not in theLays?
 		thisLay   := layoutFromCommandLine
@@ -141,7 +149,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 		thisLay := getLayInfo( "layout1code" )
 	}
 	if ( thisLay == "" ) {
-		pklMsgBox( "01", "layouts .ini" ) 								; "You must set the layout file in the EPKL_Layouts .ini!"
+		pklMsgBox( "01", "layouts .ini" ) 								; "You must set a layout file in the EPKL_Layouts .ini!"
 		ExitApp
 	}
 	setLayInfo( "ActiveLay", thisLay )
@@ -160,6 +168,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 													;   ###############################################################
 initLayIni() 										;   ######################### layout.ini  #########################
 { 													;   ###############################################################
+	
 	;; ================================================================================================
 	;;  Find and read from the layout.ini file and, if applicable, BaseLayout/LayStack
 	;
@@ -328,18 +337,11 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
-			} else if ( InStr( ksE, "®" ) == 1 ) {
-				setKeyInfo( key . ks , -3 ) 							; ®® or ®# entry: Repeat previous key (# times)
-				num := SubStr( ksE, 2 )
-				num := ( num == "®" ) ? 1 : Round( "0x" . num ) 		; # may be any hex number without "0x"
-				setKeyInfo( key . ks . "s", num )
-			} else if ( InStr( ksE, "©" ) == 1 ) {
-				setKeyInfo( key . ks , -4 ) 							; ©### entry: Named Compose/Completion key – compose previous key(s)
-				setKeyInfo( key . ks . "s", ks2 )
-				compKeys.Push( ks2 )
 			} else {
 				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
-				if InStr( "%→$§*α=β~«@Ð&¶", ksP ) {
+				if ( ksP == "©" ) 										; ©### entry: Named Compose/Completion key – compose previous key(s)
+					compKeys.Push( ks2 ) 								; Register Compose key for initialization
+				if InStr( "%→$§*α=β~«@Ð&¶®©", ksP ) {
 					ksE := ks2 											; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
@@ -358,8 +360,6 @@ initLayIni() 										;   ######################### layout.ini  ###############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
-	
 	;; ================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
@@ -369,7 +369,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		if FileExist( extFile )
 			extStck.push( extFile ) 									; The LayStack overrides the dedicated file
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
-		For ix, thisFile in extStck { 									; Parse the LayStack then the ExtendFile. 	; eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
+		For ix, thisFile in extStck { 									; Parse the LayStack then the ExtendFile.
+		; eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
 			Loop % 4 {													; Loop the multi-Extend layers
 				extN := A_Index
 				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4 	; Deprecated: [extend] in pkl.ini
@@ -387,6 +388,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 					}
 					if ( getKeyInfo( key . "ext" . extN ) != "" ) 		; Skip mapping if already defined
 						Continue
+					if ( InStr( extMapping, "©" ) == 1 )
+						compKeys.Push( SubStr( extMapping, 2 ) ) 		; Register Compose key for initialization
 					setKeyInfo( key . "ext" . extN , extMapping )
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#
@@ -398,6 +401,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) )
 		}	; end loop ext#
 	}	; end if ( extendKey )
+	
+	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
 	;; ================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
@@ -449,6 +454,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 
 activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 {
+	SetCapsLockState, Off 							; Remedy those pesky CapsLock hangups at restart
 	SetTitleMatchMode 2
 	DetectHiddenWindows on
 	WinGet, id, list, %A_ScriptName%
@@ -456,22 +462,23 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 		id := id%A_Index% 							; If this isn't the first instance...
 		PostMessage, 0x398, 422,,, ahk_id %id% 		; ...send a "kill yourself" message to all instances.
 	}
-	Sleep, 10
+	Sleep, 20
 	
 	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	Menu, Tray, Icon,,, 1 							; Freeze the tray icon
 	
 	pkl_showHelpImage( 1 ) 							; Initialize/show the help mage...
-	Sleep, 10 										; The image flashes on startup if this is long
-	if ! bool(pklIniRead("showHelpImage",true))
+	ims := bool(pklIniRead("showHelpImage",true)) ? 2 : 3
+	Loop % ims {
 		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
-	
+		Sleep, 42 									; The image flashes on startup if this is too long
+	} 												; Repeat image on/off to avoid minimize-to-taskbar bug 	; eD WIP: This is hacky but hopefully effective?!
 	setExtendInfo() 								; Prepare Extend info for the first time
 	
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
-	SetTimer, pklJanitorTic,  1000 					; Perform cleanup routine every 1 s
+	SetTimer, pklJanitorTic,  1000 					; Perform regular tasks routine every 1 s
 	
 	if bool(pklIniRead("startSuspended")) {
 		Suspend

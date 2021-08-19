@@ -25,17 +25,18 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 {
 	if ( not key )
 		Return
-	layStck := ( iniFile == "LayStk" ) ? true : false
-	if ( iniFile == "PklSet" ) {
-		iniFile := getPklInfo( "SetStack" )
-	} else if ( layStck ) { 											; The LayStack is a special case,
+;	layStck := ( iniFile == "LayStk" ) ? true : false
+	if ( layStck := ( iniFile == "LayStk" ) ? true : false ) { 			; The LayStack is a special case,
 		iniFile := getPklInfo( "LayStack" ) 							; going through all 4 layout files.
 		iniDirs := getPklInfo( "DirStack" )
+	} else if ( iniFile == "PklSet" ) {
+		iniFile := getPklInfo( "SetStack" )
 	}
 	if ( ! IsObject( iniFile ) ) 										; Turn single-file calls into arrays
 		iniFile := [ iniFile ]
 	For ix, theFile in iniFile { 										; Read from iniFile. Failing that, altFile.
-		hereDir := ( layStck ) ? iniDirs[ix] : "." 						; LayStack files may  use own home dirs
+		SplitPath, theFile, , hereDir
+		hereDir := ( layStck ) ? iniDirs[ix] : hereDir 					; LayStack files may  use own home dirs
 		if ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
 		if        ( key == "__List" ) { 								; Use key = __List for a section list

@@ -24,7 +24,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	}
 	ui_SepLine  := "————————————————" . "————————————————" . "————————————————" . "————" . "————" . "————" ;. "————"
 	ui_WideTxt  := "                " . "                " . "                " . "    " . "    " ;. "    " . "    "
-	ui_WideTxt  .= ui_WideTxt . "" 								; Standard edit box text (for autosizing its width)
+	ui_WideTxt  .= ui_WideTxt . "  " 							; Standard edit box text, autosizing the box width
 	footText    := "`n* Only the topmost active ""<key> ="" line in the section is used."
 	footText    .= "`n* Lines starting with a semicolon are commented out (inactive)."
 	
@@ -45,7 +45,7 @@ pklSetUI() { 													; EPKL Settings GUI
 					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
 	_uiAddSel(  "Main layout: "
 			,       "LayMain"   , ""            , mainLays              )
-	GUIControl, ChooseString, UI_LayMain, % "Colemak" 			; We may have layouts before Colemak in the alphabet
+	GuiControl, ChooseString, UI_LayMain, % "Colemak" 			; We may have layouts before Colemak in the alphabet
 	GUI, UI:Add, Text,      , % "Layout type:"
 	GUI, UI:Add, Text, x+92 , % "Keyboard type:" 				; Unsure how this works at other resolutions?
 	_uiAddSel(  "" 	;"Layout type:" 							; Place at the x value of the previous section
@@ -57,8 +57,11 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddSel( "Mods, if any: " 								; Make a box wider than the previous one: "wp+100"
 			,       "LayMods"   , "Choose1"     , [ ui_NA ]             ) 	; A default here may fail on the first selection if a nonexisting combo is chosen
 	
-	_uiAddEdt( "`nIn the Layouts_Override [pkl] section: layout = "
-			,       "LayFile"   , ""            , ui_WideTxt            ) 	; . "`n"
+	_uiAddEdt( "`nIn the Layouts_Override [pkl] section: layout = " 	; eD WIP: Replace this with a ComboBox
+			,       "LayFile"   , ""            , ui_WideTxt            )
+	layFiles    := [ "--"   , "<add layout>" ] 					; Default entry for the LayFile ComboBox
+;	_uiAddSel( "`nIn the Layouts_Override [pkl] section: layout = " 	; eD WIP: For multi-layout select, make this a ComboBox. Use AltSubmit for position selection?
+;			,       "LayFile"   , "Choose1 w350"     , layFiles         )
 	_uiAddEdt( "`nEPKL Layouts menu name. Edit it if you wish:"
 			,       "LayMenu"   , ""            , ui_WideTxt            )
 	GUI, UI:Add, Text,, % footText . "`n"
@@ -211,7 +214,10 @@ UIselLay: 														; Handle UI Layout selections
 	layFolder   := main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsPref . layModsName
 	layPath     := layPath[ layFolder ]
 ;	( 1 ) ? pklDebug( "`nDir:  " . layFolder . "`nPath: " . layPath , 1 )  ; eD DEBUG
-	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layFolder )
+;	_uiControl( "LayFile", 
+;	ControlGet, tmpList, List, ,ComboBox6, EPKL Settings 		; The DDL boxes are counted as ComboBox
+;	( 1 ) ? pklDebug( "" . tmpList, 3 )  ; eD DEBUG
+	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layFolder ) 	; eD WIP: Make this update the right line in the LayFile ComboBox
 	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . " " . layModsName . "(" . UI_LayKbTp . ")"
 	_uiControl( "LayMenu", layMenuName )
 Return
@@ -327,29 +333,29 @@ Return
 _uiControl( var, values ) { 									; Update an UI Control with new values and, if applicable, choice
 	var := "UI_" . var 											; Name of the global UI var
 	val := %var% 												; Content of the UI var
-	GUIControl, , %var%, %values% 								; This also works for edit/text controls
+	GuiControl, , %var%, %values% 								; This also works for edit/text controls
 	if InStr( values, val ) { 									; Try to keep the chosen option in a DDL, or take the first choice
-		GUIControl, ChooseString, %var%, %val%
+		GuiControl, ChooseString, %var%, %val%
 	} else {
-		GUIControl, Choose      , %var%, 1
+		GuiControl, Choose      , %var%, 1
 	}
-	GUI, UI:Submit, Nohide 										; Needed to update the GUI values
+	GUI, UI:Submit, Nohide 										; Needed to update the GUI values (or maybe I could've used |%val% ?)
 }
 
-_uiAddEdt( intro, var, opts, editTxt, pos = "" ) { 				; Add an Edit box with text
-	GUI, UI:Add, Text,           %pos% , % intro
+_uiAddEdt( iTxt, var, opts, editTxt, pos = "" ) { 				; Add an Edit box with text
+	GUI, UI:Add, Text,           %pos% , % iTxt
 	GUI, UI:Add, Edit, vUI_%var% %opts%, % editTxt
 }
 
-_uiAddSel( intro, var, opts, listArr, pos = "" ) { 				; Add a DropDownList selection box with text and some choices
+_uiAddSel( iTxt, var, opts, listArr, pos = "", typ = "DDL" ) { 	; Add a DropDownList selection box with text and some choices
 	listStr := _uiPipeIt( listArr, 0, 0 )
-	if ( intro ) {
-		GUI, UI:Add, Text, %pos%, % "" . intro 					; Whitespace pad the text a little?
+	if ( iTxt ) {
+		GUI, UI:Add, Text, %pos%, % "" . iTxt 					; Whitespace pad the text a little?
 	} else {
 		opts .= " " . pos
 	}
 	mod := SubStr( var, 1, 3 ) 									; UI_Lay####, Key, Set
-	GUI, UI:Add, DDL , gUIsel%mod% vUI_%var% %opts%, % listStr
+	GUI, UI:Add, %typ% , gUIsel%mod% vUI_%var% %opts%, % listStr
 }
 
 _uiGetDir( getDir, theVar = "" ) { 								; Get a list of a directory in an array

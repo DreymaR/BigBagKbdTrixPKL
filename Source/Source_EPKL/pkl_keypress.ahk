@@ -34,8 +34,6 @@ runKeyPress() 													; Called from the PKL_main processKeyPress# timer lab
 
 _keyPressed( HKey ) 											; Process a HotKey press
 {
-	static LastKey  := "" 										; Used by the Repeat key
-	
 	modif := ""
 	state := 0
 	capHK := getKeyInfo( HKey . "capSt" ) 						; Caps state (0-5 as MSKLC; -1 VK; -2 Mod)
@@ -104,19 +102,11 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		}
 	}	; end if Pri
 	_osmClearAll() 												; If another key is pressed while a OSM is active, cancel the OSM
-	if ( Pri == -3 ) { 											; Repeat previous key
-		Loop % Ent {
-			_keyPressed( LastKey ) 								; NOTE: Holding down modifiers will affect this. Sticky mods won't.
-		}
-	} else if ( Pri == -4 ) { 									; Compose/Completion key
-		pkl_Composer( Ent )
-	} else {
-		LastKey := HKey
-	}
+;	if ( not InStr( "®©", Pri ) ) 								; Log the last pressed key for Repeat, unless it was a ®# Repeat or ©### Compose
+;		setKeyInfo( "LastKey", HKey ) 							; eD WIP: Use the LastKeys array instead, to avoid modifier complications
 }	; end fn _KeyPressed										; eD WIP: Should _osmClearAll() be used more places above?
 
-extendKeyPress( HKey )											; Process an Extend modified key press
-{
+extendKeyPress( HKey ) { 										; Process an Extend modified key press
 	Critical
 	static extMods  := {}
 	static modList := { "" 										; Dictionary of modifiers vs their AHK codes

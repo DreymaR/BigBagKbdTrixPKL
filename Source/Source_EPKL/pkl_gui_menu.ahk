@@ -34,6 +34,8 @@
 	Loop % numOfLayouts { 										; Layouts menu list w/ icons
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
+		if ( layCode == "<N/A>" ) 								; Empty name entries cause an icon error below
+			Continue
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
 		if ( layCode == activeLayout ) {
 			Menu, changeLayout, Default, %layName%

@@ -216,7 +216,7 @@ Where:
     - _Example:_ For the <kbd>Y</kbd> key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
     - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
-* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for each prefix):
+* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for most prefixes):
     - → | %‹entry› : Send a literal string/ligature by the SendInput {Text}‹entry› method (default)
     - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
     - α | *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# are modifiers, {} key names)
@@ -224,15 +224,16 @@ Where:
     - « | ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
     - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab...
-* A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
-    - Note that since EPKL can't know what this produces, a `##` mapped key can't be used in composing sequences (see below).
-* A state mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the 1–4 last written characters with something else.
-    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é
+* A mapping of `®®` repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
+    - Mapping to `®#` where `#` is a hex number, repeats the last key # times.
+* A mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the last written characters with something else.
+    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
+    - Example: Composing `noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
     - The key can also be used for completions, adding to instead of deleting the original sequence
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
     - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
-* A state mapping of `®®` repeats the previous key pressed. Nice for avoiding same-finger bigrams. Works best as a thumb key.
-    - Mapping to `®#` where `#` is a hex number, repeats the key # times. Modifiers affect this but sticky mods don't.
+* A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
+    - Note that since EPKL can't know what this produces, a `##` mapped key can't be used in compose sequences.
 <br>
 
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.

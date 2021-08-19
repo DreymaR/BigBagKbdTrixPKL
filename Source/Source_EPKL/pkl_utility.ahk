@@ -123,7 +123,7 @@ _pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
 	static suspendedByLID := false 								; (They're specified by LID as seen in About...)
 
 	suspendingLIDs := getPklInfo( "suspendingLIDs" )
-	if inStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
+	if InStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
 		if ( not suspendedByLID ) { 							; ...and not already A_IsSuspended...
 			suspendedByLID := true
 			Gosub suspendOn
@@ -134,7 +134,7 @@ _pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
 	}
 }
 
-_pklJanitorActivity() {
+_pklJanitorActivity() { 										; Suspend/exit EPKL after a certain time of inactivity, if set
 	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 			; Convert from min to ms
 	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 			; Convert from min to ms
 	idleTime := A_TimeIdle 										; eD WIP: Use TimeIdlePhysical instead?
@@ -210,7 +210,7 @@ pklDebug( text, time = 2 ) {
 
 pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) { 				; Set a menu hotkey (used in pkl_init)
 	For ix, hkey in pklIniCSVs( hkIniName ) {
-		if ( hkey == "" )
+		if ( hkey == "" || hkey == "--" )
 			Break
 		Hotkey, %hkey%, %gotoLabel%
 		if ( ix == 1 )

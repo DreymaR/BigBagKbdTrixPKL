@@ -12,9 +12,11 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- TOFIX: After tidying up the Tarmak folder, variants like Tarmak\Tmk-VK-Tm0_ISO_Curl are available but they don't exist?!
-;			- Tarmak\Tmk-ISO_CurlDH-Angle\Tmk-VK-Tm1_ISO_Curl does exist. But no Tm0, and from Tm2 on it's CurlAngle
-;			- The problem may be that the Curl variant exists for Ortho?
+;		- WIP: Add Programmer Dvorak as a Sym-type mod? It is a Sym mod at heart, affecting only the Number row plus RB → @^ and a QU-SC swap (use ^SymQU).
+;			- Apparently, I'll need permission from Roland Kaufmann to use the name. I've sent him an email.
+
+;		- WIP: Add layout in GUI. Button adds layout, line becomes <lay1>, then add is grayed out until something's changed.
+;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?!
 
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 
@@ -25,15 +27,26 @@
 ;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 
+;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
+;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
+;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
+;			- Just detect every single VK code from the OS layout? It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
+
+;		- TOFIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
+;			- It still doesn't appear 100% proof, but the problem is hard to reproduce.
+;		- TOFIX: After tidying up the Tarmak folder, variants like Tarmak\Tmk-VK-Tm0_ISO_Curl are available but they don't exist?!
+;			- Tarmak\Tmk-ISO_CurlDH-Angle\Tmk-VK-Tm1_ISO_Curl does exist. But no Tm0, and from Tm2 on it's CurlAngle
+;			- The problem may be that the Curl variant exists for Ortho?
 ;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
 ;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
 ;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 
+;		- TODO: Should there be personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
 ;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
 ;			- To save time, don't look through the whole LayStack+1 for every entry on startup?
-
+;		- TODO: Lose the ANS2ISO VKEY maps in all layouts and the Remap file since they're based on flawed logic?
 ;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
 ;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
 ;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
@@ -41,14 +54,10 @@
 ;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
 ;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
-;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
-;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-;			- Or just detect every single VK code from the OS layout? It'd fix all our VK troubles...
 ;		- TOFIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
 ;			- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
 ;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 ;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
-;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
 ;		- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
 ;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Compose key!!!
 ;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
@@ -192,8 +201,6 @@
 ;		- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
 ;		- Extend lock? E.g., LShift+Mod2+Ext locks Ext2. Maybe too confusing. But for, say, protracted numeric entry it could be useful?
 ;		- Some kaomoji have non-rendering glyphs, particularly eyes. Kawaii (Messenger), Joy face, Donger (Discord on phone). Just document and leave it at that.
-;		- Implement the ANS2ISO VKEY maps in all layouts to have only one full base layout? Or keep both? For now, keep both eD BaseLayout at least.
-;			- ISO is a more international standard, but ANSI has more logical key names for the US-based Cmk[eD] layouts (e.g., OEM_MINUS/OEM_PLUS).
 ;		- Go back on the Paste Extend key vs Ext1/2? It's ugly and a bit illogical since the layers are otherwise positional. But I get confused using Ext+D for Ctrl+V.
 ;		- Allow assigning several keys as Extend Modifier?
 ;		- An EPKL sample layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
@@ -217,9 +224,17 @@
 ;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
 ;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gr-a` → `α` then `'` → `ά`.
 ;		- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
-
 ;		- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
 ;			- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
+
+;		- Fixed: A CapsLock off is sent at startup to avoid CapsLock being stuck on after an EPKL refresh.
+;		- Fixed: Using relative paths for icon files, multiple layout selections wouldn't show the correct icons.
+;		- Fixed: Setting any mod in the EPKL_Layouts file would make layout shortcuts that don't use mods fail.
+;		- Fixed: Subfolder structure added to the MainLay parameter the Colemak and Tarmak layouts. Consistent naming scheme for all such subfolders.
+;		- Prefix-syntax Repeat and Compose/Completion mappings. In addition to key states, you can now map Extend or DK mappings to ®®/®# or ©###.
+;			- If mapping a ©### key to a DK release, it must be preloaded elsewhere. Map it to an unused state or Extend mapping to achieve this.
+;		- The Repeat key now resends the last character, not the last key. Repeat used to be affected by modifiers and prone to errors.
+;		- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.
 
 ;;  ####################### main      #######################
 
@@ -455,7 +470,8 @@ epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug ho
 	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .6 )
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD WIP: Import an X11 Compose file to EPKL format
-	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
+;	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
+	ListHotkeys 										; Show AHK hotkeys as by the View -> Hotkeys menu item
 Return
 
 ;;  ####################### functions #######################

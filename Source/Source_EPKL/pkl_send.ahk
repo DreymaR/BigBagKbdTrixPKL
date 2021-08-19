@@ -48,7 +48,7 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 	compKeys    := getLayInfo( "composeKeys" ) 					; Array of the compose tables for each ©-key in use
 	tables      := compKeys[ compKey ] 							; Array of the compose tables in use for this compKey
 	if ( tables[1] == "" ) { 									; Is this ©-key empty?
-		pklWarning( "An empty/undefined Compose key was pressed." )
+		pklWarning( "An empty/undefined Compose key was pressed:`n`n©" . compKey )
 		Return
 	}
 	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["¤","¤","¤","¤"]
@@ -123,7 +123,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	if ( StrLen( entry ) < 2 ) 									; The entry must have at least a prefix plus something
 		Return false
 	psp     := SubStr( entry, 1, 1 ) 							; Look for a Parse syntax prefix
-	if not InStr( "%→$§*α=β~«@Ð&¶", psp ) 						; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
+	if not InStr( "%→$§*α=β~«@Ð&¶®©", psp ) 					; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
 		Return false
 	sendIt  := ( mode == "ParseOnly" ) ? false : true 			; Parse Only mode returns prefixes without sending
 	pfix    := -1 												; Prefix for the Send commands, such as {Blind}
@@ -150,6 +150,10 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	} else if ( psp == "&" || psp == "¶" ) { 					; &¶ : Named literal/powerstring (may vary between layouts!)
 		mode    := "PwrString"
 		pfix    := ""
+	} else if ( psp == "®" ) { 									; ®® or ®# [# is hex] : Repeat previous key once or # times
+		pkl_RepeatKey( enty )
+	} else if ( psp == "©" ) { 									; ©### : Named Compose/Completion key – compose previous key(s)
+		pkl_Composer( enty )
 	}
 	if ( sendIt && pfix != -1 ) { 								; Send if recognized and not ParseOnly
 		if ( enty && mode == "SendThis" ) { 
@@ -254,4 +258,13 @@ pkl_PwrString( strName ) { 										; Send named literal/ligature/powerstring f
 			StrReplace( theString, "`n", "`r`n" )
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
 	}	; end if brkMode
+}
+
+pkl_RepeatKey( num ) { 											; Repeat the last key a specified number of times, for the ®# key
+	lsk := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
+	lsk := lsk[lsk.MaxIndex()]
+	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # may be any hex number without "0x", or just ® for num=1
+	Loop % num {
+		SendInput {Text}%lsk% 	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
+	}
 }
