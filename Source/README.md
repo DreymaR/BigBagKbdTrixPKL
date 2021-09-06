@@ -402,7 +402,6 @@ DONE:
 	- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
 	- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
 		- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
-
 	- Fixed: A CapsLock off is sent at startup to avoid CapsLock being stuck on after an EPKL refresh.
 	- Fixed: Using relative paths for icon files, multiple layout selections wouldn't show the correct icons.
 	- Fixed: Setting any mod in the EPKL_Layouts file would make layout shortcuts that don't use mods fail.
@@ -411,6 +410,14 @@ DONE:
 		- If mapping a ©### key to a DK release, it must be preloaded elsewhere. Map it to an unused state or Extend mapping to achieve this.
 	- The Repeat key now resends the last character, not the last key. Repeat used to be affected by modifiers and prone to errors.
 	- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.
+
+	- Added ANS-Orth/ISO-Orth Colemak-eD. Images are still row-staggered, but this should clarify which ergo mods are for which board types.
+		- The bracket-lift Sym mod (Sym-Br) looks better on ortho boards than the standard (Sym-LBr). Images were made for both mod variants.
+	- Added a Programmer Dvorak Symbol mod, affecting the Number row plus remapping <kbd>]}</kbd> → <kbd>@^</kbd> and swapping <kbd>'"</kbd> ↔ <kbd>;:</kbd>.
+		- Disclaimer: This is a Dvorak Sym mod inspired by the Programmer Dvorak layout by Roland Kaufmann. It does not claim to be that layout.
+	- For the Nl locale, the ISO key was reclaimed as Compose! Kept ij on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
+		-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
+
 <br>
 
 TODO:

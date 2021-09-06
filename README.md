@@ -225,11 +225,11 @@ Where:
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
     - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab...
 * A mapping of `®®` repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
-    - Mapping to `®#` where `#` is a hex number, repeats the last key # times.
+    - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
 * A mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the last written characters with something else.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
     - Example: Composing `noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
-    - The key can also be used for completions, adding to instead of deleting the original sequence
+    - The key can also be used for completions, adding to instead of deleting the original sequence.
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
     - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
 * A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
@@ -239,7 +239,7 @@ Where:
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
 ```
 QW_J    = N         VKey            ; QW jJ  -> nN, a simple VK remapping
-RWin    = BACK      VirtualKey      ; RWin   -> Backspace
+RWin    = BACK      VirtualKey      ; RWin   -> Backspace (VKey)
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
 SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name (the old way)
 QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more intuitive KLM codes

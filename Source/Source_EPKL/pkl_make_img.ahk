@@ -110,7 +110,7 @@ for the current layout, or only state images?
 	if ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call InkScape
 		Return
 	hig_callInkscape( HIG ) 									; Call InkScape with all the SVG files at once now
-	sleepTime := 4 												; Time to wait between each file check, in s
+	sleepTime := 3 												; Time to wait between each file check, in s
 	Loop, 6
 	{
 		if ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
@@ -177,10 +177,10 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}" 			; Upper/Lower case
 				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
 				tag := ""
-			} else if ( ent == -3 ) { 							; Repeat key
+			} else if ( ent == "®" ) { 							; Repeat key
 				rel := Chr( HIG.ChRepet )
 				tag := HIG.MkRepet
-			} else if ( ent == -4 ) { 							; Compose/Context key
+			} else if ( ent == "©" ) { 							; Compose/Context key
 				rel := Chr( HIG.ChComps )
 				tag := HIG.MkComps
 			} else {
