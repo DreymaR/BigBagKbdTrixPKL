@@ -2,7 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
-![EPKL help image for Dvorak-AWide on an ANSI board](./Colemak_ISO-Angle_s0_EPKL.png)
+![EPKL help image for Dvorak-AWide on an ANSI board](./Colemak-ISO-Angle_s0_EPKL.png)
 
 _The Colemak layout with the [Angle ergonomic mod][BB_AWi] on an ISO board_
 
@@ -10,14 +10,14 @@ _The Colemak layout with the [Angle ergonomic mod][BB_AWi] on an ISO board_
 
 The Colemak layout
 ------------------
-- The [Colemak keyboard layout][CmkCom] was designed by Shai Coleman in 2006.
+- The Colemak keyboard layout was designed by Shai Coleman in 2006.
 - It's my main layout, and highly recommended if you're considering which layout to switch to!
 - You really should read more about it on its [main site][CmkCom] and/or [other sites][CmkOrg].
 - With EPKL, you can get Cmk with several [ergonomic mods][BB_Erg] and [locale variants][BB_Loc].
 
 <br>
 
-|![EPKL help image for Colemak on an ANSI board](./Cmk-eD_ANS/state0.png)|
+|![EPKL help image for Colemak on an ANSI board](./Cmk-eD/Cmk-eD_ANS/state0.png)|
 |   :---:   |
 |_The unmodified Colemak layout on an ANSI board_|
 
@@ -27,7 +27,7 @@ Ergonomic mods
 --------------
 - There are several ergonomic mods available such as [Colemak-DH (CurlAngle)][BB_CDH].
     - NOTE: You should use an Angle mod with Curl(DH) for traditional row-staggered boards.
-    - Make sure you read and understand the relevant parts of the BigBag Ergonomy page.
+    - Make sure you read and understand the relevant parts of the [BigBag Ergonomy page][BB_Erg].
     - For Ortho/matrix boards (ISO-Orth and ANS-Orth) there are non-Angle versions available.
 
 <br>

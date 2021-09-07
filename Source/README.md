@@ -410,13 +410,15 @@ DONE:
 		- If mapping a ©### key to a DK release, it must be preloaded elsewhere. Map it to an unused state or Extend mapping to achieve this.
 	- The Repeat key now resends the last character, not the last key. Repeat used to be affected by modifiers and prone to errors.
 	- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.
-
 	- Added ANS-Orth/ISO-Orth Colemak-eD. Images are still row-staggered, but this should clarify which ergo mods are for which board types.
 		- The bracket-lift Sym mod (Sym-Br) looks better on ortho boards than the standard (Sym-LBr). Images were made for both mod variants.
-	- Added a Programmer Dvorak Symbol mod, affecting the Number row plus remapping <kbd>]}</kbd> → <kbd>@^</kbd> and swapping <kbd>'"</kbd> ↔ <kbd>;:</kbd>.
+	- Added a Programmer Dvorak Symbol mod, affecting the Number row plus remapping <kbd>]}</kbd> `→` <kbd>@^</kbd> and swapping <kbd>'"</kbd> `↔` <kbd>;:</kbd>.
 		- Disclaimer: This is a Dvorak Sym mod inspired by the Programmer Dvorak layout by Roland Kaufmann. It does not claim to be that layout.
-	- For the Nl locale, the ISO key was reclaimed as Compose! Kept ij on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
+	- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
 		-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
+
+	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for Wide and a "MagentaBlob" one for non-Wide homing.
+		- Usage: In your layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` (or MagBlob) setting by appending `-HomeNubs[-Wide]`.
 
 <br>
 

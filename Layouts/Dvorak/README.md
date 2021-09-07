@@ -15,6 +15,7 @@ The Dvorak layout
 - The Dvorak layout features high hand alternation (L-R-L-R...) but less rolls than Colemak.
 - There are still some issues with it in my opinion, see below.
 - With EPKL, it can be used with the usual Angle and Wide ergonomic mods added, as seen above.
+- It rearranges the symbol keys but still isn't marked "Sym"; see "Programmer Dvorak..." below.
 <br>
 
 |![EPKL help image for Dvorak on an ANSI board](./Dvk-eD_ANS/state0.png)|
@@ -32,10 +33,10 @@ The Dvorak Curl-ID ergo mod
     - The Angle mods let you keep a straight left wrist while typing. See the image below.
     - Like Cmk-DH, this mod doesn't change any fingerings.
 
-- The Dvk-Curl-ID mod brings the common I to a home position, and DU to the comfortable "Curl" positions.
-- It also fixes the bad F placement in standard Dvorak. The less common XKMB are moved as a result.
+- The Dvk-Curl-ID mod brings the common <kbd>I</kbd> to a home position, and <kbd>D</kbd><kbd>U</kbd> to the comfortable "Curl" positions.
+- It also fixes the bad <kbd>F</kbd> placement in standard Dvorak. The less common <kbd>X</kbd><kbd>K</kbd><kbd>M</kbd><kbd>B</kbd> are moved as a result.
 - On the left hand index finger, Dvorak Curl-ID uses a simple `I → U → K → X` rotation from Dvorak.
-- On the right hand index finger, a `D → M → B → F` loop improves the Dvorak D and F positions.
+- On the right hand index finger, a `D → M → B → F` loop improves the Dvorak <kbd>D</kbd> and <kbd>F</kbd> positions.
 - Since it's such a light mod however, it doesn't address other known problems such as LS on the pinky.
 - Dvk-Curl-ID scores substantially better than plain Dvorak in analysis and impression.
 - Speaking for myself, however, I'd still recommend using a more modern optimized layout like Colemak.
@@ -51,7 +52,7 @@ The Programmer Dvorak Symbol mod
 --------------------------------
 - This is a Dvorak symbol mod inspired by [Programmer Dvorak by Roland Kaufmann][PrgDvk].
 - Disclaimer: This is not the Programmer Dvorak layout _per se_, as that consists of a bundle of features.
-- This Sym mod deviates from regular Dvorak only in the number row, a `=+ → @^` remap, and `SC ↔ QU`.
+- This Sym mod deviates from regular Dvorak only in the number row, a <kbd>=+</kbd> `→` <kbd>@^</kbd> remap, and <kbd>;:</kbd> `↔` <kbd>'"</kbd>.
 - The ergonomically reordered number sequence 75319 02468 was used in the original Dvorak layout.
 - Some dead key mappings on the number row were changed to stay intuitive, e.g., `(` for breve.
 <br>
@@ -67,7 +68,7 @@ The Programmer Dvorak Symbol mod
 <br>
 
 - Dvorak with Curl-Angle, Wide and Sym mods is called Dvorak-CAWS, in analogy to [Colemak-CAWS][BB_Erg].
-- For the combination of the Wide and Sym mods, the `#@` keys were kept together as on the non-Wide layout.
+- For the combination of the Wide and Sym mods, the <kbd>#`</kbd><kbd>@^</kbd> keys were kept together as on the non-Wide layout.
 - On the Dvorak ISO-CAWS image below you can see a Compose key in the middle. It's a powerful sequencing method.
 - On ANSI boards there isn't room for that and the hyphen is moved to the middle to keep it in a good place.
 <br>

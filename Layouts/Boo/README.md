@@ -31,9 +31,9 @@ Similarity to Dvorak
 - Therefore, it may be a good choice for experienced Dvorak users who want a better layout?!
 - Note that it has U on the same finger as E to reduce same-finger bigrams (SFB).
 - It also avoids placing I on the index finger like Dvorak has, for the same reason.
-- As a result of the UE improvement, `, .` move one key to the left.
+- As a result of the UE improvement, <kbd>,</kbd> <kbd>.</kbd> move one key to the left.
 - The LS and RN SFBs are avoided by the `L > R > N > H` remap.
-- Dvorak's poor F position is fixed by a simple move, much like in [DreymaR's Dvorak-Curl-ID mod][Dvk-ID].
+- Dvorak's poor <kbd>F</kbd> position is fixed by a simple move, much like in [DreymaR's Dvorak-Curl-ID mod][Dvk-ID].
 <br>
 
 ![Conservations and close displacements from Dvorak to the Boo layout](./_Res/Similarity_Dvorak-2-Boo.png)
