@@ -197,17 +197,17 @@ UIselLay: 														; Handle UI Layout selections
 		layDirs.Push( theDir )
 		layPath[ theDir ] := ""
 	} 	; end For theDir
-	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   ) 		; Get the available Lay Types for the chosen MainLay
-	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list
+	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   )  	; Get the available Lay Types for the chosen MainLay
+	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list (eD, VK)
 	needle      := need . UI_LayType
-	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, need   ) 		; Get the available Kbd Types for the chosen MainLay (and LayType?)
+	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, need   )  	; Get the available Kbd Types for the chosen MainLay (and LayType?)
 	_uiControl( "LayKbTp", _uiPipeIt( kbdTyps, 1 ) )
-	needle      := need . UI_LayType . ".*_" . UI_LayKbTp
-	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle ) 		; Get the available Layout Variants for the chosen MainLay/LayType/LayKbTp
+	needle      := need . UI_LayType . ".*_" . UI_LayKbTp . "?(_|$)" 	; The bit after KbTp separates types like ISO-Orth from ISO
+	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle )  	; Get the available Layout Variants for the chosen MainLay/LayType/LayKbTp
 	_uiControl( "LayVari", _uiPipeIt( layVari, 1 ) )
 	layVariName := ( UI_LayVari == ui_NA ) ? "" : "-" . UI_LayVari
-	needle      := need . UI_LayType . layVariName . "_" . UI_LayKbTp
-	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle ) 		; Get the available Mods for the chosen MainLay/LayType/LayKbTp/LayVari
+	needle      := need . UI_LayType . layVariName . "_" . UI_LayKbTp . "?(_|$)"
+	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle )  	; Get the available Mods for the chosen MainLay/LayType/LayKbTp/LayVari
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
 	layModsName := ( UI_LayMods != ui_NA ) ? UI_LayMods : ""
 	layModsPref := ( layModsName ) ? "_" : ""
