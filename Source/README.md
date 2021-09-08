@@ -417,8 +417,10 @@ DONE:
 	- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
 		-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
 
-	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for Wide and a "MagentaBlob" one for non-Wide homing.
-		- Usage: In your layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` (or MagBlob) setting by appending `-HomeNubs[-Wide]`.
+
+	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
+	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
+		- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 
 <br>
 

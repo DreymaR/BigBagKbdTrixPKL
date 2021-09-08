@@ -15,8 +15,6 @@
 ;		- TOFIX: Capitalized sequences don't compose differently from their minuscle counterparts. LJ Lj lj → Ǉ ǉ ǉ; ǈ didn't happen. Ou = Ȣ becomes ȣ, etc.
 ;			- Completions see the difference between capital and minuscle entries, although auto-titlecase still works if a title-case entry isn't specified.
 
-;		- TOFIX: The ANS/ISO-Orth variants show up for regular ANS/ISO in the Layout picker, but obviously don't work. Make the RegEx more strict!
-
 ;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful.
 ;		- WIP: Allow compose/completion additions in the LayStack! We want to allow stuff like i→ĳ, o→ø etc for locale variants.
 
@@ -248,8 +246,9 @@
 ;		- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
 ;			-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
 
-;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for Wide and a "MagentaBlob" one for non-Wide homing.
-;			- Usage: In your layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` (or MagBlob) setting by appending `-HomeNubs[-Wide]`.
+;		- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
+;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
+;			- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 
 
 ;;  ####################### main      #######################
