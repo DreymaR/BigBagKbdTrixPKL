@@ -12,8 +12,8 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- TOFIX: Capitalized sequences don't compose differently from their minuscle counterparts. LJ Lj lj → Ǉ ǉ ǉ; ǈ didn't happen. Ou = Ȣ becomes ȣ, etc.
-;			- Completions see the difference between capital and minuscle entries, although auto-titlecase still works if a title-case entry isn't specified.
+;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Scrap the silly `<K>+`-type DK entry syntax.
+;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
 ;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful.
 ;		- WIP: Allow compose/completion additions in the LayStack! We want to allow stuff like i→ĳ, o→ø etc for locale variants.
@@ -247,6 +247,7 @@
 ;			-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
 
 ;		- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
+;		- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 ;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
 ;			- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 

@@ -219,7 +219,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 				} 	; end if U####
 				dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
 				keyArr%len%[key] := val
-				if ( kyt )
+				if ( kyt && not keyArr%len%[kyt] ) 					; Only write the Titlecase entry if previously undefined.
 					keyArr%len%[kyt] := val
 			} 	; end for row
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
