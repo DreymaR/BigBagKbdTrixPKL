@@ -52,10 +52,33 @@ Getting EPKL up and running
 
 <br><br>
 
+These Aren't The Guides You're Looking For?
+-------------------------------------------
+EPKL can be complex and confusing for the newbie. So we're very happy to present to you the...
+
+**[Easiest way to setup DreymaR's EPKL on Windows][AndyLi]**, a brilliantly instructive YouTube video by Andrew Li. 
+He even shows you how to make a multi-layout setup with for instance Colemak and QWERTY, which should be useful for some people.
+
+If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( Θώθ)
+
+External guides may not be fully updated to show everything the Layout/Settings menu can do for instance! So do try that, too. 
+The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
+<br>
+
+![EPKL layout dialog](./Other/Docs/EPKL_Layout-UI.png)
+
+<br>
+
+<del>The [EPKL For Dummies][EPKL4D] guide by [TorbenGB](https://github.com/torbengb), sadly, is now outdated as a beginner's guide since it predates the Layout/Settings GUI. But if you want to edit EPKL files manually you can pick up a few tricks here. It's still well written and understandable.</del>
+
+<br><br>
+
 "Can I map the Caps key to Backspace?"
 --------------------------------------
 Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power? 
 Or, how about the multilayer "MoDK" tap-Extend with even more wonders?! See below for how that works.
+
+For that matter, you could use your <kbd>Caps</kbd> as a <kbd>Compose</kbd> key, see below. There really are a lot of brilliant options for it.
 
 Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspace</kbd>. 
 <kbd>Ext</kbd>+<kbd>T</kbd>+<kbd>O</kbd> for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> deletes the previous word! 
@@ -74,20 +97,6 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 <br>
 
 ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
-
-<br><br>
-
-These Aren't The Guides You're Looking For?
--------------------------------------------
-EPKL can be complex and confusing for the newbie. So we're very happy to present to you:
-**[EPKL For Dummies][EPKL4D]**, by master [TorbenGB](https://github.com/torbengb). Help me, Obi-Torben, you're my only hope!
-If you find my info below and on the Big Bag pages too daunting and massive, do try it out.  ( のvの) c[_]
-
-Note: Ben's guide may not yet be updated to show how easy it is to use the Layout/Settings menu! So do try that, too. 
-The Settings dialog holds some useful info points for each tab, and the KeyMapper tab has its own Help button.
-<br>
-
-![EPKL layout dialog](./Other/Docs/EPKL_Layout-UI.png)
 
 <br><br>
 
@@ -355,6 +364,7 @@ _Øystein "DreymaR" Bech_
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
 [GitCom]: https://github.com/DreymaR/BigBagKbdTrixPKL/archive/master.zip (Latest EPKL commit download)
 [EPKLRM]: https://github.com/DreymaR/BigBagKbdTrixPKL/tree/master/Source (EPKL advanced README)
+[AndyLi]: https://www.youtube.com/watch?v=P3TxloTNHPw (Setup Dreymar's EPKL on Windows, by Andrew Li on YouTube)
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [InkPrt]: https://portableapps.com/apps/graphics_pictures/inkscape_portable (Inkscape v1.0 at PortableApps.com)

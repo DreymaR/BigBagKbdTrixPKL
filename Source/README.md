@@ -416,12 +416,12 @@ DONE:
 		- Disclaimer: This is a Dvorak Sym mod inspired by the Programmer Dvorak layout by Roland Kaufmann. It does not claim to be that layout.
 	- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
 		-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
-
-
 	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
 		- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
+
+	- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 
 <br>
 

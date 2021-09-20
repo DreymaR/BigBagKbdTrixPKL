@@ -22,6 +22,7 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Colemak-eD-BeCaFr French phonetic layout variant
 ------------------------------------------------
 - The common letter éÉ is placed on the ISO key for easy access. Other acute-accent letters aren't so common in French.
+- Another tack is to have a Compose key on the ISO key as this is a very useful key. Then, add a compose of `e` to `é`.
 - Circumflex and grave accents are easily reachable on the unshifted layer, and diaeresis is on the shift layer.
 - The № digraph sign was added in case someone needs it. It may also be composed from `No` with a Compose key.
 <br>

@@ -12,18 +12,25 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Scrap the silly `<K>+`-type DK entry syntax.
+;		- WIP: Release v1.3.1 !!! Get the Heb layout ready first?
+
+;		- WIP: Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
+
+;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+
+;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
 ;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
-;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful.
-;		- WIP: Allow compose/completion additions in the LayStack! We want to allow stuff like i→ĳ, o→ø etc for locale variants.
+;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
 ;		- WIP: "Add Layout" functionality in GUI.
 ;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
 ;			- Use an Add button? The button adds layout, line becomes <lay1>, then add is grayed out until something's changed. Could I avoid an extra button?
 ;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?! Too risky and error-prone for newbs.
 
-;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+;		- WIP: Allow compose/completion additions in the LayStack! We want to allow stuff like i→ĳ, o→ø etc for locale variants.
 
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
@@ -38,23 +45,17 @@
 ;			- Just detect every single VK code from the OS layout? It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
 
 ;		- TOFIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
-;			- It still doesn't appear 100% proof, but the problem is hard to reproduce.
-;		- TOFIX: After tidying up the Tarmak folder, variants like Tarmak\Tmk-VK-Tm0_ISO_Curl are available but they don't exist?!
-;			- Tarmak\Tmk-ISO_CurlDH-Angle\Tmk-VK-Tm1_ISO_Curl does exist. But no Tm0, and from Tm2 on it's CurlAngle
-;			- The problem may be that the Curl variant exists for Ortho?
+;			- It still doesn't work as it should, but the problem is hard to reproduce.
 ;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
-;		- TOFIX: Refreshing EPKL often gets the Caps state stuck now? Most likely, I get some Caps(!)=Ext presses wrong in the process?
 ;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 
 ;		- TODO: Should there be personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
-;		- TODO: If a Compose table string is found in a LayStack file, use that file for the Compose mappings sections as well as the default file (if different).
-;			- To save time, don't look through the whole LayStack+1 for every entry on startup?
+
 ;		- TODO: Lose the ANS2ISO VKEY maps in all layouts and the Remap file since they're based on flawed logic?
 ;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
-;		- TODO: Tidy up the Tarmak folder, pointing to Extend and icon images instead of keeping them local. And sort steps in variant subfolders.
-;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
+;		- TODO: Rewrite the Tarmak layouts with remaps instead of explicit mappings. As of today, Extend isn't remapped correctly for all CurlAngle steps.
 ;		- WIP: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
 ;			- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
@@ -68,7 +69,7 @@
 ;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
-;		- 
+
 ;		- TODO: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
 ;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
@@ -221,7 +222,7 @@
 ;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
-;	* EPKL v1.3.1: WIP
+;	* EPKL v1.3.1: Folder restructuring.
 ;		- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
 ;		- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 ;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
@@ -244,12 +245,22 @@
 ;		- Added a Programmer Dvorak Symbol mod, affecting the Number row plus remapping <kbd>]}</kbd> → <kbd>@^</kbd> and swapping <kbd>'"</kbd> ↔ <kbd>;:</kbd>.
 ;			- Disclaimer: This is a Dvorak Sym mod inspired by the Programmer Dvorak layout by Roland Kaufmann. It does not claim to be that layout.
 ;		- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
-;			-  Another neat Compose key trick is adding a completion so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
-
+;			-  Also, a Compose completion was added so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
 ;		- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 ;		- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 ;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
 ;			- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
+
+;		- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
+
+;		- WIP: Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
+;		- WIP: Allow setting new tables in LayStack too? Swap LayStk for mapStack in the get_set fn if so.
+;		- TOFIX: Defining a © key now makes all other © keys unrecognized. Defining the same ©### key twice makes it fail.
+;			- The first © key read in will be defined correctly with tables, any subsequent ones not. This wasn't the case before!
+;			- It works fine if the mapFile loop is commented out. Why?!? Does it delete/reset anything?
+;		- WIP: Allow links for layout imgs, so Compose-based layouts like the proposed Epo doesn't need to duplicate images.
+;		- WIP: Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
+;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd><kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 
 
 ;;  ####################### main      #######################

@@ -17,7 +17,12 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 
 Spanish Colemak locale layout variants
 --------------------------------------
-For Spanish/Latin locale Colemak, at the least we need the letters áéíóú and ñ easily accessible. There are two main solutions, depending on your preferences:
+For Spanish/Latin locale Colemak, at the least we need the letters áéíóú and ñ easily accessible.
+- Actually, ñ isn't all that commmon so if you're adventurous you might use a Compose key to produce it.
+- In this case, composing `nn` to ñ may feel like one key stroke too many and you can make `n` plus Compose produce ñ.
+- Another neat trick for Spanish is making !/? plus Compose produce ¡/¿.
+
+There are two main solutions, depending on your preferences:
 - **Cmk-eD-EsLat**: This is good both for Spanish and other languages, using dead keys on brackets for the main accents.
 <br>
 
@@ -27,7 +32,7 @@ For Spanish/Latin locale Colemak, at the least we need the letters áéíóú an
 
 <br>
 
-- **Cmk-eD-EsAlt**: An alternative for those who prefer using AltGr. The letters áéíóú are easy to remember on AltGr+aeiou; ñ gets AltGr+n (and/or the ISO key on ISO boards).
+- **Cmk-eD-EsAlt**: An alternative for those who prefer using AltGr. The letters áéíóú are easy to remember on AltGr+aeiou; ñ gets AltGr+n (on ISO boards, the ISO key).
 <br>
 
 |![EPKL help image for Colemak-eD-EsAlt on an ANSI board, the AltGr state](./Cmk-eD-EsAlt_ANS_CurlAngle/state6.png)|

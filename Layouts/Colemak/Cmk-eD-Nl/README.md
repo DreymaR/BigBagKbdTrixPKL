@@ -22,8 +22,8 @@ For Dutch locale Colemak, at the least we need accents easily accessible. There'
 - The digraph is mostly used typographically and [even though it exists in Unicode its use is somewhat discouraged][WikiIJ].
 - Therefore, by default it may be better to keep the immensely useful Compose key on the ISO key by default!
 - With the Compose key, you can always type ij/IJ followed by Compose to produce an ĳ/Ĳ digraph.
-- It may be useful to add a completion to the Compose key so that i/I plus Compose complete to ij/IJ as well.
-- If you decide that you do want the digraph ligature ĳ on your ISO key, uncomment it in your [layout.ini file][layini].
+- I've added Dutch specific completion to the Compose key so that i/I plus Compose complete to ij/IJ as well.
+- If you decide that you do want the digraph ligature ĳ on your ISO key after all, uncomment it in your [layout.ini file][layini].
 <br>
 
 |![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](./Cmk-eD-Nl_ISO_AWide/state0.png)|

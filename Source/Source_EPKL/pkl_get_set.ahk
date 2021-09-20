@@ -165,7 +165,9 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys
 	static initialized := false
 	
-	mapFile := pklIniRead( "cmposrFile", , "LayStk" ) 			; eD TODO: Allow searches in BasIni and LayIni as well?! Lay > Bas > Compose, as usual
+	mapFile := pklIniRead( "cmposrFile", , "LayStk" )
+	mapStck := getPklInfo( "LayStack" ).Clone()  				; Use a clone, or we'll edit the actual LayStack array
+	mapStck.InsertAt( 1, mapFile )
 	if ( not initialized ) { 									; First-time initialization
 		lengths := pklIniCSVs( "lengths", "4,3,2,1",  mapFile ) 	; An array of the sequence lengths to look for. By default 1–4, longest first.
 		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
@@ -180,11 +182,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	if compKeys.IsEmpty()
 		Return
 	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
-	cmpKeyTabs  := {} 											; Array of tables for each ©-key
+	cmpKeyTabs  := {} 											; Array of table arrays for each ©-key
 	For ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
-;		if compKeys.HasKey( cmpKey ) 								; This key occurs in several mappings on one layout, so don't define it again
-;			Return
-		tables      := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
+		tables  := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
 		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
 			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
@@ -200,40 +200,49 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				keyArr%len% := {} 									; These reside in their own arrays, to reduce lookup time etc.
 			} 	; end for lengths
-			For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
-				pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
-				if ( RegExMatch( key, "U[[:xdigit:]]{4}" ) != 1 ) { 	; The key is a sequence of characters instead of a sequence of hex strings
-					kyt := ""
-					kys := ""
-					For ix, chr in StrSplit( key ) { 				; Format the character string to a U####[_U####]* key
-						if ( ix == 1 ) { 
-							cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
-						} else {
-							cht := chr
-						} 	; end if ch1
-						kyt .= "_U" . formatUnicode( cht )
-						kys .= "_U" . formatUnicode( chr )
-					} 	; end for chr
-					kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
-					key := SubStr( kys, 2 )
-				} 	; end if U####
-				dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
-				keyArr%len%[key] := val
-				if ( kyt && not keyArr%len%[kyt] ) 					; Only write the Titlecase entry if previously undefined.
-					keyArr%len%[kyt] := val
-			} 	; end for row
+;			For ix, mapFile in mapStck { 							; eD WIP: Read the Sect from the mapFile, overwrite and add to it from the LayStack.
+				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
+					if ( row == "" )
+						Continue
+					pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
+					if ( RegExMatch(key,"U[[:xdigit:]]{4}") != 1 ) { 	; The key is a sequence of characters instead of a sequence of hex strings
+						kyt := ""
+						kys := ""
+						For ix, chr in StrSplit( key ) { 				; Format the character string to a U####[_U####]* key
+							if ( ix == 1 ) { 
+								cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
+							} else {
+								cht := chr
+							} 	; end if ch1
+							kyt .= "_U" . formatUnicode( cht )
+							kys .= "_U" . formatUnicode( chr )
+						} 	; end for chr
+						kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
+						key := SubStr( kys, 2 )
+					} 	; end if string
+					dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
+					keyArr%len%[key] := val
+					if ( kyt && keyArr%len%[kyt] == "" ) 				; Only write the Titlecase entry if previously undefined.
+						keyArr%len%[kyt] := val
+				} 	; end for row
+;			} 	; end for mapFile
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				setLayInfo( "comps_" . sct . len, keyArr%len% )
 			} 	; end for lengths
 		} 	; end for sct in tables
-		cmpKeyTabs[ cmpKey ] := tables 								; For each named key, specify its required tables
+		cmpKeyTabs[ cmpKey ] := tables  							; For each named key, specify its required tables
+		tmp := ""
 	} 	; end for cmpKey in compKeys
+;		For ix, tab in cmpKeyTabs {  		; eD DEBUG -->
+;			tmp .= "`n" . ix . " :: " . tab[1] . " / " . tab[2] . " / " . tab[3]
+;		} 	; eD DEBUG
+;		( 1 ) ? pklDebug( "" . tmp, 3 )  	; eD DEBUG <--
 	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
 	setLayInfo( "composeTables" , usedTables )
 }
 
 lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previously sent characters for Compose
-	lastKeys := getKeyInfo( "LastKeys" )
+	lastKeys := getKeyInfo( "LastKeys" )  							; A link to the actual LastKeys array (not a copy)
 	if        ( cmd == "push" ) { 									; Push one key on the format "{¤}" to the lastKeys buffer
 		lastKeys.Push( chr )
 		lastKeys.RemoveAt( 1 )
@@ -241,9 +250,8 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 		lastKeys.Pop() 												; (We aren't using the pop value for anything)
 		lastKeys.InsertAt( 1, "{¤}" )
 	} else if ( cmd == "null" ) { 									; Reset the last-keys-pressed buffer.
-		nullArr := getKeyInfo( "NullKeys" )
-		setKeyInfo( "LastKeys", nullArr.Clone() ) 					; Note: Use Clone() here, or you'll make a link to NullKeys?
+		setKeyInfo( "LastKeys", getKeyInfo( "NullKeys" ).Clone() ) 	; Note: Use Clone() here, or you'll make a link to NullKeys
 		Return
 	}
-	setKeyInfo( "LastKeys", lastKeys )
+;	setKeyInfo( "LastKeys", lastKeys )  							; Since we're editing the actual LastKeys array, this isn't needed
 }

@@ -363,41 +363,41 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;; ================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
-	if getLayInfo( "ExtendKey" ) { 										; If there is an Extend key, set the Extend mappings.
+	if getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
 		extFile := pklIniRead( "extendFile",, "LayStk" ) 				; Deprecated Extend file: pkl.ini (EPKL_Settings)
-		extStck := layStck
+		extStck := layStck.Clone()  									; Use a clone, or we'll edit the actual LayStack array
 		if FileExist( extFile )
-			extStck.push( extFile ) 									; The LayStack overrides the dedicated file
+			extStck.push( extFile )  									; The LayStack overrides the dedicated file
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
-		For ix, thisFile in extStck { 									; Parse the LayStack then the ExtendFile.
+		For ix, thisFile in extStck {  									; Parse the LayStack then the ExtendFile.
 		; eD WIP: Turn around the sequence and check for existing mappings, consistent with LayStack?!
-			Loop % 4 {													; Loop the multi-Extend layers
+			Loop % 4 {  												; Loop the multi-Extend layers
 				extN := A_Index
-				thisSect := pklIniRead( "ext" . extN ,, "LayStk" ) 		; ext1/ext2/ext3/ext4 	; Deprecated: [extend] in pkl.ini
+				thisSect := pklIniRead( "ext" . extN ,, extStck )  		; ext1/ext2/ext3/ext4 	; Deprecated: [extend] in pkl.ini
 				map := pklIniSect( thisFile, thisSect )
-				if ( map.Length() == 0 ) 								; If this map layer is empty, go on
+				if ( map.Length() == 0 )  								; If this map layer is empty, go on
 					Continue
 				For ix, row in map {
-					pklIniKeyVal( row , key, extMapping ) 				; Read the Extend mapping for this SC
-					KLM := _mapKLM( key, "SC" ) 						; Co/QW-2-SC KLM remapping, if applicable
+					pklIniKeyVal( row , key, extMapping )  				; Read the Extend mapping for this SC
+					KLM := _mapKLM( key, "SC" )  						; Co/QW-2-SC KLM remapping, if applicable
 					key := upCase( key )
 					if ( hardLayers[ extN ] ) {
 						key := scMapExt[ key ] ? scMapExt[ key ] : key 	; If applicable, hard remap entry
 					} else {
 						key := scMapLay[ key ] ? scMapLay[ key ] : key 	; If applicable, soft remap entry
 					}
-					if ( getKeyInfo( key . "ext" . extN ) != "" ) 		; Skip mapping if already defined
+					if ( getKeyInfo( key . "ext" . extN ) != "" )  		; Skip mapping if already defined
 						Continue
 					if ( InStr( extMapping, "©" ) == 1 )
-						compKeys.Push( SubStr( extMapping, 2 ) ) 		; Register Compose key for initialization
+						compKeys.Push( SubStr( extMapping, 2 ) )  		; Register Compose key for initialization
 					setKeyInfo( key . "ext" . extN , extMapping )
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#
 		}	; end For thisFile (parse extStck)
 		setPklInfo( "extReturnTo", StrSplit( pklIniRead( "extReturnTo"
-							, "1/2/3/4", extStck ), "/", " " ) ) 		; ReturnTo layers for each Extend layer
+							, "1/2/3/4", extStck ), "/", " " ) )  		; ReturnTo layers for each Extend layer
 		Loop % 4 {
-			setLayInfo( "extImg" . A_Index								; Extend images
+			setLayInfo( "extImg" . A_Index  							; Extend images
 				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) )
 		}	; end loop ext#
 	}	; end if ( extendKey )
