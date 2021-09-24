@@ -233,9 +233,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		cmpKeyTabs[ cmpKey ] := tables  							; For each named key, specify its required tables
 		tmp := ""
 	} 	; end for cmpKey in compKeys
-;		For ix, tab in cmpKeyTabs {  		; eD DEBUG -->
-;			tmp .= "`n" . ix . " :: " . tab[1] . " / " . tab[2] . " / " . tab[3]
-;		} 	; eD DEBUG
+		For ix, tab in cmpKeyTabs {  		; eD DEBUG -->
+			tmp .= "`n" . ix . " :: " . tab[1] . " / " . tab[2] . " / " . tab[3]
+		} 	; eD DEBUG
 ;		( 1 ) ? pklDebug( "" . tmp, 3 )  	; eD DEBUG <--
 	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
 	setLayInfo( "composeTables" , usedTables )

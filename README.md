@@ -178,10 +178,12 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
     - If the PortableApps menu is run on logon it can start up EPKL for you too.
-* Look in the various .ini files under Files and Layouts if you're interested! Much is explained there.
+* Look inside the various .ini files under Files and Layouts if you're interested! Much is explained there.
 * See my examples in the Extend file for some advanced mappings! These may be used in layouts and dead keys too.
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.
-* EPKL allows end-of-line comments (whitespace-semicolon) in .ini files, the old PKL only allowed them in layout entries.
+* EPKL allows end-of-line comments (whitespace-semicolon) in .ini files. The old PKL only allowed them in layout entries.
+* You can use EPKL with a Virtual Machine. Set it to not capture the keyboard. System key strokes may not transfer then.
+    - If you have a VM running Windows, another way is to run EPKL inside the VM of course.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
 <br>
 

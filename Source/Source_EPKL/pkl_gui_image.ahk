@@ -39,10 +39,10 @@ pkl_showHelpImage( activate = 0 )
 	
 	if ( not initialized ) 				; First-time initialization
 	{
-		im.LayDir   := getPklInfo( "Dir_LayIni" )
-		im.BgPath  := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
+		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default Dir_LayIni
+		im.BgPath   := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
-		im.ShRoot  := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
+		im.ShRoot   := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
 								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )

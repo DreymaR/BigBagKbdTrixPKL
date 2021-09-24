@@ -14,16 +14,20 @@
 
 ;		- WIP: Release v1.3.1 !!! Get the Heb layout ready first?
 
+;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
+
+;		- WIP: "img_shftDir" is a silly name; use "img_ModsDir"? Changes 229 files though.
+
+;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
+
+;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
+
 ;		- WIP: Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
 ;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
 ;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
-;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
-
 ;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
 ;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
-
-;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
 ;		- WIP: "Add Layout" functionality in GUI.
 ;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
@@ -250,17 +254,17 @@
 ;		- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 ;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
 ;			- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
-
 ;		- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
+;		- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
+
+;		- WIP: Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
+;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd><kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 
 ;		- WIP: Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
 ;		- WIP: Allow setting new tables in LayStack too? Swap LayStk for mapStack in the get_set fn if so.
 ;		- TOFIX: Defining a © key now makes all other © keys unrecognized. Defining the same ©### key twice makes it fail.
 ;			- The first © key read in will be defined correctly with tables, any subsequent ones not. This wasn't the case before!
 ;			- It works fine if the mapFile loop is commented out. Why?!? Does it delete/reset anything?
-;		- WIP: Allow links for layout imgs, so Compose-based layouts like the proposed Epo doesn't need to duplicate images.
-;		- WIP: Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
-;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd><kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 
 
 ;;  ####################### main      #######################

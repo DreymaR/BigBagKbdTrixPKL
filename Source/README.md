@@ -420,8 +420,8 @@ DONE:
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
 		- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
-
 	- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
+	- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
 
 <br>
 

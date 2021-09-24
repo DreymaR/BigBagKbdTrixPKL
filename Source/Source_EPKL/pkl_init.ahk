@@ -65,7 +65,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	_pklSetInf( "tapModTime" ) 											; Tap-or-Mod time
 	
 	;; ================================================================================================
-	;;  Find and read from the Layouts file(s)
+	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	theLays :=  pklIniRead( "layout", "", pklLays ) 					; Read the layouts string from EPKL_Layouts
 	layMain := _pklLayRead( "LayMain", "Colemak\@3-@T@V" ) 				; Main Layout: Colemak, Tarmak, Dvorak etc.
@@ -178,7 +178,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	thisLay := getLayInfo( "ActiveLay" ) 								; For example, Colemak\Cmk-eD_ANS
 	mainDir := bool( pklIniRead("compactMode") ) ? "." 
 			 : laysDir . thisLay 										; If in compact mode, use the EPKL root dir as mainDir
-	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )				; The path of the main layout .ini file
+	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )  			; The path of the main layout .ini file
 	setPklInfo( "Dir_LayIni"        , mainDir )
 	setPklInfo( "File_LayIni"       , mainLay )
 ;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
@@ -216,6 +216,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
 	kbdType := _AnsiAns( kbdType )
 	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
+	
+	imgsDir := pklIniRead( "img_MainDir", mainDir, "LayStk" )  			; Help imgs are in the main layout folder, unless otherwise specified.
+	setPklInfo( "Dir_LayImg", atKbdType( imgsDir ) )
 	
 	mapFile := pklIniRead( "remapsFile",, "LayStk" ) 					; Layout remapping for ergo mods, ANSI/ISO conversion etc.
 	if ( not initialized ) && ( FileExist( mapFile ) ) 					; Ensure the tables are read only once
@@ -398,7 +401,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 							, "1/2/3/4", extStck ), "/", " " ) )  		; ReturnTo layers for each Extend layer
 		Loop % 4 {
 			setLayInfo( "extImg" . A_Index  							; Extend images
-				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) )
+				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) ) 	; eD WIP: Allow imgDir instead
 		}	; end loop ext#
 	}	; end if ( extendKey )
 	
@@ -431,8 +434,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key, val )									; e.g., "dk01" = "dk_dotbelow"
 		}
 	}	; end For thisFile in dkStack
-	dkImDir := fileOrAlt( pklIniRead( "img_DKeyDir", ".\DeadkeyImg" 	; Read/set DK image data
-									, "LayStk" ), mainDir ) 			; Default DK img dir: Layout dir or DeadkeyImg
+	dkImDir := fileOrAlt( atKbdType( pklIniRead( "img_DKeyDir"  		; Read/set DK image data
+						, ".\DeadkeyImg", "LayStk" ) ), mainDir )   	; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
 	HIGfile := pklIniRead( "imgGenIniFile" )							; DK img state suffix was in LayIni
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf", "", HIGfile ) )	; DK img state suffix. Defaults to old ""/"sh".
