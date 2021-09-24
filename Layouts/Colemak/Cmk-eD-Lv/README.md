@@ -23,5 +23,5 @@ For Latvian, the letters `āēīōū` with macron, `čřšž` with háček and `
 - To write the special Latvian letters, hit the RBr DK then `aeiou`/`crsz`/`gklnr` to get `āēīōū`/`čřšž`/`ġķļņŗ`.
 - To type the right bracket character, type a Space or a left bracket to release it.
 - You can also use the Compose key method for the special letters, should you want to.
-- Type for instance `ā` as <kbd>A</kbd>-<kbd>Compose</kbd>. Use `-` for macron, `<` for hacek, `,` for cedilla.
+- Type for instance `ā` as <kbd>A</kbd>, <kbd>-</kbd>, <kbd>Compose</kbd>. Use `-` for macron, `<` for hacek, `,` for cedilla.
 <br>

@@ -184,7 +184,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
 	cmpKeyTabs  := {} 											; Array of table arrays for each ©-key
 	For ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
-		tables  := pklIniCSVs( cmpKey, , mapFile, "compose-tables" )
+		tables  := pklIniCSVs( cmpKey, , mapStck, "compose-tables" )
 		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
 			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
@@ -200,7 +200,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				keyArr%len% := {} 									; These reside in their own arrays, to reduce lookup time etc.
 			} 	; end for lengths
-;			For ix, mapFile in mapStck { 							; eD WIP: Read the Sect from the mapFile, overwrite and add to it from the LayStack.
+			For ix, mapFile in mapStck { 							; eD WIP: Read the Sect from the mapFile, overwrite and add to it from the LayStack.
 				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 					if ( row == "" )
 						Continue
@@ -225,7 +225,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 					if ( kyt && keyArr%len%[kyt] == "" ) 				; Only write the Titlecase entry if previously undefined.
 						keyArr%len%[kyt] := val
 				} 	; end for row
-;			} 	; end for mapFile
+			} 	; end for mapFile
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
 				setLayInfo( "comps_" . sct . len, keyArr%len% )
 			} 	; end for lengths
@@ -233,10 +233,6 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		cmpKeyTabs[ cmpKey ] := tables  							; For each named key, specify its required tables
 		tmp := ""
 	} 	; end for cmpKey in compKeys
-		For ix, tab in cmpKeyTabs {  		; eD DEBUG -->
-			tmp .= "`n" . ix . " :: " . tab[1] . " / " . tab[2] . " / " . tab[3]
-		} 	; eD DEBUG
-;		( 1 ) ? pklDebug( "" . tmp, 3 )  	; eD DEBUG <--
 	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
 	setLayInfo( "composeTables" , usedTables )
 }

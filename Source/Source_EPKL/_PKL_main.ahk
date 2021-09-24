@@ -257,14 +257,9 @@
 ;		- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 ;		- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
 
-;		- WIP: Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
-;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd><kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
-
-;		- WIP: Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
-;		- WIP: Allow setting new tables in LayStack too? Swap LayStk for mapStack in the get_set fn if so.
-;		- TOFIX: Defining a © key now makes all other © keys unrecognized. Defining the same ©### key twice makes it fail.
-;			- The first © key read in will be defined correctly with tables, any subsequent ones not. This wasn't the case before!
-;			- It works fine if the mapFile loop is commented out. Why?!? Does it delete/reset anything?
+;		- Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
+;		- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
+;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 
 
 ;;  ####################### main      #######################
