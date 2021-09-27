@@ -73,6 +73,31 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 
 <br><br>
 
+"I just want Colemak-DH(m)..."
+------------------------------
+- Many new users ask whether Colemak-DH or "vanilla" is best for them. This is too long to discuss here, so look in the Big Bag and elsewhere.
+    - Shortly: DH makes the `HE` bigram easier, and removes some lateral stretches. Vanilla is better implemented on various platforms.
+    - At the end of the day, the question is whether stretching inwards or curling downwards from the `T/N` home position feels better to you.
+    - Some may have heard of DHk and DHm or other sub-variants. DHm is the DH standard now. It should be a one-size-fits-nearly-all.
+
+<br>
+
+- EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Here's a few tips for setting something else like DH.
+- As described above, open up the `Layout/Settings...` GUI from the EPKL tray menu.
+- To get the right layout, you should know your keyboard type. `ISO` has a key between <kbd>Z</kbd> and <kbd>LShift</kbd>, `ANS` not.
+- Next, is your keyboard geometry standard row-staggered or ortholinear/column-staggered? For the latter, use the `-Orth` KbdTypes.
+- The `Variant` option is for locale solutions such as French or German Colemak, but may also contain other mods affecting the main layout.
+    - If you're a simple USer without the need for such fanciness, just leave the `Variant/Locale` setting as `<None>`.
+- Let's say you want the popular Colemak-DH variant instead of vanilla. This is an ergonomic mod or mod combo, and there are some options.
+    - The DH mod in itself is named `Curl` in EPKL, because that's what it does physically: The home row is curled like the curve of your fingers.
+    - For the standard row-staggered keyboard, the `CurlAngle` mod equals a no-frills [**Colemak-DH**][Cmk-DH] layout.
+    - The `Curl`-only mod is for ortho keyboards.
+    - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
+    - You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the Big Bag.
+    - In some cases not all combos are pre-made as that'd be way too much work for me. You can create new ones yourself, see below.
+
+<br><br>
+
 "Can I map the Caps key to Backspace?"
 --------------------------------------
 Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power? 
@@ -84,7 +109,7 @@ Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspac
 <kbd>Ext</kbd>+<kbd>T</kbd>+<kbd>O</kbd> for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> deletes the previous word! 
 
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
-- **By Menu:** From the Layout/Settings menu's KeyMapper tab, make a `VK`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it. Allow EPKL to restart.
+- **By Menu:** From the Layout/Settings menu's KeyMapper tab, make a `VirtualKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it. Allow EPKL to restart.
 - **By File:** In your `EPKL_Layouts_` .ini file (Default or, if present, Override), find or make these lines under the `[layout]` section.
 ```
 ;QWCLK = BACK    	VKey 		; SC03a: CapsLock as Backspace (CAPITAL -> BACK)
@@ -356,6 +381,7 @@ _Øystein "DreymaR" Bech_
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
 [BBTind]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
+[BBTawi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)
@@ -377,3 +403,5 @@ _Øystein "DreymaR" Bech_
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
 [DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)
+[ISOANS]: https://deskthority.net/wiki/ANSI_vs_ISO (Deskthority on ANSI vs ISO keyboard models)
+[Cmk-DH]: https://colemakmods.github.io/mod-dh/ (The ColemakMods Mod-DH project on the Colemak-DH layout)

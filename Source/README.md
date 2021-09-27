@@ -422,7 +422,6 @@ DONE:
 		- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 	- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 	- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
-
 	- Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
 	- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
 		- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
