@@ -1,5 +1,5 @@
 ﻿pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
-	if pkl_CheckForDKs( ch )
+	if pkl_CheckForDKs( ch ) 			; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
 		Return
 	
 	char    := Chr(ch)
@@ -105,18 +105,18 @@ pkl_Composer( compKey = "" ) { 									; A post-hoc Compose method: Press a key
 }
 
 pkl_CheckForDKs( ch ) {
-	static SpaceWasSentForSystemDKs = 0
+	static SpaceWasSentForSystemDKs := false
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {					; No active DKs
-		SpaceWasSentForSystemDKs = 0
-		Return false
+	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
+		SpaceWasSentForSystemDKs := false
 	} else {
-		setKeyInfo( "CurrBaseKey_", ch )						; DK(s) active, so record the pressed key as Base key
-		if ( SpaceWasSentForSystemDKs == 0 )					; If there is an OS dead key that needs a Spc sent, do it
+;		( 1 ) ? pklDebug( "CheckForDKs`nch = " . ch, 1 )  ; eD DEBUG
+		setKeyInfo( "CurrBaseKey" , ch )						; DK(s) active, so record the pressed key as Base key
+		if ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
-		SpaceWasSentForSystemDKs = 1
-		Return true
+		SpaceWasSentForSystemDKs := true
 	}
+	Return SpaceWasSentForSystemDKs
 }
 
 pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix

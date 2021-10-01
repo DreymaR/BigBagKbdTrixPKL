@@ -33,7 +33,8 @@ Getting EPKL up and running
     - Note that some virus protection programs overreact to Autohotkey (AHK) code, especially using keyboard hooks.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key...
-    - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon.
+    - ...in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon...
+    - ...but please read the ["Can I map..." section](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) below first to know your options!
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 * To make EPKL start up automatically with Windows, [add a shortcut to it in the Startup folder][StrtUp]:
     - Create a shortcut to EPKL.exe (drag it while holding down <kbd>Alt</kbd>, or right-click and choose).
@@ -75,26 +76,43 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 
 "I just want Colemak-DH(m)..."
 ------------------------------
-- Many new users ask whether Colemak-DH or "vanilla" is best for them. This is too long to discuss here, so look in the Big Bag and elsewhere.
+**What is Colemak-DH?**
+- There are several different layout options and EPKL has many interesting ones. The two main Colemak flavors are standard/"vanilla" and DH.
+- [**Colemak-DH**][Cmk-DH] moves the <kbd>D</kbd> and <kbd>H</kbd> keys down instead of in the inwards "middle trench", so the home row curls downward.
+- Many new users ask whether Colemak-DH or vanilla is best for them. This is too long to discuss here, so look in the [Big Bag][BBTind] and elsewhere.
     - Shortly: DH makes the `HE` bigram easier, and removes some lateral stretches. Vanilla is better implemented on various platforms.
     - At the end of the day, the question is whether stretching inwards or curling downwards from the `T/N` home position feels better to you.
     - Some may have heard of DHk and DHm or other sub-variants. DHm is the DH standard now. It should be a one-size-fits-nearly-all.
 
 <br>
 
-- EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Here's a few tips for setting something else like DH.
+**How do I get Colemak-DH with EPKL?**
+- EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Here's how to get something else.
 - As described above, open up the `Layout/Settings...` GUI from the EPKL tray menu.
 - To get the right layout, you should know your keyboard type. `ISO` has a key between <kbd>Z</kbd> and <kbd>LShift</kbd>, `ANS` not.
-- Next, is your keyboard geometry standard row-staggered or ortholinear/column-staggered? For the latter, use the `-Orth` KbdTypes.
+    - Don't worry about how your Enter key looks, but look for the ISO key at the lower left.
+    - If <kbd>Z</kbd> and <kbd>Shift</kbd> are adjacent, you have an ANSI-type board.
+- Next, is your keyboard geometry standard row-staggered (rows shifted relative to each other) or ortholinear/column-staggered?
+    - For the latter, use the `-Orth` KbdTypes. These also come in ANS/ISO, to account for which key codes are used.
 - The `Variant` option is for locale solutions such as French or German Colemak, but may also contain other mods affecting the main layout.
     - If you're a simple USer without the need for such fanciness, just leave the `Variant/Locale` setting as `<None>`.
-- Let's say you want the popular Colemak-DH variant instead of vanilla. This is an ergonomic mod or mod combo, and there are some options.
+- Colemak-DH is an ergonomic Colemak mod or mod combo:
     - The DH mod in itself is named `Curl` in EPKL, because that's what it does physically: The home row is curled like the curve of your fingers.
-    - For the standard row-staggered keyboard, the `CurlAngle` mod equals a no-frills [**Colemak-DH**][Cmk-DH] layout.
+    - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals a no-frills Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
-    - You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the Big Bag.
-    - In some cases not all combos are pre-made as that'd be way too much work for me. You can create new ones yourself, see below.
+
+<br>
+
+**What are the options?**
+- You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the Big Bag.
+    <del>- In some cases not all combos are pre-made as that'd be way too much work for me. You can create new ones yourself, see below.</del>
+- The image below shows Colemak-DH on an ANSI keyboard, together with the Symbol mod which affects the right-hand symbol keys.
+    - In EPKL terms that's Colemak-eD_ANS_CurlAngleSym which may be abbreviated to Cmk-CAS in writing.
+    - Note the Angle(Z) mod that moves the XCDV keys one step to the left so your left wrist can be straight like on the right hand.
+    - Every finger in the image has its own color, so make sure you do the Angle mod right!
+
+![Colemak-DH (CurlAngle) on an ANSI keyboard, with the Sym mod (Cmk-CAS)](./Layouts/Colemak/Cmk-ANS-CAS_s0_EPKL.png)
 
 <br><br>
 

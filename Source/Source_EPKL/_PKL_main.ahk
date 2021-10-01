@@ -12,15 +12,23 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
+;			- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
+;			- Make and look for overrides in the working dir, and defaults in the script dir.
+;			- Add a syntax or setting that lets the user specify using a layout dir (and BaseLayout?) in the working dir. Or just look for it there first, if different?
+;				- `User\` could point to working dir, and `.\` continue to point to script dir? Need to make all file-reading operations aware of this!?
+;			- Might use a switch of working dir for some operations? Or, should things like the HIG just assume working dir and anyone wishing to use it must adjust?
+;				- This would make sense, in letting a user set individual settings in their working dir and getting images there too.
+
 ;		- Add help imgs for the Lv DK. Make local DK imgs in `DeadkeyImg` work w/ the main ones. This will also make an explicit DeadkeyImg declaration unnecessary.
 
 ;		- TOFIX: Pressing a DK twice doesn't release its character once but sometimes twice, sometimes not at all?
 
-;		- WIP: Release v1.3.1 !!! Get the Heb layout ready first? Fix DK-twice release?
-
 ;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
 
 ;		- WIP: "img_shftDir" is a silly name; use "img_ModsDir"? Changes 229 files though.
+
+;		- WIP: Release v1.3.1 !!! Get the Heb layout ready first? Fix DK-twice release?
 
 ;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
 
@@ -33,11 +41,6 @@
 ;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
 ;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
-;		- WIP: "Add Layout" functionality in GUI.
-;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
-;			- Use an Add button? The button adds layout, line becomes <lay1>, then add is grayed out until something's changed. Could I avoid an extra button?
-;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?! Too risky and error-prone for newbs.
-
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
@@ -46,6 +49,11 @@
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;			- Make a lock variant of the modifier
 
+;		- WIP: "Add Layout" functionality in GUI.
+;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
+;			- Use an Add button? The button adds layout, line becomes <lay1>, then add is grayed out until something's changed. Could I avoid an extra button?
+;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?! Too risky and error-prone for newbs.
+
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
@@ -53,9 +61,11 @@
 
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
 ;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
+;			- Update correspondence between the Locale Forum topic and these pages: Link to EPKL in the topic, get info from the topic.
 
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
 ;			- MoDK idea: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
+
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
 ;			- In the EPKL_Settings .ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
 ;			- Redefine the dual-role Extend key as a generic tapOrMod key. Treating Extend fully as a mod, it can also be ToM (or sticky?).
@@ -158,6 +168,7 @@
 ;				- Can we SplitBy words, like \nDEADKEY\t ?
 ;			- Then in the template there's something like $$tagName$$ where the result is to be inserted.
 ;			- For DK full names, the KEYNAME_DEAD entries could be converted (cut out ACCENT/SIGN, _ for spaces?, cut away parentheses, title case). Update my names accordingly?
+;			- In addition to MSKLC format, allow Aldo Gunsing's KLFC! https://github.com/39aldo39/klfc And maybe Keyboard Layout Editor's KLE (or do that via KLFC).
 ;		- TODO: Make pklParseSend() work for DK chaining (one DK releases another)!
 ;			- Today, a special DK entry will set the PVDK (DK queue) to ""; to chain dead keys this should this happen for @ entries?
 ;			- Removing that isn't enough though? And actually, should a dk chaining start anew? So, replicate the state and effect of a normal layout DK press.
@@ -264,7 +275,6 @@
 
 
 ;;  ####################### main      #######################
-
 #NoEnv
 #Persistent
 #NoTrayIcon
@@ -275,42 +285,34 @@
 #MaxHotkeysPerInterval 300
 #MaxThreads 30
 
+SendMode Event
+SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10.
+SetBatchLines, -1 	; eD WIP: What is the actual possible lowest SetKeyDelay value, and what's most robust? How about -1 vs 0 vs 1?
+Process, Priority, , H  									; High process priority
+Process, Priority, , R  									; Real-time process priority
+SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Can we have a separate user working dir, so users have their settings elsewhere?
+StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
+
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.0" ) 											; EPKL Version. Was PKL[eD] until v0.4.8.
+setPklInfo( "pklVers", "1.3.1β" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
-setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; http://pkl.sourceforge.net/
+setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
 setPklInfo( "pklHdrB", "`r`n"
 		. ";;  for Portable Keyboard Layout by Farkas Máté [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
 		. ";;  edition DreymaR (Øystein B Gadmar, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
 
-SendMode Event
-SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10. What is the actual possible lowest value, and what's most robust? How about -1 vs 0 vs 1?
-SetBatchLines, -1
-Process, Priority, , H 										; High process priority
-Process, Priority, , R 										; Real-time process priority
-SetWorkingDir, %A_ScriptDir%
-StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
+;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
+	global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+;	global UIsel 											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
+Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 
-; Global variables are largely replaced by the get/set info framework
-	global HotKeyBuffer = [] 					; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
-;	global UIsel 								; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
-setKeyInfo( "CurrNumOfDKs", 0 ) 				; How many dead keys were pressed 	(was 'CurrentDeadKeys')
-setKeyInfo( "CurrNameOfDK", 0 ) 				; Current dead key's name 			(was 'CurrentDeadKeyName')
-setKeyInfo( "CurrBaseKey_", 0 ) 				; Current base key 					(was 'CurrentBaseKey')
-;setKeyInfo( "HotKeyBuffer", 0 ) 				; Hotkey buffer for pkl_keypress 	(was 'HotkeysBuffer')
-setPklInfo( "File_PklSet", "EPKL_Settings"          ) 		; Used globally  		(was in 'pkl.ini')
-setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 		; Used globally  		(was in 'pkl.ini')
-setPklInfo( "LayFileName", "layout.ini"             ) 		; --"--
-setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 		; Info dictionary file, mostly from internal tables
-Gosub setUIGlobals 								; Set the globals needed for the settings UI (is this necessary?)
-
-arg = %1% ; Layout from command line parameter
+arg = %1% 													; Layout from command line parameter, if any
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
 initLayIni() 												; Read settings from layout.ini and layout part files
 activatePKL()
 
-Return  	; end main
+Return  													; end of main
 
 ;;  ####################### labels    #######################
 

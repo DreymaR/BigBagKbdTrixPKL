@@ -22,21 +22,19 @@
 	Return val
 }
 
-pkl_DeadKey( DK )
-{
+pkl_DeadKey( dkCode ) { 									; Handle DK presses
 	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?
-;	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" )			; Current dead key's name
-	CurrBaseKey_    := getKeyInfo( "CurrBaseKey_" )			; Current base/release key, set by pkl_Send()
-	DK              := getKeyInfo( "@" . DK )				; Find the dk's full name
-	static PVDK     := "" 									; Pressed Dead Key Values queue?
+	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" ) 		; Current dead key's name
+	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
+	PDKVs           := getKeyInfo( "PressedDKVs"  ) 		; Used to be the static PVDK ("Pressed Dead Key Values queue"?)
+	DK              := getKeyInfo( "@" . dkCode   ) 		; Find the dk's full name
 	DeadKeyChar     := DeadKeyValue( DK, "s0" ) 			; Base release char for this DK
 	DeadKeyChr1     := DeadKeyValue( DK, "s1" ) 			; eD WIP: The "1" entry gives alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
-	; eD WIP: Make a label at the end of this function to reset DK by nulling the Num/Name KeyInfo, then use some Goto(?) below to jump out.
-	
-	if ( CurrNumOfDKs > 0 && DK == getKeyInfo( "CurrNameOfDK" ) )	; Pressed the deadkey twice - release DK base char
-	{
+	if ( CurrNumOfDKs > 0 && DK == CurrNameOfDK ) { 		; Pressed the deadkey twice - release DK base char
+;		( 1 ) ? pklDebug( "DK twice`n" . DK . "`n# of DKs: " . getKeyInfo( "CurrNumOfDKs" ), 1 )  ; eD DEBUG
+		resetDeadKeys()
 		pkl_Send( DeadKeyChr1 )								; eD WIP: Pressing the dead key twice now releases entry 1 (or does it?)
 		Return
 	}
@@ -44,72 +42,75 @@ pkl_DeadKey( DK )
 	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs ) 			; Increase the # of registered DKs, both as variable and KeyInfo
 	setKeyInfo( "CurrNameOfDK", DK )
 	SetTimer, showHelpImageOnce, -35 						; Redraw the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
-	Input, nk, L1, {F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}{Left}{Right}{Up}{Down}{Home}{End}{PgUp}{PgDn}{Del}{Ins}{BS}{Esc}	; eD: Added {Esc}
-	IfInString, ErrorLevel, EndKey							; Test for "forbidden" keys from the next-key input
-	{
-		setKeyInfo( "CurrNumOfDKs", 0 )
-		setKeyInfo( "CurrBaseKey_", 0 )
-;		endk := "{" . Substr(ErrorLevel,8) . "}"			; eD: I found it strange that Esc and others shouldn't just cancel the dead key.
-;		pkl_Send( DeadKeyChar )								; Forbidden keys would both release entry 0 and...
-;		if not InStr( "{Backspace}{Delete}{Escape}{F", endk )
-;			Send %endk%										; ...do their thing, so beware!
+	endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
+			.  "{Left}{Right}{Up}{Down}{BS}{Esc}"
+			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; eD WIP: These keys don't work for canceling a DK? Why? Their Ext counterparts work fine.
+	Input, nk, L1, %endDKs% 								; Any ending key cancels the DK
+	IfInString, ErrorLevel, EndKey  						; NOTE: The OTB style for { is incompatible with this command
+	{ 														; Test for "forbidden" keys from the next-key input 	;( 1 ) ? pklDebug( "DK canceled", 1 )  ; eD DEBUG
+		resetDeadKeys()
 		Return
 	}
-;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey_ "`nNewKey: '" nk "'`nChr0: " DeadKeyChar, 2 )	; eD DEBUG: Check DK functionality
+;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey " / " getKeyInfo( "CurrBaseKey" ), 1.3 ) 	; eD DEBUG
 	
-	if ( CurrNumOfDKs == 0 ) { 								; eD WIP: When is this triggered? And Why? CurrNum gets increased above!?
-		pkl_Send( DeadKeyChar )								; If queue is empty, release entry 0 and return
-		Return
-	}
+;	if ( CurrNumOfDKs == 0 ) { 								; eD WIP: When is this triggered? And Why? CurrNum gets increased above!?
+;		pkl_Send( DeadKeyChar )								; If queue is empty, release entry 0 and return
+;		Return
+;	}
 	
-	if ( getKeyInfo( "CurrBaseKey_" ) != 0 ) { 				; If a BaseKey is set, use that, otherwise use the nk input directly
-		hx := getKeyInfo( "CurrBaseKey_" )
+	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
+	if ( CurrBaseKey != 0 ) { 								; If a BaseKey is set, use that, otherwise use the nk input directly
+		hx := CurrBaseKey
 		nk := Chr( hx )										; The chr symbol for the current base key (e.g., 65 = A)
 	} else {
 		hx := Ord( nk )										; The ASCII/Unicode ordinal number for the pressed key; was Asc()
-	}
+	} 	; end if CurrBaseKey
 	
 	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs ) 			; Pop one DK from the queue. Note: ++ and -- have the Input between them.
-	setKeyInfo( "CurrBaseKey_", 0 )
-	dkEnt   := DeadKeyValue( DK, hx )						; Get the DK value/entry for this base key
+	setKeyInfo( "CurrBaseKey" , 0 )
+	dkEnt   := DeadKeyValue( DK, hx )   					; Get the DK value/entry for this base key
 	
-	if ( dkEnt && (dkEnt + 0) == "" ) {						; Entry is a special string, like {Home}+{End} or prefix-entry
+	if ( dkEnt && (dkEnt + 0) == "" ) { 					; Entry is a special string, like {Home}+{End} or prefix-entry
 		psp := pkl_ParseSend( dkEnt )
-		if ( not psp ) 					 					; If not a recognized prefix-entry...
-			SendInput {Text}%dkEnt%							; ...just send the entry as text by default.
-		if ( PVDK && psp != "@" ) { 						; eD WIP: Allow chained DKs too! This means not erasing PVDK?
-			PVDK := ""
-			setKeyInfo( "CurrNumOfDKs", 0 )							; But that's not enough. It gets stuck in pkl_ParseSend()
-		}
-;		setKeyInfo( "CurrNumOfDKs", 0 ) 	; eD WIP - doesn't prevent stuckness (nor does "CurrBaseKey_", 0 ?)
-		pkl_CheckForDKs( 0 ) 								; eD WIP: This prevents the dead key from being stuck.
-	} else if ( dkEnt && PVDK == "" ) {
+		if ( not psp )  				 					; If not a recognized prefix-entry...
+			SendInput {Text}%dkEnt% 						; ...just send the entry as text by default.
+;		if ( PDKVs && psp != "@" ) { 						; eD WIP: Allow chained DKs too! This means not erasing the DK queue.
+;		}
+		resetDeadKeys()
+	} else if ( dkEnt && PDKVs == "" ) {
 		pkl_Send( dkEnt )									; Send the normal single-character final entry
 	} else {
 		if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {			; No more active dead keys, so release...
 			pkl_Send( DeadKeyChar ) 						; ...this DKs base char, then...
-			if ( PVDK ) {
-				StringTrimRight, PVDK, PVDK, 1
-				Loop, Parse, PVDK, %A_Space%
+			if ( PDKVs ) {
+				StringTrimRight, PDKVs, PDKVs, 1
+				Loop, Parse, PDKVs, %A_Space%
 				{
-					pkl_Send( A_LoopField )					; ...send all chars in PVDK queue and delete it.
+					pkl_Send( A_LoopField )					; ...send all chars in DK queue and delete it.
 				}
-				PVDK := ""
 			}
+			resetDeadKeys()
 		} else {
-			PVDK := DeadKeyChar  . " " . PVDK				; Add DK base char to space separated PVDK queue
-		}
+			PDKVs := DeadKeyChar  . " " . PDKVs 			; Add DK base char to space separated DK queue
+			setKeyInfo( "PressedDKVs", PDKVs )  			; eD WIP: Try to clear up the DK code? Unsure what it does...
+		} 	; end if CurrNumOfDKs
 		pkl_Send( hx )										; Send the release key's char
-	}
+	} 	; end if dkEnt
 }
 
-setCurrentWinLayDeadKeys( deadkeys )
-{
+resetDeadKeys( ) {  										; Tidy up and reset all global DK info parameters
+	setKeyInfo( "CurrNumOfDKs"  , 0  )  					; How many dead keys were pressed 	(was 'CurrentDeadKeys')
+	setKeyInfo( "CurrNameOfDK"  , "" )  					; Current dead key's name 			(was 'CurrentDeadKeyName')
+	setKeyInfo( "CurrBaseKey"   , 0  )  					; Current base key  				(was 'CurrentBaseKey')
+	setKeyInfo( "PressedDKVs"   , "" )  					; eD WIP: DK stuckness wasn't removed by resetting CurrNum or CurrBase alone?
+	pkl_CheckForDKs( 0 ) 									; Resets the SpaceWasSentForSystemDKs static variable
+}
+
+setCurrentWinLayDeadKeys( deadkeys ) {
 	getCurrentWinLayDeadKeys( deadkeys, 1 )
 }
 
-getCurrentWinLayDeadKeys( newDKs = "", set = 0 )
-{				; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
+getCurrentWinLayDeadKeys( newDKs = "", set = 0 ) {  		; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static DKs := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
 	if ( DKsOfSysLayout == "-2" )

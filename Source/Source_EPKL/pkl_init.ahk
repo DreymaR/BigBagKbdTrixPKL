@@ -3,6 +3,16 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 { 													;   ###############################################################
 	
 	;; ================================================================================================
+	;;  Before we start... Initialize former globals, now included in the get/set info framework:
+	;
+	setPklInfo( "File_PklSet", "EPKL_Settings"          ) 				; Used globally (used to be in pkl.ini)
+	setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 				; --"--
+	setPklInfo( "LayFileName", "layout.ini"             ) 				; --"--
+	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 				; Info dictionary file, mostly from internal tables
+	;setKeyInfo( "HotKeyBuffer", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
+	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
+	
+	;; ================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" ) 								; The default file name will still be available.
