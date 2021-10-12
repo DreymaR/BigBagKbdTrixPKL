@@ -29,13 +29,12 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses
 	PDKVs           := getKeyInfo( "PressedDKVs"  ) 		; Used to be the static PVDK ("Pressed Dead Key Values queue"?)
 	DK              := getKeyInfo( "@" . dkCode   ) 		; Find the dk's full name
 	DeadKeyChar     := DeadKeyValue( DK, "s0" ) 			; Base release char for this DK
-	DeadKeyChr1     := DeadKeyValue( DK, "s1" ) 			; eD WIP: The "1" entry gives alternative release char, if defined
+	DeadKeyChr1     := DeadKeyValue( DK, "s1" ) 			; Alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
 	if ( CurrNumOfDKs > 0 && DK == CurrNameOfDK ) { 		; Pressed the deadkey twice - release DK base char
-;		( 1 ) ? pklDebug( "DK twice`n" . DK . "`n# of DKs: " . getKeyInfo( "CurrNumOfDKs" ), 1 )  ; eD DEBUG
-		resetDeadKeys()
-		pkl_Send( DeadKeyChr1 )								; eD WIP: Pressing the dead key twice now releases entry 1 (or does it?)
+		pkl_Send( DeadKeyChr1 ) 							; eD WIP: Pressing the dead key twice now releases entry 1 (or does it? Seems the s0 entry is still sent...?!)
+		resetDeadKeys() 									; Note: Resetting before sending would output both base chars.
 		Return
 	}
 	

@@ -18,8 +18,20 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Colemak-Heb Hebrew phonetic layout variant
 ------------------------------------------
 - This is a semi-phonetic Hebrew layout with some novel ideas, constructed mainly by Wrapman, DreymaR and Tzlil
+- It is intended for Colemak typists who want to type Hebrew too. It is not really optimized for Hebrew as such.
+- It should provide a simple way of typing everyday Hebrew while also allowing for Biblical and other advanced Hebrew typing.
 - For more info, see the **[Colemak Forum post on making a Hebrew phonetic Colemak layout][HebFor]**.
 - Also see the [Heb BaseLayout file][HebLay].
+<br>
+
+Briefly:
+- Hebrew letters on Shift states 0/1, Latin letters on AltGr states. Normal Latin/Hebrew punctuation kept in both cases.
+- Shift+letter is for the final form. Where there is none, dagesh/hazaq/mapiq forms instead.
+- Where there's both final and dagesh forms, they get spare keys: Fe/pe on <kbd>F</kbd> / <kbd>P</kbd>, chaf/kaf on <kbd>K</kbd> / <kbd>J</kbd>.
+- Alef on <kbd>A</kbd>, ayin on <kbd>E</kbd>.
+- Samekh on <kbd>O</kbd>, shin on <kbd>W</kbd> by shape and convention. Shin-dot on <kbd>Shift</kbd> + <kbd>O</kbd> / <kbd>W</kbd>.
+- On the ISO key, if you have that, there's shva/dagesh/rafe/meteg, but also see the DKs below.
+    - Another tack is to comment out that key so it defaults to a Compose key. There are several Hebrew composes, as for Linux XKB.
 <br>
 
 |![EPKL help image for Colemak-eD-Heb CAWS on an ISO board, unshifted state](./Cmk-eD-Heb_ISO_CurlAWideSym/state0.png)|
@@ -33,6 +45,31 @@ Colemak-Heb Hebrew phonetic layout variant
 |![EPKL help image for Colemak-eD-Heb CAWS on an ISO board, AltGr state](./Cmk-eD-Heb_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
 |_Colemak-eD-Heb_ISO_CAWS, AltGr state_|
+
+<br>
+
+- Special dead keys on <kbd>Y</kbd> ("short niqqudot") and <kbd>O</kbd> ("long niqqudot").
+    - The two DKs provide short and long vowel signs together with the <kbd>A</kbd><kbd>E</kbd><kbd>I</kbd><kbd>O</kbd><kbd>U</kbd> keys.
+    - Both have a set of common non-vowel releases, covering special signs and final forms. Again, see the [BaseLayout file][HebLay].
+<br>
+
+|![EPKL help image for the "short niqqudot etc" DK on Colemak-eD-Heb CAWS-ISO, unshifted state](./Cmk-eD-Heb_ISO_CurlAWideSym/DeadkeyImg/Heb-Niqqud-Y_s0.png)|
+|   :---:   |
+|_The "short niqqudot etc" dead key on Colemak-eD-Heb_ISO_CAWS, unshifted state_|
+
+|![EPKL help image for the "short niqqudot etc" DK on Colemak-eD-Heb CAWS-ISO, AltGr state](./Cmk-eD-Heb_ISO_CurlAWideSym/DeadkeyImg/Heb-Niqqud-Y_s6.png)|
+|   :---:   |
+|_The "short niqqudot etc" dead key on Colemak-eD-Heb_ISO_CAWS, AltGr state_|
+
+<br>
+
+|![EPKL help image for the "long niqqudot etc" DK on Colemak-eD-Heb CAWS-ISO, unshifted state](./Cmk-eD-Heb_ISO_CurlAWideSym/DeadkeyImg/Heb-Niqqud-O_s0.png)|
+|   :---:   |
+|_The "long niqqudot etc" dead key on Colemak-eD-Heb_ISO_CAWS, unshifted state_|
+
+|![EPKL help image for the "long niqqudot etc" DK on Colemak-eD-Heb CAWS-ISO, AltGr state](./Cmk-eD-Heb_ISO_CurlAWideSym/DeadkeyImg/Heb-Niqqud-O_s6.png)|
+|   :---:   |
+|_The "long niqqudot etc" dead key on Colemak-eD-Heb_ISO_CAWS, AltGr state_|
 
 <br><br>
 

@@ -268,7 +268,7 @@ fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or us
 	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
-	if ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found
+	if ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found and errMsg is set
 		pklWarning( errMsg, errDur )
 	Return altFile
 }

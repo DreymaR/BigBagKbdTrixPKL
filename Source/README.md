@@ -392,7 +392,7 @@ DONE:
 	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
 	- In the `EPKL_HelpImgGen_Settings` file, the BrutalMode setting governs whether the EPKL HIG moves generated images straight into the layout folder.
 		- If this setting is true, generated images may overwrite any existing ones. Also, the `ImgGen_` temporary folder is deleted after use.
-* EPKL v1.3.1: WIP
+* EPKL v1.3.1: Beta
 	- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
 	- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 	- The BaseLayout setting in layout.ini can now take a `..\` syntax.
@@ -419,12 +419,16 @@ DONE:
 	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
-		- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
+		- Usage: In layout.ini, change the `img_ModsDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 	- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 	- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
 	- Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
 	- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
 		- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
+
+	- Made DK images in a local `DeadkeyImg` dir work with the ones set in `img_DKeyDir`. This also alleviates the need to declare a DeadkeyImg dir.
+	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
+	- Added Hebrew layouts. See the `Cmk-eD-Heb` layout folder and the Forum Locale post.
 
 <br>
 

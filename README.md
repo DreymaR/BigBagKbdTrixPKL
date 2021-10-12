@@ -250,22 +250,34 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
 <br>
 
-#### The LayStack explained further
+#### The LayStack and file relations explained further
 * As said before, the easy way to set layouts and settings is to let the `Layout/Settings…` GUI write your overrides.
 * If you still want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
     - There can be both [Layouts_Default][LayDef] and [Layouts_Override][LayOvr] files. Override entries take precedence.
 * In your Layouts_Override file, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
     - There are KbdType (@K) and other abbreviations, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* The `EPKL_Layouts` .ini files hold layout choices. [EPKL_Settings][PklIni] holds general program settings.
+* The [EPKL_Layouts][LayDef] .ini file(s) hold layout choices. The [EPKL_Settings][PklIni] file(s) hold general program settings.
 * The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
-* There's a "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
-    - The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
-    - The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    - The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
-    - The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
-    - Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
+<br>
+
+* Here's the "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
+    1. The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
+    2. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
+    3. The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
+    4. The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
+    5. Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
+<br>
+
+* Settings priority and file selection during EPKL startup goes like this:
+    - The `EPKL_Settings` files (`_Default` and, if present, `_Override`) determine program settings
+    - The `EPKL_Layouts` files select the active layout folder(s)
+    - The layout folder's `layout.ini` file may select a `BaseLayout` to complement
+<br>
+
+![EPKL file priority relations chart, by Tanamr](./Other/Docs/EPKL_File-Relations-Map_Tanamr.png)
+
 <br><br>
 
 Key mappings

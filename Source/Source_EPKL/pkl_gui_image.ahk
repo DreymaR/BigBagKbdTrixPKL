@@ -40,9 +40,11 @@ pkl_showHelpImage( activate = 0 )
 	if ( not initialized ) 				; First-time initialization
 	{
 		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default Dir_LayIni
+		im.DK1Dir   := getPklInfo( "Dir_LayIni" ) . "\DeadkeyImg" 			; The 1st DK img dir is local, if found
+		im.DK2Dir   := getLayInfo( "dkImgDir" )  							; The 2nd DK img dir, if set
 		im.BgPath   := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
-		im.ShRoot   := fileOrAlt( pklIniRead( "img_shftDir"  ,,  "LayStk" ) 
+		im.ShRoot   := fileOrAlt( pklIniRead( "img_ModsDir"  ,,  "LayStk" ) 
 								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
@@ -57,7 +59,6 @@ pkl_showHelpImage( activate = 0 )
 				im.PosArr.Push( pos )
 			}
 		}
-;		( 1 ) ? pklDebug( "Positions:`n" . joinArr( tmpPosArr, "_" ) . "`n" . joinArr( im.PosArr, "_" ), 2 )  ; eD DEBUG
 		im.PosDef   := hasValue( im.PosArr, im.PosDef ) ? im.PosDef : im.PosArr[1]
 		im.PosIx    := hasValue( im.PosArr, im.PosDef ) 					; Physical image positions are Nr, logical Ix
 		im.PosNr    := im.PosDef
@@ -150,7 +151,10 @@ pkl_showHelpImage( activate = 0 )
 	}
 	
 	if getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
-		thisDK  := getLayInfo( "dkImgDir" ) . "\" . getKeyInfo( "CurrNameOfDK" )
+		thisDK  := getKeyInfo( "CurrNameOfDK" )
+		thisDK  := FileExist( im.DK1Dir . "\" . thisDK . "*.*" )  		; Look for DK imgs in two dirs: Set, and local
+							? im.DK1Dir . "\" . thisDK
+							: im.DK2Dir . "\" . thisDK
 		ssuf    := getLayInfo( "dkImgSuf" ) 							; DK image state suffix
 		dkS     := []
 		dkS0    := ( ssuf ) ? ssuf . "0.png" :   ".png" 				; Img file state 0 suffix

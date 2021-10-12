@@ -13,13 +13,17 @@ The Boo layout
 - For more info, see the [Boo Layout Page at github.io][BooLay].
 <br>
 
-![Boo!](./_Res/Ghost_Discord.png)
+![Boo layout on a matrix board](https://ballerboo.github.io/boolayout/layout.png)
 
 <br><br>
 
 |![EPKL help image for Boo-AngleSym on an ISO board](./Boo-eD_ISO_AngleSym/state0.png)|
 |   :---:   |
 |_The Boo-AngleSym layout on an ISO board_|
+
+<br>
+
+![Boo!](./_Res/Ghost_Discord.png)
 
 <br>
 

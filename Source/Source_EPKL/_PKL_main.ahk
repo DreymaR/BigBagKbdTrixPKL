@@ -20,26 +20,11 @@
 ;			- Might use a switch of working dir for some operations? Or, should things like the HIG just assume working dir and anyone wishing to use it must adjust?
 ;				- This would make sense, in letting a user set individual settings in their working dir and getting images there too.
 
-;		- Add help imgs for the Lv DK. Make local DK imgs in `DeadkeyImg` work w/ the main ones. This will also make an explicit DeadkeyImg declaration unnecessary.
-
-;		- TOFIX: Pressing a DK twice doesn't release its character once but sometimes twice, sometimes not at all?
-
-;		- WIP: Heb BaseLayout. See its file and the Forum Locale post. Flesh out its folder README with descriptions and explanations like in the Forum post.
-
-;		- WIP: "img_shftDir" is a silly name; use "img_ModsDir"? Changes 229 files though.
-
-;		- WIP: Release v1.3.1 !!! Get the Heb layout ready first? Fix DK-twice release?
-
-;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
-
-;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
-
-;		- WIP: Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;		- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+;			- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;			- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
 ;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
 ;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
-
-;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
-;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
 ;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
@@ -49,6 +34,12 @@
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;			- Make a lock variant of the modifier
 
+;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
+;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
+
+;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
+;			- This allows the use of more @ codes in the LayStack files
+
 ;		- WIP: "Add Layout" functionality in GUI.
 ;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
 ;			- Use an Add button? The button adds layout, line becomes <lay1>, then add is grayed out until something's changed. Could I avoid an extra button?
@@ -57,14 +48,17 @@
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
 ;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-;			- Just detect every single VK code from the OS layout? It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
+;			- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
+;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
+
+;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
 ;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
 ;			- Update correspondence between the Locale Forum topic and these pages: Link to EPKL in the topic, get info from the topic.
 
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
-;			- MoDK idea: Tap Ext for DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is easily remembered but not so ergonomic.
+;			- MoDK idea: Tap Ext for chaining DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is not so ergonomic.
 
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
 ;			- In the EPKL_Settings .ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
@@ -75,7 +69,6 @@
 ;			- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 ;			- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 
-;		- TOFIX: Pressing DK+DK releases both versions of the base glyphs. It should just release one character, the main base.
 ;		- TOFIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
 ;			- It still doesn't work as it should, but the problem is hard to reproduce.
 ;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
@@ -106,7 +99,7 @@
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 
 ;;  eD TONEXT:
-;		- TODO: Allow a BaseLayout stack: Variant,Options,Base... ? Then for instance Cmk-Ru could base itself on the Cmk-eD BaseLayout and Cmk-Ru-CAW on Cmk-Ru w/ remaps.
+;		- TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. 
 ;			- Possible to extract the pic from pkl_gui_image?
 ;		- TODO: Personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
@@ -125,6 +118,7 @@
 ;			- Maybe that should be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM KbdTypes?
 ;		- TOFIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
 ;		- TOFIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
+;		- TOFIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
 ;;  eD TODO:
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
@@ -239,13 +233,13 @@
 ;	* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
-;	* EPKL v1.3.1: Folder restructuring.
+;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo/Dvk-Sym.
 ;		- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
 ;		- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 ;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
 ;		- Added the Boo (Dvorak-like modern) layout.
 ;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
-;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `gr-a` → `α` then `'` → `ά`.
+;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `g'a` → `α` then `'` → `ά`.
 ;		- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
 ;		- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
 ;			- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
@@ -266,13 +260,18 @@
 ;		- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 ;		- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 ;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
-;			- Usage: In layout.ini, change the `img_shftDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
+;			- Usage: In layout.ini, change the `img_ModsDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 ;		- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 ;		- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
 ;		- Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
 ;		- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
 ;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 
+;		- Made DK images in a local `DeadkeyImg` dir work with the ones set in `img_DKeyDir`. This also alleviates the need to declare a DeadkeyImg dir.
+;		- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
+;		- Added Hebrew layouts. See the `Cmk-eD-Heb` layout folder and the Forum Locale post.
+
+;		- WIP: Release v1.3.1 !
 
 ;;  ####################### main      #######################
 #NoEnv
@@ -294,7 +293,7 @@ SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Ca
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.1β" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.3.1" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
