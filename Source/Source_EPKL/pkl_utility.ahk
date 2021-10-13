@@ -152,7 +152,7 @@ _pklJanitorLocaleVK() { 										; Renew VK codes: OEM key VKs vary by locale f
 	newLID  := getWinLocaleID()
 	if ( oldLID != newLid ) {
 ;		( 1 ) ? pklDebug( "System layout LID change: " . oldLID . "->" . newLID, 1 )  ; eD DEBUG
-		setPklInfo( "oemVKdic", detectCurrentWinLayOEMs() )
+		setPklInfo( "oemVKdic", detectCurrentWinLayVKs() )
 		; eD WIP: Renew the OEM VK mappings here! Rethink strategy? Need to map based on the values you want, based on KLM/SC codes.
 	}
 	setPklInfo( "previousLocaleID", newLID )
@@ -229,28 +229,27 @@ getWinInfo() { 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-detectCurrentWinLayOEMs() { 								; Find the VK values for the current Win layout's OEM keys 	; eD WIP: Map from SC, so we can keep track of how OEM keys should be mapped.
+detectCurrentWinLayVKs() {  								; Find the VK values for the current Win layout's OEM keys 	; eD WIP: Map from SC, so we can keep track of how OEM keys should be mapped.
 	scMap   := getPklInfo( "scMapLay" ) 					; The pdic used to remap SC for the layout
 ;		( 1 ) ? pklDebug( "`nSC remap for MN: " . scMap["SC00C"] . "`nSC remap for GR: " . scMap["SC029"], 1 )  ; eD DEBUG
 	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_## 							; NOTE: Must keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
 	qVKdic  := getPklInfo( "QWVKdic" ) 						; VK QW_## = vc_##
 	oemDic  := {}  ;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; "SC0" . SCs[ix]
-	For ix, oem in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] { 	; eD WIP: Run through the whole SCdic instead?
-		oem := "_" . oem
-		qsc := qSCdic[ oem ]
-		qvk := qVKdic[ oem ] 								; Map from a KLM (ANSI) VK## code
+	For ix, key in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] { 	; eD WIP: Run through the whole SCdic instead?
+		key := "_" . key
+		qsc := qSCdic[ key ]
+;	For key, qsc in qSCdic { 								; eD WIP: Run through the whole SCdic
+		qvk := qVKdic[ key ] 								; Map from a KLM (ANSI) VK## code
 		ovk := Format( "VK{:X}", GetKeyVK( qsc ) ) 			; VK## format
 		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
-;	( oem == "_GR" ) ? pklDebug( "OEM: " . oem . "`nSC: " . qSCdic[oem] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
-	}
+;	( key == "_GR" ) ? pklDebug( "OEM: " . key . "`nSC: " . qSCdic[key] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
+	} 	; end for key
 	Return oemDic
 }
 
 getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK name
 	name := upCase( name )
 	if ( not RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
-;		Return name 	; name := SubStr( name, 3 ) 		; Used to keep only the ## here
-;	} else {
 		name := "VK" . pklIniRead( "VK_" . name, "00", "PklDic", "VKeyCodeFromName" )
 	}
 	Return name
@@ -367,14 +366,14 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
 }
 
-debugShowCurrentWinLayOEMs() { 								; eD DEBUG: Display the VK values for the current Win layout's OEM keys
-;	qwSCdic := getPklInfo( "QWSCdic" ) 						; detectCurrentWinLayOEMs maps KLM OEM VK## values to current layout ones.
+debugShowCurrentWinLayOEMs() {  							; eD DEBUG: Display the VK values for the current Win layout's OEM keys
+;	qwSCdic := getPklInfo( "QWSCdic" )  					; detectCurrentWinLayOEMs maps KLM OEM VK## values to current layout ones.
 	mapFile := getPklInfo( "RemapFile" )
 	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
 ;	SCQWdic := ReadKeyLayMapPDic( "SC", "QW", mapFile ) 	; KLM SC-2-QW code translation dictionary
 	lin := "`n————" . "————" . "————" 						; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
 	str := "For layout LID: " . getWinLocaleID() . lin . "`nKLM`tqVK`tVK" . lin
-	oemDic  := detectCurrentWinLayOEMs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_##
+	oemDic  := detectCurrentWinLayVKs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_## 	; eD WIP: Try w/ the whole SC dic!
 	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
 		klm := SubStr( VKQWdic[ oem ], 2) 					;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
 		str .= Format( "`n{}`t{}`t{}", klm, SubStr(oem,3), SubStr(ovk,3) ) 	; GetKeyName(sc), GetKeyVK(sc), SubStr(sc,3) )

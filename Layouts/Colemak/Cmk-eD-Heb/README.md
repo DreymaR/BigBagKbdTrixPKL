@@ -31,7 +31,8 @@ Briefly:
 - Alef on <kbd>A</kbd>, ayin on <kbd>E</kbd>.
 - Samekh on <kbd>O</kbd>, shin on <kbd>W</kbd> by shape and convention. Shin-dot on <kbd>Shift</kbd> + <kbd>O</kbd> / <kbd>W</kbd>.
 - On the ISO key, if you have that, there's shva/dagesh/rafe/meteg, but also see the DKs below.
-    - Another tack is to comment out that key so it defaults to a Compose key. There are several Hebrew composes, as for Linux XKB.
+    - Another tack is to comment out that key so it defaults to a Compose key.
+    - There are several Hebrew composes, as for Linux XKB. I've added a few more, including Yiddish yod-yod etc.
 <br>
 
 |![EPKL help image for Colemak-eD-Heb CAWS on an ISO board, unshifted state](./Cmk-eD-Heb_ISO_CurlAWideSym/state0.png)|
@@ -94,4 +95,4 @@ Here are the Biblical-SIL layout states, for reference. The images contain Unico
 
 
 [HebFor]: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971 (HebMak discussed on the Colemak Forum)
-[HebLay]: ../BaseLayout_Cmk-eD-Heb.ini (the Colemak-eD-Heb EPKL BaseLayout file)
+[HebLay]: ./BaseLayout_Cmk-eD-Heb.ini (the Colemak-eD-Heb EPKL BaseLayout file)

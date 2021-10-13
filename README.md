@@ -424,7 +424,7 @@ Credits/sources
 <br>
 
 _Finally, to all of you: Best of luck using EPKL!_
-_Øystein "DreymaR" Bech_
+_Øystein "DreymaR" Bech-Aase_
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (Old PKL on GitHub)
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (Old PKL on SourceForge)
