@@ -366,13 +366,19 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
 }
 
-debugShowCurrentWinLayOEMs() {  							; eD DEBUG: Display the VK values for the current Win layout's OEM keys
-;	qwSCdic := getPklInfo( "QWSCdic" )  					; detectCurrentWinLayOEMs maps KLM OEM VK## values to current layout ones.
-	mapFile := getPklInfo( "RemapFile" )
+debugShowCurrentWinLayKeys() {  							; eD DEBUG: Display the VK values for the current Win layout's OEM keys
+	lin := "`n————" . "————" . "————"   					; Just a line of dashes for formatting
+	str := "For layout LID: " . getWinLocaleID() . lin  	; The active Windows layout's Locale ID
+;	qwSCdic := getPklInfo( "QWSCdic" )  					; KLM-2-SC dic
+;	str .= "`nKLM`tSC`tkey" . lin
+;	For klm, sc in qwSCdic { 
+;		str .= Format( "`n{}`t{}`t{}", klm, SubStr(sc,3), GetKeyName(sc) )
+;	}
+	
+	mapFile := getPklInfo( "RemapFile" ) 					; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
 	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
 ;	SCQWdic := ReadKeyLayMapPDic( "SC", "QW", mapFile ) 	; KLM SC-2-QW code translation dictionary
-	lin := "`n————" . "————" . "————" 						; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
-	str := "For layout LID: " . getWinLocaleID() . lin . "`nKLM`tqVK`tVK" . lin
+	str .= "`nKLM`tqVK`tVK" . lin
 	oemDic  := detectCurrentWinLayVKs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_## 	; eD WIP: Try w/ the whole SC dic!
 	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
 		klm := SubStr( VKQWdic[ oem ], 2) 					;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##

@@ -12,6 +12,11 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Add "What about gaming?" to README. Explain send method. Mention MSKLC CAWS and SharpKeys.
+
+;		- TOFIX: Sticky Shift sends the 2nd state mapping shifted which is wrong if it was mapped to be something unshifted. Normal Shift does not.
+;			- Thing is, the Sticky Shift just holds down the Shift key which leads to this effect. Should I make sure the state map is sent unblind?
+
 ;		- WIP: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
 ;			- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
 ;			- Make and look for overrides in the working dir, and defaults in the script dir.
@@ -102,6 +107,7 @@
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 
 ;;  eD TONEXT:
+;		- TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
 ;		- TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. 
 ;			- Possible to extract the pic from pkl_gui_image?
@@ -237,44 +243,9 @@
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
-;		- Prefix-syntax Repeat and Compose/Completion mappings. In addition to key states, you can now map Extend or DK mappings to ®®/®# or ©###.
-;			- If mapping a ©### key to a DK release, it must be preloaded elsewhere. Map it to an unused state or Extend mapping to achieve this.
-;		- Mapping a state to `®#` where # is a hex number will repeat the previous key # times. This is affected by modifiers, but not sticky ones.
-;		- The Repeat key now resends the last character, not the last key. Repeat used to be affected by modifiers and prone to errors.
-;		- Single-char Compose output is pushed to the LastKeys queue, thereby allowing some compose chaining. Example: `g'a` → `α` then `'` → `ά`.
-;		- Composing `U####[#]` where `#` are hex digits, sends the corresponding Unicode character
-;		- Compose table entries in the LayStack files override those in the Compose file. Use sections for existing tables like `[compose_adding]`.
-;	
-;		- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
-;		- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
-;		- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
-;		- The BaseLayout setting in layout.ini can now take a `..\` syntax.
-;		- Added ANS-Orth/ISO-Orth Colemak-eD. Images are still row-staggered, but this should clarify which ergo mods are for which board types.
-;			- The bracket-lift Sym mod (Sym-Br) looks better on ortho boards than the standard (Sym-LBr). Images were made for both mod variants.
-;		- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
-;			- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
-;		- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.
-;		- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
-;			- Usage: In layout.ini, change the `img_ModsDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
-;		- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
-;		- Made DK images in a local `DeadkeyImg` dir work with the ones set in `img_DKeyDir`. This also alleviates the need to declare a DeadkeyImg dir.
-;	
-;		- Added the Boo (Dvorak-like modern) layout.
-;		- Added a Programmer Dvorak Symbol mod, affecting the Number row plus remapping <kbd>]}</kbd> → <kbd>@^</kbd> and swapping <kbd>'"</kbd> ↔ <kbd>;:</kbd>.
-;			- Disclaimer: This is a Dvorak Sym mod inspired by the Programmer Dvorak layout by Roland Kaufmann. It does not claim to be that layout.
-;		- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
-;			-  Also, a Compose completion was added so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
-;		- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
-;			- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
-;		- Added Hebrew layouts. See the `Cmk-eD-Heb` layout folder and the Forum Locale post.
-;	
-;		- Fixed: A CapsLock off is sent at startup to avoid CapsLock being stuck on after an EPKL refresh.
-;		- Fixed: Using relative paths for icon files, multiple layout selections wouldn't show the correct icons.
-;		- Fixed: Setting any mod in the EPKL_Layouts file would make layout shortcuts that don't use mods fail.
-;		- Fixed: Subfolder structure added to the MainLay parameter the Colemak and Tarmak layouts. Consistent naming scheme for all such subfolders.
-;		- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
-;		- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
-;		- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
+;	* EPKL v1.3.2: WIP
+;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
+;		- Finished the Cmk-CAWS-eD `.KLC` file in Other\MSKLC. Added an ANSI-Angle(Z) version.
 
 ;;  ####################### main      #######################
 #NoEnv
@@ -501,7 +472,7 @@ epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug ho
 	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .6 )
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
-	debugShowCurrentWinLayOEMs() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
+	debugShowCurrentWinLayKeys() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 ;	ListHotkeys 										; Show AHK hotkeys as by the View -> Hotkeys menu item
 Return
 
