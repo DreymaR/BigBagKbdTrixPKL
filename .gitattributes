@@ -24,6 +24,7 @@ README       text
 # Declare files that will always have LF/CRLF line endings on checkout:
 *.bat        text eol=crlf
 *.ini        text eol=crlf
+*.klc        text working-tree-encoding=UTF-16LE-BOM eol=crlf
 *.svg        text eol=lf
 *.mk         text eol=lf
 *.sh         text eol=lf

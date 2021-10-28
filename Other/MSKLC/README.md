@@ -23,6 +23,10 @@ In this folder are some files that aren't used by EPKL but MSKLC-related. This i
 Installing a MSKLC Layout
 -------------------------
 - To install a layout from a `.klc` file, it must first be compiled using the `Build DLL and Setup Package` menu option in MSKLC.
+	- If you have trouble using a `.klc` file from GitHub with MSKLC, make sure it contains [Windows line endings (CRLF)][WinLin].
+	- One fairly sure-fire way is to right-click and `Save Link As...` from the raw link, which will produce the right format.
+		- [Link to the raw Cmk-CAWS-eD-ANS.klc file in this repo][CAWSAR]
+		- [Link to the raw Cmk-CAWS-eD-ISO.klc file in this repo][CAWSIR]
 - To install a compiled layout, run the `setup.exe` program in its folder. Setup will choose the right `.msi` and `.dll` for you.
 - **NOTE:** You need to **restart your computer** before you can choose the newly installed layout!
 - Now you can select the new layout from `Language preferences` (in the tray menu if you have the Language Bar active)
@@ -46,6 +50,9 @@ Sometimes a KLC install can go wrong. That can even [mess up your computer][KLCt
 - Restart Windows
 
 
-[MyCAWS]: ./Cmk-CAWS-eD.klc (DreymaR's MSKLC Colemak-CAWS layout file)
+[MyCAWS]: ./Cmk-CAWS-eD-ISO.klc (DreymaR's MSKLC Colemak-CAWS layout file)
 [MSKLCg]: https://msklc-guide.github.io/ (Henri's MSKLC Guide)
 [KLCtec]: https://forum.colemak.com/topic/2785-techinal-issues-after-using-colemak/#p24299 (A case of technical trouble with MSKLC)
+[WinLin]: https://stackoverflow.com/questions/32255747/on-windows-how-would-i-detect-the-line-ending-of-a-file (StackOverflow on line endings for Windows)
+[CAWSIR]: https://github.com/DreymaR/BigBagKbdTrixPKL/raw/master/Other/MSKLC/Cmk-CAWS-eD-ISO.klc
+[CAWSAR]: https://github.com/DreymaR/BigBagKbdTrixPKL/raw/master/Other/MSKLC/Cmk-CAWS-eD-ANS.klc
