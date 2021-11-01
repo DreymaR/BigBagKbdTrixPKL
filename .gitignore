@@ -19,6 +19,7 @@ EPKL_Settings_Override.ini
 Layouts/**ImgGen_*
 Layouts/**/*ImgGen_*
 *PKL.exe
-EPKL_*able*.zip
+EPKL_*xecutable*.zip
 *Notepad*_Session*
 **/_Inbox/*
+KeyboardVerify.log

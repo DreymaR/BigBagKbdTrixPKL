@@ -430,7 +430,7 @@ DONE:
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
 * EPKL v1.3.2: WIP
 	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
-	- Finished the Cmk-CAWS-eD `.KLC` file in Other\MSKLC. Added an ANSI-Angle(Z) version.
+	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
 
 <br>
 

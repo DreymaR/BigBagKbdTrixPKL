@@ -245,7 +245,8 @@
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 ;	* EPKL v1.3.2: WIP
 ;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
-;		- Finished the Cmk-CAWS-eD `.KLC` file in Other\MSKLC. Added an ANSI-Angle(Z) version.
+;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
+
 
 ;;  ####################### main      #######################
 #NoEnv
