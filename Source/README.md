@@ -431,6 +431,8 @@ DONE:
 * EPKL v1.3.2: WIP
 	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
 	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
+	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
+		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision may be desirable.
 
 <br>
 
