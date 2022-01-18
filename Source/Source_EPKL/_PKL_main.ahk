@@ -1,7 +1,7 @@
 ﻿;
 ;;  EPiKaL PKL - EPKL
-;;  Portable Keyboard Layout by Farkas Máté   [https://github.com/Portable-Keyboard-Layout]
-;;  edition DreymaR (Øystein B Gadmar, 2015-) [https://github.com/DreymaR/BigBagKbdTrixPKL]
+;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
+;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
 ;
 
 ;;  ####################### user area #######################
@@ -12,10 +12,30 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Add "What about gaming?" to README. Explain send method. Mention MSKLC CAWS and SharpKeys.
+;		- TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
 
-;		- TOFIX: Sticky Shift sends the 2nd state mapping shifted which is wrong if it was mapped to be something unshifted. Normal Shift does not.
-;			- Thing is, the Sticky Shift just holds down the Shift key which leads to this effect. Should I make sure the state map is sent unblind?
+;		- WIP: Decide on supporting DK images and suchlike only for Cmk vanilla, CA and CAWS. Drop CAW support for sanity; link to CAWS in files.
+;			- There is also AWide support today. But... I don't think a lot of people use it? And they can always be asked to generate their own.
+
+;		- New tab on the Settings GUI? "Special Keys"? Make some common things more newb-friendly: Caps behavior, Sticky mods, Compose (@co1), hotkeys...?
+;			- One sub-panel for Layout (Caps, Compose) and one for Setting (Sticky, ...?) overrides.
+;			- For ISO/ANS, a setting for the OEM_102 or Z(?) key that allows Co(DeKey)? Or ®® etc
+;				- Format the key line based on which key is chosen (using the Z key requires having Z on AltGr... and on a nearby key...? ugh)?
+;				- The key next to RAlt is good for Compose. Which key that is, varies: Most common is RWin; Lenovo has PrtSc. Menu/APP(S) is a fairly unused key.
+;				- Check box for whether to make it a CoDeKey (w/ @co0 DK)
+;				- Selection for what to do with @co1 too? Too advanced for most?
+;			- Text suggestions for the Caps key behavior panel:
+;				- CapsLock  	(wasted)
+;				- Backspace 	(meh...)
+;				- Extend    	(wowza!)
+;				- Back/Extend 	(fancy!)
+;				- Mother-of-DKs (POWAH!)
+;			- Also a Hotkeys panel?
+;			- Menu language choice (on the Settings tab)?
+
+;		- WIP: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
+;		- WIP: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
+;			- Become a Great Composer!
 
 ;		- WIP: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
 ;			- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
@@ -39,13 +59,13 @@
 ;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;			- Make a lock variant of the modifier
 
-;		- WIP: Since I can now read Compose tables case sensitive, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax, but keep <#> syntax?
+;		- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
 ;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
 ;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
-;			- This allows the use of more @ codes in the LayStack files
+;			- This would allow the use of all @ codes in all LayStack files
 
-;		- WIP: "Add Layout" functionality in GUI.
+;		- WIP: "Add Layout" functionality in GUI, to select multiple active layouts without editing files manually.
 ;			- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
 ;			- Use an Add button? The button adds layout, line becomes <lay1>, then add is grayed out until something's changed. Could I avoid an extra button?
 ;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?! Too risky and error-prone for newbs.
@@ -58,6 +78,8 @@
 ;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
 ;		- TOFIX: System layout is faulty? OEMs are wrong.
 ;			- If I get it working, add a section to the README with "I don't want Colemak"? For people who just want Extend on top of their OS layout
+
+;		- WIP: Get started on the Arabic phonetic layout!
 
 ;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
@@ -80,7 +102,7 @@
 ;		- TOFIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
 ;			- It still doesn't work as it should, but the problem is hard to reproduce.
 ;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
-;		- TOFIX: Ext-Shift often gets stuck until Ext is released. Not sure exactly how.
+;		- TOFIX: Ext-Shift may get stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 ;		- FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
@@ -89,10 +111,6 @@
 ;			- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
 ;			- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 ;			- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
-;		- TEST: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Compose key!!!
-;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
-;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
-;			- It works well! But then after a while it stops working?
 ;		- TOFIX: Setting a hotkey to, e.g., <^<+6 (LeftCtrl & LeftShift & 6) doesn't work.
 ;		- TOFIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
 ;			- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
@@ -105,6 +123,10 @@
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
 ;		- TOFIX: The NBSP mapping (AltGr+Spc), in Messenger at least, sends Home or something that jumps to the start of the line?! The first time only, and then normal Space?
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
+;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
+;			- It works well! But then after a while it stops working?
+;		- TESTING: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Compose key!!!
+;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 
 ;;  eD TONEXT:
 ;		- TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
@@ -130,6 +152,7 @@
 ;		- TOFIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
 ;;  eD TODO:
+;		- TODO: Could I turn around the Compose method, to be leader key after all? But how to input then? Without looking sucks. In a pop-up box?
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
 ;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!
@@ -206,6 +229,11 @@
 ;			- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
 ;;  eD ONHOLD:
+;		- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
+;			- Issue: With Sticky Shift, the 2nd state mapping is sent shifted which is wrong if it was mapped to be something unshifted. Normal Shift does not.
+;			- Sticky Shift just holds down the Shift key which leads to this effect. Should I make sure the state map is sent unblind?
+;			- Only happens for single-character mappings. Mappings that aren't a key name aren't sent as "keys" by AHK.
+;			- Conclusion: Not a good idea to send as text categorically, as non-"key" sending breaks Win+‹key› shortcuts.
 ;		- Try out a swap-side layout instead of the mirrored one? More strain on weak fingers, but fewer SFBs I should think.
 ;			- Is the brain equally good at side-swapping and mirroring?
 ;		- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Is that actually safer? No, don't think so?
@@ -243,11 +271,37 @@
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
-;	* EPKL v1.3.2: WIP
+;	* EPKL v1.3.2: Dual-function Compose key.
 ;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
 ;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
 ;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 ;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision may be desirable.
+
+;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
+;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
+;			- As a fix, the offending entries were given `→` prefixes so they're sent literally.
+;			- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
+;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
+;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
+;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
+;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
+
+;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized, it becomes a dead key (@co0) instead.
+;			- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
+;			- It should be very nice for locale layouts' special letters.
+;			- I've also tested out punctuation-plus-space home row mappings, ++. These seem very promising!
+;			- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
+;			- Had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
+;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on using an `EPKL_Layouts` override defining `@co0`.
+;		- Added a separate dead key for the Shift-Compose mapping, `@co1`. If using the CoDeKey © key, we'll have both @co0 and @co1.
+;			- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
+
+	; eD WIP: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
+	; eD WIP: Add Compose and CoDeKey to the Short EPKL Glossary section of the README! And Prefix-Entry Syntax [with "see Key Mappings below"].
+	; eD WIP: Is the CoDeKey best for a thumb key like the key-next-to-RAlt? For punctuation etc, it seems so.
+	; eD WIP: Edit the prefix-entry section in the Extend and README files, and add one to the KeyMapper Help screen
+	; eD WIP: Special Keys tab for the Settings UI!
+	; eD WIP: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
 
 ;;  ####################### main      #######################
 #NoEnv
@@ -269,13 +323,13 @@ SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Ca
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.1" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.3.2α" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
 setPklInfo( "pklHdrB", "`r`n"
-		. ";;  for Portable Keyboard Layout by Farkas Máté [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
-		. ";;  edition DreymaR (Øystein B Gadmar, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
+		. ";;  for Portable Keyboard Layout by Máté Farkas [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
+		. ";;  edition DreymaR (Øystein Bech-Aase, 2015-)  [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
 
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
 	global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns

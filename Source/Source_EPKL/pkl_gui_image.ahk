@@ -152,7 +152,7 @@ pkl_showHelpImage( activate = 0 )
 	
 	if getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
 		thisDK  := getKeyInfo( "CurrNameOfDK" )
-		thisDK  := FileExist( im.DK1Dir . "\" . thisDK . "*.*" )  		; Look for DK imgs in two dirs: Set, and local
+		pathDK  := FileExist( im.DK1Dir . "\" . thisDK . "*.*" )  		; Look for DK imgs in two dirs: Set, and local
 							? im.DK1Dir . "\" . thisDK
 							: im.DK2Dir . "\" . thisDK
 		ssuf    := getLayInfo( "dkImgSuf" ) 							; DK image state suffix
@@ -162,9 +162,10 @@ pkl_showHelpImage( activate = 0 )
 		For ix, st in [ 6, 7, 8, 9 ] {  								; Loop through the remaining states
 			dkS[ st ] := ssuf . st . ".png"
 		}	; A state6 img w/ a state6 DK may break DK img display if we're too fast. See 'SetTimer, showHelpImage'.
-		imgPath := thisDK . dkS0 										; State0 is fallback for DK state imgs
-		imgPath := ( state ) ? fileOrAlt( thisDK . dkS[state], imgPath ) : imgPath
-		stateOn := "dk" . state 										; Never hide DK images?
+		imgPath := pathDK . dkS0 										; State0 is fallback for DK state imgs
+		imgPath := ( state ) ? fileOrAlt( pathDK . dkS[state], imgPath ) : imgPath
+		stateOn := "dk_" . thisDK 	; . "_s" . state 					; Only hide explicitly defined DK images
+		imgPath := hasValue( im.HiddenS, "DKs", 0 ) ? "" : imgPath  	; If desired, hide all DK images instead 	; eD WIP: Hiding a DK image triggered by an AltGr+<key> DK fails!
 	} else if ExtendIsPressed() { 										; Extend image
 		imgPath := getLayInfo( "extendImg" ) 							; Default im.LayDir . "\extend.png"
 		stateOn := "ext"
@@ -172,7 +173,7 @@ pkl_showHelpImage( activate = 0 )
 		imgPath := im.LayDir . "\state" . state . ".png"
 		stateOn := state
 	}
-	imgPath := hasValue( im.HiddenS, stateOn ) ? "" : imgPath 			; Hide specified states
+	imgPath := hasValue( im.HiddenS, stateOn, 0 ) ? "" : imgPath 		; Hide specified states (caseless comparison)
 	if ( imgPath )
 		imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
 	

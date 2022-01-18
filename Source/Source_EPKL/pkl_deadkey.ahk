@@ -22,7 +22,7 @@
 	Return val
 }
 
-pkl_DeadKey( dkCode ) { 									; Handle DK presses
+pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given as `@###` where `###` is dkCode.
 	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?
 	CurrNameOfDK    := getKeyInfo( "CurrNameOfDK" ) 		; Current dead key's name
 	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?

@@ -89,7 +89,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 - There are several different layout options and EPKL has many interesting ones. The two main Colemak flavors are standard/"vanilla" and DH.
 - [**Colemak-DH**][Cmk-DH] moves the <kbd>D</kbd> and <kbd>H</kbd> keys down instead of in the inwards "middle trench", so the home row curls downward.
 - Many new users ask whether Colemak-DH or vanilla is best for them. This is too long to discuss here, so look in the [Big Bag][orgBBT] and elsewhere.
-    - Shortly: DH makes the `HE` bigram easier, and removes some lateral stretches. Vanilla is better implemented on various platforms.
+    - Briefly: DH makes the `HE` bigram easier, and removes some lateral stretches. Vanilla is better implemented on various platforms.
     - At the end of the day, the question is whether stretching inwards or curling downwards from the `T/N` home position feels better to you.
     - Some may have heard of DHk and DHm or other sub-variants. DHm is the DH standard now. It should be a one-size-fits-nearly-all.
 
@@ -107,7 +107,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - If you're a simple USer without the need for such fanciness, leave the `Variant/Locale` setting at `<None>`.
 - Colemak-DH is an ergonomic Colemak mod or mod combo:
     - The DH mod in itself is named `Curl` in EPKL, because that's what it does physically: The home row is curled like the curve of your fingers.
-    - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals a no-frills Colemak-DH layout.
+    - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
 
@@ -303,10 +303,11 @@ Where:
     - _Example:_ For the <kbd>Y</kbd> key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
     - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
-* Special prefix-entry syntax (can be used for layouts, Extend and dead key entries; two possibilities for most prefixes):
-    - → | %‹entry› : Send a literal string/ligature by the SendInput {Text}‹entry› method (default)
+* EPKL prefix-entry syntax can be used in layout state mappings, Extend, Compose and dead key entries:
+    - There are two equivalent prefix characters for each entry type: One ASCII (easy to type) and one from my Shift+AltGr layer.
+    - → | %‹entry› : Send a literal string/ligature by the SendInput {Text}‹entry› method
     - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
-    - α | *‹entry› : Send ‹entry› directly, allowing AHK syntax (!+^# are modifiers, {} key names)
+    - α | *‹entry› : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
     - β | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
     - « | ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
     - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
@@ -315,12 +316,12 @@ Where:
     - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
 * A mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the last written characters with something else.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
-    - Example: Composing `noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
+    - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
     - The key can also be used for completions, adding to rather than deleting the original sequence.
     - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
     - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
 * A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
-    - Note that since EPKL can't know what this produces, a `##` mapped key can't be used in compose sequences.
+    - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used, e.g., in compose sequences.
 <br>
 
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
@@ -347,7 +348,12 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 * The above Extend modifier mappings may be in any LayStack .ini file, such as [Layouts_Default][LayDef]
 * Holding designated modifiers, <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> by default (specified in the [Settings][PklIni]), chooses Extend layers.
     - So, e.g., holding the Ext1 mod (<kbd>RAlt</kbd>) then the <kbd>Extend</kbd> key activates the Extend2 layer (NumPad).
-* After selecting your Extend layer, you hold down only the <kbd>Ext</kbd> key (Caps by default) and start using Extend!
+    - After selecting your Extend layer, you hold down only the <kbd>Ext</kbd> key (Caps by default) and start using Extend!
+    - Again: To get the NumPad Extend layer (Ext2):
+        1) Press AltGr and hold it
+        2) Press Extend (Caps) and hold it
+        3) Release AltGr while keeping Extend down
+        4) While holding down Extend, start using the NumPad layer
 * Extend layers (like Ext3/Ext4) can be set as one-shot so they fall back to another layer after each use.
     - This lets you for instance release a string then keep editing. But dead keys are better for that, see below.
 * Setting the Extend key as a Tap-or-Mod (ToM) key as above lets you tap it for, e.g., Backspace or hold for Extend.
@@ -364,32 +370,37 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 
 Layout variant tutorial
 -----------------------
-You can make your own version of, say, a locale layout with a certain (non-)ergonomic variant:
-* Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale you want to start from.
+You can make your own version of, say, a locale layout variant – for instance, using an ergonomic mod combo that isn't provided out-of-the-box:
+* Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale variant you want to start from.
 * Determine whether you want to just move keys around by VirtualKey mappings or map all their shift states like Colemak-eD does.
 * Copy/Paste a promising layout folder and rename the result to what you want.
     - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
-    - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak](./Layouts/Colemak) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
+    - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak\Cmk-eD-De](./Layouts/Colemak/Cmk-eD-De) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
     - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
-* In that folder's layout.ini file, edit the remap fields to represent the new settings.
+* In that folder's layout.ini file, edit the remap and/or other relevant fields to represent the new settings.
     - Here, change `mapSC_layout = Cmk-CAW-_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
-    - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move <kbd>Ctrl</kbd>+<kbd>V</kbd> by adding 'V-B,' in front.
+    - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move <kbd>Ctrl</kbd>+<kbd>V</kbd> with `Ext-CA--`.
+    - The geometric ergo mods Angle and Wide alone are named `Angle` and `Wide`; `AWide` for both. For the Curl mods, use C/A/W/S letter abbreviations.
+    - If you don't know the name of your desired mod combo, look in a `layout.ini` file using that combo. Or in the [Remap file][MapIni] itself.
 * Change any key mappings you want to tweak.
     - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
-    - See the next section to learn more about key mapping syntax.
-    - The mappings in the De layout are okay as they are, but let's say we want to swap <kbd>V</kbd> and <kbd>Ö</kbd> (`OEM_102`) for the sake of example.
-    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `OEM_102` is there, state 0/1 mapped to ö/Ö.
+    - However, I've also provided a more intuitive syntax, like `QW_Z` for the QWERTY Z key. See the next section to learn more about key mapping syntax.
+    - The mappings in the De layout are okay as they are, but let's say we want to swap <kbd>V</kbd> and <kbd>Ö</kbd> (`QW_LG`) for the sake of example.
+    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `QW_LG` is there, state 0/1 mapped to ö/Ö.
     - To find the <kbd>V</kbd> key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. 
-    - There's the <kbd>V</kbd> key, with the scan code `SC02f` alias the more intuitive EPKL KLM code `QW_V` as key (before `=`).
-    - Now, copy the `V` and `OEM_102` key lines to your layout.ini `[layout]` section so they'll override the baseLayout, and swap their scan codes.
-    - Alternatively, you could just edit the mappings for the affected shift states of the two keys. Use any white space between entries.
-* Now, if your `EPKL_Layouts_Override.ini` Type/Locale/Kbd/Curl/Ergo/Other settings are right you should get the variant you wanted.
+    - There's the <kbd>V</kbd> key, with the KLM code `QW_V` (scan code `SC02f`).
+    - Now, copy the `QW_V` key line from the BaseLayout file to your layout.ini `[layout]` section so it'll override the baseLayout.
+    - Make sure the `QW_LG` line you want is also active and not commented out with a `;`, and then swap the key names (scan codes) for the two lines.
+    - Alternatively, you could just edit the mappings for the affected shift states of the two keys in the `layout.ini` file.
+    - The main shift state mappings are `0/1` for unshifted/shifted, and `6/7` for the AltGr states. See above for more info.
+* Now, if your `EPKL_Layouts_Override.ini` layout selection setting is right, you should get the variant you just made.
     - From the Layout/Settings menu, you should be able to see and select it using the right options. Then you can let EPKL restart itself.
     - Or, in the file set LayType/LayVari/KbdType/CurlMod/HardMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
-    - If you prefer to use another existing layout line in the file, comment out the `layout = ` line with `;` and activate another.
+    - If you prefer to use another existing layout line in the file, comment out the old `layout = ` line with `;` and activate another.
     - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
-* After making layout changes, refresh EPKL with the <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> hotkey. If that doesn't work, quit and restart EPKL.
+* After making layout changes, refresh EPKL with the <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> hotkey.
+    - If that somehow doesn't work, just quit and restart EPKL.
 * To get relevant help images without generating them with Inkscape:
     - Check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
     - Here, you might either keep the current De_ISO_CurlAWide settings to see the German special signs without making new images, or…
@@ -418,7 +429,7 @@ For more info about past and future EPKL history, see the **[EPKL Advanced READM
 
 Credits/sources
 ---------------
-#### ~ The original [PKL][PKLGit] written by [Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
+#### ~ The original [PKL][PKLGit] written by [Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
 #### ~ [EPKL][EPKLgh], formerly [PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-
 #### ~ Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors.
 <br>

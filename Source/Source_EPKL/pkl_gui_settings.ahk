@@ -82,7 +82,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	For ix, row in [ 0,1,2,3,4 ] { 								; Get the KLM codes for each keyboard row
 		rawRow  := pklIniRead( "QW" . row, "", getPklInfo( "RemapFile" ), "KeyLayoutMap" )
 		lix     := klmLix[ ix ]
-		ui_KLMp .= "`n  ||" . rawRow . "|  `n" . klmLi%lix% 	; Format the row to the ASCII table layout
+		ui_KLMp .= "`n  ||" . rawRow . "|  `n" . klmLi%lix% 	; Format the row to the ASCII table layout for later display
 		keyRow  := RegExReplace( rawRow, "[|]{2}.*", "|" ) 		; Delete any mappings after a double pipe, as...
 		keyRow  := RegExReplace( keyRow, "[ `t]*" ) 			;   ...these are advanced and clutter up the selector
 		keyRow  := ( row == 1 ) ? keyRow . "BSP|" : keyRow 		; The KLM map has Backspace on row 0 beyond the ||.
@@ -263,18 +263,46 @@ UIselSet: 														; Handle UI Settings selections
 Return
 
 UIklmShow: 														; Show the KLM code table GUI and other info
-	klmText :=   ""
-			.   "- EPKL maps keys from their Scan codes. QW_ codes denote QWERTY locations. Keys may be moved by mod remaps such as ergo mods. Here, remap the unmodded location."
+	hlpText :=  ""
+			.   "EPKL Key Mapper help:"
+			. "`n- EPKL maps keys from their Scan codes. QW_ codes denote QWERTY locations. Keys may be moved by mod remaps such as ergo mods. Here, remap the unmodded location."
 			. "`n- Example: Standard Colemak has G on the top row, where Colemak-DH has B. To remap this key for Cmk-DH, refer to it by its vanilla position QW_B or Co_B."
 			. "`n- The shift states for state maps are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number and don't map the Ctrl state."
 			. "`n"
-			. "`n- Below is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW"" Scan Codes and ""Map to vc"" Virtual Key codes."
-			. "`n- You can edit the key mapping lines directly to any valid key codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists."
-	GUI, KLM:New    , ToolWindow , Key Mapper Help & KLM Code Table
-	GUI, KLM:Add    , Text,      , % klmText 	;. "`n"
+			. "`n- State mappings can be lots of different things, from simple characters via AHK syntax and PowerStrings to advanced dead or Compose/Completion/Repeat keys."
+			. "`n- To learn more about the most powerful options, look in the Files folder and study these files: Compose, DeadKeys, Extend and PowerStrings."
+			. "`n- Also read in the main Readme file about EPKL Prefix-Entry syntax, the Compose method and more."
+	pesText :=  ""
+			. "`n  This is an overview of EPKL prefix-entry syntax:`n" . ui_PrefEntr
+	pesTabl :=  ""
+			.   "  X=======================================================================================================================X"
+			. "`n  |  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose and dead key entries.                  |"
+			. "`n  |  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from my Shift+AltGr layer.      |"
+			. "`n  |      →  | %‹entry› : Send a literal string/ligature by the SendInput {Text} method                                    |"
+			. "`n  |      §  | $‹entry› : Send a literal string/ligature by the SendMessage method                                         |"
+			. "`n  |      α  | *‹entry› : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names                   |"
+			. "`n  |      β  | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state                                          |"
+			. "`n  |      «  | ~‹entry› : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)                      |"
+			. "`n  |      Ð  | @‹entry› : Send the current layout's dead key named ‹entry›                                                 |"
+			. "`n  |      ¶  | &&‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &&Esc, &&Tab…     |" 	; Need to && escape the &amp;
+			. "`n  |  - Other advanced state mappings:                                                                                     |"
+			. "`n  |      ®® | ®#       : Repeat the previous character. '#' may be a hex number. Nice for avoiding same-finger bigrams.   |"
+			. "`n  |      ©‹name›       : Named Compose key, replacing the last written character sequence with something else.            |"
+			. "`n  |      ##            : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.  |"
+			. "`n  X=======================================================================================================================X"
+	klmText :=  ""
+			. "`n  Below is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW"" Scan Codes and ""Map to vc"" Virtual Key codes."
+			. "`n  You can edit the key mapping lines directly to any valid key codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists."
+	GUI, KLM:New    , ToolWindow , Key Mapper Help & KLM Code Table"`n  |
+	GUI, KLM:Add    , Text,      , % hlpText
+	GUI, KLM:Add    , Text,      , % pesText
 	GUI, KLM:Font   , s10        , Courier New
-	GUI, KLM:Add    , Text,      , % ui_KLMp . "`n"
-	GUI, KLM:Font 												; Restore the default system font
+	GUI, KLM:Add    , Text,      , % pesTabl . "`n"  			; Syntax-Entry table
+	GUI, KLM:Font   											; Restore the default system font
+	GUI, KLM:Add    , Text,      , % klmText
+	GUI, KLM:Font   , s10        , Courier New
+	GUI, KLM:Add    , Text,      , % ui_KLMp . "`n"  			; KLM key code table, generated above
+	GUI, KLM:Font   											; Restore the default system font
 	GUI, KLM:Add, Button, gUIklmHide Default, &Hide
 	GUI, KLM:Show   , x16 y16 									; Show the help window in the screen corner
 Return

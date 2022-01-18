@@ -350,10 +350,12 @@ formatUnicode( chr ) { 										; Format a character as a hex string, without t
 	Return  Format( "{:" . pad . "x}", chr ) 				; Format as a Unicode hex string [0x]#### (4+ digits)
 }
 
-hasValue( haystack, needle ) { 								; Check if an array object has a certain value
+hasValue( haystack, needle, case = true ) {  				; Check if an array object has a certain value
 	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
 		Return false
 	For ix, value in haystack {
+		value   := ( case ) ? value  : loCase( value  )  	; If desired, use caseless comparison
+		needle  := ( case ) ? needle : loCase( needle )
 		if ( value == needle )
 			Return ix
 	}

@@ -36,7 +36,7 @@ rem if "%ERRORLEVEL%" == "3" set binImg=%binImg3%
 set binImg=Unicode 32-bit
 echo * Compiling as %binImg%
 rem echo.
-set binImg=%ahk%\%binImg%.bin
+set binImg="%ahk%\%binImg%.bin"
 
 REM *** USE MPRESS COMPRESSION IF AVAILABLE (MAY NOT MATTER?)
 rem choice /c yn /t 2 /d y /m "Do you want to compress file using MPRESS? Default in 2 sec.: yes."
@@ -47,13 +47,15 @@ rem echo.
 set doComp=1
 
 REM *** %~dpn1 IS THE DRIVE-PATH-NAME OF DROPPED SCRIPT DIR
-rem if exist "%~dpn1.ico" set iconParam=/icon "%~dpn1.ico"
-set iconParam=/icon "Resources\Main.ico"
+rem if exist "%~dpn1.ico" set iconPath=/icon "%~dpn1.ico"
+set iconPath="Resources\Main.ico"
 
 REM *** THE ORIGINAL SCRIPT WAS DRAG-N-DROP
 echo Compiling with %ahk%...
 rem ahk2exe /in %1 /out "%~dpn1.exe" %iconParam% /bin "%binImg%.bin" /mpress %doComp%endlocal
-%ahk%\ahk2exe /in "EPKL.ahk" /out "..\EPKL.exe" %iconParam% /bin "%binImg%" /mpress %doComp%
+rem /ahk /bin /mpress are deprecated, but since when? Probably AHK v1.1.33 so we need to get there first.
+rem See https://www.autohotkey.com/docs/Scripts.htm#ahk2exe for more info
+%ahk%\ahk2exe /in "EPKL.ahk" /out "..\EPKL.exe" /icon %iconPath% /bin %binImg% /mpress %doComp%
 echo.
 echo * Done compiling!
 echo Press any key to run EPKL or Ctrl+C to quit...

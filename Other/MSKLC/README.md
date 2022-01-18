@@ -53,6 +53,8 @@ Installing a MSKLC Layout
 -------------------------
 - To install a layout from a `.klc` file, it must first be compiled using the `Build DLL and Setup Package` menu option in MSKLC.
 - To install a compiled layout, run the `setup.exe` program in its folder. Setup will choose the right `.msi` and `.dll` for you.
+- The keyboard verify log may well give a lot of warnings about glyphs being defined twice etc; these don't matter.
+- If you have the layout already on your system – let's say you've edited it a little – you must **uninstall** it before compiling.
 - NOTE: **You have to restart your computer** before you can choose the newly installed layout!
 <br>
 

@@ -4,7 +4,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ### [EPiKaL PKL][CmkPKL] for Windows
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
-#### ([Written By Farkas Máté in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
+#### ([Written By Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
 ![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
 
@@ -45,7 +45,7 @@ Setup:
   
 
 _Best of luck!_
-_Øystein "DreymaR" Gadmar, 2018-_
+_Øystein "DreymaR" Bech-Aase, 2018-_
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (PKL on GitHub)
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (PKL on SourceForge)
@@ -66,7 +66,7 @@ EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... 
 
 This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
 
-~ Øystein B "DreymaR" Gadmar, 2020
+~ Øystein "DreymaR" Bech-Aase, 2022
 <br>
 
 DONE:
@@ -428,12 +428,20 @@ DONE:
 	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
-* EPKL v1.3.2: WIP
+* EPKL v1.3.2: Dual-function Compose key.
 	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
 	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision may be desirable.
 
+	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
+	- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
+		- As a fix, the offending entries were given `→` prefixes so they're sent literally.
+		- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
+	- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
+	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
+	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
+	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 <br>
 
 TODO:

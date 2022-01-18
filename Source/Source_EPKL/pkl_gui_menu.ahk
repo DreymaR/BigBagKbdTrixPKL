@@ -173,7 +173,7 @@ pkl_about()
 		GUI, AW:Add, Text, , Based on Portable Keyboard Layout v0.4
 	}
 	GUI, AW:Add, Edit, , %pklMainURL%
-	GUI, AW:Add, Text, , `n(c) FARKAS, Máté, 2007-2010`n(c) OEystein B Gadmar, 2015-
+	GUI, AW:Add, Text, , `n(c) FARKAS, Máté, 2007-2010`n(c) OEystein Bech-Aase, 2015-
 	GUI, AW:Add, Text, , %locThanksTo%: Chris Mallet && The AHK Foundation
 	GUI, AW:Add, Text, , %locDisclaim%`n`n%locLicense%
 	GUI, AW:Add, Edit, , http://www.gnu.org/licenses/gpl-3.0.txt
