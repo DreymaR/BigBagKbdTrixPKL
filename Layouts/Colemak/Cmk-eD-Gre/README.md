@@ -19,8 +19,9 @@ Colemak-Gre Greek phonetic layout variant
 -----------------------------------------
 - For the Greek phonetic layout, some choices were made 
 - It's for the most part similarly mapped as the Greek dead key usually found on AltGr+5
-- The two diaeresis letters Ϋϋ/Ϊϊ are added to Q and the ISO key, to ease input
-- Full polytonic Greek still requires more DK mappings
+- The two diaeresis letters Ϋϋ/Ϊϊ were added to Q and the ISO key, to ease input. But they are quite rare...
+- Full polytonic Greek still would require a lot more DK mappings, or Compose
+- Another way is combining accents, if those are supported in your application
 <br>
 
 |![EPKL help image for Colemak-eD-Gre CAWS on an ISO board, unshifted state](./Cmk-eD-Gre_ISO_CurlAWideSym/state0.png)|
