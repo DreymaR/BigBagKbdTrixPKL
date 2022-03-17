@@ -157,21 +157,29 @@ More Know-How
 -------------
 #### A Short EPKL Glossary
 * **Extend** is a layer switch, by default the <kbd>CapsLock</kbd> key, giving easy access to navigation and NumPad etc layers
+    - I really can't overstate the benefits of using Extend. It amazes nearly everyone who gets used to it.
     - The true power of Extend may be hard to understand at first. You really should read about it in the [Big Bag][BBText]!
 * **Multi-Extend** means you'll get another Extend layer if you hold down modifiers when pressing <kbd>Extend</kbd>
     - Try holding down <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> then press <kbd>Extend</kbd>
     - After selecting an Extend layer this way, keep only the <kbd>Extend</kbd> key pressed down to maintain it
-* A **Sticky Modifier** or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
-    - There's a setting in the Settings file for how quickly the OSM times out, in milliseconds
+* **Sticky Modifier** or **OSM** (One-Shot Mod) is when you can tap a mod and then another key shortly thereafter
+    - There's a setting in the Settings file for how quickly the OSM times out, and which keys are OSMs
 * **ToM** (Tap-or-Mod) is a dual-role key, working as a mod when held down and a normal key when tapped
     - ToM has its own timer setting which is typically shorter than the Sticky Mods timer
 * **DK** is a dead key. You tap it then another key, there's no timer. Most of my DKs are on <kbd>AltGr</kbd>+<kbd>‹symbol›</kbd>.
     - DK sequence: You can tap several DKs to get new symbols (example: {<kbd>AltGr</kbd>+<kbd>=</kbd>,<kbd>=</kbd>} gives `≡`; <kbd>AltGr</kbd>+`{/,=}` then <kbd>=</kbd> gives `≢`)
     - DK chaining: One DK can release to another. This is not implemented in EPKL yet
     - **MoDK** (Mother-of-DKs) is a ToM key (here, on **tap-Extend**) that leads to lots of cool DKs
+* **Compose** is a concept taken from the Linux world. In EPKL, the Compose key works a little differently.
+    - You can enter a sequence of characters and then press an EPKL Compose key if your layout has one
+    - If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced
+    - It's also possible to set a Compose table to add to instead of replacing sequences
+    - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
+    - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
+    - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
-* The **LayStack** is a stack of files that may hold layout definitions. From top to bottom priority:
+* **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
     - Layout, that is, the `layout.ini` file in your chosen layout folder
     - BaseLayout, which may be pointed to by the layout file
     - Layouts_Override, which may be generated to hold your personal layout settings and mappings
@@ -179,6 +187,11 @@ More Know-How
     - Special dedicated files for Extend, DeadKeys, PowerStrings, Remaps etc etc.
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
     - These can be in the LayStack files for quick layout tweaks, or in the dedicated [Remap file][MapIni].
+* **Prefix-Entry Syntax** is a powerful enhancement for most kind of EPKL mappings
+    - Prefix-Entry syntax can go in layout state mappings, DKs, Extend, PowerStrings, Compose entries...
+    - Basically, it's any mapping starting with one of the characters `%→$§*α=β~†@Ð&¶®©` and then an entry
+    - It allows AHK Send syntax, sending Unicode points, EPKL DKs and PowerStrings
+    - See below for more details
 <br>
 
 #### Hotkeys defined in the EPKL_Settings file:
@@ -304,24 +317,25 @@ Where:
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
     - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
 * EPKL prefix-entry syntax can be used in layout state mappings, Extend, Compose and dead key entries:
-    - There are two equivalent prefix characters for each entry type: One ASCII (easy to type) and one from my Shift+AltGr layer.
-    - → | %‹entry› : Send a literal string/ligature by the SendInput {Text}‹entry› method
-    - § | $‹entry› : Send a literal string/ligature by the SendMessage ‹entry› method
-    - α | *‹entry› : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
-    - β | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
-    - « | ~‹entry› : Send the 4-digit hex Unicode point U+<entry>
-    - Ð | @‹entry› : Send the current layout's dead key named ‹entry›
-    - ¶ | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
-* A mapping of `®®` repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
+    - There are two equivalent prefix characters for each entry type: One ASCII (easy to type), one from the eD Shift+AltGr layer.
+    - If the mapping starts with `«#»` where # is one or more characters, these are used for Help Images.
+    - `→ | %‹entry›` : Send a literal string/ligature by the SendInput {Text}‹entry› method
+    - `§ | $‹entry›` : Send a literal string/ligature by the SendMessage ‹entry› method
+    - `α | *‹entry›` : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
+    - `β | =‹entry›` : Send {Blind}‹entry›, keeping the current modifier state
+    - `† | ~‹entry›` : Send the 4-digit hex Unicode point U+<entry>
+    - `Ð | @‹entry›` : Send the current layout's dead key named ‹entry›
+    - `¶ | &‹entry›` : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
+* A `®®` mapping repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
     - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
-* A mapping of `©<name>` uses a Linux/X11-type Compose method, replacing the last written characters with something else.
+* A `©<name>` mapping uses a Linux/X11-type Compose method, replacing the last written characters with something else.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
     - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
     - The key can also be used for completions, adding to rather than deleting the original sequence.
-    - See the [EPKL Compose file][CmpIni] for more info. Compose tables for each ©-key name should be defined in that file.
+    - See the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
     - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
-* A state mapping of `##` sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
-    - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used, e.g., in compose sequences.
+* A `##` state mapping sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
+    - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used in, e.g., compose sequences.
 <br>
 
 Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.

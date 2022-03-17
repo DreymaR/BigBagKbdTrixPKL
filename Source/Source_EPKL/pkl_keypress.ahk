@@ -1,5 +1,5 @@
 ﻿;; ================================================================================================
-;;  EPKL key press
+;;  EPKL key press functions
 ;;      Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 

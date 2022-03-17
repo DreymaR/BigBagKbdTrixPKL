@@ -50,5 +50,28 @@ I'd add a Sym mod to the brackets-equals-hyphen keys.
 
 _Semimak AngleWideSym on an ISO keyboard. The © key is a Compose key._
 
+<br><br>
+
+
+The Semimak-JQ layout
+---------------------
+After a while of testing and getting feedback after the one-month Semimak speed contest, Semi made a little twist and now he uses the [Semimak-JQ][Sem_JQ] mod that he made in September 2021.
+
+It's just a `Q > J > QU` cycle so it's no big change. Although Semi thinks it's "objectively" better and solves some problems with apostrophe n-grams, some of the fastest Semimak typists still prefer the original.
+
+In EPKL you can select Semimak-eD-JQ as a layout variant of Semimak-eD.
+<br>
+
+#### Semimak-JQ
+```
++----------------------------+
+| f l h v z   ' w u o y  [ ] |
+| s r n t k   c d e a i  ; \ |
+| x j b m q   p g , . /      |
++----------------------------+
+Remap cycle from vanilla: Q > J > QU
+```
+
 
 [SemGit]: https://semilin.github.io/semimak/ (Semimak on GitHub.io)
+[Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb (Semimak-JQ)

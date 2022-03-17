@@ -114,8 +114,8 @@ pkl_showHelpImage( activate = 0 )
 		if ( im.Opacity > 0 && im.Opacity < 256 ) {
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
-			WinSet, TransColor, % im.BgColor, pklImgWin
-		} 								; eD ONHOLD: Seems that vVv got transparent color to work with separate GUIs for front/back?
+			WinSet, TransColor, % im.BgColor, pklImgWin  				; eD WIP: This actually works, but if I resize the window it goes away again?
+		}
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg ; AltSubmit 	; Make image controls stored in Help##### variables
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlKyImg ; AltSubmit
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit

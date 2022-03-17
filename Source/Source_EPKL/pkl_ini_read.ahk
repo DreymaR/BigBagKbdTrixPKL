@@ -73,7 +73,7 @@ pklIniCSVs( key, default = "", iniFile = "PklSet", section = "pkl"
 ;
 pklIniKeyVal( row, ByRef key, ByRef val, esc=0, com=1 ) 	; Because PKL doesn't always use IniRead? Why though?
 {
-	pos := InStr( row, "=" )
+	pos := InStr( row, "= " )   							; Spc after `=` is enforced. Avoids ambiguity vis-a-vis `<=> = ‹entry›` etc.
 	key := Trim( SubStr( row, 1, pos-1 ))
 	val := Trim( SubStr( row,    pos+1 ))
 	val := ( com ) ? strCom( val ) : val 					; Comment stripping

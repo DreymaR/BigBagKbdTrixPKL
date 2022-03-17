@@ -251,3 +251,6 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 	}
 ;	setKeyInfo( "LastKeys", lastKeys )  							; Since we're editing the actual LastKeys array, this isn't needed
 }
+
+;; ================================================================================================
+;

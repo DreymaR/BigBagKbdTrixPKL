@@ -237,7 +237,8 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		mapStck := layStck.Clone() 										; Allow a [Remaps] section in the LayStack too. Or only in layout.ini?!?
 		mapStck.Push( mapFile ) 	;.InsertAt( 1, mapFile ) 			; By pushing mapFile at the end of the stack, maps may be overridden.
 ;		setPklInfo( "RemapStck", mapStck ) 								; For local maps, look in mapFile then the LayStack
-		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file.
+		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file (layout.ini).
+		secList .= pklIniRead( "__List", , layStck[2] ) 				; A list of sections in the second  LayStack file (BaseLayout).
 		remStck := InStr( secList, "Remaps" ) ? mapStck : mapFile 		; Only check the whole LayStack if [Remaps] is in secList, to save startup time.
 		cycStck := InStr( secList, "RemapCycles" ) ? mapStck : mapFile 	; InStr() is case insensitive.
 		mapTypes    := [ "scMapLay"    , "scMapExt"    , "vkMapMec"     ] 	; Map types: Main remap, Extend/"hard" remap, VK remap
@@ -337,7 +338,6 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
 			ks      := shStates[ A_Index ] 								; This shift state for this key
 			ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
-			ks2     := SubStr( ksE, 2 )
 			if        ( StrLen( ksE ) == 0 ) { 							; Empty entry; ignore
 				Continue
 			} else if ( StrLen( ksE ) == 1 ) { 							; Single character entry:
@@ -351,17 +351,24 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
-				ksP := SubStr( ksE, 1, 1 )								; Multi-character entries may have a prefix
-				if ( ksP == "©" ) 										; ©### entry: Named Compose/Completion key – compose previous key(s)
-					compKeys.Push( ks2 ) 								; Register Compose key for initialization
-				if InStr( "%→$§*α=β~«@Ð&¶®©", ksP ) {
-					ksE := ks2 											; = : Send {Blind} - use current mod state
+				ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
+;				if ( ksP == "«" ) {     								; Any mapping may start with a HIG display tag for help images  	; eD WIP
+;					tag := hig_tag( ksE )   							; This tag is formatted `«#»` w/ # any character(s) except `»`
+;					if ( tag )
+;						setKeyInfo( key . ks . "Ħ", tag )   			; The display tag is kept so the HIG can find it if necessary
+;					ksE := hig_tag( ksE, "entry" )  					; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
+;				} 	; end if HIG tag
+				ks2 := SubStr( ksE, 2 )
+				if InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
+					if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
+						compKeys.Push( ks2 )    						; Register Compose key for initialization
+					ksE := ks2  										; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
 					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
 				setKeyInfo( key . ks      , ksP ) 						; "key<state>"  is the entry prefix
 				setKeyInfo( key . ks . "s", ksE ) 						; "key<state>s" is the entry itself
-			}
+			}	; end if prefix
 		}	; end loop entries
 	}	; end loop (parse keymap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
