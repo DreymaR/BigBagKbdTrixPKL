@@ -442,6 +442,11 @@ DONE:
 	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
+	- Remaps in BaseLayout files are now fully respected on their own, so a Remap section in the layout.ini file is no longer mandatory.
+	- Added the Semimak-JQ variant. It's a little Q > J > QU cycle from the original.
+	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
+		- Note that Compose allows accented/polytonic Greek letters to be written as sequences using punctuation.
 <br>
 
 TODO:
@@ -452,19 +457,24 @@ TODO:
 * Dead key chaining, allowing one DK to release another.
 	- EPKL allows the @## syntax but it doesn't work as it should yet. Because it resets PVDK?
 	- Chainable dead keys would allow a true Mother-of-DKs for Compose-like "tap dance" sequences like {MoDK,t,n}->ñ.
-* Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
+* Rework the AltGr code. Check whether Ralt (SC138 without LCtrl) will be AltGr consistently in layouts with state 6-7.
 * Add to unmapped dead key functionality
-	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad.
+	- Specify release for unmapped sequences. Today's practice of leaving an accent then the next character is often bad?
 	- That way, one could for instance use the Vietnamese Telex method with aou dead keys (aw ow uw make â ô ư) etc.
 	- One catch would be that the dead key wouldn't release until next key press, but that may be acceptable.
 	- Specify, e.g., the entry for s1 similar to today's s0 entry. (U+0000–U+001F are just ‹control› chars.)
 	- That'd be backwards compatible with existing PKL tables, and one can choose behavior.
 * Truly transparent image background without the image frame. Overall transparency (but not transparent color?) works.
 	- Transparent foreground images for all states and dead keys.
-* Some more dead key mappings:
-	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. See https://en.wikipedia.org/wiki/Greek_diacritics for tables.
-	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic
-	- IPA on AltGr+Shift symbol keys?
+* More dead key mappings:
+	- Greek polytonic accents? Need nestable accents, e.g., iota with diaeresis and tonos. May be done by Compose instead, though.
+	- Kyrillic special letters like ёЁ (for Bulmak) җ ӆ ҭ ң қ ӎ (tailed); see the Rulemak topic.
+	- IPA on AltGr+Shift symbol keys?! A proposed system based on phonetics, having DKs based on position and suchlike.
+		- DKs for vowels rounded/unrounded (near-)front, central, (near-)back. Release w/ I(YU)-E(ØO)-O(Œ)-A(Æ) for close-open, U/Y?/Æ for inbetweens?
+		- For consonants, DKs for (bi-)labial, dental, (post-)alveolar, retroflex, palatal, velar, uvular, pharyngeal/glottal?
+		- Release with the voiced/unvoiced P/B, T/D, M, N, R, F/V, S/H, L. Have to tweak it a little to account for the whole chart.
+		- Also need to provide clicks (! etc), voiced implosives (hooked), ejectives (ʼ), diacritics and others. May sequence DKs for that?
+		- Apart from combining diacritics, IPA needs superscript `ʰ ⁿ ᶿ ᵊ ˡ ˣ ʷ ˠ ˤ ʲ`. The Acute DK should be enough... except it conflicts for nlw.
 <br>
 
 INFO: Some documentation notes

@@ -17,11 +17,15 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 
 Colemak-Gre Greek phonetic layout variant
 -----------------------------------------
-- For the Greek phonetic layout, some choices were made 
-- It's for the most part similarly mapped as the Greek dead key usually found on AltGr+5
-- The two diaeresis letters Ϋϋ/Ϊϊ were added to Q and the ISO key, to ease input. But they are quite rare...
-- Full polytonic Greek still would require a lot more DK mappings, or Compose
-- Another way is combining accents, if those are supported in your application
+- For the Greek phonetic layout, some choices were made as not all letters correspond directly to each other.
+- It's for the most part similarly mapped as the Greek dead key usually found on AltGr+5.
+- The common Tonos (acute) accent is needed in an accessible spot. The Q key holds it and Diaeresis (umlaut).
+- The two diaeresis letters Ϋϋ/Ϊϊ could've been on Q and the ISO key, to ease input. But they are quite rare.
+- Instead, the ISO key (if you have it) is used as a Compose key. See the [Big Bag][orgBBT] pages for info.
+- The acute/Tonos and umlaut/Diaeresis accents are added on Q for easy access. This is similar to the Greek XKB layout.
+- Full polytonic Greek requires a lot more mappings in the tables of several DKs, or using [Compose][CmpIni].
+- Another way is to use combining accents, if those are supported in your application
+- You can type `;'υ` then Compose to get `ΰ`, or even type full katharevousa like `~(η` then Compose for `ἧ`.
 <br>
 
 |![EPKL help image for Colemak-eD-Gre CAWS on an ISO board, unshifted state](./Cmk-eD-Gre_ISO_CurlAWideSym/state0.png)|
@@ -31,3 +35,7 @@ Colemak-Gre Greek phonetic layout variant
 |![EPKL help image for Colemak-eD-Gre CAWS on an ISO board, AltGr state](./Cmk-eD-Gre_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
 |_Colemak-eD-Gre_ISO_CAWS, AltGr state_|
+
+
+[orgBBT]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
+[CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)
