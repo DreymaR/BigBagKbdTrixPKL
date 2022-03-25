@@ -181,6 +181,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 				rel := Chr( HIG.ChRepet )
 				tag := HIG.MkRepet
 			} else if ( ent == "©" ) { 							; Compose/Context key
+				dkName := getKeyInfo( "co0" )   				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_Compose_0.
+				if ( dkName )
+					HIG.DKNames[ "co0" ] := dkName  			; Add it to the DK list so its help images are generated.
 				rel := Chr( HIG.ChComps )
 				tag := HIG.MkComps
 			} else {
@@ -279,7 +282,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 hig_aChr( ent ) { 												; Get a single-character entry in various formats (number, hex, prefix syntax)
 	psp     := pkl_ParseSend( ent, "ParseOnly" ) 				; Check for prefix-entry syntax, without sending
 	ntry    := SubStr( ent, 2 )
-	if        InStr( "~«", psp ) { 								; ~ : Hex Unicode point U+####
+	if        InStr( "~†", psp ) { 								; ~ : Hex Unicode point U+####
 		psp := ""
 		ent := "0x" . ntry
 	} else if InStr( "$§%→", psp ) { 							; → : Literal string
@@ -294,7 +297,7 @@ hig_aChr( ent ) { 												; Get a single-character entry in various formats 
 hig_parseEntry( ByRef HIG, ent ) { 								; Parse a state or DK mapping for help image display
 	psp     := pkl_ParseSend( ent, "ParseOnly" ) 				; Check for prefix-entry syntax, without sending
 	ntry    := SubStr( ent, 2 )
-	if        InStr( "~«", psp ) { 								; ~ : Hex Unicode point U+####
+	if        InStr( "~†", psp ) { 								; ~ : Hex Unicode point U+####
 		psp := ""
 		ent := "0x" . ntry 										; No need for Format( "{:i}", "0x" . ntry ) here
 	} else if InStr( "%→$§", psp ) { 							; Literals can have these prefixes, or be unprefixed
@@ -344,3 +347,19 @@ ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or
 	ControlSetText, Button1, &Full
 	ControlSetText, Button2, &State
 Return
+
+hig_tag( ent, retur = "tag" ) { 									; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
+	pre := SubStr( ent, 1, 1 )
+	if ( pre == "«" ) { 											; Any mapping may start with a HIG display tag for help images
+		pos := InStr( ent, "»",, 3 )    							; This tag is formatted `«#»` w/ # any character(s) except `»`
+		if ( pos ) {
+			tag :=       SubStr( ent, 2, pos - 2 )
+			ent := Trim( SubStr( ent,    pos + 1 ) )    			; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
+		} else {
+			tag := false
+			ent := "%" . ent    									; If there is no properly formed tag, interpret entry as a string [not necessary?]
+		}
+	( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 3 )  ; eD DEBUG
+	} 	; end if HIG tag
+	Return ( retur == "tag" ) ? tag : entry
+}

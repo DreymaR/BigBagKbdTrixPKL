@@ -1,4 +1,9 @@
-﻿pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
+﻿;; ================================================================================================
+;;  EPKL Send functions
+;;      Parse and send key presses and strings
+;
+
+pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
 	if pkl_CheckForDKs( ch ) {  			; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
 		Return
 	}
@@ -78,7 +83,7 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 			Return
 		}
 	}
-	For ix, len in lengths { 									; Normally we compose up to 4 characters, in a specified priority (usually longer first)
+	For ix, len in lengths { 									; Normally we compose up to 4+ characters, in a specified priority - usually longer first
 		For ix, sct in tables {
 			keyArr  := getLayInfo( "comps_" . sct . len ) 		; Key arrays are marked both by ©-key names and lengths
 			key     := SubStr( kys
@@ -101,6 +106,9 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 			} 	; end if keyArr
 		} 	; end for sections
 	} 	; end for lengths
+	if getKeyInfo("@co0") && ( getKeyInfo("@co0") != "--" ) { 	; If a "CoDeKey" Compose0 DK is defined...
+		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
+	}
 ;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG
 }
 
@@ -120,13 +128,14 @@ pkl_CheckForDKs( ch ) {
 }
 
 pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
+;	entry := hig_tag( entry, "entry" )  						; If there is an initial HIG tag of the form «#», lop it off 	; eD WIP
 	if ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something
 		Return false
-	psp     := SubStr( entry, 1, 1 ) 							; Look for a Parse syntax prefix
-	if not InStr( "%→$§*α=β~«@Ð&¶®©", psp ) 					; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
+	psp     := SubStr( entry, 1, 1 )    						; Look for a Parse syntax prefix
+	if not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
 		Return false
-	sendIt  := ( mode == "ParseOnly" ) ? false : true 			; Parse Only mode returns prefixes without sending
-	pfix    := -1 												; Prefix for the Send commands, such as {Blind}
+	sendIt  := ( mode == "ParseOnly" ) ? false : true   		; Parse Only mode returns prefixes without sending
+	pfix    := -1   											; Prefix for the Send commands, such as {Blind}
 	enty    := SubStr( entry, 2 )
 	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
 		mode    := "Input"
@@ -141,7 +150,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 		pfix    := ""
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		pfix    := "{Blind}"
-	} else if ( psp == "~" || psp == "«" ) { 					; ~« : Hex Unicode point U+####
+	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
 		enty    := "{U+" . enty . "}"
 	} else if ( psp == "@" || psp == "Ð" ) { 					; @Ð : Named dead key (may vary between layouts!)

@@ -352,10 +352,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
 				ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-;				if ( ksP == "«" ) {     								; Any mapping may start with a HIG display tag for help images  	; eD WIP
-;					tag := hig_tag( ksE )   							; This tag is formatted `«#»` w/ # any character(s) except `»`
-;					if ( tag )
-;						setKeyInfo( key . ks . "Ħ", tag )   			; The display tag is kept so the HIG can find it if necessary
+;				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images  	; eD WIP
+;				if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
+;					setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
 ;					ksE := hig_tag( ksE, "entry" )  					; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
 ;				} 	; end if HIG tag
 				ks2 := SubStr( ksE, 2 )
@@ -364,7 +363,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 						compKeys.Push( ks2 )    						; Register Compose key for initialization
 					ksE := ks2  										; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
-					ksP := "%"											; %$: Literal/ligature (Unicode/ASCII allowed)
+					ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
 				}														; @&: Dead keys and named literals/strings
 				setKeyInfo( key . ks      , ksP ) 						; "key<state>"  is the entry prefix
 				setKeyInfo( key . ks . "s", ksE ) 						; "key<state>s" is the entry itself

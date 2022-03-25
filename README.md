@@ -10,7 +10,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-* This is a Windows implementation of the [**Big Bag Of Tricks**][orgBBT]!
+* This is a program that implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
 * That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout,…
 * … with or without my own `[eD]` AltGr layers and dead keys,…
@@ -96,7 +96,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 <br>
 
 **How do I get Colemak-DH with EPKL?**
-- EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Here's how to get something else.
+- EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Now let's choose something else.
 - As described above, open up the `Layout/Settings…` GUI from the EPKL tray menu.
 - To get the right layout, you should know your keyboard type. `ISO` has a key between <kbd>Z</kbd> and <kbd>LShift</kbd>, `ANS` not.
     - Don't worry about how your Enter key looks, but look for the ISO key at the lower left.
@@ -110,6 +110,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
+- **TL;DR answer:**: Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO).
 
 <br>
 
@@ -316,16 +317,16 @@ Where:
     - _Example:_ For the <kbd>Y</kbd> key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
 * S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
     - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
-* EPKL prefix-entry syntax can be used in layout state mappings, Extend, Compose and dead key entries:
+* EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.
     - There are two equivalent prefix characters for each entry type: One ASCII (easy to type), one from the eD Shift+AltGr layer.
     - If the mapping starts with `«#»` where # is one or more characters, these are used for Help Images.
-    - `→ | %‹entry›` : Send a literal string/ligature by the SendInput {Text}‹entry› method
-    - `§ | $‹entry›` : Send a literal string/ligature by the SendMessage ‹entry› method
-    - `α | *‹entry›` : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
-    - `β | =‹entry›` : Send {Blind}‹entry›, keeping the current modifier state
-    - `† | ~‹entry›` : Send the 4-digit hex Unicode point U+<entry>
-    - `Ð | @‹entry›` : Send the current layout's dead key named ‹entry›
-    - `¶ | &‹entry›` : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
+    - `→ | % ‹entry›` : Send a literal string/ligature by the SendInput {Text}‹entry› method
+    - `§ | $ ‹entry›` : Send a literal string/ligature by the SendMessage ‹entry› method
+    - `α | * ‹entry›` : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
+    - `β | = ‹entry›` : Send {Blind}‹entry›, keeping the current modifier state
+    - `† | ~ ‹entry›` : Send the 4-digit hex Unicode point U+<entry>
+    - `Ð | @ ‹entry›` : Send the current layout's dead key named ‹entry› (often a 3-character code)
+    - `¶ | & ‹entry›` : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
 * A `®®` mapping repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
     - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
 * A `©<name>` mapping uses a Linux/X11-type Compose method, replacing the last written characters with something else.

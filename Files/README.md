@@ -18,35 +18,36 @@ Examples From The EPKL Files
 Overview over the EPKL Prefix-Entry and other advanced syntax for mappings, useable in several contexts:
 ```
 ;;  ====================================================================================================================
-;;  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose and dead key entries.
-;;  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from my Shift+AltGr layer.
-;;      →  | %‹entry› : Send a literal string/ligature by the SendInput {Text} method
-;;      §  | $‹entry› : Send a literal string/ligature by the SendMessage method
-;;      α  | *‹entry› : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
-;;      β  | =‹entry› : Send {Blind}‹entry›, keeping the current modifier state
-;;      «  | ~‹entry› : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)
-;;      Ð  | @‹entry› : Send the current layout's dead key named ‹entry›
-;;      ¶  | &‹entry› : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
+;;  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.
+;;  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.
+;;      →  |  %  : Send a literal string/ligature by the SendInput {Text} method
+;;      §  |  $  : Send a literal string/ligature by the SendMessage method
+;;      α  |  *  : Send ‹entry› as AHK syntax in which !+^# are modifiers, and {} contain key names
+;;      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state
+;;      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)
+;;      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)
+;;      ¶  |  &  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
 ;;  - Other advanced state mappings:
-;;      ®® | ®#       : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.
-;;      ©‹name›       : Named Compose key, replacing the last written character sequence with something else.
-;;      ##            : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.
+;;      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.
+;;      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.
+;;      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.
 ;;  ====================================================================================================================
 ```
 
 A few of the several thousand(!) compose/completion sequences in the [`_eD_Compose.ini`](./_eD_Compose.ini) file:
 ```
-noevil  = 🙈 🙉 🙊   				; U1f648/9/a # See/Hear/Speak-No-Evil Monkeys
-raise   = 🙌         				; U1f64c # Person Raising Both Hands In Celebration
-pray    = 🙏         				; U1f64f # Person with Folded Hands (Namaste)
-hmmm    = 🤔         				; U1f914 # Thinking Face
-hugs    = 🤗         				; U1f917 # Hugging Face
-rock    = 🤘         				; U1f918 # Sign of the Horns
-call    = 🤙         				; U1f919 # Call Me Hand
-fist    = 🤜         				; U1f91c # Right-Facing Fist
-love    = 🤟         				; U1f91f # I Love You Hand Sign
-kungfu  = 🥋         				; U1f94b # Martial Arts Uniform
-viper   = 🐍💨       				; U1f40d + U1f4a8 # Snake + Dash Symbol
+'noevil     = 🙈 🙉 🙊  					; U1f648/9/a # See/Hear/Speak-No-Evil Monkeys
+'raise      = 🙌  							; U1f64c # Person Raising Both Hands In Celebration
+'pray       = 🙏  							; U1f64f # Person with Folded Hands (Namaste)
+'namaste    = _/|\_  						; U1464f # ASCII version of 🙏
+'hmmm       = 🤔 ❓❗  						; U1f914 + U2753 + U2757 # Thinking Face + Black Question/Exclamation Mark
+'hugs       = 🤗  							; U1f917 # Hugging Face
+'metal      = 🤘  							; U1f918 # Sign of the Horns (Metal salute)
+'call       = 🤙  							; U1f919 # Call Me Hand
+'fistbump   = 🤜🤛  						; U1f91c + U1f91b # Right/Left-Facing Fist
+'love       = 🤟  							; U1f91f # I Love You Hand Sign
+'brain      = 🧠  							; U1f9e0 # Brain
+'martial    = 🥋  							; U1f94b # Martial Arts Uniform
 ```
 <br>
 
