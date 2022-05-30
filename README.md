@@ -79,23 +79,22 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 
 <br>
 
-<del>The [EPKL For Dummies][EPKL4D] guide by [TorbenGB](https://github.com/torbengb), sadly, is now outdated as a beginner's guide since it predates the Layout/Settings GUI. But if you want to edit EPKL files manually you can pick up a few tricks here. It's still well written and understandable.</del>
+<del>The [EPKL For Dummies][EPKL4D] guide by [TorbenGB](https://github.com/torbengb), sadly, is now outdated since it predates the Layout/Settings GUI. But if you want to edit EPKL files manually you can still learn the ropes there.</del>
 
 <br><br>
 
-"I just want Colemak-DH(m) …"
-------------------------------
-**What is Colemak-DH?**
+"I just want Colemak-DH(?) …"
+-----------------------------
+#### What is Colemak-DH?
 - There are several different layout options and EPKL has many interesting ones. The two main Colemak flavors are standard/"vanilla" and DH.
 - [**Colemak-DH**][Cmk-DH] moves the <kbd>D</kbd> and <kbd>H</kbd> keys down instead of in the inwards "middle trench", so the home row curls downward.
-- Many new users ask whether Colemak-DH or vanilla is best for them. This is too long to discuss here, so look in the [Big Bag][orgBBT] and elsewhere.
+- Many new users ask whether Colemak-DH or vanilla is best for them. This is too long to discuss here, so look on the [Cmk community page][CmkOrg] and elsewhere.
     - Briefly: DH makes the `HE` bigram easier, and removes some lateral stretches. Vanilla is better implemented on various platforms.
     - At the end of the day, the question is whether stretching inwards or curling downwards from the `T/N` home position feels better to you.
     - Some may have heard of DHk and DHm or other sub-variants. DHm is the DH standard now. It should be a one-size-fits-nearly-all.
-
 <br>
 
-**How do I get Colemak-DH with EPKL?**
+#### How do I get Colemak-DH with EPKL?
 - EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Now let's choose something else.
 - As described above, open up the `Layout/Settings…` GUI from the EPKL tray menu.
 - To get the right layout, you should know your keyboard type. `ISO` has a key between <kbd>Z</kbd> and <kbd>LShift</kbd>, `ANS` not.
@@ -111,10 +110,9 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
 - **TL;DR answer:**: Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO).
-
 <br>
 
-**What are the options?**
+#### What are the options?
 - You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the [Big Bag][orgBBT].
     - All combos aren't pre-made as that'd be too much work for me. To create new ones yourself, see below.
 - The image below shows Colemak-DH on an ANSI keyboard, together with the Symbol mod which affects the right-hand symbol keys.
@@ -174,7 +172,7 @@ More Know-How
 * **Compose** is a concept taken from the Linux world. In EPKL, the Compose key works a little differently.
     - You can enter a sequence of characters and then press an EPKL Compose key if your layout has one
     - If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced
-    - It's also possible to set a Compose table to add to instead of replacing sequences
+    - It's also possible to set a Compose table to complete instead of replacing sequences
     - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
     - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
     - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
@@ -330,11 +328,7 @@ Where:
 * A `®®` mapping repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
     - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
 * A `©<name>` mapping uses a Linux/X11-type Compose method, replacing the last written characters with something else.
-    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
-    - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
-    - The key can also be used for completions, adding to rather than deleting the original sequence.
-    - See the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
-    - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
+    - See below and in the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
 * A `##` state mapping sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
     - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used in, e.g., compose sequences.
 <br>
@@ -351,8 +345,9 @@ QW_U    = VKey                      ; System mapped key. Uses whatever is on the
 Entries are any-whitespace delimited.
 <br><br>
 
-Advanced Extending
-------------------
+Special Special Keys
+--------------------
+#### Advanced Extend
 Here are some sample Extend key mappings:
 ```
 QWCLK   = Extend    Modifier        ; Caps   -> The Extend modifier (see the Big Bag)
@@ -381,6 +376,22 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
     - "Tap-dance" {<kbd>Shift</kbd>,<kbd>Ext</kbd>,<kbd>‹key›</kbd>} quickly using Sticky Shift, for a kaomoji. Wait before <kbd>‹key›</kbd> for another.
     - Holding <kbd>Ctrl</kbd> then tapping <kbd>Ext</kbd> sends <kbd>Win</kbd>+<kbd>.</kbd>, opening the Emoji picker.
     - <kbd>AltGr</kbd>+<kbd>Ext</kbd>-tap holds some commands to avoid hand contortion. Example: {<kbd>AltGr</kbd>+<kbd>Ext</kbd>,<kbd>T</kbd>} for Task Manager.
+<br>
+
+#### Advanced Compose/CoDeKey
+As mentioned, the EPKL Compose key is used to enter a sequence of characters and then change that into something else.
+    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
+    - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
+    - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
+    - The key can also be used for completions (using a `+` table), adding to rather than deleting the original sequence.
+    - Unlike its Linux counterpart, the EPKL Compose key works _post-hoc_: Enter the sequence first, then press Compose.
+    - If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced or completed.
+    - A layout can have several Compose keys defined, duplicates or different ones, in its state mappings.
+    - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
+    - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
+    - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
+    - To enable all Compose keys as CoDeKey, define a dead key with the code `@co0` in a Layouts file.
+    - Look inside the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
 <br><br>
 
 Layout variant tutorial
@@ -455,7 +466,9 @@ _Øystein "DreymaR" Bech-Aase_
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (Old PKL on GitHub)
 [PKLSFo]: https://sourceforge.net/projects/pkl/ (Old PKL on SourceForge)
 [PKLAHK]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (Old PKL on the AutoHotkey forums)
-[AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
+[AHKcom]: https://autohotkey.com/ (AutoHotkey main page)
+[CmkCom]: https://www.colemak.com (The Colemak official site)
+[CmkOrg]: https://www.colemak.org (The Colemak Community site)
 [orgBBT]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTawi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)

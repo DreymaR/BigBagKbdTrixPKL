@@ -19,11 +19,14 @@ Colemak-Nl Dutch (Netherlands/Belgium) locale layout variant
 ------------------------------------------------------------
 For Dutch locale Colemak, at the least we need accents easily accessible. There's also the ĳ digraph, but it's often written as a bigram (ij) instead. However, the J position in Colemak is not ideal since J is significantly more common in Dutch than in English.
 - **Cmk-eD-Nl** has accents on the bracket keys. The ĳ digraph may go on the ISO key if you have it, and there's also an ij bigram on AltGr+i.
-- The digraph is mostly used typographically and [even though it exists in Unicode its use is somewhat discouraged][WikiIJ].
+- The typographical ĳ digraph is mostly used in print and [even though it exists in Unicode its use is somewhat discouraged][WikiIJ].
 - Therefore, by default it may be better to keep the immensely useful Compose key on the ISO key by default!
-- With the Compose key, you can always type ij/IJ followed by Compose to produce an ĳ/Ĳ digraph.
+- With the Compose key, you can always type `'ij`/`'IJ` followed by Compose to produce an ĳ/Ĳ digraph.
 - I've added Dutch specific completion to the Compose key so that i/I plus Compose complete to ij/IJ as well.
+- To use ij completion, you need to enable a Compose key that uses the `compose_adding` table.
 - If you decide that you do want the digraph ligature ĳ on your ISO key after all, uncomment it in your [layout.ini file][layini].
+- If you have the more advanced CoDeKey (Compose+DeadKey) enabled, its `@co0` DK gets a Compose,y/Y addition for ij/IJ.
+- You could if you wish, add more special letters to the CoDeKey `dk_Compose_0` (and `1`) table in the layout file.
 <br>
 
 |![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](./Cmk-eD-Nl_ISO_AWide/state0.png)|

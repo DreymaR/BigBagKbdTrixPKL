@@ -93,11 +93,11 @@ pkl_showHelpImage( activate = 0 )
 			im.Active   := 1
 		}
 	} else if ( activate == 5 ) { 										; Zoom in/out
-		if ( ++im.ZoomNr > im.Zooms.maxIndex() )
+		if ( ++im.ZoomNr > im.Zooms.Length() )
 			im.ZoomNr   := 1
 		scaleImage  := 1
 	} else if ( activate == 6 ) { 										; Move image +1 position
-		im.PosIx    := ( im.PosIx == im.PosArr.MaxIndex() ) ? 1 : ++im.PosIx
+		im.PosIx    := ( im.PosIx == im.PosArr.Length() ) ? 1 : ++im.PosIx
 		scaleImage  := 1
 	} else if ( activate == 7 ) { 										; Flip image between opaque and transparent (by opacity setting)
 		im.Opacity  := ( im.Opacity == 255 ) ? im.OpacIni : 255
@@ -135,7 +135,7 @@ pkl_showHelpImage( activate = 0 )
 	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
 	if ( title == "pklImgWin" ) {
-		max         := im.PosArr.MaxIndex()
+		max         := im.PosArr.Length()
 		if ( mouseX - imgX < im.Mrg[5] ) { 								; Push +1/right (with wrap)
 			im.PosIx    := ( im.PosIx = max ) ? 1 : ++im.PosIx
 		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) { 				; Push -1/left   --"--

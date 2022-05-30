@@ -85,7 +85,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	shortLayDic := {} 													; CSV list of main layout name abbreviations
 	For ix, entr in shortLays { 										;     (Default: First 3 letters)
 		split := StrSplit( entr, "/" )
-		if ( split.maxIndex() != 2 )
+		if ( split.Length() != 2 )
 			Continue
 		shortLayDic[ split[1] ] := split[2]
 	}
@@ -128,7 +128,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	theLays := StrReplace( theLays, "@H",   hardMod )
 	theLays := StrReplace( theLays, "@O",   othrMod )
 	layouts := StrSplit( theLays, ",", " `t" )							; Split the CSV layout list
-	numLayouts := layouts.MaxIndex()
+	numLayouts := layouts.Length()
 	setLayInfo( "NumOfLayouts", numLayouts )							; Store the number of listed layouts
 	for ix, thisLay in layouts { 										; Store the layout dir names and menu names
 ;		kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : ""
@@ -143,7 +143,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 			theCode := "<N/A>"
 			pklWarning( "At least one layout entry is empty" )
 		}
-		theName := ( nameParts.MaxIndex() > 1 ) ? nameParts[2] : theCode
+		theName := ( nameParts.Length() > 1 ) ? nameParts[2] : theCode
 		setLayInfo( "layout" . A_Index . "code", theCode )
 		setLayInfo( "layout" . A_Index . "name", theName )
 	} 	; end for thisLay
@@ -285,15 +285,15 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
 		entries := RegExReplace( entries, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
 		entry   := StrSplit( entries, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr := ( entry.MaxIndex() < 2 + shStates.MaxIndex() ) 
-			? entry.MaxIndex() : 2 + shStates.MaxIndex() 				; Comments make pseudo-entries, so truncate them
+		numEntr := ( entry.Length() < 2 + shStates.Length() ) 
+			? entry.Length() : 2 + shStates.Length() 					; Comments make pseudo-entries, so truncate them 	; eD WIP: Not quite robust?
 		entr1   := ( numEntr > 0 ) ? entry[1] : ""
 		entr2   := ( numEntr > 1 ) ? entry[2] : ""
 		if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
 			tomEnts := StrSplit( entr1, "/" ) 							;   Their VK entry is of the form 'VK/ModName'.
 			entr1   := tomEnts[1]
 			tapMod  := _checkModName( tomEnts[2] )
-			extKey  := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as the Extend key (for ExtendIsPressed)
+			extKey  := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as an Extend key (for ExtendIsPressed)
 			setKeyInfo( key . "ToM", tapMod )
 		} else {
 			tapMod  := ""
@@ -352,11 +352,11 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
 				ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-;				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images  	; eD WIP
-;				if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
-;					setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
-;					ksE := hig_tag( ksE, "entry" )  					; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
-;				} 	; end if HIG tag
+				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images  	; eD WIP
+				if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
+					setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
+					ksE := hig_untag( ksE ) 							; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
+				} 	; end if HIG tag
 				ks2 := SubStr( ksE, 2 )
 				if InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
 					if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
@@ -371,7 +371,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		}	; end loop entries
 	}	; end loop (parse keymap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
-		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed
+		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use an array instead!
 	}	; end For row in map
 	}	; end For layFile (parse layoutFiles)
 	
@@ -397,7 +397,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 				if ( map.Length() == 0 )  								; If this map layer is empty, go on
 					Continue
 				For ix, row in map {
-					pklIniKeyVal( row , key, extMapping )  				; Read the Extend mapping for this SC
+					pklIniKeyVal( row , key, extMapping )   			; Read the Extend mapping for this SC
 					KLM := _mapKLM( key, "SC" )  						; Co/QW-2-SC KLM remapping, if applicable
 					key := upCase( key )
 					if ( hardLayers[ extN ] ) {
@@ -405,21 +405,23 @@ initLayIni() 										;   ######################### layout.ini  ###############
 					} else {
 						key := scMapLay[ key ] ? scMapLay[ key ] : key 	; If applicable, soft remap entry
 					}
-					if ( getKeyInfo( key . "ext" . extN ) != "" )  		; Skip mapping if already defined
+					if ( getKeyInfo( key . "ext" . extN ) != "" )   	; Skip mapping if already defined
 						Continue
 					if ( InStr( extMapping, "©" ) == 1 )
-						compKeys.Push( SubStr( extMapping, 2 ) )  		; Register Compose key for initialization
+						compKeys.Push( SubStr( extMapping, 2 ) )    	; Register Compose key for initialization
+					tmp := extMapping
+					extMapping := hig_untag( extMapping )   			; Lop off any HIG tag   	; eD TODO: We don't yet generate Extend images. Could we?
 					setKeyInfo( key . "ext" . extN , extMapping )
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#
 		}	; end For thisFile (parse extStck)
 		setPklInfo( "extReturnTo", StrSplit( pklIniRead( "extReturnTo"
-							, "1/2/3/4", extStck ), "/", " " ) )  		; ReturnTo layers for each Extend layer
+							, "1/2/3/4", extStck ), "/", " " ) )    	; ReturnTo layers for each Extend layer
 		Loop % 4 {
 			setLayInfo( "extImg" . A_Index  							; Extend images
 				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) ) 	; eD WIP: Allow imgDir instead
 		}	; end loop ext#
-	}	; end if ( extendKey )
+	}	; end if ( ExtendKey )
 	
 	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	

@@ -8,7 +8,7 @@
 	ActiveLay     := "" ; The active layout
 	dir           := "" ; The directory of the active layout (eD: Obsolete)
 	LayHasAltGr   := 0  ; Should Right Alt work as AltGr in the layout?
-	ExtendKey     := "" ; Extend modifier for navigation, editing, etc.
+	ExtendKey     := [] ; Extend modifier(s) for navigation, editing, etc.
 	
 	NextLayout    := "" ; If you set multiple layouts, this is the next one.
 	                    ; see the "changeActiveLayout:" label!

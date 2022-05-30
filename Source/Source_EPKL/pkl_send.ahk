@@ -128,13 +128,16 @@ pkl_CheckForDKs( ch ) {
 }
 
 pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
-;	entry := hig_tag( entry, "entry" )  						; If there is an initial HIG tag of the form «#», lop it off 	; eD WIP
-	if ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something
-		Return false
+	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
+;	tag     := hig_tag( entry )
+;	if ( higMode && tag )
+;		Return "Ħ"
+	entry   := hig_untag( entry )   							; If there is an initial HIG tag of the form «#», lop it off 	; eD WIP
 	psp     := SubStr( entry, 1, 1 )    						; Look for a Parse syntax prefix
 	if not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
 		Return false
-	sendIt  := ( mode == "ParseOnly" ) ? false : true   		; Parse Only mode returns prefixes without sending
+	if ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something to qualify
+		Return false
 	pfix    := -1   											; Prefix for the Send commands, such as {Blind}
 	enty    := SubStr( entry, 2 )
 	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
@@ -164,7 +167,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	} else if ( psp == "©" ) {  								; ©### : Named Compose/Completion key – compose previous key(s)
 		pkl_Composer( enty )
 	}
-	if ( sendIt && pfix != -1 ) { 								; Send if recognized and not ParseOnly
+	if ( pfix != -1 && ! higMode ) {    						; Send if recognized and not ParseOnly/HIG
 		if ( enty && mode == "SendThis" ) { 
 			pkl_Send( "", pfix . enty ) 						; Used by _keyPressed()
 		} else if ( mode == "SendMess"  ) {
@@ -177,7 +180,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 			SendInput % pfix . enty
 		}
 	}
-	Return % psp 												; Return the recognized prefix
+	Return psp  												; Return the recognized prefix
 }
 
 pkl_SendMessage( string ) { 									; Send a string robustly by char messages, so that mods don't get stuck etc
@@ -271,7 +274,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 
 pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of times, for the ®# key
 	lsk := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
-	lsk := lsk[lsk.MaxIndex()]
+	lsk := lsk[lsk.Length()]
 	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # may be any hex number without "0x", or just ® for num=1
 	Loop % num {
 		SendInput {Text}%lsk% 	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.

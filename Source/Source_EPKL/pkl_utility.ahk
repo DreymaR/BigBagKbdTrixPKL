@@ -24,7 +24,7 @@ ReadRemaps( mapList, mapStck ) { 					; Parse a remap string to a CSV list of cy
 }	; end fn
 
 ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
-	mapFile := IsObject( mapStck ) ? mapStck[mapStck.MaxIndex()] : mapStck 		; Use a file stack, or just one file
+	mapFile := IsObject( mapStck ) ? mapStck[mapStck.Length()] : mapStck 		; Use a file stack, or just one file
 	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
 	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
@@ -46,7 +46,7 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
 		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) { 	; Parse cycle to minicycles:  | a | b / c | d | e |
 			thisCycle   := StrSplit( minCycl, "|", " `t" ) 		; Parse cycle by pipe, and create mapping pdic
-			numSteps    := thisCycle.MaxIndex()
+			numSteps    := thisCycle.Length()
 			Loop % numSteps { 									; Loop to get proper key codes
 				this := thisCycle[ A_Index ]
 				if ( mapType == "SC" ) { 						; Remap from thisType to SC
@@ -75,19 +75,19 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 
 ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of KLMaps in a remap.ini file
 	pdic    := {}
-	Loop % 5 {													; Loop through KLM rows 0-4
+	Loop % 5 {  												; Loop through KLM rows 0-4
 		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
 		valRow := pklIniCSVs( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; --"--
 		For ix, key in keyRow { 								; (Robust against keyRow shorter than valRow)
-			if ( ix > valRow.MaxIndex() ) 						; End of val row
+			if ( ix > valRow.Length() ) 						; End of val row
 				Break
-			if ( not key ) 										; Empty key entry (e.g., double pipes)
+			if ( not key )  									; Empty key entry (e.g., double pipes)
 				Continue
 			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC### key
 			key := ( keyType == "VK" ) ? getVKnrFromName( key ) : key
 			val := upCase( valRow[ ix ] )
 			val := ( valType == "VK" ) ? getVKnrFromName( val ) : val
-			pdic[ key ] := val 									; e.g., pdic[ "SC001" ] := "VK1B"
+			pdic[ key ] := val  								; e.g., pdic[ "SC001" ] := "VK1B"
 		}	; end For key
 	}	; end Loop KLM rows
 	Return pdic
@@ -301,20 +301,20 @@ getPriority(procName="") { 					; Utility function to get process priority, by S
 	hProcess := DllCall( "OpenProcess", Int, 1024, Int, 0, Int, thePID )
 	Priority := DllCall( "GetPriorityClass", Int, hProcess )
 	DllCall( "CloseHandle", Int, hProcess )
-	Return % procList[ Priority ]
+	Return procList[ Priority ]
 }
 
 loCase( str ) {
-	Return % Format( "{:L}", str )
+	Return Format( "{:L}", str )
 }
 
 upCase( str ) {
-	Return % Format( "{:U}", str )
+	Return Format( "{:U}", str )
 }
 
 isInt( this ) { 											; AHK cannot use "is <type>" in expressions...
 	if this is integer  									; ...so use this wrapper function instead.
-		Return true
+		Return true 										; [This includes hex numbers starting with "0x"]
 	Return false 											; Else. May not be strictly necessary in AHK syntax.
 }
 

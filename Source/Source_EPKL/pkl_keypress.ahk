@@ -42,7 +42,7 @@ _keyPressed( HKey ) 											; Process a HotKey press
 		_osmClearAll() 											; ...clear any sticky mods, then...
 		extendKeyPress( HKey ) 									; ...process the Extend key press.
 		Return
-	}	; end if extendKey
+	}	; end if ExtPressed
 	
 	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK## code.
 		theVKey := getKeyInfo( HKey . "vkey" )
@@ -283,20 +283,22 @@ AltGrIsPressed() 												; Used in pkl_keypress and pkl_gui_image
 ExtendIsPressed() 											; Determine whether the Extend key is pressed. Used in _keyPressed() and pkl_gui_image
 {
 	ext := getLayInfo( "ExtendKey" )
-	Return % ( ext && getKeyState( ext, "P" ) ) ? true : false
+	Return ( ext && getKeyState( ext, "P" ) ) ? true : false
 }	; end fn
 
 _setExtendState( set = 0 )									; Called from setModState
 { 															; This function handles Extend key tap or hold
+	static initialized  := false
 	static extendKey    := -1
 	static extMod1      := ""
 	static extMod2      := ""
 	static extHeld      := 0
 	
-	if ( extendKey == -1 ) { 								; Initialize the extendKey static variables
+	if ( not initialized ) { 								; Initialize the extendKey static variables
 		extendKey       := getLayInfo( "ExtendKey" )
 		extMod1         := getPklInfo( "extendMod1" )
 		extMod2         := getPklInfo( "extendMod2" )
+		initialized     := true
 	}
 	
 ;	_osmClearAll() 											; eD WIP: Don't mix ToM and Extend? Nope, this didn't work and landed us with a stuck Caps key!

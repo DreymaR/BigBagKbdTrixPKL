@@ -1,6 +1,6 @@
 ﻿;; ================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
-;;      Calls InkScape with a .SVG template to generate a set of .PNG help images
+;;      Calls Inkscape with a .SVG template to generate a set of .PNG help images
 ;;      Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
 ;;      Example – KLD(Co) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
 ;;      The template can hold an area for ISO and another for ANSI, specified in the EPKL_ImgGen_Settings.ini file
@@ -25,9 +25,9 @@ makeHelpImages() {
 	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
 	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
-	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
 	HIG.Debug   := pklIniRead( "DebugMode"      , false , HIG.Ini ) 	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
+	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
 	HIG.Brute   := pklIniRead( "Efficiency"     , 0     , HIG.Ini ) 	; Move images to layout folder if >=1, overwrite current ones if >=2.
 	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" , HIG.Ini ) 	; Debug: Show info on this idKey during image generation.
 	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af, HIG.Ini ) 	; U+25AF  White Rectangle
@@ -41,17 +41,24 @@ makeHelpImages() {
 ;	HIG.MkOther := pklIniRead( "k_OtherKeyMark" , 0x25cf, HIG.Ini ) 	; U+25CF  Black Circle
 	HIG.MkEllip :=                                0x22ef 				; U+22EF  Midline horizontal ellipsis
 	
+	HIG.fontDef := pklIniRead( "fontDefault"    , 32    , HIG.Ini ) 	; The default font size used in the file template is 32px
+	HIG.fontSiz := pklIniCSVs( "fontSizes"      , 32    , HIG.Ini ) 	; Array of font sizes to use depending on number of glyphs
+	HIG.fontSiz := ( HIG.fontSiz.Length() == 1 )    					; If there's only one size, make it also work for two character entries
+					? [ HIG.fontSiz[1], HIG.fontSiz[1] ] : HIG.fontSiz
 	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , HIG.Ini )
 	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , HIG.Ini )
 	imgDPI      := pklIniRead( "imgResDPI"                            , 96  , HIG.Ini )
 	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
-	HIG.inkOpts := " --export-type=""png""" 					; Prior to InkScape v1.0, the export command was "--export-png=" . pngFile for each file
+	HIG.inkOpts := " --export-type=""png""" 					; Prior to Inkscape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
+	HIG.inkFile := []   												; Array of the .SVG image file paths used to call Inkscape with
+	HIG.maxFils := pklIniRead( "batchSize"      , 64    , HIG.Ini ) 	; Batch size for Inkscape calls. It couldn't handle more than ≈80 files at once.
 	
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." 	: ""
-	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug 									: ""
+	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug  								: ""
 	makeMsgStr  .= ( HIG.Brute  ) ? "`n`nEFFICIENCY: IMAGES WILL BE MOVED TO THE LAYOUT FOLDER." 	: ""
-	makeMsgStr  .= ( HIG.Brute > 1 ) ? "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!" 				: ""
+	makeMsgStr  .= ( HIG.Brute == 1 ) ? "`n  (They will not overwrite existing images.)"  			: ""
+	makeMsgStr  .= ( HIG.Brute > 1  ) ? "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!"    			: ""
 	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
 	MsgBox, 0x133, Make Help Images?, 							; MsgBox type 0x3[Yes/No/Cancel] + 0x30[Warning] + 0x100[2nd button is default]
 (
@@ -107,9 +114,9 @@ for the current layout, or only state images?
 		For ix, state in shiftStates
 			hig_makeImgDicThenImg( HIG, state )
 	}
-	if ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call InkScape
+	if ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call Inkscape
 		Return
-	hig_callInkscape( HIG ) 									; Call InkScape with all the SVG files at once now
+	hig_callInkscape( HIG ) 									; Call Inkscape with all the SVG files at once now
 	sleepTime := 3 												; Time to wait between each file check, in s
 	Loop, 6
 	{
@@ -134,7 +141,7 @@ for the current layout, or only state images?
 		FileRemoveDir   % HIG.ImgDirs["root"], 1 				; Recurse = 1 to remove files inside dir
 	}
 	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?
-;	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
+	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
 
 hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help image by a pdic.
@@ -151,15 +158,20 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 ;	( dkV == 180 ) ? pklDebug( "`ndkV: " . dkV . "`nrel: " . rel . "`nChr: " Chr(dkV) . "`n1Ch: " hig_aChr(dkV), 6 )  ; eD DEBUG
 		}	; end For release
 	}
-	emptyBool   := true 										; Keep track of whether a state layer is empty
+	HIG.Empty   := true 										; Keep track of whether a state layer is empty
 	For CO, SC in HIG.PngDic
 	{
-		rel := ""
+		rel := ""   											; Release mapping
 		tag := ""
 		idKey   := shSt . CO
-		if ( stateImg ) { 										; ****** Main layout shift state image ******
-			ent     :=       getKeyInfo( SC . shSt       ) 		; Current layout key/state main entry
-			ents    := ent . getKeyInfo( SC . shSt . "s" ) 		; Two-part key/state entry
+		if ( SC == "SC056" && getLayInfo( "Ini_KbdType" ) != "ISO" ) {
+			Continue 											; Ignore the ISO key on non-ISO images
+		}
+															;;  ###############################################################
+		if ( stateImg ) {   								;;  ################ Main layout shift state image ################
+															;;  ###############################################################
+			ent     :=       getKeyInfo( SC . shSt       )  	; Current layout key/state main entry
+			ents    := ent . getKeyInfo( SC . shSt . "s" )  	; Two-part key/state entry
 			if ( not ent ) {
 				Continue
 			} else if ( ent == "@" ) { 							; Entry is a DeadKey; was "dk"
@@ -174,45 +186,47 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 				tag := HIG.MkTpMod  							; Mark Tap-or-Mod keys, for state 0:1
 			} else if ( ent == -1 ) { 							; VKey state entry
 				key := GetKeyName( SubStr( ents, 3 ) )
-				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}" 			; Upper/Lower case
+				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}"  		; Upper/Lower case
 				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
 				tag := ""
-			} else if ( ent == "®" ) { 							; Repeat key
+			} else if ( ent == "®" ) {  						; Repeat key
 				rel := Chr( HIG.ChRepet )
 				tag := HIG.MkRepet
-			} else if ( ent == "©" ) { 							; Compose/Context key
-				dkName := getKeyInfo( "co0" )   				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_Compose_0.
+			} else if ( ent == "©" ) {  						; Compose/Context key
+				dkName := getKeyInfo( "@co0" )  				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_Compose_0.
 				if ( dkName )
 					HIG.DKNames[ "co0" ] := dkName  			; Add it to the DK list so its help images are generated.
 				rel := Chr( HIG.ChComps )
 				tag := HIG.MkComps
 			} else {
-				rel := hig_parseEntry( HIG, ents ) 				; Prepare the entry for display
+				rel := hig_parseEntry( HIG, ents )  			; Prepare the entry for display vis-a-vis HIG «» tags
 				tag := ""
 			}
-		} else { 												; ****** Dead key shift state image ******
-			ent     := HIG.ImgDic[ idKey ] 						; Here, the entry is the base for the DK entry
-			if ( not ent )
+															;;  ###############################################################
+		} else { 											;;  ################  Dead key shift state image  #################
+															;;  ###############################################################
+			ent     := HIG.ImgDic[ idKey ]  					; Here, the entry is the base for the DK entry
+			rel     := DeadKeyValue( dkName, ent )  			; Get the DeadKeyValue for the current state/key...
+			if ( not ent || not rel )
 				Continue
-			rel     := DeadKeyValue( dkName, ent ) 				; Get the DeadKeyValue for the current state/key...
 			tag     := DkMk.HasKey( hig_aChr(rel) ) 
-						? "MrkdDK" : "" 						; The DKVal is in the base/mark list, so mark it for display (was "dc_")
-			rel     := ( rel ) ? hig_parseEntry( HIG, rel ) : "" 	; Prepare the entry for display
+						? "MrkdDK" : "" 						; The DKVal is in the base/mark list, so mark it for display
+			rel     := hig_parseEntry( HIG, rel )   			; Prepare the entry for display vis-a-vis HIG «» tags
 			idKey   := dkName . "_" . idKey
 		}	; end if imgName
-		emptyBool   := ( rel ) ? false : emptyBool
-		HIG.ImgDic[ idKey       ]  := rel 						; Store the release value for this (DK/)state/key
-		HIG.ImgDic[ idKey . "¤" ]  := tag 						; Store the tag            --"--
+		HIG.Empty   := ( rel ) ? false : HIG.Empty  			; If rel is something, the layer isn't empty anymore
+		HIG.ImgDic[ idKey       ]  := rel   					; Store the release value for this (DK/)state/key
+		HIG.ImgDic[ idKey . "¤" ]  := tag   					; Store the tag            --"--
 	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nidKey: " . idKey . "`nent: " . ent . "`nents: " . ents . "`nrel: " . rel . "`ntag: " . tag . "`nChr: " Chr(rel), 6 )  ; eD DEBUG
 	}	; end For CO, SC
 	
-	if ( HIG.imgMake == "--" ) 									; Sometimes we just need the dictionary, like for single DK.
+	if ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
 	;; ================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "
-	if ( emptyBool ) {
+	if ( HIG.Empty ) {
 		pklSplash( HIG.Title, "Layout " . HIG.imgMake . "`n" . preName . "state" . shSt . "`nempty - skipping.", 1.5 )
 		Return
 	} else {
@@ -231,8 +245,17 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 	
 	if not tempImg := pklFileRead( HIG.OrigImg, "SVG template" )
 		Return
-	For CO, SC in HIG.PngDic
-	{
+	;;  Constants used in image search-n-replace below are defined outside the `For CO,SC` loop for speed
+;	imgLen  := StrLen( tempImg ) 							; Should be around 159,509 characters for my SVG template
+	tsTx    := "</tspan></text>" 							; This always follows text elements in our SVG file
+	tsTxLn  := StrLen( tsTx )
+	fsTx    := "font-size:" 								; This always preceeds the font size specification
+	fsTxLn  := StrLen( fsTx )
+	fsDf    := HIG.fontDef  								; The template's font-size for replaceable entries
+	fsDfLn  := StrLen( fsDf )
+	fsRp    := fsTx . fsDf
+	For CO, SC in HIG.PngDic {  								; Run through each CO and corresponding SC code 	; { "_Q":"SC010", "_W":"SC011" } { 
+		size    := false    									; Don't resize all entries (such as spc-padded ones)
 		idKey   := indx . CO
 		chrVal  := HIG.ImgDic[ idKey       ]
 		chrTag  := HIG.ImgDic[ idKey . "¤" ] 					; Tags such as "DK_Key" for a Dead Key
@@ -243,84 +266,116 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 			dkV2 := DeadKeyValue( chrVal, "s2" ) 				; Get the base char (entry 2) for the dead key
 			dkV2 := ( dkV2 ) ? dkV2 : DeadKeyValue( chrVal, "s0" ) 	; Fallback is entry0
 			comb := hig_combAcc( dkV2 ) ? " " : "" 				; Pad combining accents w/ a space for better display
-			aChr := comb . hig_svgChar( dkV2 ) 					; Note: Padding may lead to unwanted lateral shift
+			aChr := comb . hig_makeChr( dkV2 ) 					; Note: Padding may lead to unwanted lateral shift
 			dkV3 := DeadKeyValue( chrVal, "s3" ) 				; Get the alternate display base char, if it exists
 			if ( dkV3 ) && ( dkV3 != dkV2 ) { 					; If there is a second display char, show both
 				comb := ""	;hig_combAcc( dkV3 ) ? " " : "" 	; Note: Padding works well for some but not others.
-				aChr := aChr . comb . hig_svgChar( dkV3 )
+				aChr := aChr . comb . hig_makeChr( dkV3 )
 			}
 			dChr := aChr
-		} else if ( chrTag == "MrkdDK" ) { 						; Marked dead key base/accent char (marked in pdic)
+		} else if ( chrTag == "MrkdDK" ) {  					; Marked dead key base/accent char (marked in pdic)
 			mark := hig_combAcc( chrVal ) ? HIG.MkDkCmb : HIG.MkDkBas
-			aChr := hig_svgChar( chrVal )
+			aChr := hig_makeChr( chrVal )
 			dChr := Chr( mark ) 								; Mark for DK base chars: Default U+2B24 Black Large Circle
-		} else if ( InStr( chrTag, "0x" ) == 1 ) { 				; Direct Unicode point tag
-			aChr := hig_svgChar( chrVal )
-			dChr := hig_svgChar( chrTag )
+		} else if ( InStr( chrTag, "0x" ) == 1 ) {  			; Direct Unicode point tag
+			aChr := hig_makeChr( chrVal )
+			dChr := hig_makeChr( chrTag )
 ;		} else if ( chrTag == "--" ) {
-;			aChr := Chr( HIG.MkNaChr ) 							; Replace nonprintables (marked in pdic)
+;			aChr := Chr( HIG.MkNaChr )   						; Replace nonprintables (marked in pdic) 	; NOTE: I don't do this anymore
 ;			dChr := ""
-		} else { ; eD TODO:	Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
-			aChr := hig_svgChar( chrVal )
-			dChr := "" 											; The dead key layer entry is empty for non-DK keys
+		} else { ; eD TODO: Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
+			aChr := hig_makeChr( chrVal )
+			dChr := ""  										; The dead key layer entry is empty for non-DK keys
+			size := true    									; Allow resizing generic entries by number of characters
 		}
-	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nImage: " . ImgName . "`nidKey: " . idKey . "`nVal: " . chrVal . "`nTag: " . chrTag . "`naChr: " . aChr . "`ndChr: " . dChr, 6 )  ; eD DEBUG
+		( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nImage: " . ImgName 
+			. "`nidKey: " . idKey . "`nVal: " . chrVal . "`nTag: " . chrTag . "`naChr: " . aChr . "`ndChr: " . dChr, 6 ) 	; eD DEBUG
 		CO      := RegExReplace( CO, "_(\w\w)", "${1}" ) 		; Co _## entries are missing the underscore in the SVG template
-		tstx    := "</tspan></text>" 							; This always follows text elements in an SVG file
-		needle  := ">\K" . CO . tstx . "(.*>)" . CO . tstx 		; The RegEx to search for (ignore the start w/ \K)
-		result  := dChr . tstx . "${1}" . aChr . tstx 			; CO -> dChr, then next CO -> aChr
-		tempImg := RegExReplace( tempImg, needle , result )
-	}
+		fsSz    := ( size ) ? HIG.fontSiz[ StrLen( aChr ) ] 	; If applicable...
+							: fsDf  							; ...tabulate font size based on number of characters in the entry
+		For ix, chr in [ dChr, aChr ] {
+			chr     := hig_svgText( chr )   					; Escape any SVG forbidden characters in the entry
+			psEi    := InStr( tempImg, ">" . CO . tsTx ) +1 	; Inner position of pattern end
+;			psEo    := psEi + StrLen( CO )
+;			psF     := psEi - imgLen    						; Negative value, specifies backwards search from end of the string 	; eD WIP: This seems to not quite work?!
+			psBo    := InStr( SubStr( tempImg, 1, psEi ), fsRp,, -1 ) + fsTxLn  	; Outer position of pattern beginning
+			psBi    := psBo + fsDfLn
+;			iniStr  := SubStr( tempImg, 1, psBo - 1 )   		; The file-string up to the font-size
+			midStr  := SubStr( tempImg, psBi, psEi - psBi ) 	; The file-string between font-size and CO entry
+;			endStr  := SubStr( tempImg, psEo )  				; The file-string after the CO entry
+			tempImg := StrReplace( tempImg, fsDf . midStr . CO
+										  , fsSz . midStr . chr,, 1 )   	; It all comes together again.
+		} 	; end For chr
+;;		tmp := ( aChr ) ? tmp . "`n" . CO . " - " . fsSz . ": '" . aChr . "'" : tmp
+	} 	; end For CO,SC in PngDic
+;;		( 1 ) ? pklDebug( "" . tmp, 30 )  ; eD DEBUG
 	if ( HIG.Debug >= 3 ) 		; eD DEBUG: Don't make files
 		Return
 	if not pklFileWrite( tempImg, svgFile 						; Save the changed image file in a temp folder
 						, "temporary SVG file" ) 				; Note: Inkscape SVG is UTF-8, w/ Linux line endings
 		Return
-	HIG.inkFile .= " " . svgFile 								; In InkScape v1.0, the "--file" option is gone, but multiple files can be used
+	HIG.inkFile.Push( svgFile ) 								; In Inkscape v1.0, the "--file" option is gone, but multiple files can be used
 }
 
 hig_aChr( ent ) { 												; Get a single-character entry in various formats (number, hex, prefix syntax)
-	psp     := pkl_ParseSend( ent, "ParseOnly" ) 				; Check for prefix-entry syntax, without sending
-	ntry    := SubStr( ent, 2 )
-	if        InStr( "~†", psp ) { 								; ~ : Hex Unicode point U+####
-		psp := ""
-		ent := "0x" . ntry
-	} else if InStr( "$§%→", psp ) { 							; → : Literal string
-		psp := ""
-		ent := ntry
-	}
-	if ( not ent + 0 ) 											; Non-numeric entry
+	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
+	if ( not ent + 0 )  										; Non-numeric entry
 		ent := ( StrLen(ent) == 1 ) ? Ord(ent) : "" 			; Convert single-char literals to their ordinal value
-	Return % ent + 0 											; Convert hex to dec, longer entries to ""
+	Return  ent 												; Longer entries would be converted to ""
 }
 
-hig_parseEntry( ByRef HIG, ent ) { 								; Parse a state or DK mapping for help image display
-	psp     := pkl_ParseSend( ent, "ParseOnly" ) 				; Check for prefix-entry syntax, without sending
-	ntry    := SubStr( ent, 2 )
-	if        InStr( "~†", psp ) { 								; ~ : Hex Unicode point U+####
+hig_ParsePrefix( ByRef ent ) {  					  			; Check for tag or prefix-entry syntax, without sending
+	psp     := pkl_ParseSend( ent, "HIG" )  					; Will return a prefix only if one is recognized
+	ntry    := SubStr( ent, 2 ) 								; This function may change the value of ent
+	if        hig_tag( ent ) {  								; Specified `«#»` HIG tag for display
+		psp := "Ħ"
+		ent := hig_tag( ent )
+	} else if InStr( "~†", psp ) {  							; ~ : Hex Unicode point U+####
 		psp := ""
-		ent := "0x" . ntry 										; No need for Format( "{:i}", "0x" . ntry ) here
+		ent := "0x" . ntry  									; No need for Format( "{:i}", "0x" . ntry ) here
 	} else if InStr( "%→$§", psp ) { 							; Literals can have these prefixes, or be unprefixed
 		psp := ""
 		ent := ntry
-	} else if InStr( "*α=β@Ð&¶", psp ) { 						; AHK string(*α), Blind send(=β), DK(@Ð), PwrString(&¶)
-		ent := "·" . psp . "·" 									; Show the prefixed entry as the prefix flanked by mid-dots
-	} 	; end if psp 									; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
-	if ( ent && not psp ) {
-		ent := ( (ent + 0) == "" && StrLen( ent ) > 3 ) 		; eD WIP: Must not mark "dc_" keys here! Add if else to the above? 	; eD WIP: Do this in the image generating fn instead?
-				? HIG.MkEllip : ent 							; Entry is a string, like {Home}+{End} or prefix-entry. Marked as a (midline?) ellipse.
 	}
-	naChr   := Chr( HIG.MkNaChr ) 								; Not-a-char mark, default U+25AF Rect.
-	ent     := isInt( ent ) && ( ent < 32 ) ? naChr : ent 		; Replace control characters (ASCII < 0x20)
+	ent     := isInt( ent ) ? ent + 0 : ent  					; Convert hex to decimal for numeric entries with this trick
+	Return psp
+}
+
+hig_parseEntry( ByRef HIG, ent ) {  							; Parse a state or DK mapping for help image display
+	naChr   := Chr( HIG.MkNaChr )   							; Not-a-char mark, default U+25AF Rect.
+	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
+	if ( psp && psp != "Ħ" ) {  ;InStr( "*α=β@Ð&¶", psp ) { 	; AHK string(*α), Blind send(=β), DK(@Ð), PwrString(&¶)
+		ent := "·" . psp . "·"  								; Show untagged prefix-entries as the prefix between dots
+;	} 	; end if psp 		; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
+	} else if ( not isInt(ent) ) {  							; eD WIP: Must not mark "dc_" keys here! Add if else to the above?
+		maxLen := HIG.fontSiz.Length()  						; The number of specified font sizes; ellipse out anything longer
+		ent := ( StrLen(ent) > maxLen ) ? HIG.MkEllip : ent 	; Entry is a string, like {Home}+{End}. Marked as a (midline) ellipse.
+																; eD WIP: Do this in the image generating fn instead?!
+	}
+	ent     := isInt( ent ) && ( ent < 32 ) ? naChr : ent   	; Replace control characters (ASCII < 0x20)
 	Return ent
 }
 
 hig_callInkscape( ByRef HIG ) {
-	try { 														; Call InkScape w/ cmd line options
-		RunWait % HIG.InkPath . HIG.inkOpts . HIG.inkFile 		; --without-gui is implicit for export commands.
-	} catch {
-		pklErrorMsg( "Running Inkscape failed." )
-		Return
+	numFils := HIG.inkFile.Length()
+	batch   := HIG.maxFils  									; Max batch size for Inkscape calls
+	turns   := 1 + ( (numFils-1) // batch ) 					; Using floor division, loop if numFils > maxFils
+	Loop % turns {
+		turn    := A_Index
+		minInx  := batch * (turn-1) + 1
+		maxInx  := batch *  turn
+		maxInx  := ( maxInx > numFils ) ? numFils : maxInx
+		inkFils := ""
+		Loop % 1 + maxInx - minInx {
+			inkFils .= " " . HIG.inkFile[ minInx + A_Index - 1 ] 	; Precede and join by spaces 	;	inkFils := " " . joinArr( HIG.inkFile, " " )
+		}
+		pklSplash( HIG.Title, "Calling Inkscape [batch " . turn . "/" . turns . "] with files " . minInx . "-" . maxInx . " of " . numFils . " ...", 15 )
+		try {   													; Call Inkscape w/ cmd line options
+			RunWait % HIG.InkPath . HIG.inkOpts . inkFils   		; --without-gui is implicit for export commands.
+		} catch {
+			pklErrorMsg( "Running Inkscape failed." )
+			Return
+		}
 	}
 }
 
@@ -329,14 +384,45 @@ hig_combAcc( ch ) { 											; Check whether a character code is a Combining A
 	Return comb
 }
 
-hig_svgChar( ch ) { 												; Convert character code to RegEx-able SVG text entry
-	static escapeDic := {}
-	escapeDic   :=  { "&"  : "&amp;"  , "'"  : "&apos;" , """" : "&quot;" 		; &'"<> for SVG XML compliance.
-					, "<"  : "&lt;"   , ">"  : "&gt;"   , "$"  : "$$"     } 	; $ -> $$ for use with RegExReplace.
-	txt := isInt( ch ) ? Chr( ch ) : ch
-	For key, val in escapeDic
-		txt := ( txt == key ) ? val : txt 						; Escape forbidden characters for XML/SVG and $ for RegEx
+hig_makeChr( ch ) { 											; Convert character code to a char, if applicable
+	ch := isInt( ch ) ? Chr( ch ) : ch  						; The isInt() fn allows hex numbers too
+	Return ch   	;hig_svgEsc( ch )
+}
+
+hig_svgText( str ) { 											; Convert character string to SVG text
+	txt := ""
+	Loop, Parse, str
+		txt .= hig_svgEsc( A_LoopField )
 	Return txt
+}
+
+hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
+	static escapeDic := {}
+	escapeDic   :=  { "&"  : "&amp;"  , "'"  : "&apos;" , """" : "&quot;"   	; &'"<> for SVG XML compliance.
+					, "<"  : "&lt;"   , ">"  : "&gt;"   } 	;, "$"  : "$$"     } 	; $ -> $$ for use with RegExReplace only.
+	For key, val in escapeDic
+		ch  := ( ch == key ) ? val : ch     					; Escape forbidden characters for XML/SVG and $ for RegEx
+	Return ch
+}
+
+hig_tag( ent, retur = "tag" ) { 								; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
+	tag := false
+	pre := SubStr( ent, 1, 1 )
+	if ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images
+		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`
+		if ( pos ) {
+			tag :=       SubStr( ent, 2, pos - 2 )
+			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
+		} else {
+			ent := "%" . ent    								; If there is no properly formed tag, interpret entry as a string [not necessary?]
+		}
+;	( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  ; eD DEBUG
+	} 	; end if HIG tag
+	Return ( retur == "tag" ) ? tag : ent
+}
+
+hig_untag( ent ) {  											; Convenient call to hig_tag to return the entry
+	Return hig_tag( ent, "entry" )
 }
 
 ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or state images
@@ -347,19 +433,3 @@ ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or
 	ControlSetText, Button1, &Full
 	ControlSetText, Button2, &State
 Return
-
-hig_tag( ent, retur = "tag" ) { 									; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
-	pre := SubStr( ent, 1, 1 )
-	if ( pre == "«" ) { 											; Any mapping may start with a HIG display tag for help images
-		pos := InStr( ent, "»",, 3 )    							; This tag is formatted `«#»` w/ # any character(s) except `»`
-		if ( pos ) {
-			tag :=       SubStr( ent, 2, pos - 2 )
-			ent := Trim( SubStr( ent,    pos + 1 ) )    			; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
-		} else {
-			tag := false
-			ent := "%" . ent    									; If there is no properly formed tag, interpret entry as a string [not necessary?]
-		}
-	( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 3 )  ; eD DEBUG
-	} 	; end if HIG tag
-	Return ( retur == "tag" ) ? tag : entry
-}

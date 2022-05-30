@@ -1,6 +1,6 @@
 ﻿setUIGlobals: 													; Declare globals (can't be done inside a function for "global globals")
-;	global UI_Set 												; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed
-	global UI_Tab, UI_Btn1, UI_Btn2, UI_Btn3 					; GUI Control vars must be global (or static) to work
+;	global UI_Set 												; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed for UI
+	global UI_Tab, UI_Btn1, UI_Btn2, UI_Btn3, UI_Btn4   		; GUI Control vars must be global (or static) to work
 	global UI_LayMain, UI_LayType, UI_LayKbTp, UI_LayVari, UI_LayMods
 	global UI_KeyRowS, UI_KeyCodS, UI_KeyRowV, UI_KeyCodV, UI_KeyModL, UI_KeyModN, UI_KeyType
 	global UI_SetThis, UI_SetThat, UI_SetComm, UI_SetLine
@@ -29,8 +29,8 @@ pklSetUI() { 													; EPKL Settings GUI
 	footText    .= "`n* Lines starting with a semicolon are commented out (inactive)."
 	
 	GUI, UI:New,       , %winTitle%
-	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; AltSubmit gets tab # not name
-			, % "Layout||KeyMapper|Settings" 					; The first tab (double pipe) is default
+	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; Multi-tab GUI. AltSubmit gets tab # not name.
+			, % "Layout||Settings|Special|KeyMapper"    		; The first tab (double pipe) is default
 	
 	;; ================================================================================================
 	;;  Layout Picker UI
@@ -72,7 +72,63 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs+250 yp          gUIrevLay   , &Reset
 	
 	;; ================================================================================================
-	;;  Key Mapper UI
+	;;  Settings UI
+	;
+	GUI, UI:Tab, 2
+	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
+					, % "`nGeneral settings for " . pklAppName
+					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
+	setThis := pklIniCSVs( "setInGUI", "showHelpImage, img_HideStates, advancedMode", "PklDic" )
+	_uiAddSel(  "Change this setting from Settings_Default: " 	;,"menuLanguage","stickyMods","stickyTime","systemDeadKeys","suspendTimeOut","exitAppTimeOut"
+			,       "SetThis"   , "Choose1 w160" , setThis  , "xs y+m" ) 	; Submits the entry itself
+	_uiAddEdt( "`nDefault value:"
+			,       "SetThat"   , "Disabled"       , ui_WideTxt, "xs y+m" )
+	_uiAddEdt( "`nLine comments etc for this option:"
+			,       "SetComm"   , "Disabled"       , ui_WideTxt, "xs y+m" ) 	; "cGray" lets you select/view the whole line
+	_uiAddEdt( "`n`nSubmit this to the Settings_Override [pkl] section:"
+			,       "SetLine"   , ""            , ui_WideTxt, "xs y+m" )
+	GUI, UI:Add, Text,, % footText . "`n"
+						. "`n* For Yes/No settings you may also use y/n, true/false or 1/0."
+						. "`n* There are more settings in the Settings_Default file."
+						. "`n* Also, settings are explained somewhat in that file."     . "`n`n"
+	GUI, UI:Add, Button, xs y500  vUI_Btn2  gUIhitSetBtn, &Submit Settings
+	GUI, UI:Add, Button, xs+250 yp          gUIrevSet   , &Reset
+	
+	;; ================================================================================================
+	;;  Special Keys UI [WIP]
+	;
+	GUI, UI:Tab, 3
+	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
+					, % "`nSpecial keys settings for " . pklAppName . " [WIP]"
+					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
+	GUI, UI:Add, Text,, % "" 									; Drop the footText here for clarity
+						. "`n"
+						. "`n* EPKL has powerful special keys!"
+						. "`n"
+						. "`n* Extend is a layer modifier, usually replacing the Caps key."
+						. "`n* Read more about this in DreymaR's Big Bag of Kbd Tricks!"
+						. "`n"
+						. "`n* You can get different Extend layers with modifier combos."
+						. "`n* For instance, hold RAlt then hold Extend then release RAlt..."
+						. "`n* ...while keeping Extend down, to activate a NumPad layer."
+						. "`n"
+						. "`n* Extend can furthermore do something else on tap instead of hold."
+						. "`n* For Ext-tap, tap Extend – with modifiers if you wish."
+						. "`n* Combining Ext and Ext-tap, you can have many different layers!"
+						. "`n* This is called a MoDK (Mother-of-DeadKeys) Extend."
+						. "`n"
+						. "`n* Compose is a sequence recognizer. You type a sequence and hit it."
+						. "`n* If the Compose key is a CoDeKey, it'll be a dead key too."
+						. "`n* A CoDeKey composes if it recognises a sequence, or else is a DK."
+						. "`n"
+						. "`n* This tab is Work-In-Progress."
+						. "`n* Please refer to the Layouts/Settings files for now."
+						. "`n* (Note that there can be both default and override files.)"
+						. "`n"
+	GUI, UI:Add, Button, xs+310 y500        gUIklmShow  , %spc%&Help%spc% 	; Note: Using absolute pos., specify both x & y
+	
+	;; ================================================================================================
+	;;  Key Mapper UI [advanced]
 	;
 	klmLi1  := "  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX  "
 	klmLi2  := "  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX------+------+------+------XX  "
@@ -89,13 +145,13 @@ pklSetUI() { 													; EPKL Settings GUI
 		if ( row > 0 ) 											; Only show row 1-4 in the DDLs
 			ui_KLMs[ row ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	; Split by pipe
 	}
-	GUI, UI:Tab, 2
+	GUI, UI:Tab, 4
 	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
-					, % "`nKey mapping editor for " . pklAppName
+					, % "`nKey mapping editor for " . pklAppName . " [advanced]"
 					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
 	_uiAddSel(  "Mapping type: "
 			,       "KeyType"   , "Choose4 +AltSubmit", [ "VirtualKey", "State maps", "Modifier", "Tap-or-Mod", "MoDK" ], "xs y+m" )
-	klmRows     := [ "Number", "Upper", "Home", "Lower" ] 		; Num,Upp,Hom,Low. Row 1-4 in the KLM.
+	klmRows     := [ "Number", "Upper", "Home", "Lower" ]   	; Num,Upp,Hom,Low. Row 1-4 in the KLM.
 	GUI, UI:Add, Text,          , % "SC Row:"
 	GUI, UI:Add, Text, x+60     , % "Map from QW Scan code:"
 	_uiAddSel(  "" 	;"Row: "
@@ -129,38 +185,15 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
 						. "`n"
 	spc := A_Space . A_Space
-	GUI, UI:Add, Button, xs y500  vUI_Btn2  gUIhitKeyBtn, &Submit Key Mapping
+	GUI, UI:Add, Button, xs y500  vUI_Btn4  gUIhitKeyBtn, &Submit Key Mapping
 	GUI, UI:Add, Button, x+20               gUIhitKeyLay, &Write to layout.ini
 	GUI, UI:Add, Button, xs+310 yp          gUIklmShow  , %spc%&Help%spc% 	; Note: Using absolute pos., specify both x & y
 	GUI, UI:Add, Button, xs+250 yp          gUIrevKey   , &Reset
 	
-	;; ================================================================================================
-	;;  Settings UI
-	;
-	GUI, UI:Tab, 3
-	GUI, UI:Add, Text, section 									; 'section' stores the x value for later
-					, % "`nGeneral settings for " . pklAppName
-					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
-	setThis := pklIniCSVs( "setInGUI", "showHelpImage, img_HideStates, advancedMode", "PklDic" )
-	_uiAddSel(  "Change this setting from Settings_Default: " 	;,"menuLanguage","stickyMods","stickyTime","systemDeadKeys","suspendTimeOut","exitAppTimeOut"
-			,       "SetThis"   , "Choose1 w160" , setThis  , "xs y+m" ) 	; Submits the entry itself
-	_uiAddEdt( "`nDefault value:"
-			,       "SetThat"   , "Disabled"       , ui_WideTxt, "xs y+m" )
-	_uiAddEdt( "`nLine comments etc for this option:"
-			,       "SetComm"   , "Disabled"       , ui_WideTxt, "xs y+m" ) 	; "cGray" lets you select/view the whole line
-	_uiAddEdt( "`n`nSubmit this to the Settings_Override [pkl] section:"
-			,       "SetLine"   , ""            , ui_WideTxt, "xs y+m" )
-	GUI, UI:Add, Text,, % footText . "`n"
-						. "`n* For Yes/No settings you may also use y/n, true/false or 1/0."
-						. "`n* There are more settings in the Settings_Default file."
-						. "`n* Also, settings are explained somewhat in that file."     . "`n`n"
-	GUI, UI:Add, Button, xs y500  vUI_Btn3  gUIhitSetBtn, &Submit Settings
-	GUI, UI:Add, Button, xs+250 yp          gUIrevSet   , &Reset
-	
 	GUI, UI:Show
-	Gosub UIselSet
-	Gosub UIselKey
-	Gosub UIselLay
+	Gosub UIselKey  											; First, handle Key Mapper...
+	Gosub UIselSet  											; ...then, Settings...
+	Gosub UIselLay  											; ...then, Layout
 	Gosub UIhitTab
 }
 
@@ -267,6 +300,7 @@ UIklmShow:  													; Show the KLM code table GUI and other info
 	hlpText :=  ""
 ;			.   "EPKL Key Mapper help:"
 			. "`nFirstly: This is a complex topic! Please refer to the BigBag web pages and read inside the relevant EPKL files if you wish to understand it better."
+			. "`nDreymaR's Big Bag of Keyboard Tricks is found at: https://dreymar.colemak.org"
 			. "`n"
 			. "`n•   V I R T U A L K E Y   A N D   S T A T E   M A P P I N G"
 ;			. "`n•   V i r t u a l K e y   A n d   S t a t e   M a p p i n g"

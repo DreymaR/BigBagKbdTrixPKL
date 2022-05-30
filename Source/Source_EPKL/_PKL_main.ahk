@@ -44,9 +44,11 @@
 ;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 ;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
 ;			- Note that Compose allows accented/polytonic Greek letters to be written as sequences using punctuation.
+;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
+;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
 
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
-;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on using an `EPKL_Layouts` override defining `@co0`.
+;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
 ;			- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 ;			- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
 ;			- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These seem very promising!
@@ -64,6 +66,29 @@
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- TOFIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
+
+;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend!
+
+;		- WIP: Make a pkl_Utility() fn called by the Utility/Debug hotkey, that reads a number in Settings to select which debug/utility function it triggers
+;			- One hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
+
+;		- TOFIX: Tarmak layouts from the shortcut lines don't work. Check their BaseLayout settings?
+
+;		- WIP: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
+;			- I think the bulgarian =+ position should house Ѝ ѝ
+;			- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
+;			- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
+;			- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
+;		- WIP: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
+;			- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
+;			    (not used in the official orthography, but used in the still-popular 1918 orthography)
+;			- Russian letters should also be accessible seeing how belarus is officially bilingual
+;			- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
+;			- The national layout uses `'` so the current mapping may suffice
+;			- Maybe put ’ on the iso key instead of double acute?
+;			- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
+
 ;		- TODO: Add a Help button with a more generic help screen for the first Settings UI panel?
 ;		- TODO: Move the text for the Settings UI help text to the language files?!
 ;			- Make a separate .ini file section for it. Then read in the whole section and process it?
@@ -73,16 +98,11 @@
 ;		- WIP: Edit the prefix-entry section in the Extend and README files, and add one to the KeyMapper Help screen
 ;		- WIP: Special Keys tab for the Settings UI!?!
 ;		- WIP: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
-;		- WIP: Redo the images for changed DKs. Macron, Ring-Lig, Currency, DblAcute-Sci, Breve, DotBelow
 ;		- WIP: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
 ;			- May not work with WinSet, Transparent; I'm using that with the Help Images.
 ;		- TOFIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬`. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` work. What gives?
 ;			- Also iota/upsilon with dialytika and tonos don't work...?
 ;		- TOFIX: When selecting downwards with Extend and then using Extend-copy, sometimes an 'EXT' character (?) is made instead.
-
-;		- WIP: To work everywhere, the HIG tag will have to be in the prefix parser itself nevertheless and not in pkl_init, won't it?
-;			- Make HIG call ParseSend w/ a "HIG" setting (now "ParseOnly") which then gets the tag if applicable or the entry otherwise as now
-;			- Call hig_tag() first in ParseSend() to lop off the tag
 
 ;		- TOFIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
 ;			- Is this because of the VK detection making an error? The ones that work both have V in its old place.
@@ -101,9 +121,13 @@
 ;				- In the .svg file: 'font-size:32px', ahead of the '<text>' tags. Need to rework the regex a bit to incorporate that.
 ;				- In my "IBM board" file, Esc is 14px as is F##/Ctrl/Ins/Del/End, PrntSc/SysRq 11.5px, Scroll+Lock/Page+Up 12.5px, Pause/Break 12px
 ;				- So a useful size array could be something like 32,24,16,14,12? Try it out.
-;			- Example: «^Z»β{Esc}^z  		; Undo (on the Compose DK @co0)
-;			- Example: «,_»α{,}{Space}  	; Comma-Space (on @co0)
+;			- Example: «⌃Z»  β{Esc}^z   		; Undo (on the Compose DK @co0)
+;			- Example: «,_»  α{,}{Space}  		; Comma-Space (on @co0)
 ;			- Is it bad to only use it for Prefix-Entry though? Should we use it for other strings as well? But they could just use, e.g., → syntax.
+;		- TOFIX: The `<>` HIG tag on @Co0 becomes only `>` in the help image. The tag is sent correctly, so the problem must be in the actual image creation?
+;			- Solution: Used the hig_svgChar() fn on each character of the entry! `<>` are forbidden characters in the SVG/html format.
+;		- Do we really need one routine for single-character and another for multi-character entries?
+;		- NOTE: Restart EPKL when making changes to DK images
 
 ;		- TODO: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 
@@ -367,11 +391,12 @@
 #Persistent
 #NoTrayIcon
 #InstallKeybdHook
-#SingleInstance force
+#SingleInstance         force
 #MaxThreadsBuffer
-#MaxThreadsPerHotkey  3
-#MaxHotkeysPerInterval 300
-#MaxThreads 30
+#MaxThreadsPerHotkey    3
+#MaxHotkeysPerInterval  300
+#MaxThreads             30
+#MaxMem                 128 								; Default 64 Mb. More is needed for HIG image generation in its search-n-replace loop.
 
 SendMode Event
 SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10.

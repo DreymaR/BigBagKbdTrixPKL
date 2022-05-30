@@ -447,9 +447,11 @@ DONE:
 	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
 		- Note that Compose allows accented/polytonic Greek letters to be written as sequences using punctuation.
+	- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
+	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
 
 	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
-		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on using an `EPKL_Layouts` override defining `@co0`.
+		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
 		- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
 		- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These seem very promising!
