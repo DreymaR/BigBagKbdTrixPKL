@@ -13,7 +13,8 @@ The Canary layout
 - This layout was made by layout creators at the AltKeyboardLayout Discord, including Apsu and Semilin.
 - Its design is based on novel analysis and joint experience.
 - It contains its own Curl(DH) mod, and is strongly recommended to Angle mod on row-staggered boards.
-- For more info, see [the Canary layout repo on GitHub][CanGit]
+- On ortho boards, use `G > B > K` and `F > X > M` remaps [as explained in the Canary readme][CanOrt].
+- For more info, see [the Canary layout repo on GitHub][CanGit].
 <br>
 
 #### The Canary layout on an ANSI board:
@@ -25,12 +26,12 @@ The Canary layout
 +-----------------------------+
 ```
 
-#### The Canary layout on a matrix board:
+#### The Canary layout on a ortho/matrix board:
 ```
 +----------------------------+
-| w l y p k   z x o u ;  [ ] |
-| c r s t b   f n e i a  ' \ |
-| q j v d g   m h / , .      |
+| w l y p b   z f o u ;  [ ] |
+| c r s t g   m n e i a  ' \ |
+| q j v d k   x h / , .      |
 +----------------------------+
 ```
 
@@ -48,3 +49,4 @@ The Canary layout
 
 
 [CanGit]: https://github.com/Apsu/Canary (The Canary layout on GitHub)
+[CanOrt]: https://github.com/Apsu/Canary#ortho (Canary layout Readme, Ortho section)
