@@ -27,6 +27,10 @@ Colemak-eD-BeCaFr French phonetic layout variant
 - The № digraph sign was added in case someone needs it. It may also be composed from `No` with a Compose key.
 <br>
 
+- There is an issue with some `BaseLayout` files using ## entries for numbers to preserve `Win+#` shortcuts.
+- AZERTY and such layouts may have a non-standard number row. To stay safe, these variants use `VK-None` BaseLayouts.
+<br>
+
 |![EPKL help image for Colemak-eD-BeCaFr AngleWide on an ISO board, unshifted state](./Cmk-eD-BeCaFr_ISO_AWide/state0.png)|
 |   :---:   |
 |_Colemak-eD-BeCaFr_ISO_AWide, unshifted state_|

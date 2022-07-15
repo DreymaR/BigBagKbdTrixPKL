@@ -433,7 +433,7 @@ DONE:
 	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
-		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision may be desirable.
+		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 	- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
 		- As a fix, the offending entries were given `→` prefixes so they're sent literally.
@@ -443,26 +443,33 @@ DONE:
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Remaps in BaseLayout files are now fully respected on their own, so a Remap section in the layout.ini file is no longer mandatory.
-	- Added the Semimak-JQ variant. It's a little Q > J > QU cycle from the original.
-	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
-	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
-		- Note that Compose allows accented/polytonic Greek letters to be written as sequences using punctuation.
-	- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
 	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
+	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+	- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
+	- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
+	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
+		- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
+	- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
+	- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
 
 	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
-		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
-		- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
-		- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These seem very promising!
+		- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These are very promising!
 		- The punctuation CoDeKey, in my experience, works wonderfully with a thumb Compose key like the key-next-to-RAlt.
 		- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
 		- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
 			- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
+		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
+		- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 	- Added a separate dead key for the Shift-Compose mapping, `@co1`. If using the CoDeKey © key, we'll have both @co0 and @co1.
 		- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
-	- Fixed: Generating all DK images didn't generate the Co0 ones, because Co0 isn't used directly in any layout mappings. Added a check around the © key.
+	- Fixed: Generating all DK images didn't generate the `co0` ones, because `co0` isn't used directly in any layout mappings. Added a check around the © key.
 	- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+
+	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+	- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
 <br>
 
 TODO:

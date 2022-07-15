@@ -18,11 +18,13 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Spanish Colemak locale layout variants
 --------------------------------------
 For Spanish/Latin locale Colemak, at the least we need the letters áéíóú and ñ easily accessible.
-- Actually, ñ isn't all that commmon so if you're adventurous you might use a Compose key to produce it.
+- Actually, ñ isn't all that common so if you're adventurous you might use a Compose key to produce it.
 - In this case, composing `nn` to ñ may feel like one key stroke too many and you can make `n` plus Compose produce ñ.
 - Another neat trick for Spanish is making !/? plus Compose produce ¡/¿.
+- If you're an advanced enough user that you use a CoDeKey, it's perfect for this kind of thing.
+<br>
 
-There are two main solutions, depending on your preferences:
+There are two main locale variant solutions, depending on your preferences:
 - **Cmk-eD-EsLat**: This is good both for Spanish and other languages, using dead keys on brackets for the main accents.
 <br>
 
@@ -38,3 +40,23 @@ There are two main solutions, depending on your preferences:
 |![EPKL help image for Colemak-eD-EsAlt on an ANSI board, the AltGr state](./Cmk-eD-EsAlt_ANS_CurlAngle/state6.png)|
 |   :---:   |
 |_Colemak-eD-EsAlt_ANS_CurlAngle, AltGr state_|
+<br><br>
+
+Issues with using Colemak for Spanish
+-------------------------------------
+Obviously, Colemak was developed for English but that's generally okay since the Latin languages have mostly similar frequencies for the most common letters.
+- In particular, the <kbd>H</kbd> key may actually have a slightly too good place for English – but that's just perfect for Spanish!
+- <kbd>A</kbd> is common in Spanish and you may worry about Colemak leaving it on the left pinky. But as long as the pinky doesn't move too much, that's fine.
+- Since most of us write in English too, learning one layout that works okay for both should be enough. Colemak is such a layout.
+
+However, [there are still some real issues][RedCmkEs].
+- The <kbd>Z</kbd> key creates same-finger bigrams with <kbd>A</kbd>, and the `UE` SFB is quite common in Spanish.
+- You may use the Angle-Z (ANSI Angle) mod, so <kbd>Z</kbd> moves to the left index finger. This will solve the `AZ`/`ZA` SFB.
+- To alleviate the `UE` bigram (and `ÑO` if you put <kbd>Ñ</kbd> on a bracket and don't use the Wide mod), some suggest a `O-U` swap.
+- I'm really not sure, myself. I'd probably just use AngleWide or CAWS mods and "tank" the rest, like I do when typing my own language.
+- However, if you're convinced and adventurous, EPKL does support a `O-U` swap:
+    - Prepend the `mapSC_layout` entry in your `layout.ini` file with `O-U,`, so it reads `mapSC_layout    = O-U,` etc.
+    - Then refresh EPKL. The help images will not be updated; you can generate new ones if you have the Inkscape program.
+
+
+[RedCmkEs]: https://www.reddit.com/r/Colemak/comments/v7jzj4/colemak_in_spanish_dh_mod/ (A Reddit topic on issues with using Colemak for Spanish)

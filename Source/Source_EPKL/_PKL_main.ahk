@@ -30,7 +30,7 @@
 ;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
 ;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 ;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
-;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision may be desirable.
+;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 ;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 ;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
 ;			- As a fix, the offending entries were given `→` prefixes so they're sent literally.
@@ -40,33 +40,57 @@
 ;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 ;		- Remaps in BaseLayout files are now fully respected on their own, so a Remap section in the layout.ini file is no longer mandatory.
-;		- Added the Semimak-JQ variant. It's a little Q > J > QU cycle from the original.
-;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
-;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
-;			- Note that Compose allows accented/polytonic Greek letters to be written as sequences using punctuation.
-;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
 ;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
+;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+;		- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
+;		- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+;		- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
+;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
+;			- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
+;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
+;		- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
 
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
-;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
-;			- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 ;			- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
-;			- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These seem very promising!
+;			- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These are very promising!
 ;			- The punctuation CoDeKey, in my experience, works wonderfully with a thumb Compose key like the key-next-to-RAlt.
 ;			- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
 ;			- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
 ;				- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
+;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
+;			- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
 ;		- Added a separate dead key for the Shift-Compose mapping, `@co1`. If using the CoDeKey © key, we'll have both @co0 and @co1.
 ;			- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
-;		- Fixed: Generating all DK images didn't generate the Co0 ones, because Co0 isn't used directly in any layout mappings. Added a check around the © key.
-;		- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+;		- Fixed: Generating all DK images didn't generate the `co0` ones, because `co0` isn't used directly in any layout mappings. Added a check around the © key.
+
+;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+;		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+
+;		- WIP: New tab on the Settings GUI: "Special Keys". Make some common things more newb-friendly: Caps behavior, Sticky mods, Compose (@co1), hotkeys...?
+;			- One sub-panel for Layout (Caps, Compose) and one for Setting (Sticky, ...?) overrides?
+;			- For ISO/ANS, a setting for the OEM_102 or RWin or Z(?) key that allows Co(DeKey)? Or ®® etc
+;				- Format the key line based on which key is chosen (using the Z key requires having Z on AltGr... and on a nearby key...? ugh)?
+;				- The key next to RAlt is good for Compose. Which key that is, varies: Most common is RWin; Lenovo has PrtSc. Menu/APP(S) is a fairly unused key.
+;				- Add a check box for whether to make it a CoDeKey (w/ @co0 DK)
+;				- Selection for what to do with @co1 too? Too advanced for most?
+
+;		- WIP: Make a setting for which Compose keys are CoDeKeys instead of the current if co0 defined nonsense.
+;			- In the Settings_Override file?
+;			- Currently [deadKeyNames] ⇒ @co0 = Compose_0     	; Special Empty-Compose DK (CoDeKey). Just leave those on, in the Deadkeys file.
+;			- Make the Special Keys settings GUI follow suit, can have an editable line for it
 
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- TOFIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
+;		- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
+
+;		- TODO: More GUI settings?
+;			- A Hotkeys panel?
+;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
 
 ;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend!
 
@@ -107,53 +131,17 @@
 ;		- TOFIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
 ;			- Is this because of the VK detection making an error? The ones that work both have V in its old place.
 
-;		- TODO: Add a display abbreviation to prefix-entry syntax, so help images can show what's going on? E.g., `«»`.
-;			- For good efficiency during typing, do this at init? Lop off the display bit and store it so HIG can find it if necessary.
-;				- For DKs it'll have to happen at runtime though, so we'll probably need to do it in ParseSend() too.
-;			- Probably can't have more than two characters or it'll be too wide? But try it out w/ `Esc` for instance.
-;				- Eventually, may reduce the font size automatically if more than 2 characters?
-;				- But – check U+2423⇒␣ (space), U+2408⇒␈ (BS), U+241B⇒␛ (ESC), U+2421⇒␡ (DEL)...! U+23FB⇒⏻ (Power), U+2328⇒⌨ (keeb).
-;				- From the Unicode Control Pictures block: https://www.fileformat.info/info/unicode/block/control_pictures/list.htm
-;				- Also use symbols like ↓↑←→ used in the Extend images. U+21B5⇒↵ (Enter). U+23CE⇒⏎ (Enter), U+232B⇒⌫ (BS), U+2326⇒⌦ (Del)...
-;				- From the Unicode Misc. Technical block: https://www.compart.com/en/unicode/block/U+2300
-;				- From the Unicode Arrow Symbols block: https://www.compart.com/en/unicode/block/U+2190
-;			- Better: Figure out sizes for 1,2,3,4(+?) character tags. Calculate, or tabulate from the settings file? The latter is more flexible.
-;				- In the .svg file: 'font-size:32px', ahead of the '<text>' tags. Need to rework the regex a bit to incorporate that.
-;				- In my "IBM board" file, Esc is 14px as is F##/Ctrl/Ins/Del/End, PrntSc/SysRq 11.5px, Scroll+Lock/Page+Up 12.5px, Pause/Break 12px
-;				- So a useful size array could be something like 32,24,16,14,12? Try it out.
-;			- Example: «⌃Z»  β{Esc}^z   		; Undo (on the Compose DK @co0)
-;			- Example: «,_»  α{,}{Space}  		; Comma-Space (on @co0)
-;			- Is it bad to only use it for Prefix-Entry though? Should we use it for other strings as well? But they could just use, e.g., → syntax.
-;		- TOFIX: The `<>` HIG tag on @Co0 becomes only `>` in the help image. The tag is sent correctly, so the problem must be in the actual image creation?
-;			- Solution: Used the hig_svgChar() fn on each character of the entry! `<>` are forbidden characters in the SVG/html format.
-;		- Do we really need one routine for single-character and another for multi-character entries?
-;		- NOTE: Restart EPKL when making changes to DK images
-
 ;		- TODO: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 
 ;		- TODO: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
+
+;		- TODO: The s0–s7 DK entries are unintuitive. Give them more human-readable names?
 
 ;		- TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
 ;			- Would destroying the GUI on DK activation help at all?
 
 ;		- WIP: Decide on supporting DK images and suchlike only for Cmk vanilla, CA and CAWS. Drop CAW support for sanity; link to CAWS in files.
 ;			- There is also AWide support today. But... I don't think a lot of people use it? And they can always be asked to generate their own.
-
-;		- TODO: New tab on the Settings GUI? "Special Keys"? Make some common things more newb-friendly: Caps behavior, Sticky mods, Compose (@co1), hotkeys...?
-;			- One sub-panel for Layout (Caps, Compose) and one for Setting (Sticky, ...?) overrides.
-;			- For ISO/ANS, a setting for the OEM_102 or RWin or Z(?) key that allows Co(DeKey)? Or ®® etc
-;				- Format the key line based on which key is chosen (using the Z key requires having Z on AltGr... and on a nearby key...? ugh)?
-;				- The key next to RAlt is good for Compose. Which key that is, varies: Most common is RWin; Lenovo has PrtSc. Menu/APP(S) is a fairly unused key.
-;				- Add a check box for whether to make it a CoDeKey (w/ @co0 DK)
-;				- Selection for what to do with @co1 too? Too advanced for most?
-;			- Text suggestions for the Caps key behavior panel:
-;				- CapsLock  	(wasted)
-;				- Backspace 	(oki...)
-;				- Extend    	(wowza!)
-;				- Back/Extend 	(fancy!)
-;				- Mother-of-DKs (POWAH!)
-;			- Also a Hotkeys panel?
-;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
 
 ;		- WIP: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
 ;		- WIP: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
@@ -253,6 +241,11 @@
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;		- TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
+;		- TOFIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
+;			- Sort of fixed it by making the new disp0 entry that can display any string on the DK's key in the help image.
+;		- TODO: Rework the GUI submit to allow multi-submit/reset on tabs that have more than one submit. 
+;			- Maybe make the submit routine callable with arrays so it loops before asking for a restart?
 ;		- TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
 ;		- TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. 

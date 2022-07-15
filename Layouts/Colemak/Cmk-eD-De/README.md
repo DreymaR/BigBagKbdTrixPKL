@@ -22,6 +22,8 @@ Some locales traditionally use ANSI keyboards though, and some prefer to use the
 Colemak-eD-De German phonetic layout variant
 --------------------------------------------
 - For German, `äöü` are readily available on bracket+ISO keys, similarly to the Scandinavian `æøå`.
+- Since ẞ (capital ß) is German standard now, it's added on <kbd>AltGr</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>.
+- (The section sign, accordingly, § was moved to <kbd>AltGr</kbd>+<kbd>P</kbd>.)
 - To allow easier Pan-Germanic typing, Scandinavian `æøå` letters are added on <kbd>AltGr</kbd>+{ <kbd>A</kbd> / <kbd>ISO</kbd> / <kbd>U</kbd> }.
 <br>
 

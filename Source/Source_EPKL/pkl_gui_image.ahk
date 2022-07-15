@@ -135,7 +135,7 @@ pkl_showHelpImage( activate = 0 )
 	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
 	if ( title == "pklImgWin" ) {
-		max         := im.PosArr.Length()
+		max     := im.PosArr.Length()
 		if ( mouseX - imgX < im.Mrg[5] ) { 								; Push +1/right (with wrap)
 			im.PosIx    := ( im.PosIx = max ) ? 1 : ++im.PosIx
 		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) { 				; Push -1/left   --"--

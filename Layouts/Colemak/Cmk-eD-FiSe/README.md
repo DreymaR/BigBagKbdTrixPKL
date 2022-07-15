@@ -16,6 +16,7 @@ Colemak-eD-DkNo/FiSe Scandinavian phonetic layout variants
 - For Danish/Norwegian, `æøå` are readily available on bracket+ISO keys, similarly to the German `äöü`.
 - To allow easier Pan-Germanic typing, German `äöü` letters are added on <kbd>AltGr</kbd>+{ <kbd>A</kbd> / <kbd>ISO</kbd> / <kbd>U</kbd> }.
 - For Finnish/Swedish,  `äöå` are in the bracket+ISO spots. The letters `æøü` are on AltGr mappings as above.
+- In Finnish and Skolt Sámi etc, the letters `šž` are used. In addition to the Caron dead key, you may have them on a CoDeKey.
 <br>
 
 |![EPKL help image for Colemak-eD-DkNo CAWS on an ISO board, unshifted state](../Cmk-eD-DkNo/Cmk-eD-DkNo_ISO_CurlAWideSym/state0.png)|

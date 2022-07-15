@@ -69,8 +69,8 @@ Using Inkscape, make a help image for each Shift/AltGr state
 and dead key under a subfolder of the current layout folder.
 These may then be moved up to the folder for use with EPKL.
 
-Do you want to make a full set of help images
-for the current layout, or only state images?
+Do you want to make a full set of all help images
+for the current layout, or only default/state images?
 (Many Inkscape calls will take a long time!)%makeMsgStr%
 )
 	IfMsgBox, Cancel
@@ -150,13 +150,13 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 	stateImg    := ( HIG.imgType == "ShSt" ) ? true : false 	; Base shift state image
 	if ( HIG.imgType == "DKSS" ) { 								; Dead key shift state image
 		dkName := HIG.imgName 									; DK name is used here and later
-		dkMk := {}
-		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] { 					; Loop through DK releases to be marked, see the Deadkeys file
-			dkV := DeadKeyValue( dkName, "s" . rel ) 			; Get the DeadKeyValue for the special entries
-			if dkV
-				dkMk[ hig_aChr( dkV ) ] := true 				; Base char and comb. accents will be marked
+;		dkMk := {}
+;		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] { 					; Loop through DK releases to be marked, see the Deadkeys file
+;			dkV := DeadKeyValue( dkName, "s" . rel ) 			; Get the DeadKeyValue for the special entries
+;			if dkV
+;				dkMk[ hig_aChr( dkV ) ] := true 				; Base char and comb. accents will be marked
 ;	( dkV == 180 ) ? pklDebug( "`ndkV: " . dkV . "`nrel: " . rel . "`nChr: " Chr(dkV) . "`n1Ch: " hig_aChr(dkV), 6 )  ; eD DEBUG
-		}	; end For release
+;		}	; end For release
 	}
 	HIG.Empty   := true 										; Keep track of whether a state layer is empty
 	For CO, SC in HIG.PngDic
@@ -262,16 +262,21 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 		if ( not chrVal ) { 									; Empty entry
 			aChr := "" 											; Alpha layer char
 			dChr := "" 											; DKey layer char (mark, by default bold yellow)
-		} else if ( chrTag == "DK_Key" ) { 						; Dead key (full dk Name, or classic name if used)
-			dkV2 := DeadKeyValue( chrVal, "s2" ) 				; Get the base char (entry 2) for the dead key
-			dkV2 := ( dkV2 ) ? dkV2 : DeadKeyValue( chrVal, "s0" ) 	; Fallback is entry0
-			comb := hig_combAcc( dkV2 ) ? " " : "" 				; Pad combining accents w/ a space for better display
-			aChr := comb . hig_makeChr( dkV2 ) 					; Note: Padding may lead to unwanted lateral shift
-			dkV3 := DeadKeyValue( chrVal, "s3" ) 				; Get the alternate display base char, if it exists
-			if ( dkV3 ) && ( dkV3 != dkV2 ) { 					; If there is a second display char, show both
-				comb := ""	;hig_combAcc( dkV3 ) ? " " : "" 	; Note: Padding works well for some but not others.
-				aChr := aChr . comb . hig_makeChr( dkV3 )
-			}
+		} else if ( chrTag == "DK_Key" ) {  					; Dead key (full dk Name, or classic name if used)
+			dkD1 := DeadKeyValue( chrVal, "disp0" ) 			; There may be a display tag entry
+			if ( dkD1 ) {
+				aChr := SubStr( dkD1, 2, -1 )   				; A display entry will be enclosed in, e.g., «».
+			} else {
+				dkD1 := DeadKeyValue( chrVal, "disp1" ) 			; Get the display base char for the dead key
+				dkD1 := ( dkD1 ) ? dkD1 : DeadKeyValue( chrVal, "base1" ) 	; Fallback is the usual base char
+				comb := hig_combAcc( dkD1 ) ? " " : "" 				; Pad combining accents w/ a space for better display
+				aChr := comb . hig_makeChr( dkD1 ) 					; Note: Padding may lead to unwanted lateral shift
+				dkD2 := DeadKeyValue( chrVal, "disp2" ) 			; Get the alternate display base char, if it exists
+				if ( dkD2 ) && ( dkD2 != dkD1 ) { 					; If there is a second display char, show both
+					comb := hig_combAcc( dkD2 ) ? " " : ""  		; Note: Padding works well for some but not others.
+					aChr := aChr . comb . hig_makeChr( dkD2 )
+				}
+			} 	; end if display tag
 			dChr := aChr
 		} else if ( chrTag == "MrkdDK" ) {  					; Marked dead key base/accent char (marked in pdic)
 			mark := hig_combAcc( chrVal ) ? HIG.MkDkCmb : HIG.MkDkBas
@@ -369,7 +374,7 @@ hig_callInkscape( ByRef HIG ) {
 		Loop % 1 + maxInx - minInx {
 			inkFils .= " " . HIG.inkFile[ minInx + A_Index - 1 ] 	; Precede and join by spaces 	;	inkFils := " " . joinArr( HIG.inkFile, " " )
 		}
-		pklSplash( HIG.Title, "Calling Inkscape [batch " . turn . "/" . turns . "] with files " . minInx . "-" . maxInx . " of " . numFils . " ...", 15 )
+		pklSplash( HIG.Title, "Calling Inkscape with files " . minInx . "-" . maxInx . " of " . numFils . " [batch " . turn . "/" . turns . "] ...", 15 )
 		try {   													; Call Inkscape w/ cmd line options
 			RunWait % HIG.InkPath . HIG.inkOpts . inkFils   		; --without-gui is implicit for export commands.
 		} catch {
@@ -431,5 +436,5 @@ ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or
 	SetTimer, ChangeButtonNamesHIG, Off
 	WinActivate
 	ControlSetText, Button1, &Full
-	ControlSetText, Button2, &State
+	ControlSetText, Button2, &Make
 Return

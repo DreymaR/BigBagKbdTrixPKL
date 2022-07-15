@@ -3,7 +3,7 @@
 ;
 
 DeadKeyValue( dkName, base )								; NOTE: 'dk' was just a number, but it's a name now
-{															; NOTE: Entries 0-31 are named "s#", as pklIniRead can't read a "0" key
+{															; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
 		dkFile  := getLayInfo( "dkFile" )
@@ -32,8 +32,8 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
 	PDKVs           := getKeyInfo( "PressedDKVs"  ) 		; Used to be the static PVDK ("Pressed Dead Key Values queue"?)
 	DK              := getKeyInfo( "@" . dkCode   ) 		; Find the dk's full name
-	DeadKeyChar     := DeadKeyValue( DK, "s0" ) 			; Base release char for this DK
-	DeadKeyChr1     := DeadKeyValue( DK, "s1" ) 			; Alternative release char, if defined
+	DeadKeyChar     := DeadKeyValue( DK, "base1" )  		; Base release char for this DK
+	DeadKeyChr1     := DeadKeyValue( DK, "base2" )  		; Alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
 	if ( CurrNumOfDKs > 0 && DK == CurrNameOfDK ) { 		; Pressed the deadkey twice - release DK base char

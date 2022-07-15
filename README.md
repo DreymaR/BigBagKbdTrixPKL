@@ -175,7 +175,7 @@ More Know-How
     - It's also possible to set a Compose table to complete instead of replacing sequences
     - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
     - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
-    - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
+    - Such a key can be very handy for enhancing your layout with a variety of useful mappings!
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
@@ -206,7 +206,7 @@ More Know-How
 * Ctrl+Shift+0 – Show info about the active window; useful for setting suspending apps
 <br>
 
-#### Tweakable parameters:
+#### Examples of tweakable parameters:
 The layouts and setup files may take a little tweaking to get what you want. There are several parameters:
 * Colemak vs QWERTY vs what-have-you, obviously. Choose your main layout wisely!
     - EPKL defaults to Colemak(-DH) and Tarmak layouts, but also holds QWERTY and Dvorak and several others.
@@ -380,18 +380,21 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 
 #### Advanced Compose/CoDeKey
 As mentioned, the EPKL Compose key is used to enter a sequence of characters and then change that into something else.
-    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter é.
+    - Look inside the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
+    - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter `é`.
     - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
     - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
+    - A layout can have several Compose keys defined in its state mappings. They may be duplicates or different ones.
     - The key can also be used for completions (using a `+` table), adding to rather than deleting the original sequence.
     - Unlike its Linux counterpart, the EPKL Compose key works _post-hoc_: Enter the sequence first, then press Compose.
     - If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced or completed.
-    - A layout can have several Compose keys defined, duplicates or different ones, in its state mappings.
-    - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
-    - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
+    - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality.
+    - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise.
     - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
-    - To enable all Compose keys as CoDeKey, define a dead key with the code `@co0` in a Layouts file.
-    - Look inside the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
+    - I have one on my ISO key in the middle of the board, with mappings to neighboring key rolls. ANSI users can't do that of course.
+    - I also use one on the key next to RAlt. Using the Wide mod it's a quite accessible thumb key. Excellent for home row mappings!
+    - If you want for instance a thumb key DK without the Compose, you could of course use any dead key directly.
+    - WIP: For now, to enable all Compose keys as CoDeKey, define a dead key with the code `@co0` in a Layouts file.
 <br><br>
 
 Layout variant tutorial

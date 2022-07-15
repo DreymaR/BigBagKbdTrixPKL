@@ -18,7 +18,7 @@ The Canary layout
 <br>
 
 Here's a quote from Colby regarding the Canary layout [somewhat edited for brevity]:
-> Canary was designed by oxey, semi, whorf, apsu, ec0vid, kathy, smudge, <3, and myself. [...] 
+> Canary was designed by oxey, semi, whorf, apsu, ec0vid, kathy, smudge, <3, and myself. [...] <br>
 > The goal with Canary was not to be cutting-edge, but rather it was to create a layout that could [act] as a go-to first alt layout.
 <br>
 
