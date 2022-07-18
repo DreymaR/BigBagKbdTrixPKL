@@ -442,7 +442,7 @@ DONE:
 	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
-	- Remaps in BaseLayout files are now fully respected on their own, so a Remap section in the layout.ini file is no longer mandatory.
+	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
 	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
 	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 	- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
@@ -469,6 +469,7 @@ DONE:
 	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
 		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
 	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+	- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
 	- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
 <br>
 

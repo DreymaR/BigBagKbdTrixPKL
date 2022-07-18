@@ -8,51 +8,50 @@
 ;;      Images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
 ;;      Dead keys can be marked in a separate layer of the template image (in bold yellow in the default template)
 ;;      Special marks for released DK base chars and combining accents
-;;      An Extend image is not generated, as these require a special layout
+;;      Extend images are not generated, as these use a special layout template. Ext-tap and CoDeKey images are made.
 ;
 
 makeHelpImages() {
-	HIG         := {} 											; This parameter object is passed to subfunctions
+	HIG         := {} 												; This parameter object is passed to subfunctions
 	HIG.Title   :=  "EPKL Help Image Generator"
-	remapFile   := getPklInfo( "RemapFile" ) 					; _eD_Remap.ini
-	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 	; PDic from the Co codes of the SVG template to SC
+	remapFile   := getPklInfo( "RemapFile" ) 						; _eD_Remap.ini
+	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 		; PDic from the Co codes of the SVG template to SC
 	layDir      := getPklInfo( "Dir_LayIni" )
 	dksDir      := "\DeadkeyImg"
 	imgRoot     := layDir . "\ImgGen_" . thisMinute()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . dksDir }
-	HIG.Ini     := pklIniRead( "imgGenIniFile", "Files\HelpImgGenerator\EPKL_HelpImgGen_Settings.ini" )
-	HIG.States  := pklIniRead( "imgStates", "0:1:6:7", HIG.Ini ) 	; Which shift states, if present, to render
-	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis",, HIG.Ini ) 		; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
+	HIG.InkPath := pklIniRead( "InkscapePath"   ,       ,, "hig" )  	; HIG settings are in the EPKL_Settings file, under the [hig] section
+	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       ,, "hig" )  	; The SVG image template file to use
+	HIG.States  := pklIniRead( "imgStates"   , "0:1:6:7",, "hig" )  	; Which shift states, if present, to render
+	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis" ,       ,, "hig" )  	; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
 	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
-	HIG.InkPath := pklIniRead( "InkscapePath"   ,       , HIG.Ini )
-	HIG.Debug   := pklIniRead( "DebugMode"      , false , HIG.Ini ) 	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
-	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       , HIG.Ini )
-	HIG.Brute   := pklIniRead( "Efficiency"     , 0     , HIG.Ini ) 	; Move images to layout folder if >=1, overwrite current ones if >=2.
-	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" , HIG.Ini ) 	; Debug: Show info on this idKey during image generation.
-	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af, HIG.Ini ) 	; U+25AF  White Rectangle
-	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24, HIG.Ini ) 	; U+2B24  Black Large Circle
-	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25cc, HIG.Ini ) 	; U+25CC  Dotted Circle
-	HIG.MkTpMod := pklIniRead( "k_TapOrModMark" , 0x25cc, HIG.Ini ) 	; U+25CC  Dotted Circle
-	HIG.ChRepet := pklIniRead( "k_RepeatItChar" ,0x1f504, HIG.Ini ) 	;
-	HIG.MkRepet := pklIniRead( "k_RepeatItMark" ,0x1f504, HIG.Ini ) 	; U+1F504 Anticlockwise Downwards and Upwards Open Circle Arrows
-	HIG.ChComps := pklIniRead( "k_ComposerChar" , 0x24b8, HIG.Ini ) 	; U+24B8  Circled Latin Capital Letter C
-	HIG.MkComps := pklIniRead( "k_ComposerMark" , 0x25cf, HIG.Ini ) 	; U+25CF  Black Circle (goes with the © symbol?)
-;	HIG.MkOther := pklIniRead( "k_OtherKeyMark" , 0x25cf, HIG.Ini ) 	; U+25CF  Black Circle
+	HIG.Debug   := pklIniRead( "DebugMode"      , false ,, "hig" )  	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
+	HIG.Brute   := pklIniRead( "Efficiency"     , 0     ,, "hig" )  	; Move images to layout folder if >=1, overwrite current ones if >=2.
+	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" ,, "hig" )  	; Debug: Show info on this idKey during image generation.
+	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af,, "hig" )  	; U+25AF  White Rectangle
+	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24,, "hig" )  	; U+2B24  Black Large Circle
+	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25cc,, "hig" )  	; U+25CC  Dotted Circle
+	HIG.MkTpMod := pklIniRead( "k_TapOrModMark" , 0x25cc,, "hig" )  	; U+25CC  Dotted Circle
+	HIG.ChRepet := pklIniRead( "k_RepeatItChar" ,0x1f504,, "hig" )  	;
+	HIG.MkRepet := pklIniRead( "k_RepeatItMark" ,0x1f504,, "hig" )  	; U+1F504 Anticlockwise Downwards and Upwards Open Circle Arrows
+	HIG.ChComps := pklIniRead( "k_ComposerChar" , 0x24b8,, "hig" )  	; U+24B8  Circled Latin Capital Letter C
+	HIG.MkComps := pklIniRead( "k_ComposerMark" , 0x25cf,, "hig" )  	; U+25CF  Black Circle (goes with the © symbol?)
+;	HIG.MkOther := pklIniRead( "k_OtherKeyMark" , 0x25cf,, "hig" )  	; U+25CF  Black Circle
 	HIG.MkEllip :=                                0x22ef 				; U+22EF  Midline horizontal ellipsis
 	
-	HIG.fontDef := pklIniRead( "fontDefault"    , 32    , HIG.Ini ) 	; The default font size used in the file template is 32px
-	HIG.fontSiz := pklIniCSVs( "fontSizes"      , 32    , HIG.Ini ) 	; Array of font sizes to use depending on number of glyphs
+	HIG.fontDef := pklIniRead( "fontDefault"    , 32    ,, "hig" )  	; The default font size used in the file template is 32px
+	HIG.fontSiz := pklIniCSVs( "fontSizes"      , 32    ,, "hig" )  	; Array of font sizes to use depending on number of glyphs
 	HIG.fontSiz := ( HIG.fontSiz.Length() == 1 )    					; If there's only one size, make it also work for two character entries
 					? [ HIG.fontSiz[1], HIG.fontSiz[1] ] : HIG.fontSiz
-	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     , HIG.Ini )
-	imWH        := pklIniCSVs( "imgSizeWH"                            ,     , HIG.Ini )
-	imgDPI      := pklIniRead( "imgResDPI"                            , 96  , HIG.Ini )
+	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     ,, "hig" )
+	imWH        := pklIniCSVs( "imgSizeWH"                            ,     ,, "hig" )
+	imgDPI      := pklIniRead( "imgResDPI"                            , 96  ,, "hig" )
 	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
-	HIG.inkOpts := " --export-type=""png""" 					; Prior to Inkscape v1.0, the export command was "--export-png=" . pngFile for each file
+	HIG.inkOpts := " --export-type=""png""" 							; Prior to Inkscape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	HIG.inkFile := []   												; Array of the .SVG image file paths used to call Inkscape with
-	HIG.maxFils := pklIniRead( "batchSize"      , 64    , HIG.Ini ) 	; Batch size for Inkscape calls. It couldn't handle more than ≈80 files at once.
+	HIG.maxFils := pklIniRead( "batchSize"      , 64    ,, "hig" )  	; Batch size for Inkscape calls. It couldn't handle more than ≈80 files at once.
 	
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." 	: ""
 	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug  								: ""
@@ -79,7 +78,7 @@ for the current layout, or only default/state images?
 		stateImgOnly := true
 	stateImgOnly := ( onlyMakeDK ) ? false : stateImgOnly 		; StateImgOnly overrides DK images, unless DK only is set
 	if not FileExist( HIG.InkPath ) {
-		pklErrorMsg( "You must set a path to a working copy of Inkscape in " . HIG.Ini . "!" )
+		pklErrorMsg( "You must set a path to a working copy of Inkscape in the Settings file!" )
 		Return
 	}
 	pklSplash( HIG.Title, "Starting...", 2.5 ) 					;MsgBox, 0x41, %HIG.Title%, Starting..., 2.0
@@ -127,7 +126,7 @@ for the current layout, or only default/state images?
 	}
 	FileMove    % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
 	FileMove    % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
-	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0, HIG.Ini ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
+	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0,, "hig" ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
 	delTmpFiles := ( HIG.Brute >= 1 ) ? 2 : delTmpFiles
 	if        ( delTmpFiles == 2 ) {
 		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir

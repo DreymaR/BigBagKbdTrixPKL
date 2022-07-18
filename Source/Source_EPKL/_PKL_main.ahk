@@ -39,7 +39,7 @@
 ;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
 ;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
-;		- Remaps in BaseLayout files are now fully respected on their own, so a Remap section in the layout.ini file is no longer mandatory.
+;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
 ;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
 ;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 ;		- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
@@ -66,6 +66,7 @@
 ;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
 ;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
 ;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+;		- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
 ;		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
 
 ;		- WIP: New tab on the Settings GUI: "Special Keys". Make some common things more newb-friendly: Caps behavior, Sticky mods, Compose (@co1), hotkeys...?
@@ -281,7 +282,7 @@
 ;			- See https://forum.colemak.com/topic/1858-learn-colemak-in-steps-with-the-tarmak-layouts/p4/#p23659
 ;			- Allow a section in layout.ini too!
 ;			- Mark differently by state, as in the Tarmak images
-;		- TODO: Make state images and DK image dirs ISO/ANSI aware?! Generate both in the HIG each time. Make layouts that can handle both. 
+;		- TODO: Make state images and DK image dirs ISO/ANSI aware?! Generate both in the HIG each time (plus Ortho?). Make layouts that can handle both. 
 ;			- How to handle special mappings? Could have [layout_###] sections.
 ;		- TODO: I never use the SendMessage parse prefix. Cannibalize it for a strEsc() send? Or add that as €\ prefix instead?
 ;		- Mod ensemble: For lr in [ "", "L", "R" ], For mod in [ "Shift", "Ctrl", "Alt", "Win" ] ? May not always need the empties? Also add [ "CapsLock", "Extend", "SGCaps" ] ?

@@ -455,8 +455,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	dkImDir := fileOrAlt( atKbdType( pklIniRead( "img_DKeyDir"  		; Read/set DK image data
 						, ".\DeadkeyImg", "LayStk" ) ), mainDir )   	; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
-	HIGfile := pklIniRead( "imgGenIniFile" )							; DK img state suffix was in LayIni
-	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf", "", HIGfile ) )	; DK img state suffix. Defaults to old ""/"sh".
+	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK img state suffix. Defaults to old ""/"sh"?
 	
 	strFile  := fileOrAlt( pklIniRead( "stringFile",, "LayStk" )
 						, mainLay )										; Default literals/powerstring file: layout.ini

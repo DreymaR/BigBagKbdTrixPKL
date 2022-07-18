@@ -166,6 +166,7 @@ pkl_showHelpImage( activate = 0 )
 		imgPath := ( state ) ? fileOrAlt( pathDK . dkS[state], imgPath ) : imgPath
 		stateOn := "dk_" . thisDK 	; . "_s" . state 					; Only hide explicitly defined DK images
 		imgPath := hasValue( im.HiddenS, "DKs", 0 ) ? "" : imgPath  	; If desired, hide all DK images instead 	; eD WIP: Hiding a DK image triggered by an AltGr+<key> DK fails!
+;		( 1 ) ? pklDebug( "DK img debug:`nimgPath: " . imgPath, 1 )  ; eD DEBUG
 	} else if ExtendIsPressed() { 										; Extend image
 		imgPath := getLayInfo( "extendImg" ) 							; Default im.LayDir . "\extend.png"
 		stateOn := "ext"
