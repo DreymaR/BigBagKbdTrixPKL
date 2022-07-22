@@ -136,7 +136,8 @@ Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspac
 <kbd>Ext</kbd>+<kbd>T</kbd>+<kbd>O</kbd> for <kbd>Ctrl</kbd>+<kbd>Backspace</kbd> deletes the previous word! 
 
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
-- **By Menu:** From the Layout/Settings menu's KeyMapper tab, make a `VirtualKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it. Allow EPKL to restart.
+- **By Menu:** On the Layout/Settings menu's Special Keys tab, select your Caps key's desired behavior then allow EPKL to restart.
+- **By KeyMapper:** On the Layout/Settings KeyMapper tab, make a `VirtualKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it.
 - **By File:** In your `EPKL_Layouts_` .ini file (Default or, if present, Override), find or make these lines under the `[layout]` section.
 ```
 ;QWCLK = BACK    	VKey 		; SC03a: CapsLock as Backspace (CAPITAL -> BACK)
@@ -150,6 +151,14 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 
 ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
 
+<br><br>
+
+Layout Variants & Key Mappings
+------------------------------
+It's entirely possible to create new layout variants and tweak existing ones with EPKL. It can be a little daunting at first though!
+Mostly because there is so much functionality and complexity, which is actually a good thing but hard on the beginner.
+
+To learn more about key mappings and creating your own layout variants, please consult the [EPKL Layouts folder Readme][PklLay].
 <br><br>
 
 More Know-How
@@ -260,6 +269,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * You can use EPKL with a Virtual Machine. Set it to not capture the keyboard. System key strokes may not transfer then.
     - If you have a VM running Windows, another way is to run EPKL inside the VM of course.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
+* EPKL may not always be the most robust solution for gaming etc. See the [Other folder][PklOth] for more options/info.
 <br>
 
 #### The LayStack and file relations explained further
@@ -292,61 +302,12 @@ The layouts and setup files may take a little tweaking to get what you want. The
 
 <br><br>
 
-Key mappings
-------------
-Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
-
-Here are some full shift-state mappings with a legend:
-```
-; SC  = VK      CS    S0    S1    S2    S6    S7    ; comments
-QW_O  = Y       1     y     Y     --    ›     »     ; SC018: QW oO
-QW_P  = vc_SC   0     ;     :     --    @0a8  …     ; SC019: QW pP - dk_umlaut (ANS/ISO_1/3)
-```
-Where:
-* SC & VK: [Scan code ("hard code")][SCMSDN] & Virtual Key Code [("key name")][VKCAHK]; also see my [Key Code Table][KeyTab].
-    - For SC, you could use an AHK key name instead. For VK you need Windows VK names/codes.
-    - Instead of the technical SC or VK you may use my more intuitive KLM codes. See the [Remap file][MapIni].
-    - _Example:_ The above SC are for the <kbd>O</kbd> and <kbd>P</kbd> keys; these are mapped to their Colemak equivalents <kbd>Y</kbd> and <kbd>;</kbd>.
-    - The `OEM_#` VK names are ISO/ANSI keyboard type specific. For these, it's much better to use KLM `vc_##` codes.
-    - _Example:_ The KLM code `vc_SC` is the <kbd>;</kbd> key, which is VK `OEM_1` for ANSI but `OEM_3` for ISO keyboards.
-    - If the VK entry is VK/ModName, that key is Tap-or-Mod. If tapped it's the VKey, if held down it's the modifier.
-    - The VK code may be an AHK key name. For modifiers you may use only the first letters, so `LSh` -> `LShift` etc.
-* CS: Cap state. Default 0; +1 if S1 is the capitalized version of S0 (that is, CapsLock acts as Shift for it); +4 for S6/S7.
-    - _Example:_ For the <kbd>Y</kbd> key above, CS = 1 because `Y` is a capital `y`. For `OEM_1`, CS = 0 because `:` isn't a capital `;`.
-* S#: Modifier states for the key. S0/S1:Unmodified/+Shift, S2:Ctrl (rarely used), S6/S7:AltGr/+Shift.
-    - _Example:_ <kbd>Shift</kbd>+<kbd>AltGr</kbd>+<kbd>Y</kbd> sends the `»` glyph. <kbd>AltGr</kbd>AltGr+<kbd>;</kbd> has the special entry `@0a8` (umlaut deadkey).
-* EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.
-    - There are two equivalent prefix characters for each entry type: One ASCII (easy to type), one from the eD Shift+AltGr layer.
-    - If the mapping starts with `«#»` where # is one or more characters, these are used for Help Images.
-    - `→ | % ‹entry›` : Send a literal string/ligature by the SendInput {Text}‹entry› method
-    - `§ | $ ‹entry›` : Send a literal string/ligature by the SendMessage ‹entry› method
-    - `α | * ‹entry›` : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
-    - `β | = ‹entry›` : Send {Blind}‹entry›, keeping the current modifier state
-    - `† | ~ ‹entry›` : Send the 4-digit hex Unicode point U+<entry>
-    - `Ð | @ ‹entry›` : Send the current layout's dead key named ‹entry› (often a 3-character code)
-    - `¶ | & ‹entry›` : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
-* A `®®` mapping repeats the previous character. Nice for avoiding same-finger bigrams. May work best as a thumb key?
-    - A state mapping of `®#` where `#` is a hex number, repeats the last key # times.
-* A `©<name>` mapping uses a Linux/X11-type Compose method, replacing the last written characters with something else.
-    - See below and in the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
-* A `##` state mapping sends the key's VK code "blind", so whatever is on the underlying system layout shines through.
-    - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used in, e.g., compose sequences.
-<br>
-
-Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
-```
-QW_J    = N         VKey            ; QW jJ  -> nN, a simple VK remapping
-RWin    = BACK      VirtualKey      ; RWin   -> Backspace (VKey)
-RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name (the old way)
-QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more intuitive KLM codes
-QW_U    = VKey                      ; System mapped key. Uses whatever is on the system layout.
-```
-Entries are any-whitespace delimited.
-<br><br>
-
 Special Special Keys
 --------------------
+There is a Special Keys tab on the Layout/Settings window, that can be used to set Extend and Compose keys more easily than before. Have a look.
+
+However, to fully understand how these mappings and settings work you may want to study this section as well.
+
 #### Advanced Extend
 Here are some sample Extend key mappings:
 ```
@@ -397,63 +358,31 @@ As mentioned, the EPKL Compose key is used to enter a sequence of characters and
     - WIP: For now, to enable all Compose keys as CoDeKey, define a dead key with the code `@co0` in a Layouts file.
 <br><br>
 
-Layout variant tutorial
------------------------
-You can make your own version of, say, a locale layout variant – for instance, using an ergonomic mod combo that isn't provided out-of-the-box:
-* Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale variant you want to start from.
-* Determine whether you want to just move keys around by VirtualKey mappings or map all their shift states like Colemak-eD does.
-* Copy/Paste a promising layout folder and rename the result to what you want.
-    - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
-    - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak\Cmk-eD-De](./Layouts/Colemak/Cmk-eD-De) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
-    - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
-* In that folder's layout.ini file, edit the remap and/or other relevant fields to represent the new settings.
-    - Here, change `mapSC_layout = Cmk-CAW-_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
-    - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
-    - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move <kbd>Ctrl</kbd>+<kbd>V</kbd> with `Ext-CA--`.
-    - The geometric ergo mods Angle and Wide alone are named `Angle` and `Wide`; `AWide` for both. For the Curl mods, use C/A/W/S letter abbreviations.
-    - If you don't know the name of your desired mod combo, look in a `layout.ini` file using that combo. Or in the [Remap file][MapIni] itself.
-* Change any key mappings you want to tweak.
-    - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
-    - However, I've also provided a more intuitive syntax, like `QW_Z` for the QWERTY Z key. See the next section to learn more about key mapping syntax.
-    - The mappings in the De layout are okay as they are, but let's say we want to swap <kbd>V</kbd> and <kbd>Ö</kbd> (`QW_LG`) for the sake of example.
-    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `QW_LG` is there, state 0/1 mapped to ö/Ö.
-    - To find the <kbd>V</kbd> key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. 
-    - There's the <kbd>V</kbd> key, with the KLM code `QW_V` (scan code `SC02f`).
-    - Now, copy the `QW_V` key line from the BaseLayout file to your layout.ini `[layout]` section so it'll override the baseLayout.
-    - Make sure the `QW_LG` line you want is also active and not commented out with a `;`, and then swap the key names (scan codes) for the two lines.
-    - Alternatively, you could just edit the mappings for the affected shift states of the two keys in the `layout.ini` file.
-    - The main shift state mappings are `0/1` for unshifted/shifted, and `6/7` for the AltGr states. See above for more info.
-* Now, if your `EPKL_Layouts_Override.ini` layout selection setting is right, you should get the variant you just made.
-    - From the Layout/Settings menu, you should be able to see and select it using the right options. Then you can let EPKL restart itself.
-    - Or, in the file set LayType/LayVari/KbdType/CurlMod/HardMod/OthrMod to eD/De/ISO/--/Angle/-- respectively (or use 'MeinDe' if you went with that).
-    - If you prefer to use another existing layout line in the file, comment out the old `layout = ` line with `;` and activate another.
-    - You can also write the `layout = LayoutFolder:DisplayedName` entry directly instead, using the folder path starting from `Layouts\`.
-* After making layout changes, refresh EPKL with the <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>5</kbd> hotkey.
-    - If that somehow doesn't work, just quit and restart EPKL.
-* To get relevant help images without generating them with Inkscape:
-    - Check around in the eD layout folders. Maybe there's something that works for you there despite a few minor differences?
-    - Here, you might either keep the current De_ISO_CurlAWide settings to see the German special signs without making new images, or…
-    - … edit the image settings, replacing AWide/CAWide/CAngle with 'Angle' to get normal ISO_Angle images without German letters, or…
-    - … make new help images in an image editor by copying and combining from the ones you need. I use Gimp for such tasks.
-* If you do want to generate a set of help images from your layout you must get Inkscape and run the EPKL Help Image Generator (HIG).
-    - You can download Inkscape for instance from [PortableApps.com]{InkPrt], or install it properly. Make sure it's version 1.0 or newer.
-    - Point to your Inkscape in the [ImgGen_Settings](./Files/ImgGenerator/EPKL_ImgGen_Settings.ini) file.
-    - By default, the HIG looks for Inkscape in `C:\PortableApps\InkscapePortable\InkscapePortable.exe`, so you could just put it there.
-    - To see the "Create help images…" menu option, advancedMode must be on in [EPKL_Settings][PklIni].
-    - The HIG will make images for the currently active layout.
-    - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
-<br>
-
 KNOWN ISSUES:
 -------------
-* ISO VK layouts may not send the right OEM_# key VK codes for several ISO locales. Known affected locales: UK, De, Fr, Be…
+* The AHK `Send` command used by EPKL, sends a `KeyDown` shortly followed by a `KeyUp`. This produces a key press with the desired character/key.
+    - However, when holding down a key for a while the Windows OS really sends repeated `KeyDown` events and `KeyUp` only on key release.
+    - This discrepancy often messes with games. The `KeyUp` events tend to interrupt held-down keys, resulting in choppy game controls.
+    - If your game doesn't work well with EPKL, I recommend using the `suspendingApps` setting to auto-suspend EPKL when the game's active.
+    - If you need your layout for the game, you can use a `MSKLC` install or whatever works for you. See the [Other\MSKLC][PklKLC] folder.
+* Another effect of key repeats may be key buffer overflow, especially when using Extend combos.
+    - This is most notable when holding down Extend arrow combos such as `Ext+S+N` (select previous letter) for a while.
+    - Again, to effect this EPKL has to send more key presses including modifier up/down and key up/down.
+    - The result may be that EPKL's hotkey buffer overflows. Keys and modifiers may get stuck as a result.
+    - I've tried hard to get rid of this problem and it's much better than it used to be, but it's not completely gone.
+    - To mostly avoid this problem, use e.g., `Ext+T+S+N` to select whole words instead of single characters.
+    - Also, try not to hold your Extend combos down for too long if you can avoid it. You can often break it up a little with some training.
+    - If you do get in trouble, use the `Refresh` menu option to restart EPKL. That usually does the trick.
+* ISO VK layouts may not send the right OEM_# key VK codes for all ISO locales. Bad for QWERTZ/AZERTY etc. Known affected locales: UK, De, Fr, Be…
+    - State mapped layouts should work, or you could figure out which VK codes are the right ones and edit the layout files accordingly.
+    - Finding a more robust solution is on my TODO list. I have some ideas.
 * Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd> so these may work oddly with state remaps like eD.
     - A workaround for this is to map a shortcut to `α#e` for accessing <kbd>Win</kbd>+<kbd>E</kbd> on Colemak. For Ext-tap, there's one on `{Ext,w}`.
 <br>
 
 DONE/TODO:
 ----------
-For more info about past and future EPKL history, see the **[EPKL Advanced README][EPKLRM]** in the Source folder.
+For more info about past and future EPKL history, see the **[EPKL Advanced README][PklSrc]** in the Source folder.
 <br>
 
 Credits/sources
@@ -484,11 +413,14 @@ _Øystein "DreymaR" Bech-Aase_
 [EPKLgh]: https://github.com/DreymaR/BigBagKbdTrixPKL/ (EPKL on GitHub)
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
 [GitCom]: https://github.com/DreymaR/BigBagKbdTrixPKL/archive/master.zip (Latest EPKL commit download)
-[EPKLRM]: https://github.com/DreymaR/BigBagKbdTrixPKL/tree/master/Source (EPKL advanced README)
 [AndyLi]: https://www.youtube.com/watch?v=P3TxloTNHPw (Setup Dreymar's EPKL on Windows, by Andrew Li on YouTube)
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [InkPrt]: https://portableapps.com/apps/graphics_pictures/inkscape_portable (Inkscape v1.0 at PortableApps.com)
+[PklSrc]: ./Source      (EPKL advanced README)
+[PklLay]: ./Layouts     (EPKL Layouts folder)
+[PklOth]: ./Other       (EPKL Other folder)
+[PklKLC]: ./Other/MSKLC (EPKL's Microsoft Keyboard Layout Creator folder)
 [KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
 [LayOvr]: ./EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)

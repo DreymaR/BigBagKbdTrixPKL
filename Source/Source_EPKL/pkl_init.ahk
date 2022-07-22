@@ -267,9 +267,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
 	setLayInfo( "LayHasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
 	shStates := StrSplit( RegExReplace( shStates, "[ `t]+" ), ":" ) 	; Remove any whitespace and make it an array
-	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator
+	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator (HIG)
 	
-	compKeys := [] 														; Any Compose keys are registered before calling init_Composer().
+	compKeys := []  													; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
 	map := pklIniSect( layFile, "layout" )
 	extKey := pklIniRead( "extend_key","", layFile ) 					; Extend was in layout.ini [global]. Can map it directly now.

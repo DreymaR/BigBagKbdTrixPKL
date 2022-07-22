@@ -80,7 +80,7 @@
 ;		- WIP: Make a setting for which Compose keys are CoDeKeys instead of the current if co0 defined nonsense.
 ;			- In the Settings_Override file?
 ;			- Currently [deadKeyNames] ⇒ @co0 = Compose_0     	; Special Empty-Compose DK (CoDeKey). Just leave those on, in the Deadkeys file.
-;			- Make the Special Keys settings GUI follow suit, can have an editable line for it
+;			- Make the Special Keys settings GUI follow suit, can have an editable line for it in EPKL_Layouts
 
 
 ;; ================================================================================================

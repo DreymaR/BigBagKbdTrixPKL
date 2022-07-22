@@ -11,8 +11,11 @@ _Semimak AngleSym on an ANSI keyboard_
 The Semimak layout
 ------------------
 - This layout was made by Semilin alias Semi based on novel analysis techniques.
+- Among other things, it uses his finger speeds for modeling instead of subjective weights.
+- It also models some new factors like skipgrams (disjointed SFBs).
 - For more info, see [the Semimak page on github.io][SemGit]
-- I moved the Semimak-eD `‚‘’` quotes so their relative positions match Colemak-eD.
+- Also, here's an interesting [reflection on Semimak by Semilin][Sem200] after hitting 200 WPM with it.
+- For sanity, I moved the Semimak-eD `‚‘’` quotes so their relative positions match Colemak-eD.
 <br>
 
 #### Semimak vanilla:
@@ -75,3 +78,4 @@ Remap cycle from vanilla: Q > J > QU
 
 [SemGit]: https://semilin.github.io/semimak/ (Semimak on GitHub.io)
 [Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb (Semimak-JQ)
+[Sem200]: https://semilin.github.io/blog/hitting_200wpm.html (Semilin on hitting 200 WPM)
