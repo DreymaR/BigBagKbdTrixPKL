@@ -77,10 +77,23 @@
 ;				- Add a check box for whether to make it a CoDeKey (w/ @co0 DK)
 ;				- Selection for what to do with @co1 too? Too advanced for most?
 
+;		- WIP: Restart only once in the Settings GUI, whenever several changes are made at once.
+;			- Split out the restart part into its own fn, _uiMsg_RefreshPKL().
+;			- Problem: Need to activate restart if and only if something's changed. How to keep track of that?
+;			- A global ui_IsWritten could keep track; then, check it in the Refresh fn
+
 ;		- WIP: Make a setting for which Compose keys are CoDeKeys instead of the current if co0 defined nonsense.
 ;			- In the Settings_Override file?
 ;			- Currently [deadKeyNames] ⇒ @co0 = Compose_0     	; Special Empty-Compose DK (CoDeKey). Just leave those on, in the Deadkeys file.
 ;			- Make the Special Keys settings GUI follow suit, can have an editable line for it in EPKL_Layouts
+
+;		- TOFIX: The SC codes for VK-mapped Home/End/PgUp/PgDn are wrong. The VK mapping sends SC047 (NumPad Home) instead of SC147 (Home), etc.
+;			- Reported by guraltsev at the Colemak Discord. Also as GitHub issues.
+;			- Check the VK table, and find the source for it. Conclusion: No, the VK code is right.
+;			- Worse! VK codes for NumPad keys are degenerate. So in this case we should've used a VK-SC mapping instead.
+;			- Possible fix: For the affected keys, make the table entry CSV? VK,SC. If there isn't a `VK,SC` in the table, detect it?
+;			- Or, when sending certain keys make EPKL send the standard ones. Could have a short table entry for SC-by-VK substitutions.
+;			- Or implement a full-blown VK,SC mapping formalism?
 
 
 ;; ================================================================================================
@@ -271,6 +284,7 @@
 
 ;; ================================================================================================
 ;;  eD TODO:
+;		- TODO: Make the CoDeKey follow the StickyTime timer? So you'll only use it as CoDeKey in flow. No, it'd need its own timer.
 ;		- TODO: Could I turn around the Compose method, to be leader key after all? But how to input then? Without looking sucks. In a pop-up box?
 ;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
 ;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
