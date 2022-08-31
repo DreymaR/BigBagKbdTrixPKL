@@ -430,10 +430,6 @@ DONE:
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
 * EPKL v1.3.2: Dual-function CoDeKey (Compose+Dead key).
 	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
-	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
-		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
-	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
-		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 	- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
 		- As a fix, the offending entries were given `→` prefixes so they're sent literally.
@@ -444,13 +440,23 @@ DONE:
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
 	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
-	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
 	- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
+	- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+	- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
+	- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 	- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
 	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
 		- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
 	- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
 	- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
+	- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
+		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
+	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
+		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 
 	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -459,18 +465,14 @@ DONE:
 		- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
 		- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
 			- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
-		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
-		- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
-	- Added a separate dead key for the Shift-Compose mapping, `@co1`. If using the CoDeKey © key, we'll have both @co0 and @co1.
+		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on with a `CoDeKeys` entry in `EPKL_Settings_Override.ini`.
+	- Added a separate dead key for the Shift-Compose mapping, `@co1`. Using the CoDeKey © key, we can then have both @co0 and @co1.
 		- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
-	- Fixed: Generating all DK images didn't generate the `co0` ones, because `co0` isn't used directly in any layout mappings. Added a check around the © key.
-	- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+	- Made a `CoDeKeys` setting in the Settings file for which Compose keys are CDKs, instead of the old `if co0 defined` nonsense.
 
-	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
-		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
-	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
-	- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
-	- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+
 <br>
 
 TODO:

@@ -351,7 +351,7 @@ formatUnicode( chr ) { 										; Format a character as a hex string, without t
 	Return  Format( "{:" . pad . "x}", chr ) 				; Format as a Unicode hex string [0x]#### (4+ digits)
 }
 
-hasValue( haystack, needle, case = true ) {  				; Check if an array object has a certain value
+inArray( haystack, needle, case = true ) {  				; Check if an array object has a certain value, and return its index
 	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
 		Return false
 	For ix, value in haystack {

@@ -51,7 +51,7 @@ pkl_SendThis( this, modif = "" ) {  							; Actually send a char/string. Also l
 
 pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key mapped with ©###, and the preceding sequence will be composed
 	compKeys    := getLayInfo( "composeKeys" )  				; Array of the compose tables for each ©-key in use
-	tables      := compKeys[ compKey ] 							; Array of the compose tables in use for this compKey
+	tables      := compKeys[ compKey ]  						; Array of the compose tables in use for this compKey
 	if ( tables[1] == "" ) { 									; Is this ©-key empty?
 		pklWarning( "An empty/undefined Compose key was pressed:`n`n©" . compKey )
 		Return
@@ -59,6 +59,7 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["¤","¤","¤","¤"]
 	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
 	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
+	CoDeKeys    := getLayInfo( "CoDeKeys" ) 					; Array of which Compose keys are advanced CoDeKeys as well
 	key     := ""
 	For ix, chr in LastKeys { 									; Build a n-char key from LastKeys to match the Compose table
 ;		ch  := SubStr( chr, 2, 1 )
@@ -106,7 +107,8 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 			} 	; end if keyArr
 		} 	; end for sections
 	} 	; end for lengths
-	if getKeyInfo("@co0") && ( getKeyInfo("@co0") != "--" ) { 	; If a "CoDeKey" Compose0 DK is defined...
+;	if getKeyInfo("@co0") && ( getKeyInfo("@co0") != "--" ) { 	; If a "CoDeKey" Compose0 DK is defined...
+	if inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
 		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
 	}
 ;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG

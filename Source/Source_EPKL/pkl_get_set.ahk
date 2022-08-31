@@ -169,7 +169,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	mapStck := getPklInfo( "LayStack" ).Clone()  				; Use a clone, or we'll edit the actual LayStack array
 	mapStck.InsertAt( 1, mapFile )
 	if ( not initialized ) { 									; First-time initialization
-		lengths := pklIniCSVs( "lengths", "4,3,2,1",  mapFile ) 	; An array of the sequence lengths to look for. By default 1–4, longest first.
+		CDKs    := pklIniCSVs( "CoDeKeys"     ) 				; An array of which named Compose keys are CoDeKeys – Compose+DeadKeys.
+		setLayInfo( "CoDeKeys"      , CDKs    ) 				; 
+		lengths := pklIniCSVs( "lengths", "4,3,2,1", mapFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
 		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
 		keyArr  := []
 		Loop % Max( lengths* ) {

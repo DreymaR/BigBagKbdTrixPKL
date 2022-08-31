@@ -27,10 +27,6 @@
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 ;	* EPKL v1.3.2: Dual-function CoDeKey (Compose+Dead key).
 ;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
-;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
-;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
-;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
-;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 ;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 ;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
 ;			- As a fix, the offending entries were given `→` prefixes so they're sent literally.
@@ -41,14 +37,23 @@
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 ;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
 ;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
-;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
 ;		- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
 ;		- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+;		- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
+;		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 ;		- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
 ;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
 ;			- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
 ;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
 ;		- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
+;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
+;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
+;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
+;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 ;			- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -57,58 +62,36 @@
 ;			- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
 ;			- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
 ;				- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
-;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on by defining `@co0`, e.g., in `EPKL_Layouts_Override.ini`.
-;			- If `@co0` is undefined (or defined as '--'), the Compose key does nothing after an unrecognized sequence, like it used to.
-;		- Added a separate dead key for the Shift-Compose mapping, `@co1`. If using the CoDeKey © key, we'll have both @co0 and @co1.
+;			- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on with a `CoDeKeys` entry in `EPKL_Settings_Override.ini`.
+;		- Added a separate dead key for the Shift-Compose mapping, `@co1`. Using the CoDeKey © key, we can then have both @co0 and @co1.
 ;			- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
-;		- Fixed: Generating all DK images didn't generate the `co0` ones, because `co0` isn't used directly in any layout mappings. Added a check around the © key.
+;		- Made a `CoDeKeys` setting in the Settings file for which Compose keys are CDKs, instead of the old `if co0 defined` nonsense.
 
-;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
-;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
-;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
-;		- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
-;		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
 
-;		- WIP: New tab on the Settings GUI: "Special Keys". Make some common things more newb-friendly: Caps behavior, Sticky mods, Compose (@co1), hotkeys...?
-;			- One sub-panel for Layout (Caps, Compose) and one for Setting (Sticky, ...?) overrides?
-;			- For ISO/ANS, a setting for the OEM_102 or RWin or Z(?) key that allows Co(DeKey)? Or ®® etc
-;				- Format the key line based on which key is chosen (using the Z key requires having Z on AltGr... and on a nearby key...? ugh)?
-;				- The key next to RAlt is good for Compose. Which key that is, varies: Most common is RWin; Lenovo has PrtSc. Menu/APP(S) is a fairly unused key.
-;				- Add a check box for whether to make it a CoDeKey (w/ @co0 DK)
-;				- Selection for what to do with @co1 too? Too advanced for most?
-
-;		- WIP: Restart only once in the Settings GUI, whenever several changes are made at once.
-;			- Split out the restart part into its own fn, _uiMsg_RefreshPKL().
-;			- Problem: Need to activate restart if and only if something's changed. How to keep track of that?
-;			- A global ui_IsWritten could keep track; then, check it in the Refresh fn
-
-;		- WIP: Make a setting for which Compose keys are CoDeKeys instead of the current if co0 defined nonsense.
-;			- In the Settings_Override file?
-;			- Currently [deadKeyNames] ⇒ @co0 = Compose_0     	; Special Empty-Compose DK (CoDeKey). Just leave those on, in the Deadkeys file.
-;			- Make the Special Keys settings GUI follow suit, can have an editable line for it in EPKL_Layouts
-
-;		- TOFIX: The SC codes for VK-mapped Home/End/PgUp/PgDn are wrong. The VK mapping sends SC047 (NumPad Home) instead of SC147 (Home), etc.
+;		- TOFIX: The SC codes for VK-mapped PgUp/PgDn/End/Home/Ins/Del are wrong. The VK mapping sends SC047 (NumPad Home) instead of SC147 (Home), etc.
+;			- Names/VK/SC are: PgUp-21-#49, PgDn-22-#51, End-23-#4F, Home-24-#47, Ins-2D-#52, Del-2E-#53.
 ;			- Reported by guraltsev at the Colemak Discord. Also as GitHub issues.
 ;			- Check the VK table, and find the source for it. Conclusion: No, the VK code is right.
 ;			- Worse! VK codes for NumPad keys are degenerate. So in this case we should've used a VK-SC mapping instead.
 ;			- Possible fix: For the affected keys, make the table entry CSV? VK,SC. If there isn't a `VK,SC` in the table, detect it?
 ;			- Or, when sending certain keys make EPKL send the standard ones. Could have a short table entry for SC-by-VK substitutions.
+;			- Or, just or the SC with 0x100. Or detect their SC and use that.
 ;			- Or implement a full-blown VK,SC mapping formalism?
+
+;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend!
 
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
-
 ;		- TODO: More GUI settings?
-;			- A Hotkeys panel?
+;			- A Hotkeys settings panel?
 ;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
 
-;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend!
-
-;		- WIP: Make a pkl_Utility() fn called by the Utility/Debug hotkey, that reads a number in Settings to select which debug/utility function it triggers
+;		- TODO: Make a pkl_Utility() fn called by the Utility/Debug hotkey, that reads a number in Settings to select which debug/utility function it triggers
 ;			- One hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
 
 ;		- TOFIX: Tarmak layouts from the shortcut lines don't work. Check their BaseLayout settings?
@@ -133,8 +116,6 @@
 
 ;		- TOFIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
 ;		- WIP: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
-;		- WIP: Edit the prefix-entry section in the Extend and README files, and add one to the KeyMapper Help screen
-;		- WIP: Special Keys tab for the Settings UI!?!
 ;		- WIP: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
 ;		- WIP: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
 ;			- May not work with WinSet, Transparent; I'm using that with the Help Images.
@@ -148,8 +129,6 @@
 ;		- TODO: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 
 ;		- TODO: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
-
-;		- TODO: The s0–s7 DK entries are unintuitive. Give them more human-readable names?
 
 ;		- TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
 ;			- Would destroying the GUI on DK activation help at all?
@@ -209,7 +188,7 @@
 ;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
 ;		- WIP: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
-;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment format.
+;			- This way, people may read, e.g., IndyRad/QI analysis on the GitHub page in Markdown rather than the unattractive comment-in-file format.
 ;			- Update correspondence between the Locale Forum topic and these pages: Link to EPKL in the topic, get info from the topic.
 
 ;		- WIP: Mother-of-DKs (MoDK), e.g., on Extend tap! Near endless possibilities, especially if dead keys can chain.
@@ -226,7 +205,7 @@
 
 ;		- TOFIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
 ;			- It still doesn't work as it should, but the problem is hard to reproduce.
-;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related?
+;		- TOFIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related? Mouseover removes them.
 ;		- TOFIX: Ext-Shift may get stuck until Ext is released. Not sure exactly how.
 ;		- TOFIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 ;			- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
@@ -242,7 +221,6 @@
 ;		- TOFIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 ;			- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
 ;		- TOFIX: Mapping a key to a modifier makes it one-shot?!
-;		- TOFIX: -- remap mapping settings in layout.ini fail.
 ;		- TOFIX: Redo the AltGr implementation.
 ;			- Make a mapping for LCtrl & RAlt, with the layout alias AltGr?! That'd pick up the OS AltGr, and we can then do what we like with it.
 ;			- Treat EPKL AltGr as a normal mod, just that it sends <^>! - shouldn't that work? Maybe an alias mapping AltGr = <^>!
@@ -250,11 +228,10 @@
 ;		- TOFIX: Remapping to LAlt doesn't quite work? Should we make it recognizeable as a modifier? Trying 'SC038 = LAlt VK' also disabled Extend?
 ;		- TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 ;			- It works well! But then after a while it stops working?
-;		- TESTING: Use the laptop PrtScr key for something? It's thumb accessible w/ the Wide mod. Corresponds to the Menu key on many other boards. Compose key!!!
-;			- Try Alt as thumb-Ext, Caps as Alt? AltGr as Shift, PrtScr as AltGr?
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;		- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
 ;		- TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
 ;		- TOFIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
 ;			- Sort of fixed it by making the new disp0 entry that can display any string on the DK's key in the help image.

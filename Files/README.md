@@ -27,6 +27,7 @@ Overview over the EPKL Prefix-Entry and other advanced syntax for mappings, usea
 ;;      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)
 ;;      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)
 ;;      ¶  |  &  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
+;;  - Any entry may start with «#»: '#' is one or more characters to display on help images for the following mapping.
 ;;  - Other advanced state mappings:
 ;;      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.
 ;;      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.

@@ -55,12 +55,12 @@ pkl_showHelpImage( activate = 0 )
 		im.PosArr   := []
 		For ix, pos in tmpPosArr {
 			pos     := imgPosDic( pos, false )
-			if ( pos && not hasValue( im.PosArr, pos ) ) {
+			if ( pos && not inArray( im.PosArr, pos ) ) {
 				im.PosArr.Push( pos )
 			}
 		}
-		im.PosDef   := hasValue( im.PosArr, im.PosDef ) ? im.PosDef : im.PosArr[1]
-		im.PosIx    := hasValue( im.PosArr, im.PosDef ) 					; Physical image positions are Nr, logical Ix
+		im.PosDef   := inArray( im.PosArr, im.PosDef ) ? im.PosDef : im.PosArr[1]
+		im.PosIx    := inArray( im.PosArr, im.PosDef )  					; Physical image positions are Nr, logical Ix
 		im.PosNr    := im.PosDef
 		im.Zooms    := pklIniCSVs( "img_Zooms"    , "100,150"   )
 		im.ZoomNr   := 1
@@ -143,7 +143,7 @@ pkl_showHelpImage( activate = 0 )
 		} else { 														; Push up/down, if available
 			here        := im.PosArr[ im.PosIx ]
 			move        := ( here > 3 ) ? here - 3 : here + 3
-			movIx       := hasValue( im.PosArr, move )
+			movIx       := inArray( im.PosArr, move )
 			im.PosIx    := movIx ? movIx 
 						 : ( im.PosIx = max ) ? 1 : ++im.PosIx 			; If up/down isn't possible, move +1 instead
 		}
@@ -165,7 +165,7 @@ pkl_showHelpImage( activate = 0 )
 		imgPath := pathDK . dkS0 										; State0 is fallback for DK state imgs
 		imgPath := ( state ) ? fileOrAlt( pathDK . dkS[state], imgPath ) : imgPath
 		stateOn := "dk_" . thisDK 	; . "_s" . state 					; Only hide explicitly defined DK images
-		imgPath := hasValue( im.HiddenS, "DKs", 0 ) ? "" : imgPath  	; If desired, hide all DK images instead 	; eD WIP: Hiding a DK image triggered by an AltGr+<key> DK fails!
+		imgPath := inArray( im.HiddenS, "DKs", 0 ) ? "" : imgPath   	; If desired, hide all DK images instead 	; eD WIP: Hiding a DK image triggered by an AltGr+<key> DK fails!
 ;		( 1 ) ? pklDebug( "DK img debug:`nimgPath: " . imgPath, 1 )  ; eD DEBUG
 	} else if ExtendIsPressed() { 										; Extend image
 		imgPath := getLayInfo( "extendImg" ) 							; Default im.LayDir . "\extend.png"
@@ -174,7 +174,7 @@ pkl_showHelpImage( activate = 0 )
 		imgPath := im.LayDir . "\state" . state . ".png"
 		stateOn := state
 	}
-	imgPath := hasValue( im.HiddenS, stateOn, 0 ) ? "" : imgPath 		; Hide specified states (caseless comparison)
+	imgPath := inArray( im.HiddenS, stateOn, 0 ) ? "" : imgPath 		; Hide specified states (caseless comparison)
 	if ( imgPath )
 		imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
 	
@@ -218,7 +218,7 @@ pklGetState() { 														; Get the 0:1:6:7 shift state as in layout.ini and
 imgPosDic( pos, def = 0 ) { 											; Get a numerical image position from a T/B+L/M/R one, if needed
 	posDic  := { "TL" : 1, "TM" : 2, "TR" : 3
 			   , "BL" : 4, "BM" : 5, "BR" : 6 }
-	if hasValue( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...
+	if inArray( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...
 		posNr   := pos
 	} else if posDic.HasKey( pos ) { 									; ...or in the posDic conversion array...
 		posNr   := posDic[ pos ]

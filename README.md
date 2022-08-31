@@ -11,12 +11,12 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 [Θώθ][ThothW] – What Is This?
 -----------------------------
 * This is a program that implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
-* That is, my many layout mods and tweaks and bells and whistles. 
+    - That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout,…
 * … with or without my own `[eD]` AltGr layers and dead keys,…
 * … **ergonomic mods** both for **Colemak**, the **Tarmak** learning layouts and **other layouts**,…
 * … and the incredibly useful [**Extend**][BBText] layers which work with any layout.
-* Info about DreymaR's Big Bag of Keyboard Trickery is mainly found on the BigBag site at [dreymar.colemak.org][orgBBT].
+* **DreymaR's Big Bag of Keyboard Trickery** at [dreymar.colemak.org][orgBBT] is my main info site.
     - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
     - <del>In the [old Forum BigBag][CmkBBT] there's a specific [topic for EPKL/Windows][CmkPKL] too. It's old though.</del>
 <br>
@@ -269,7 +269,8 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * You can use EPKL with a Virtual Machine. Set it to not capture the keyboard. System key strokes may not transfer then.
     - If you have a VM running Windows, another way is to run EPKL inside the VM of course.
 * Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
-* EPKL may not always be the most robust solution for gaming etc. See the [Other folder][PklOth] for more options/info.
+    - When this happens, it becomes uncertain which hook gets which key press, with unpredictable results.
+* EPKL isn't always a robust solution for gaming etc. See the [Other folder][PklOth] for more options/info.
 <br>
 
 #### The LayStack and file relations explained further
@@ -341,21 +342,21 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 
 #### Advanced Compose/CoDeKey
 As mentioned, the EPKL Compose key is used to enter a sequence of characters and then change that into something else.
-    - Look inside the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
+* Unlike its Linux counterpart, the EPKL Compose key works _post-hoc_: Enter the sequence first, then press Compose.
+* If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced or completed.
+* A layout can have several Compose keys defined in its state mappings. They may be duplicates or different ones.
+* Look inside the [EPKL Compose file][CmpIni] for more info. Compose tables are defined and described in that file.
     - Example: Type <kbd>e</kbd><kbd>'</kbd><kbd>Compose</kbd> to get the accented letter `é`.
     - Example: Composing `'noevil` using the default EPKL tables produces three monkey emojis. 🙈 🙉 🙊
-    - Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character.
-    - A layout can have several Compose keys defined in its state mappings. They may be duplicates or different ones.
-    - The key can also be used for completions (using a `+` table), adding to rather than deleting the original sequence.
-    - Unlike its Linux counterpart, the EPKL Compose key works _post-hoc_: Enter the sequence first, then press Compose.
-    - If the sequence is recognized as one in an applicable [Compose table][CmpIni], it gets replaced or completed.
-    - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality.
-    - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise.
-    - A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
-    - I have one on my ISO key in the middle of the board, with mappings to neighboring key rolls. ANSI users can't do that of course.
-    - I also use one on the key next to RAlt. Using the Wide mod it's a quite accessible thumb key. Excellent for home row mappings!
-    - If you want for instance a thumb key DK without the Compose, you could of course use any dead key directly.
-    - WIP: For now, to enable all Compose keys as CoDeKey, define a dead key with the code `@co0` in a Layouts file.
+* Composing `U####` where `####` is a 4-5 digit hex number, sends the corresponding Unicode character. 💪
+* The key can also be used for completions (using a `+` table), adding to rather than deleting the original sequence.
+* **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality.
+* If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise.
+* A Compose key or CoDeKey can be very handy for enhancing your layout with useful mappings!
+* I have one on my ISO key in the middle of the board, with mappings to neighboring key rolls. ANSI users can't do that of course.
+* I also use one on the key next to RAlt. Using the Wide mod it's a quite accessible thumb key. Excellent for home row mappings!
+* If you want for instance a thumb key DK without the Compose, you could of course use any dead key directly.
+* You can map keys as Compose and specify which Compose keys are CoDeKeys from the Special Keys tab of the Layout/Settings menu.
 <br><br>
 
 KNOWN ISSUES:
