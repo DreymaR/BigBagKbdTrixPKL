@@ -1,7 +1,8 @@
-﻿;
+﻿;; ================================================================================================
 ;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
+;; ================================================================================================
 ;
 
 ;;  ####################### user area #######################
@@ -33,6 +34,8 @@
 ;			- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
 ;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 ;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
+;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
+;			- ScanCodes are now added to the VirtualKey codes so their normal versions (SC 149,151,14F,147,152,153) are sent.
 ;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 ;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
@@ -70,22 +73,14 @@
 ;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
 ;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
 
-;		- TOFIX: The SC codes for VK-mapped PgUp/PgDn/End/Home/Ins/Del are wrong. The VK mapping sends SC047 (NumPad Home) instead of SC147 (Home), etc.
-;			- Names/VK/SC are: PgUp-21-#49, PgDn-22-#51, End-23-#4F, Home-24-#47, Ins-2D-#52, Del-2E-#53.
-;			- Reported by guraltsev at the Colemak Discord. Also as GitHub issues.
-;			- Check the VK table, and find the source for it. Conclusion: No, the VK code is right.
-;			- Worse! VK codes for NumPad keys are degenerate. So in this case we should've used a VK-SC mapping instead.
-;			- Possible fix: For the affected keys, make the table entry CSV? VK,SC. If there isn't a `VK,SC` in the table, detect it?
-;			- Or, when sending certain keys make EPKL send the standard ones. Could have a short table entry for SC-by-VK substitutions.
-;			- Or, just or the SC with 0x100. Or detect their SC and use that.
-;			- Or implement a full-blown VK,SC mapping formalism?
-
-;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend!
-
+;		- WIP: Detect OS VK codes for all keys instead of just a select subset
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
+
+;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
+;			- Next, specify which layer(s) goes which which key so you can have different Extend keys.
 
 ;		- TODO: More GUI settings?
 ;			- A Hotkeys settings panel?
@@ -392,7 +387,7 @@ SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Ca
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.2α" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.3.2β" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files

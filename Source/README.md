@@ -436,6 +436,8 @@ DONE:
 		- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
 	- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
+	- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
+		- ScanCodes are now added to the VirtualKey codes so their normal versions (SC 149,151,14F,147,152,153) are sent.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.

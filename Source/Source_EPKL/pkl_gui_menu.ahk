@@ -1,4 +1,9 @@
-﻿pkl_set_tray_menu()
+﻿;; ================================================================================================
+;;  EPKL tray menu/GUI module
+;;  - Handles the EPKL tray menu, and its About... GUI window
+;
+
+pkl_set_tray_menu()
 {
 	ShowMoreInfo    := getPklInfo( "AdvancedMode" ) 	; Show extra technical info and the Reset hotkey
 	

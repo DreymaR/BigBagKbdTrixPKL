@@ -45,7 +45,11 @@ _keyPressed( HKey ) 											; Process a HotKey press
 	}	; end if ExtPressed
 	
 	if ( capHK == -1 ) {										; The key is VK mapped, so just send its VK## code.
-		theVKey := getKeyInfo( HKey . "vkey" )
+		theVKey := getKeyInfo( HKey . "vkey" )  				; [PgUp,PgDn,End ,Home,Ins ,Del ] are sent as their NumPad versions by AHK
+		if inArray( [ "VK21", "VK22", "VK23", "VK24", "VK2D", "VK2E" ], theVKey ) {
+			SC  := GetKeySC(theVKey) | 0x100 					; [149 ,151 ,14F ,147 ,152 ,153 ] are the proper SCs for the normal keys
+			theVKey .= Format( "SC{:03X}", SC ) 				; Send {vk##sc###} ensures that the normal key version is sent
+		}
 		if ( theVKey == "VK08" ) 								; Backspace was pressed, so...
 			lastKeys( "pop1" ) 									; ...remove the last entry in the compose queue
 		Send % "{Blind}{" . theVKey . "}"

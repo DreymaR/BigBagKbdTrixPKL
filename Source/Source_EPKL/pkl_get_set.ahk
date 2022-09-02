@@ -1,27 +1,26 @@
 ﻿;; ================================================================================================
 ;;  EPKL get/set module
-;;      Static associative dictionaries for EPKL info are used instead of most globals
+;;  - Static associative dictionaries for EPKL info are used instead of most globals
+;;  
+;;  LayoutInfo entries:
+;;  -------------------
+;;  ActiveLay     := "" ; The active layout
+;;  dir           := "" ; The directory of the active layout (eD: Obsolete)
+;;  LayHasAltGr   := 0  ; Should Right Alt work as AltGr in the layout?
+;;  ExtendKey     := [] ; Extend modifier(s) for navigation, editing, etc.
+;;  
+;;  NextLayout    := "" ; If you set multiple layouts, this is the next one.
+;;                      ; see the "changeActiveLayout:" label!
+;;  NumOfLayouts  := 0  ; Array size
+;;  LayoutsXcode        ; layout code
+;;  LayoutsXname        ; layout name
+;;  Ico_On_File         ; Icon for On  (file)
+;;  Ico_On_Num_         ; --"--        (# in file)
+;;  Ico_OffFile         ; Icon for Off (file)
+;;  Ico_OffNum_         ; --"--        (# in file)
+;;  ...and more...
 ;
-/*
-	LayoutInfo entries:
-	-------------------
-	ActiveLay     := "" ; The active layout
-	dir           := "" ; The directory of the active layout (eD: Obsolete)
-	LayHasAltGr   := 0  ; Should Right Alt work as AltGr in the layout?
-	ExtendKey     := [] ; Extend modifier(s) for navigation, editing, etc.
-	
-	NextLayout    := "" ; If you set multiple layouts, this is the next one.
-	                    ; see the "changeActiveLayout:" label!
-	NumOfLayouts  := 0  ; Array size
-	LayoutsXcode        ; layout code
-	LayoutsXname        ; layout name
-	Ico_On_File         ; Icon for On  (file)
-	Ico_On_Num_         ; --"--        (# in file)
-	Ico_OffFile         ; Icon for Off (file)
-	Ico_OffNum_         ; --"--        (# in file)
-	...and more...
-*/
-	
+
 setKeyInfo( key, value )
 {
 	Return getKeyInfo( key, value, 1 )

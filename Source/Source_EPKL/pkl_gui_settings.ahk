@@ -1,10 +1,11 @@
-﻿	;; ================================================================================================
-	;;  EPKL Settings UI module
-	;;  - This is the EPKL Layout/Settings... menu, consisting of several settings tabs
-	;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
-	;;  - Note: To Reset a certain choice, the same choice (.ini key) needs to be currently selected.
-	;;  - For a list of AHK GUI Controls, see https://www.autohotkey.com/docs/commands/GuiControls.htm
-	;
+﻿;; ================================================================================================
+;;  EPKL Settings UI module
+;;  - This is the EPKL Layout/Settings... menu, consisting of several settings tabs
+;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
+;;  - Note: To Reset a certain choice, the same choice (.ini key) needs to be currently selected.
+;;  - For a list of AHK GUI Controls, see https://www.autohotkey.com/docs/commands/GuiControls.htm
+;
+
 setUIGlobals: 													; Declare globals (can't be done inside a function for "global globals")
 ;	global UI_Set 												; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed for UI
 	global UI_Tab, UI_Btn1, UI_Btn2, UI_Btn3, UI_Btn4   		; GUI Control vars must be global (or static) to work
