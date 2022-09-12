@@ -590,6 +590,7 @@ _uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override.
 				Return false
 			} 	; end if makeFile
 		} else {
+			pklInfo( "Override file not found:`n`n" . ovrFile, 3 )
 			Return false
 		} 	; end if tplFile
 	} 	; end if not FileExist ovrFile

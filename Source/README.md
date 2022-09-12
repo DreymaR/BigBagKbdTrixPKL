@@ -132,7 +132,7 @@ DONE:
 * Greek layout w/ tonos/dialytika in the acute/umlaut dead keys.
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (CtrlAltlIsAltGr).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
-* A single layout entry of VK or -1 will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
+* A single layout entry of `VK` or `VKey` will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
 <br>
 
 **OTHER/NOTES**
@@ -437,7 +437,8 @@ DONE:
 	- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
 	- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
-		- ScanCodes are now added to the VirtualKey codes so their normal versions (SC 149,151,14F,147,152,153) are sent.
+		- ScanCodes are now added to the VirtualKey codes (VK21–24,2D–2E) so their normal versions (SC 149,151,14F,147,152,153) are sent.
+	- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
@@ -527,6 +528,22 @@ INFO: Some documentation notes
         - Don't have empty mappings in the Extend section. Comment these out.
         - By default {} is added to send keys by name. To escape these, use a prefix-entry or }‹any string›{.
 <br>
+
+**AHK key remapping
+AHK direct key mapping works with games, unlike the PKL way of using the Send command to send (KeyDown followed by a KeyUp)
+The classic remapping of the form `a::b` actually consists of:
+```
+*a::
+SetKeyDelay -1
+Send {Blind}{b DownR}
+return
+
+*a up::
+SetKeyDelay -1
+Send {Blind}{b Up}
+return
+```
+The `DownR` format replaced `DownTemp` with AHK v1.1.27. It tells other Send command to ignore this key's down state.
 
 **Entry format info from Farkas' sample.ini layout file:** (Note that EPKL now uses '@' for 'dk' entries etc)
 ```

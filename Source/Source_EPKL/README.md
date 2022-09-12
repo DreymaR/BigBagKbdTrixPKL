@@ -1,0 +1,11 @@
+EPiKaL Portable Keyboard Layout by Máté Farkas & DreymaR
+========================================================
+<br>
+
+Version:  1.3.2
+Compiled: 2022-09 from GitHub/DreymaR/BigBagKbdTrixPKL
+Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
+
+	(c)  PKL:   Máté Farkas                     , 2007-2010
+	(c) EPKL:   Øystein Bech "DreymaR" Gadmar   , 2015-2021
+	(c) EPKL:   Øystein "DreymaR" Bech-Aase     , 2021-

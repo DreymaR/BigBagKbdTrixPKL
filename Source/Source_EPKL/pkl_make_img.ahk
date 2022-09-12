@@ -183,7 +183,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", shSt ) ) {
 				rel := ent
 				tag := HIG.MkTpMod  							; Mark Tap-or-Mod keys, for state 0:1
-			} else if ( ent == -1 ) { 							; VKey state entry
+			} else if ( ent == -2 ) { 							; VKey state entry
 				key := GetKeyName( SubStr( ents, 3 ) )
 				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}"  		; Upper/Lower case
 				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
@@ -313,15 +313,15 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help ima
 ;;		tmp := ( aChr ) ? tmp . "`n" . CO . " - " . fsSz . ": '" . aChr . "'" : tmp
 	} 	; end For CO,SC in PngDic
 ;;		( 1 ) ? pklDebug( "" . tmp, 30 )  ; eD DEBUG
-	if ( HIG.Debug >= 3 ) 		; eD DEBUG: Don't make files
+	if ( HIG.Debug >= 3 )   	; eD DEBUG: Don't make files
 		Return
-	if not pklFileWrite( tempImg, svgFile 						; Save the changed image file in a temp folder
+	if not pklFileWrite( tempImg, svgFile   					; Save the changed image file in a temp folder
 						, "temporary SVG file" ) 				; Note: Inkscape SVG is UTF-8, w/ Linux line endings
 		Return
 	HIG.inkFile.Push( svgFile ) 								; In Inkscape v1.0, the "--file" option is gone, but multiple files can be used
 }
 
-hig_aChr( ent ) { 												; Get a single-character entry in various formats (number, hex, prefix syntax)
+hig_aChr( ent ) {   											; Get a single-character entry in various formats (number, hex, prefix syntax)
 	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
 	if ( not ent + 0 )  										; Non-numeric entry
 		ent := ( StrLen(ent) == 1 ) ? Ord(ent) : "" 			; Convert single-char literals to their ordinal value

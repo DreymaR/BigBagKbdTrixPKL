@@ -361,11 +361,14 @@ As mentioned, the EPKL Compose key is used to enter a sequence of characters and
 
 KNOWN ISSUES:
 -------------
-* The AHK `Send` command used by EPKL, sends a `KeyDown` shortly followed by a `KeyUp`. This produces a key press with the desired character/key.
+* The AHK `Send` command used by EPKL, sends a `KeyDown` shortly followed by a `KeyUp`.
+    - This does produce a key press with the desired character/key.
     - However, when holding down a key for a while the Windows OS really sends repeated `KeyDown` events and `KeyUp` only on key release.
     - This discrepancy often messes with games. The `KeyUp` events tend to interrupt held-down keys, resulting in choppy game controls.
+    - Also, typing sites like Monkeytype may have a cheat detection that reacts to this consistently rapid KeyDown-KeyUp sending.
     - If your game doesn't work well with EPKL, I recommend using the `suspendingApps` setting to auto-suspend EPKL when the game's active.
     - If you need your layout for the game, you can use a `MSKLC` install or whatever works for you. See the [Other\MSKLC][PklKLC] folder.
+    - Note that EPKL has a Work-In-Progress send mode for ScanCode and VirtualKey code mapped keys that should fix this problem! Stay tuned.
 * Another effect of key repeats may be key buffer overflow, especially when using Extend combos.
     - This is most notable when holding down Extend arrow combos such as `Ext+S+N` (select previous letter) for a while.
     - Again, to effect this EPKL has to send more key presses including modifier up/down and key up/down.
@@ -374,11 +377,18 @@ KNOWN ISSUES:
     - To mostly avoid this problem, use e.g., `Ext+T+S+N` to select whole words instead of single characters.
     - Also, try not to hold your Extend combos down for too long if you can avoid it. You can often break it up a little with some training.
     - If you do get in trouble, use the `Refresh` menu option to restart EPKL. That usually does the trick.
-* ISO VK layouts may not send the right OEM_# key VK codes for all ISO locales. Bad for QWERTZ/AZERTY etc. Known affected locales: UK, De, Fr, Be…
+* ISO VK layouts may not send the right OEM_# key VK codes for all ISO locales.
+    - This is bad for QWERTZ/AZERTY etc. Known affected locales are: UK, De, Fr, Be…
     - State mapped layouts should work, or you could figure out which VK codes are the right ones and edit the layout files accordingly.
-    - Finding a more robust solution is on my TODO list. I have some ideas.
-* Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd> so these may work oddly with state remaps like eD.
+    - Finding a more robust solution is on my TODO list. There should be new options shortly, including more robust ScanCode mappings.
+* Using the `Colemak w/ Caps -> Backspace` MSKLC install found on [colemak.com][CmkCom] will cause the Back and Caps keys to be swapped. Also, Extend will not work.
+    - This is due to that layout being hacked to provide the Caps-to-Back remapping. Please use a normal Windows layout with EPKL.
+* Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd>
+    - Consequently, these combinations may work oddly with state remaps like eD. Keys may end up working as both unmapped and remapped.
     - A workaround for this is to map a shortcut to `α#e` for accessing <kbd>Win</kbd>+<kbd>E</kbd> on Colemak. For Ext-tap, there's one on `{Ext,w}`.
+* Virus programs may be skittish about compiling AHK code. You may get a `Threats found` notification, and your `epkl.exe` file doesn't get made.
+    - The `ahk2exe` temp file will be interpreted as a Trojan. Even allowing the "Threat" doesn't always help, as compilation already failed.
+    - Turn off `Windows Security → Virus & threat protection → Virus & threat protection settings → Real-time protection` temporarily to remedy this.
 <br>
 
 DONE/TODO:
