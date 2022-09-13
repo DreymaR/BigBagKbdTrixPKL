@@ -460,6 +460,7 @@ DONE:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
+	- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
 
 	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -529,7 +530,7 @@ INFO: Some documentation notes
         - By default {} is added to send keys by name. To escape these, use a prefix-entry or }‹any string›{.
 <br>
 
-**AHK key remapping
+**AHK key remapping**
 AHK direct key mapping works with games, unlike the PKL way of using the Send command to send (KeyDown followed by a KeyUp)
 The classic remapping of the form `a::b` actually consists of:
 ```
@@ -544,6 +545,7 @@ Send {Blind}{b Up}
 return
 ```
 The `DownR` format replaced `DownTemp` with AHK v1.1.27. It tells other Send command to ignore this key's down state.
+<br>
 
 **Entry format info from Farkas' sample.ini layout file:** (Note that EPKL now uses '@' for 'dk' entries etc)
 ```

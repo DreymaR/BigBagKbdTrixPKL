@@ -35,7 +35,8 @@
 ;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 ;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
 ;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
-;			- ScanCodes are now added to the VirtualKey codes so their normal versions (SC 149,151,14F,147,152,153) are sent.
+;			- ScanCodes are now added to the VirtualKey codes (VK21–24,2D–2E) so their normal versions (SC 149,151,14F,147,152,153) are sent.
+;		- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
 ;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 ;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
@@ -57,6 +58,7 @@
 ;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 ;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 ;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
+;		- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
 
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 ;			- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -75,9 +77,31 @@
 
 ;		- WIP: Detect OS VK codes for all keys instead of just a select subset
 
+;		- WIP: A new ScanCode key mapping type, sending a key's scan code instead of the more complex VK mappings. This should be far more robust.
+
+;		- WIP: For System mapped keys, send SC instead of VK. Change some keys like PgUp/PgDn etc to SC?
+
+;		- WIP: Send KeyUp and KeyDown events. Could it be okay for gaming and Monkeytype then?
+;			- You could even send vk## or vk##sc### entries this way!
+;			- Obviously, they don't allow composing.
+;			- Try it for VK mapped keys too?
+;			- They don't work with one-shot Shift from Compose? A hard Shift is required to break the lock.
+;				- Would it help to send a osmClear? No.
+;				- Somehow, mapping the key UP to KeyRelease is what causes this problem.
+;				- Why does a normal Send work and not a separate up send? Because DownTemp means another Send may release the key but this isn't a full Send?
+
+;		- WIP: Instead of the tricksy {Shift DownTemp} trick, make a proper routine for sending, e.g., {Shift OSM} which will activate the OSM routine!
+;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as these will not cancel {Shift DownTemp}.
+;			- It'd have to be within the prefix-entry framework then
+
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
+
+;		- TOFIX: In the Layout Selector GUI, choosing first `VK` then `ANS/ISO-Orth` lands you with a faulty selection (`Colemak\Cmk-VK-_` etc).
+;			- If choosing it by arrows then proceeding to, say, `ANS`, the error remains. The boxes for Variant and Mods will be blank.
+
+;		- WIP: A layout_Override.ini too? So people (like me) can have a non-version controlled file for their changes
 
 ;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
 ;			- Next, specify which layer(s) goes which which key so you can have different Extend keys.
@@ -86,8 +110,7 @@
 ;			- A Hotkeys settings panel?
 ;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
 
-;		- TODO: Make a pkl_Utility() fn called by the Utility/Debug hotkey, that reads a number in Settings to select which debug/utility function it triggers
-;			- One hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
+;		- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
 
 ;		- TOFIX: Tarmak layouts from the shortcut lines don't work. Check their BaseLayout settings?
 
@@ -379,10 +402,9 @@
 #MaxMem                 128 								; Default 64 Mb. More is needed for HIG image generation in its search-n-replace loop.
 
 SendMode Event
-SetKeyDelay 0 												; The Send key delay wasn't set in PKL, defaulted to 10.
-SetBatchLines, -1 	; eD WIP: What is the actual possible lowest SetKeyDelay value, and what's most robust? How about -1 vs 0 vs 1?
-Process, Priority, , H  									; High process priority
-Process, Priority, , R  									; Real-time process priority
+SetKeyDelay -1  											; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
+SetBatchLines, -1   										;
+Process, Priority, , R  									; Real-time process priority (H for High)
 SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Can we have a separate user working dir, so users have their settings elsewhere?
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
 
@@ -448,7 +470,7 @@ processKeyPress20:
 processKeyPress21:
 processKeyPress22:
 processKeyPress23:
-processKeyPress24: 	; eD WIP: What's the ideal size of this cycle? Does #MaxThreads apply?
+processKeyPress24:  	; eD WIP: What's the ideal size of this cycle? Does #MaxThreads apply?
 processKeyPress25:
 processKeyPress26:
 processKeyPress27:
@@ -459,19 +481,17 @@ processKeyPress31:
 	runKeyPress()
 Return
 
-;keyPressedWoStar:		; SC###
-;	Critical
-;	processKeyPress( A_ThisHotkey )
-;Return
-
 keyPressed: 			; *SC###
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
 Return
 
-keyReleased:			; *SC### UP
-	Critical
-	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
+keyReleased:			; *SC### UP 							; To avoid timing issues, this is just sent directly
+;	Critical
+;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
+	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ) . "  UP}"
+;	( 1 ) ? pklDebug( "" . GetKeyState("Shift") . "`n" . GetKeyState("Shift",P) . "`n" 
+;						 . DLLCall("GetKeyState","UInt",0x10) . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
 Return
 
 modifierDown:			; *SC###    (call fn as HKey to translate to modifier name)
@@ -588,13 +608,28 @@ getWinInfo:
 	getWinInfo() 										; Show the active window's title/process(exe)/class
 Return
 
-epklDebugWIP: 											; eD WIP/DEBUG: This entry is activated by the Debug hotkey
-	pklDebug( "Running Debug/WIP routine`n(specified in _PKL_main)", .6 )
+epklDebugUtil:  										; eD DEBUG/UTILITY/WIP: This entry is activated by the Debug hotkey
+	nr  := pklIniRead( "whichUtility", 1 )
+	pklDebug( "Running Debug/Utility routine " . nr . "`n(specified in Settings)", .7 )
+	debug%nr%() 										; Run the specified debug# routine
+Return
+
+  debug1() {
+	KeyHistory  										; Show AHK Key History      as by the View -> Key history menu
+} debug2() {
+	ListHotkeys 										; Show AHK hotkeys          as by the View -> Hotkeys     menu
+} debug3() {
+	ListVars 											; Show AHK global variables as by the View -> Variables   menu
+} debug4() {
+	ListLines   										; Show AHK script (flow relevant) line execution history
+} debug5() {
+	getWinInfo() 										; Show the active window's title/process(exe)/class
+} debug6() {
+;	setOneShotMod( "Shift" ) 							; eD WIP
+	debugShowCurrentWinLayKeys() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
-	debugShowCurrentWinLayKeys() 						; eD DEBUG: Show OS & EPKL VK codes for the OEM keys
-;	ListHotkeys 										; Show AHK hotkeys as by the View -> Hotkeys menu item
-Return
+} 	; end debug#
 
 ;;  ####################### functions #######################
 

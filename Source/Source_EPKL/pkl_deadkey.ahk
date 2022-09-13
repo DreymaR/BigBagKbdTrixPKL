@@ -157,9 +157,11 @@ TODO: A better version without Send/Clipboard (I don't have any ideas)
 ------------------------------------------------------------------------
 */
 
-detectCurrentWinLayDeadKeys()
-{
+detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are DKs.
+{   													; eD WIP: Freezes up mid-detection sometimes? Due to ClipWait? And does it actually detect DKs now?
 	CurrentWinLayDKs := ""
+	CR  := "{Enter}"
+	SPC := A_Space
 	
 	notepadMode = 0
 	txt := getPklInfo( "DetecDK_" .  "MSGBOX_TITLE" )
@@ -171,42 +173,43 @@ detectCurrentWinLayDeadKeys()
 	{
 		notepadMode = 1
 		Run Notepad
-		Sleep 2000
+		Sleep 1500
 		txt := getPklInfo( "DetecDK_" .  "EDITOR" )
 		SendInput {Text}%txt%
-		Send {Enter}
+		Send %CR%%CR%
 	} else {
 		Send `n{Space}+{Home}{Del}
 	}
 	
-	ordinal = 33
-	Loop	; eD TODO: Detect AltGr+key hotkeys as well?! But then we'd have to send keys and not just characters. Or... just continue a ways past 0x80? To 0xFF?
-	{
+	ord := 0x20 										; Character ordinal numbers to check. 0x00–0x1F are Ctrl characters.
+	Loop {  		; eD TODO: Detect AltGr+key hotkeys as well?! But then we'd have to send keys and not just characters.
+		++ord
+		if ( ord >= 0x80 && ord <= 0x9F ) 				; These UTF-8 code points are non-printing
+			Continue
+		if not Mod( ord, 0x10 ) 						; Send a CR every 16 characters, for neatness
+			Send %CR%
 		clipboard := ""
-		cha := Chr( ordinal )
+		cha := Chr( ord )
 		Send {%cha%}{Space}+{Left}^{Ins}
+		Sleep 50
 		ClipWait
-		ifNotEqual clipboard, %A_Space%
-			CurrentWinLayDKs = %CurrentWinLayDKs%%ch%
-		++ordinal
-		if ( ordinal >= 0x80 )
-			break
-	}
-	Send {Ctrl Up}{Shift Up}
-	Send +{Home}{Del}
+		ifNotEqual clipboard, %SPC%
+			CurrentWinLayDKs := CurrentWinLayDKs . cha
+	} Until ord >= 0xBF 								; Could've gone to 0xFF, but it's only special/accented letters there.
+	Send {Ctrl Up}{Shift Up}%CR%%CR% 	;+{Home}{Del}
 	txt := getPklInfo( "DetecDK_" . "DEADKEYS" )
-	Send {Text}%txt%:%A_Space%
+	Send {Text}%txt%:%SPC%
 	Send {Text}%CurrentWinLayDKs%
-	Send {Enter}
-	
+	Send %CR%
 	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
-	Send {Text}%txt%:%A_Space%
+	Send {Text}%txt%:%SPC%
 	Send % getWinLocaleID()
-	Send {Enter}
+	Send %CR%
 	
 	if ( notepadMode )
+		Sleep 1000
 		Send !{F4}
-		Send {Right}				; Select "Don't save"
+		Send {Right}									; Select "Don't save"
 	
 	Return CurrentWinLayDKs
 }

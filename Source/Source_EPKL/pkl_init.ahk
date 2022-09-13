@@ -49,7 +49,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 8 - Hidden from menu
 	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 9 - Hidden from menu 	; eD WIP: Use this for something better?
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
-	pklSetHotkey( "epklDebugHotkey", "epklDebugWIP"        , "HK_DebugWIP"     ) 	; = - Hidden from menu
+	pklSetHotkey( "epklDebugHotkey", "epklDebugUtil"       , "HK_DebugUtil"    ) 	; = - Hidden from menu
 	
 	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )

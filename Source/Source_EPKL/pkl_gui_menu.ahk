@@ -11,7 +11,7 @@ pkl_set_tray_menu()
 	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]		; Dummy legend menu item
 					,   "aboutMe" : [ "09"        , ""             ]		; ---
 					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
-					,   "deadKey" : [ "12"        , ""             ]		; ---
+					,   "deadKey" : [ "12"        , ""             ]		; --- - Don't show this to avoid clutter?
 					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
 					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
 					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
@@ -23,7 +23,7 @@ pkl_set_tray_menu()
 					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
 					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+9 - Don't show this to avoid clutter
 					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
-					,   "debugMe" : [ ""          , "DebugWIP"     ] } 		; ^+= - Don't show the Debug/WIP hotkey
+					,   "debugMe" : [ ""          , "DebugUtil"    ] } 		; ^+= - Don't show the Debug/Utility hotkey
 	For item, val in menuItems
 	{
 		%item%MenuItem  := getPklInfo( "LocStr_" . val[1] ) 	; Menu item text - hotkey text is added on the next lines
@@ -70,7 +70,7 @@ pkl_set_tray_menu()
 	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
 		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
-		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect DKs
+		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect OS DKs (old PKL module)
 ;		Menu, Tray, add, %importsMenuItem%, importLayouts 					; Import Module
 		Menu, Tray, add, %makeImgMenuItem%, makeHelpImages 					; Help Image Generator
 		Menu, Tray, add, 													; (separator)
