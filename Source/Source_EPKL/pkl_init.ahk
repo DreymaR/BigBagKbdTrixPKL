@@ -1,6 +1,6 @@
 ﻿													;   ###############################################################
-initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settings ########################
-{ 													;   ###############################################################
+initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
+													;   ###############################################################
 	
 	;; ================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
@@ -11,6 +11,8 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 				; Info dictionary file, mostly from internal tables
 	;setKeyInfo( "HotKeyBuffer", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
+	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
+	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
 	;; ================================================================================================
 	;;  Find and read from the Settings file(s)
@@ -58,6 +60,8 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	_pklSetInf( "suspendTimeOut" ) 										; Time idle (min) before program suspends itself
 	_pklSetInf( "exitAppTimeOut" ) 										; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" ) { 					; Programs that suspend EPKL when active
+		if ( suspApp == "--" )
+			Break
 		shorthand := { "C " : "ahk_class " , "X " : "ahk_exe " , "T " : "" }
 		For needle, newtxt in shorthand 								; C/X/[T] matches by window Class/Exe/Title
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
@@ -65,7 +69,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	}	; end For suspApp
 	_pklSetInf( "suspendingLIDs" ) 										; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
-	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (CSV)
+	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
 	_pklSetInf( "stickyTime" ) 											; --"--
 	
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
@@ -116,13 +120,13 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	theLays := StrReplace( theLays, "@Ʃ",   "@L-@T@V"  ) 				; Shorthand .ini notation for main layout, type and variant
 	theLays := StrReplace( theLays, "@Ç",   "@K@C@H@O" ) 				; Shorthand .ini notation for KbdType[_]ErgoMods; not in use
 	theLays := StrReplace( theLays, "@E",     "@C@H@O" ) 				; Shorthand .ini notation for the full ergomods battery
-	theLays := StrReplace( theLays, ":@L",  ":" . layName ) 			; Replaces @L w/ LayMain in menu names, given that they start with @L
-	theLays := StrReplace( theLays, "@L",   layMain . "\" . lay3LA ) 	; Replaces @L w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
+	theLays := StrReplace( theLays, ":@L", ":" layName ) 				; Replaces @L w/ LayMain in menu names, given that they start with @L
+	theLays := StrReplace( theLays, "@L",   layMain "\" lay3LA ) 		; Replaces @L w/ LayMain\3LA in layout paths, as in 'Colemak\Cmk'
 	theLays := StrReplace( theLays, "@3",   lay3LA  )
 	theLays := StrReplace( theLays, "@T",   layType )
 	theLays := StrReplace( theLays, "@V",   localID ) 					; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
 	kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
-	theLays := StrReplace( theLays, "@K@","@K" . kbdTypJ . "@" ) 		; --"--
+	theLays := StrReplace( theLays, "@K@","@K" kbdTypJ "@" ) 			; --"--
 	theLays := StrReplace( theLays, "@K",   kbdType ) 					; Later on, EPKL will use atKbdType() for layout files instead of this one 	; . "_"
 	theLays := StrReplace( theLays, "@C",   curlMod )
 	theLays := StrReplace( theLays, "@H",   hardMod )
@@ -130,7 +134,7 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 	layouts := StrSplit( theLays, ",", " `t" )							; Split the CSV layout list
 	numLayouts := layouts.Length()
 	setLayInfo( "NumOfLayouts", numLayouts )							; Store the number of listed layouts
-	for ix, thisLay in layouts { 										; Store the layout dir names and menu names
+	For ix, thisLay in layouts { 										; Store the layout dir names and menu names
 ;		kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : ""
 ;		needle  := kbdType .           curlMod . hardMod . othrMod 		; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
 ;		newtxt  := kbdType . kbdTypJ . curlMod . hardMod . othrMod
@@ -176,8 +180,8 @@ initPklIni( layoutFromCommandLine ) 				;   ######################## EPKL Settin
 }	; end fn initPklIni()
 
 													;   ###############################################################
-initLayIni() 										;   ######################### layout.ini  #########################
-{ 													;   ###############################################################
+initLayIni() {  									;   ######################### layout.ini  #########################
+													;   ###############################################################
 	
 	;; ================================================================================================
 	;;  Find and read from the layout.ini file and, if applicable, BaseLayout/LayStack
@@ -195,8 +199,9 @@ initLayIni() 										;   ######################### layout.ini  ###############
 ;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in layout.ini overrides the first Layout_ setting
 ;	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
 ;	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout
-	IniRead, basePath, % mainLay, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
-	SplitPath, basePath, baseLay, baseDir
+	IniRead, basePath, %mainLay%, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
+	basePath        := StrCom( basePath )   							; Strip comments, like in pklIniRead()
+	SplitPath, basePath, baseLay, baseDir   							; eD WIP: Manage to use pklIniRead() for this?! It should handle ..\ too.
 	useDots         := ( InStr( basePath, "..\" ) == 1 ) ? true : false
 	baseDir         := ( useDots ) ? mainDir . "\.."         : laysDir . baseDir
 	baseLay         := ( useDots ) ? baseDir . "\" . baseLay : laysDir . basePath
@@ -250,14 +255,14 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			%mapType% := ReadCycles( mapType, %mapType%, cycStck ) 		; Parse the cycle list into a pdic of mappings
 		}	; end For mapType
 		setPklInfo( "scMapLay", scMapLay )
-;		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile )  			; Make a code dictionary for SC-2-VK mapping below
+;		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile ) 			; Make a code dictionary for SC-2-VK mapping below
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other code tables?
 		setPklInfo( "QWSCdic", QWSCdic )
 		QWVKdic := ReadKeyLayMapPDic( "QW", "VK", mapFile ) 	; KLM code dictionary for QW-2-VK mapping 	; Co is unintuitive since KLM VK names are QW based.
 		setPklInfo( "QWVKdic", QWVKdic )
-;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile )  	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
-;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile )  			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
-;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile )  			; --"--
+;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
+;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
+;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		mapVK   := detectCurrentWinLayVKs()  							; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
 		setPklInfo( "oemVKdic", mapVK )
 		initialized := true
@@ -299,41 +304,57 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			tapMod  := ""
 		}
 		keyVK := "VK" . Format( "{:X}", GetKeyVK( key ) ) 				; Find the right VK code for the key's SC, from the active layout.
-		vkStr := "i)^(virtualkey|vk|vkey|-1)$" 							; RegEx needle for VKey entries, ignoring case. Allow -1 or not?
-		if RegExMatch( entr1, vkStr) { 									; If the first entry is a VKey synonym, VK map the key to itself
+		vkStr := "i)^(vkey|-2|vk|virtualkey)$"  						; RegEx needle for VK entries, ignoring case. Allow -1 or not?
+		scStr := "i)^(skey|-3|sc|scancode|system)$"  					; RegEx needle for SC entries, ignoring case.
+		if RegExMatch( entr1, vkStr) {  								; If the first entry is a VKey synonym, VK map the key to itself
 			numEntr   := 2
-			entr1     := keyVK 											; The right VK code for the key's SC, from the active layout.
+			entr1     := keyVK  										; The right VK code for the key's SC, from the active layout.
 			entr2     := "VKey" 										; Note: This is the KLM vc=QWERTY mapping of that SC###.
+		} else if RegExMatch( entr1, scStr ) {  						; SC map the key to itself
+			numEntr   := 2
+			entr1     := key
+			entr2     := "ScanCode"
 		}
-		if ( numEntr < 2 ) || ( entr1 == "--" ) { 						; An empty or one-entry key mapping will deactivate the key
-			Hotkey, *%key%   ,  doNothing 								; The *SC### format maps the key regardless of modifiers.
-			Hotkey, *%key% Up,  doNothing 								; eD WIP: Does a key Up doNothing help to unset better?
+		if ( numEntr < 2 )  || ( entr1 == "--" )  						; Any other empty or one-entry key mapping will deactivate the key
+							|| ( InStr(entr2,";") == 1 ) {   			; (This includes if the 2nd entry is a comment)
+			Hotkey, *%key%   ,  doNothing   							; The *SC### format maps the key regardless of modifiers.
+;			Hotkey, *%key% Up,  doNothing   							; eD WIP: Does a key Up doNothing help to unset better?
 			Continue 													; eD WIP: Is this working though? With base vs layout?
 		}
-		if ( InStr( "modifier", loCase(entr2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'VK' or 'Modifier'
-			entr1     := _checkModName( entr1 ) 						; Modifiers are stored as their AHK or special names
-			extKey    := ( entr1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'
-			setKeyInfo( key . "vkey", entr1 ) 							; Set VK as modifier name, e.g., "RShift", "AltGr" or "Extend"
-			entr2     := -2 											; -2 = Modifier
-		} else {
-			KLM := _mapKLM( entr1, "VK" ) 								; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
-			mpdVK  := getVKnrFromName( entr1 ) 							; Translate to the four-digit VK## hex code (Uppercase)
-			mpdVK  := ( mapVK[mpdVK] ) ? mapVK[ mpdVK ] : mpdVK 		; If necessary, convert VK_OEM_# key codes 	; kbdType == "ISO" && 
-			mpdVK  := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
-			setKeyInfo( key . "vkey", mpdVK ) 							; Set the (mapped) VK## code for the key
-			entr2   := RegExMatch( entr2, vkStr ) ? -1 : entr2 			; -1 = VKey internally, if entr2 is "VKey" or similar
+		if ( InStr( "modifier", loCase(entr2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'Modifier', 'VKey' or 'SKey'
+			entr1   := _checkModName( entr1 )   						; Modifiers are stored as their AHK names, e.g., "RShift", "AltGr"...
+			extKey  := ( entr1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'. Special modifier.
+;			entr1   := entr1 											; Set VK as modifier name
+			entr2   := -1   											; -1 = Modifier
+		} else if RegExMatch( entr2, scStr ) {
+			qw  := SubStr( entr1, 3 )   								; Check for a KLM QW### ScanCode entry
+			iq  := ( InStr( entr1, "QW" ) == 1 && QWSCdic.HasKey( qw ) ) ? 1 : 0 	; This isn't case sensitive now.
+			entr1   := ( iq ) ? QWSCdic[ qw ] : entr1    				; Set the scan code for the key as its key info
+			entr2   := -3    											; -3 = ScanCode
+		} else {    													; The entry is either VK or state mapped. Remap its VK.
+			KLM     := _mapKLM( entr1, "VK" )   						; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
+			mpdVK   := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
+			mpdVK   := ( mapVK[mpdVK] ) ? mapVK[ mpdVK ] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
+			mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
+			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
+			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey
+					                              : entr2   			; ...or in the case of a state entry, its Cap state
 ;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . mpdVK . "`n" )  ; eD DEBUG
 		}
-		setKeyInfo( key . "capSt", entr2 ) 								; Set Caps state (0-5 for states; -1 VK; -2 Mod)
+		setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
+		setKeyInfo( key . "ent2", entr2 )   							; Set CapsState (`CAP`: 0-5 for states; -1 Mod; -2 VK; -3 SC)
 		if ( tapMod ) { 												; Tap-or-Modifier
 			Hotkey, *%key%   ,  tapOrModDown
 			Hotkey, *%key% Up,  tapOrModUp
-		} else if ( entr2 == -2 ) { 									; Set modifier keys, including Extend
+		} else if ( entr2 == -1 ) { 									; Set modifier keys, including Extend
 			Hotkey, *%key%   ,  modifierDown
 			Hotkey, *%key% Up,  modifierUp
+		} else if ( entr2 == -2 ) || ( entr2 == -3 ) {   				; Set VK/SC mapped keys, activated on down and released on up
+			Hotkey, *%key%   ,  keypressDown
+			Hotkey, *%key% Up,  keypressUp   							; In this case, A_ThisHotkey will contain a trailing ` UP`
 		} else {
-			Hotkey, *%key%,     keyPressed 								; Set normal keys
-			Hotkey, *%key% Up,  doNothing 	 							; eD WIP: Only Down needed? - EPKL sends a lot of Down-Up presses. But if the key is redefined?
+			Hotkey, *%key%   ,  keypressDown 							; Set state mapped keys; these use AHK Send (Down/Up)
+			Hotkey, *%key% Up,  doNothing   							; eD WIP: Only Down needed? Or is this an advantage?
 		}	; end if entries
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
 			ks      := shStates[ A_Index ] 								; This shift state for this key
@@ -346,7 +367,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 			} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
 				setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
 			} else if ( ksE == "##" ) {
-				setKeyInfo( key . ks , -1 ) 							; Send this state {Blind} as its VK##
+				setKeyInfo( key . ks , -2 ) 							; Send this state {Blind} as its VK##
 				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
 			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
@@ -371,7 +392,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 		}	; end loop entries
 	}	; end loop (parse keymap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
-		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use an array instead!
+		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use an extKeys[] array instead!
 	}	; end For row in map
 	}	; end For layFile (parse layoutFiles)
 	
@@ -429,7 +450,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
-	;;  - A -- or -1 entry in a overriding LayStack file disables any corresponding entry in the base DK file.
+	;;  - A -- (or -1) entry in a overriding LayStack file disables any corresponding entry in the base DK file.
 	;
 	Loop % 32 {															; Start with the default dead key table
 		key := "@" . Format( "{:02}", A_Index ) 						; Pad with zero if index < 10
@@ -472,8 +493,7 @@ initLayIni() 										;   ######################### layout.ini  ###############
 	pkl_set_tray_menu()
 }	; end fn initLayIni()
 
-activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
-{
+activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	SetCapsLockState, Off 							; Remedy those pesky CapsLock hangups at restart
 	SetTitleMatchMode 2
 	DetectHiddenWindows on
@@ -506,8 +526,7 @@ activatePKL() 										; Activate EPKL single-instance, with a tray icon etc
 	}
 }	; end fn
 
-changeLayout( nextLayout ) 							; Rerun EPKL with a specified layout
-{
+changeLayout( nextLayout ) { 						; Rerun EPKL with a specified layout
 	Menu, Tray, Icon,,, 1 							; Freeze the tray icon
 	Suspend, On
 	
@@ -517,13 +536,11 @@ changeLayout( nextLayout ) 							; Rerun EPKL with a specified layout
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
-_pklSetInf( pklInfo )
-{
-	setPklInfo( pklInfo, pklIniRead( pklInfo ) ) 	; Simple setting for EPKL_Settings entries
+_pklSetInf( pklInfo ) { 							; Simple setting for EPKL_Settings entries
+	setPklInfo( pklInfo, pklIniRead( pklInfo ) )
 }
 
-_pklLayRead( type, def = "<N/A>", prefix = "" )		; Read kbd type/mods (used in pkl_init) and set Lay info
-{
+_pklLayRead( type, def = "<N/A>", prefix = "" ) { 	; Read kbd type/mods (used in pkl_init) and set Lay info
 	pklLays := getPklInfo( "Arr_PklLay" )
 	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
 	val := ( type = "KbdType" ) ? _AnsiAns( val ) : val
@@ -537,8 +554,7 @@ _AnsiAns( kbdt ) { 									; You're allowed to use ANSI as a more well-known sy
 	Return ( kbdt = "ANSI" ) ? "ANS" : kbdt
 }
 
-_mapKLM( ByRef key, type )
-{
+_mapKLM( ByRef key, type ) {
 	static initialized  := false
 	static QWSCdic      := []
 	static QWVKdic      := []
@@ -561,8 +577,7 @@ _mapKLM( ByRef key, type )
 	Return KLM
 }
 
-_checkModName( key ) 								; Mod keys need only the first letters of their name
-{
+_checkModName( key ) {  							; Mod keys need only the first letters of their name
 	static modNames := [ "LShift", "RShift", "CapsLock", "Extend", "SGCaps"
 						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin" ]
 	
@@ -577,8 +592,7 @@ _checkModName( key ) 								; Mod keys need only the first letters of their nam
 	}
 }
 
-_MessageFromNewInstance( lparam ) 					; Called by OnMessage( 0x0398 ) in pkl_init
-{ 													; If running a second instance, this message is sent
-	if ( lparam == 422 )
+_MessageFromNewInstance( lparam ) { 				; Called by OnMessage( 0x0398 ) in pkl_init
+	if ( lparam == 422 ) 							; If you run a second EPKL instance, this message is sent
 		ExitApp
 }

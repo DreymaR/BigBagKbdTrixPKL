@@ -2,7 +2,7 @@ EPiKaL Portable Keyboard Layout by Máté Farkas & DreymaR
 ========================================================
 <br>
 
-- Version:  1.3.2
+- Version:  1.4.0
 - Compiled: 2022-09 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>

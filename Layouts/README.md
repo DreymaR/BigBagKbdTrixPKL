@@ -68,9 +68,10 @@ Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain 
 QW_J    = N         VKey            ; QW jJ  -> nN, a simple VK remapping
 RWin    = BACK      VirtualKey      ; RWin   -> Backspace (VKey)
 RShift  = LShift    Modifier        ; RShift -> LShift, so it works with LShift hotkeys
-SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name (the old way)
+SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name (the old/MSKLC way)
 QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more intuitive KLM codes
-QW_U    = VKey                      ; System mapped key. Uses whatever is on the system layout.
+QWPGU   = qwPGD     SKey            ; PgUp   -> PgDn, this time with KLM scan code (SC) mapping
+QW_U    = System                    ; System mapped key. Uses whatever is on the system layout.
 ```
 Entries are any-whitespace delimited.
 <br><br>
@@ -79,7 +80,7 @@ Layout variant tutorial
 -----------------------
 You can make your own version of, say, a locale layout variant – for instance, using an ergonomic mod combo that isn't provided out-of-the-box:
 * Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale variant you want to start from.
-* Determine whether you want to just move keys around by VirtualKey mappings or map all their shift states like Colemak-eD does.
+* Determine whether you want to just move keys around by VirtualKey/ScanCode mappings or map all their shift states like Colemak-eD does.
 * Copy/Paste a promising layout folder and rename the result to what you want.
     - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
     - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak\Cmk-eD-De](../Layouts/Colemak/Cmk-eD-De) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.

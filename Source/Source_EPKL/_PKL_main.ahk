@@ -26,7 +26,7 @@
 ;	* EPKL v1.2.0: Layout/Settings UI.
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
-;	* EPKL v1.3.2: Dual-function CoDeKey (Compose+Dead key).
+;	* EPKL v1.4.0: ScanCode key mapping. Better Send for key mapping. Dual-function CoDeKey (Compose+Dead key).
 ;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
 ;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 ;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
@@ -34,9 +34,10 @@
 ;			- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
 ;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 ;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
-;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
-;			- ScanCodes are now added to the VirtualKey codes (VK21–24,2D–2E) so their normal versions (SC 149,151,14F,147,152,153) are sent.
+;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del and arrows had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
+;			- ScanCodes are now added to the VirtualKey codes (VK21–28,2D–2E) so their normal versions (SC 149,151,14F,147,152,153 etc) are sent.
 ;		- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
+;		- Fixed: An end-of-line comment in the baseLayout entriy would cause the layout to fail.
 ;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 ;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 ;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
@@ -75,35 +76,51 @@
 ;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
 ;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
 
-;		- WIP: Detect OS VK codes for all keys instead of just a select subset
+;		- A new `ScanCode`/`SKey` key mapping type, sending a key's scan code instead of the more complex VK mappings. This should be more robust.
+;			- KLM names such as `QW_A` or `qwBSP` are allowed for SC mapping, in addition to the traditional `SC###`.
+;			- Several keys like PgUp/PgDn etc were changed from VK to SC mapping. Keys may be SC mapped to themselves by mapping them just as `System`.
+;			- The `System` passthrough layout now works as intended, using `System` key mappings throughout.
+;			- You could even send vk## or vk##sc### entries using `SKey`-type mappings, as these mappings are compatible with all AHK key Send syntax.
+;			- Neither VK nor SC mapped keys allow composing: EPKL can't know what's actually sent from these keys. Extend and dead keys work just fine.
 
-;		- WIP: A new ScanCode key mapping type, sending a key's scan code instead of the more complex VK mappings. This should be far more robust.
+;		- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Should be okay for gaming and Monkeytype then!
+;			- This is a pretty huge development, really!
 
-;		- WIP: For System mapped keys, send SC instead of VK. Change some keys like PgUp/PgDn etc to SC?
+;		- Instead of the tricksy {Shift DownTemp} trick for the CoDeKey, a new syntax for, e.g., {Shift OSM} activates the Sticky Mod routine!
+;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as these don't cancel {Shift DownTemp}.
+;			- It works with any prefix-entry α or β (AHK code) entries.
 
-;		- WIP: Send KeyUp and KeyDown events. Could it be okay for gaming and Monkeytype then?
-;			- You could even send vk## or vk##sc### entries this way!
-;			- Obviously, they don't allow composing.
-;			- Try it for VK mapped keys too?
-;			- They don't work with one-shot Shift from Compose? A hard Shift is required to break the lock.
-;				- Would it help to send a osmClear? No.
-;				- Somehow, mapping the key UP to KeyRelease is what causes this problem.
-;				- Why does a normal Send work and not a separate up send? Because DownTemp means another Send may release the key but this isn't a full Send?
+;		- Added vanilla Colemak-eD to the MSKLC folder
 
-;		- WIP: Instead of the tricksy {Shift DownTemp} trick, make a proper routine for sending, e.g., {Shift OSM} which will activate the OSM routine!
-;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as these will not cancel {Shift DownTemp}.
-;			- It'd have to be within the prefix-entry framework then
+;		- WIP: Add a section to the README with "I don't want Colemak", about the System layout? For people who just want Extend++ on top of their OS layout.
+
+;		- WARNING: SC-mapping may be less robust than VK-mapping vs AZERTY et al! For these, the VK-remap with detection is better.
+
+;		- WIP: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
+;			- No, doesn't work; the SC don't get remapped at all. Ah well.
+;			- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
+
+;		- WIP: Make Compose work with VK/SC mapping, using the GetKeyName(sc) function.
+;			- It's working for lower-case. But E' composes to é etc. Same with <u -> ų instead of <u caret>. Find a solution! Is there a DLL call or something?
+
+;		- TOFIX: SC/VK-mapping turns OS dead keys inactive, outputting only the base letter? Mainly a problem vs AltGr? Some DKs work, others not?
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
+;		- WIP: Tidy up Tarmak files?
+
+;		- WIP: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
+
 ;		- TOFIX: In the Layout Selector GUI, choosing first `VK` then `ANS/ISO-Orth` lands you with a faulty selection (`Colemak\Cmk-VK-_` etc).
 ;			- If choosing it by arrows then proceeding to, say, `ANS`, the error remains. The boxes for Variant and Mods will be blank.
+;			- Isn't the GUI updated after choosing KbdType? Doesn't _uiCheckLaySet() find LayVari and LayMods for an `-Orth` KbdType?
 
-;		- WIP: A layout_Override.ini too? So people (like me) can have a non-version controlled file for their changes
+;		- WIP: A layout_Override.ini file too? So people (like me) can have a non-version controlled file for their personal layout changes.
+;			- Writing to the layout.ini file with the KeyMapper GUI should create an override if not present, like with the other overrides.
 
-;		- WIP: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
+;		- TODO: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
 ;			- Next, specify which layer(s) goes which which key so you can have different Extend keys.
 
 ;		- TODO: More GUI settings?
@@ -158,7 +175,7 @@
 ;		- WIP: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
 ;			- Become a Great Composer!
 
-;		- WIP: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
+;		- TODO: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
 ;			- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
 ;			- Make and look for overrides in the working dir, and defaults in the script dir.
 ;			- Add a syntax or setting that lets the user specify using a layout dir (and BaseLayout?) in the working dir. Or just look for it there first, if different?
@@ -173,7 +190,7 @@
 ;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
 ;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
-;		- WIP: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
+;		- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
 ;			- Kindly sponsored by Rasta at the Colemak Discord!
 ;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
 ;			- May have to clean up the state calculation in _keyPressed()
@@ -198,10 +215,8 @@
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
 ;			- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
 ;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
-;		- TOFIX: System layout is faulty? OEMs are wrong.
-;			- If I get it working, add a section to the README with "I don't want Colemak"? For people who just want Extend on top of their OS layout
 
-;		- WIP: Get started on the Arabic phonetic layout!
+;		- TODO: Get started on the Arabic phonetic layout!
 
 ;		- WIP: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
@@ -406,10 +421,10 @@ SetKeyDelay -1  											; The Send key delay wasn't set in PKL, defaulted to 
 SetBatchLines, -1   										;
 Process, Priority, , R  									; Real-time process priority (H for High)
 SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Can we have a separate user working dir, so users have their settings elsewhere?
-StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off)
+StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.3.2β" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.4.0β" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
@@ -481,27 +496,27 @@ processKeyPress31:
 	runKeyPress()
 Return
 
-keyPressed: 			; *SC###
+keypressDown: 			; *SC###    hotkeys
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
 Return
 
-keyReleased:			; *SC### UP 							; To avoid timing issues, this is just sent directly
+keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent directly
 ;	Critical
 ;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
-	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ) . "  UP}"
+	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
 ;	( 1 ) ? pklDebug( "" . GetKeyState("Shift") . "`n" . GetKeyState("Shift",P) . "`n" 
 ;						 . DLLCall("GetKeyState","UInt",0x10) . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
 Return
 
-modifierDown:			; *SC###    (call fn as HKey to translate to modifier name)
+modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2     ) . "vkey" ), 1 ) 	; eD WIP: Use "vmod" instead of "vkey" for modifiers?
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2     ) . "ent1" ), 1 )
 Return
 
 modifierUp:
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "vkey" ), 0 ) 	; eD WIP: --"--
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ), 0 )
 Return
 
 tapOrModDown: 			; *SC###

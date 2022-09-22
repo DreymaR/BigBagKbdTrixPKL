@@ -299,8 +299,8 @@ _setValDefCom( setting ) {  									; Get value/default/commentaries for a Sett
 UIselSpc:   													; Handle UI Special Key selections
 	GUI, UI:Submit, Nohide
 	case    :=  UI_SpcExtS  									; eD TODO: The Switch command only appears with AHK v1.1.31+!
-	mapping :=  ( case == 1 ) ? "CAPITAL     VKey"  			; [ "Caps", "Back", "Ext", "Back/Ext", "MoDK" ]
-			:   ( case == 2 ) ? "BACK        VKey"
+	mapping :=  ( case == 1 ) ? "System" 					;"CAPITAL     VKey"  	; [ "Caps", "Back", "Ext", "Back/Ext", "MoDK" ]
+			:   ( case == 2 ) ? "qwBSP       SKey"  		;"BACK        VKey"
 			:   ( case == 3 ) ? "Extend      Modifier"
 			:   ( case == 4 ) ? "BACK/Ext    VKey"
 			:   ( case == 5 ) ? "BACK/Ext    0   	@ex0	@ex1	*#. 	@ex6	@ex7"
@@ -308,10 +308,10 @@ UIselSpc:   													; Handle UI Special Key selections
 	_uiControl( "SpcExLn", "QWCLK = " . mapping )
 	case    :=  UI_SpcCmpS  									; eD TODO: The Switch command only appears with AHK v1.1.31+!
 	mapping :=  ( case == 1 ) ? "QW_LG = vc_LG    " 			; [ "ISO", "RCtrl", "RWin", "PrtScn", "Menu/App" ]
-			:   ( case == 2 ) ? "QWRCT = vc_RCT   "
-			:   ( case == 3 ) ? "QWRWI = RWIN     "
-			:   ( case == 4 ) ? "QWPSC = vc_PSC   "
-			:   ( case == 5 ) ? "QWAPP = APPS     "
+			:   ( case == 2 ) ? "QWRCT = vcRCT    "
+			:   ( case == 3 ) ? "QWRWI = vcRWI    "
+			:   ( case == 4 ) ? "QWPSC = vcPSC    "
+			:   ( case == 5 ) ? "QWAPP = vcAPP    "
 			:                   " --"
 	_uiControl( "SpcCoLn", mapping .             "0   	©Def	@co1	--  	®®  	®®  " )
 ;	CoDeVal := pklIniRead( "CoDeKeys", "<N/A>" ) 				; Read from SetStck. Strip EOL comments.
@@ -362,14 +362,14 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n- If a Compose key is set as a CoDeKey, it'll be a dead key too. A CoDeKey composes if it recognises a sequence, or else is a DK. Very powerful!"
 			. "`n- Dead keys are also very useful on their own. You can have as many as you like, and use them in ingenious ways. See the Deadkeys .ini file."
 			. "`n`n"
-			. "`n•   V I R T U A L K E Y   A N D   S T A T E   M A P P I N G"
+			. "`n•   K E Y   V S   S T A T E   M A P P I N G S"
 			. "`n"
-			. "`n- VirtualKey (VK) mapping a key means that a key press is emulated and as a result whatever is in the system layout for that key is sent."
+			. "`n- VirtualKey (VK) or ScanCode (SC) key mapping means that a key press is emulated and as a result whatever is in the system layout for that key is sent."
 			. "`n- State mappings such as [eD] are different: They send characters directly into the Input Stream, so you can send anything regardless of the system layout."
 			. "`n"
 			. "`n- State mappings can be lots of different things, from simple characters via AHK syntax and PowerStrings to advanced dead or Compose/Completion/Repeat keys."
 			. "`n- Learn about EPKL Prefix-Entry syntax, Extend, dead keys, Compose and more in the main Readme file. Also in the Compose, DeadKeys, Extend and PowerStrings files."
-			. "`n- Shift states for state maps are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number and don't map the Ctrl state."
+			. "`n- The Windows ShiftStates are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number, and don't map the Ctrl state."
 ;	pesText :=  ""
 ;			.   "    This is an overview of EPKL prefix-entry syntax:"  	; . ui_PrefEntr
 	pesTabl :=  ""
@@ -390,11 +390,11 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n  |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |"
 			. "`n  X=======================================================================================================================X"
 	klmText :=  ""
-			.   "•   K E Y   C O D E S   A N D   R E M A P P I N G"
+			.   "•   K E Y   C O D E S   A N D   R E M A P S"
 			. "`n"
-			. "`n- EPKL maps keys using their scan codes. 'QW_' codes denote QWERTY locations, see the table below."
-			. "`n- Keys may get moved around by mod remaps such as ergo mods. When mapping something to a key, map to the unmodded location (the old 'N' key is still QW_N)."
-			. "`n- Example: Standard Colemak has G on the top row, where Colemak-DH has B. To remap the B key for Cmk-DH, refer to it by its vanilla position QW_B (or Co_B)."
+			. "`n- EPKL maps keys using their scan codes. 'QW_' codes denote QWERTY locations, see the table below. Actual SC### scan codes work as well."
+			. "`n- Keys may get moved around by mod _Remaps_ such as ergo mods. When mapping something to a key, map to the unmodded location (the old 'N' key is still QW_N)."
+			. "`n- Example: Standard Colemak has G on the top row, where Colemak-DH has B. To edit the B key in Cmk-DH, still use its QWERTY (and Colemak) position QW_B."
 			. "`n"
 			. "`n    This is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW"" Scan Codes and ""Map to vc"" Virtual Key codes."
 			. "`n    You can edit the key mapping lines directly to any valid key codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists."

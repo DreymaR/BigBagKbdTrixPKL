@@ -352,11 +352,11 @@ formatUnicode( chr ) { 										; Format a character as a hex string, without t
 }
 
 inArray( haystack, needle, case = true ) {  				; Check if an array object has a certain value, and return its index
-	if !(IsObject(haystack)) || ( haystack.Length() == 0 )
+	if !(IsObject(haystack)) || ( haystack.Length() == 0 )  ; (For associative arrays, you can use Array.HasKey() to find a key.)
 		Return false
+	needle      := ( case ) ? needle : loCase( needle ) 	; If desired, use caseless comparison
 	For ix, value in haystack {
-		value   := ( case ) ? value  : loCase( value  )  	; If desired, use caseless comparison
-		needle  := ( case ) ? needle : loCase( needle )
+		value   := ( case ) ? value  : loCase( value  )
 		if ( value == needle )
 			Return ix
 	}

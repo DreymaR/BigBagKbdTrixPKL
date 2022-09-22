@@ -120,7 +120,6 @@ pkl_CheckForDKs( ch ) {
 	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
 		SpaceWasSentForSystemDKs := false
 	} else {
-;		( 1 ) ? pklDebug( "CheckForDKs`nch = " . ch, 1 )  ; eD DEBUG
 		setKeyInfo( "CurrBaseKey" , ch ) 						; DK(s) active, so record the pressed key as Base key
 		if ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
@@ -153,8 +152,12 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 		SetCapsLockState % togCap
 	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special !+^#{} syntax, omitting {Text}
 		pfix    := ""
+		if pkl_ParseAHK( enty, pfix )   						;      Special EPKL-AHK syntax additions
+			Return psp
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		pfix    := "{Blind}"
+		if pkl_ParseAHK( enty, pfix )
+			Return psp
 	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
 		enty    := "{U+" . enty . "}"
@@ -185,6 +188,32 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	Return psp  												; Return the recognized prefix
 }
 
+pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α entries.
+	OSM := false , OSMs  := []
+	While InStr( enty, " OSM}" ) {  							; OneShotMod syntax: `{<mod> OSM}` activates <mod> as OSM once.
+		OSM := true
+		mod := "i)\{([LR]?(?:Shift|Alt|Ctrl|Win)) OSM\}" 		; RegEx capture pattern for a OneShotMod
+		RegExMatch( enty, mod, mod ) 							; RegExMatch mode O) stores the match object in the mod variable.
+		mod := mod1 											; Simple way to get the first subpattern
+		enty := StrReplace( enty, "{" . mod . " OSM}" ) 		; Remove the special syntax
+		OSMs.Push( mod )
+;		setOneShotMod( mod ) 									; eD WIP: To get this done after the Send, either send it here and bail out or make a fancy dynamic %fn%() call
+;		dynFn.Push( "setOneShotMod", [ mod ] )  	; ???
+	}
+	if ( OSM ) {
+		SendInput % pfix . enty
+		Sleep 50
+;		setOneShotMod( "Shift" ) 	; eD WIP: NOT WORKING!!! WHY!?! Something that ModifierDown does, that this doesn't...?
+;		setModifierState( "SC02A" . "ent1", 1 )
+;	; eD WIP: Seems the problem is the osmClearAll at the end of _keyPressed() clears our OSM prematurely. But without it, we get DOuble CAps. What triggers it unnecessarily?
+		For ix, mod in OSMs {
+			setOneShotMod( mod ) 	; eD WIP: NOT WORKING!!! WHY!?! Because somehow, _osmClearAll() gets invoked after this...
+		}
+		Return true
+	} 	; end if osm
+	Return false
+}
+
 pkl_SendMessage( string ) { 									; Send a string robustly by char messages, so that mods don't get stuck etc
 																; SendInput/PostMessage don't wait for the send to finish; SendMessage does
 	Critical 													; Source: https://autohotkey.com/boards/viewtopic.php?f=5&t=36973
@@ -194,7 +223,7 @@ pkl_SendMessage( string ) { 									; Send a string robustly by char messages, 
 		SendMessage, 0x102, % Ord( A_LoopField ), 1, %vClsN%, ahk_id%hWnd% 	; 0x100 = WM_CHAR sends a character input message
 ;		SendMessage, 0x100, 0x0D, 0, %vClsN%, ahk_id%hWnd% 		; 0x100 = WM_KEYDOWN. Sends a Windows key input message.
 ;		SendMessage, 0x101, 0x0D, 0, %vClsN%, ahk_id%hWnd% 		; 0x100 = WM_KEYUP, 0x0D = VK_RETURN = {Enter}.
-;		ControlSend, %vClsN%, +{Enter} 							; Try ControlSend instead.
+;		ControlSend, %vClsN%, +{Enter} 							; Try ControlSend instead. 
 ;		Control, EditPaste, +{Enter}, %vClsN% 					; Try Control, EditPaste instead.
 }
 

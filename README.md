@@ -137,7 +137,7 @@ Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspac
 
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
 - **By Menu:** On the Layout/Settings menu's Special Keys tab, select your Caps key's desired behavior then allow EPKL to restart.
-- **By KeyMapper:** On the Layout/Settings KeyMapper tab, make a `VirtualKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it.
+- **By KeyMapper:** On the Layout/Settings KeyMapper tab, make a `VKey` or `SKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it.
 - **By File:** In your `EPKL_Layouts_` .ini file (Default or, if present, Override), find or make these lines under the `[layout]` section.
 ```
 ;QWCLK = BACK    	VKey 		; SC03a: CapsLock as Backspace (CAPITAL -> BACK)
@@ -220,7 +220,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Colemak vs QWERTY vs what-have-you, obviously. Choose your main layout wisely!
     - EPKL defaults to Colemak(-DH) and Tarmak layouts, but also holds QWERTY and Dvorak and several others.
     - To type with QWERTY it may be just as easy to suspend EPKL. Of course, then Extend etc won't work.
-* Full/VK mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
+* Full/VK/SC mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
     - The _VK_ layouts just move the keys of your installed OS layout around, without other changes
     - The _[eD]_ layouts have their own Shift/AltGr state mappings specified.
     - Actually, you may mix mapping types freely in any layout.
@@ -361,14 +361,14 @@ As mentioned, the EPKL Compose key is used to enter a sequence of characters and
 
 KNOWN ISSUES:
 -------------
-* The AHK `Send` command used by EPKL, sends a `KeyDown` shortly followed by a `KeyUp`.
+* The AHK `Send` command used by some EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
     - This does produce a key press with the desired character/key.
-    - However, when holding down a key for a while the Windows OS really sends repeated `KeyDown` events and `KeyUp` only on key release.
+    - However, when holding down a key for a while Windows really sends repeated `KeyDown` events and `KeyUp` only on key release.
     - This discrepancy often messes with games. The `KeyUp` events tend to interrupt held-down keys, resulting in choppy game controls.
     - Also, typing sites like Monkeytype may have a cheat detection that reacts to this consistently rapid KeyDown-KeyUp sending.
-    - If your game doesn't work well with EPKL, I recommend using the `suspendingApps` setting to auto-suspend EPKL when the game's active.
-    - If you need your layout for the game, you can use a `MSKLC` install or whatever works for you. See the [Other\MSKLC][PklKLC] folder.
-    - Note that EPKL has a Work-In-Progress send mode for ScanCode and VirtualKey code mapped keys that should fix this problem! Stay tuned.
+    - If your game doesn't work well with EPKL, you can use the `suspendingApps` setting to auto-suspend EPKL when the game's active.
+    - If you need your layout for the game, you can use a VK/SC-mapped layout, a `MSKLC` install or whatever works for you. See the [Other\MSKLC][PklKLC] folder.
+    - Note that EPKL v1.4+ has a send mode for ScanCode and VirtualKey mapped keys that should fix this problem!
 * Another effect of key repeats may be key buffer overflow, especially when using Extend combos.
     - This is most notable when holding down Extend arrow combos such as `Ext+S+N` (select previous letter) for a while.
     - Again, to effect this EPKL has to send more key presses including modifier up/down and key up/down.

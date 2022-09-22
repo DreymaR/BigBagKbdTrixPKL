@@ -132,7 +132,7 @@ DONE:
 * Greek layout w/ tonos/dialytika in the acute/umlaut dead keys.
 * In the OS deadkey table ([DeadKeysFromLocID] in PKL_Tables.ini) a -2 entry means no dead keys and RAlt may be used as AltGr (CtrlAltlIsAltGr).
 * Special keys such as Back/Del/Esc/F# used to release a dead key's base char and also do their normal action. Now they just cancel the dead key(s).
-* A single layout entry of `VK` or `VKey` will set that key to itself as a VirtualKey (if it was set in the base layout and you don't want it remapped).
+* A single layout entry of `VK`/`VKey` or `SC`/`System` will set that key to itself, say, if it was set in the base layout and you don't want it remapped.
 <br>
 
 **OTHER/NOTES**
@@ -428,7 +428,7 @@ DONE:
 	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
-* EPKL v1.3.2: Dual-function CoDeKey (Compose+Dead key).
+* EPKL v1.4.0: ScanCode key mapping. Better Send for key mapping. Dual-function CoDeKey (Compose+Dead key).
 	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
 	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 	- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
@@ -436,9 +436,10 @@ DONE:
 		- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
 	- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
 	- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
-	- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
-		- ScanCodes are now added to the VirtualKey codes (VK21–24,2D–2E) so their normal versions (SC 149,151,14F,147,152,153) are sent.
+	- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del and arrows had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
+		- ScanCodes are now added to the VirtualKey codes (VK21–28,2D–2E) so their normal versions (SC 149,151,14F,147,152,153 etc) are sent.
 	- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
+	- Fixed: An end-of-line comment in the baseLayout entriy would cause the layout to fail.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
 	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
@@ -521,7 +522,7 @@ INFO: Some documentation notes
         - PKL: Don't use end-of-line comments in the .ini files. OK in layout.ini because of tab parsing.
         - EPKL: End-of-line comments are now safe.
     - In layout.ini, for old PKL:
-        - Always use single tabs as separators in layout.ini, also between a VK code and 'VirtualKey'.
+        - Always use single tabs as separators in layout.ini, also between a VK code and the word 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A, if using 'extend_key = CapsLock'.
         - The Extend key should be mapped or it won't work, e.g., 'CapsLock = CAPITAL	VirtualKey'.
         - EPKL changes all of the above: Any whitespace delimits, and Extend is mapped as 'Extend Modifier'.

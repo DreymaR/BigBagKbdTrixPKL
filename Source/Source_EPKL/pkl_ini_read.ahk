@@ -25,9 +25,8 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 {
 	if ( not key )
 		Return
-;	layStck := ( iniFile == "LayStk" ) ? true : false
-	if ( layStck := ( iniFile == "LayStk" ) ? true : false ) { 			; The LayStack is a special case,
-		iniFile := getPklInfo( "LayStack" ) 							; going through all 4 layout files.
+	if ( layStck := ( iniFile == "LayStk" ) ? true : false ) {  		; The LayStack is a special case,
+		iniFile := getPklInfo( "LayStack" ) 							; going through all 4+ layout stack files.
 		iniDirs := getPklInfo( "DirStack" )
 	} else if ( iniFile == "PklSet" ) {
 		iniFile := getPklInfo( "SetStack" )
@@ -36,7 +35,8 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 		iniFile := [ iniFile ]
 	For ix, theFile in iniFile { 										; Read from iniFile. Failing that, altFile.
 		SplitPath, theFile, , hereDir
-		hereDir := ( layStck ) ? iniDirs[ix] : hereDir 					; LayStack files may  use own home dirs
+;		hereDir := ( theFile == "LayIni" ) ? getPklInfo( "Dir_LayIni" ) : 	; eD WIP: This somehow made layouts lose their tray icons?!
+		hereDir := ( layStck ) ? iniDirs[ix] : hereDir  				; LayStack files may use own home dirs
 		if ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
 		if        ( key == "__List" ) { 								; Use key = __List for a section list
