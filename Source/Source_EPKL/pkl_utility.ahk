@@ -153,7 +153,7 @@ _pklJanitorLocaleVK() { 										; Renew VK codes: OEM key VKs vary by locale f
 	newLID  := getWinLocaleID()
 	if ( oldLID != newLid ) {
 ;		( 1 ) ? pklDebug( "System layout LID change: " . oldLID . "->" . newLID, 1 )  ; eD DEBUG
-		setPklInfo( "oemVKdic", detectCurrentWinLayVKs() )
+		detectCurrentWinLayVKs()
 		; eD WIP: Renew the OEM VK mappings here! Rethink strategy? Need to map based on the values you want, based on KLM/SC codes.
 	}
 	setPklInfo( "previousLocaleID", newLID )
@@ -230,22 +230,21 @@ getWinInfo() { 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-detectCurrentWinLayVKs() {  								; Find the VK values for the current Win layout's OEM keys 	; eD WIP: Map from SC, so we can keep track of how OEM keys should be mapped.
-	scMap   := getPklInfo( "scMapLay" ) 					; The pdic used to remap SC for the layout
-;		( 1 ) ? pklDebug( "`nSC remap for MN: " . scMap["SC00C"] . "`nSC remap for GR: " . scMap["SC029"], 1 )  ; eD DEBUG
-	qSCdic  := getPklInfo( "QWSCdic" ) 						; SC QW_## 							; NOTE: Must keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
-	qVKdic  := getPklInfo( "QWVKdic" ) 						; VK QW_## = vc_##
-	oemDic  := {}  ;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; "SC0" . SCs[ix]
-	For ix, key in  [ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] { 	; eD WIP: Run through the whole SCdic instead?
-		key := "_" . key
+detectCurrentWinLayVKs() {  								; Find the VK values for the current Win layout's (OEM) keys, in case there's a weird ISO remapping or something
+;	scMap   := getPklInfo( "scMapLay" ) 					; The pdic used to remap SC for the active layout
+	qSCdic  := getPklInfo( "QWSCdic" )  					; SC from QW_##  	; eD WIP: Keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
+	qVKdic  := getPklInfo( "QWVKdic" )  					; VK from QW_## = vc_## (KLM_QW-2-Win_VK)
+	oemDic  := {}  ;[ "029","00c","00d","01a","01b","02b","027","028","056","033","034","035" ] 	; "SC" . SCs[ix]
+	For ix, key in  [ "_GR","_MN","_PL","_LB","_RB","_BS","_SC","_QU","_LG","_CM","_PD","_SL" ] { 	; eD WIP: Run through the whole SCdic instead?
 		qsc := qSCdic[ key ]
-;	For key, qsc in qSCdic { 								; eD WIP: Run through the whole SCdic
+;	For key, qsc in qSCdic { 								; Run through all mappable ScanCodes 	; eD WIP: This goes wrong! Why?
 		qvk := qVKdic[ key ] 								; Map from a KLM (ANSI) VK## code
-		ovk := Format( "VK{:X}", GetKeyVK( qsc ) ) 			; VK## format
+		ovk := Format( "VK{:02X}", GetKeyVK( qsc ) ) 		; VK## format
 		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
 ;	( key == "_GR" ) ? pklDebug( "OEM: " . key . "`nSC: " . qSCdic[key] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
 	} 	; end for key
-	Return oemDic
+	setPklInfo( "oemVKdic", oemDic )
+	Return oemDic 											; eD WIP: Map from SC instead, so we can keep track of how OEM keys should be mapped? Also, VK aren't as robust.
 }
 
 getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK name
@@ -277,7 +276,7 @@ atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper 
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }
 
-pklSplash( title, text, dur = 4.0 ) { 		; Default display duration is in seconds
+pklSplash( title, text, dur = 4.0 ) { 		; Default display duration in seconds
 	SetTimer, KillSplash, Off 				; TrayTip and SplashText are hard to kill? SplashText is also deprecated.
 	Gui, pklSp:New, ToolWindow -SysMenu, %title% 	; GUI window w/ title, no buttons
 	Gui, pklSp:Margin, 24 					; Horizontal margin to allow the whole window title to be shown
@@ -289,6 +288,15 @@ pklSplash( title, text, dur = 4.0 ) { 		; Default display duration is in seconds
 
 KillSplash:
 	Gui, pklSp: Destroy 					;TrayTip 	;SplashTextOff
+Return
+
+pklTooltip( text, dur = 4.0 ) { 			; Default display duration in seconds
+	ToolTip % text
+	SetTimer, KillToolTip, % -1000 * dur
+}
+
+KillToolTip:
+	ToolTip
 Return
 
 getPriority(procName="") { 					; Utility function to get process priority, by SKAN from the AHK forums
@@ -369,6 +377,22 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
 }
 
+toUnicodeEx( VK, SC ) { 																; Call the OS layout to translate VK/SC to a character, if possible
+	;;  https://www.autohotkey.com/boards/viewtopic.php?t=1040
+	TID := DllCall( "GetWindowThreadProcessId", "Int", WinExist("A"), "Int", 0 ) 		; TID: Window  Thread Process ID
+	ID0 := DllCall( "GetCurrentThreadId", "UInt", 0 )   								; TI0: Current Thread Process ID
+	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 1 ) 					; Attach TID input to the TI0 process. Needed to detect AltGr etc.
+	HKL := DllCall( "GetKeyboardLayout", "Int", TID )   								; Refresh GetKeyboardLayout
+	VarSetCapacity( KeyState, 256 )
+	DllCall( "GetKeyboardState", "uint", &KeyState ) 									; Get Keyboard State -> &KeyState (256 bytes) 	; eD WIP: This throws off OS DKs?
+;	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 0 )
+	VarSetCapacity( theChar, 32 )   													; The result may be a buffer with several chars (if so, these are not good here)
+	DK  := DllCall( "ToUnicodeEx", "UInt", VK, "UInt", SC, "UInt", &KeyState, "Str", theChar, "UInt", 64, "UInt", 1, "UInt", HKL) 	; Note: It also gives Ctrl chars (0x00–0x1F)
+	Map := DllCall( "MapVirtualKey", "uint", VK, "uint", 2 ) 							; MapVirtualKey translates/maps VK into SC (0) or char (2), or SC to VK (1/3)
+	if ( DK == 1 ) && ( Map > 0 ) && ( Ord(theChar) > 0x1F ) 							; Is it the same as AHK's GetKeyName() fn, for this purpose? Used here to detect DKs.
+		Return theChar  																; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
+} 	; eD WIP: Need to weed out Ctrl chars! It makes output for Ctrl+S for instance.
+
 debugShowCurrentWinLayKeys() {  							; eD DEBUG: Display the VK values for the current Win layout's OEM keys
 	lin := "`n————" . "————" . "————"   					; Just a line of dashes for formatting
 	str := "For layout LID: " . getWinLocaleID() . lin  	; The active Windows layout's Locale ID
@@ -384,7 +408,7 @@ debugShowCurrentWinLayKeys() {  							; eD DEBUG: Display the VK values for the
 	str .= "`nKLM`tqVK`tVK" . lin
 	oemDic  := detectCurrentWinLayVKs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_## 	; eD WIP: Try w/ the whole SC dic!
 	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
-		klm := SubStr( VKQWdic[ oem ], 2) 					;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
+		klm := VKQWdic[ oem ]   							;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
 		str .= Format( "`n{}`t{}`t{}", klm, SubStr(oem,3), SubStr(ovk,3) ) 	; GetKeyName(sc), GetKeyVK(sc), SubStr(sc,3) )
 		str .= InStr( "_GR|_LG", VKQWdic[oem] ) ? lin : "" 	; "VKC0|VKE2" "VKBD|VKDB|VKE2"
 	}

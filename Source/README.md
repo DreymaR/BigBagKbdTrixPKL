@@ -462,6 +462,12 @@ DONE:
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 	- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
+	- Vanilla Colemak-eD added to the MSKLC folder; there was only CAWS before. The Vanilla layout is ISO/ANSI agnostic.
+	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+	- Instead of a tricksy {Shift DownTemp} one-shot Shift on CoDeKey etc, a new syntax for, e.g., {Shift OSM} now activates the Sticky Mod routine.
+		- It works with any prefix-entry α or β (AHK code) entries.
+		- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as their Send methods don't cancel {Shift DownTemp}.
 
 	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -475,8 +481,12 @@ DONE:
 		- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
 	- Made a `CoDeKeys` setting in the Settings file for which Compose keys are CDKs, instead of the old `if co0 defined` nonsense.
 
-	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
-		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+	- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Should be okay for typing games and tests now.
+		- This is a pretty huge development, really! It's a step in the direction of gaming-friendly EPKL.
+
+	- Compose can now work with VK/SC mapped keys. This allows you to compose accented letters etc with a VK/SC/System type layout.
+		- The GetKeyName(sc) function doesn't work with shifted output etc, so I used a DLL call to ToUnicodeEx.
+		- This worked, but had a side effect: OS Dead Keys now output, e.g., ¨¨ (whereas before they did nothing), due to a GetKeyboardState call(?)
 
 <br>
 

@@ -54,7 +54,7 @@ Getting EPKL up and running
     - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
     - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist – they'll likely be eD variants.
     - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym…
-* Helpful help images are shown by default. To show them only when modifiers are pressed, change `img_HideStates` to `0` on the `Settings` tab. You can choose whether to show images at all, or which ones to show; see the [EPKL_Settings][PklIni] file for more explanations.
+* Helpful help images are shown by default. To show them only when modifiers are pressed, change `img_HideStates` to `0` on the `Settings` tab. You can choose whether to show images at all, or which ones to show; see the [EPKL_Settings][SetDef] file for more explanations.
 * This image shows the EPKL tray menu. Right-click the `Co` icon in the lower right corner of your screen, if necessary via the 'Show hidden icons' caret.
 <br>
 
@@ -151,6 +151,35 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 
 ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
 
+<br><br>
+
+"I don't want your layouts but I still want EPKL"
+-------------------------------------------------
+You may want to use some of EPKL's functionality without opting for one of the available layouts. That's possible too.
+- You may of course make your own layout or layout variant. There's a guide to that in the [Layouts folder][PklLay] README.
+- But you may also run EPKL with your installed OS layout, to just get Extend and/or Compose. Or to map just a few keys.
+- To do that, use the System layout. It's designed to pass through the OS layout so whatever you have there will work with EPKL.
+- For now, any dead keys on an OS layout will unfortunately not work as they should with the EPKL System layout. You could eD map them...?
+- If you want an ergo mod for the Extend layer, you need to select/make the right mod combo.
+<br><br>
+
+EPKL & Games
+------------
+There are some pitfalls to using a keyboard remapping program like EPKL for gaming, which uses the keyboard very differently.
+
+In gaming a key is often held down for a longish time. This may lead to some problems:
+* The underlying OS layout sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
+* When sending characters, AutoHotkey sends a KeyDown followed immediately by a KeyUp. So inbetween each sent KeyDown there will be an extra KeyUp.
+    - The result of this is often choppy game controls. Also, the MonkeyType typing test site has a cheat detection that interprets this behavior as suspect.
+    - The solution is to use a VK/SC or System mapped layout (EPKL v1.4+). These send only the KeyDown events from the OS with no KeyUp until you release the key.
+    - ShiftState maps like eD must still send input with KeyDown-KeyUp. If you use an eD-type layout, you can make EPKL sleep whenever your game is active.
+* Too many key presses in too short time makes normal AHK scripts miss key presses. EPKL uses a buffer queue to avoid this, but this buffer may eventually overflow.
+    - When you hold down a key for too long, EPKL may continue sending input events for a while after you let it go. EPKL may act strangely afterwards.
+    - To avoid this when using, say, Extend isn't so hard once you get used to it. But for many games it's still a problem. I'm working on a solution.
+* You can suspend EPKL at any time with its Suspend hotkey (default `Ctrl+Shift+3`). If you want your layout in-game, you may have to use a [MSKLC install][PklKLC].
+* If you want EPKL to suspend itself when your game or webpage is active, you can use the `suspendingApps` setting; see the [Settings file][SetDef].
+* You could try setting the Windows Key Repeat speed as low as possible, but I'm unsure whether it'll really help.
+* For more info, consult the Known Issues section below.
 <br><br>
 
 Layout Variants & Key Mappings
@@ -280,7 +309,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * In your Layouts_Override file, activate the layout(s) you want by editing and/or uncommenting (remove initial semicolon).
     - There are KbdType (@K) and other abbreviations, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
-* The [EPKL_Layouts][LayDef] .ini file(s) hold layout choices. The [EPKL_Settings][PklIni] file(s) hold general program settings.
+* The [EPKL_Layouts][LayDef] .ini file(s) hold layout choices. The [EPKL_Settings][SetDef] file(s) hold general program settings.
 * The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
 <br>
@@ -318,7 +347,7 @@ QWCLK   = BACK/Ext  0   @ex0 @ex1 *#. @ex6 @ex7 ; Mother-of-DeadKeys (MoDK) on t
 ```
 * These mappings merit explanation. Extend is a most marvelous beast, so don't be daunted now! ฅ(=ʘᆽʘ=)ฅ
 * The above Extend modifier mappings may be in any LayStack .ini file, such as [Layouts_Default][LayDef]
-* Holding designated modifiers, <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> by default (specified in the [Settings][PklIni]), chooses Extend layers.
+* Holding designated modifiers, <kbd>RShift</kbd> and/or <kbd>RAlt</kbd> by default (specified in the [Settings][SetDef]), chooses Extend layers.
     - So, e.g., holding the Ext1 mod (<kbd>RAlt</kbd>) then the <kbd>Extend</kbd> key activates the Extend2 layer (NumPad).
     - After selecting your Extend layer, you hold down only the <kbd>Ext</kbd> key (Caps by default) and start using Extend!
     - Again: To get the NumPad Extend layer (Ext2):
@@ -435,7 +464,7 @@ _Øystein "DreymaR" Bech-Aase_
 [KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
 [LayOvr]: ./EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
-[PklIni]: ./EPKL_Settings_Default.ini (EPKL Settings file)
+[SetDef]: ./EPKL_Settings_Default.ini (EPKL Settings file)
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
 [DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)

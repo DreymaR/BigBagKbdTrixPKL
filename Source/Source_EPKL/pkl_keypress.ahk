@@ -48,13 +48,18 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 				, "VK25", "VK26", "VK27", "VK28" ], vk_HK ) { 	; [049 ,051 ,04F ,047 ,04B ,048 ,04D ,050 ,052 ,053 ] are the NumPad SCs for the keys
 			SC  := GetKeySC(vk_HK) | 0x100  					; [149 ,151 ,14F ,147 ,14B ,148 ,14D ,150 ,152 ,153 ] are the normal SCs for the keys
 			vk_HK .= Format( "SC{:03X}", SC )   				; Send {vk##sc###} ensures that the normal key version is sent
-		} 	; end if capHK
+		} 	; end if capHK == VK
 		if InStr( "VK08SC00E", vk_HK ) { 						; Backspace was pressed, so...
 			lastKeys( "pop1" )  								; ...remove the last entry in the Composer LastKeys queue
 		} else {
-			key := GetKeyName( vk_HK )
-			if ( StrLen( key ) == 1 ) { 						; Normal letters/numbers/symbols are single-character, so...
-				lastKeys( "push", key ) 						; ...push them to the Compose queue
+			key := GetKeyName( vk_HK )  						; GetKeyName doesn't return shifted/AltGr/DK results, just the base unshifted key name.
+			if ( StrLen(key) == 1 ) && getPklInfo("composeVKs") { 	; Normal letters/numbers/symbols are single-character
+				zVK := GetKeyVK( vk_HK ) 						; eD WIP: This may not be robust when mapping vk##sc###
+				zSC := Format( "{:X}", SubStr( HKey, 3 ) )  	; This should be okay, as we don't have KeyUp events here? Just pure SC###.
+				chr := toUnicodeEx( zVK, zSC )  				; Get the actual char 	; eD WIP: Cannot yet get dead key output (the ShowKeyEventChar script could?!)
+;				pklTooltip( "VK: " zVK "`nSC: " zSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
+				if ( chr )  									; If the output from the OS layout is a printable single character...
+					lastKeys( "push", chr ) 					; ...push  to the Compose queue
 			}
 		}
 		Send {Blind}{%vk_HK% DownR}  							; Send the down press as DownR so other Send won't be affected, like AHK remaps.

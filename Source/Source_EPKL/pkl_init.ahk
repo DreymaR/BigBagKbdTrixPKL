@@ -75,8 +75,9 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
 	setPklInfo( "extendMod1", ( extMods[1] ) ? extMods[1] : "" )
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
-	_pklSetInf( "extendTaps" ) 											; --"--
-	_pklSetInf( "tapModTime" ) 											; Tap-or-Mod time
+	_pklSetInf( "extendTaps" )  										; --"--
+	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
+	setPklInfo( "composeVKs", bool(pklIniRead("composeVKs")) )  		; Whether to Compose using VK/SC mappings 	; eD WIP: It has a side effect on OS DKs
 	
 	;; ================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
@@ -264,7 +265,6 @@ initLayIni() {  									;   ######################### layout.ini  #############
 ;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
 ;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
 		mapVK   := detectCurrentWinLayVKs()  							; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
-		setPklInfo( "oemVKdic", mapVK )
 		initialized := true
 	}
 	
@@ -283,8 +283,9 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		pklIniKeyVal( row, key, entries, 0, 0 ) 		; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
 		if InStr( "<NoKey><Blank>shiftStates", key ) 					; This could be mapped, but usually it's from pklIniKeyVal()
 			Continue 													; The shiftStates entry is special, defining the layout's states
-		KLM := _mapKLM( key, "SC" ) 									; Co/QW-2-SC KLM remapping, if applicable
-		key := scMapLay[ key ] ? scMapLay[ key ] : key 					; If there is a SC remapping, apply it
+;		keyOrig := key  												; eD WIP: Can we make the System layout remappable, so you could apply ergomods etc to your OS layout?
+		KLM     := _mapKLM( key, "SC" ) 								; Co/QW-2-SC KLM remapping, if applicable
+		key     := scMapLay[ key ] ? scMapLay[ key ] : key 				; If there is a SC remapping, apply it
 		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
 			Continue
 		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
@@ -304,9 +305,9 @@ initLayIni() {  									;   ######################### layout.ini  #############
 			tapMod  := ""
 		}
 		keyVK := "VK" . Format( "{:X}", GetKeyVK( key ) ) 				; Find the right VK code for the key's SC, from the active layout.
-		vkStr := "i)^(vkey|-2|vk|virtualkey)$"  						; RegEx needle for VK entries, ignoring case. Allow -1 or not?
-		scStr := "i)^(skey|-3|sc|scancode|system)$"  					; RegEx needle for SC entries, ignoring case.
-		if RegExMatch( entr1, vkStr) {  								; If the first entry is a VKey synonym, VK map the key to itself
+		vkStr := "i)^(vkey|-2|vk|virtualkey)$"  						; RegEx needle for VK entries, ignoring case. Allow -2 or not?
+		scStr := "i)^(skey|-3|sc|scancode|system)$"  					; RegEx needle for SC entries  --"--
+		if RegExMatch( entr1, vkStr) {  								; VK map the key to itself if the first entry is a VKey synonym
 			numEntr   := 2
 			entr1     := keyVK  										; The right VK code for the key's SC, from the active layout.
 			entr2     := "VKey" 										; Note: This is the KLM vc=QWERTY mapping of that SC###.

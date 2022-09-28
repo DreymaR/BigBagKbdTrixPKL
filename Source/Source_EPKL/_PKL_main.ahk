@@ -60,6 +60,9 @@
 ;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 ;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 ;		- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
+;		- Vanilla Colemak-eD added to the MSKLC folder; there was only CAWS before. The Vanilla layout is ISO/ANSI agnostic.
+;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
 
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 ;			- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
@@ -72,9 +75,9 @@
 ;		- Added a separate dead key for the Shift-Compose mapping, `@co1`. Using the CoDeKey © key, we can then have both @co0 and @co1.
 ;			- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
 ;		- Made a `CoDeKeys` setting in the Settings file for which Compose keys are CDKs, instead of the old `if co0 defined` nonsense.
-
-;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
-;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+;		- Instead of a tricksy {Shift DownTemp} one-shot Shift on CoDeKey etc, a new syntax for, e.g., {Shift OSM} now activates the Sticky Mod routine.
+;			- It works with any prefix-entry α or β (AHK code) entries.
+;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as their Send methods don't cancel {Shift DownTemp}.
 
 ;		- A new `ScanCode`/`SKey` key mapping type, sending a key's scan code instead of the more complex VK mappings. This should be more robust.
 ;			- KLM names such as `QW_A` or `qwBSP` are allowed for SC mapping, in addition to the traditional `SC###`.
@@ -82,36 +85,38 @@
 ;			- The `System` passthrough layout now works as intended, using `System` key mappings throughout.
 ;			- You could even send vk## or vk##sc### entries using `SKey`-type mappings, as these mappings are compatible with all AHK key Send syntax.
 ;			- Neither VK nor SC mapped keys allow composing: EPKL can't know what's actually sent from these keys. Extend and dead keys work just fine.
+;			- WARNING: SC-mapping may be less robust than VK-mapping vs AZERTY et al. For these, the VK-remap with EPKL's VK detection is better.
 
-;		- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Should be okay for gaming and Monkeytype then!
-;			- This is a pretty huge development, really!
+;		- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Should be okay for typing games and tests now.
+;			- This is a pretty huge development, really! It's a step in the direction of gaming-friendly EPKL.
 
-;		- Instead of the tricksy {Shift DownTemp} trick for the CoDeKey, a new syntax for, e.g., {Shift OSM} activates the Sticky Mod routine!
-;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as these don't cancel {Shift DownTemp}.
-;			- It works with any prefix-entry α or β (AHK code) entries.
+;		- Compose can now work with VK/SC mapped keys. This allows you to compose accented letters etc with a VK/SC/System type layout.
+;			- The GetKeyName(sc) function doesn't work with shifted output etc, so I used a DLL call to ToUnicodeEx.
+;			- This worked, but had a side effect: OS Dead Keys now output, e.g., ¨¨ (whereas before they did nothing), due to a GetKeyboardState call(?)
 
-;		- Added vanilla Colemak-eD to the MSKLC folder
+;		- TOFIX: SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
 
-;		- WIP: Add a section to the README with "I don't want Colemak", about the System layout? For people who just want Extend++ on top of their OS layout.
-
-;		- WARNING: SC-mapping may be less robust than VK-mapping vs AZERTY et al! For these, the VK-remap with detection is better.
-
-;		- WIP: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
-;			- No, doesn't work; the SC don't get remapped at all. Ah well.
-;			- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
-
-;		- WIP: Make Compose work with VK/SC mapping, using the GetKeyName(sc) function.
-;			- It's working for lower-case. But E' composes to é etc. Same with <u -> ų instead of <u caret>. Find a solution! Is there a DLL call or something?
-
-;		- TOFIX: SC/VK-mapping turns OS dead keys inactive, outputting only the base letter? Mainly a problem vs AltGr? Some DKs work, others not?
+;		- WIP: A quick stab at SGCaps? Call it the SwiSh key, for Swiss Shift. (If I ever make yet another Shift key, it'll be Flick.)
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
 
-;		- WIP: Tidy up Tarmak files?
+;		- TOFIX: The detectCurrentWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
+;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
+;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
+;			- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
+;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
+
+;		- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins DKs.
+
+;		- WIP: Tidy up the Tarmak layout files, using BaseLayout/remaps? The remaps exist.
 
 ;		- WIP: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
+
+;		- WIP: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
+;			- No, doesn't work; the SC don't get remapped at all. Ah well.
+;			- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
 
 ;		- TOFIX: In the Layout Selector GUI, choosing first `VK` then `ANS/ISO-Orth` lands you with a faulty selection (`Colemak\Cmk-VK-_` etc).
 ;			- If choosing it by arrows then proceeding to, say, `ANS`, the error remains. The boxes for Variant and Mods will be blank.
@@ -130,6 +135,23 @@
 ;		- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
 
 ;		- TOFIX: Tarmak layouts from the shortcut lines don't work. Check their BaseLayout settings?
+
+;		- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
+;			- Kindly sponsored by Rasta at the Colemak Discord!
+;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
+;			- May have to clean up the state calculation in _keyPressed()
+;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
+;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
+;			- Make a lock variant of the modifier
+
+;		- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
+;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
+
+;		- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+;			- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;			- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
+;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
 ;		- WIP: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 ;			- I think the bulgarian =+ position should house Ѝ ѝ
@@ -184,23 +206,6 @@
 ;				- This would make sense, in letting a user set individual settings in their working dir and getting images there too.
 ;			- By default, the working dir can be Data which is the right place for it in the PortableApps standard (for backup).
 
-;		- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-;			- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
-;			- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
-;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
-;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
-
-;		- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
-;			- Kindly sponsored by Rasta at the Colemak Discord!
-;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
-;			- May have to clean up the state calculation in _keyPressed()
-;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
-;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;			- Make a lock variant of the modifier
-
-;		- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
-;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
-
 ;		- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
 ;			- This would allow the use of all @ codes in all LayStack files
 
@@ -210,11 +215,6 @@
 ;			- Or... a cheeky Join button that uses RegExReplace to merge the topmost two GUI override entries?! Too risky and error-prone for newbs.
 
 ;		- WIP: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
-;		- TOFIX: The detectCurrentWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?
-;		- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
-;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-;			- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
-;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
 
 ;		- TODO: Get started on the Arabic phonetic layout!
 
@@ -418,15 +418,15 @@
 
 SendMode Event
 SetKeyDelay -1  											; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
-SetBatchLines, -1   										;
-Process, Priority, , R  									; Real-time process priority (H for High)
+SetBatchLines, -1   										; This script never sleeps (default is every 10 ms)
+Process, Priority, , R  									; Real-time process priority (default is N for Normal; H for High in old PKL; R for Realtime is max)
 SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Can we have a separate user working dir, so users have their settings elsewhere?
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
 setPklInfo( "pklVers", "1.4.0β" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
-setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" ) 		; URL used to be http://pkl.sourceforge.net/
+setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
 setPklInfo( "pklHdrB", "`r`n"
 		. ";;  for Portable Keyboard Layout by Máté Farkas [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
