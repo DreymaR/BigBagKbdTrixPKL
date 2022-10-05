@@ -280,7 +280,7 @@ pklSplash( title, text, dur = 4.0 ) { 		; Default display duration in seconds
 	SetTimer, KillSplash, Off 				; TrayTip and SplashText are hard to kill? SplashText is also deprecated.
 	Gui, pklSp:New, ToolWindow -SysMenu, %title% 	; GUI window w/ title, no buttons
 	Gui, pklSp:Margin, 24 					; Horizontal margin to allow the whole window title to be shown
-	Gui, PklSp:Font, s12 w500 				; Font size and weight (400 normal, 700 bold)
+	Gui, pklSp:Font, s12 w500 				; Font size and weight (400 normal, 700 bold)
 	Gui, pklSp:Add, Text,, %text%
 	Gui, pklSp:Show 		;	TrayTip %title%, `n%text%, dur, 0x11 	;SplashTextOn, 300, 100, %title%, `n%text%
 	SetTimer, KillSplash, % -1000 * dur
@@ -393,7 +393,7 @@ toUnicodeEx( VK, SC ) { 																; Call the OS layout to translate VK/SC 
 		Return theChar  																; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
 } 	; eD WIP: Need to weed out Ctrl chars! It makes output for Ctrl+S for instance.
 
-debugShowCurrentWinLayKeys() {  							; eD DEBUG: Display the VK values for the current Win layout's OEM keys
+pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
 	lin := "`n————" . "————" . "————"   					; Just a line of dashes for formatting
 	str := "For layout LID: " . getWinLocaleID() . lin  	; The active Windows layout's Locale ID
 ;	qwSCdic := getPklInfo( "QWSCdic" )  					; KLM-2-SC dic
@@ -402,7 +402,7 @@ debugShowCurrentWinLayKeys() {  							; eD DEBUG: Display the VK values for the
 ;		str .= Format( "`n{}`t{}`t{}", klm, SubStr(sc,3), GetKeyName(sc) )
 ;	}
 	
-	mapFile := getPklInfo( "RemapFile" ) 					; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
+	mapFile := getPklInfo( "RemapsFile" )   				; Note: OEM_8 (VKDF) is on UK QW_GR, but not ANS nor many other.
 	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
 ;	SCQWdic := ReadKeyLayMapPDic( "SC", "QW", mapFile ) 	; KLM SC-2-QW code translation dictionary
 	str .= "`nKLM`tqVK`tVK" . lin

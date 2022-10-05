@@ -72,8 +72,8 @@ getPklInfo( key, value = "", set = 0 )
 pkl_locale_load( lang )
 {
 	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too 	; eD WIP: Does that really work, or matter?
-	if ( not initialized )
-	{															; Read/set default locale string list
+	
+	if ( not initialized ) {    								; Read/set default locale string list
 		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] { 	; Read defaults from the EPKL_Tables file
 			For ix, row in pklIniSect( getPklInfo( "File_PklDic" ), sectName ) { 	; Read default locale strings (key/value)
 				pklIniKeyVal( row, key, val, 1 ) 				; Extraction with \n escape replacement
@@ -162,15 +162,14 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 ;
 
 init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys
-	static initialized := false
+	static initialized  := false
 	
-	mapFile := pklIniRead( "cmposrFile", , "LayStk" )
-	mapStck := getPklInfo( "LayStack" ).Clone()  				; Use a clone, or we'll edit the actual LayStack array
-	mapStck.InsertAt( 1, mapFile )
-	if ( not initialized ) { 									; First-time initialization
+	if ( not initialized ) {
+		cmpFile := getPklInfo( "CmposrFile" )
+		cmpStck := getPklInfo( "CmposrStck" )
 		CDKs    := pklIniCSVs( "CoDeKeys"     ) 				; An array of which named Compose keys are CoDeKeys – Compose+DeadKeys.
 		setLayInfo( "CoDeKeys"      , CDKs    ) 				; 
-		lengths := pklIniCSVs( "lengths", "4,3,2,1", mapFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
+		lengths := pklIniCSVs( "lengths", "4,3,2,1", cmpFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
 		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
 		keyArr  := []
 		Loop % Max( lengths* ) {
@@ -179,13 +178,14 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		setKeyInfo( "NullKeys", keyArr )
 		setKeyInfo( "LastKeys", keyArr.Clone() ) 				; Used by the Compose/Completion key, via pkl_SendThis()
 		initialized := true
-	} 	; end if init
+	}
+	
 	if compKeys.IsEmpty()
 		Return
 	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
 	cmpKeyTabs  := {} 											; Array of table arrays for each ©-key
 	For ix, cmpKey in compKeys { 								; Loop through all detected ©-keys in the layout
-		tables  := pklIniCSVs( cmpKey, , mapStck, "compose-tables" )
+		tables  := pklIniCSVs( cmpKey, , cmpStck, "compose-tables" )
 		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
 			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
@@ -199,9 +199,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 				usedTables[ sct ] := sendBS 						; compTables[ section ] contains the sendBS info for that table section
 			}
 			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
-				keyArr%len% := {} 									; These reside in their own arrays, to reduce lookup time etc.
+				keyArr%len% := {}   								; These reside in their own arrays, to reduce lookup time etc.
 			} 	; end for lengths
-			For ix, mapFile in mapStck { 							; eD WIP: Read the Sect from the mapFile, overwrite and add to it from the LayStack.
+			For ix, mapFile in cmpStck { 							; Read from the LayStack+1
 				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 					if ( row == "" )
 						Continue

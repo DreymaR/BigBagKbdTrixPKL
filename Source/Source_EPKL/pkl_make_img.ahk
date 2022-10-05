@@ -14,7 +14,7 @@
 makeHelpImages() {
 	HIG         := {} 												; This parameter object is passed to subfunctions
 	HIG.Title   :=  "EPKL Help Image Generator"
-	remapFile   := getPklInfo( "RemapFile" ) 						; _eD_Remap.ini
+	remapFile   := getPklInfo( "RemapsFile" )   					; _eD_Remap.ini
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 		; PDic from the Co codes of the SVG template to SC
 	layDir      := getPklInfo( "Dir_LayIni" )
 	dksDir      := "\DeadkeyImg"

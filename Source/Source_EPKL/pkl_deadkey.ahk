@@ -6,14 +6,14 @@ DeadKeyValue( dkName, base )								; NOTE: 'dk' was just a number, but it's a n
 {															; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
-		dkFile  := getLayInfo( "dkFile" )
+		dkStck  := getPklInfo( "DkListStck" )
 		chr := Chr( base )
 		upp := ( ( 64 < base ) && ( base < 91 ) ) ? "+" : "" 	; Mark upper case with a tag, as IniRead() lacks base letter case distinction
 		cha := convertToANSI( chr ) 						; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
-		val :=                 pklIniRead( base                   ,, dkFile, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
-		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkFile, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
-		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
-		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkFile, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
+		val :=                 pklIniRead( base                   ,, dkStck, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
+		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkStck, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
+		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
+		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
 		val := ( val == "--" ) ? -1 : val 					; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		if val is integer
