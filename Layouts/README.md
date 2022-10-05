@@ -22,6 +22,20 @@ This is where EPKL keeps its layout files.
 	- This file hierarchy is known as the `LayStack`. There's a mini-stack for general settings too. See the [main EPKL Readme][EPKLgh].
 <br><br>
 
+Available layouts
+-----------------
+I don't try to provide all possible layouts with EPKL, obviously. The ones you will find here are in these categories:
+* Useful and recommended, such as Colemak(!)
+* Of historical interest, such as Dvorak or QWERTY
+* Interesting to me and of some promise (Boo, Canary, ISRT, MTGAP, Semimak etc)
+* Just for fun! (Foalmak, QUARTZ)
+<br>
+
+If you want me to add a layout of your choice, the answer may be no. Even if you made the files for it. Especially if that layout is Workman, Norman, Minimak or another one of those layouts I feel are poor and oversold choices (and the AltKeyboardLayout community largely agree with me). Sorry, but that's how it goes.<br>
+
+But you're free to ask! Who knows, maybe you pique my interest with a new and promising development in layout design.
+<br><br>
+
 Key mappings
 ------------
 Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.

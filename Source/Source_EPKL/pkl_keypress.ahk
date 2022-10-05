@@ -12,8 +12,8 @@ processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Re
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
 	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
-	if ( ++keyTimerCounter > 31 ) { 							; Resets the timer count on overflow. This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
-		keyTimerCounter = 0
+	if ( ++keyTimerCounter > 20 ) { 							; Resets the timer count on overflow. This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
+		keyTimerCounter = 0 									; eD WIP: What's the optimal size for the buffer? No idea, really. And we must address the buffer overflow issues...!
 	}
 	SetTimer, processKeyPress%keyTimerCounter%, -1   			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
 }
@@ -49,20 +49,14 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 			SC  := GetKeySC(vk_HK) | 0x100  					; [149 ,151 ,14F ,147 ,14B ,148 ,14D ,150 ,152 ,153 ] are the normal SCs for the keys
 			vk_HK .= Format( "SC{:03X}", SC )   				; Send {vk##sc###} ensures that the normal key version is sent
 		} 	; end if capHK == VK
-		if InStr( "VK08SC00E", vk_HK ) { 						; Backspace was pressed, so...
+		if        InStr( "VK08SC00E", vk_HK ) { 				; Backspace was pressed, so...
 			lastKeys( "pop1" )  								; ...remove the last entry in the Composer LastKeys queue
+		} else if InStr( "VK0DSC01C", vk_HK ) { 				; Enter     was pressed, so...
+			lastKeys( "null" )  								; ...delete the Composer LastKeys queue 	; eD WIP: Any others?
 		} else {
-			key := GetKeyName( vk_HK )  						; GetKeyName doesn't return shifted/AltGr/DK results, just the base unshifted key name.
-			if ( StrLen(key) == 1 ) && getPklInfo("composeVKs") { 	; Normal letters/numbers/symbols are single-character
-				zVK := GetKeyVK( vk_HK ) 						; eD WIP: This may not be robust when mapping vk##sc###
-				zSC := Format( "{:X}", SubStr( HKey, 3 ) )  	; This should be okay, as we don't have KeyUp events here? Just pure SC###.
-				chr := toUnicodeEx( zVK, zSC )  				; Get the actual char 	; eD WIP: Cannot yet get dead key output (the ShowKeyEventChar script could?!)
-;				pklTooltip( "VK: " zVK "`nSC: " zSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
-				if ( chr )  									; If the output from the OS layout is a printable single character...
-					lastKeys( "push", chr ) 					; ...push  to the Compose queue
-			}
+			_composeVK( HKey, vk_HK )   						; If the output is a single, printable character, add it to the Compose queue
 		}
-		Send {Blind}{%vk_HK% DownR}  							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
+		Send {Blind}{%vk_HK% DownR} 							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
 		_osmClearAll()  										; Clear any sticky mods after sending
 		Return
 	}	; end if VK/SC
@@ -105,7 +99,8 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 		Return
 	} else if ( state == "ent1" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: Tried "VKey" here but then Ctrl+<key> fails?!
 		pkl_SendThis( "{" . Pri . "}", modif ) 					; (Without this, Ctrl+Shift+# keys are broken. Why?)
-	} else if ( Pri == -2 ) { 									; This state is sent as a VKey
+	} else if ( Pri == -2 ) {   								; This state is sent as a VKey
+		_composeVK( HKey, Ent )     							; If the output is a single, printable character, add it to the Compose queue
 		Send % "{Blind}{" . Ent . "}"
 	} else if ( ( Pri + 0 ) > 0 ) { 							; Normal numeric Unicode entry
 		pkl_Send( Pri, modif )
@@ -166,6 +161,21 @@ extendKeyPress( HKey ) { 										; Process an Extend modified key press
 setExtendInfo( xLvl = 1 ) { 									; Update PKL info about the current Extend layer
 	setPklInfo( "extLvl", xLvl )
 	setLayInfo( "extendImg", getLayInfo( "extImg" . xLvl ) )
+}
+
+_composeVK( HKey, vk_HK ) { 									; If the output is a single, printable character, add it to the Compose queue
+	if not getPklInfo( "composeVKs" )   						; For now, this functionality is optional (since there's trouble with it vs OS DKs)
+		Return
+	key := GetKeyName( vk_HK )  								; GetKeyName doesn't return shifted/AltGr/DK results, just the base unshifted key name.
+	key := ( key == "Space" ) ? " " : key   					; Include spaces
+	if ( StrLen(key) == 1 ) {   								; Normal letters/numbers/symbols are single-character
+		zVK := GetKeyVK( vk_HK ) 								; eD WIP: This may not be robust when mapping vk##sc###?
+		zSC := Format( "{:X}", SubStr( HKey, 3 ) )  			; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
+		chr := toUnicodeEx( zVK, zSC )  						; Get the actual char 	; eD WIP: Cannot yet get dead key output (the ShowKeyEventChar script could?!)
+;		pklTooltip( "VK: " zVK "`nSC: " zSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
+		if ( chr )  											; If the output from the OS layout is a printable single character...
+			lastKeys( "push", chr ) 							; ...push it to the Compose queue
+	}
 }
 
 ;; ================================================================================================
@@ -294,13 +304,13 @@ ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Use
 }	; end fn
 
 _setExtendState( set = 0 ) { 							; Called from setModState. This function handles Extend key tap or hold.
-	static initialized  := false
 	static extendKey    := -1
 	static extMod1      := ""
 	static extMod2      := ""
 	static extHeld      := 0
+	static initialized  := false
 	
-	if ( not initialized ) { 								; Initialize the extendKey static variables
+	if ( not initialized ) {
 		extendKey       := getLayInfo( "ExtendKey" )
 		extMod1         := getPklInfo( "extendMod1" )
 		extMod2         := getPklInfo( "extendMod2" )

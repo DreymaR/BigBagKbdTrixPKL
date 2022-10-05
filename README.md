@@ -41,7 +41,7 @@ Getting EPKL up and running
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key…
     - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon…
-    - … but please read the ["Can I map…" section](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) below first to know your options!
+    - … but please read the ["Can I map…"](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) section below first to know your options!
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 * To make EPKL start up automatically with Windows, [add a shortcut to it in the Startup folder][StrtUp]:
     - Create a shortcut to EPKL.exe (drag it while holding down <kbd>Alt</kbd>, or right-click and choose).
@@ -115,7 +115,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 #### What are the options?
 - You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the [Big Bag][orgBBT].
     - All combos aren't pre-made as that'd be too much work for me. To create new ones yourself, see below.
-- The image below shows Colemak-DH on an ANSI keyboard, together with the Symbol mod which affects the right-hand symbol keys.
+- The next image shows Colemak-DH on an ANSI keyboard, together with the Symbol mod which affects the right-hand symbol keys.
     - In EPKL terms that's Colemak-eD_ANS_CurlAngleSym which may be abbreviated to Cmk-CAS in writing.
     - Note the Angle(Z) mod that moves the XCDV keys one step to the left so your left wrist can be straight like on the right hand.
     - Every finger in the image has its own color, so make sure you do the Angle mod right!
@@ -156,7 +156,7 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 "I don't want your layouts but I still want EPKL"
 -------------------------------------------------
 You may want to use some of EPKL's functionality without opting for one of the available layouts. That's possible too.
-- You may of course make your own layout or layout variant. There's a guide to that in the [Layouts folder][PklLay] README.
+- You may of course make your own layout or layout variant. See [below](https://github.com/DreymaR/BigBagKbdTrixPKL#layout-variants--key-mappings) for more info.
 - But you may also run EPKL with your installed OS layout, to just get Extend and/or Compose. Or to map just a few keys.
 - To do that, use the System layout. It's designed to pass through the OS layout so whatever you have there will work with EPKL.
 - For now, any dead keys on an OS layout will unfortunately not work as they should with the EPKL System layout. You could eD map them...?
@@ -179,7 +179,7 @@ In gaming a key is often held down for a longish time. This may lead to some pro
 * You can suspend EPKL at any time with its Suspend hotkey (default `Ctrl+Shift+3`). If you want your layout in-game, you may have to use a [MSKLC install][PklKLC].
 * If you want EPKL to suspend itself when your game or webpage is active, you can use the `suspendingApps` setting; see the [Settings file][SetDef].
 * You could try setting the Windows Key Repeat speed as low as possible, but I'm unsure whether it'll really help.
-* For more info, consult the Known Issues section below.
+* For more info, consult the [Known Issues](https://github.com/DreymaR/BigBagKbdTrixPKL#known-issues) section below.
 <br><br>
 
 Layout Variants & Key Mappings
@@ -187,7 +187,7 @@ Layout Variants & Key Mappings
 It's entirely possible to create new layout variants and tweak existing ones with EPKL. It can be a little daunting at first though!
 Mostly because there is so much functionality and complexity, which is actually a good thing but hard on the beginner.
 
-To learn more about key mappings and creating your own layout variants, please consult the [EPKL Layouts folder Readme][PklLay].
+To learn more about key mappings and creating your own layout variants, please consult the [Layouts folder][PklLay] README.
 <br><br>
 
 More Know-How

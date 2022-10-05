@@ -156,7 +156,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	klmLix  :=     [ 2,3,3,3,1 ] 								; What type of line comes after each row in the ASCII table
 	ui_KLMp := klmLi1   										; It starts off with a Line1
 	For ix, row in [ 0,1,2,3,4 ] {  							; Get the KLM codes for each keyboard row
-		rawRow  := pklIniRead( "QW" . row, "", getPklInfo( "RemapFile" ), "KeyLayoutMap" )
+		rawRow  := pklIniRead( "QW" . row, "", getPklInfo( "RemapsFile" ), "KeyLayoutMap" )
 		lix     := klmLix[ ix ]
 		ui_KLMp .= "`n  ||" . rawRow . "|  `n" . klmLi%lix% 	; Format the row to the ASCII table layout for later display
 		keyRow  := RegExReplace( rawRow, "[|]{2}.*", "|" )  	; Delete any mappings after a double pipe, as...

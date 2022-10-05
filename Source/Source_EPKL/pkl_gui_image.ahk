@@ -37,15 +37,14 @@ pkl_showHelpImage( activate = 0 )
 	static CtrlShImg 					; --"--
 	static initialized  := false
 	
-	if ( not initialized ) 				; First-time initialization
-	{
+	if ( not initialized ) { 			; First-time initialization
 		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default Dir_LayIni
 		im.DK1Dir   := getPklInfo( "Dir_LayIni" ) . "\DeadkeyImg" 			; The 1st DK img dir is local, if found
 		im.DK2Dir   := getLayInfo( "dkImgDir" )  							; The 2nd DK img dir, if set
 		im.BgPath   := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found
 		im.ShRoot   := fileOrAlt( pklIniRead( "img_ModsDir"  ,,  "LayStk" ) 
-								, im.LayDir . "\ModStateImg"             ) 	; Shift state images
+								, im.LayDir . "\ModStateImg"             ) 	; Shift state images (usually blobs over the Shift/AltGr keys)
 		im.BgColor  := pklIniRead( "img_bgColor"  , "333333",   "LayStk" ) 	; BG color (was fefeff)
 		im.OpacIni  := pklIniRead( "img_opacity"  , 255         )
 		im.Opacity  := im.OpacIni 											; The actual image opacity (0-255; 255 is opaque)

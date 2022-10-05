@@ -262,17 +262,19 @@ _strSendMode( string, strMode ) {
 }
 
 pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring from a file
-	static strFile := -1
+	static strFile
 	static strMode
 	static brkMode
+	static initialized  := false
 	
-	Critical
-	if ( StrFile == -1 ) {
-		strFile := getLayInfo( "strFile" )  					; The file containing named string tables
+	if ( not initialized ) {
+		strFile := getPklInfo( "StringFile" )   				; The file containing named string tables
 		strMode := pklIniRead( "strMode", "Message", strFile ) 	; Mode for sending strings: "Input", "Message", "Paste"
 		brkMode := pklIniRead( "brkMode", "+Enter" , strFile ) 	; Mode for handling line breaks: "+Enter", "n", "rn"
+		initialized := true
 	}
 	
+	Critical    												; eD WIP: Is Critical right here?
 	theString := pklIniRead( strName, , strFile, "strings" ) 	; Read the named string's entry (w/ comment stripping)
 	if pkl_ParseSend( theString ) 								; Unified prefix-entry syntax; only for single line entries
 		Return

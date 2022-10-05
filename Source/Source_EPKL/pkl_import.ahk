@@ -48,6 +48,7 @@ _importOneLayout( LIM )								; Function to import one layout via a template .i
 {
 	static temp
 	static initialized  := false
+	
 	if ( not initialized ) {
 		if not theFile := pklFileRead( importFile, "template" )
 			Return
