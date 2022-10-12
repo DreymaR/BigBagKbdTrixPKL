@@ -6,7 +6,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
-![EPKL help image, for the Colemak-CAWS layout](../Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
+![EPKL help image, for the Colemak-CAWS layout](/Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
 
 <br>
 
@@ -31,7 +31,7 @@ Compiling manually
 * Choose the right Source\#.ahk file, EPKL or PKL_Orig.
 * Choose to compile into your main EPKL folder.
 * You may choose any name for the .exe and run it afterwards.
-* Choose Source\Resources\Main.ico as the custom icon file.  
+* Choose Source\EPKL_Resources\Main.ico as the custom icon file.  
 <br>
 
 Setup:
@@ -52,11 +52,11 @@ _Øystein "DreymaR" Bech-Aase, 2018-_
 [PKLAHK]: https://autohotkey.com/board/topic/25991-portable-keyboard-layout/ (PKL on the AutoHotkey forums)
 [AHKHom]: https://autohotkey.com/ (AutoHotkey main page)
 [AHKDld]: https://autohotkey.com/download/ (AutoHotkey download page)
-[MakExe]: ./Compile_EPKL.bat (Compile_EPKL batch file)
+[MakExe]: /Compile_EPKL.bat (Compile_EPKL batch file)
 [BBTind]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
-[EPKLRM]: ./Files/ (EPKL Files folder/README)
+[EPKLRM]: /Files/ (EPKL Files folder/README)
 <br><br>
 
 WARNING: HARD HAT AREA!
@@ -429,8 +429,46 @@ DONE:
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
-	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both ISO-Angle and an ANSI-Angle(Z) versions. Builds in `.zip` files.
+	- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Typing games and typing tests should work fine now.
+		- This is a pretty huge development, really! It's a step in the direction of gaming-friendly EPKL.
+	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
+		- This is very nice for locale layouts' special letters. I've put mine next to my mid-board (ISO) Compose key for easy rolls.
+		- I've also made punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These are great on a thumb Compose key!
+		- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
+			- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
+			- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
+		- It isn't on by default in case someone finds it overmuch. Turn it on with a `CoDeKeys` entry in `EPKL_Settings_Override.ini`.
+	- Added a separate dead key for the Shift-Compose mapping, `@co1`. Using the CoDeKey © key, we can then have both @co0 and @co1.
+		- For now, it points to the Ext_Command release table. Slight caveat: Its releases are Shift sensitive, so be mindful of Sticky Shift timing.
+	- A `CoDeKeys` setting in the Settings file determines which Compose keys are CoDeKeys. The keys themselves are defined in the Compose file.
+	- A syntax for Sticky Mods, e.g., {Shift OSM} in mapping entries. Handy for one-shot Shift on CoDeKey entries, for instance.
+		- This syntax works with any prefix-entry `α* β=` (AHK code) entries.
+		- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as their Send methods don't cancel {Shift DownTemp}.
+	- A new `ScanCode`/`SKey` key mapping type, sending a key's scan code instead of the more complex VK mappings. This is more robust in some cases.
+		- KLM names such as `QW_A` or `qwBSP` are allowed for SC mapping, in addition to the traditional `SC###`.
+		- Several keys like PgUp/PgDn etc were changed from VK to SC mapping. Keys may be SC mapped to themselves by mapping them just as `System`.
+		- The `System` passthrough layout now works as intended, using `System` SC key mappings throughout.
+		- You could even send vk## or vk##sc### entries using `SKey`-type mappings, as these mappings are compatible with all AHK key Send syntax.
+		- Sending SC is safer in the case of keys that have both a normal and a NumPad version, as AHK by default sends the NumPad version.
+			- This was already fixed by adding the SC for the normal version of these keys when sent as VK. You can still send any vk##sc### combo.
+		- WARNING: SC-mapping may be less robust than VK-mapping vs AZERTY et al. For these, the VK-remap with EPKL's VK detection should be better.
+	- Compose can now work with VK/SC mapped keys. This allows you to compose accented letters etc with a VK/SC/System type layout.
+		- The GetKeyName(sc) function doesn't work with shifted output etc, so I used a DLL call to ToUnicodeEx.
+		- This worked, but had a side effect: OS Dead Keys now output, e.g., `¨¨` (whereas before they did nothing), due to a GetKeyboardState call(?)
+	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
 	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
+	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+	- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+	- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
+		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
+	- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
+	- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
+	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
 	- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
 		- As a fix, the offending entries were given `→` prefixes so they're sent literally.
 		- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
@@ -441,16 +479,12 @@ DONE:
 	- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
 	- Fixed: An end-of-line comment in the baseLayout entriy would cause the layout to fail.
 	- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
-	- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
-	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
-	- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
-	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
-		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
-	- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
-	- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
-	- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
-	- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
-	- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+	- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both w/ ISO-Angle and an ANSI-Angle(Z) mods. Builds in `.zip` files.
+		- Vanilla Colemak-eD also added to the MSKLC folder. The Vanilla layout is ISO/ANSI agnostic.
+	- Rearranged the Layouts_Default (and Override_Example) file so that there's a commented-out `;[pkl]` section for Tarmak, then a `[pkl]` w/ the rest.
+		- That way, you only have to uncomment the first `;[pkl]` to get Tarmak! Much simpler. Also, more settings can be uncommented and ready.
+	- Tidied up the Tarmak layout files, using existing BaseLayout/remaps instead of explicit VK mappings.
+	- Separated the layout shorthand `@L` into LayMain (`@L`) and LayPath (`@P`). It's clearer, and you can use `@L` as LayName in description strings.
 	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
 	- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
 	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
@@ -461,37 +495,6 @@ DONE:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-	- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
-	- Vanilla Colemak-eD added to the MSKLC folder; there was only CAWS before. The Vanilla layout is ISO/ANSI agnostic.
-	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
-		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
-	- Instead of a tricksy {Shift DownTemp} one-shot Shift on CoDeKey etc, a new syntax for, e.g., {Shift OSM} now activates the Sticky Mod routine.
-		- It works with any prefix-entry α or β (AHK code) entries.
-		- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as their Send methods don't cancel {Shift DownTemp}.
-
-	- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
-		- This seems very nice for locale layouts' special letters. I've put mine next to the ISO-Compose key for easy rolls.
-		- I've also tested out punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These are very promising!
-		- The punctuation CoDeKey, in my experience, works wonderfully with a thumb Compose key like the key-next-to-RAlt.
-		- Several default X11 sequences cause trouble with this: `c+<letter>` (caron), `b+<letter>` (breve), `ng` for ŋ, `ae` for æ etc.
-		- I had to nuke/unselect most one-char composes/completions, to make sure we don't stumble over a sequence when wanting the DK.
-			- Some sequences were restored with a leading apostrophe, like for instance `'ng` instead of just `ng` for ŋ.
-		- Since it's still slightly Work-In-Progress, it isn't on by default. Turn it on with a `CoDeKeys` entry in `EPKL_Settings_Override.ini`.
-	- Added a separate dead key for the Shift-Compose mapping, `@co1`. Using the CoDeKey © key, we can then have both @co0 and @co1.
-		- For now, it points to the Ext_Command release table. Slight problem: Its releases are Shift sensitive, so mind Sticky Shift timing.
-	- Made a `CoDeKeys` setting in the Settings file for which Compose keys are CDKs, instead of the old `if co0 defined` nonsense.
-
-	- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Should be okay for typing games and tests now.
-		- This is a pretty huge development, really! It's a step in the direction of gaming-friendly EPKL.
-
-	- Compose can now work with VK/SC mapped keys. This allows you to compose accented letters etc with a VK/SC/System type layout.
-		- The GetKeyName(sc) function doesn't work with shifted output etc, so I used a DLL call to ToUnicodeEx.
-		- This worked, but had a side effect: OS Dead Keys now output, e.g., `¨¨` (whereas before they did nothing), due to a GetKeyboardState call(?)
-
-	- Rearranged the Layouts_Default (and Override_Example) file so that there's a commented-out `;[pkl]` section for Tarmak, then a `[pkl]` w/ the rest.
-		- That way, you only have to uncomment the first `;[pkl]` to get Tarmak! Much simpler. Also, more settings can be uncommented and ready.
-
-	- Separated the layout shorthand `@L` into LayMain (`@L`) and LayPath (`@P`). It's clearer, and you can use `@L` as LayName in description strings.
 
 <br>
 
