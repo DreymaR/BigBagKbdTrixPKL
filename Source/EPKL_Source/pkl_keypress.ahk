@@ -1,6 +1,6 @@
 ﻿;; ================================================================================================
 ;;  EPKL key press functions
-;;      Process various key presses, mostly called from hotkey event labels in PKL_main.
+;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 
 processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Released labels

@@ -27,46 +27,8 @@
 ;	* EPKL v1.3.0: Compose/Completion and Repeat keys.
 ;	* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 ;	* EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
-;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
-;			- As a fix, the offending entries were given `→` prefixes so they're sent literally.
-;			- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
-;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
-;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
-;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del and arrows had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
-;			- ScanCodes are now added to the VirtualKey codes (VK21–28,2D–2E) so their normal versions (SC 149,151,14F,147,152,153 etc) are sent.
-;		- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
-;		- Fixed: An end-of-line comment in the baseLayout entriy would cause the layout to fail.
-;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
-;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
-;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
-;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both w/ ISO-Angle and an ANSI-Angle(Z) mods. Builds in `.zip` files.
-;			- Vanilla Colemak-eD also added to the MSKLC folder. The Vanilla layout is ISO/ANSI agnostic.
-;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
-;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
-;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
-;		- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
-;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
-;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
-;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
-;		- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
-;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
-;		- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
-;		- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
-;		- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
-;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
-;		- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
-;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
-;			- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
-;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
-;		- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
-;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
-;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
-;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
-;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-
 ;		- EPKL now sends separate KeyUp and KeyDown events for VK/SC mapped keys. Typing games and typing tests should work fine now.
 ;			- This is a pretty huge development, really! It's a step in the direction of gaming-friendly EPKL.
-
 ;		- Dual-function Compose/DK "CoDeKey": If a sequence isn't recognized by the Compose key, it becomes a dead key (@co0) instead.
 ;			- This is very nice for locale layouts' special letters. I've put mine next to my mid-board (ISO) Compose key for easy rolls.
 ;			- I've also made punctuation-plus-space home row mappings, ++ on the `NEIO;UY'-` keys. These are great on a thumb Compose key!
@@ -80,7 +42,6 @@
 ;		- A syntax for Sticky Mods, e.g., {Shift OSM} in mapping entries. Handy for one-shot Shift on CoDeKey entries, for instance.
 ;			- This syntax works with any prefix-entry `α* β=` (AHK code) entries.
 ;			- This is necessary to use OSM Shift in a string with VK/SC mapped keys, as their Send methods don't cancel {Shift DownTemp}.
-
 ;		- A new `ScanCode`/`SKey` key mapping type, sending a key's scan code instead of the more complex VK mappings. This is more robust in some cases.
 ;			- KLM names such as `QW_A` or `qwBSP` are allowed for SC mapping, in addition to the traditional `SC###`.
 ;			- Several keys like PgUp/PgDn etc were changed from VK to SC mapping. Keys may be SC mapped to themselves by mapping them just as `System`.
@@ -89,23 +50,57 @@
 ;			- Sending SC is safer in the case of keys that have both a normal and a NumPad version, as AHK by default sends the NumPad version.
 ;				- This was already fixed by adding the SC for the normal version of these keys when sent as VK. You can still send any vk##sc### combo.
 ;			- WARNING: SC-mapping may be less robust than VK-mapping vs AZERTY et al. For these, the VK-remap with EPKL's VK detection should be better.
-
 ;		- Compose can now work with VK/SC mapped keys. This allows you to compose accented letters etc with a VK/SC/System type layout.
 ;			- The GetKeyName(sc) function doesn't work with shifted output etc, so I used a DLL call to ToUnicodeEx.
 ;			- This worked, but had a side effect: OS Dead Keys now output, e.g., `¨¨` (whereas before they did nothing), due to a GetKeyboardState call(?)
-
+;		- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
+;			- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
+;		- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
+;		- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
+;		- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
+;			- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
+;		- Changed the Prefix-Entry prefix for Unicode points from `«` to `†` to accommodate the new `«»` HIG prefix. Plus, it looks nicer. Still using `~` for it.
+;		- Help image entries more than one character long may be scaled by a `fontSizes` table entry in the settings file.
+;		- Dead key images can utilize a "disp0" entry that contains a string to be displayed on the key, enclosed in any non-space glyphs (like `«»`).
+;			- NOTE: Remember to restart EPKL before image generation when there are changes to DK images
+;		- Inkscape calls by the HIG was split into batches ruled by a batchSize setting. My Inkscape couldn't handle more than around 80 files per call.
+;		- You can have a hotkey run a debug/utility routine (in `_PKL_main.ahk`) of choice, by means of `epklDebugHotkey` and `whichUtility` in the Settings files.
+;		- Moved all HIG settings from their separate file into the Settings file: They'll be easier to find, and Settings_Override works on them.
+;		- The "kaomoji" speech bubbles and other links are now PowerStrings, and their Compose and DeadKey entries updated.
+;		- Fixed: Shifted state entries with an unshifted character would get the character shifted by sticky Shift. This is the case for Dvorak Sym.
+;			- As a fix, the offending entries were given `→` prefixes so they're sent literally.
+;			- Note that Win+‹key› (here Win+number) shortcuts won't work with this kind of mapping. I don't know a fix that works in both cases.
+;		- Fixed: The caron dead key in the MSKLC files was missing the important Čč entries.
+;		- Fixed: Several language files had the wrong encoding so menus became full of `�` symbols.
+;		- Fixed: VK-mapped PgUp,PgDn,End,Home,Ins,Del and arrows had their NumPad versions sent as per AHK Send default, due to degenerate VK codes.
+;			- ScanCodes are now added to the VirtualKey codes (VK21–28,2D–2E) so their normal versions (SC 149,151,14F,147,152,153 etc) are sent.
+;		- Fixed: QWERTY-VK layouts pointed to the Colemak-VK BaseLayout_Cmk-VK without the Cmk-VK subfolder.
+;		- Fixed: An end-of-line comment in the baseLayout entriy would cause the layout to fail.
+;		- Prefix-Entry documentation updated, in main and Files README. Also added to the KeyMapper Help screen.
+;		- Cmk-CAWS-eD MicroSoft Keyboard Layout Creator `.KLC` files in `Other\MSKLC`, both w/ ISO-Angle and an ANSI-Angle(Z) mods. Builds in `.zip` files.
+;			- Vanilla Colemak-eD also added to the MSKLC folder. The Vanilla layout is ISO/ANSI agnostic.
 ;		- Rearranged the Layouts_Default (and Override_Example) file so that there's a commented-out `;[pkl]` section for Tarmak, then a `[pkl]` w/ the rest.
 ;			- That way, you only have to uncomment the first `;[pkl]` to get Tarmak! Much simpler. Also, more settings can be uncommented and ready.
-
+;		- Tidied up the Tarmak layout files, using existing BaseLayout/remaps instead of explicit VK mappings.
 ;		- Separated the layout shorthand `@L` into LayMain (`@L`) and LayPath (`@P`). It's clearer, and you can use `@L` as LayName in description strings.
+;		- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+;		- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
+;		- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
+;			- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
+;		- Added Dutch Colemak-eD ANSI (`Cmk-eD-Nl_ANS`) variants, as most Dutch users actually have ANSI and not ISO boards – the poor things...
+;		- Updated the German/De locale with the letter ẞ (capital ß). The § sign was moved to AltGr+P.
+;		- Added palatal-hook letters to the ogonek-commabelow DK, as only the s mapping overlapped. Mapped ᶊ to ß (AltGr+s) for this DK.
+;			- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
+;		- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
+;			- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 
-;		- WIP: Tidy up the Tarmak layout files, using BaseLayout/remaps? The remaps exist.
-;			- Rewrite the Tarmak layouts with remaps instead of explicit mappings.
-;			- As of today, Extend isn't remapped correctly for all CurlAngle steps?
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;		- WIP: 
+
+;		- TOFIX: Using the KeyMapper on, e.g., a QWERTY layout that's been remapped from Colemak, it goes wrong: Mapping to QW_U leads to QW_SC getting mapped to. Hmmm.
+;			- For one, I guess it's time to stop being cute and making an actual BaseLayout for QWERTY. Heh.
 
 ;		- WIP: It would be cool to make the Vim Help Sheet for Colemak available as a state image? Could, e.g., have it on state1 and show it whenever Shift is pressed.
 ;			- Could fix that using my colemak-vim-helpsheet.svg files.
@@ -278,6 +273,7 @@
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;		- TODO: Ext layers by app/window? Like auto-Suspend. Could be handy for ppl w/ apps using odd shortcuts.
 ;		- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
 ;		- TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
 ;		- TOFIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
@@ -437,7 +433,7 @@ SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Ca
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.4.0β" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.4.0" ) 											; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files

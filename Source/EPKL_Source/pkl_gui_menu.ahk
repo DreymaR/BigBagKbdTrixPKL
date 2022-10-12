@@ -105,7 +105,7 @@ pkl_set_tray_menu()
 ;		Menu, Tray, Default, %suspendMenuItem%
 ;	}
 	
-	; eD: Icon lists with numbers can be found using the enclosed Resources\AHK_MenuIconList.ahk script.
+	; eD: Icon lists with numbers can be found using the enclosed Source\Extras\AHK_MenuIconList.ahk script.
 	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMe icon - about/question
 	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 317: Blue cogs)
 	if ( ShowMoreInfo ) {
@@ -222,7 +222,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 			icoFil%ix%  := A_ScriptName
 			icoNum%ix%  := ( icon == "on.ico" ) ? 1 : 5 		; was 6/3 in original PKL.exe - keyboard and red 'S' icons
 		} else {
-			icoFil%ix%  := "Resources\" . icon 					; If all else fails, look for a Resources\ .ico file
+			icoFil%ix%  := "EPKL_Resources\" . icon 			; If all else fails, look for a Resources\ .ico file
 		}
 	}	; end For icon
 	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }

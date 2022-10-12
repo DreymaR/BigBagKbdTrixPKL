@@ -1,8 +1,14 @@
 ﻿;; ================================================================================================
+;;  EPKL Ini read module
+;;  - Functions for reading and preprocessing sections and values from .ini data files
+;
+
+;; ================================================================================================
 ;;  Read a section of an .ini file
 ;;      Strips away blank and comment lines but not end-of-line comments by default
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
+
 pklIniSect( file, section = "pkl", strip = 0 ) 						; Read an .ini section as a line array
 {
 	if not fileTxt := pklFileRead( file ) 							; Use "*P65001 <file>" to read UTF-8 .ini files

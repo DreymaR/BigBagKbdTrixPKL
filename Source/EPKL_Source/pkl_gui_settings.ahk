@@ -1,6 +1,6 @@
 ﻿;; ================================================================================================
 ;;  EPKL Settings UI module
-;;  - This is the EPKL Layout/Settings... menu, consisting of several settings tabs
+;;  - Handles the EPKL Layout/Settings... menu, consisting of several settings tabs
 ;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
 ;;  - Note: To Reset a certain choice, the same choice (.ini key) needs to be currently selected.
 ;;  - For a list of AHK GUI Controls, see https://www.autohotkey.com/docs/commands/GuiControls.htm

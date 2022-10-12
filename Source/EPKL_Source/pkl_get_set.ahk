@@ -1,6 +1,9 @@
 ﻿;; ================================================================================================
-;;  EPKL get/set module
-;;  - Static associative dictionaries for EPKL info are used instead of most globals
+;;  EPKL Get/Set module
+;;  - Read and set global variables without having to declare them
+;;  - Static associative dictionaries are used instead of most globals
+;;  - Organized in three main types: (E)PKL, Layout and Key info
+;;  - Some other get/set fns below: Locale, Hotkeys and Composer
 ;;  
 ;;  LayoutInfo entries:
 ;;  -------------------

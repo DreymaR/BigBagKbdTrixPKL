@@ -1,10 +1,11 @@
 ﻿;; ================================================================================================
-;;  EPKL Image module: Display help images by shift state, also for dead keys and Extend layers.
-;;    - Separate background image and Shift/AltGr indicator overlay, configurable in layout.ini
-;;    - Transparent color for images (may work for the GUI window vs underlying windows now?)
-;;    - Overall image opacity
-;;    - Six positions with adjustable screen gutters and right/left push in addition to up/down
-;;    - Rescaling by hotkey
+;;  EPKL Image module
+;;  - Displays main and dead key help images by shift state, and Extend layers
+;;  - Separate background image and Shift/AltGr indicator overlay, configurable in layout.ini
+;;  - Transparent color for images (may work for the GUI window vs underlying windows now?)
+;;  - Overall image opacity
+;;  - Six positions with adjustable screen gutters and right/left push in addition to up/down
+;;  - Rescaling by hotkey
 ;
 
 pkl_showHelpImage( activate = 0 )

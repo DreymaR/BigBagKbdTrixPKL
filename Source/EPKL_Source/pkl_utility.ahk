@@ -1,7 +1,7 @@
 ﻿;; ================================================================================================
 ;;  EPKL Remap module
-;;      Functions to read and parse remap cycles for ergo mods and suchlike
-;;      Used primarily in pkl_init.ahk
+;;  - Functions to read and parse remap cycles for ergo mods and suchlike
+;;  - Used primarily in pkl_init.ahk
 ;
 
 ReadRemaps( mapList, mapStck ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)

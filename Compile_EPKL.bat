@@ -48,7 +48,7 @@ set doComp=1
 
 REM *** %~dpn1 IS THE DRIVE-PATH-NAME OF DROPPED SCRIPT DIR
 rem if exist "%~dpn1.ico" set iconPath=/icon "%~dpn1.ico"
-set iconPath="Resources\Main.ico"
+set iconPath="EPKL_Resources\Main.ico"
 
 REM *** THE ORIGINAL SCRIPT WAS DRAG-N-DROP
 echo Compiling with %ahk%...

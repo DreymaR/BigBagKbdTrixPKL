@@ -1,6 +1,6 @@
 ﻿;; ================================================================================================
 ;;  EPKL Send functions
-;;      Parse and send key presses and strings
+;;  - Parse and send key presses and strings
 ;
 
 pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling

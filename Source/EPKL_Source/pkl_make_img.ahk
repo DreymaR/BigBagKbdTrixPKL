@@ -1,14 +1,14 @@
 ﻿;; ================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
-;;      Calls Inkscape with a .SVG template to generate a set of .PNG help images
-;;      Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
-;;      Example – KLD(Co) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
-;;      The template can hold an area for ISO and another for ANSI, specified in the EPKL_ImgGen_Settings.ini file
-;;      Images are made for each shift state, also for any dead keys if "Full" is chosen
-;;      Images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
-;;      Dead keys can be marked in a separate layer of the template image (in bold yellow in the default template)
-;;      Special marks for released DK base chars and combining accents
-;;      Extend images are not generated, as these use a special layout template. Ext-tap and CoDeKey images are made.
+;;  - Calls Inkscape with a .SVG template to generate a set of .PNG help images
+;;  - Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
+;;  - Example – KLD(Co) letters: |_Q|_W|_F|_P|_G|_J|_L|_U|_Y||_A|_R|_S|_T|_D|_H|_N|_E|_I|_O||_Z|_X|_C|_V|_B|_K|_M|
+;;  - The template can hold an area for ISO and another for ANSI, specified in the EPKL_ImgGen_Settings.ini file
+;;  - Images are made for each shift state, also for any dead keys if "Full" is chosen
+;;  - Images as state#.png in a time-marked subfolder of the layout folder. The DK images in a subfolder of that.
+;;  - Dead keys can be marked in a separate layer of the template image (in bold yellow in the default template)
+;;  - Special marks for released DK base chars and combining accents
+;;  - Extend images are not generated, as these use a special layout template. Ext-tap and CoDeKey images are made.
 ;
 
 makeHelpImages() {
