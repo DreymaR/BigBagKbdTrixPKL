@@ -422,7 +422,7 @@ KNOWN ISSUES:
 
 DONE/TODO:
 ----------
-For more info about past and future EPKL history, see the **[EPKL Advanced README][PklSrc]** in the Source folder.
+For more info about past and future EPKL history, see the **[EPKL Advanced README][PklSrc]** in the EPKL_Source folder.
 <br>
 
 Credits/sources
@@ -450,6 +450,8 @@ _Øystein "DreymaR" Bech-Aase_
 [PrtApp]: https://portableapps.com/ (PortableApps.com)
 [SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
 [VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
+[ISOANS]: https://deskthority.net/wiki/ANSI_vs_ISO (Deskthority on ANSI vs ISO keyboard models)
+[Cmk-DH]: https://colemakmods.github.io/mod-dh/ (The ColemakMods Mod-DH project on the Colemak-DH layout)
 [EPKLgh]: https://github.com/DreymaR/BigBagKbdTrixPKL/ (EPKL on GitHub)
 [GitRel]: https://github.com/DreymaR/BigBagKbdTrixPKL/releases/latest (Latest EPKL release)
 [GitCom]: https://github.com/DreymaR/BigBagKbdTrixPKL/archive/master.zip (Latest EPKL commit download)
@@ -468,5 +470,3 @@ _Øystein "DreymaR" Bech-Aase_
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
 [DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)
-[ISOANS]: https://deskthority.net/wiki/ANSI_vs_ISO (Deskthority on ANSI vs ISO keyboard models)
-[Cmk-DH]: https://colemakmods.github.io/mod-dh/ (The ColemakMods Mod-DH project on the Colemak-DH layout)
