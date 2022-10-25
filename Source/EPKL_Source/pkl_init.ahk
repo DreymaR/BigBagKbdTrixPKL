@@ -196,7 +196,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	
 	laysDir := "Layouts\"
 	thisLay := getLayInfo( "ActiveLay" ) 								; From initPklIni(). For example, Colemak\Cmk-eD\Cmk-eD_ANS.
-	layType := getLay3LA( thisLay )[4]  								; Returns layName as [1], L3A as [2] and L3A-from-string as [3]
+	layType := getLayStrInfo( thisLay )[4]  							; Returns layName as [1], L3A as [2] and L3A-from-string as [3]
 	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, layout.ini as usual.
 	layType := st2VK ? SubStr(layType,1,-3) : layType   				; Make layType reflect actual layType, and set St2VK as necessary.
 	thisLay := StrReplace( thisLay, layType . "2VK", layType )

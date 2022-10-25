@@ -249,11 +249,13 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Colemak vs QWERTY vs what-have-you, obviously. Choose your main layout wisely!
     - EPKL defaults to Colemak(-DH) and Tarmak layouts, but also holds QWERTY and Dvorak and several others.
     - To type with QWERTY it may be just as easy to suspend EPKL. Of course, then Extend etc won't work.
-* Full/VK/SC mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' versions
-    - The _VK_ layouts just move the keys of your installed OS layout around, without other changes
-    - The _[eD]_ layouts have their own Shift/AltGr state mappings specified.
-    - Actually, you may mix mapping types freely in any layout.
-    - Note that a VK mapped key can't be used for Compose sequences. It still works with Extend and DK releases.
+* Full/VK/SC mappings: I've provided my own Colemak[eD] as well as 'VirtualKey' or 'ScanCode' versions
+    - Key mapped `VK`/`SC` layouts just move the keys of your installed OS layout around, without other changes
+    - State mapped `[eD]` layouts have their own Shift/AltGr state mappings specified.
+    - Actually, you may mix mapping types freely in any layout. Layout types are mainly a means of organizing mappings.
+    - Furthermore, a state-mapped BaseLayout may be read as VK-mapped by setting layout type to `##2VK` – here, `eD2VK`.
+    - VK/SC mapped keys work for Compose sequences, as well as Extend and DK releases.
+    - The DKs themselves are on state mappings only, as are Compose key definitions.
 * ISO (European/World) vs ANSI (US) vs other keyboard types
     - ISO boards have a <kbd>OEM_102</kbd> key between <kbd>Z</kbd> and <kbd>LShift</kbd>. It often holds `<>` or `-_`.
     - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. These boards send the same scan codes though.

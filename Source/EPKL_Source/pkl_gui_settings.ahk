@@ -6,8 +6,8 @@
 ;;  - For a list of AHK GUI Controls, see https://www.autohotkey.com/docs/commands/GuiControls.htm
 ;
 
-setUIGlobals: 													; Declare globals (can't be done inside a function for "global globals")
-;	global UI_Set 												; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed for UI
+setUIGlobals:   												; Declare globals (can't be done inside a function for "global globals")
+;	global UI_Set    											; eD WIP: Would like to use UI_Set.MainLay etc, but can't? Single variables needed for UI
 	global UI_Tab, UI_Btn1, UI_Btn2, UI_Btn3, UI_Btn4   		; GUI Control vars must be global (or static) to work
 	global UI_LayMain, UI_LayType, UI_LayKbTp, UI_LayVari, UI_LayMods   				; Layout Selector    UI variables
 	global UI_SetThis, UI_SetDefs, UI_SetComm, UI_SetLine   							; General Settings   UI variables
@@ -18,7 +18,7 @@ setUIGlobals: 													; Declare globals (can't be done inside a function fo
 	global ui_Revert    := false 								; For the GUI Reset button
 	global ui_Written   := false 								; For whether EPKL Refresh is needed
 	global ui_KLMs      := []   								; For the Help UI, showing the KLM code table
-	global ui_KLMp   	;, ui_SepLine, ui_WideTxt
+	global ui_KLMp  	;, ui_SepLine, ui_WideTxt
 Return
 
 pklSetUI() { 													; EPKL Settings GUI
@@ -226,7 +226,7 @@ Return
 UIselLay:   													; Handle UI Layout selections
 	GUI, UI:Submit, Nohide
 	mainDir := "Layouts\" . UI_LayMain
-	main3LA := getLay3LA( UI_LayMain )[2]   					; '3LA' 3-letter layout name abbreviation
+	main3LA := getLayStrInfo( UI_LayMain )[2]   				; '3LA' 3-letter layout name abbreviation
 	need        := main3LA . "-" 								; Needle for the MainLay: '3LA-', e.g., 'Cmk-'
 	layPath := {} 												; Variant folders for locales etc may contain several mods
 	layDirs := [] 												; Layout folders hold the layouts themselves
@@ -250,26 +250,28 @@ UIselLay:   													; Handle UI Layout selections
 		layPath[ theDir ] := ""
 	} 	; end For theDir
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   )  	; Get the available Lay Types for the chosen MainLay
+	hasType     := inArray( layTyps, "eD" )
+	if ( hasType ) {
+		layTyps.InsertAt( hasType, "eD2VK" ) 					; ##2VK layType reads a state-mapped BaseLayout as VK
+	}
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list (eD, VK)
-	needle      := need . UI_LayType
+	ui_layTyp3  := ( UI_LayType == "eD2VK" ) ? "eD" : UI_LayType
+	needle      := need . ui_layTyp3
 	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, need   )  	; Get the available Kbd Types for the chosen MainLay (and LayType?)
 	_uiControl( "LayKbTp", _uiPipeIt( kbdTyps, 1 ) )
-	needle      := need . UI_LayType . ".*_" . UI_LayKbTp . "?(_|$)" 	; The bit after KbTp separates types like ISO-Orth from ISO
+	needle      := need . ui_layTyp3 . ".*_" . UI_LayKbTp . "?(_|$)" 	; The bit after KbTp separates types like ISO-Orth from ISO
 	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle )  	; Get the available Layout Variants for the chosen MainLay/LayType/LayKbTp
 	_uiControl( "LayVari", _uiPipeIt( layVari, 1 ) )
 	layVariName := ( UI_LayVari == ui_NA ) ? "" : "-" . UI_LayVari
-	needle      := need . UI_LayType . layVariName . "_" . UI_LayKbTp . "?(_|$)"
+	needle      := need . ui_layTyp3 . layVariName . "_" . UI_LayKbTp . "?(_|$)"
 	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle )  	; Get the available Mods for the chosen MainLay/LayType/LayKbTp/LayVari
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
 	layModsName := ( UI_LayMods != ui_NA ) ? UI_LayMods : ""
 	layModsPref := ( layModsName ) ? "_" : ""
-	layFolder   := main3LA . "-" . UI_LayType . layVariName . "_" . UI_LayKbTp . layModsPref . layModsName
-	layPath     := layPath[ layFolder ]
-;	( 1 ) ? pklDebug( "`nDir:  " . layFolder . "`nPath: " . layPath , 1 )  ; eD DEBUG
-;	_uiControl( "LayFile", 
-;	ControlGet, tmpList, List, ,ComboBox6, EPKL Settings 		; The DDL boxes are counted as ComboBox
-;	( 1 ) ? pklDebug( "" . tmpList, 3 )  ; eD DEBUG
-	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layFolder ) 	; eD WIP: Make this update the right line in the LayFile ComboBox
+	layDir1     := main3LA . "-" ,  layDir3 := layVariName . "_" . UI_LayKbTp . layModsPref . layModsName 	; Used to be one var, layFolder
+	layPath     := layPath[ layDir1 . ui_layTyp3 . layDir3 ] 	; Subdirectory, if there is one
+;	_uiControl( "LayFile", ControlGet, tmpList, List, ,ComboBox6, EPKL Settings 			; DDL boxes are regarded as ComboBox
+	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layDir1 . UI_LayType . layDir3 ) 	; eD WIP: Make this update the right line in LayFile ComboBox?
 	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . " " . layModsName . "(" . UI_LayKbTp . ")"
 	_uiControl( "LayMenu", layMenuName )
 Return
@@ -527,7 +529,7 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 		if not inArray( theList, match ) 						; Add the match if it isn't added yet
 			theList.Push( match )
 	} 	; end For
-	Return theList
+	Return theList  											; Return an array of the relevant layout settings
 }
 
 _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride

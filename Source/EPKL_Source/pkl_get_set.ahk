@@ -258,7 +258,7 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 ;
 
 ;;  TODO: Make this fn return other info parsed from a layout string as well? [ LayMain, LayPath, LayType, LayVari, KbdType, OthrMod ] ?
-getLay3LA( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
+getLayStrInfo( layStr ) {   										; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
 	d3LA    := getPklInfo( "shortLays" ) 							; Global dictionary of '3LA' 3-letter layout name abbreviations. From pkl_init.
 	splt    := StrSplit( layStr, "\" )  							; LayMain can also contain a subfolder. Its name often starts w/ 3LA.
 	mLay    := splt[1]
@@ -266,5 +266,5 @@ getLay3LA( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbreviation
 	endS    := splt[ splt.maxIndex() ]
 	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 	; The 3LA found in the string itself, if any.
 	type    := RegExMatch( layStr, mLay . "(?:\\.*)?\\" . m3LA . "-(\w+?)(?:-\w+?)?_", REMatch ), type := REMatch1
-	Return [ mLay, m3LA, s3LA, type ]   							; You may choose one output by calling, e.g., getLay3LA( str )[2].
+	Return [ mLay, m3LA, s3LA, type ]   							; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
 }

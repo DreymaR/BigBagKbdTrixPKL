@@ -476,7 +476,10 @@ DONE:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: WIP
-	- BaseLayout for QWERTY VK.
+* EPKL v1.4.1: State-2-VK mapping types.
+	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
+		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrid variants.
+		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit manually afterwards.
+	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.
