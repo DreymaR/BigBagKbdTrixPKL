@@ -307,8 +307,8 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 
 pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of times, for the ®# key
 	lsk := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
-	lsk := lsk[lsk.Length()]
-	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # may be any hex number without "0x", or just ® for num=1
+	lsk := lsk[lsk.Length()] 									; The last entry in LastKeys is the previous key.
+	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # of repeats may be any hex number without "0x", or just ® for num=1
 	Loop % num {
 		SendInput {Text}%lsk% 	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
 	}

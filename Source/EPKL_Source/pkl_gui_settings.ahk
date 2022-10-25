@@ -18,7 +18,7 @@ setUIGlobals: 													; Declare globals (can't be done inside a function fo
 	global ui_Revert    := false 								; For the GUI Reset button
 	global ui_Written   := false 								; For whether EPKL Refresh is needed
 	global ui_KLMs      := []   								; For the Help UI, showing the KLM code table
-	global ui_Lay3LAs   , ui_KLMp   	;, ui_SepLine, ui_WideTxt
+	global ui_KLMp   	;, ui_SepLine, ui_WideTxt
 Return
 
 pklSetUI() { 													; EPKL Settings GUI
@@ -45,8 +45,6 @@ pklSetUI() { 													; EPKL Settings GUI
 	;; ================================================================================================
 	;;  Layout Picker UI
 	;
-	ui_Lay3LAs  := getPklInfo( "shortLays" ) 					; Global dictionary of '3LA' 3-letter layout name abbreviations
-	
 	GUI, UI:Add, Text, section  								; 'section' stores the x value for later
 					, % "`nLayout Selector for " . pklAppName
 					.   "`n" . ui_SepLine 	; ————————————————————————————————————————————————
@@ -220,15 +218,15 @@ pklSetUI() { 													; EPKL Settings GUI
 	;; ================================================================================================
 	;;  UI Control sections
 	;
-UIhitTab: 														; When a tab is selected, make its button the default.
-	GUI, UI:Submit, Nohide 										; Not needed: 'GUI, +LastFound'? GuiControlGet,thisTab,,UI_Tab
+UIhitTab:   													; When a tab is selected, make its button the default.
+	GUI, UI:Submit, Nohide  									; Not needed: 'GUI, +LastFound'? GuiControlGet,thisTab,,UI_Tab
 	GuiControl, +Default, UI_Btn%UI_Tab%
 Return
 
-UIselLay: 														; Handle UI Layout selections
+UIselLay:   													; Handle UI Layout selections
 	GUI, UI:Submit, Nohide
 	mainDir := "Layouts\" . UI_LayMain
-	main3LA := ( ui_Lay3LAs[UI_LayMain] ) ? ui_Lay3LAs[UI_LayMain] : SubStr( UI_LayMain, 1, 3 )
+	main3LA := getLay3LA( UI_LayMain )[2]   					; '3LA' 3-letter layout name abbreviation
 	need        := main3LA . "-" 								; Needle for the MainLay: '3LA-', e.g., 'Cmk-'
 	layPath := {} 												; Variant folders for locales etc may contain several mods
 	layDirs := [] 												; Layout folders hold the layouts themselves

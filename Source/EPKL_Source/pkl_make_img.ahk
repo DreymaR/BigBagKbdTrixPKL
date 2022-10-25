@@ -95,7 +95,7 @@ for the current layout, or only default/state images?
 			Return
 		}
 	} 	; end if Debug
-	shiftStates := getLayInfo( "shiftStates" ) 					; may skip some, e.g., state 2 (Ctrl), by imgStates
+	shiftStates := getLayInfo( "shiftStates" )  				; may skip some, e.g., state 2 (Ctrl), by imgStates
 	HIG.imgMake := ( onlyMakeDK ) ? "--" : "shift state" 		; If refreshing one DK, don't render state images
 	HIG.destDir := HIG.ImgDirs[ "root" ]
 	HIG.imgType := "ShSt"

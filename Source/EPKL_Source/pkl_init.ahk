@@ -30,11 +30,10 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 			setStck.push( file ) 										; ...add it to the SetStack
 	}	; end For type
 	if ( setStck.Length() == 0 ) {
-		MsgBox, %setFile% file NOT FOUND`nSorry. EPKL will exit.
+		MsgBox, %setFile% file NOT FOUND.`nEPKL cannot run without this file.`n`n• EPKL.exe must be run inside its home folder.`n• This folder must be uncompressed/extracted.
 		ExitApp
 	}
 	setPklInfo( "SetStack", setStck ) 									; Settings_Override, Settings_Default
-;	setPklInfo( "File_PklSet", setFile . ".ini" ) 	; eD WIP: Instead of this, we now use the Default/Override SetStack
 	setPklInfo( "AdvancedMode", bool(pklIniRead("advancedMode")) ) 		; Extra debug info etc
 	pklLays := getPklInfo( "File_PklLay" ) 								; EPKL_Layouts
 	pklLays := [ pklLays . "_Override.ini", pklLays . "_Default.ini" ] 	; Now an array of override and default
@@ -109,7 +108,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	}
 	layPath := _pklLayRead( "LayPath", "@L\@3-@T@V" )   				; Path to layout folders: @L\<subfolder>. Simple layouts just have `@L`.
 ;	split   := StrSplit( layMain, "\" ), layName := split[1]    		; LayMain can also contain a subfolder.
-	layType := _pklLayRead( "LayType", "eD"         ) 					; Layout type, mostly eD or VK
+	layType := _pklLayRead( "LayType", "eD"         )   				; Layout type, mostly eD or VK
 	layVari := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl", or other variant such as Tarmak steps
 	polyLID := {}
 	For ix, LVars in pklIniCSVs( "multiLocs",, "pklDic" ) { 			; For layouts with compound Locale IDs, any component can be used alone
@@ -148,8 +147,8 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 ;		thisLay := RegExReplace( thisLay, needle, newtxt )
 		nameParts := StrSplit( thisLay, ":" )
 		theCode := nameParts[1]
-		theCode := RegExReplace( theCode, "_$"       ) 					; If the layout code ends with the KbdType, the trailing underscore is omitted
-		theCode := RegExReplace( theCode, "_\\", "\" ) 					; The trailing underscore may also figure in subpaths
+		theCode := RegExReplace( theCode, "_$"       )  				; If the layout code ends with the KbdType, the trailing underscore is omitted
+		theCode := RegExReplace( theCode, "_\\", "\" )  				; The trailing underscore may also figure in subpaths
 		if ( not theCode ) { 											; Empty entries cause an error, but any other layouts still work
 			theCode := "<N/A>"
 			pklWarning( "At least one layout entry is empty" )
@@ -196,7 +195,12 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	static initialized  := false
 	
 	laysDir := "Layouts\"
-	thisLay := getLayInfo( "ActiveLay" ) 								; For example, Colemak\Cmk-eD_ANS
+	thisLay := getLayInfo( "ActiveLay" ) 								; From initPklIni(). For example, Colemak\Cmk-eD\Cmk-eD_ANS.
+	layType := getLay3LA( thisLay )[4]  								; Returns layName as [1], L3A as [2] and L3A-from-string as [3]
+	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, layout.ini as usual.
+	layType := st2VK ? SubStr(layType,1,-3) : layType   				; Make layType reflect actual layType, and set St2VK as necessary.
+	thisLay := StrReplace( thisLay, layType . "2VK", layType )
+	setLayInfo( "St2VK", ( st2VK ) ? layType : "" ) 					; This is tested for each layFile below
 	mainDir := bool( pklIniRead("compactMode") ) ? "." 
 			 : laysDir . thisLay 										; If in compact mode, use the EPKL root dir as mainDir
 	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )  			; The path of the main layout .ini file
@@ -226,7 +230,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	pklLays := [ mainLay, baseLay, pklLays[1], pklLays[2] ] 			; Could also concatenate w/, e.g., pklStck.push( pklLays* )
 	pklDirs := [ mainDir, baseDir, "."       , "."        ]
 	layStck := []   													; The LayStack is the stack of layout info files
-	dirStck := []
+	dirStck := []   													; eD WIP: Allow a BaseStack, where any BaseLayout can include others? SubBase?
 	For ix, file in pklLays {
 		if FileExist( file ) {  										; If the file exists...
 			layStck.push( file ) 										; ...add it to the LayStack
@@ -281,16 +285,17 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		initialized := true
 	}
 	
-	shStates := pklIniRead( "shiftStates", "0:1"   , "LayStk", "global" ) 	; .= ":8:9" ; SgCap should be declared explicitly
-	shStates := pklIniRead( "shiftStates", shStates, "LayStk", "layout" ) 	; This was in [global] then [pkl]
-	setLayInfo( "LayHasAltGr", InStr( shStates, 6 ) ? 1 : 0 )
-	shStates := StrSplit( RegExReplace( shStates, "[ `t]+" ), ":" ) 	; Remove any whitespace and make it an array
-	setLayInfo( "shiftStates", shStates ) 								; Used by the Help Image Generator (HIG)
+	shStats := pklIniRead("shiftStates", "0:1"  , "LayStk", "global") 	; .= ":8:9" ; SgCap/SwiSh should be declared explicitly
+	shStats := pklIniRead("shiftStates", shStats, "LayStk", "layout") 	; This was in [global] then [pkl]
+	setLayInfo( "LayHasAltGr", InStr( shStats, 6 ) ? 1 : 0 )
+	shStats := StrSplit( RegExReplace( shStats, "[ `t]+" ), ":" ) 		; Remove any whitespace and make it an array
+	setLayInfo( "shiftStates", shStats ) 								; Used by the Help Image Generator (HIG)
 	
-	compKeys := []  													; Any Compose keys are registered before calling init_Composer().
+	cmpKeys := []   													; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
-	map := pklIniSect( layFile, "layout" )
-	extKey := pklIniRead( "extend_key","", layFile ) 					; Extend was in layout.ini [global]. Can map it directly now.
+	st2VK   := getLayInfo("St2VK") && ( layFile == baseLay ) 			; State-2-VK layout type: BaseLay entries are made VK.  	; eD WIP: Use BaseStack here when implemented
+	map     := pklIniSect( layFile, "layout" )
+	extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in layout.ini [global]. Can map it directly now.
 	( extKey ) ? map.Push( "`r`n" . extKey . " = Extend Modifier" ) 	; Define the Extend key. Lifts earlier req of a layout entry.
 	For ix, row in map { 												; Loop parsing the layout 'key = entries' lines
 		pklIniKeyVal( row, key, entries, 0, 0 ) 		; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
@@ -304,8 +309,8 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
 		entries := RegExReplace( entries, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
 		entry   := StrSplit( entries, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr := ( entry.Length() < 2 + shStates.Length() ) 
-			? entry.Length() : 2 + shStates.Length() 					; Comments make pseudo-entries, so truncate them 	; eD WIP: Not quite robust?
+		numEntr := ( entry.Length() < 2 + shStats.Length() ) 
+			? entry.Length() : 2 + shStats.Length() 					; Comments make pseudo-entries, so truncate them 	; eD WIP: Not quite robust?
 		entr1   := ( numEntr > 0 ) ? entry[1] : ""
 		entr2   := ( numEntr > 1 ) ? entry[2] : ""
 		if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
@@ -351,8 +356,9 @@ initLayIni() {  									;   ######################### layout.ini  #############
 			mpdVK   := ( mapVK[mpdVK] ) ? mapVK[ mpdVK ] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
 			mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
 			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
-			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey
-					                              : entr2   			; ...or in the case of a state entry, its Cap state
+			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
+			            : ( st2VK )               ? -2 : entr2  		; ...or in the case of a state entry, its Cap state
+;					                              : entr2   			; ...or in the case of a state entry, its Cap state
 ;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . mpdVK . "`n" )  ; eD DEBUG
 		}
 		setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
@@ -370,8 +376,10 @@ initLayIni() {  									;   ######################### layout.ini  #############
 			Hotkey, *%key%   ,  keypressDown 							; Set state mapped keys; these use AHK Send (Down/Up)
 			Hotkey, *%key% Up,  doNothing   							; eD WIP: Only Down needed? Or is this an advantage?
 		}	; end if entries
+		if ( entr2 < 0 )
+			numEntr := 2 												; If the key is VK/SC/Mod, ignore any extra entries
 		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
-			ks      := shStates[ A_Index ] 								; This shift state for this key
+			ks      := shStats[ A_Index ]   							; This shift state for this key
 			ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
 			if        ( StrLen( ksE ) == 0 ) { 							; Empty entry; ignore
 				Continue
@@ -387,7 +395,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 			} else {
 				ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images  	; eD WIP
+				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images
 				if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
 					setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
 					ksE := hig_untag( ksE ) 							; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
@@ -395,7 +403,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 				ks2 := SubStr( ksE, 2 )
 				if InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
 					if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
-						compKeys.Push( ks2 )    						; Register Compose key for initialization
+						cmpKeys.Push( ks2 ) 							; Register Compose key for initialization
 					ksE := ks2  										; = : Send {Blind} - use current mod state
 				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
 					ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
@@ -438,7 +446,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 					if ( getKeyInfo( key . "ext" . extN ) != "" )   	; Skip mapping if already defined
 						Continue
 					if ( InStr( extMapping, "©" ) == 1 )
-						compKeys.Push( SubStr( extMapping, 2 ) )    	; Register Compose key for initialization
+						cmpKeys.Push( SubStr( extMapping, 2 ) ) 		; Register Compose key for initialization
 					tmp := extMapping
 					extMapping := hig_untag( extMapping )   			; Lop off any HIG tag   	; eD TODO: We don't yet generate Extend images. Could we?
 					setKeyInfo( key . "ext" . extN , extMapping )
@@ -453,7 +461,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		}	; end loop ext#
 	}	; end if ( ExtendKey )
 	
-	init_Composer( compKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
+	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
 	;; ================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file

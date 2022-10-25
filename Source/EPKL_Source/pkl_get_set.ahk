@@ -1,5 +1,5 @@
 ﻿;; ================================================================================================
-;;  EPKL Get/Set module
+;;  EPKL Get/Set ###Info module
 ;;  - Read and set global variables without having to declare them
 ;;  - Static associative dictionaries are used instead of most globals
 ;;  - Organized in three main types: (E)PKL, Layout and Key info
@@ -24,46 +24,43 @@
 ;;  ...and more...
 ;
 
-setKeyInfo( key, value )
+setKeyInfo( key, val )
 {
-	Return getKeyInfo( key, value, 1 )
+	Return getKeyInfo( key, val, 1 )
 }
 
-setLayInfo( var, val )
+setLayInfo( key, val )
 {
-	Return getLayInfo( var, val, 1 )
+	Return getLayInfo( key, val, 1 )
 }
 
-setPklInfo( key, value )
+setPklInfo( key, val )
 {
-	getPklInfo( key, value, 1 )
+	Return getPklInfo( key, val, 1 )
 }
 
-getKeyInfo( key, value = "", set = 0 )
+getKeyInfo( key, val = "", set = 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
-		pdic[key]   := value
-	else
-		Return pdic[key]
+		pdic[key]   := val
+	Return pdic[key]
 }
 
-getLayInfo( key, value = "", set = 0 )
+getLayInfo( key, val = "", set = 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
-		pdic[key]   := value
-	else
-		Return pdic[key]
+		pdic[key]   := val
+	Return pdic[key]
 }
 
-getPklInfo( key, value = "", set = 0 )
+getPklInfo( key, val = "", set = 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
-		pdic[key]   := value
-	else
-		Return pdic[key]
+		pdic[key]   := val
+	Return pdic[key]
 }
 
 ;; ================================================================================================
@@ -176,7 +173,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
 		keyArr  := []
 		Loop % Max( lengths* ) {
-			keyArr.Push( "{¤}" ) 								; Example: [ "", "", "", "" ] if 4 is the max compose length used
+			keyArr.Push( "" )   								; Example: [ "", "", "", "" ] if 4 is the max compose length used
 		}
 		setKeyInfo( "NullKeys", keyArr )
 		setKeyInfo( "LastKeys", keyArr.Clone() ) 				; Used by the Compose/Completion key, via pkl_SendThis()
@@ -243,12 +240,12 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 
 lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previously sent characters for Compose
 	lastKeys := getKeyInfo( "LastKeys" )  							; A link to the actual LastKeys array (not a copy)
-	if        ( cmd == "push" ) { 									; Push one key on the format "{¤}" to the lastKeys buffer
+	if        ( cmd == "push" ) { 									; Push one key to the lastKeys buffer
 		lastKeys.Push( chr )
 		lastKeys.RemoveAt( 1 )
 	} else if ( cmd == "pop1" ) { 									; Remove the last entry in lastKeys (after Backspace presses)
-		lastKeys.Pop() 												; (We aren't using the pop value for anything)
-		lastKeys.InsertAt( 1, "{¤}" )
+		lastKeys.Pop()  											; (We aren't using the pop value for anything)
+		lastKeys.InsertAt( 1, "" )
 	} else if ( cmd == "null" ) { 									; Reset the last-keys-pressed buffer.
 		setKeyInfo( "LastKeys", getKeyInfo( "NullKeys" ).Clone() ) 	; Note: Use Clone() here, or you'll make a link to NullKeys
 		Return
@@ -257,4 +254,17 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 }
 
 ;; ================================================================================================
+;;  EPKL other Get/Set functions
 ;
+
+;;  TODO: Make this fn return other info parsed from a layout string as well? [ LayMain, LayPath, LayType, LayVari, KbdType, OthrMod ] ?
+getLay3LA( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
+	d3LA    := getPklInfo( "shortLays" ) 							; Global dictionary of '3LA' 3-letter layout name abbreviations. From pkl_init.
+	splt    := StrSplit( layStr, "\" )  							; LayMain can also contain a subfolder. Its name often starts w/ 3LA.
+	mLay    := splt[1]
+	m3LA    := ( d3LA[mLay] ) ? d3LA[mLay] : SubStr( mLay,1,3 ) 	; The 3LA found in the table, or just the 3 first letters of theLay.
+	endS    := splt[ splt.maxIndex() ]
+	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 	; The 3LA found in the string itself, if any.
+	type    := RegExMatch( layStr, mLay . "(?:\\.*)?\\" . m3LA . "-(\w+?)(?:-\w+?)?_", REMatch ), type := REMatch1
+	Return [ mLay, m3LA, s3LA, type ]   							; You may choose one output by calling, e.g., getLay3LA( str )[2].
+}

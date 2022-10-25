@@ -173,7 +173,7 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 		zSC := Format( "{:X}", SubStr( HKey, 3 ) )  			; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
 		chr := toUnicodeEx( zVK, zSC )  						; Get the actual char 	; eD WIP: Cannot yet get dead key output (the ShowKeyEventChar script could?!)
 ;		pklTooltip( "VK: " zVK "`nSC: " zSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
-		if ( chr )  											; If the output from the OS layout is a printable single character...
+		if ( chr != "" ) 										; If the output from the OS layout is a printable single character...
 			lastKeys( "push", chr ) 							; ...push it to the Compose queue
 	}
 }

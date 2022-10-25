@@ -479,3 +479,4 @@ DONE:
 * EPKL v1.4.1: WIP
 	- BaseLayout for QWERTY VK.
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
+	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.

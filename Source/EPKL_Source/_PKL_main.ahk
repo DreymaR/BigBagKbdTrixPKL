@@ -6,6 +6,16 @@
 ;
 
 ;;  ####################### user area #######################
+/*
+	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, use `layType = eD2VK`.
+		- This will only affect the BaseLayout, so any mappings in layout.ini will work as before. This allows, e.g., locale VK/State hybrid variants.
+	
+WIP 	- Allow a eD2VK choice in the Layout GUI, whenever there is an eD layType. Let it reflect both the layPath and display string.
+		- With this, we could reduce the number of folders and more or less duplicate files a lot.
+		
+	- Fixed: Compose and Repeat didn't register the `0` (zero) character.
+TOFIX	- Pressing Repeat right after startup prints `{¤}`
+*/
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
@@ -14,14 +24,16 @@
 ;		- TOFIX: Using the KeyMapper on, e.g., a QWERTY layout that's been remapped from Colemak, it goes wrong: Mapping to QW_U leads to QW_SC getting mapped to. Hmmm.
 ;			- For one, I guess it's time to stop being cute and making an actual BaseLayout for QWERTY. Heh.
 
+;		- WIP: A quick stab at SGCaps? Call it the SwiSh key, for Swiss Shift. (If I ever make yet another Shift key, it'll be Flick.)
+;		- WIP: Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
+
+;		- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
 ;		- WIP: It would be cool to make the Vim Help Sheet for Colemak available as a state image? Could, e.g., have it on state1 and show it whenever Shift is pressed.
 ;			- Could fix that using my colemak-vim-helpsheet.svg files.
 ;			- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
 ;			- The smallest text on the help image may not render well at the standard help image resolution?
 
 ;		- TOFIX: SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
-
-;		- WIP: A quick stab at SGCaps? Call it the SwiSh key, for Swiss Shift. (If I ever make yet another Shift key, it'll be Flick.)
 
 ;		- TOFIX: The detectCurrentWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
 ;			- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
@@ -30,9 +42,6 @@
 ;			- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
 ;			- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
 ;			- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
-
-;		- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
-
 ;		- WIP: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
 
 ;		- WIP: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
@@ -49,31 +58,6 @@
 ;		- TODO: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
 ;			- Next, specify which layer(s) goes which which key so you can have different Extend keys.
 
-;		- TODO: More GUI settings?
-;			- A Hotkeys settings panel?
-;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
-
-;		- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
-
-;		- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4 more states than the current 4, disregarding Ctrl.
-;			- Kindly sponsored by Rasta at the Colemak Discord!
-;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
-;			- May have to clean up the state calculation in _keyPressed()
-;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
-;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;			- Make a lock variant of the modifier
-
-;		- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
-;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
-
-;		- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-;			- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
-;			- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
-;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
-;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
-;		- TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
-;			- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
-
 ;		- WIP: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 ;			- I think the bulgarian =+ position should house Ѝ ѝ
 ;			- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
@@ -87,6 +71,32 @@
 ;			- The national layout uses `'` so the current mapping may suffice
 ;			- Maybe put ’ on the iso key instead of double acute?
 ;			- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
+
+;		- TODO: More GUI settings?
+;			- A Hotkeys settings panel?
+;			- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
+
+;		- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
+
+;		- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4(8) more states than the current 4, disregarding Ctrl.
+;			- Kindly sponsored by Rasta at the Colemak Discord!
+;			- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
+;			- May have to clean up the state calculation in _keyPressed()
+;			- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
+;			- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
+
+;		- TODO: Make a lock variant of modifiers. Which ones?
+
+;		- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
+;			- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
+
+;		- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+;			- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;			- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
+;			- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+;			- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
+;		- TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
+;			- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
 
 ;		- TODO: Add a Help button with a more generic help screen for the first Settings UI panel?
 ;		- TODO: Move the text for the Settings UI help text to the language files?!
@@ -149,7 +159,7 @@
 ;			- MoDK idea: Tap Ext for chaining DK layer (e.g., {Ext,a,e} for e acute – é?). But how best to organize them? Mnemonically is not so ergonomic.
 
 ;		- WIP: Dual-role modifiers. Allow home row modifiers like for instance Dusty from Discord uses: ARST and OIEN can be Alt/Win/Shift/Ctrl when held. Define both KeyDn/Up.
-;			- In the EPKL_Settings .ini, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
+;			- In EPKL_Settings, set a tapOrModTapTime. In layout, use SC### = VK/ModName first entries. The key works normally when tapped, and the Mod is stored separately.
 ;			- Redefine the dual-role Extend key as a generic tapOrMod key. Treating Extend fully as a mod, it can also be ToM (or sticky?).
 ;			- TOFIX: ToM-tap gets transposed when typing fast, the key is sluggish. But if the tap time is set too low, the key can't be tapped instead.
 ;				- To fix this, registered interruption. So if something is hit before the mod timer the ToM tap is handled immediately.
@@ -185,6 +195,8 @@
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;		- TODO: OS DK detection sucks. Go through all SC### and send their four states? (Only if the OS layout has AltGr; can we detect that by DLL?)
+;			- Also store the DK characters in a better format? Just a string like ´¨`^~ is unclear and tricky.
 ;		- TODO: Ext layers by app/window? Like auto-Suspend. Could be handy for ppl w/ apps using odd shortcuts.
 ;		- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
 ;		- TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
@@ -197,7 +209,6 @@
 ;		- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. 
 ;			- Possible to extract the pic from pkl_gui_image?
 ;		- TODO: Personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
-;		- TODO: Lose the ANS2ISO VKEY maps in all layouts and the Remap file since they're based on flawed logic?
 ;		- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
 ;		- TODO: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
 ;			- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
@@ -217,10 +228,6 @@
 ;;  eD TODO:
 ;		- TODO: Make the CoDeKey follow the StickyTime timer? So you'll only use it as CoDeKey in flow. No, it'd need its own timer.
 ;		- TODO: Could I turn around the Compose method, to be leader key after all? But how to input then? Without looking sucks. In a pop-up box?
-;		- TODO: Offer VK layouts based on the eD ones! Use only the state0/1 images then.
-;			- Let the Layout Picker show VK if VK or other kinds are available. With the LayType setting, use a VK if the layout is present but if not, look for eD.
-;			- Let the generated VK layout convert to VK in BaseLayout only! That way, we could have state mapped overrides in layout.ini, and thus locale VK variants!
-;			- With this, we could reduce the number of folders and more or less duplicate files a lot.
 ;		- TODO: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
 ;			- markColors = #c00:_E/_N/_K, #990:_B/_T/_F, #009:_J     ; Tarmak2 colors
 ;			- markColors = <CSV of marking specs>, similar to the remaps. Could have Tarmak1,Tarmak2,Tarmak3,#009:_J ?
