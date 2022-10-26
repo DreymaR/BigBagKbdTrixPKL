@@ -7,6 +7,10 @@
 
 ;;  ####################### user area #######################
 /*
+TOFIX	- SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
+			- The problem is that the VK is sent twice, once physically and then again by EPKL. This releases the base char.
+			- Possible solution: Don't send anything for a known DK?
+				- But what are known DKs? Improve the DK detection routine. Not by char but by key+mods.
 		
 WIP 	- 
 */
@@ -15,19 +19,14 @@ WIP 	-
 ;;  eD TOFIX/WIP:
 ;	- WIP: 
 
-;	- TOFIX: Using the KeyMapper on, e.g., a QWERTY layout that's been remapped from Colemak, it goes wrong: Mapping to QW_U leads to QW_SC getting mapped to. Hmmm.
-;		- For one, I guess it's time to stop being cute and making an actual BaseLayout for QWERTY. Heh.
-
-;	- WIP: A quick stab at SGCaps? Call it the SwiSh key, for Swiss Shift. (If I ever make yet another Shift key, it'll be Flick.)
-;	- WIP: Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
+;	- TODO: A layout2/3/4 setting in layout files that can define Swish/Flick layers. Allows for instance a Greek layout added as Swish/Flick layers.
+;	- TODO: Lockable modifiers would be nice, especially for SwiSh/FliCK. For instance, RCtrl+SwiSh could lock/unlock SwiSh.
 
 ;	- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
 ;	- WIP: It would be cool to make the Vim Help Sheet for Colemak available as a state image? Could, e.g., have it on state1 and show it whenever Shift is pressed.
 ;		- Could fix that using my colemak-vim-helpsheet.svg files.
 ;		- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
 ;		- The smallest text on the help image may not render well at the standard help image resolution?
-
-;	- TOFIX: SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
 
 ;	- TOFIX: The detectCurrentWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
 ;		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
@@ -71,13 +70,6 @@ WIP 	-
 ;		- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
 
 ;	- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
-
-;	- TODO: Implement SGCaps, allowing Shift State +8 for a total of 16 possible states - in effect 4(8) more states than the current 4, disregarding Ctrl.
-;		- Kindly sponsored by Rasta at the Colemak Discord!
-;		- The states themselves are already implemented? So what remains is a sensible switch. "Lvl8|SGCap Modifier"? Can translate in _checkModName()
-;		- May have to clean up the state calculation in _keyPressed()
-;		- This should be the ideal way of implementing mirrored typing? (On the Lenovo Thinkpad there's even a thumb PrtSc/SC137 key that could serve as switch.)
-;		- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 
 ;	- TODO: Make a lock variant of modifiers. Which ones?
 
@@ -189,6 +181,8 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;	- SwiSh/FliCK should be the ideal way of implementing mirrored typing?
+;		- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;	- TODO: OS DK detection sucks. Go through all SC### and send their four states? (Only if the OS layout has AltGr; can we detect that by DLL?)
 ;		- Also store the DK characters in a better format? Just a string like ´¨`^~ is unclear and tricky.
 ;	- TODO: Ext layers by app/window? Like auto-Suspend. Could be handy for ppl w/ apps using odd shortcuts.
@@ -295,6 +289,7 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD ONHOLD:
+;	- Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
 ;	- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
 ;		- Issue: With Sticky Shift, the 2nd state mapping is sent shifted which is wrong if it was mapped to be something unshifted. Normal Shift does not.
 ;		- Sticky Shift just holds down the Shift key which leads to this effect. Should I make sure the state map is sent unblind?

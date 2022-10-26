@@ -388,6 +388,21 @@ As mentioned, the EPKL Compose key is used to enter a sequence of characters and
 * I also use one on the key next to RAlt. Using the Wide mod it's a quite accessible thumb key. Excellent for home row mappings!
 * If you want for instance a thumb key DK without the Compose, you could of course use any dead key directly.
 * You can map keys as Compose and specify which Compose keys are CoDeKeys from the Special Keys tab of the Layout/Settings menu.
+<br>
+
+#### More Modifiers
+You can set pretty much any key to be a modifier of choice.
+* To set a key to be a Left Shift modifier, just map that key to `LShift Modifier` – similar to a VK/SC key mapping.
+* The Shift, Ctrl and AltGr (RAlt is AltGr on international layouts) modifiers affect the Shift state: Shift is +1, AltGr is +6.
+* So, the four main states are `0:1:6:7`. In a standard layout there is also a state `2` for Ctrl, but it isn't normally used.
+* In a `layout.ini` (or its BaseLayout) file there's usually a `ShiftStates` setting that specifies which shift states that layout uses.
+* However, EPKL has more modifiers for you to play with, should you wish to: The magical **SwiSh & FliCK** are there for you.
+* SwiSh stands for "Swiss Shift" and is the same as Windows "SGCaps" which is an extra Shift-type modifier on the CapsLock key.
+* FliCK got its name because of the other one, pretty much. I've decided it means "Flip Cap Key". Bear with me.  ฅʕ •ᴥ•ʔฅ
+* To use SwiSh, edit your layout's `ShiftStates` setting to add the desired shift states by changing `7 ; 8` to `7 : 8`.
+* Then, add the new state mappings to all state-mapped keys. To leave a state blank, map it to `--` flanked by whitespace as usual.
+* Be advised that if there are more shift states than mappings in a layout definition, line comments may be interpreted as mappings.
+* Side note: It may be harder the other way around; in particular the Alt keys aren't easily mappable. Try [SharpKeys][ShrpKy] for those?
 <br><br>
 
 KNOWN ISSUES:
@@ -461,10 +476,11 @@ _Øystein "DreymaR" Bech-Aase_
 [EPKL4D]: https://docs.google.com/document/d/1G0chfgAwdf8cF-uoPEUw0CWwKXW9-uuQiNLbYlnYurs (EPKL For Dummies, by Torben G.B.)
 [ThothW]: https://en.wikipedia.org/wiki/Thoth (Thoth: Egyptian god of wisdom and writing)
 [InkPrt]: https://portableapps.com/apps/graphics_pictures/inkscape_portable (Inkscape v1.0 at PortableApps.com)
-[PklSrc]: ./Source      (EPKL advanced README)
-[PklLay]: ./Layouts     (EPKL Layouts folder)
-[PklOth]: ./Other       (EPKL Other folder)
-[PklKLC]: ./Other/MSKLC (EPKL's Microsoft Keyboard Layout Creator folder)
+[PklSrc]: ./Source          (EPKL advanced README)
+[PklLay]: ./Layouts         (EPKL Layouts folder)
+[PklOth]: ./Other           (EPKL Other folder)
+[PklKLC]: ./Other/MSKLC     (EPKL's Microsoft Keyboard Layout Creator folder)
+[ShrpKy]: ./Other/SharpKeys (EPKL's SharpKeys folder)
 [KeyTab]: ./Other/KeyCodeTable.txt (KeyCodeTable.txt)
 [LayOvr]: ./EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
 [LayDef]: ./EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)

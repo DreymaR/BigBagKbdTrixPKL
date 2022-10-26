@@ -289,6 +289,9 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	shStats := pklIniRead("shiftStates", shStats, "LayStk", "layout") 	; This was in [global] then [pkl]
 	setLayInfo( "LayHasAltGr", InStr( shStats, 6 ) ? 1 : 0 )
 	shStats := StrSplit( RegExReplace( shStats, "[ `t]+" ), ":" ) 		; Remove any whitespace and make it an array
+	for ix, state in shStats {
+		shStats[ix] := Format( "{:i}", "0x" . state )   				; Use hex in layout files for states (above 9), but dec internally
+	}
 	setLayInfo( "shiftStates", shStats ) 								; Used by the Help Image Generator (HIG)
 	
 	cmpKeys := []   													; Any Compose keys are registered before calling init_Composer().
@@ -602,7 +605,8 @@ _mapKLM( ByRef key, type ) {
 
 _checkModName( key ) {  							; Mod keys need only the first letters of their name
 	static modNames := [ "LShift", "RShift", "CapsLock", "Extend", "SGCaps"
-						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin" ]
+						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin"
+						, "SwiSh", "FliCK" ] 		; eD WIP: SwiSh (SGCaps) modifier, FliCK (FlipCapKey)
 	
 	For ix, modName in modNames {
 		if ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?

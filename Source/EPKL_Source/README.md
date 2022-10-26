@@ -476,7 +476,13 @@ DONE:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: State-2-VK mapping types.
+* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types.
+	- Two new modifiers: SwiSh and FliCK! SwiSh ("Swiss Shift") corresponds to the Windows SGCaps modifier, and FliCK ("Flip Cap Key") is custom.
+		- To get a SwiSh modifier for instance, just map a key like you would for any modifier, to `Swish Modifier`.
+		- The SwiSh & FliCK modifiers are virtual, not physical like Shift/Ctrl/Alt/Win. They add 8 and 16 to the ShiftState, respectively.
+		- For ShiftStates in layout files, use hex values. Corresponding to the standard `0:1:6:7` plus SwiSh, are `8:9:e:f` – `a` is the Ctrl+SwiSh state.
+		- SwiSh/FliCK modifiers can be made Sticky (one-shot) via the stickyMods setting, like other modifiers.
+		- SwiSh and FliCK were kindly sponsored by Antoine Olivier (Rastast at the Colemak Discord, IKLProject on GitHub)! Thanks a lot – sorry about the delay!
 	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
 		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrid variants.
 		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit manually afterwards.

@@ -92,9 +92,11 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 ;	if ( getKeyState("LShift") || getKeyState("RShift") ) 		; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
 ;		modif .= "+"
 	modif := InStr( modif, "!" ) ? "{Blind}" . modif : modif 	; Alt+F to File menu etc doesn't work without Blind if the Alt button is pressed.
+	state += _getModState( "SwiSh" ) ? 0x08 : 0 				; SwiSh (SGCaps, state+08) modifier
+	state += _getModState( "FliCK" ) ? 0x10 : 0 				; FliCK (Custom, state+16) modifier
 	
-	Pri := getKeyInfo( HKey . state ) 							; Primary entry by state; may be a prefix
-	Ent := getKeyInfo( HKey . state . "s" )						; Actual entry by state, if using a prefix
+	Pri := getKeyInfo( HKey . state )   						; Primary entry by state; may be a prefix
+	Ent := getKeyInfo( HKey . state . "s" ) 					; Actual entry by state, if using a prefix
 	if ( Pri == "" ) {
 		Return
 	} else if ( state == "ent1" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: Tried "VKey" here but then Ctrl+<key> fails?!
@@ -199,24 +201,24 @@ setModifierState( theMod, keyDown = 0 ) {   				; Can be called from a hotkey or
 	}
 }
 
-_setModState( theMod, keyDown = 1 ) {
+_setModState( theMod, keyDown = 1 ) {   					; Using 1/0 for true/false here.
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
-	} else if ( theMod == "AltGr" ) {
-;		setAltGrState( keyDown ) 							; AltGr 	; eD NOTE: For now, AltGr can't be sticky?
-		setKeyInfo( "ModState_AltGr", keyDown )
+;	} else if ( theMod == "AltGr" ) {
+;		setAltGrState( keyDown ) 							; AltGr (not used now)  	; eD NOTE: For now, AltGr can't be sticky?
 	} else {
-		UD := ( keyDown ) ? "Down" : "Up"
 		setKeyInfo( "ModState_" . theMod, keyDown ) 		; Standard modifier
-		Send {%theMod% %UD%} 								; NOTE: This autorepeats. Is that desirable?
+		UD := ( keyDown ) ? "Down" : "Up"   				; If a physical mod, send KeyDown/Up
+		if not inArray( [ "AltGr", "SwiSh", "FliCK" ], theMod )
+			Send {%theMod% %UD%} 							; NOTE: This autorepeats. Is that desirable?
 	}
 }
 
-;_getModState( theMod ) {
+_getModState( theMod ) { 									; This is only used for virtual modifiers. Returns 1/0 (true/false).
 ;	if ( theMod == "AltGr" )
 ;		Return getAltGrState()
-;	Return getKeyInfo( "ModState_" . theMod )
-;}
+	Return getKeyInfo( "ModState_" . theMod )   			; Physical ones are simply depressed in _setModState().
+}
 
 setOneShotMod( theMod ) {   								; Activate a One-Shot Mod (OSM).
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . theMod, 0.3 )  ; eD DEBUG 	; eD WIP
