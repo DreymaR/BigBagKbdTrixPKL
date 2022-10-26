@@ -33,3 +33,21 @@ This layout variant aims to provide a Vietnamese Colemak that works well with EP
 |![EPKL help image for Colemak-eD-Vi on an ANSI board, Shift+AltGr state](./Cmk-eD-Vi_ANS/state7.png)|
 |   :---:   |
 |_Colemak-eD-Vi_ANS, Shift+AltGr state_|
+<br><br>
+
+Use an IME instead?
+-------------------
+Many users are accustomed to their Input Method for languages like Vietnamese, and want to keep using it with Colemak.
+- Unfortunately, that's not trivial since the standard Windows IMEs are linked to language – which means the QWERTY layout.
+- There is a way of relinking which layout is the default for a language. It involves Registry editing, so it's rather high-tech.
+- It's described in the Reddit post "[How to: Colemak for ... IMEs][IMEreg]". The Vietnamese language has the ID `0000042a`.
+- That way, you could use an installed Colemak such as the one in the [EPKL Other\MSKLC][PklKLC] folder or from the [Colemak site][CmkCom].
+- Relevant Registry keys are in these locations:
+```
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\0000042a
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\i8042prt\Parameters
+```
+
+[IMEreg]: https://www.reddit.com/r/Colemak/comments/9rq7vv/how_to_colemak_for_japanese_chinese_and_other/ (Reddit – How to: Colemak for ... IMEs)
+[CmkCom]: https://www.colemak.com (The Colemak official site)
+[PklKLC]: ../../../Other/MSKLC     (EPKL's Microsoft Keyboard Layout Creator folder)
