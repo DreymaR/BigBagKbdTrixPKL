@@ -56,6 +56,8 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 		} else {
 			_composeVK( HKey, vk_HK )   						; If the output is a single, printable character, add it to the Compose queue
 		}
+;		if inArray( [ "SC002","SC003","SC004" ], HKey )
+;			pklTooltip( HKey . " " . capHK ), Return 	; eD DEBUG
 		Send {Blind}{%vk_HK% DownR} 							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
 		_osmClearAll()  										; Clear any sticky mods after sending
 		Return

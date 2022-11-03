@@ -8,10 +8,20 @@
 ;;  ####################### user area #######################
 /*
 TOFIX	- SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
-			- The problem is that the VK is sent twice, once physically and then again by EPKL. This releases the base char.
+			- The problem is that the VK is sent twice, once physically and then again by EPKL? This releases the base char.
 			- Possible solution: Don't send anything for a known DK?
-				- But what are known DKs? Improve the DK detection routine. Not by char but by key+mods.
-		
+				- But what are known DKs? Improve the DK detection routine. Not by char but by key+mods. Or, use code w/ DLL calls from the AHK forum?
+		- Would not sending DK states for VK/SC mappings help? No, then the DK simply isn't sent and the next key will just be itself.
+		- Sending the key as by the old VK Send (KeyUp-then-KeyDown), produces the same result: A double accent is released.
+		- The culprit is GetKeySC(vk_HK) w/ DLLs that _composeVK() uses. OS DKs worked before I introduced that.
+			- Simply exclude the offending key states from that fn? No, the issue is its GetKeyboardState DLL call I think.
+			- Its function is to return a pointer to a 256-byte array of key states for the whole board. But only the mod key states may be necessary?
+			- If so, emulate it in some way? GetKeyState for individual keys and put it in the right spots?
+			- VK_SHIFT-VK_CONTROL-VK_MENU indices have values 16-17-18 (0x10-0x11-0x12).
+			- Setting ComposeVK to 'no' restores OS DK functionality
+		- If it works: Add a list of key:state that get special treatment from VK/SC. In settings or layouts, like `_1:6,_2:6,...,SC:6,...`.
+		- Later on, make DK detection able to generate such a list
+TOFIX	- SwiSh/FliCK modifiers doesn't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 WIP 	- 
 */
 
@@ -422,8 +432,7 @@ keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent d
 ;	Critical
 ;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
 	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
-;	( 1 ) ? pklDebug( "" . GetKeyState("Shift") . "`n" . GetKeyState("Shift",P) . "`n" 
-;						 . DLLCall("GetKeyState","UInt",0x10) . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
+;	( 1 ) ? pklDebug( "" . GetKeyState("Shift", "P") . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)

@@ -208,10 +208,12 @@ pkl_showHelpImage( activate = 0 )
 }
 
 pklGetState() { 														; Get the 0:1:6:7 shift state as in layout.ini and img names
-	state  = 0
-	state += 1 * getKeyState( "Shift" )
-;	state += 2 * getKeyState( "Ctrl" )
-	state += 6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
+	state  =  0
+	state +=  1 * getKeyState( "Shift" )
+;	state +=  2 * getKeyState( "Ctrl" )
+	state +=  6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
+	state +=  8 * getKeyInfo( "ModState_SwiSh" )
+	state += 16 * getKeyInfo( "ModState_FliCK" )
 	Return state
 }
 

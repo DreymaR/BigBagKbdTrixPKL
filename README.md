@@ -1,4 +1,4 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
+﻿DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
 ### ***EPiKaL PortableKeyboardLayout** for Windows, with layouts*
@@ -287,7 +287,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 <br>
 
 #### Techy tips for EPKL:
-* EPKL is Viper approved! One of the fastest typists in the world has tested it and found it responsive enough.
+* EPKL is Viper and CSGO approved! Some of the fastest typists in the world have tested it and found it responsive enough.
     - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
@@ -392,17 +392,19 @@ As mentioned, the EPKL Compose key is used to enter a sequence of characters and
 
 #### More Modifiers
 You can set pretty much any key to be a modifier of choice.
-* To set a key to be a Left Shift modifier, just map that key to `LShift Modifier` – similar to a VK/SC key mapping.
-* The Shift, Ctrl and AltGr (RAlt is AltGr on international layouts) modifiers affect the Shift state: Shift is +1, AltGr is +6.
-* So, the four main states are `0:1:6:7`. In a standard layout there is also a state `2` for Ctrl, but it isn't normally used.
-* In a `layout.ini` (or its BaseLayout) file there's usually a `ShiftStates` setting that specifies which shift states that layout uses.
-* However, EPKL has more modifiers for you to play with, should you wish to: The magical **SwiSh & FliCK** are there for you.
-* SwiSh stands for "Swiss Shift" and is the same as Windows "SGCaps" which is an extra Shift-type modifier on the CapsLock key.
-* FliCK got its name because of the other one, pretty much. I've decided it means "Flip Cap Key". Bear with me.  ฅʕ •ᴥ•ʔฅ
-* To use SwiSh, edit your layout's `ShiftStates` setting to add the desired shift states by changing `7 ; 8` to `7 : 8`.
-* Then, add the new state mappings to all state-mapped keys. To leave a state blank, map it to `--` flanked by whitespace as usual.
-* Be advised that if there are more shift states than mappings in a layout definition, line comments may be interpreted as mappings.
-* Side note: It may be harder the other way around; in particular the Alt keys aren't easily mappable. Try [SharpKeys][ShrpKy] for those?
+* To make any key into a Left Shift key, just map that key to `LShift Modifier` – similar to a VK/SC key mapping.
+* Shift, Ctrl and AltGr (RAlt is AltGr on international layouts) affect the Shift State: Shift is +1, AltGr is +6.
+* So, the four main states are `0:1:6:7`. In most layouts there's also state `2` for Ctrl, but it isn't normally used.
+* In a `layout.ini` or its BaseLayout file there's a `ShiftStates` setting that specifies which states are used.
+* However, EPKL has more modifiers for you to play with, should you wish to: The magical **SwiSh & FliCK** are there for you!
+* SwiSh stands for "Swiss Shift" from the Windows "SGCaps", an extra Shift-type modifier on the CapsLock key.
+* FliCK got its name because of the other one, pretty much. It means "Flip Cap Key". Bear with me.  ฅʕ •ᴥ•ʔฅ
+* To use SwiSh, edit your layout's `ShiftStates` entry to add states by changing `7 ; 8` to `7 : 8`.
+* Then, add the new mappings to all state-mapped keys. To leave a state blank, map it to `--` as usual.
+* For Cmk-eD derived layouts, just set your `layout.ini` baseLayout setting to `BaseLayout_Cmk-eD_SwiSh`.
+* Then add a `SwiSh Modifier` key definition somewhere. You could override RCtrl for instance.
+* Side note: It may be harder the other way around; in particular the Alt keys aren't easily mappable.
+* Try [SharpKeys][ShrpKy] for hard mod remapping? It's less flexible but very robust!
 <br><br>
 
 KNOWN ISSUES:

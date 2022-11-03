@@ -207,9 +207,10 @@ pkl_about()
 
 readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
+	layIni  := StrReplace( layIni, "2VK" )  					; Remove the to-VK tag if present
+	SplitPath, layIni, , layDir 								; The icon files may be in the layout dir
+	layDir  := ( layIni == "LayStk" ) ? getPklInfo( "Dir_LayIni" ) : layDir
 	For ix, icon in [ "on.ico", "off.ico" ] {
-		SplitPath, layIni, , layDir 							; The icon files may be in the layout dir
-		layDir  := ( layIni == "LayStk" ) ? getPklInfo( "Dir_LayIni" ) : layDir
 		dirIco  := layDir . "\" . icon
 		iniIco  := fileOrAlt( pklIniRead( "icons_OnOff",, layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon ) 	; If not specified in layout file or in dir, use this

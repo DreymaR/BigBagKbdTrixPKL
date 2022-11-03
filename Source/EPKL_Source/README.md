@@ -1,4 +1,4 @@
-EPiKaL Portable Keyboard Layout by Máté Farkas & DreymaR
+﻿EPiKaL Portable Keyboard Layout by Máté Farkas & DreymaR
 ========================================================
 <br>
 
@@ -489,3 +489,6 @@ DONE:
 	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.
+	- Fixed: Repeat is counted in the LastKeys queue so it works with composing.
+	- Fixed: End-of-line comments in layout entries are now stripped, w/o harming semicolon state entries. These now have to be on the form `Tab-;-spaces-Tab`.
+	

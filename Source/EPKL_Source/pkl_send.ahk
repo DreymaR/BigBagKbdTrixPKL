@@ -36,7 +36,7 @@ pkl_SendThis( this, modif = "" ) {  							; Actually send a char/string. Also l
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" ) 			; Strip off any spaces sent to release OS deadkeys, and other such stuff
 	if        ( this == "{Space}" ) { 							; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
-	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {  	; eD WIP: Why don't these and Space compose now?
+	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
 	if ( StrLen( tht ) == 3 ) 									; Single-char keys are on the form "{¤}"
@@ -306,10 +306,11 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 }
 
 pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of times, for the ®# key
-	lsk := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
-	lsk := lsk[lsk.Length()] 									; The last entry in LastKeys is the previous key.
+	lks := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
+	lky := lks[lks.Length()] 									; The last entry in LastKeys is the previous key.
 	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # of repeats may be any hex number without "0x", or just ® for num=1
 	Loop % num {
-		SendInput {Text}%lsk% 	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
+		SendInput {Text}%lky%   	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
+		lastKeys( "push", lky ) 								; Repeated keys are counted in the LastKeys queue
 	}
 }

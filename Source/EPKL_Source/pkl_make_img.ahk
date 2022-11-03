@@ -143,8 +143,8 @@ for the current layout, or only default/state images?
 	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
 
-hig_makeImgDicThenImg( ByRef HIG, shSt ) { 						; Function to create a help image by a pdic.
-	if not InStr( HIG.States, shSt ) 							; If this state isn't marked for rendering, skip it
+hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help image by a pdic.
+	if not InStr( HIG.States, Format("{:x}",shSt) ) 			; If this state isn't marked for rendering, skip it (hex comparison)
 		Return
 	stateImg    := ( HIG.imgType == "ShSt" ) ? true : false 	; Base shift state image
 	if ( HIG.imgType == "DKSS" ) { 								; Dead key shift state image

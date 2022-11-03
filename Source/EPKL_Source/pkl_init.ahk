@@ -200,7 +200,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, layout.ini as usual.
 	layType := st2VK ? SubStr(layType,1,-3) : layType   				; Make layType reflect actual layType, and set St2VK as necessary.
 	thisLay := StrReplace( thisLay, layType . "2VK", layType )
-	setLayInfo( "St2VK", ( st2VK ) ? layType : "" ) 					; This is tested for each layFile below
+	setLayInfo( "St2VK", st2VK )    									; This is tested for each layFile below
 	mainDir := bool( pklIniRead("compactMode") ) ? "." 
 			 : laysDir . thisLay 										; If in compact mode, use the EPKL root dir as mainDir
 	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )  			; The path of the main layout .ini file
@@ -297,11 +297,11 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	cmpKeys := []   													; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
 	st2VK   := getLayInfo("St2VK") && ( layFile == baseLay ) 			; State-2-VK layout type: BaseLay entries are made VK.  	; eD WIP: Use BaseStack here when implemented
-	map     := pklIniSect( layFile, "layout" )
+	layMap  := pklIniSect( layFile, "layout" )  						; An array of lines. Not End-of-line comment stripped (yet).
 	extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in layout.ini [global]. Can map it directly now.
-	( extKey ) ? map.Push( "`r`n" . extKey . " = Extend Modifier" ) 	; Define the Extend key. Lifts earlier req of a layout entry.
-	For ix, row in map { 												; Loop parsing the layout 'key = entries' lines
-		pklIniKeyVal( row, key, entries, 0, 0 ) 		; Key SC and entries. No comment stripping here to avoid nuking the semicolon!
+	( extKey ) ? layMap.Push("`r`n" . extKey . " = Extend Modifier") 	; Define the Extend key. Lifts earlier req of a layout entry.
+	For ix, row in layMap { 											; Loop parsing the layout 'key = entries' lines
+		pklIniKeyVal( row, key, entrys, 0, 0 )  						; Key SC and entries. No comment stripping here to avoid nuking the semicolon.
 		if InStr( "<NoKey><Blank>shiftStates", key ) 					; This could be mapped, but usually it's from pklIniKeyVal()
 			Continue 													; The shiftStates entry is special, defining the layout's states
 ;		keyOrig := key  												; eD WIP: Can we make the System layout remappable, so you could apply ergomods etc to your OS layout?
@@ -310,10 +310,11 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
 			Continue
 		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
-		entries := RegExReplace( entries, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
-		entry   := StrSplit( entries, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr := ( entry.Length() < 2 + shStats.Length() ) 
-			? entry.Length() : 2 + shStats.Length() 					; Comments make pseudo-entries, so truncate them 	; eD WIP: Not quite robust?
+		entrys  := RegExReplace( entrys, "`t;[ ]{2,}`t", "Ş₡εɳŦŕ¥" ) 	; Conserve semicolon entries so they aren't comment-stripped
+		entrys  := StrReplace( strCom(entrys), "Ş₡εɳŦŕ¥", "`t;`t" ) 	; Strip end-of-line comments (whitespace-then-semicolon)
+		entrys  := RegExReplace( entrys, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
+		entry   := StrSplit( entrys, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
+		numEntr := entry.Length()
 		entr1   := ( numEntr > 0 ) ? entry[1] : ""
 		entr2   := ( numEntr > 1 ) ? entry[2] : ""
 		if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
@@ -361,8 +362,6 @@ initLayIni() {  									;   ######################### layout.ini  #############
 			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
 			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
 			            : ( st2VK )               ? -2 : entr2  		; ...or in the case of a state entry, its Cap state
-;					                              : entr2   			; ...or in the case of a state entry, its Cap state
-;			( key == "SC01A" ) ? pklDebug( "`nSC01A codes:`n" . entr1 . " / VK" . mpdVK . "`n" )  ; eD DEBUG
 		}
 		setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
 		setKeyInfo( key . "ent2", entr2 )   							; Set CapsState (`CAP`: 0-5 for states; -1 Mod; -2 VK; -3 SC)
@@ -415,7 +414,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 				setKeyInfo( key . ks . "s", ksE ) 						; "key<state>s" is the entry itself
 			}	; end if prefix
 		}	; end loop entries
-	}	; end loop (parse keymap)
+	}	; end loop (parse layMap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
 		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use an extKeys[] array instead!
 	}	; end For row in map

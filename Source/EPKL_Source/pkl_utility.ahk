@@ -378,20 +378,23 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 }
 
 toUnicodeEx( VK, SC ) { 																; Call the OS layout to translate VK/SC to a character, if possible
-	;;  https://www.autohotkey.com/boards/viewtopic.php?t=1040
 	TID := DllCall( "GetWindowThreadProcessId", "Int", WinExist("A"), "Int", 0 ) 		; TID: Window  Thread Process ID
 	ID0 := DllCall( "GetCurrentThreadId", "UInt", 0 )   								; TI0: Current Thread Process ID
 	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 1 ) 					; Attach TID input to the TI0 process. Needed to detect AltGr etc.
-	HKL := DllCall( "GetKeyboardLayout", "Int", TID )   								; Refresh GetKeyboardLayout
-	VarSetCapacity( KeyState, 256 )
-	DllCall( "GetKeyboardState", "uint", &KeyState ) 									; Get Keyboard State -> &KeyState (256 bytes) 	; eD WIP: This throws off OS DKs?
-;	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 0 )
+	HKL := DllCall( "GetKeyboardLayout", "Int", TID )   								; Refresh GetKeyboardLayout (the user may change it, e.g., with Win+Space)
+;	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 0 )  				; ???
 	VarSetCapacity( theChar, 32 )   													; The result may be a buffer with several chars (if so, these are not good here)
-	DK  := DllCall( "ToUnicodeEx", "UInt", VK, "UInt", SC, "UInt", &KeyState, "Str", theChar, "UInt", 64, "UInt", 1, "UInt", HKL) 	; Note: It also gives Ctrl chars (0x00–0x1F)
+	DK  := DllCall( "ToUnicodeEx", "UInt", VK, "UInt", SC, "UInt", _keyState(), "Str", theChar, "UInt", 64, "UInt", 1, "UInt", HKL) 	; This also gives Ctrl chars (0x00–0x1F)
 	Map := DllCall( "MapVirtualKey", "uint", VK, "uint", 2 ) 							; MapVirtualKey translates/maps VK into SC (0) or char (2), or SC to VK (1/3)
 	if ( DK == 1 ) && ( Map > 0 ) && ( Ord(theChar) > 0x1F ) 							; Is it the same as AHK's GetKeyName() fn, for this purpose? Used here to detect DKs.
 		Return theChar  																; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
-} 	; eD WIP: Need to weed out Ctrl chars! It makes output for Ctrl+S for instance.
+} 	; eD WIP: How to make OS DKs work again?! Check other AHK articles. 				; https://www.autohotkey.com/boards/viewtopic.php?t=1040
+
+_keyState() {   																		; Get a &KeyState 256-byte array
+	VarSetCapacity( KeyState, 256 ) 													; Is just the ModState actually needed, or all?
+	DllCall( "GetKeyboardState", "uint", &KeyState ) 									; Get Keyboard State -> &KeyState (256 bytes) 	; eD WIP: This throws off OS DKs?
+	Return &KeyState
+}
 
 pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
 	lin := "`n————" . "————" . "————"   					; Just a line of dashes for formatting
