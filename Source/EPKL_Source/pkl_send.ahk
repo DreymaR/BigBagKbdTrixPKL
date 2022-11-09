@@ -10,7 +10,7 @@ pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for 
 	char    := Chr(ch)
 	if ( ch > 32 ) { 						; ch > 128 works with Unicode AHK
 		this    := "{" . char . "}" 		; Normal char
-	if InStr( getCurrentWinLayDeadKeys(), char )
+	if InStr( getCurrentWinLayDeadKeys(), char ) 	; eD WIP: Improve this with real DK detection?! How does that work, really? A char may be both a DK release and not...!
 		this    .= "{Space}" 				; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
 		this    := "{Space}"
@@ -118,7 +118,7 @@ pkl_CheckForDKs( ch ) {
 	static SpaceWasSentForSystemDKs := false
 	
 	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
-		SpaceWasSentForSystemDKs := false
+		SpaceWasSentForSystemDKs := false   					; eD WIP: Because "CurrNumOfDKs" is for EPKL DKs, but this is for OS DKs?!?
 	} else {
 		setKeyInfo( "CurrBaseKey" , ch ) 						; DK(s) active, so record the pressed key as Base key
 		if ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it

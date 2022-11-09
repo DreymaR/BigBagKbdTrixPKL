@@ -96,7 +96,7 @@ pkl_locale_load( lang )
 		}
 	}	; end For
 	
-	For ix, row in pklIniSect( file, "detectDeadKeys" ) { 		; Read the locale strings for DK detection
+	For ix, row in pklIniSect( file, "detectDeadKeys" ) { 		; Read the locale strings for DK detection  	; eD WIP: Phase this out? Use getWinLayDKs().
 		pklIniKeyVal( row, key, val, 1 )
 		setPklInfo( "DetecDK_" . key, val ) 					; detectDeadKeys_SetLocaleTxt(
 	}	; end For
@@ -258,13 +258,23 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 ;
 
 ;;  TODO: Make this fn return other info parsed from a layout string as well? [ LayMain, LayPath, LayType, LayVari, KbdType, OthrMod ] ?
-getLayStrInfo( layStr ) {   										; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
-	d3LA    := getPklInfo( "shortLays" ) 							; Global dictionary of '3LA' 3-letter layout name abbreviations. From pkl_init.
-	splt    := StrSplit( layStr, "\" )  							; LayMain can also contain a subfolder. Its name often starts w/ 3LA.
+getLayStrInfo( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
+	d3LA    := getPklInfo( "shortLays" ) 								; Global dictionary of '3LA' 3-letter layout name abbreviations. From pkl_init.
+	splt    := StrSplit( layStr, "\" )  								; LayMain can also contain a subfolder. Its name often starts w/ 3LA.
 	mLay    := splt[1]
-	m3LA    := ( d3LA[mLay] ) ? d3LA[mLay] : SubStr( mLay,1,3 ) 	; The 3LA found in the table, or just the 3 first letters of theLay.
+	m3LA    := ( d3LA[mLay] ) ? d3LA[mLay] : SubStr( mLay,1,3 ) 		; The 3LA found in the table, or just the 3 first letters of theLay.
 	endS    := splt[ splt.maxIndex() ]
-	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 	; The 3LA found in the string itself, if any.
+	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 		; The 3LA found in the string itself, if any.
 	type    := RegExMatch( layStr, mLay . "(?:\\.*)?\\" . m3LA . "-(\w+?)(?:-\w+?)?_", REMatch ), type := REMatch1
-	Return [ mLay, m3LA, s3LA, type ]   							; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
+	Return [ mLay, m3LA, s3LA, type ]   								; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
+}
+
+pklGetState() { 														; Get the 0:1:6:7 etc shift state as in layout.ini and img names
+	state :=  0
+	state +=  1 * getKeyState( "Shift" )
+;	state +=  2 * getKeyState( "Ctrl" ) 								; AltGr registers Ctrl too; may have to get clever here. Ctrl && not Alt?
+	state +=  6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
+	state +=  8 * getKeyInfo( "ModState_SwiSh" )
+	state += 16 * getKeyInfo( "ModState_FliCK" )
+	Return state
 }

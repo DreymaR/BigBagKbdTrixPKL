@@ -290,7 +290,7 @@ _setValDefCom( setting ) {  									; Get value/default/commentaries for a Sett
 	set.Val := pklIniRead( setting  , "<N/A>"          )    	; Read from SetStck. Strip EOL comments.
 	set.Def := pklIniRead( setting  , "<N/A>", def_Ini )    	; Read from Default. Strip EOL comments.
 	set.Com := pklIniRead( setting  , "<N/A>", def_Ini, , 0 ) 	; Read from Default. Don't strip comments.
-	set.Com := RegExReplace( set.Com, "^" . set.Def . "[ `t]*;[ `t]*" )
+	set.Com := RegExReplace( set.Com, "^" . set.Def . "[ `t]*;[ `t]*" ) 	; ^ $ beginning/end of line (\A \z for whole string)
 	set.Com := RegExReplace( set.Com, "[`t]+"   , "  " )
 	set.Com := RegExReplace( set.Com, "[ ]{3,}" , "  " ) 		; Compactify whitespace
 	Return set

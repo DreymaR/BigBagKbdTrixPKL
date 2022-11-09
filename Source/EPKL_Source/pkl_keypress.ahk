@@ -12,9 +12,9 @@ processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Re
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
 	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
-	if ( ++keyTimerCounter > 20 ) { 							; Resets the timer count on overflow. This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
-		keyTimerCounter = 0 									; eD WIP: What's the optimal size for the buffer? No idea, really. And we must address the buffer overflow issues...!
-	}
+	if ( ++keyTimerCounter > 20 ) { 							; Resets the timer count on overflow.
+		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
+	} 															; eD WIP: What's the optimal size for the buffer? No idea, really. And we must address buffer overflow issues...!
 	SetTimer, processKeyPress%keyTimerCounter%, -1   			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
 }
 
@@ -94,8 +94,8 @@ _keyPressed( HKey ) {   										; Process a HotKey press
 ;	if ( getKeyState("LShift") || getKeyState("RShift") ) 		; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
 ;		modif .= "+"
 	modif := InStr( modif, "!" ) ? "{Blind}" . modif : modif 	; Alt+F to File menu etc doesn't work without Blind if the Alt button is pressed.
-	state += _getModState( "SwiSh" ) ? 0x08 : 0 				; SwiSh (SGCaps, state+08) modifier
-	state += _getModState( "FliCK" ) ? 0x10 : 0 				; FliCK (Custom, state+16) modifier
+	state += getModState( "SwiSh" ) ? 0x08 : 0  				; SwiSh (SGCaps, state+08) modifier
+	state += getModState( "FliCK" ) ? 0x10 : 0  				; FliCK (Custom, state+16) modifier
 	
 	Pri := getKeyInfo( HKey . state )   						; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" ) 					; Actual entry by state, if using a prefix
@@ -168,16 +168,19 @@ setExtendInfo( xLvl = 1 ) { 									; Update PKL info about the current Extend 
 }
 
 _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable character, add it to the Compose queue
-	if not getPklInfo( "composeVKs" )   						; For now, this functionality is optional (since there's trouble with it vs OS DKs)
+	static skipForDK    := false
+	if skipForDK {  											; If the previous key press was an OS DK, skip the next press too to allow its release.
+		skipForDK       := false
 		Return
-	key := GetKeyName( vk_HK )  								; GetKeyName doesn't return shifted/AltGr/DK results, just the base unshifted key name.
-	key := ( key == "Space" ) ? " " : key   					; Include spaces
+	}
+	iVK := Format( "{:i}", "0x" . SubStr( vk_HK, 3, 2 ) )   	; VK as int. This should be robust for vk##sc### mappings too. GetKeyName/VK messes w/ OS DKs; avoid that.
+	key := dllMapVK( iVK, "chr" )   							; GetKeyName() returns the base (unshifted) key name. We use a DLL call to avoid it here.
 	if ( StrLen(key) == 1 ) {   								; Normal letters/numbers/symbols are single-character
-		zVK := GetKeyVK( vk_HK ) 								; eD WIP: This may not be robust when mapping vk##sc###?
-		zSC := Format( "{:X}", SubStr( HKey, 3 ) )  			; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
-		chr := toUnicodeEx( zVK, zSC )  						; Get the actual char 	; eD WIP: Cannot yet get dead key output (the ShowKeyEventChar script could?!)
-;		pklTooltip( "VK: " zVK "`nSC: " zSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
-		if ( chr != "" ) 										; If the output from the OS layout is a printable single character...
+		iSC := Format( "{:i}", "0x" . SubStr( HKey, 3 ) )   	; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
+		chr := dllToUni( iVK, iSC ) 							; Get the actual char (using a ToUnicode DLL call)
+;		pklTooltip( "VK: " iVK "`nSC: " iSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
+		skipForDK   := ( chr == "śķιᶈForDK" ) ? true : false
+		if ( StrLen(chr) == 1 ) 								; If the output from the OS layout is a printable single character...
 			lastKeys( "push", chr ) 							; ...push it to the Compose queue
 	}
 }
@@ -216,7 +219,7 @@ _setModState( theMod, keyDown = 1 ) {   					; Using 1/0 for true/false here.
 	}
 }
 
-_getModState( theMod ) { 									; This is only used for virtual modifiers. Returns 1/0 (true/false).
+getModState( theMod ) { 									; This is needed for virtual modifiers. Returns 1/0 (true/false).
 ;	if ( theMod == "AltGr" )
 ;		Return getAltGrState()
 	Return getKeyInfo( "ModState_" . theMod )   			; Physical ones are simply depressed in _setModState().

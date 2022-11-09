@@ -57,7 +57,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
 	pklSetHotkey( "epklDebugHotkey", "epklDebugUtil"       , "HK_DebugUtil"    ) 	; = - Hidden from menu
 	
-	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )
+	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )  		; eD WIP: Better DK detection fn!
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
 	_pklSetInf( "cleanupTimeOut" ) 										; Time idle (sec) before mods etc are cleaned up
@@ -81,7 +81,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
 	_pklSetInf( "extendTaps" )  										; --"--
 	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
-	setPklInfo( "composeVKs", bool(pklIniRead("composeVKs")) )  		; Whether to Compose using VK/SC mappings 	; eD WIP: It has a side effect on OS DKs
+;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
 	
 	;; ================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
@@ -281,7 +281,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 ;		CoSCdic := ReadKeyLayMapPDic( "Co", "SC", mapFile ) 	; KLM code dictionary for Co-2-SC mapping 	; eD WIP: Maybe use QW-2-SC then SC-2-VK to save on number of dics?
 ;		mapVK   := ReadRemaps( "ANS2ISO-Sc",      mapFile ) 			; Map between ANSI (default in the Remap file) and ISO mappings 	; eD WIP: Instead, use GetKeyVK(SC)
 ;		mapVK   := ReadCycles( "vkMapMec", mapVK, mapFile ) 			; --"--
-		mapVK   := detectCurrentWinLayVKs()  							; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
+		mapVK   := getWinLayVKs()   									; Map the OEM_ VK codes to the right ones for the current system layout (locale dependent) 	; eD WIP
 		initialized := true
 	}
 	
@@ -292,7 +292,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	for ix, state in shStats {
 		shStats[ix] := Format( "{:i}", "0x" . state )   				; Use hex in layout files for states (above 9), but dec internally
 	}
-	setLayInfo( "shiftStates", shStats ) 								; Used by the Help Image Generator (HIG)
+	setLayInfo( "shiftStates", shStats ) 								; An array of the active shift states. Used by the Help Image Generator (HIG).
 	
 	cmpKeys := []   													; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
@@ -357,7 +357,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 		} else {    													; The entry is either VK or state mapped. Remap its VK.
 			KLM     := _mapKLM( entr1, "VK" )   						; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
 			mpdVK   := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
-			mpdVK   := ( mapVK[mpdVK] ) ? mapVK[ mpdVK ] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
+			mpdVK   :=    mapVK[mpdVK] ?    mapVK[mpdVK] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
 			mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
 			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
 			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
@@ -528,12 +528,13 @@ activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	Sleep, 200 										; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
-	SetTimer, pklJanitorTic,  1000 					; Perform regular tasks routine every 1 s
-	
+	SetTimer, pklJanitorTic,  1000  				; Perform regular tasks routine every 1 s
 	if bool(pklIniRead("startSuspended")) {
 		Suspend
 		Gosub afterSuspend
 	}
+	_pklJanitorLocaleVK( true ) 					; Force the first janitor locale update
+;	Gosub pklJanitorTic 							; Do the first janitor sweep right away
 }	; end fn
 
 changeLayout( nextLayout ) { 						; Rerun EPKL with a specified layout

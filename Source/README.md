@@ -16,22 +16,7 @@ EPKL was based on a decompiled PKL v0.4preview from 2010 (formerly v0.3r85) by M
 
 I started development in 2014, and since then EPKL has come a long way.
 
-A comprehensive version history for is found in the actual [EPKL Source folder][EPKLsc].
-
-```
-* EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
-* EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
-* EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
-* EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
-* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
-* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
-* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
-* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
-* EPKL v1.2.0: Layout/Settings UI.
-* EPKL v1.3.0: Compose/Completion and Repeat keys.
-* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
-* EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
-```
+A comprehensive EPKL version history is found in the actual [EPKL Source folder][EPKLsc].
 <br>
 
 Source code info

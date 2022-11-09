@@ -7,27 +7,24 @@
 
 ;;  ####################### user area #######################
 /*
-TOFIX	- SC/VK-mapping turns OS dead keys inactive, outputting only the base letter (or two accents)? Mainly a problem vs AltGr? Some DKs work, others not?
-			- The problem is that the VK is sent twice, once physically and then again by EPKL? This releases the base char.
-			- Possible solution: Don't send anything for a known DK?
-				- But what are known DKs? Improve the DK detection routine. Not by char but by key+mods. Or, use code w/ DLL calls from the AHK forum?
-		- Would not sending DK states for VK/SC mappings help? No, then the DK simply isn't sent and the next key will just be itself.
-		- Sending the key as by the old VK Send (KeyUp-then-KeyDown), produces the same result: A double accent is released.
-		- The culprit is GetKeySC(vk_HK) w/ DLLs that _composeVK() uses. OS DKs worked before I introduced that.
-			- Simply exclude the offending key states from that fn? No, the issue is its GetKeyboardState DLL call I think.
-			- Its function is to return a pointer to a 256-byte array of key states for the whole board. But only the mod key states may be necessary?
-			- If so, emulate it in some way? GetKeyState for individual keys and put it in the right spots?
-			- VK_SHIFT-VK_CONTROL-VK_MENU indices have values 16-17-18 (0x10-0x11-0x12).
-			- Setting ComposeVK to 'no' restores OS DK functionality
-		- If it works: Add a list of key:state that get special treatment from VK/SC. In settings or layouts, like `_1:6,_2:6,...,SC:6,...`.
-		- Later on, make DK detection able to generate such a list
-TOFIX	- SwiSh/FliCK modifiers doesn't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
+WIP 	- Further getWinLayDKs() development
+			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
+			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
+			- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
+			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
+			- What about pkl_CheckForDKs() in pkl_send.ahk?
+TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
+TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 WIP 	- 
 */
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;	- WIP: 
+
+;	- TOFIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
+
+;	- TODO: The newLID pklJanitor routine doesn't quite work, since the locale gets preloaded on EPKL startup or smth. Need to restart EPKL then? Or just parts?
 
 ;	- TODO: A layout2/3/4 setting in layout files that can define Swish/Flick layers. Allows for instance a Greek layout added as Swish/Flick layers.
 ;	- TODO: Lockable modifiers would be nice, especially for SwiSh/FliCK. For instance, RCtrl+SwiSh could lock/unlock SwiSh.
@@ -38,7 +35,7 @@ WIP 	-
 ;		- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
 ;		- The smallest text on the help image may not render well at the standard help image resolution?
 
-;	- TOFIX: The detectCurrentWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
+;	- TOFIX: The findWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
 ;		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
 ;		- Therefore, OEM keys should probably be treated differently from remapped keys (AZERTY, Cmk-CAWS etc). In some cases, a key can be both! Char-to-VK?
 ;	- TOFIX: Need to SC remap the OEMdic or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
@@ -191,7 +188,9 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;	- TODO: Once ToUnicode() and DetectDK() are working, it should be possible to generate help images from VK/SC layouts too?!
 ;	- SwiSh/FliCK should be the ideal way of implementing mirrored typing?
+;		- Need to solve them being effectivly one-shot now, then. They should be able to be held down reliably.
 ;		- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
 ;	- TODO: OS DK detection sucks. Go through all SC### and send their four states? (Only if the OS layout has AltGr; can we detect that by DLL?)
 ;		- Also store the DK characters in a better format? Just a string like ´¨`^~ is unclear and tricky.
@@ -359,15 +358,16 @@ setPklInfo( "pklHdrB", "`r`n"
 		. ";;  for Portable Keyboard Layout by Máté Farkas [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
 		. ";;  edition DreymaR (Øystein Bech-Aase, 2015-)  [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
 
+setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
 	global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
 ;	global UIsel 											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
-
 arg = %1% 													; Layout from command line parameter, if any
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
 initLayIni() 												; Read settings from layout.ini and layout part files
 activatePKL()
+;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 )   	; eD DEBUG
 
 Return  													; end of main
 
@@ -467,9 +467,9 @@ keyHistory: 												; Menu "AHK Key History..."
 	KeyHistory
 Return
 
-detectCurrentWinLayDeadKeys: 								; Menu "Detect dead keys..."
-	setCurrentWinLayDeadKeys( detectCurrentWinLayDeadKeys() )
-Return
+;detectCurrentWinLayDeadKeys: 								; Menu "Detect dead keys..."
+;	setCurrentWinLayDeadKeys( detectCurrentWinLayDeadKeys() )
+;Return
 
 showHelpImage:
 	pkl_showHelpImage()
@@ -556,19 +556,23 @@ epklDebugUtil:  										; eD DEBUG/UTILITY/WIP: This entry is activated by the
 Return
 
   debug1() {
-	KeyHistory  										; Show AHK Key History      as by the View -> Key history menu
+	KeyHistory  										; Show AHK Key History      as by the View -> Key history menu  (shown)
 } debug2() {
-	ListHotkeys 										; Show AHK hotkeys          as by the View -> Hotkeys     menu
+	ListHotkeys 										; Show AHK hotkeys          as by the View -> Hotkeys     menu  (hidden)
 } debug3() {
-	ListVars 											; Show AHK global variables as by the View -> Variables   menu
+	ListVars 											; Show AHK global variables as by the View -> Variables   menu  (hidden)
 } debug4() {
-	ListLines   										; Show AHK script (flow relevant) line execution history
+	ListLines   										; Show AHK script (flow relevant) line execution history        (hidden)
 } debug5() {
-	getWinInfo() 										; Show the active window's title/process(exe)/class
+	getWinInfo() 										; Show the active window's title/process(exe)/class             (EPKL)
 } debug6() {
+;	getWinLayDKs()  									; eD WIP: Improved WinLayDK detection
+;	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 1 )  ; eD DEBUG
 	pklDebugCustomRoutine() 							; eD DEBUG – usually: Show OS & EPKL VK codes for the OEM keys
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
+} debug7() {
+	detectCurrentWinLayDeadKeys()   					; The old PKL DeadKey detection routine                         (hidden)
 } 	; end debug#
 
 ;;  ####################### functions #######################

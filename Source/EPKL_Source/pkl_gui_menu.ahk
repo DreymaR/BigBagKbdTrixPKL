@@ -11,7 +11,7 @@ pkl_set_tray_menu()
 	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]		; Dummy legend menu item
 					,   "aboutMe" : [ "09"        , ""             ]		; ---
 					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
-					,   "deadKey" : [ "12"        , ""             ]		; --- - Don't show this to avoid clutter?
+					,   "deadKey" : [ "12"        , ""             ]		; --- - Don't show this to avoid clutter
 					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
 					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
 					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
@@ -52,42 +52,42 @@ pkl_set_tray_menu()
 	}
 
 	if ( A_IsCompiled ) {
-		Menu, Tray, NoStandard 									; No standard AHK tray menu items
+		Menu, Tray, NoStandard  								; No standard AHK tray menu items
 	} else {
 		SplitPath, A_AhkPath,, AhkDir
-		Menu, Tray, Icon,  1&, %A_AhkPath%			,   1 		; Open
-		Menu, Tray, Icon,  2&, %A_WinDir%\hh.exe	,   1 		; Help
-		Menu, Tray, Icon,  4&, %AhkDir%\AU3_Spy.exe	,   1 		; Spy
-		Menu, Tray, Icon,  5&, shell32.dll			, 147		; Reload
-		Menu, Tray, Icon,  6&, %A_AhkPath%			,   2 		; Edit
-		Menu, Tray, Icon,  8&, %A_AhkPath%			,   3 		; Suspend
-		Menu, Tray, Icon,  9&, %A_AhkPath%			,   4 		; Pause
-		Menu, Tray, Icon, 10&, shell32.dll			,  28 		; Exit
+		Menu, Tray, Icon,  1&, %A_AhkPath%          ,   1   	; Open
+		Menu, Tray, Icon,  2&, %A_WinDir%\hh.exe    ,   1   	; Help
+		Menu, Tray, Icon,  4&, %AhkDir%\AU3_Spy.exe ,   1   	; Spy
+		Menu, Tray, Icon,  5&, shell32.dll          , 147   	; Reload
+		Menu, Tray, Icon,  6&, %A_AhkPath%          ,   2   	; Edit
+		Menu, Tray, Icon,  8&, %A_AhkPath%          ,   3   	; Suspend
+		Menu, Tray, Icon,  9&, %A_AhkPath%          ,   4   	; Pause
+		Menu, Tray, Icon, 10&, shell32.dll          ,  28   	; Exit
 		Menu, Tray, add, 										; (separator)
 	}
 	
-	Menu, Tray, add, %aboutMeMenuItem%, showAbout 							; About
-	Menu, Tray, add, %settingMenuItem%, changeSettings 						; Layouts/Settings UI
+	Menu, Tray, add, %aboutMeMenuItem%, showAbout   						; About
+	Menu, Tray, add, %settingMenuItem%, changeSettings  					; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
-		Menu, Tray, add, %keyHistMenuItem%, keyHistory 						; Key history
-		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect OS DKs (old PKL module)
-;		Menu, Tray, add, %importsMenuItem%, importLayouts 					; Import Module
-		Menu, Tray, add, %makeImgMenuItem%, makeHelpImages 					; Help Image Generator
+		Menu, Tray, add, %keyHistMenuItem%, keyHistory  				; Key history
+;		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect OS DKs (old PKL module)
+;		Menu, Tray, add, %importsMenuItem%, importLayouts   				; Import Module
+		Menu, Tray, add, %makeImgMenuItem%, makeHelpImages  				; Help Image Generator
 		Menu, Tray, add, 													; (separator)
 	}
 	Menu, Tray, add, %showImgMenuItem%, showHelpImageToggle 				; Show image
-	Menu, Tray, add, %zoomImgMenuItem%, zoomHelpImage 						; Zoom image
-;	Menu, Tray, add, %moveImgMenuItem%, moveHelpImage 						; Move image
-;	Menu, Tray, add, %opaqImgMenuItem%, opaqHelpImage 						; Opaque/transparent image
+	Menu, Tray, add, %zoomImgMenuItem%, zoomHelpImage   					; Zoom image
+;	Menu, Tray, add, %moveImgMenuItem%, moveHelpImage   					; Move image
+;	Menu, Tray, add, %opaqImgMenuItem%, opaqHelpImage   					; Opaque/transparent image
 	if ( numOfLayouts > 1 ) {
 		Menu, Tray, add, 													; (separator)
-		Menu, Tray, add, %layoutsMenu%, :changeLayout 						; Layouts
-		Menu, Tray, add, %chngLayMenuItem%, changeActiveLayout 				; Change layout
+		Menu, Tray, add, %layoutsMenu%, :changeLayout   					; Layouts
+		Menu, Tray, add, %chngLayMenuItem%, changeActiveLayout  			; Change layout
 	}
 	Menu, Tray, add,
 	Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 				; Refresh
-	Menu, Tray, add, %suspendMenuItem%, suspendToggle						; Suspend
-	Menu, Tray, add, %exitAppMenuItem%, exitPKL								; Exit
+	Menu, Tray, add, %suspendMenuItem%, suspendToggle   					; Suspend
+	Menu, Tray, add, %exitAppMenuItem%, exitPKL 							; Exit
 	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )
@@ -110,7 +110,7 @@ pkl_set_tray_menu()
 	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 317: Blue cogs)
 	if ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
-		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
+;		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
 		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImg icon - painting on screen
 	}
 	Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 			; refresh icon - refresh arrows
@@ -193,12 +193,9 @@ pkl_about()
 	GUI, AW:Add, Edit, , %layPage%
 	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
 		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
-;		text :=   "Keyboard/Layout type from settings: "    . kbdType
-;		text .= "`nCurl/Ergo/Other mod from settings: "     . hardMod
-;		text .= "`n" 											; Since layouts can be chosen with the Layout Picker, this info is confusing now
 		text :=   "EPKL.exe compiled on: "                  . compiledOn            . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
-		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"
+		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"  	; eD WIP: Remove this? Or replace it? It's hard to see anyway.
 		text .= "`nLayout/BaseLayout file paths:`n- " . layFile . "`n- " . basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}

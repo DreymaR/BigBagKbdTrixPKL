@@ -207,16 +207,6 @@ pkl_showHelpImage( activate = 0 )
 	}
 }
 
-pklGetState() { 														; Get the 0:1:6:7 shift state as in layout.ini and img names
-	state  =  0
-	state +=  1 * getKeyState( "Shift" )
-;	state +=  2 * getKeyState( "Ctrl" )
-	state +=  6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
-	state +=  8 * getKeyInfo( "ModState_SwiSh" )
-	state += 16 * getKeyInfo( "ModState_FliCK" )
-	Return state
-}
-
 imgPosDic( pos, def = 0 ) { 											; Get a numerical image position from a T/B+L/M/R one, if needed
 	posDic  := { "TL" : 1, "TM" : 2, "TR" : 3
 			   , "BL" : 4, "BM" : 5, "BR" : 6 }

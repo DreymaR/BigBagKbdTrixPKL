@@ -146,14 +146,15 @@ _pklJanitorActivity() { 										; Suspend/exit EPKL after a certain time of in
 	}
 }
 
-_pklJanitorLocaleVK() { 										; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
-	if ( A_TimeIdle < 2000 ) 									; Don't do this if the comp isn't unused for at least 2 s
+_pklJanitorLocaleVK( force = false ) {  						; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
+	if ( not force && A_TimeIdle < 2000 )   					; Don't do this if the comp isn't unused for at least 2 s
 		Return
 	oldLID  := getPklInfo( "previousLocaleID" )
 	newLID  := getWinLocaleID()
 	if ( oldLID != newLid ) {
 ;		( 1 ) ? pklDebug( "System layout LID change: " . oldLID . "->" . newLID, 1 )  ; eD DEBUG
-		detectCurrentWinLayVKs()
+		getWinLayVKs()
+		getWinLayDKs()  										; Get the Windows Layout's DKs  	; eD WIP
 		; eD WIP: Renew the OEM VK mappings here! Rethink strategy? Need to map based on the values you want, based on KLM/SC codes.
 	}
 	setPklInfo( "previousLocaleID", newLID )
@@ -230,7 +231,7 @@ getWinInfo() { 												; Get match info for the active window
 			. "`n" , 10 )
 }
 
-detectCurrentWinLayVKs() {  								; Find the VK values for the current Win layout's (OEM) keys, in case there's a weird ISO remapping or something
+getWinLayVKs() {    										; Find the VK values for the current Win layout's (OEM) keys, in case there's a weird ISO remapping or something
 ;	scMap   := getPklInfo( "scMapLay" ) 					; The pdic used to remap SC for the active layout
 	qSCdic  := getPklInfo( "QWSCdic" )  					; SC from QW_##  	; eD WIP: Keep track of remappings. Must not remap, e.g., Angle Z on QW_LG to its underlying VK##!
 	qVKdic  := getPklInfo( "QWVKdic" )  					; VK from QW_## = vc_## (KLM_QW-2-Win_VK)
@@ -377,23 +378,64 @@ joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a stri
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
 }
 
-toUnicodeEx( VK, SC ) { 																; Call the OS layout to translate VK/SC to a character, if possible
+dllToUni( iVK, iSC ) {  																; Call the OS layout to translate VK/SC to a character, if possible. NB: VK/SC are int.
+	;;  ToUnicodeEx distinguishes between left and right versions of keys. ToUnicode doesn't.
+	;;  Regarding problem w/ ToUnicode(Ex) and WinLay/OS DKs: See the warning in Remarks at...
+	;;  https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-tounicodeex?redirectedfrom=MSDN
+	;;  " As ToUnicodeEx translates the virtual-key code, it also changes the state of the kernel-mode keyboard buffer. 
+	;;    This state-change affects dead keys, ligatures, alt+numpad key entry, and so on. 
+	;;    It might also cause undesired side-effects if used in conjunction with TranslateMessage..."  [So, that's why OS DKs got messed up.]
+;	pklTooltip( "VK " . Format("{:X}",iVK) . "`n" . Format("SC{:03X}",iSC) . "`nchr [" . dllMapVK(iVK) . "]`nAGr " . GetKeyState("RAlt"), 2 )  ; eD DEBUG
+	state   := pklGetState() 															; GetKeyState() calls are OS-DK safe (and pklModState() calls too).
+	winDKs  := getPklInfo( "WinLayDKs" ) 												; Couldn't run getWinLayDKs() here, as it messes up OS-DKs. Leave it to pklJanitor.
+	sSC     := Format( "SC{:03X}", iSC ) 												; Reformat int SC to scMap's "SC###" notation
+;	pklTooltip( "SC: " . sSC . "  DKs: " . winDKs[sSC] . "  ShSt: " . state, 1 ) 		; eD DEBUG: Use remapped SC
+	if winDKs.HasKey( sSC ) ;{   														; If this key holds an OS DK ...
+		if InStr( winDKs[sSC], "" . state ) 											; ... and the shift state matches, ...
+			Return % "śķιᶈForDK" 														; ... don't proceed to the DLL call (twice) to avoid disturbing the DK.
+	map := dllMapVK( iVK, "ord" )   													; Get ordinal of VK's (base keyname) mapping; (map>0) tests isNoDK? No, it doesn't.
 	TID := DllCall( "GetWindowThreadProcessId", "Int", WinExist("A"), "Int", 0 ) 		; TID: Window  Thread Process ID
 	ID0 := DllCall( "GetCurrentThreadId", "UInt", 0 )   								; TI0: Current Thread Process ID
 	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 1 ) 					; Attach TID input to the TI0 process. Needed to detect AltGr etc.
-	HKL := DllCall( "GetKeyboardLayout", "Int", TID )   								; Refresh GetKeyboardLayout (the user may change it, e.g., with Win+Space)
-;	DllCall( "AttachThreadInput", "UInt", ID0, "UInt", TID, "Int", 0 )  				; ???
+	HKL := DllCall( "GetKeyboardLayout", "Int", TID )   								; Refresh GetKeyboardLayout (the user may change it, e.g., with Win+Space). Used for Ex.
 	VarSetCapacity( theChar, 32 )   													; The result may be a buffer with several chars (if so, these are not good here)
-	DK  := DllCall( "ToUnicodeEx", "UInt", VK, "UInt", SC, "UInt", _keyState(), "Str", theChar, "UInt", 64, "UInt", 1, "UInt", HKL) 	; This also gives Ctrl chars (0x00–0x1F)
-	Map := DllCall( "MapVirtualKey", "uint", VK, "uint", 2 ) 							; MapVirtualKey translates/maps VK into SC (0) or char (2), or SC to VK (1/3)
-	if ( DK == 1 ) && ( Map > 0 ) && ( Ord(theChar) > 0x1F ) 							; Is it the same as AHK's GetKeyName() fn, for this purpose? Used here to detect DKs.
-		Return theChar  																; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
-} 	; eD WIP: How to make OS DKs work again?! Check other AHK articles. 				; https://www.autohotkey.com/boards/viewtopic.php?t=1040
+	DK  := DllCall( "ToUnicodeEx",  "UInt", iVK, "UInt", iSC, "UInt", dllKbdState() 	; The call needs a 256-byte &KeyState array (or, is just the ModState needed?).
+		          , "Str", theChar, "UInt", 64, "UInt",  1, "UInt", HKL )   			; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
+	if ( map > 0 ) && ( DK == 1 ) && ( Ord(theChar) > 0x1F ) 							; Avoid returning multi-char results and Ctrl chars (0x00–0x1F)
+		Return theChar  																; https://www.autohotkey.com/boards/viewtopic.php?t=1040
+}
 
-_keyState() {   																		; Get a &KeyState 256-byte array
-	VarSetCapacity( KeyState, 256 ) 													; Is just the ModState actually needed, or all?
-	DllCall( "GetKeyboardState", "uint", &KeyState ) 									; Get Keyboard State -> &KeyState (256 bytes) 	; eD WIP: This throws off OS DKs?
+dllKbdState() { 																		; Get a &KeyState 256-byte array of the state of each key on the keyboard
+	VarSetCapacity( KeyState, 256, 0 )
+	DllCall( "GetKeyboardState", "uint", &KeyState ) 									; Get Keyboard State -> &KeyState (256 bytes)
 	Return &KeyState
+}
+
+pklModState( mode = "get", ShSt = 0 ) { 												; Get/Set a &ModState 256-byte array like KeyState, of the main three state mods
+	static VK_MODS  := { "Shift" : 0x10  , "Ctrl" : 0x11  , "Alt" : 0x12   } 			; This works w/ AltGr = Ctrl + Alt
+	setMods         := { "Shift" : 0     , "Ctrl" : 0     , "Alt" : 0      }
+	if ( ShSt & 4 ) ;{   																; AltGr
+		setMods["Ctrl"] := 1 , setMods["Alt"] := 1
+	if ( ShSt & 1 ) ;{   																; Shift
+		setMods["Shift"] := 1
+	VarSetCapacity( ModState, 256, 0 )  												; A 256-byte string array prefilled with zeros
+	For mod, modVK in VK_MODS {
+		modDown := ( mode == "set" ) ? setMods[ mod ] : GetKeyState( mod )  			; Either set the mods' states from an array, or get it from key states
+		if ( modDown )  																; The modifier is pressed (if using GetKeyState(), "P" is for physical)
+			NumPut( 0x80, ModState, modVK + 0, "UChar" )
+;		( ShSt == 6 ) ? pklDebug( "mod: " . mod . " (" . modVK . ")`nShSt: " . ShSt . "`nmodDn: " . modDown , 2 )  ; eD DEBUG
+	} 	; end for
+;	VarSetCapacity( ModState, 256, 0 ), NumPut( 0x80, ModState, 0x11, "UChar" ), NumPut( 0x80, ModState, 0x12, "UChar" ) 	; eD DEBUG
+	Return &ModState
+}
+
+dllMapVK( VK, mode = "chr" ) {  														; Call the MapVirtualKey DLL to determine SC/VK/ord/chr based on VK or SC (int) input
+	static mapModes :=  { "SC"  : 0 , "VK"  : 1 , "ord" : 2 , "chr" : 2 
+					    , "VKx" : 3 , "SCx" : 4 }   									; Similar to the GetKeyName/SC/VK AHK fns, but those mess w/ OS DKs etc.
+	mod := mapModes[ mode ] 															; The "Ex" mappings distinguish between left/right versions of keys; normal ones do not.
+	map := DllCall( "MapVirtualKey", "uint", VK, "uint", mod )  						; MapVirtualKey translates/maps VK into SC (0/4) or char ordinal (2), or SC to VK (1/3)
+	map := ( mode = "chr" ) ? Chr( map ) : map  										; Return the actual chr instead of its ordinal. Letter keys will be shifted (Win bug).
+	Return map
 }
 
 pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
@@ -409,7 +451,7 @@ pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() –
 	VKQWdic := ReadKeyLayMapPDic( "VK", "QW", mapFile ) 	; KLM VK-2-QW code translation dictionary
 ;	SCQWdic := ReadKeyLayMapPDic( "SC", "QW", mapFile ) 	; KLM SC-2-QW code translation dictionary
 	str .= "`nKLM`tqVK`tVK" . lin
-	oemDic  := detectCurrentWinLayVKs() 					;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_## 	; eD WIP: Try w/ the whole SC dic!
+	oemDic  := getWinLayVKs()   							;[ "GR","MN","PL","LB","RB","BS","SC","QU","LG","CM","PD","SL" ] 	; QW_## 	; eD WIP: Try w/ the whole SC dic!
 	For oem, ovk in oemDic { 								;[ "C0","BD","BB","DB","DD","DC","BA","DE","E2","BC","BE","BF" ] 	;  VK##
 		klm := VKQWdic[ oem ]   							;[ "29","0c","0d","1a","1b","2b","27","28","56","33","34","35" ] 	; SC0##
 		str .= Format( "`n{}`t{}`t{}", klm, SubStr(oem,3), SubStr(ovk,3) ) 	; GetKeyName(sc), GetKeyVK(sc), SubStr(sc,3) )

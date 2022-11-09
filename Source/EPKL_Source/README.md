@@ -2,8 +2,8 @@
 ========================================================
 <br>
 
-- Version:  1.4.0
-- Compiled: 2022-10 from GitHub/DreymaR/BigBagKbdTrixPKL
+- Version:  1.4.0 going on 1.4.1α
+- Compiled: 2022-11 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
 
@@ -12,8 +12,39 @@
 	(c) EPKL:   Øystein "DreymaR" Bech-Aase     , 2021-
 <br>
 
+EPKL VERSIONS:
+--------------
+For a detailed version history, look further down.
+```
+* EPKL v1.0.0: Name change to EPiKaL PKL. ./PKL_eD -> ./Files folder. Languages are now under Files.
+* EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
+* EPKL v1.1.1: Some format changes. Minor fixes/additions. Tap-or-Mod keys (WIP).
+* EPKL v1.1.2: Multifunction Tap-or-Mod Extend with dead keys on tap. Janitor inactivity timer.
+* EPKL v1.1.3: The LayStack, separating & overriding layout settings. Bugfixes. More kaomoji.
+* EPKL v1.1.4: Sym mod and Dvorak layouts. HIG updated for new Inkscape. Unified VK codes for layouts. Mapping/setting tweaks.
+* EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
+* EPKL v1.1.6: New Curl-DH standard! EPKL For Dummies. KLM key codes. Extend fixes. AltGr layouts for Es/It, and Pan-Germanic locale variants.
+* EPKL v1.2.0: Layout/Settings UI.
+* EPKL v1.3.0: Compose/Completion and Repeat keys.
+* EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
+* EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
+* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. WinLay DeadKey auto-detection [WIP].
+```
+<br>
+
+WARNING: HARD HAT AREA!
+=======================
+
+EPiKaL PKL is always a bit of a Work-In-Progress, so all of it may not be working perfectly ... yet.
+
+This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
+
+~ Øystein "DreymaR" Bech-Aase, 2022
+<br>
+
 EPKL TODO:
 ----------
+The full WIP/TODO/etc list is found near the top of `_PKL_main.ahk` as comment lines. This section just lists some tasters.
 * A "janitor" timer that checks whether the underlying Windows layout has changed (affects dead keys)
 * Generic dual-role keys and/or modifiers. For instance, home row keys might act as modifiers when held and letters when tapped.
 * An import module for MSKLC layout files and other formats.
@@ -38,16 +69,6 @@ EPKL TODO:
 		- Release with the voiced/unvoiced P/B, T/D, M, N, R, F/V, S/H, L. Have to tweak it a little to account for the whole chart.
 		- Also need to provide clicks (! etc), voiced implosives (hooked), ejectives (ʼ), diacritics and others. May sequence DKs for that?
 		- Apart from combining diacritics, IPA needs superscript `ʰ ⁿ ᶿ ᵊ ˡ ˣ ʷ ˠ ˤ ʲ`. The Acute DK should be enough... except it conflicts for nlw.
-<br>
-
-WARNING: HARD HAT AREA!
-=======================
-
-EPiKaL PKL is a Work-In-Progress, so all of it may not be working perfectly ... yet.
-
-This is the EPKL Work-In-Progress README, going into details on the changes. For the normal EPKL README see the main folder.
-
-~ Øystein "DreymaR" Bech-Aase, 2022
 <br>
 
 DONE:
@@ -120,7 +141,9 @@ DONE:
 * There was a problem with DKs getting stuck after a special entry. Seems this was always the case?! A call to pkl_CheckForDKs( 0 ) somehow prevents it...
 <br>
 
-**PKL[eD] VERSION HISTORY**
+VERSION HISTORY:
+----------------
+**PKL[eD] VERSIONS:**
 * PKL[eD] v0.4.0: Transition to AHK v1.1
 	- A Refresh menu option with a hotkey (default Ctrl+Shift+5) in case the program hangs up in some way (stuck modifiers etc).
 	- Advanced Mode setting that shows 'AHK key history' and other menu options, plus more info in the About... dialog.
@@ -163,7 +186,7 @@ DONE:
 	- Powerstrings can have prefix-entry syntax too now. Lets you, e.g., have long AHK command strings referenced by name tags in layouts.
 <br>
 
-**EPKL VERSION HISTORY:**
+**EPKL VERSIONS:**
 * EPKL v1.0.0: Name change to EPiKaL PKL.
 	- Moved ./PKL_eD -> ./Files folder. Languages are now under Files.
 	- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
@@ -476,7 +499,7 @@ DONE:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types.
+* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. WinLay DeadKey auto-detection.
 	- Two new modifiers: SwiSh and FliCK! SwiSh ("Swiss Shift") corresponds to the Windows SGCaps modifier, and FliCK ("Flip Cap Key") is custom.
 		- To get a SwiSh modifier for instance, just map a key like you would for any modifier, to `Swish Modifier`.
 		- The SwiSh & FliCK modifiers are virtual, not physical like Shift/Ctrl/Alt/Win. They add 8 and 16 to the ShiftState, respectively.
@@ -486,9 +509,17 @@ DONE:
 	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
 		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrid variants.
 		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit manually afterwards.
-	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
-		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
+	- The new OS DeadKey detection routine `getWinLayDKs()` uses a ToAscii DLL call; it returns -1 if the specified key/state is a Windows Layout DK.
+		- It runs on init/refresh. It returns a dictionary of `{ SC:DK-ShiftStates }`, like `{ "SC003" : "6:7", } (if SC003 has DKs on states 6 and 7).
+		- The old `Detect Dead Keys...` menu option was hidden and demoted to utility/debug routine #7.
+	- Fixed: SC/VK-mapping turned OS dead keys inactive, outputting either nothing or two accents.
+		- This happens when calling the ToUnicode DLL while a DK is active; `_composeVK()` did this to determine the output of a key/state.
+		- Solution: Don't call ToUnicode if a DK! Both for the OS DK itself, and the next key press.
+		- The problem occurs using GetKeyName/VK/SC() too: These turn active OS DKs etc inert.
+		- Made a wrapper for the MapVirtualKey DLL to avoid this. Call `dllMapVK()` with "VK","SC","ord","chr" to get conversions as desired.
+		- The GetKeyboardState DLL and GetKeyState() don't harm DKs. Maybe WM_CHAR from the PeekMessage DLL could've proved useful too.
 	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.
 	- Fixed: Repeat is counted in the LastKeys queue so it works with composing.
 	- Fixed: End-of-line comments in layout entries are now stripped, w/o harming semicolon state entries. These now have to be on the form `Tab-;-spaces-Tab`.
-	
+	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
+		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.

@@ -2,27 +2,27 @@
 ;;  EPKL dead key functions
 ;
 
-DeadKeyValue( dkName, base )								; In old PKL, 'dk' was just a number. It's a name now.
-{															; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
+DeadKeyValue( dkName, base ) 											; In old PKL, 'dk' was just a number. It's a name now.
+{ 																		; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
 	val := getKeyInfo( "DKval_" . dkName . "_" . base )
 	if ( not val ) {
 		dkStck  := getPklInfo( "DkListStck" )
 		chr := Chr( base )
-		upp := ( ( 64 < base ) && ( base < 91 ) ) ? "+" : "" 	; Mark upper case with a tag, as IniRead() lacks base letter case distinction
-		cha := convertToANSI( chr ) 						; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
+		upp := ( ( 64 < base ) && ( base < 91 ) ) ? "+" : "" 			; Mark upper case with a tag, as IniRead() lacks base letter case distinction
+		cha := convertToANSI( chr ) 									; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
 		val :=                 pklIniRead( base                   ,, dkStck, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkStck, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
 		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
 		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
-		val := ( val == "--" ) ? -1 : val 					; A '-1' or '--' value means unmapping, to be used in the LayStack
+		val := ( val == "--" ) ? -1 : val   							; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		if val is integer
-			val := Format( "{:i}", val ) 					; Converts hex to decimal so it's always treated as the same number
-		setKeyInfo( "DKval_" . dkName . "_" . base, val)	; The DK info pdic is filled in gradually with use
+			val := Format( "{:i}", val ) 								; Converts hex to decimal so it's always treated as the same number (could've used a +0 trick)
+		setKeyInfo( "DKval_" . dkName . "_" . base, val)				; The DK info pdic is filled in gradually with use
 	}
-;	if ( base == 960 ) 												; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
+;	if ( base == 960 )  											; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
 ;		pklDebug( "DK: " dkName "`nBase: " base " (" Chr(base) ")`nVal: " val, 6 ) 	; --"--     Check DK value functionality
-	val := ( val == "--" ) ? 0 : val 						; Store any empty entry so it isn't reread, but return it as 0
+	val := ( val == "--" ) ? 0 : val 									; Store any empty entry so it isn't reread, but return it as 0
 	Return val
 }
 
@@ -101,12 +101,42 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	} 	; end if dkEnt
 }
 
-resetDeadKeys( ) {  										; Tidy up and reset all global DK info parameters
-	setKeyInfo( "CurrNumOfDKs"  , 0  )  					; How many dead keys were pressed 	(was 'CurrentDeadKeys')
-	setKeyInfo( "CurrNameOfDK"  , "" )  					; Current dead key's name 			(was 'CurrentDeadKeyName')
-	setKeyInfo( "CurrBaseKey"   , 0  )  					; Current base key  				(was 'CurrentBaseKey')
-	setKeyInfo( "PressedDKVs"   , "" )  					; eD WIP: DK stuckness wasn't removed by resetting CurrNum or CurrBase alone?
-	pkl_CheckForDKs( 0 ) 									; Resets the SpaceWasSentForSystemDKs static variable
+resetDeadKeys( ) {  													; Tidy up and reset all global DK info parameters
+	setKeyInfo( "CurrNumOfDKs"  , 0  )  								; How many dead keys were pressed   (was 'CurrentDeadKeys')
+	setKeyInfo( "CurrNameOfDK"  , "" )  								; Current dead key's name           (was 'CurrentDeadKeyName')
+	setKeyInfo( "CurrBaseKey"   , 0  )  								; Current base key                  (was 'CurrentBaseKey')
+	setKeyInfo( "PressedDKVs"   , "" )  								; eD WIP: DK stuckness wasn't removed by resetting CurrNum or CurrBase alone?
+	pkl_CheckForDKs( 0 ) 												; Resets the SpaceWasSentForSystemDKs static variable
+}
+
+;;  eD WIP: Replace all the CurrentWinLayDeadKeys fns w/ auto-detection that actually picks up everything using Windows DLL calls?!
+getWinLayDKs() {    													; Detect all DeadKeys of the active Windows layout. Return a dictionary of them by SC:state.
+	scMap   := getPklInfo( "scMapLay" ) 								; Dictionary of SC remaps in the active EPKL layout, on the form { "SC00C" : "SC01B" } etc
+	winDKs  := {}
+	maxSC   := 0x040 													; Scan 1: Main block 0x02–0x35+0x39(SPC)+0x56(ISO), Num -0x53. 0x80(128) onwards are break codes.
+	Loop % maxSC {  													; This loop will include some F# keys (up to F6 SC040), NumPad and modifiers; it that okay?
+		SC  := ( A_Index == 0x40 ) ? 0x056+0 : A_Index  				; Include the ISO key SC056 w/ the main block and Spc.
+		VK  := dllMapVK( SC, "VK" ) 									; GetKeyVK(SC) didn't do the job right?!
+		dkS := ""
+		For ix, ShSt in [ 0, 1, 6, 7 ] {    							; Go through the OS shift states
+			mod := pklModState( "set", ShSt )   						; Make a 256-byte &ModState array ptr that reflects the shift state
+			DK  := DllCall( "USer32.dll\ToAscii", "UInt",VK, "UInt",SC 	; This disturbs OS DKs (via the kernel buffer state), so don't call it while one is active.
+				, "Ptr",mod, "UIntP",ord, "UInt",0, "Int" ) , chr := Chr( ord )
+			if ( DK == -1 ) ;{
+				dkS := dkS . ":" . ShSt
+;			( SC == 0x003 && ShSt == 6 ) ? pklDebug( "SC/VK/ShSt: " . SC . "/" . VK . "/" . ShSt . "`nDK: " . DK . "`ndkS: " . dkS . "`nchr: [" . chr . "]", 3 )  ; eD DEBUG
+		} 	; end For states
+		if ( dkS != "" ) {
+			sSC := Format("SC{:03X}",SC)    							; Reformat SC to scMap's "SC###" notation
+			mSC := scMap.HasKey(sSC) ? scMap[sSC] : sSC 				; Use the "SC###" string as key
+			winDKs[mSC] := SubStr( dkS, 2 )  							; Map from decimal SC value to state string, e.g., `6` for AltGr, `0:1` for normal+Shift
+		}
+	} 	; end Loop SCs
+	setPklInfo( "WinLayDKs", winDKs )
+;	for scode, dks in winDKs
+;		test .= "`n" . Format("SC{:03X}",scode) . "  " . dks
+;	( 1 ) ? pklDebug( "" . test, 30 )  ; eD DEBUG
+	Return winDKs
 }
 
 setCurrentWinLayDeadKeys( deadkeys ) {
@@ -159,7 +189,7 @@ TODO: A better version without Send/Clipboard (I don't have any ideas)
 
 detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are DKs.
 {   													; eD WIP: Freezes up mid-detection sometimes? Due to ClipWait? And does it actually detect DKs now?
-	CurrentWinLayDKs := ""
+	theWinLayDKs := ""
 	CR  := "{Enter}"
 	SPC := A_Space
 	
@@ -194,12 +224,12 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 		Sleep 50
 		ClipWait
 		ifNotEqual clipboard, %SPC%
-			CurrentWinLayDKs := CurrentWinLayDKs . cha
+			theWinLayDKs := theWinLayDKs . cha
 	} Until ord >= 0xBF 								; Could've gone to 0xFF, but it's only special/accented letters there.
 	Send {Ctrl Up}{Shift Up}%CR%%CR% 	;+{Home}{Del}
 	txt := getPklInfo( "DetecDK_" . "DEADKEYS" )
 	Send {Text}%txt%:%SPC%
-	Send {Text}%CurrentWinLayDKs%
+	Send {Text}%theWinLayDKs%
 	Send %CR%
 	txt := getPklInfo( "DetecDK_" . "LAYOUT_CODE" )
 	Send {Text}%txt%:%SPC%
@@ -211,5 +241,5 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 		Send !{F4}
 		Send {Right}									; Select "Don't save"
 	
-	Return CurrentWinLayDKs
+	Return theWinLayDKs
 }
