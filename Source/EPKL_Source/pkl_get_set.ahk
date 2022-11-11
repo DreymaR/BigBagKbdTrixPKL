@@ -13,7 +13,7 @@
 ;;  ExtendKey     := [] ; Extend modifier(s) for navigation, editing, etc.
 ;;  
 ;;  NextLayout    := "" ; If you set multiple layouts, this is the next one.
-;;                      ; see the "changeActiveLayout:" label!
+;;                      ; see the "rerunNextLayout:" label!
 ;;  NumOfLayouts  := 0  ; Array size
 ;;  LayoutsXcode        ; layout code
 ;;  LayoutsXname        ; layout name

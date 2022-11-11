@@ -479,7 +479,7 @@ showHelpImageOnce: 											; Used as a one-time refresh when necessary
 	pkl_showHelpImage()
 Return
 
-showHelpImageToggle: 										; Menu "Display help image"
+toggleHelpImage:    										; Menu "Display help image"
 	pkl_showHelpImage( 2 )
 Return
 
@@ -495,14 +495,14 @@ opaqHelpImage: 												; Hotkey "Opaque/Transparent image"
 	pkl_showHelpImage( 7 )
 Return
 
-changeActiveLayout: 										; Menu "Change layout"
+rerunNextLayout: 											; Menu "Change layout"
 	changeLayout( getLayInfo( "NextLayout" ) )
 Return
 
-rerunWithSameLayout: 										; Use the layout # instead of its code, to reflect any PKL Settings list changes
+rerunSameLayout:    										; Menu "Refresh EPKL"
 	activeLay   := getLayInfo( "ActiveLay" ) 				; Layout code (path) of the active layout
 	numLayouts  := getLayInfo( "NumOfLayouts" ) 			; The number of listed layouts
-	Loop % numLayouts {
+	Loop % numLayouts { 									; Use the layout # instead of its code, to reflect any PKL Settings list changes
 		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
 	}
@@ -523,7 +523,7 @@ suspendOff:
 	Goto afterSuspend
 Return
 
-suspendToggle: 												; Menu "Suspend"
+toggleSuspend:  											; Menu "Suspend"
 	Suspend
 	Goto afterSuspend
 Return

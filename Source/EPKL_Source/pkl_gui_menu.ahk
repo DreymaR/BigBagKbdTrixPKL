@@ -66,39 +66,35 @@ pkl_set_tray_menu()
 		Menu, Tray, add, 										; (separator)
 	}
 	
-	Menu, Tray, add, %aboutMeMenuItem%, showAbout   						; About
-	Menu, Tray, add, %settingMenuItem%, changeSettings  					; Layouts/Settings UI
+	_pklMenuAdd( aboutMeMenuItem, "showAbout"       ) 				; About
+	_pklMenuAdd( settingMenuItem, "changeSettings"  ) 				; Layouts/Settings UI
 	if ( ShowMoreInfo ) {
-		Menu, Tray, add, %keyHistMenuItem%, keyHistory  				; Key history
-;		Menu, Tray, add, %deadKeyMenuItem%, detectCurrentWinLayDeadKeys 	; Detect OS DKs (old PKL module)
-;		Menu, Tray, add, %importsMenuItem%, importLayouts   				; Import Module
-		Menu, Tray, add, %makeImgMenuItem%, makeHelpImages  				; Help Image Generator
-		Menu, Tray, add, 													; (separator)
+		_pklMenuAdd( keyHistMenuItem, "keyHistory"      ) 				; Key history
+;		_pklMenuAdd( deadKeyMenuItem, "detectCurrentWinLayDeadKeys" ) 	; Detect OS DKs (old PKL module)
+;		_pklMenuAdd( importsMenuItem, "importLayouts"   ) 				; Import Module
+		_pklMenuAdd( makeImgMenuItem, "makeHelpImages"  ) 				; Help Image Generator
+		_pklMenuAdd( ,, "sep" ) 										; --------
 	}
-	Menu, Tray, add, %showImgMenuItem%, showHelpImageToggle 				; Show image
-	Menu, Tray, add, %zoomImgMenuItem%, zoomHelpImage   					; Zoom image
-;	Menu, Tray, add, %moveImgMenuItem%, moveHelpImage   					; Move image
-;	Menu, Tray, add, %opaqImgMenuItem%, opaqHelpImage   					; Opaque/transparent image
+	_pklMenuAdd( showImgMenuItem, "toggleHelpImage" ) 				; Show image
+	_pklMenuAdd( zoomImgMenuItem, "zoomHelpImage"   ) 				; Zoom image
+;	_pklMenuAdd( moveImgMenuItem, "moveHelpImage"   ) 				; Move image
+;	_pklMenuAdd( opaqImgMenuItem, "opaqHelpImage"   ) 				; Opaque/transparent image
 	if ( numOfLayouts > 1 ) {
-		Menu, Tray, add, 													; (separator)
-		Menu, Tray, add, %layoutsMenu%, :changeLayout   					; Layouts
-		Menu, Tray, add, %chngLayMenuItem%, changeActiveLayout  			; Change layout
+		_pklMenuAdd( ,, "sep" ) 										; --------
+		_pklMenuAdd( layoutsMenu    , ":changeLayout"    )  			; Layouts submenu (denoted by a leading colon)
+		_pklMenuAdd( chngLayMenuItem, "rerunNextLayout" ) 				; Change/cycle layout
 	}
-	Menu, Tray, add,
-	Menu, Tray, add, %refreshMenuItem%, rerunWithSameLayout 				; Refresh
-	Menu, Tray, add, %suspendMenuItem%, suspendToggle   					; Suspend
-	Menu, Tray, add, %exitAppMenuItem%, exitPKL 							; Exit
+	_pklMenuAdd( ,, "sep" ) 										; --------
+	_pklMenuAdd( refreshMenuItem, "rerunSameLayout" ) 				; Refresh
+	_pklMenuAdd( suspendMenuItem, "toggleSuspend"   ) 				; Suspend
+	_pklMenuAdd( exitAppMenuItem, "exitPKL"         ) 				; Exit
 	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )
 	Menu, Tray, Tip, %pklAppName% v%pklVersion%`n(%activeLayName%)
 
 	Menu, Tray, Click, 2
-	try {
-		Menu, Tray, Default, % pklIniRead( "trayMenuDefault", suspendMenuItem )
-	} catch {
-		pklWarning( "EPKL_Settings .ini:`nNon-existing menu item specified as default!?" )
-	}
+	_pklMenuAdd( pklIniRead( "trayMenuDefault", suspendMenuItem ),, "def" ) 	; Set the tray menu default item
 ;	if ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chngLayMenuItem%
 ;	} else {
@@ -124,7 +120,41 @@ pkl_set_tray_menu()
 	}
 	Menu, Tray, Icon,      %suspendMenuItem%,  shell32.dll , 110 		; suspend icon - crossed circle
 	Menu, Tray, Icon,      %exitAppMenuItem%,  shell32.dll ,  28 		; exitApp icon - power off
-;	OnMessage( 0x404, "_AHK_NOTIFYICON" ) 								; Handle tray icon clicks. Using AHK defaults now.
+;	OnMessage( 0x404, "_AHK_NOTIFYICON" )   							; Handle tray icon clicks. Using AHK defaults now.
+}
+
+_pklMenuAdd( item = "", label = "", mode = "add" ) { 					; Add a Tray menu item, registering it. In "def" mode, set the default item.
+	static inx  := 0 													; By default, adds and registers a menu item
+	static itmList  := []   											; Empty item/label will add a separator (mode doesn't really matter)
+	static posList  := []   											; Mode "def" instead sets the default menu item by (partial) name or pos.
+	
+	if ( mode == "def" ) {
+		if ( SubStr( item, 0 ) == "&" ) {   							; Positional entry on the form #& selects the #th menu item – including separators
+			num := SubStr( item, 1, -1 )
+			len := posList.MaxIndex()   								; If bigger than the last position, use the second-to-last one (Suspend, not Exit) as def.
+			num := ( num > len ) ? posList[ len - 1 ] : posList[ num ] 	; The posList[] array contains actual menu item positions disregarding separators
+			def := num . "&"
+		} else {
+			For ix, line in itmList {
+				if InStr( line, item ) { 								; Partial text matching is allowed.
+					def := itmList[ ix ]
+					Break   											; Use the first (partial) match found.
+				}
+			}
+		} 	; end if item
+		try {
+			Menu, Tray, Default, %def%
+		} catch {
+			pklWarning( "EPKL_Settings .ini:`nNon-existing menu item specified as default?!`nPlease check your trayMenuDefault setting." )
+		}
+	} else {
+		inx += 1
+		Menu, Tray, Add, %item%, %label%
+		if ( item != "" ) { 											; No item/label means a separator line
+			itmList.Push( item ) 										; Stores the full string   of item N
+			posList.Push( inx  ) 										; Stores the real position of item N
+		}
+	} 	; end if mode
 }
 
 pkl_about()

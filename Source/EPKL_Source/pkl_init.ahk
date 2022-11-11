@@ -45,11 +45,11 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pkl_locale_load( lang )
 	
 	;;  Legend: (  hkIniName       ,  gotoLabel            ,  pklInfoTag       ) 	; Set a (menu) hotkey
-	pklSetHotkey( "helpImageHotkey", "showHelpImageToggle" , "HK_ShowHelpImg"  ) 	; 1
-	pklSetHotkey( "changeLayHotkey", "changeActiveLayout"  , "HK_ChangeLayout" ) 	; 2
-	pklSetHotkey( "suspendMeHotkey", "suspendToggle"       , "HK_Suspend"      ) 	; 3/` - 3 didn't work well?
+	pklSetHotkey( "helpImageHotkey", "toggleHelpImage"     , "HK_ShowHelpImg"  ) 	; 1
+	pklSetHotkey( "changeLayHotkey", "rerunNextLayout"     , "HK_ChangeLayout" ) 	; 2
+	pklSetHotkey( "suspendMeHotkey", "toggleSuspend"       , "HK_Suspend"      ) 	; 3/` - 3 didn't work well?
 	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
-	pklSetHotkey( "refreshMeHotkey", "rerunWithSameLayout" , "HK_Refresh"      ) 	; 5
+	pklSetHotkey( "refreshMeHotkey", "rerunSameLayout"     , "HK_Refresh"      ) 	; 5
 	pklSetHotkey( "settingUIHotkey", "changeSettings"      , "HK_SettingsUI"   ) 	; 6
 	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 7
 	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 8 - Hidden from menu

@@ -684,5 +684,5 @@ You can also refresh it later by the tray menu,
 or by the Refresh hotkey (default Ctrl+Shift+5).
 )
 	IfMsgBox, OK
-		gosub rerunWithSameLayout
+		gosub rerunSameLayout
 } 	; end fn UI RefreshPKL
