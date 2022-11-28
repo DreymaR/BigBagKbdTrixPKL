@@ -7,14 +7,20 @@
 
 ;;  ####################### user area #######################
 /*
+TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
+			- Might using ToUnicodeEx make a difference?
+			- Reverting to listing DKs in the settings sounds like a defeat now...
+TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
+TOFIX	- Check whether something can be done about hotkey queue buffer overflow. Concurrent number of hotkeys, something?
+			- If we can measure the buffer queue, we could flush part of it.
+			- Measure whether the queue has a large number of equal presses in it (auto-repeat situation)?
+			- There is an actual queue, not just a bunch of timers: The global HotKeyBuffer
 WIP 	- Further getWinLayDKs() development
 			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
 			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
 			- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
-TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
-TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 WIP 	- 
 */
 

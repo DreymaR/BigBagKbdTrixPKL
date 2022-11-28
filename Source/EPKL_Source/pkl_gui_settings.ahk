@@ -123,13 +123,13 @@ pklSetUI() { 													; EPKL Settings GUI
 					, "Right Win"
 					, "PrintScreen"
 					, "Menu"                ]
-	_uiAddSel(  "`n`nCompose key location and mapping entry: "
+	_uiAddSel(  "`n`nCompose key location, and the resultant mapping entry:"
 			,       "SpcCmpS"   , "Choose3 w170 +AltSubmit" , choices   , "xs y+m" )
 	_uiAddEdt(  ""  ;"Compose key mapping entry:"
 			,       "SpcCoLn"   , ""                        , ui_WideTxt, "xs y+m" )
-;	choices     :=  [ "These Compose keys are advanced CoDeKeys [Compose+DeadKeys]:" ]
+;	choices     :=  [ "These named Compose keys double as CoDeKeys [Compose+DeadKeys]:" ]
 ;	_uiAddSel(  "", "SpcCDCo"   , "Checked1 -Wrap"          , choices,, "CheckBox" )  	; Fn piggybacking w/ type DDL -> CheckBox. "-Wrap" is said to be more robust.
-	_uiAddEdt(  "These Compose keys are advanced CoDeKeys [Compose+DeadKeys]:"
+	_uiAddEdt(  "These named Compose keys double as CoDeKeys [Compose+DeadKeys]:"
 			,       "SpcCDLn"   , ""                        , ui_WideTxt, "xs y+m" )
 	GUI, UI:Add, Text,, % "`n`n`n`n`n`n`n"  				; (I'm dropping the footText here for clarity)
 						. "`n* EPKL has powerful special keys! This tab simplifies their activation."
@@ -138,7 +138,7 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* The mapping lines above get written to the Layouts_Override [layout] section."
 						. "`n* The lines are freely editable before submission, e.g., to change key codes."
 						. "`n* You could also achieve the same with the Key Mapper tab or direct file editing."
-						. "`n* Please refer to the EPKL_Layouts .ini files for more info."
+						. "`n* Click Help for more info, and/or look inside the EPKL_Layouts .ini files."
 						. "`n"
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn3  gUIsubSpcExt, &Submit Extend Key
 	GUI, UI:Add, Button, x+14   yp          gUIsubSpcCmp, Submit &Compose Key

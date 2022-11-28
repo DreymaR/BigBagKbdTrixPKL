@@ -214,6 +214,9 @@ More Know-How
     - **CoDeKey** is an even more advanced variety of a Compose key, adding Dead Key functionality
     - If you have a CoDeKey set, it works as a special DK if no sequence is recognized, and Compose otherwise
     - Such a key can be very handy for enhancing your layout with a variety of useful mappings!
+* **Repeat** is another handy special key. It simply repeats the previous key press, but boy is that nice.
+    - Map any state mapping to `®®` to make it a Repeat mapping. A `®#` mapping repeats # times.
+    - It's good on a key for the thumb not used for Space. I use the [SharpKeys][ShrpKy] program for that.
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
