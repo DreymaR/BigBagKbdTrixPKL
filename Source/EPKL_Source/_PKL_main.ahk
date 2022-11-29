@@ -15,6 +15,7 @@ TOFIX	- Check whether something can be done about hotkey queue buffer overflow. 
 			- If we can measure the buffer queue, we could flush part of it.
 			- Measure whether the queue has a large number of equal presses in it (auto-repeat situation)?
 			- There is an actual queue, not just a bunch of timers: The global HotKeyBuffer
+			- Is it only caused by Extend-mousing now? If so, could that be addressed separately?
 WIP 	- Further getWinLayDKs() development
 			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
 			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
@@ -341,11 +342,11 @@ WIP 	-
 #Persistent
 #NoTrayIcon
 #InstallKeybdHook
-#SingleInstance         force   							; eD WIP: Is something wonky with this now? I get lots of apparent EPKL instances in the System Tray...?
-#MaxThreadsBuffer
+#SingleInstance         Force   							; eD WIP: Is something wonky with this now? I get lots of apparent EPKL instances in the System Tray...?
 #MaxThreadsPerHotkey    3
+#MaxThreadsBuffer       Off 								; We'll turn it on later in pkl_init, so it's off for program hotkeys and on for key press ones.
 #MaxHotkeysPerInterval  300
-#MaxThreads             30
+#MaxThreads             32
 #MaxMem                 128 								; Default 64 Mb. We need more than that for HIG image generation in its search-n-replace loop.
 
 SendMode Event
@@ -425,7 +426,6 @@ processKeyPress27:
 processKeyPress28:
 processKeyPress29:
 processKeyPress30:
-processKeyPress31:
 	runKeyPress()
 Return
 

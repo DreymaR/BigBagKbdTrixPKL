@@ -56,13 +56,14 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 9 - Hidden from menu 	; eD WIP: Use this for something better?
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
 	pklSetHotkey( "epklDebugHotkey", "epklDebugUtil"       , "HK_DebugUtil"    ) 	; = - Hidden from menu
+	#MaxThreadsBuffer       Off 										; Turn on hotkey buffering for subsequent hotkeys (key presses)
 	
 	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )  		; eD WIP: Better DK detection fn!
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
-	_pklSetInf( "cleanupTimeOut" ) 										; Time idle (sec) before mods etc are cleaned up
-	_pklSetInf( "suspendTimeOut" ) 										; Time idle (min) before program suspends itself
-	_pklSetInf( "exitAppTimeOut" ) 										; Time idle (min) before program exits itself
+	_pklSetInf( "cleanupTimeOut" )  									; Time idle (sec) before mods etc are cleaned up
+	_pklSetInf( "suspendTimeOut" )  									; Time idle (min) before program suspends itself
+	_pklSetInf( "exitAppTimeOut" )  									; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" ) { 					; Programs that suspend EPKL when active
 		if ( suspApp == "--" )
 			Break
