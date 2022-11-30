@@ -11,8 +11,9 @@ TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they s
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
 TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
+			- The vmods don't need to be sticky for this to happen.
+			- Are they turned off somewhere on release? That'd account for them working only once.
 TOFIX	- Check whether something can be done about hotkey queue buffer overflow. Concurrent number of hotkeys, something?
-			- If we can measure the buffer queue, we could flush part of it.
 			- Measure whether the queue has a large number of equal presses in it (auto-repeat situation)?
 			- There is an actual queue, not just a bunch of timers: The global HotKeyBuffer
 			- Is it only caused by Extend-mousing now? If so, could that be addressed separately?
@@ -22,6 +23,9 @@ WIP 	- Further getWinLayDKs() development
 			- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
+TOFIX	- Alt and/or Shift get stuck off, so I can't switch to unread Discord channels by Extend+A+S+U/E ?
+WIP 	- Make the Settings GUI write to layout_Override.ini, making it from a template in root?
+			- Explain therein that it should be used in the layout directories.
 WIP 	- 
 */
 

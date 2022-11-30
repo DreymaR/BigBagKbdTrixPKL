@@ -11,10 +11,9 @@ processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Re
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey ) 												; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
+	if ( HotKeyBuffer.Length() > 24 )   						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
+		Return  												; ...refuse further buffering. The processKeyPress timers will reduce the buffer again.
 	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
-	bufLen  := HotKeyBuffer.Length() 							; There used to be buffer overflow, especially when Extend-mousing.
-	if ( bufLen > 24 )  										; If the buffer is growing too long...
-		n := 12, HotKeyBuffer.RemoveAt( bufLen-n, n )   		; ...clear the last part of it.
 	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal size for the buffer? Related to #MaxThreads?
 		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
 	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
