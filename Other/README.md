@@ -16,8 +16,10 @@ In this folder are some files that aren't used by EPKL but may still be interest
 	- Remappings can happen at the HKEY_LOCAL_MACHINE\SYSTEM level (for all users) or HKEY_CURRENT_USER only.
 	- Only one such remap script will take effect at a time, so if you want to do two things you have to edit your .reg file.
 	- The SetWinApp script may be used to set what apps the labels "App1" and "App2" refer to, e.g., for the Extend1 layer.
-- Instead of using RegEdit scripts, you could use the [SharpKeys program][ShrpKy] which does most of the same more safely.
+- Instead of using RegEdit scripts, you can use the [SharpKeys][ShrpKy] program which does most of the same more safely.
 	- I warmly recommend SharpKeys. It is available at the [Microsoft Store][ShrpMS] too, so it's quite official.
+	- It's hard to remap modifiers like the Alt keys well using EPKL. SharpKeys complements EPKL excellently in this respect.
+	- I use a combo of EPKL+SharpKeys to implement my BigBag [Modifier Modness][BBTMod] thumb keys. I'm very happy with that.
 - There's a MSKLC folder, that's about the Microsoft Keyboard Layout Creator program. With it you can make installable layouts.
 	- For a good guide to getting and using MSKLC, see [Henri's MSKLC Guide][MSKLCg].
 	- You'll need to install MSKLC from Microsoft's site. With it you can look at existing Win layouts and make new ones.
@@ -37,3 +39,4 @@ In this folder are some files that aren't used by EPKL but may still be interest
 [MSPTKM]: https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager (info on Microsoft PowerToys Keyboard Manager)
 [MSKLCg]: https://msklc-guide.github.io/ (Henri's MSKLC Guide)
 [KbdEdt]: http://www.kbdedit.com/manual/manual_index.html (KbdEdit online manual)
+[BBTMod]: https://dreymar.colemak.org/ergo-mods.html#modifiers

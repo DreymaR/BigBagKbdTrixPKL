@@ -77,6 +77,12 @@ Some of the mappings for my tap-Extend Kaomoji layer in the [`_eD_DeadKeys.ini`]
 ```
 <br>
 
+The CoDeKey dead key is a special key (I have it on a thumb key) that lets you access a layer designed for typing comfort:
+![EPKL help image, for the first CoDeKey DK layer](../Other/Docs/CoDeKey_s0_ISO-AWide_EPKL_marked.png)  
+
+_CoDeKey DK help image, marked with color. Pink: Punctuation-space-capitalization. Yellow: Reach reduction._
+<br><br>
+
 Extend1 mappings for the upper and home rows, from the [`_eD_Extend.ini`](./_eD_Extend.ini) file:
 ```
 QW_Q  = Esc

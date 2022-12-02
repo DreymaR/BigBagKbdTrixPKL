@@ -167,15 +167,14 @@ EPKL & Games
 ------------
 There are some pitfalls to using a keyboard remapping program like EPKL for gaming, which uses the keyboard very differently.
 
+TL;DR: Don't use eD-type (state mapped) layouts for gaming; eD2VK is okay. For key-intensive games like FPS, probably (auto-)suspend EPKL.
+
 In gaming a key is often held down for a longish time. This may lead to some problems:
 * The underlying OS layout sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
 * When sending characters, AutoHotkey sends a KeyDown followed immediately by a KeyUp. So inbetween each sent KeyDown there will be an extra KeyUp.
     - The result of this is often choppy game controls. Also, the MonkeyType typing test site has a cheat detection that interprets this behavior as suspect.
-    - The solution is to use a VK/SC or System mapped layout (EPKL v1.4+). These send only the KeyDown events from the OS with no KeyUp until you release the key.
+    - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These send only the KeyDown events from the OS with no KeyUp until you release the key.
     - ShiftState maps like eD must still send input with KeyDown-KeyUp. If you use an eD-type layout, you can make EPKL sleep whenever your game is active.
-* Too many key presses in too short time makes normal AHK scripts miss key presses. EPKL uses a buffer queue to avoid this, but this buffer may eventually overflow.
-    - When you hold down a key for too long, EPKL may continue sending input events for a while after you let it go. EPKL may act strangely afterwards.
-    - To avoid this when using, say, Extend isn't so hard once you get used to it. But for many games it's still a problem. I'm working on a solution.
 * You can suspend EPKL at any time with its Suspend hotkey (default `Ctrl+Shift+3`). If you want your layout in-game, you may have to use a [MSKLC install][PklKLC].
 * If you want EPKL to suspend itself when your game or webpage is active, you can use the `suspendingApps` setting; see the [Settings file][SetDef].
 * You could try setting the Windows Key Repeat speed as low as possible, but I'm unsure whether it'll really help.
@@ -420,20 +419,14 @@ KNOWN ISSUES:
     - If your game doesn't work well with EPKL, you can use the `suspendingApps` setting to auto-suspend EPKL when the game's active.
     - If you need your layout for the game, you can use a VK/SC-mapped layout, a `MSKLC` install or whatever works for you. See the [Other\MSKLC][PklKLC] folder.
     - Note that EPKL v1.4+ has a send mode for ScanCode and VirtualKey mapped keys that should fix this problem!
-* Another effect of key repeats may be key buffer overflow, especially when using Extend combos.
-    - This is most notable when holding down Extend arrow combos such as `Ext+S+N` (select previous letter) for a while.
-    - Again, to effect this EPKL has to send more key presses including modifier up/down and key up/down.
-    - The result may be that EPKL's hotkey buffer overflows. Keys and modifiers may get stuck as a result.
-    - I've tried hard to get rid of this problem and it's much better than it used to be, but it's not completely gone.
-    - To mostly avoid this problem, use e.g., `Ext+T+S+N` to select whole words instead of single characters.
-    - Also, try not to hold your Extend combos down for too long if you can avoid it. You can often break it up a little with some training.
-    - If you do get in trouble, use the `Refresh` menu option to restart EPKL. That usually does the trick.
+    - There is also an eD2VK layout type that uses VK mapping based on an eD-type base layout. AltGr mappings won't work then.
 * ISO VK layouts may not send the right OEM_# key VK codes for all ISO locales.
     - This is bad for QWERTZ/AZERTY etc. Known affected locales are: UK, De, Fr, Be…
     - State mapped layouts should work, or you could figure out which VK codes are the right ones and edit the layout files accordingly.
     - Finding a more robust solution is on my TODO list. There should be new options shortly, including more robust ScanCode mappings.
 * Using the `Colemak w/ Caps -> Backspace` MSKLC install found on [colemak.com][CmkCom] will cause the Back and Caps keys to be swapped. Also, Extend will not work.
     - This is due to that layout being hacked to provide the Caps-to-Back remapping. Please use a normal Windows layout with EPKL.
+    - If you wish to hard swap keys, a better and safer way is to use the [SharpKeys][ShrpKy] program included with EPKL.
 * Windows intercepts certain key combinations like <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> and <kbd>Win</kbd>+<kbd>L</kbd>
     - Consequently, these combinations may work oddly with state remaps like eD. Keys may end up working as both unmapped and remapped.
     - A workaround for this is to map a shortcut to `α#e` for accessing <kbd>Win</kbd>+<kbd>E</kbd> on Colemak. For Ext-tap, there's one on `{Ext,w}`.
