@@ -31,6 +31,15 @@ runKeyPress() { 												; Called from the PKL_main processKeyPress# timer la
 	_keyPressed( ThisHotkey )   								; Pops one HKey from the buffer
 }
 
+removeKey( ThisHotKey ) {                                       ; Called from PKL_main on key up. Clears any keydowns in the buffer before releasing
+	Critical
+	global HotKeyBuffer                                         ; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+	
+	For Index, Value In HotKeyBuffer                            ; Loop through each key in the buffer
+		if (Value == ThisHotKey)                                ; If the buffered key is the released key
+			HotKeyBuffer.Remove(Index)                          ; ... get rid of it.
+}
+
 _keyPressed( HKey ) {   										; Process a HotKey press
 	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
 		_osmClearAll()  										; ...clear any sticky mods, then...

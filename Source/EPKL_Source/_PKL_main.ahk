@@ -441,6 +441,7 @@ Return
 keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent directly
 ;	Critical
 ;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
+	removeKey(SubStr( A_ThisHotkey, 2, -3)) 	; Removes the key from the buffer. Avoids unwanted keydown after keyup
 	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
 ;	( 1 ) ? pklDebug( "" . GetKeyState("Shift", "P") . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
 Return
