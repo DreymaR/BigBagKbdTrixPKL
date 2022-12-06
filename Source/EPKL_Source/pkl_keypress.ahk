@@ -9,14 +9,37 @@ processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Re
 	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
-;	if ( tomKey ) 												; ...handle that first
+;	if ( tomKey )   											; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
-	if ( HotKeyBuffer.Length() > 24 )   						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
+	if ( HotKeyBuffer.Length() > 24 ) { 						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
 		Return  												; ...refuse further buffering. The processKeyPress timers will reduce the buffer again.
+;		pklTooltip( "Stopping extra keys", 0.2 )
+	} 	; end if
 	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
 	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal size for the buffer? Related to #MaxThreads?
 		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
 	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
+}
+
+processKeyUpBuf( ThisHotKey ) { 
+	Critical
+	global HotKeyBufUp      := []
+	
+	HotKeyBufUp.Push( ThisHotKey )
+	SetTimer, processKeyUp , -2 								; Set a run-once timer to process the event
+}
+
+runKeyUp() {
+	Critical
+	global HotKeyBufUp
+;	global HotKeyBuffer
+	
+	key := HotKeyBufUp.Pop()
+;	While ( ky2 := HotKeyBuffer.Pop() == key ) {    			; Flush HotKeyBuffer of all repeats of the released key 	; eD WIP: Is this necessary? CSGO felt it helps.
+;		pklTooltip( "Popping extra keys", 0.2 )
+;	} 	; end While
+;	HotKeyBuffer.Push( ky2 ) 									; Put the last one back in (not equal to key)
+	Send % "{Blind}{" . getKeyInfo( key . "ent1" ) . "  UP}"
 }
 
 runKeyPress() { 												; Called from the PKL_main processKeyPress# timer labels

@@ -7,16 +7,17 @@
 
 ;;  ####################### user area #######################
 /*
+TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer overflow, it seems.
+			- I can't reproduce it on https://keyboardchecker.com/
+			- He holds a key for 0.5–1.5 s and it sticks. Longer, and it may not stick?
+			- He detects a KeyDown after the KeyUp, that may be the trouble?
+				- He deleted all similar key presses in the buffer. That worked for him.
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
 TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 			- The vmods don't need to be sticky for this to happen.
 			- Are they turned off somewhere on release? That'd account for them working only once.
-TOFIX	- Check whether something can be done about hotkey queue buffer overflow. Concurrent number of hotkeys, something?
-			- Measure whether the queue has a large number of equal presses in it (auto-repeat situation)?
-			- There is an actual queue, not just a bunch of timers: The global HotKeyBuffer
-			- Is it only caused by Extend-mousing now? If so, could that be addressed separately?
 WIP 	- Further getWinLayDKs() development
 			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
 			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
@@ -24,8 +25,9 @@ WIP 	- Further getWinLayDKs() development
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
 TOFIX	- Alt and/or Shift get stuck off, so I can't switch to unread Discord channels by Extend+A+S+U/E ?
-WIP 	- Make the Settings GUI write to layout_Override.ini, making it from a template in root?
+WIP 	- Make the Settings GUI write to a Layout_Override.ini, making it from a template in root?
 			- Explain therein that it should be used in the layout directories.
+TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
 WIP 	- 
 */
 
@@ -371,7 +373,8 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-	global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+;	global HotKeyBuffer := []   							; Keeps track of the buffer of up to 30 pressed keys in ###KeyPress() fns; defined in processKeyPress()
+;	global HotKeyBufUps := []
 ;	global UIsel 											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any
@@ -433,16 +436,18 @@ processKeyPress30:
 	runKeyPress()
 Return
 
+processKeyUp:
+	runKeyUp()
+Return
+
 keypressDown: 			; *SC###    hotkeys
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
 Return
 
-keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent directly
-;	Critical
-;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
-	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
-;	( 1 ) ? pklDebug( "" . GetKeyState("Shift", "P") . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
+keypressUp:  			; *SC### UP 						; To avoid timing issues, this is sent with a different stack buffer
+	Critical
+	processKeyUpBuf(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Remove trailing " UP" as well
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)

@@ -499,7 +499,7 @@ VERSION HISTORY:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. WinLay DeadKey auto-detection.
+* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. OS DeadKey auto-detection.
 	- Two new modifiers: SwiSh and FliCK! SwiSh ("Swiss Shift") corresponds to the Windows SGCaps modifier, and FliCK ("Flip Cap Key") is custom.
 		- To get a SwiSh modifier for instance, just map a key like you would for any modifier, to `Swish Modifier`.
 		- The SwiSh & FliCK modifiers are virtual, not physical like Shift/Ctrl/Alt/Win. They add 8 and 16 to the ShiftState, respectively.
@@ -524,3 +524,6 @@ VERSION HISTORY:
 	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Robust `trayMenuDefault` setting. As before, `#&` selects item by position – but it now ignores separators. Also, partial matches are allowed for text entries.
+	- Fixed: Holding down auto-repeating keys could lead to hotkey buffer overflow, making EPKL unresponsive. Especially when holding down Extend mousing keys.
+		- The variable HotKeyBuffer holds the buffer array which led to too many concurrent timers. Whenever it has > 24 entries it now won't accept more.
+		- Also put KeyUp on a timer, to ensure it doesn't sneak past a last KeyDown of a repeating key
