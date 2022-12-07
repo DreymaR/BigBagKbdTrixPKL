@@ -373,7 +373,7 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-	global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
+	; global HotKeyBuffer = [] 								; Keeps track of the buffer of up to 30 pressesd keys in ###KeyPress() fns
 ;	global UIsel 											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any
@@ -401,48 +401,47 @@ Return  													; end of main
 ;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
 ;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
 
-processKeyPress0:
-processKeyPress1:
-processKeyPress2:
-processKeyPress3:
-processKeyPress4:
-processKeyPress5:
-processKeyPress6:
-processKeyPress7:
-processKeyPress8:
-processKeyPress9:
-processKeyPress10:
-processKeyPress11:
-processKeyPress12:
-processKeyPress13:
-processKeyPress14:
-processKeyPress15:
-processKeyPress16:
-processKeyPress17:
-processKeyPress18:
-processKeyPress19:
-processKeyPress20:
-processKeyPress21:
-processKeyPress22:
-processKeyPress23:
-processKeyPress24:  	; eD WIP: What's the ideal size of this cycle? Does #MaxThreads apply?
-processKeyPress25:
-processKeyPress26:
-processKeyPress27:
-processKeyPress28:
-processKeyPress29:
-processKeyPress30:
-	runKeyPress()
+; processKeyPress0:     ; Timer/Buffer removed - CSGO
+; processKeyPress1:
+; processKeyPress2:
+; processKeyPress3:
+; processKeyPress4:
+; processKeyPress5:
+; processKeyPress6:
+; processKeyPress7:
+; processKeyPress8:
+; processKeyPress9:
+; processKeyPress10:
+; processKeyPress11:
+; processKeyPress12:
+; processKeyPress13:
+; processKeyPress14:
+; processKeyPress15:
+; processKeyPress16:
+; processKeyPress17:
+; processKeyPress18:
+; processKeyPress19:
+; processKeyPress20:
+; processKeyPress21:
+; processKeyPress22:
+; processKeyPress23:
+; processKeyPress24:  	; eD WIP: What's the ideal size of this cycle? Does #MaxThreads apply?
+; processKeyPress25:
+; processKeyPress26:
+; processKeyPress27:
+; processKeyPress28:
+; processKeyPress29:
+; processKeyPress30:
+; 	runKeyPress()
+; Return
+
+keypressDown: 			; *SC###    hotkeys         ; Now sent directly
+	Critical
+	_keyPressed(SubStr( A_ThisHotkey, 2 )) 	; SubStr removes leading '*'
 Return
 
-keypressDown: 			; *SC###    hotkeys
+keypressUp:  			; *SC### UP 			    ; Also sent directly			
 	Critical
-	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
-Return
-
-keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent directly
-	Critical
-	removeKey(SubStr( A_ThisHotkey, 2, -3)) 	; Removes the key from the buffer. Avoids unwanted keydown after keyup
 	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
 Return
 

@@ -3,46 +3,36 @@
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 
-processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Released labels
-	Critical
-	global HotKeyBuffer                							; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
-	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
-	
-;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
-;	if ( tomKey ) 												; ...handle that first
-;		setTapOrModState( tomKey, -1 )
-	if ( HotKeyBuffer.Length() > 24 )   						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
-		Return  												; ...refuse further buffering. The processKeyPress timers will reduce the buffer again.
-	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
-	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal size for the buffer? Related to #MaxThreads?
-		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
-	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
-}
+; Timer/buffer removed - CSGO
 
-runKeyPress() { 												; Called from the PKL_main processKeyPress# timer labels
-	Critical
-	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+; processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Released labels
+; 	Critical
+; 	global HotKeyBuffer                							; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+; 	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
 	
-	if HotKeyBuffer.Length() == 0
-		Return
-	ThisHotkey := HotKeyBuffer[ 1 ] 							; Chomp the buffer from the left
-	HotKeyBuffer.RemoveAt( 1 )
-	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below _keyPressed() caused hard hangs.
-	_keyPressed( ThisHotkey )   								; Pops one HKey from the buffer
-}
+; ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
+; ;	if ( tomKey ) 												; ...handle that first
+; ;		setTapOrModState( tomKey, -1 )
+; 	if ( HotKeyBuffer.Length() > 24 )   						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
+; 		Return  												; ...refuse further buffering. The processKeyPress timers will reduce the buffer again.
+; 	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
+;     pklTooltip(ThisHotKey)
+; 	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal size for the buffer? Related to #MaxThreads?
+; 		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
+; 	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
+; }
 
-removeKey( ThisHotKey ) {                                       ; Called from PKL_main on key up. Clears any keydowns in the buffer before releasing -- CSGO
-	Critical
-	global HotKeyBuffer                                         ; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+; runKeyPress() { 												; Called from the PKL_main processKeyPress# timer labels
+; 	Critical
+; 	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	
-    For Index, Value In HotKeyBuffer                            ; Loop through each key in the buffer. This option is recommended to ensure purging.
-		if (Value == ThisHotKey)                                ; If the buffered key is the released key
-			HotKeyBuffer.Remove(Index)                          ; ... get rid of it.
-
-	; While (HotKeyBuffer[1] == ThisHotKey ) {                  ; Modified DreymaR's purging. This seems to work as well, but I recommend the other option
-	; 	HotKeyBuffer.RemoveAt(1)                                ; Potential problem: HotKeyBuffer[1] is not ThisHotKey, HotKeyBuffer[2] is. Buffer doesn't get purged.
-	; } 	; end While	
-}
+; 	if HotKeyBuffer.Length() == 0
+; 		Return
+; 	ThisHotkey := HotKeyBuffer[ 1 ] 							; Chomp the buffer from the left
+; 	HotKeyBuffer.RemoveAt( 1 )
+; 	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below _keyPressed() caused hard hangs.
+; 	_keyPressed( ThisHotkey )   								; Pops one HKey from the buffer
+; }
 
 _keyPressed( HKey ) {   										; Process a HotKey press
 	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
@@ -376,7 +366,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )
 		} else {
-			processKeyPress( HKey )
+			_keyPressed( HKey )
 			tomHeld[HKey] := 0
 		}
 	} else { 												; If the key is released (unless interrupted first)...
@@ -385,7 +375,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 		tomHeld[HKey] := 0
 		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
 		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
-			processKeyPress( HKey )
+			_keyPressed( HKey )
 		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 			_setModState( tomMod, 0 )
 		setLayInfo( "extendUsed", false )
