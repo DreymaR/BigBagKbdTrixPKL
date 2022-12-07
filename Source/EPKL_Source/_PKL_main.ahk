@@ -7,16 +7,17 @@
 
 ;;  ####################### user area #######################
 /*
+TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer overflow, it seems.
+			- I can't reproduce it on https://keyboardchecker.com/
+			- He holds a key for 0.5–1.5 s and it sticks. Longer, and it may not stick?
+			- He detects a KeyDown after the KeyUp, that may be the trouble?
+				- He deleted all similar key presses in the buffer. That worked for him.
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
 TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 			- The vmods don't need to be sticky for this to happen.
 			- Are they turned off somewhere on release? That'd account for them working only once.
-TOFIX	- Check whether something can be done about hotkey queue buffer overflow. Concurrent number of hotkeys, something?
-			- Measure whether the queue has a large number of equal presses in it (auto-repeat situation)?
-			- There is an actual queue, not just a bunch of timers: The global HotKeyBuffer
-			- Is it only caused by Extend-mousing now? If so, could that be addressed separately?
 WIP 	- Further getWinLayDKs() development
 			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
 			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
@@ -24,8 +25,9 @@ WIP 	- Further getWinLayDKs() development
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
 TOFIX	- Alt and/or Shift get stuck off, so I can't switch to unread Discord channels by Extend+A+S+U/E ?
-WIP 	- Make the Settings GUI write to layout_Override.ini, making it from a template in root?
+WIP 	- Make the Settings GUI write to a Layout_Override.ini, making it from a template in root?
 			- Explain therein that it should be used in the layout directories.
+TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
 WIP 	- 
 */
 
@@ -439,11 +441,9 @@ keypressDown: 			; *SC###    hotkeys
 Return
 
 keypressUp:  			; *SC### UP 							; To avoid timing issues, this is just sent directly
-;	Critical
-;	processKeyPress(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Also remove trailing ' UP'
+	Critical
 	removeKey(SubStr( A_ThisHotkey, 2, -3)) 	; Removes the key from the buffer. Avoids unwanted keydown after keyup
 	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
-;	( 1 ) ? pklDebug( "" . GetKeyState("Shift", "P") . "`n" . DLLCall("GetAsyncKeyState","UInt",0x10), 1 )  ; eD DEBUG
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)
