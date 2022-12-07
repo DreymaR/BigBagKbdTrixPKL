@@ -3,58 +3,77 @@
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 
-processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Released labels
+;/*  	; eD WIP: Timerless EPKL?!?
+processKeyPress( theHotKey ) {  								; Called from the PKL_main keyPressed/Released labels
 	Critical
-	global HotKeyBuffer     := []   							; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+;	global HotKeyBuffer 										; Buffer queue of up to 32 pressesd keys, used in ###KeyPress() fns. Super-global variable, declared in PKL_main.
 	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey )   											; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
-	if ( HotKeyBuffer.Length() > 24 ) { 						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys)...
-		Return  												; ...refuse further buffering. The processKeyPress timers will reduce the buffer again.
-;		pklTooltip( "Stopping extra keys", 0.2 )
+	if ( HotKeyBuffer.Length() > 24 ) { 						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys) ...
+;		pklTooltip( "Buffer full", 0.2 ) 	; eD DEBUG
+		purgeEqualKeys( theHotKey ) 							; ... purge the buffer of repeated key strokes, and ...
+		Return  												; ... refuse further buffering. The process timers will reduce the buffer again.
 	} 	; end if
-	HotKeyBuffer.Push( ThisHotKey ) 							; Add this hotkey to the hotkey buffer
-	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal size for the buffer? Related to #MaxThreads?
+	HotKeyBuffer.Push( theHotKey )  							; Add this hotkey to the hotkey buffer
+	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal concurrent timer count? Related to #MaxThreads?
 		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
-	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once processKeyPress# timer (key buffer)
+	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once process timer (key buffer)
 }
 
-processKeyUpBuf( ThisHotKey ) { 
+purgeEqualKeys( theHotKey ) {
 	Critical
-	global HotKeyBufUp      := []
+;	global HotKeyBuffer
 	
-	HotKeyBufUp.Push( ThisHotKey )
-	SetTimer, processKeyUp , -2 								; Set a run-once timer to process the event
+	if ( not theHotKey )
+		Return
+	
+;	While ( ky2 := HotKeyBuffer.Pop() == theHotKey ) {  		; The DreymaR Purge: Flush HotKeyBuffer of all repeats of the released key
+;;		pklTooltip( "Popping extra repeats", 0.2 )  	; eD DEBUG
+;	} 	; end While 											; eD WIP: Is this purge necessary? CSGO's tests say it helps vs stuck KeyDown.
+;	if ( ky2 != "" )
+;		HotKeyBuffer.Push( ky2 ) 								; Put the last one (ky2 != key) back in, since it was popped above
+	For ix, bufKey in HotKeyBuffer  							; The CSGO Purge: Loop through each key in the buffer. This option ensures purging regardless of buffer sequence.
+		if ( bufKey == theHotKey)   							; If the buffered key is the released key ...
+			HotKeyBuffer.Remove(Index)  						; ... get rid of it. 		; eD WIP: Could this lead to unwarranted buffer deletions? Likely no biggie either way?
+}
+
+processKeyUpBuf( theHotKey ) { 
+	Critical
+;	global HotKeyBufUp  										; Super-Global variable, declared in PKL_main. Super-globals don't have to be redeclared in fns.
+	
+	HotKeyBufUp.Push( theHotKey )
+	SetTimer, processKeyUp , -1 								; Set a run-once timer to process the event
 }
 
 runKeyUp() {
 	Critical
-	global HotKeyBufUp
-;	global HotKeyBuffer
+;	global HotKeyBufUp
 	
-	key := HotKeyBufUp.Pop()
-;	While ( ky2 := HotKeyBuffer.Pop() == key ) {    			; Flush HotKeyBuffer of all repeats of the released key 	; eD WIP: Is this necessary? CSGO felt it helps.
-;		pklTooltip( "Popping extra keys", 0.2 )
-;	} 	; end While
-;	HotKeyBuffer.Push( ky2 ) 									; Put the last one back in (not equal to key)
-	Send % "{Blind}{" . getKeyInfo( key . "ent1" ) . "  UP}"
+	theHotKey := HotKeyBufUp[ 1 ]   							; Chomp the buffer from the left (FIFO buffer)
+	HotKeyBufUp.RemoveAt( 1 )
+	if ( not theHotKey )
+		Return
+	purgeEqualKeys( theHotKey ) 								; Remove this key from the buffer to avoid trouble with remaining KeyDown (CSGO)
+	Send % "{Blind}{" . getKeyInfo( theHotKey . "ent1" ) . "  UP}"
 }
 
 runKeyPress() { 												; Called from the PKL_main processKeyPress# timer labels
 	Critical
-	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+;	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	
-	if HotKeyBuffer.Length() == 0
+	if ( HotKeyBuffer.Length() == 0 )
 		Return
-	ThisHotkey := HotKeyBuffer[ 1 ] 							; Chomp the buffer from the left
+	theHotKey := HotKeyBuffer[ 1 ]  							; Chomp the buffer from the left (FIFO buffer)
 	HotKeyBuffer.RemoveAt( 1 )
-	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below _keyPressed() caused hard hangs.
-	_keyPressed( ThisHotkey )   								; Pops one HKey from the buffer
+	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below keyPressed() caused hard hangs.
+	keyPressed( theHotKey ) 									; Pops one HKey from the buffer
 }
+;*/  	; eD WIP: Timerless EPKL?!?
 
-_keyPressed( HKey ) {   										; Process a HotKey press
+keyPressed( HKey ) { 											; Process a HotKey press
 	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
 		_osmClearAll()  										; ...clear any sticky mods, then...
 		extendKeyPress( HKey )  								; ...process the Extend key press.
@@ -329,7 +348,7 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 ; ;	( 1 ) ? pklDebug( "getAltGrState " . keyDown . " " . set )  ; eD DEBUG – When exactly is this used? Only if there's no real AltGr in the OS layout?
 ;}
 
-ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Used in _keyPressed() and pkl_gui_image
+ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Used in keyPressed() and pkl_gui_image
 	ext := getLayInfo( "ExtendKey" )
 	Return ( ext && getKeyState( ext, "P" ) ) ? true : false
 }	; end fn
@@ -386,7 +405,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )
 		} else {
-			processKeyPress( HKey )
+			processKeyPress( HKey )  	;keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
 			tomHeld[HKey] := 0
 		}
 	} else { 												; If the key is released (unless interrupted first)...
@@ -395,7 +414,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 		tomHeld[HKey] := 0
 		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
 		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
-			processKeyPress( HKey )
+			processKeyPress( HKey )  	;keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
 		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 			_setModState( tomMod, 0 )
 		setLayInfo( "extendUsed", false )

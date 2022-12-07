@@ -25,7 +25,7 @@ Colemak-Heb Hebrew phonetic layout variant
 <br>
 
 Briefly:
-- Hebrew letters on Shift states 0/1, Latin letters on AltGr states. Normal Latin/Hebrew punctuation kept in both cases.
+- Hebrew letters on base/Shift states, Latin letters on AltGr states. Normal Latin/Hebrew punctuation kept in both cases.
 - Shift+letter is for the final form. Where there is none, dagesh/hazaq/mapiq forms instead.
 - Where there's both final and dagesh forms, they get spare keys: Fe/pe on <kbd>F</kbd> / <kbd>P</kbd>, chaf/kaf on <kbd>K</kbd> / <kbd>J</kbd>.
 - Alef on <kbd>A</kbd>, ayin on <kbd>E</kbd>.
@@ -79,19 +79,19 @@ More Hebrew script resources
 Here are the Biblical-SIL layout states, for reference. The images contain Unicode codes for all relevant glyphs, both for modern and ancient/Biblical Hebrew.
 <br>
 
-![Biblical Hebrew SIL layout, state 0](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state0.png)
+![Biblical Hebrew SIL layout, state 0](https://dreymar.colemak.org/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state0.png)
 
 <br>
 
-![Biblical Hebrew SIL layout, state 1](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state1.png)
+![Biblical Hebrew SIL layout, state 1](https://dreymar.colemak.org/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state1.png)
 
 <br>
 
-![Biblical Hebrew SIL layout, state 6](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state6.png)
+![Biblical Hebrew SIL layout, state 6](https://dreymar.colemak.org/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state6.png)
 
 <br>
 
-![Biblical Hebrew SIL layout, state 7](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrix/master/docs/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state7.png)
+![Biblical Hebrew SIL layout, state 7](https://dreymar.colemak.org/res/div/Glyphs/Hebrew/BiblicalHebrew-SIL_state7.png)
 
 
 [HebFor]: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971 (HebMak discussed on the Colemak Forum)

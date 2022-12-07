@@ -216,6 +216,7 @@ More Know-How
 * **Repeat** is another handy special key. It simply repeats the previous key press, but boy is that nice.
     - Map any state mapping to `®®` to make it a Repeat mapping. A `®#` mapping repeats # times.
     - It's good on a key for the thumb not used for Space. I use the [SharpKeys][ShrpKy] program for that.
+    - Speed typist Sophie says: "Double letter n-grams are funny: They start off as free WPM; then the better you get, the more they slow you down."
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:

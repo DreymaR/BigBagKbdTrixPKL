@@ -174,7 +174,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	}
 	if ( pfix != -1 && ! higMode ) {    						; Send if recognized and not ParseOnly/HIG
 		if ( enty && mode == "SendThis" ) { 
-			pkl_Send( "", pfix . enty ) 						; Used by _keyPressed()
+			pkl_Send( "", pfix . enty ) 						; Used by keyPressed()
 		} else if ( mode == "SendMess"  ) {
 			pkl_SendMessage( enty )
 		} else if ( mode == "DeadKey"   ) {
@@ -205,7 +205,7 @@ pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax addition
 		Sleep 50
 ;		setOneShotMod( "Shift" ) 	; eD WIP: NOT WORKING!!! WHY!?! Something that ModifierDown does, that this doesn't...?
 ;		setModifierState( "SC02A" . "ent1", 1 )
-;	; eD WIP: Seems the problem is the osmClearAll at the end of _keyPressed() clears our OSM prematurely. But without it, we get DOuble CAps. What triggers it unnecessarily?
+;	; eD WIP: Seems the problem is the osmClearAll at the end of keyPressed() clears our OSM prematurely. But without it, we get DOuble CAps. What triggers it unnecessarily?
 		For ix, mod in OSMs {
 			setOneShotMod( mod ) 	; eD WIP: NOT WORKING!!! WHY!?! Because somehow, _osmClearAll() gets invoked after this...
 		}
@@ -310,7 +310,7 @@ pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of ti
 	lky := lks[lks.Length()] 									; The last entry in LastKeys is the previous key.
 	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # of repeats may be any hex number without "0x", or just ® for num=1
 	Loop % num {
-		SendInput {Text}%lky%   	;_keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
+		SendInput {Text}%lky%   	;keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.
 		lastKeys( "push", lky ) 								; Repeated keys are counted in the LastKeys queue
 	}
 }

@@ -7,6 +7,8 @@
 
 ;;  ####################### user area #######################
 /*
+WIP 	- Timerless EPKL?!? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-runKeyPress/Up!
+			- Nope, the dead key routine caused a hard hang together with timerless key press processing.
 TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer overflow, it seems.
 			- I can't reproduce it on https://keyboardchecker.com/
 			- He holds a key for 0.5–1.5 s and it sticks. Longer, and it may not stick?
@@ -319,9 +321,6 @@ WIP 	-
 ;		- Conclusion: Not a good idea to send as text categorically, as non-"key" sending breaks Win+‹key› shortcuts.
 ;	- Try out a swap-side layout instead of the mirrored one? More strain on weak fingers, but fewer SFBs I should think.
 ;		- Is the brain equally good at side-swapping and mirroring?
-;	- Make it so that if the hotkey queue overflows it's reset and you lose, say, the last 10 keys in it? Is that actually safer? No, don't think so?
-;		- Need a way to count the hotkeys then, without spending much resources. The size of pklHotKeyBuffer should be an indication, as it's usually 'SC###¤' repeated.
-;		- Only necessary to intervene on hotkey #31? Then stop the first 16 or so timers and flush the corresponding pklHotKeyBuffer entries.
 ;	- Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
 ;		- Could keep everything in kbdType and adjust the reading of it to use the first and second substring.
 ;		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in layout.ini anyway.
@@ -373,9 +372,9 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-;	global HotKeyBuffer := []   							; Keeps track of the buffer of up to 30 pressed keys in ###KeyPress() fns; defined in processKeyPress()
-;	global HotKeyBufUps := []
-;	global UIsel 											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
+global HotKeyBuffer := []   								; Keeps track of the buffer of up to ≈30 pressed keys in ###KeyPress() fns in pkl_keypress
+global HotKeyBufUps := []   								; Note: These declarations in the main section are Super-Global (see AHK docs); they don't really need re-declaring
+;global UIsel 												; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
@@ -402,6 +401,7 @@ Return  													; end of main
 ;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
 ;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
 
+;/*  	; eD WIP: Timerless EPKL?!?
 processKeyPress0:
 processKeyPress1:
 processKeyPress2:
@@ -439,15 +439,18 @@ Return
 processKeyUp:
 	runKeyUp()
 Return
+;*/  	; eD WIP: Timerless EPKL?!?
 
 keypressDown: 			; *SC###    hotkeys
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
+;	keyPressed(         SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
 Return
 
 keypressUp:  			; *SC### UP 						; To avoid timing issues, this is sent with a different stack buffer
 	Critical
 	processKeyUpBuf(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Remove trailing " UP" as well
+;	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)

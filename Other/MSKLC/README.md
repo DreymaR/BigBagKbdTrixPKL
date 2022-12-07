@@ -37,13 +37,13 @@ Included are MSKLC installs for my Colemak-CAWS-eD layout variant.
 - [Link to the Cmk-CAWS-eD-ISO installer file][CAWSIi]
 <br>
 
-![Colemak-CurlAWideSym on an ISO board, ground state](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrixPKL/master/Layouts/Colemak/Cmk-ISO-CAWS_s0_EPKL.png)
+![Colemak-CurlAWideSym on an ISO board, ground state](/Layouts/Colemak/Cmk-ISO-CAWS_s0_EPKL.png)
 
 _Colemak-CurlAngleWideSym layout, alias Cmk-CAWS, on an ISO keyboard._<br>_Ground state. The `œ` key is ISO-only; on an ANSI board that positions holds `Z`._
 
 <br>
 
-![Colemak-CurlAWideSym on an ISO board, AltGr state](https://raw.githubusercontent.com/DreymaR/BigBagKbdTrixPKL/master/Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
+![Colemak-CurlAWideSym on an ISO board, AltGr state](/Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
 
 _Colemak-CurlAngleWideSym layout, alias Cmk-CAWS, on an ISO keyboard._<br>_AltGr state. Dead keys marked in yellow._
 
