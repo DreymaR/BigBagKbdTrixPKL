@@ -5,7 +5,7 @@
 
 processKeyPress( ThisHotkey ) { 								; Called from the PKL_main keyPressed/Released labels
 	Critical
-	global HotKeyBuffer     := []   							; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+	global HotKeyBuffer                							; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
@@ -31,13 +31,17 @@ runKeyPress() { 												; Called from the PKL_main processKeyPress# timer la
 	_keyPressed( ThisHotkey )   								; Pops one HKey from the buffer
 }
 
-removeKey( ThisHotKey ) {                                       ; Called from PKL_main on key up. Clears any keydowns in the buffer before releasing
+removeKey( ThisHotKey ) {                                       ; Called from PKL_main on key up. Clears any keydowns in the buffer before releasing -- CSGO
 	Critical
 	global HotKeyBuffer                                         ; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	
-	For Index, Value In HotKeyBuffer                            ; Loop through each key in the buffer
+    For Index, Value In HotKeyBuffer                            ; Loop through each key in the buffer. This option is recommended to ensure purging.
 		if (Value == ThisHotKey)                                ; If the buffered key is the released key
 			HotKeyBuffer.Remove(Index)                          ; ... get rid of it.
+
+	; While (HotKeyBuffer[1] == ThisHotKey ) {                  ; Modified DreymaR's purging. This seems to work as well, but I recommend the other option
+	; 	HotKeyBuffer.RemoveAt(1)                                ; Potential problem: HotKeyBuffer[1] is not ThisHotKey, HotKeyBuffer[2] is. Buffer doesn't get purged.
+	; } 	; end While	
 }
 
 _keyPressed( HKey ) {   										; Process a HotKey press
