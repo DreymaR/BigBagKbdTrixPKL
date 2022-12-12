@@ -4,40 +4,38 @@
 ;
 
 ;/*  	; eD WIP: Timerless EPKL?!?
-processKeyPress( theHotKey ) {  								; Called from the PKL_main keyPressed/Released labels
+processKeyPress( theHotKey ) {  								; Called from the PKL_main keyPressed label
 	Critical
-;	global HotKeyBuffer 										; Buffer queue of up to 32 pressesd keys, used in ###KeyPress() fns. Super-global variable, declared in PKL_main.
+;	global HotKeyBufDn  										; Buffer queue of up to 32 pressesd keys, used in ###KeyPress() fns. Super-global variable, declared in PKL_main.
 	static keyTimerCounter  := 0    							; Counter for keys queued with timers (0-31 then 0 again).
 	
 ;	tomKey := getPklInfo( "tomKey" ) 							; If interrupting an active Tap-or-Mod timer... 	; eD WIP! Interrupt seems necessary, but it's hard to get right
 ;	if ( tomKey )   											; ...handle that first
 ;		setTapOrModState( tomKey, -1 )
-	if ( HotKeyBuffer.Length() > 24 ) { 						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys) ...
+	if ( HotKeyBufDn.Length() > 24 ) {  						; If the hotkey buffer is growing too long (such as when holding down Extend-mousing keys) ...
 ;		pklTooltip( "Buffer full", 0.2 ) 	; eD DEBUG
-		purgeEqualKeys( theHotKey ) 							; ... purge the buffer of repeated key strokes, and ...
+		HotKeyBufDn := []   									; ... nuke the buffer – muahahaaa! – and ... 	; eD WIP: Can this have any adverse effects?
+;		purgeEqualKeys( theHotKey ) 							; ... purge the buffer of repeated key strokes, and ...
 		Return  												; ... refuse further buffering. The process timers will reduce the buffer again.
 	} 	; end if
-	HotKeyBuffer.Push( theHotKey )  							; Add this hotkey to the hotkey buffer
+	HotKeyBufDn.Push( theHotKey )   							; Add this hotkey to the hotkey buffer
 	if ( ++keyTimerCounter > 28 )   							; Resets the timer count on overflow. 	; eD WIP: What's the optimal concurrent timer count? Related to #MaxThreads?
-		keyTimerCounter = 0 									; This doesn't affect the HotKeyBuffer size, only the number of concurrent timers.
+		keyTimerCounter = 0 									; This doesn't affect HotKeyBufDn size, only the number of concurrent timers.
 	SetTimer, processKeyPress%keyTimerCounter%, -1  			; Set a 1 ms(!) run-once process timer (key buffer)
 }
 
-purgeEqualKeys( theHotKey ) {
+purgeEqualKeys( theHotKey ) {   								; Purge HotKeyBufDn of KeyDown events of a given key, to prevent stuck KeyDown events
 	Critical
-;	global HotKeyBuffer
+;	global HotKeyBufDn
 	
-	if ( not theHotKey )
-		Return
-	
-;	While ( ky2 := HotKeyBuffer.Pop() == theHotKey ) {  		; The DreymaR Purge: Flush HotKeyBuffer of all repeats of the released key
+;	While ( ky2 := HotKeyBufDn.Pop() == theHotKey ) {   		; The DreymaR Purge: Flush the hotkey down buffer of all repeats of the released key
 ;;		pklTooltip( "Popping extra repeats", 0.2 )  	; eD DEBUG
 ;	} 	; end While 											; eD WIP: Is this purge necessary? CSGO's tests say it helps vs stuck KeyDown.
 ;	if ( ky2 != "" )
-;		HotKeyBuffer.Push( ky2 ) 								; Put the last one (ky2 != key) back in, since it was popped above
-	For ix, bufKey in HotKeyBuffer  							; The CSGO Purge: Loop through each key in the buffer. This option ensures purging regardless of buffer sequence.
+;		HotKeyBufDn.Push( ky2 ) 								; Put the last one (ky2 != key) back in, since it was popped above
+	For ix, bufKey in HotKeyBufDn   							; The CSGO Purge: Loop through each key in the buffer. This option ensures purging regardless of buffer sequence.
 		if ( bufKey == theHotKey)   							; If the buffered key is the released key ...
-			HotKeyBuffer.Remove(Index)  						; ... get rid of it. 		; eD WIP: Could this lead to unwarranted buffer deletions? Likely no biggie either way?
+			HotKeyBufDn.Remove(Index)   						; ... get rid of it. 		; eD WIP: Could this lead to unwarranted buffer deletions? Likely no biggie either way?
 }
 
 processKeyUpBuf( theHotKey ) { 
@@ -52,38 +50,36 @@ runKeyUp() {
 	Critical
 ;	global HotKeyBufUp
 	
-	theHotKey := HotKeyBufUp[ 1 ]   							; Chomp the buffer from the left (FIFO buffer)
-	HotKeyBufUp.RemoveAt( 1 )
+	theHotKey := HotKeyBufUp[1] , HotKeyBufUp.RemoveAt(1)   	; Chomp the keyUp buffer from the left (FIFO buffer)
 	if ( not theHotKey )
 		Return
 	purgeEqualKeys( theHotKey ) 								; Remove this key from the buffer to avoid trouble with remaining KeyDown (CSGO)
 	Send % "{Blind}{" . getKeyInfo( theHotKey . "ent1" ) . "  UP}"
 }
 
-runKeyPress() { 												; Called from the PKL_main processKeyPress# timer labels
+runKeyDn() { 													; Called from the PKL_main processKeyPress# timer labels
 	Critical
-;	global HotKeyBuffer 										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
+;	global HotKeyBufDn  										; Keeps track of the buffer queue of up to 32 pressesd keys in ###KeyPress() fns
 	
-	if ( HotKeyBuffer.Length() == 0 )
+	if ( HotKeyBufDn.Length() == 0 )
 		Return
-	theHotKey := HotKeyBuffer[ 1 ]  							; Chomp the buffer from the left (FIFO buffer)
-	HotKeyBuffer.RemoveAt( 1 )
-	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below keyPressed() caused hard hangs.
-	keyPressed( theHotKey ) 									; Pops one HKey from the buffer
+	theHotKey := HotKeyBufDn[1] , HotKeyBufDn.RemoveAt(1)   	; Chomp the keyDn buffer from the left (FIFO buffer)
+	keyPressed( theHotKey ) 									; Execute the key press
 }
 ;*/  	; eD WIP: Timerless EPKL?!?
 
-keyPressed( HKey ) { 											; Process a HotKey press
+keyPressed( HKey ) { 											; Executes a HotKey press – the actual processing part
+	modif := ""
+	state := 0
+	vk_HK := getKeyInfo( HKey . "ent1" ) 						; Key "VK_" info; usually VK/SC code.
+	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
+	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below keyPressed() caused hard hangs.
+	
 	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
 		_osmClearAll()  										; ...clear any sticky mods, then...
 		extendKeyPress( HKey )  								; ...process the Extend key press.
 		Return
 	}	; end if ExtPressed
-	
-	modif := ""
-	state := 0
-	vk_HK := getKeyInfo( HKey . "ent1" ) 						; Key "VK_" info; usually VK/SC code.
-	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
 	
 	if ( capHK < -1 ) { 										; The key is VK or SC mapped, so just send its VK## and/or SC### code.
 		if ( capHK == -2 ) && inArray( [ "VK2D", "VK2E"  		; [PgUp,PgDn,End ,Home,Left,Up ,Right,Down,Ins ,Del ] are sent as their NumPad versions by AHK, as...
@@ -157,7 +153,7 @@ keyPressed( HKey ) { 											; Process a HotKey press
 			Return  											; Skip osmClearAll in this case
 	}	; end if Pri
 	_osmClearAll()  											; If another key is pressed while a OSM is active, cancel the OSM
-}	; end fn _KeyPressed										; eD WIP: Should _osmClearAll() be used more places above?
+}	; end fn keyPressed 										; eD WIP: Should _osmClearAll() be used more places above?
 
 extendKeyPress( HKey ) { 										; Process an Extend modified key press
 	Critical

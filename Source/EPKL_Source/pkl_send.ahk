@@ -107,7 +107,6 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 			} 	; end if keyArr
 		} 	; end for sections
 	} 	; end for lengths
-;	if getKeyInfo("@co0") && ( getKeyInfo("@co0") != "--" ) { 	; If a "CoDeKey" Compose0 DK is defined...
 	if inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
 		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
 	}
@@ -195,19 +194,14 @@ pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax addition
 		mod := "i)\{([LR]?(?:Shift|Alt|Ctrl|Win)) OSM\}" 		; RegEx capture pattern for a OneShotMod
 		RegExMatch( enty, mod, mod ) 							; RegExMatch mode O) stores the match object in the mod variable.
 		mod := mod1 											; Simple way to get the first subpattern
-		enty := StrReplace( enty, "{" . mod . " OSM}" ) 		; Remove the special syntax
+		enty := StrReplace( enty, "{" . mod . " OSM}" ) 		; Remove the special syntax, replacing `{<mod> OSM}` with nothing.
 		OSMs.Push( mod )
-;		setOneShotMod( mod ) 									; eD WIP: To get this done after the Send, either send it here and bail out or make a fancy dynamic %fn%() call
-;		dynFn.Push( "setOneShotMod", [ mod ] )  	; ???
 	}
 	if ( OSM ) {
-		SendInput % pfix . enty
+		SendInput % pfix . enty 								; Send the entry before activating the OSM
 		Sleep 50
-;		setOneShotMod( "Shift" ) 	; eD WIP: NOT WORKING!!! WHY!?! Something that ModifierDown does, that this doesn't...?
-;		setModifierState( "SC02A" . "ent1", 1 )
-;	; eD WIP: Seems the problem is the osmClearAll at the end of keyPressed() clears our OSM prematurely. But without it, we get DOuble CAps. What triggers it unnecessarily?
 		For ix, mod in OSMs {
-			setOneShotMod( mod ) 	; eD WIP: NOT WORKING!!! WHY!?! Because somehow, _osmClearAll() gets invoked after this...
+			setOneShotMod( mod )
 		}
 		Return true
 	} 	; end if osm

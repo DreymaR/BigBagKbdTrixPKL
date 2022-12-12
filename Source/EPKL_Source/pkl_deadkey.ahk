@@ -1,30 +1,46 @@
 ﻿;; ================================================================================================
 ;;  EPKL dead key functions
+;;  - Handle EPKL's DKs
+;;  - Detect OS (Windows Layout) DKs
 ;
 
-DeadKeyValue( dkName, base ) 											; In old PKL, 'dk' was just a number. It's a name now.
-{ 																		; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
-	val := getKeyInfo( "DKval_" . dkName . "_" . base )
+DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It's a name now. Release character = rChr.
+{   																	; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
+	val := getKeyInfo( "DKval_" . dkName . "_" . rChr )
 	if ( not val ) {
 		dkStck  := getPklInfo( "DkListStck" )
-		chr := Chr( base )
-		upp := ( ( 64 < base ) && ( base < 91 ) ) ? "+" : "" 			; Mark upper case with a tag, as IniRead() lacks base letter case distinction
+		chr := Chr( rChr )
+		upp := ( ( 64 < rChr ) && ( rChr < 91 ) ) ? "+" : "" 			; Mark upper case with a tag, as IniRead() lacks rChr letter case distinction
 		cha := convertToANSI( chr ) 									; Convert the key from UTF-8 to ANSI so IniRead() can handle more char entries
-		val :=                 pklIniRead( base                   ,, dkStck, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
+		val :=                 pklIniRead( rChr                   ,, dkStck, "dk_" . dkName ) 	; Key as decimal number (original PKL style),
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkStck, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
-		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
-		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",base),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
+		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
+		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
 		val := ( val == "--" ) ? -1 : val   							; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		if val is integer
 			val := Format( "{:i}", val ) 								; Converts hex to decimal so it's always treated as the same number (could've used a +0 trick)
-		setKeyInfo( "DKval_" . dkName . "_" . base, val)				; The DK info pdic is filled in gradually with use
+		setKeyInfo( "DKval_" . dkName . "_" . rChr, val)				; The DK info pdic is filled in gradually with use
 	}
-;	if ( base == 960 )  											; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
-;		pklDebug( "DK: " dkName "`nBase: " base " (" Chr(base) ")`nVal: " val, 6 ) 	; --"--     Check DK value functionality
+;	if ( rChr == 960 )  											; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
+;		pklDebug( "DK: " dkName "`nBase: " rChr " (" Chr(rChr) ")`nVal: " val, 6 ) 	; --"--     Check DK value functionality
 	val := ( val == "--" ) ? 0 : val 									; Store any empty entry so it isn't reread, but return it as 0
 	Return val
 }
+
+inputDK() { 												; Input the release key for a DK.
+	static endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
+			.  "{Left}{Right}{Up}{Down}{BS}{Esc}"
+			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; eD WIP: These keys don't work for canceling a DK, due to the NumPad VK issue? Their Ext counterparts work.
+	Input, inKey, L1, %endDKs%  							; L1: Length 1. The EndKeys string contains ending keys that return an error.
+	IfInString, ErrorLevel, EndKey  						; The return is on the form "EndKey:Escape" etc.
+	{   													; Note that an OTB style ` {` is incompatible with this command
+		resetDeadKeys() 									; A DK-ending input cancels all existing DKs
+		Return % "€ɳđḲëý"
+	} else {
+		Return % inKey
+	}
+}   														; eD WIP: Do this differently! The Input commands conflicts with Timerless EPKL?!?
 
 pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given as `@###` where `###` is dkCode.
 	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?
@@ -32,7 +48,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
 	PDKVs           := getKeyInfo( "PressedDKVs"  ) 		; Used to be the static PVDK ("Pressed Dead Key Values queue"?)
 	DK              := getKeyInfo( "@" . dkCode   ) 		; Find the dk's full name
-	DeadKeyChar     := DeadKeyValue( DK, "base1" )  		; Base release char for this DK
+	DeadKeyChar     := DeadKeyValue( DK, "base1" )  		; Base release char for this DK, named "base1" in the DK's table.
 	DeadKeyChr1     := DeadKeyValue( DK, "base2" )  		; Alternative release char, if defined
 	DeadKeyChr1     := ( DeadKeyChr1 ) ? DeadKeyChr1 : DeadKeyChar
 	
@@ -41,37 +57,31 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 		resetDeadKeys() 									; Note: Resetting before sending would output both base chars.
 		Return
 	}
+	SetTimer, showHelpImageOnce, -35 						; Redraw the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
 	
 	setKeyInfo( "CurrNumOfDKs", ++CurrNumOfDKs ) 			; Increase the # of registered DKs, both as variable and KeyInfo
 	setKeyInfo( "CurrNameOfDK", DK )
-	SetTimer, showHelpImageOnce, -35 						; Redraw the img once if active (refresh takes 16.7 ms). A showHelpImage() call loses releases.
-	endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
-			.  "{Left}{Right}{Up}{Down}{BS}{Esc}"
-			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; eD WIP: These keys don't work for canceling a DK? Why? Their Ext counterparts work fine.
-	Input, nk, L1, %endDKs% 								; Any ending key cancels the DK
-	IfInString, ErrorLevel, EndKey  						; NOTE: The OTB style for { is incompatible with this command
-	{ 														; Test for "forbidden" keys from the next-key input 	;( 1 ) ? pklDebug( "DK canceled", 1 )  ; eD DEBUG
-		resetDeadKeys()
-		Return
-	}
-;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey " / " getKeyInfo( "CurrBaseKey" ), 1.3 ) 	; eD DEBUG
 	
 ;	if ( CurrNumOfDKs == 0 ) { 								; eD WIP: When is this triggered? And Why? CurrNum gets increased above!?
 ;		pkl_Send( DeadKeyChar )								; If queue is empty, release entry 0 and return
 ;		Return
 ;	}
 	
+	inKey := inputDK()  									; eD WIP: Make a new method for release key input that works with Timerless EPKL?!?
+	if ( inKey == "€ɳđḲëý" )    							; eD WIP: The syntax `if( inKey := inputDK() == "` etc, failed somehow, so take care.
+		Return
 	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
-	if ( CurrBaseKey != 0 ) { 								; If a BaseKey is set, use that, otherwise use the nk input directly
-		hx := CurrBaseKey
-		nk := Chr( hx )										; The chr symbol for the current base key (e.g., 65 = A)
+	if ( CurrBaseKey != 0 ) { 								; If a BaseKey is set, use that. Otherwise, use the inKey input directly.
+		relChr  := CurrBaseKey
+;		inKey   := Chr( relChr ) 							; The chr symbol for the current base key (e.g., 65 = A) 				; eD WIP: This isn't used – is it?!?
 	} else {
-		hx := Ord( nk )										; The ASCII/Unicode ordinal number for the pressed key; was Asc()
+		relChr  := Ord( inKey ) 							; The ASCII/Unicode ordinal number for the pressed key; was Asc()
 	} 	; end if CurrBaseKey
-	
+;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey "`ninKey: " inKey "`nrelChr: " relChr, 4 ) 	; eD DEBUG
+
 	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs ) 			; Pop one DK from the queue. Note: ++ and -- have the Input between them.
 	setKeyInfo( "CurrBaseKey" , 0 )
-	dkEnt   := DeadKeyValue( DK, hx )   					; Get the DK value/entry for this base key
+	dkEnt   := DeadKeyValue( DK, relChr )   				; Get the DK value/entry for this base key
 	
 	if ( dkEnt && (dkEnt + 0) == "" ) { 					; Entry is a special string, like {Home}+{End} or prefix-entry
 		psp := pkl_ParseSend( dkEnt )
@@ -97,7 +107,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 			PDKVs := DeadKeyChar  . " " . PDKVs 			; Add DK base char to space separated DK queue
 			setKeyInfo( "PressedDKVs", PDKVs )  			; eD WIP: Try to clear up the DK code? Unsure what it does...
 		} 	; end if CurrNumOfDKs
-		pkl_Send( hx )										; Send the release key's char
+		pkl_Send( relChr )  								; Send the release key's char
 	} 	; end if dkEnt
 }
 
@@ -133,9 +143,6 @@ getWinLayDKs() {    													; Detect all DeadKeys of the active Windows lay
 		}
 	} 	; end Loop SCs
 	setPklInfo( "WinLayDKs", winDKs )
-;	for scode, dks in winDKs
-;		test .= "`n" . Format("SC{:03X}",scode) . "  " . dks
-;	( 1 ) ? pklDebug( "" . test, 30 )  ; eD DEBUG
 	Return winDKs
 }
 

@@ -193,11 +193,11 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddEdt( "  =  "
 			,       "KeyLine"   , ""            , ui_WideTxt, "xs y+m" )
 	GUI, UI:Add, Text,, % "`n"
-						. "`n* Default settings map CapsLock to Backspace-on-tap, Extend-on-hold."
+						. "`n* The default settings map CapsLock to a Backspace-on-tap, Extend-on-hold key."
 						. "`n* Press the Help button for useful info including a key code table."
-						. "`n* For keys defined by the (base-)layout, use the ""Write to layout.ini"" button."
+						. "`n* For keys defined by the (base-)layout, use the ""Submit to layout.ini"" button."
 						. "`n"
-						. "`n* VKey mappings only move keys. Modifier mappings are for Shift-type keys."
+						. "`n* VKey mappings simply move keys around. Modifier mappings are Shift-type."
 						. "`n* State maps specify the output for each modifier state, e.g., Shift + AltGr."
 						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
 						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
@@ -250,10 +250,8 @@ UIselLay:   													; Handle UI Layout selections
 		layPath[ theDir ] := ""
 	} 	; end For theDir
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, need   )  	; Get the available Lay Types for the chosen MainLay
-	hasType     := inArray( layTyps, "eD" )
-	if ( hasType ) {
-		layTyps.InsertAt( hasType, "eD2VK" ) 					; ##2VK layType reads a state-mapped BaseLayout as VK
-	}
+	if inArray( layTyps, "eD" )
+		layTyps.InsertAt( inArray(layTyps,"eD"), "eD2VK" )  	; The special ##2VK layType reads a state-mapped BaseLayout as VK mapped
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list (eD, VK)
 	ui_layTyp3  := ( UI_LayType == "eD2VK" ) ? "eD" : UI_LayType
 	needle      := need . ui_layTyp3
@@ -534,6 +532,7 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 
 _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 	GUI, UI:Submit, Nohide  									; Refresh UI parameter values
+	layDir  := StrReplace( getLayInfo("ActiveLay"), "2VK" ) 	; Account for st2VK layTypes such as eD2VK
 	case    := inArray( [ "LaySel", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyMap", "KeyLay" ], which )
 	Return      ( case == 1 ) ? [ "layout = " . UI_LayFile . ":" . UI_LayMenu   , "LayoutPicker"
 		, "pkl"     , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  LaySel
@@ -548,7 +547,7 @@ _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 			:   ( case == 6 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
 		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  KeyMap
 			:   ( case == 7 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , "Layouts\" . getLayInfo("ActiveLay") . "\layout", ""  ] 	;  KeyLay
+		, "layout"  , "Layouts\" . layDir . "\layout", ""                   ] 	;  KeyLay
 			:   []
 }
 

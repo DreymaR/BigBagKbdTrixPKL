@@ -9,11 +9,16 @@
 /*
 WIP 	- Timerless EPKL?!? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-runKeyPress/Up!
 			- Nope, the dead key routine caused a hard hang together with timerless key press processing.
+WIP 	- New DK routine without Input? To allow Timerless EPKL.
+			- Moved the Input fn to a separate function.
+			- 
 TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer overflow, it seems.
 			- I can't reproduce it on https://keyboardchecker.com/
 			- He holds a key for 0.5–1.5 s and it sticks. Longer, and it may not stick?
 			- He detects a KeyDown after the KeyUp, that may be the trouble?
 				- He deleted all similar key presses in the buffer. That worked for him.
+				- Putting KeyUp on a timer like the KeyDn one, works too.
+				- But: CSGO isn't a big fan of these timers causing delays and sluggishness...
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
@@ -27,6 +32,7 @@ WIP 	- Further getWinLayDKs() development
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
 TOFIX	- Alt and/or Shift get stuck off, so I can't switch to unread Discord channels by Extend+A+S+U/E ?
+			- If I hit first Ext-Alt then Ext-Shift, channel changing works fine.
 WIP 	- Make the Settings GUI write to a Layout_Override.ini, making it from a template in root?
 			- Explain therein that it should be used in the layout directories.
 TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
@@ -36,6 +42,9 @@ WIP 	-
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
 ;	- WIP: 
+
+;	- WIP: Like SteveP's Seniply, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it?
+;		- It's already started in the {Shift OSM} syntax, but not sure that'll work fully with the Ext-mods? They need to be dual-function.
 
 ;	- TOFIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
 
@@ -362,7 +371,7 @@ SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Ca
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.4.0" ) 											; EPKL Version
+setPklInfo( "pklVers", "1.4.1π" )    										; EPKL Version
 setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
@@ -372,8 +381,11 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-global HotKeyBuffer := []   								; Keeps track of the buffer of up to ≈30 pressed keys in ###KeyPress() fns in pkl_keypress
-global HotKeyBufUps := []   								; Note: These declarations in the main section are Super-Global (see AHK docs); they don't really need re-declaring
+;/*  	; eD WIP: Timerless EPKL?!?
+global HotKeyBufDn := [] 									; Keeps track of the buffer of up to ≈30 pressed keys in ###KeyPress() fns in pkl_keypress
+global HotKeyBufUp := [] 									; Note: These declarations in the main section are Super-Global (see AHK docs); they don't really need re-declaring
+;*/ 	; eD WIP: Timerless EPKL?!?
+global DeadKeyBufr := [] 									; Keeps track of active EPKL dead keys  	; eD WIP: Timerless EPKL?!?
 ;global UIsel 												; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any
@@ -433,7 +445,7 @@ processKeyPress27:
 processKeyPress28:
 processKeyPress29:
 processKeyPress30:
-	runKeyPress()
+	runKeyDn()
 Return
 
 processKeyUp:
@@ -444,13 +456,13 @@ Return
 keypressDown: 			; *SC###    hotkeys
 	Critical
 	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
-;	keyPressed(         SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
+;	keyPressed(         SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*' 		; eD WIP: Timerless EPKL?!?
 Return
 
 keypressUp:  			; *SC### UP 						; To avoid timing issues, this is sent with a different stack buffer
 	Critical
 	processKeyUpBuf(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Remove trailing " UP" as well
-;	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"
+;	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"  		; eD WIP: Timerless EPKL?!?
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)

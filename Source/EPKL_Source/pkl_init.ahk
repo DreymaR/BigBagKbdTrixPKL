@@ -14,7 +14,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 				; --"--
 	setPklInfo( "LayFileName", "layout.ini"             ) 				; --"--
 	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 				; Info dictionary file, mostly from internal tables
-	;setKeyInfo( "HotKeyBuffer", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
+	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter

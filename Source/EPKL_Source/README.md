@@ -380,7 +380,7 @@ VERSION HISTORY:
 	- Tidied up some complex remaps like `SL-BS,V-B` for Ext. Made `Ext-CAW(S)_@K` remaps instead. Ext1/2 images were also renamed/copied to be simpler and more consistent.
 	- The SL-BS swap is good for `Extend-CAWS_ISO`, bringing the WheelLeft/Right keys together. Since Ext1 and Ext2 use the same remap, it wasn't done for AWide/CAW.
 	- Background image files were renamed more consistently.
-	- Replaced the global PklHotKeyBuffer queue string with a global array.
+	- Replaced the global PklHotKeyBufDn queue string with a global array.
 	- Mirrored Colemak BaseLayouts. The AltGr layer holds mirror mappings, and ergo mods can be used normally. The Sym mod may not be ideal for it.
 		- There's a separate base layout for Cmk-DH to make mirroring work as it should. Curl mod remaps should not be added to the resulting layout, just other mods.
 	- The AHK Send command sends active modifiers up before a sent character/string, and down after, before the final up as you release them physically.
@@ -525,5 +525,6 @@ VERSION HISTORY:
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Robust `trayMenuDefault` setting. As before, `#&` selects item by position – but it now ignores separators. Also, partial matches are allowed for text entries.
 	- Fixed: Holding down auto-repeating keys could lead to hotkey buffer overflow, making EPKL unresponsive. Especially when holding down Extend mousing keys.
-		- The variable HotKeyBuffer holds the buffer array which led to too many concurrent timers. Whenever it has > 24 entries it now won't accept more.
+		- The variable HotKeyBufDn holds the buffer array which led to too many concurrent timers. Whenever it has > 24 entries it now won't accept more.
 		- Also put KeyUp on a timer, to ensure it doesn't sneak past a last KeyDown of a repeating key
+	- Fixed: When KeyMapper was used with an eD2VK layType, submitting to layout.ini failed with an "Override file not found" error, looking for an eD2VK folder.
