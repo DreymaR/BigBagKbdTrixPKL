@@ -40,7 +40,7 @@ inputDK() { 												; Input the release key for a DK.
 	} else {
 		Return % inKey
 	}
-}   														; eD WIP: Do this differently! The Input commands conflicts with Timerless EPKL?!?
+}   														; eD WIP: Do this differently! The Input command seems to conflict with Timerless EPKL?!?
 
 pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given as `@###` where `###` is dkCode.
 	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?

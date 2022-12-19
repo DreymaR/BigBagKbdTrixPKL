@@ -7,8 +7,9 @@
 
 ;;  ####################### user area #######################
 /*
-WIP 	- Timerless EPKL?!? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-runKeyPress/Up!
+WIP 	- Timerless EPKL? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-runKeyPress/Up!
 			- Nope, the dead key routine caused a hard hang together with timerless key press processing.
+			- Oooor... Does it work now? Tried only enabling the two fn calls for keyPressDn/Up and it does seem to be working?!
 WIP 	- New DK routine without Input? To allow Timerless EPKL.
 			- Moved the Input fn to a separate function.
 			- 
@@ -19,9 +20,11 @@ TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer 
 				- He deleted all similar key presses in the buffer. That worked for him.
 				- Putting KeyUp on a timer like the KeyDn one, works too.
 				- But: CSGO isn't a big fan of these timers causing delays and sluggishness...
+		
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
+			- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
 TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 			- The vmods don't need to be sticky for this to happen.
 			- Are they turned off somewhere on release? That'd account for them working only once.
@@ -212,11 +215,14 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+;	- TODO: If we get Timerless EPKL working, maybe ToM can have better timing at last? Enabling exciting projects like HomeRowMods and a Shift+CoDeKey ToM.
 ;	- TODO: Once ToUnicode() and DetectDK() are working, it should be possible to generate help images from VK/SC layouts too?!
-;	- SwiSh/FliCK should be the ideal way of implementing mirrored typing?
+;	- TODO: SwiSh/FliCK should be the ideal way of implementing mirrored typing?
 ;		- Need to solve them being effectivly one-shot now, then. They should be able to be held down reliably.
 ;		- For fun, could make a mirror layout for playing the crazy game Textorcist: Typing with one hand, mirroring plus arrowing with the other!
-;	- TODO: OS DK detection sucks. Go through all SC### and send their four states? (Only if the OS layout has AltGr; can we detect that by DLL?)
+;	- TODO: OS DK detection sucks.
+;		- Go through all SC### and send their four states? (Only if the OS layout has AltGr; can we detect that by DLL?)
+;		- Or detect through the ToUnicodeEx() DLL? Seems much better.
 ;		- Also store the DK characters in a better format? Just a string like ´¨`^~ is unclear and tricky.
 ;	- TODO: Ext layers by app/window? Like auto-Suspend. Could be handy for ppl w/ apps using odd shortcuts.
 ;	- TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
@@ -247,6 +253,9 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TODO:
+;	- TODO: Use the off-Space thumb key as a Shift/CoDeKey ToM!
+;			- Preserves SteveP's thumb Shift for compact boards, while allowing the fancy CoDeKey shift combos too.
+;			- It's a sweet idea! But again, it requires better ToM timing than EPKL can currently deliver. So it'll have to wait, for now...
 ;	- TODO: Make the CoDeKey follow the StickyTime timer? So you'll only use it as CoDeKey in flow. No, it'd need its own timer.
 ;	- TODO: Could I turn around the Compose method, to be leader key after all? But how to input then? Without looking sucks. In a pop-up box?
 ;	- TODO: Color markings for keys in HIG images! Could have a layer of bold key overlays and mark the keys we want with colors through entries in the HIG settings file.
@@ -372,7 +381,6 @@ StringCaseSense, On 										; All string comparisons are case sensitive (AHK d
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
 setPklInfo( "pklVers", "1.4.1π" )    										; EPKL Version
-setPklInfo( "pklComp", "AHK v1.1.27.07" ) 									; Compilation info
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
 setPklInfo( "pklHdrB", "`r`n"
@@ -381,10 +389,10 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-;/*  	; eD WIP: Timerless EPKL?!?
+/*  	; eD WIP: Timerless EPKL?!?
 global HotKeyBufDn := [] 									; Keeps track of the buffer of up to ≈30 pressed keys in ###KeyPress() fns in pkl_keypress
 global HotKeyBufUp := [] 									; Note: These declarations in the main section are Super-Global (see AHK docs); they don't really need re-declaring
-;*/ 	; eD WIP: Timerless EPKL?!?
+*/  	; eD WIP: Timerless EPKL?!?
 global DeadKeyBufr := [] 									; Keeps track of active EPKL dead keys  	; eD WIP: Timerless EPKL?!?
 ;global UIsel 												; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
@@ -413,7 +421,7 @@ Return  													; end of main
 ;LControl & RAlt::Send {RAlt Down} 	; This alone gets AltGr stuck
 ;LControl Up & RAlt Up::Send {RAlt Up} 	; This doesn't work!?
 
-;/*  	; eD WIP: Timerless EPKL?!?
+/*  	; eD WIP: Timerless EPKL?!?
 processKeyPress0:
 processKeyPress1:
 processKeyPress2:
@@ -451,18 +459,18 @@ Return
 processKeyUp:
 	runKeyUp()
 Return
-;*/  	; eD WIP: Timerless EPKL?!?
+*/  	; eD WIP: Timerless EPKL?!?
 
 keypressDown: 			; *SC###    hotkeys
 	Critical
-	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
-;	keyPressed(         SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*' 		; eD WIP: Timerless EPKL?!?
+;	processKeyPress(    SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*'
+	keyPressed(         SubStr( A_ThisHotkey, 2     ) ) 	; SubStr removes leading '*' 		; eD WIP: Timerless EPKL?!?
 Return
 
 keypressUp:  			; *SC### UP 						; To avoid timing issues, this is sent with a different stack buffer
 	Critical
-	processKeyUpBuf(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Remove trailing " UP" as well
-;	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"  		; eD WIP: Timerless EPKL?!?
+;	processKeyUpBuf(    SubStr( A_ThisHotkey, 2, -3 ) ) 	; Remove trailing " UP" as well
+	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"  		; eD WIP: Timerless EPKL?!?
 Return
 
 modifierDown: 			; *SC###    (call fn as HKey to translate to modifier name)
@@ -608,30 +616,31 @@ Return
 ;;  ####################### functions #######################
 
 #Include pkl_init.ahk
-#Include pkl_gui_image.ahk	; pkl_gui was too long; it's been split into help image and menu/about parts
+#Include pkl_gui_image.ahk      	; pkl_gui was too long; it's been split into help image and menu/about parts
 #Include pkl_gui_menu.ahk
 #Include pkl_gui_settings.ahk
 #Include pkl_keypress.ahk
 #Include pkl_send.ahk
 #Include pkl_deadkey.ahk
-#Include pkl_utility.ahk	; Various functions such as pkl_activity.ahk were merged into this file
+#Include pkl_utility.ahk        	; Various functions such as pkl_activity.ahk were merged into this file
 #Include pkl_get_set.ahk
 #Include pkl_ini_read.ahk
-#Include pkl_import.ahk 	; Import module, converting MSKLC layouts to EPKL format, and other import/conversion
-#Include pkl_make_img.ahk	; Help image generator, calling Inkscape with an SVG template
+#Include pkl_import.ahk         	; Import module, converting MSKLC layouts to EPKL format, and other import/conversion
+#Include pkl_make_img.ahk       	; Help image generator, calling Inkscape with an SVG template
 
-;;  #######################  modules  #######################
-
-; #Include ext_Uni2Hex.ahk ; HexUC by Laszlo Hars - moved into pkl_init.ahk
-; #Include ext_MenuIcons.ahk ; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
-; #Include ext_SendUni.ahk ; SendU by Farkas et al - obviated by Unicode AHK v1.1
-; #Include ext_HashTable.ahk ; Merged w/ CoHelper then obviated by AHK v1.1 associative arrays
-; #Include getVKeyCodeFromName.ahk ; (was VirtualKeyCodeFromName) - replaced w/ read from tables .ini file
-; #Include getLangStrFromDigits.ahk ; http://www.autohotkey.com/docs/misc/Languages.htm - replaced w/ .ini
-; #Include ext_IniRead.ahk ; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk - replaced with pkl_iniRead
-; #Include getDeadKeysOfSystemsActiveLayout.ahk - replaced w/ read from tables .ini file
-; #Include A_OSVersion.ahk - moved into this file then removed as OSVersion <= VISTA are no longer supported
-; #Include getGlobal.ahk - moved into pkl_getset.ahk then removed as it was only used for one variable
-; #Include iniReadBoolean.ahk - moved into pkl_iniRead and tweaked
-; #Include detectDeadKeysInCurrentLayout.ahk - moved into pkl_deadkey.ahk
-; #Include pkl_locale.ahk - moved into pkl_get_set.ahk
+;;  ##################### modules (old) #####################
+/*
+#Include ext_Uni2Hex.ahk        	; HexUC by Laszlo Hars  								- moved into pkl_init.ahk
+#Include ext_MenuIcons.ahk      	; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
+#Include ext_SendUni.ahk        	; SendU by Farkas et al 								- obviated by Unicode AHK v1.1
+#Include ext_HashTable.ahk      	; Merged w/ CoHelper    								- obviated by AHK v1.1 associative arrays
+#Include getVKeyCodeFromName.ahk 	; (was VirtualKeyCodeFromName)  						- replaced w/ read from tables .ini file
+#Include getLangStrFromDigits.ahk 	; http://www.autohotkey.com/docs/misc/Languages.htm 	- replaced w/ .ini
+#Include ext_IniRead.ahk        	; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk 	- replaced with pkl_iniRead
+#Include getDKsOfOSActiveLay.ahk 	; Was getDeadKeysOfSystemsActiveLayout.ahk  			- replaced w/ read from tables .ini file
+#Include A_OSVersion.ahk        	; Moved into this file  								- removed as OSVersion <= VISTA are unsupported
+#Include getGlobal.ahk          	; Moved into pkl_getset.ahk 							- removed as it was only used for one variable
+#Include iniReadBoolean.ahk     	;   													- moved into pkl_iniRead and tweaked
+#Include detectDKsInCurrentLay.ahk 	; Was detectDeadKeysInCurrentLayout.ahk 				- moved into pkl_deadkey.ahk
+#Include pkl_locale.ahk         	;   													- moved into pkl_get_set.ahk
+*/

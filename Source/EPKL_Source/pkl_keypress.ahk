@@ -3,7 +3,7 @@
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
 
-;/*  	; eD WIP: Timerless EPKL?!?
+/*  	; eD WIP: Timerless EPKL?!?
 processKeyPress( theHotKey ) {  								; Called from the PKL_main keyPressed label
 	Critical
 ;	global HotKeyBufDn  										; Buffer queue of up to 32 pressesd keys, used in ###KeyPress() fns. Super-global variable, declared in PKL_main.
@@ -66,7 +66,7 @@ runKeyDn() { 													; Called from the PKL_main processKeyPress# timer labe
 	theHotKey := HotKeyBufDn[1] , HotKeyBufDn.RemoveAt(1)   	; Chomp the keyDn buffer from the left (FIFO buffer)
 	keyPressed( theHotKey ) 									; Execute the key press
 }
-;*/  	; eD WIP: Timerless EPKL?!?
+*/  	; eD WIP: Timerless EPKL?!?
 
 keyPressed( HKey ) { 											; Executes a HotKey press – the actual processing part
 	modif := ""
@@ -401,7 +401,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )
 		} else {
-			processKeyPress( HKey )  	;keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
+			keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
 			tomHeld[HKey] := 0
 		}
 	} else { 												; If the key is released (unless interrupted first)...
@@ -410,7 +410,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 		tomHeld[HKey] := 0
 		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
 		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
-			processKeyPress( HKey )  	;keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
+			keyPressed( HKey )  	;processKeyPress( HKey ) 	; eD WIP: Timerless EPKL?!?
 		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 			_setModState( tomMod, 0 )
 		setLayInfo( "extendUsed", false )

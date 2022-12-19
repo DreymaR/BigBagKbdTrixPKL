@@ -168,7 +168,6 @@ pkl_about()
 	pklMainURL      := "https://github.com/Portable-Keyboard-Layout"
 	pklProgURL      := getPklInfo( "pklHome" )
 	pklVersion      := getPklInfo( "pklVers" )
-	compiledOn      := getPklInfo( "pklComp" )
 	aboutTitle      := "About EPKL"
 	
 	locUnknown      := getPklInfo( "LocStr_03" ) 				; "Unknown"
@@ -223,7 +222,7 @@ pkl_about()
 	GUI, AW:Add, Edit, , %layPage%
 	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
 		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
-		text :=   "EPKL.exe compiled on: "                  . compiledOn            . "`n"
+		text :=   "Compiled with AutoHotKey version: " . A_AhkVersion               . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"  	; eD WIP: Remove this? Or replace it? It's hard to see anyway.
 		text .= "`nLayout/BaseLayout file paths:`n- " . layFile . "`n- " . basFile
