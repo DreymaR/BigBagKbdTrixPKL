@@ -69,11 +69,11 @@ runKeyDn() { 													; Called from the PKL_main processKeyPress# timer labe
 */  	; eD WIP: Timerless EPKL?!?
 
 keyPressed( HKey ) { 											; Executes a HotKey press – the actual processing part
+	Critical 													; Not all of this fn can have Critical priority, it seems: Hard hangs occurred when trying that.
 	modif := ""
 	state := 0
 	vk_HK := getKeyInfo( HKey . "ent1" ) 						; Key "VK_" info; usually VK/SC code.
 	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
-	Critical, Off   											; eD WIP: Where should I turn off Critical priority? Moving it below keyPressed() caused hard hangs.
 	
 	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
 		_osmClearAll()  										; ...clear any sticky mods, then...
@@ -138,6 +138,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	
 	Pri := getKeyInfo( HKey . state )   						; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" ) 					; Actual entry by state, if using a prefix
+	Critical, Off   											; eD WIP: Where should Critical priority be turned off? Moving it below keyPressed() caused hard hangs.
 	if ( Pri == "" ) {
 		Return
 	} else if ( state == "ent1" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: Tried "VKey" here but then Ctrl+<key> fails?!
@@ -197,8 +198,8 @@ extendKeyPress( HKey ) { 										; Process an Extend modified key press
 		if ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
 	} 	; end For
-	Critical, Off
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
+	Critical, Off   											; eD WIP: Is this necessary? Or will AHK always go non-critical after each fn?
 }
 
 setExtendInfo( xLvl = 1 ) { 									; Update PKL info about the current Extend layer
@@ -230,6 +231,7 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 ;
 
 setModifierState( theMod, keyDown = 0 ) {   				; Can be called from a hotkey or with an AHK mod key name. Handles OneShotMods (OSM) too.
+	Critical
 	osmKeys := getPklInfo( "stickyMods" )   				; One-Shot mods (CSV, but stored as a string)
 	osmLast := getPklInfo( "osmKeyN" . getPklInfo("osmN") ) ; The last set OSM
 	if ( keyDown ) { 																	; eD WIP: Avoid the OSM if already held?
@@ -246,6 +248,7 @@ setModifierState( theMod, keyDown = 0 ) {   				; Can be called from a hotkey or
 }
 
 _setModState( theMod, keyDown = 1 ) {   					; Using 1/0 for true/false here.
+	Critical
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
 ;	} else if ( theMod == "AltGr" ) {
@@ -265,6 +268,7 @@ getModState( theMod ) { 									; This is needed for virtual modifiers. Returns
 }
 
 setOneShotMod( theMod ) {   								; Activate a One-Shot Mod (OSM).
+	Critical
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . theMod, 0.3 )  ; eD DEBUG 	; eD WIP
 	static osmN := 0 										; OSM number counter
 	
@@ -290,6 +294,7 @@ osmTimer3:  												; Timer label for the sticky mods
 Return
 
 _osmClear( osmN ) { 										; Clear a specified sticky mod
+	Critical
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
 	theMod := getPklInfo( "osmKeyN" . osmN ) 				; ...but this is also called from elsewhere.
 	setPklInfo( "osmKeyN" . osmN , "" )
@@ -298,6 +303,7 @@ _osmClear( osmN ) { 										; Clear a specified sticky mod
 }
 
 _osmClearAll() { 											; Clear all active sticky mods
+	Critical
 	Loop % getPklInfo( "osmMax" )
 	{
 	if ( getPklInfo( "osmKeyN" . A_Index ) != "" )
@@ -396,7 +402,7 @@ setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDow
 	} else if ( set == -1 ) { 								; If the key is interrupted by another...
 		SetTimer, tomTimer, Off
 		setPklInfo( "tomKey", "" )
-		pklDebug( "caught interrupted ToM!", 0.5 ) 	; ED DEBUG: This isn't happening atm, as the lines that call it in processKeyPress() above are commented out
+		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: This isn't happening atm, as the lines that call it above are commented out pending more robustness
 		if getKeyState( HKey, "P" ) {
 			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 			setPklInfo( "tomMod", -1 )

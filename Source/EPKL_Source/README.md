@@ -2,8 +2,8 @@
 ========================================================
 <br>
 
-- Version:  1.4.0 going on 1.4.1α
-- Compiled: 2022-11 from GitHub/DreymaR/BigBagKbdTrixPKL
+- Version:  1.4.1α
+- Compiled: 2022-12 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
 
@@ -28,7 +28,7 @@ For a detailed version history, look further down.
 * EPKL v1.3.0: Compose/Completion and Repeat keys.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
-* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. WinLay DeadKey auto-detection [WIP].
+* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. OS DeadKey auto-detection.
 ```
 <br>
 
@@ -499,16 +499,19 @@ VERSION HISTORY:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: SwiSh & FliCK modifiers. State-2-VK mapping types. OS DeadKey auto-detection.
+* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. OS DeadKey auto-detection.
+	- Timerless EPKL! All the processKey and runKey functions and timers were replaced by simply calling keyPressed() and sending KeyUp directly.
+		- This could remove the last bit of sluggishness and possibly allow EPKL to work with more games and the like. It could be pretty huge!
+		- Critical priority was given to some functions to improve timing for OSMs etc.
+	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
+		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrids from existing state maps.
+		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit the layout setting manually.
 	- Two new modifiers: SwiSh and FliCK! SwiSh ("Swiss Shift") corresponds to the Windows SGCaps modifier, and FliCK ("Flip Cap Key") is custom.
 		- To get a SwiSh modifier for instance, just map a key like you would for any modifier, to `Swish Modifier`.
 		- The SwiSh & FliCK modifiers are virtual, not physical like Shift/Ctrl/Alt/Win. They add 8 and 16 to the ShiftState, respectively.
 		- For ShiftStates in layout files, use hex values. Corresponding to the standard `0:1:6:7` plus SwiSh, are `8:9:e:f` – `a` is the Ctrl+SwiSh state.
 		- SwiSh/FliCK modifiers can be made Sticky (one-shot) via the stickyMods setting, like other modifiers.
 		- SwiSh and FliCK were kindly sponsored by Antoine Olivier (Rastast at the Colemak Discord, IKLProject on GitHub)! Thanks a lot – sorry about the delay!
-	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
-		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrid variants.
-		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit manually afterwards.
 	- The new OS DeadKey detection routine `getWinLayDKs()` uses a ToAscii DLL call; it returns -1 if the specified key/state is a Windows Layout DK.
 		- It runs on init/refresh. It returns a dictionary of `{ SC:DK-ShiftStates }`, like `{ "SC003" : "6:7", } (if SC003 has DKs on states 6 and 7).
 		- The old `Detect Dead Keys...` menu option was hidden and demoted to utility/debug routine #7.
@@ -521,10 +524,11 @@ VERSION HISTORY:
 	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.
 	- Fixed: Repeat is counted in the LastKeys queue so it works with composing.
 	- Fixed: End-of-line comments in layout entries are now stripped, w/o harming semicolon state entries. These now have to be on the form `Tab-;-spaces-Tab`.
+	- Fixed: When KeyMapper was used with an eD2VK layType, submitting to layout.ini failed with an "Override file not found" error, looking for an eD2VK folder.
 	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Robust `trayMenuDefault` setting. As before, `#&` selects item by position – but it now ignores separators. Also, partial matches are allowed for text entries.
 	- Fixed: Holding down auto-repeating keys could lead to hotkey buffer overflow, making EPKL unresponsive. Especially when holding down Extend mousing keys.
-		- The variable HotKeyBufDn holds the buffer array which led to too many concurrent timers. Whenever it has > 24 entries it now won't accept more.
-		- Also put KeyUp on a timer, to ensure it doesn't sneak past a last KeyDown of a repeating key
-	- Fixed: When KeyMapper was used with an eD2VK layType, submitting to layout.ini failed with an "Override file not found" error, looking for an eD2VK folder.
+		- The first fix was to limit the HotKeyBufDn buffer array size to 24 entries, to avoid too many concurrent timers.
+		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
+		- Eventually though, the whole timer system was removed to make EPKL timerless.

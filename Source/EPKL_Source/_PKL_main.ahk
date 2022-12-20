@@ -7,19 +7,13 @@
 
 ;;  ####################### user area #######################
 /*
-WIP 	- Timerless EPKL? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-runKeyPress/Up!
-			- Nope, the dead key routine caused a hard hang together with timerless key press processing.
-			- Oooor... Does it work now? Tried only enabling the two fn calls for keyPressDn/Up and it does seem to be working?!
-WIP 	- New DK routine without Input? To allow Timerless EPKL.
-			- Moved the Input fn to a separate function.
-			- 
-TOFIX	- CSGO's problem: We're still not quite out of the woods regarding buffer overflow, it seems.
-			- I can't reproduce it on https://keyboardchecker.com/
-			- He holds a key for 0.5–1.5 s and it sticks. Longer, and it may not stick?
-			- He detects a KeyDown after the KeyUp, that may be the trouble?
-				- He deleted all similar key presses in the buffer. That worked for him.
-				- Putting KeyUp on a timer like the KeyDn one, works too.
-				- But: CSGO isn't a big fan of these timers causing delays and sluggishness...
+WIP 	- Timerless EPKL? CSGO tried it and it seems to work: Just call keyPressed(HKey) directly without the whole process-then-run KeyPressDn/Up!
+			- I can't reproduce CSGO's stuck keys (after they're held for 0.5–1.5 s) on https://keyboardchecker.com/ (from timing, could cause a KeyDn after KeyUp)
+			- Nope? The dead key routine caused a hard hang together with timerless key press processing.
+				- Moved the Input fn to a separate function. Seems to be working now ... for whatever reason?!
+		- Added Critical priority to some functions, to improve timing.
+			- Got a hiccup with OSM timing (CoDeKey etc). It went away by setting pkl_ParseAHK() to Critical.
+			- Critical priority will lead to hard hangs if added indiscriminately, so beware. An example is the last part of keyPressed().
 		
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
@@ -34,8 +28,6 @@ WIP 	- Further getWinLayDKs() development
 			- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
-TOFIX	- Alt and/or Shift get stuck off, so I can't switch to unread Discord channels by Extend+A+S+U/E ?
-			- If I hit first Ext-Alt then Ext-Shift, channel changing works fine.
 WIP 	- Make the Settings GUI write to a Layout_Override.ini, making it from a template in root?
 			- Explain therein that it should be used in the layout directories.
 TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
@@ -373,14 +365,14 @@ WIP 	-
 #MaxMem                 128 								; Default 64 Mb. We need more than that for HIG image generation in its search-n-replace loop.
 
 SendMode Event
-SetKeyDelay -1  											; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
-SetBatchLines, -1   										; This script never sleeps (default is every 10 ms)
+SetKeyDelay,    -1  										; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
+SetBatchLines,  -1  										; This script never sleeps (default is every 10 ms)
 Process, Priority, , R  									; Real-time process priority (default is N for Normal; H for High in old PKL; R for Realtime is max)
-SetWorkingDir, %A_ScriptDir% 								; Should "ensure consistency" 	; eD WIP: Can we have a separate user working dir, so users have their settings elsewhere?
+SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: Make a separate user working dir, so users can have their settings elsewhere?
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.4.1π" )    										; EPKL Version
+setPklInfo( "pklVers", "1.4.1α" )    										; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
 setPklInfo( "pklHdrB", "`r`n"
@@ -393,7 +385,7 @@ setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 global HotKeyBufDn := [] 									; Keeps track of the buffer of up to ≈30 pressed keys in ###KeyPress() fns in pkl_keypress
 global HotKeyBufUp := [] 									; Note: These declarations in the main section are Super-Global (see AHK docs); they don't really need re-declaring
 */  	; eD WIP: Timerless EPKL?!?
-global DeadKeyBufr := [] 									; Keeps track of active EPKL dead keys  	; eD WIP: Timerless EPKL?!?
+;global DeadKeyBufr := [] 									; Keeps track of active EPKL dead keys  	; eD WIP: Necessary for Timerless EPKL?!?
 ;global UIsel 												; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any

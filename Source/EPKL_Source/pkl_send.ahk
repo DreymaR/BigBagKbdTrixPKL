@@ -128,6 +128,7 @@ pkl_CheckForDKs( ch ) {
 }
 
 pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
+;	Critical 													; eD WIP: Causes hangs after DKs etc?
 	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
 ;	tag     := hig_tag( entry )
 ;	if ( higMode && tag )
@@ -188,6 +189,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 }
 
 pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α entries.
+	Critical 													; eD WIP: Try to improve timing for OSMs
 	OSM := false , OSMs  := []
 	While InStr( enty, " OSM}" ) {  							; OneShotMod syntax: `{<mod> OSM}` activates <mod> as OSM once.
 		OSM := true
