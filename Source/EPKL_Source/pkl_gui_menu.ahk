@@ -192,7 +192,7 @@ pkl_about()
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
 	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
 	hardMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
-	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "layout.ini", "" )
+	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "Layout.ini", "" )
 	basFile  :=             getPklInfo( "File_BasIni" )
 	menuSep  := "............................................................................................"
 	

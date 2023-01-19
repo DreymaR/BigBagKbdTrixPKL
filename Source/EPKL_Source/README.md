@@ -82,9 +82,9 @@ DONE:
 * Made a PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * If using a layout from the command line, the notation "UseLayPos_#" will run layout # in the layout list set in EPKL_Layouts.
 	- This also makes Refresh robust against layout changes in EPKL_Layouts.
-* Base layout: Specify in layout.ini a basis file (layout section only). Just need to list changes in layout.ini now. Nice for variants.
+* Base layout: Specify in Layout.ini a basis file (layout section only). Just need to list changes in Layout.ini now. Nice for variants.
 * Shorthand notation in EPKL .ini layouts, allowing the KbdType/CurlMod/ErgoMod settings to be referred to as @K/@C/@H resp. (@A for all at once).
-* Path shortcut for layout.ini entries, allowing ".\" instead of full path from EPKL root.
+* Path shortcut for Layout.ini entries, allowing ".\" instead of full path from EPKL root.
 <br>
 
 **MENUS/IMAGES**
@@ -98,7 +98,7 @@ DONE:
 	- Shift/AltGr indicators on separate images in a specified directory instead of in the state#.png (and dk) images.
 	- Allow pushing the help image horizontally if mouse x pos. is in the R/L ~20% zone.
 	- Zoom and Move hotkeys for the help image, cycling between image sizes and positions. Set e.g., imgZoom = 60,100,150 (%) in EPKL_Settings.
-	- Settings in layout.ini: Size/scaling, background/extend images, background color, shift indicator, icons and dead key dirs.
+	- Settings in Layout.ini: Size/scaling, background/extend images, background color, shift indicator, icons and dead key dirs.
 	- Settings in settings.ini: Overall transparency/opacity, top/bottom gutter distances, horizonal activation zone.
 	- If settings are missing, may default to backgr.png, extend.png, on/off.ico and ModStateImg\ in the layout dir.
 	- Instead of many lines of image sizes, introduced a scaling factor 'img_scale' (in percent).
@@ -115,10 +115,10 @@ DONE:
 **MAPPINGS**
 * Updated and added several layouts, including locale and script variants.
 * Removed explicit Cut/Copy/Paste keys (in pkl_keypress.ahk); use +{Del} / ^{Ins} / +{Ins} (or as I have used in my Extend mappings, }^{X/C/V ).
-* Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or layout.ini). The old way should still work though.
+* Made an _eD_Extend.ini file for Extend mappings that were formerly in pkl.ini (or Layout.ini). The old way should still work though.
 * Made Extend substitutes for Launch_Media/Search/App1/App2, as AHK multimedia launcher keys aren't working in Win 10.
 * Scan code modular remapping, making ergo and other variants much easier. Separate key permutation cycles, and remaps combining/translating them.
-	- In layout.ini, specify any remap combinations using the names (and syntax) found in the [Remaps] section of the Remap.ini file.
+	- In Layout.ini, specify any remap combinations using the names (and syntax) found in the [Remaps] section of the Remap.ini file.
 	- The _layout remap specifies a full remapping, while the _extend remap is only for those keys you want to move for Extend ("hard" remaps).
 	- Uses my KeyLayoutDefinition (KLD) mapping format.
 	- KLD is good for remaps, but too compact for main layout or Extend definitions. (Besides, Aldo Gunsing has a conversion tool for those.)
@@ -151,7 +151,7 @@ VERSION HISTORY:
 	- A PKL_Tables.ini file for info tables that were formerly internal. This way, the user can make additions as necessary.
 * PKL[eD] v0.4.1: Transition to AHK v1.1 Unicode, using native Unicode Send and UTF-8 compatible files. Menu icons.
 	- Array pdics instead of the old HashTable code
-	- A base layout file can be specified, allowing layout.ini to only contain entries that should override the base layout.
+	- A base layout file can be specified, allowing Layout.ini to only contain entries that should override the base layout.
 * PKL[eD v0.4.2: Help image layers, opacity, scaling, background color and gutter size settings. Help images can be pushed horizontally too.
 	- Separate help image background/overlay, so keys/fingering, letters/glyphs and Shift/AltGr marks can be in different images.
 * PKL[eD] v0.4.3: Scan and virtual key code modular remapping for layouts and Extend, making ergo and other variants much more accessible.
@@ -161,7 +161,7 @@ VERSION HISTORY:
 * PKL[eD] v0.4.5: Common prefix-entry syntax for keypress/deadkey/extend. Allows, e.g., literal/deadkey release from Extend.
 	- Layouts, Extend and dead keys now support the same prefix-entry syntax, parsing "%$*=@&" as first character specially.
 	- The "&" prefix denotes literals/powerstrings found in a separate file. These may span more than one line.
-	- There's a string file specified in the layout.ini, by default it's Files\_eD_PwrStrings.ini
+	- There's a string file specified in the Layout.ini, by default it's Files\_eD_PwrStrings.ini
 	- The ligature name can be any text string. In layout entries, two-digit names are prettiest.
 	- Note that programs handle line breaks differently! In some apps, \r\n is needed but that creates a double break in others.
 	- SendMode can be selected for powerstrings (Input, Message, Paste from Clipboard) in the string file.
@@ -189,7 +189,7 @@ VERSION HISTORY:
 **EPKL VERSIONS:**
 * EPKL v1.0.0: Name change to EPiKaL PKL.
 	- Moved ./PKL_eD -> ./Files folder. Languages are now under Files.
-	- Bugfix: A '--' entry in layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
+	- Bugfix: A '--' entry in Layout.ini didn't overwrite the corresponding BaseLayout.ini entry.
 * EPKL v1.1.0: Some layout format changes. Minor fixes/additions. And kaomoji!  d( ^◇^)b
 	- Fixed: DK images were gone due to an error in the EPKL_Settings .ini. DK images also didn't work for some layouts.
 	- Fixed: Sticky/One-Shot mods stayed active when selecting Extend, affecting strings if sent within the OSM timer even when sent with %.
@@ -209,7 +209,7 @@ VERSION HISTORY:
 	- The Extend key can be set the old way as extend_key in [pkl] (but no layout entry is needed anymore!), as 'Ext Mod' or as ToM, e.g., 'VK/EXT VKey'
 	- Modifiers can be referred to by the first letters of their name so, e.g., 'LS' and 'LSh' both point to LShift. Also, VK or VKey = VirtualKey.
 	- Unicode points can be sent by the ~ prefix; a ~#### entry sends the U+#### character as used in MSKLC file entries.
-	- The shiftStates layout entry is now in the [layouts] section of layout.ini, spaced out so entries have more room and are clearer.
+	- The shiftStates layout entry is now in the [layouts] section of Layout.ini, spaced out so entries have more room and are clearer.
 	- Since Space/Tab are used to delimit layout entries, there are now special '&Spc' and '&Tab' PowerString entries for them.
 	- Dead key abbreviations are now by code point instead of numbered, as in MSKLC. Example: The .klc entry 02c7@ is a caron DK; in EPKL it becomes @2c7.
 	- Added a Compile_EPKL.bat file that compiles the source code by running AHK2Exe with default settings.
@@ -234,7 +234,7 @@ VERSION HISTORY:
 	- The 'Sym' (;>' />=>- cycles) symbol key rotation mod I'm testing is available as a remap.
 	- The CurlM/DHm variant of the Curl(DH) mod is available through the remap 'Curl-DHmMod'; it isn't available for most premade layouts though.
 	- Added eD/VK Colemak Curl(DHm) only layouts. Used CurlM/DHm here, to support ortho boards. Ortho help images are on the TODO list.
-	- Fixed: The Extend modifier in the BaseLayout didn't work so most layouts didn't get Extend before adding it to their layout.ini manually.
+	- Fixed: The Extend modifier in the BaseLayout didn't work so most layouts didn't get Extend before adding it to their Layout.ini manually.
 	- Fixed: From PKL[eD] v0-4-5, DK+Spc didn't release the base accent as Spc was prefixed. Now, (&)Spc and {Space} are turned into a space glyph.
 	- Fixed: Some kaomoji with ^ or ` in them would get confused - (=･ω･^^=)丿 - due to insufficient handling of OS dead keys.
 	- Fixed: Ensured that a quickly used Extend press isn't open for re-use as an Extend tap! Example: Ext+Space, then quickly E.
@@ -255,7 +255,7 @@ VERSION HISTORY:
 	- Key state and dead key mappings can be disabled using '--' or '-1' entries. Thus an entry can be removed in the LayStack.
 	- Remap cycles can consist of minicycles separated by slashes, like this: | a | b / c | d | e | to remap a-b and c-d-e separately.
 	- Instead of special '_ExtDV' remaps for Extend Ctrl+V to follow V under CurlDH, now prepend the mapSC_extend remap with 'V-B,'.
-	- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from layout.ini files. Still left in BaseLayout files as an example.
+	- All mapVK_mecSym (ANS2ISO/ISO2ANS) mappings removed from Layout.ini files. Still left in BaseLayout files as an example.
 	- Set the help image refresh timer a bit faster. Seems to help for Extend2, but not for Tap-Ext Kaomoji DK nor the initial help image?
 * EPKL v1.1.5: Tarmak Curl(DHm) w/ ortho images. Suspending apps. Language tweaks, fixes.
 	- The EPKL_Layouts_Override file is no longer tracked. Instead, there's an Override_Example file you can copy/rename/edit. Thus, your changes are kept over updates.
@@ -301,8 +301,8 @@ VERSION HISTORY:
 	- The Key Mapper UI reads KeyLayoutMap (KLM) names from the Remap file. Keys not in the selection box may be edited manually into the text fields.
 		- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
 		- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
-		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, write the line to `layout.ini` or it won't work.
-		- Added a `Write to layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
+		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, write the line to `Layout.ini` or it won't work.
+		- Added a `Write to Layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
 	- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
 		- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
 		- To allow the Settings UI to work, EPKL can now use a Settings Override/Default stack (like with the Layouts files) instead of just `EPKL_Settings.ini`.
@@ -316,7 +316,7 @@ VERSION HISTORY:
 	- Renamed the KLM key code `_DT` (OEM_PERIOD) to `_PD` and `_EQ` (OEM_PLUS) to `_PL` for better compatibility with the actual VK names. Also updated the HIG files.
 	- Added a 'hideImageState' setting to hide certain help image shift states. Some users may want only AltGr, Extend and dead key images to show.
 	- Remaps and RemapCycle sections are now allowed in the LayStack. See the `_Test\Cmk-eD-Nyfee_ANS_CurlAngle` layout for an example.
-		- LayStack Remaps and cycles will only be checked for if their sections are present in `layout.ini`. This is to avoid slowing down other layouts.
+		- LayStack Remaps and cycles will only be checked for if their sections are present in `Layout.ini`. This is to avoid slowing down other layouts.
 		- The Nyfee Colemak-DH mods were added to test LayStack remaps. His mods move `Z W X C F K (V)` and the Bracket/Minus/Equals keys.
 	- Detection of current system layout VK codes through GetKeyVK().
 		- This makes `key = VKey` mappings work as intended, enabling for instance Extend to see and use a key without changing its system layout mapping.
@@ -373,7 +373,7 @@ VERSION HISTORY:
 	- Updated the EPKL compiler to Ahk2Exe from AHK v1.1.27.07. Later versions are currently not fully compatible with EPKL source, causing trouble with AltGr.
 	- A `##` state entry now sends the key's VK## Blind. Good for, e.g., `Win+<number>` which doesn't work otherwise. Warning: Output will depend on your OS layout.
 		- In particular, if you run a self-made MSKLC layout underneath in which letter and/or `OEM_` VK codes are wrong, the result will be odd.
-		- Added a `BaseLayout_Cmk-eD-NoVK.ini` file with only direct state mappings. If the VK mappings cause you any trouble, point your `layout.ini` to this one.
+		- Added a `BaseLayout_Cmk-eD-NoVK.ini` file with only direct state mappings. If the VK mappings cause you any trouble, point your `Layout.ini` to this one.
 		- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini` again, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
 	- Added DK images for ANS AWide and CAWS, in addition to the existing vanilla and CAW. For ISO, we already have Angle, AWide, CAW and CAWS.
 	- Reworked the `@` layout codes. ErgoMod/`@E` is now HardMod/`@H`, as Curl/DH and Sym are also ergonomic mods. MainLay is now `@L` and the ergo mod ensemble `@E`.
@@ -407,14 +407,14 @@ VERSION HISTORY:
 	- Remapped dead key combining accents to `© ø Ø` to account for the Compose key taking the place of `œ` in many cases, and NBSP being iffy.
 	- Tidied up the Tarmak folders with icon and Extend image links to a `_Res` folder instead of local files
 	- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
-	- The BaseLayout setting in layout.ini can now take a `..\` syntax.
+	- The BaseLayout setting in Layout.ini can now take a `..\` syntax.
 	- Added ANS-Orth/ISO-Orth Colemak-eD. Images are still row-staggered, but this should clarify which ergo mods are for which board types.
 		- The bracket-lift Sym mod (Sym-Br) looks better on ortho boards than the standard (Sym-LBr). Images were made for both mod variants.
 	- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
 		- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
 	- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.
 	- Added homing-nubbed help image ModState overlays. For now, there's a "GreenBlob" set for non-Wide and Wide homing, some with FShui colors.
-		- Usage: In layout.ini, change the `img_ModsDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
+		- Usage: In Layout.ini, change the `img_ModsDir = Files\ImgModStates\GrnBlob` setting by appending `-HomeNubs[Wide][-FShui]`.
 	- Allowed links for layout images, so layouts that use the same images as others don't need to keep their own copies.
 	- Made DK images in a local `DeadkeyImg` dir work with the ones set in `img_DKeyDir`. This also alleviates the need to declare a DeadkeyImg dir.
 	- Added the Boo (Dvorak-like modern) layout.
@@ -461,7 +461,7 @@ VERSION HISTORY:
 		- This worked, but had a side effect: OS Dead Keys now output, e.g., `¨¨` (whereas before they did nothing), due to a GetKeyboardState call(?)
 	- A "Special keys" tab on the Settings GUI can define Caps key behavior, Compose keys and CoDeKeys.
 		- These can also be set using the Key Mapper tab and `.ini` file editing, but this way should be more clear for newcomers.
-	- Remaps in BaseLayout files are now fully respected, so a Remap section in the layout.ini file is no longer mandatory for remapping variants.
+	- Remaps in BaseLayout files are now fully respected, so a Remap section in the Layout.ini file is no longer mandatory for remapping variants.
 	- You can hide the images for a specific dead key, rather than dead key images in general. To hide all DK images, specify 'DKs' (WIP).
 	- Added an optional `«»`-enclosed display tag to the prefix-entry syntax, so help images can show any desired short string on a key.
 		- Example: «,␣»  α{,}{Space}  		; Comma-Space (on @co0)
@@ -507,7 +507,7 @@ VERSION HISTORY:
 		- Got hard hangs on EPKL dead keys on initial tests and suspected the DK Input fn, but it's probably innocent.
 		- CSGO experienced stuck keys in stress testing before, using https://keyboardchecker.com/ to show it. He reports that it's fixed now.
 	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
-		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrids from existing state maps.
+		- This only affects the BaseLayout, so any mappings in Layout.ini will work as before. It allows, e.g., locale VK/State hybrids from existing state maps.
 		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit the layout setting manually.
 	- Two new modifiers: SwiSh and FliCK! SwiSh ("Swiss Shift") corresponds to the Windows SGCaps modifier, and FliCK ("Flip Cap Key") is custom.
 		- To get a SwiSh modifier for instance, just map a key like you would for any modifier, to `Swish Modifier`.
@@ -527,7 +527,7 @@ VERSION HISTORY:
 	- Fixed: Compose and Repeat didn't register the `0` (zero) character. Right after startup, Repeat would print `{¤}`.
 	- Fixed: Repeat is counted in the LastKeys queue so it works with composing.
 	- Fixed: End-of-line comments in layout entries are now stripped, w/o harming semicolon state entries. These now have to be on the form `Tab-;-spaces-Tab`.
-	- Fixed: When KeyMapper was used with an eD2VK layType, submitting to layout.ini failed with an "Override file not found" error, looking for an eD2VK folder.
+	- Fixed: When KeyMapper was used with an eD2VK layType, submitting to Layout.ini failed with an "Override file not found" error, looking for an eD2VK folder.
 	- Added BaseLayout for QWERTY VK. (QWERTY-eD still uses a remap from the Colemak-eD BaseLayout.)
 		- Makes the KeyMapper more intuitive, as you can use QW key positions directly instead of having to map from Co positions w/ the QWERTY remap.
 	- Robust `trayMenuDefault` setting. As before, `#&` selects item by position – but it now ignores separators. Also, partial matches are allowed for text entries.

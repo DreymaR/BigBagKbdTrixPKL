@@ -2,7 +2,7 @@
 ;;  EPKL Layout Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
 ;;    - Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
 ;;    - WIP: Just use an _Inbox under layouts, and generate directly into the Layout dir? Check if existing then.
-;;    - Uses a template with a set of regular expression (RegEx) entries to generate the layout.ini file.
+;;    - Uses a template with a set of regular expression (RegEx) entries to generate the Layout.ini file.
 ;
 
 importLayouts() 	; eD TODO

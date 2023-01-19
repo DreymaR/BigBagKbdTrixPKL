@@ -220,7 +220,7 @@ More Know-How
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
-    - Layout, that is, the `layout.ini` file in your chosen layout folder
+    - Layout, that is, the `Layout.ini` file in your chosen layout folder
     - BaseLayout, which may be pointed to by the layout file
     - Layouts_Override, which may be generated to hold your personal layout settings and mappings
     - Layouts_Default, found in the root folder, holds default layout settings/mappings
@@ -265,7 +265,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - Brazilian ABNT boards are like ISO, but have two extra <kbd>ABNT</kbd> keys. These can be remapped by their scan codes.
     - JIS (Japanese) etc are not supported so far. Sorry. Gomen-nasai. ごめんなさい.  &nbsp;&nbsp; ᏊᵕꈊᵕᏊ
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
-    - Angle/Wide affect the "hard" key positions in the layout.ini file, usually both for Layout and Extend
+    - Angle/Wide affect the "hard" key positions in the Layout.ini file, usually both for Layout and Extend
     - Curl(DH) is Colemak/Tarmak/Dvorak specific and for the most part should not affect Extend
     - The Curl(DH) mod does insert <kbd>D</kbd> between <kbd>C</kbd> and <kbd>V</kbd> though. There's a remap to let <kbd>Extend</kbd>+<kbd>V</kbd> still be Paste
 * Extend mappings, using for instance CapsLock as a modifier for nav/edit/multimedia/etc keys. It's awesome!!!
@@ -277,9 +277,9 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The Layout Picker creates a `EPKL_Layouts_Override.ini` file if necessary, and writes to it.
     - For Extend (on by default), set an Extend file and map the Extend modifier to a key in your layout.
     - My _eD_Extend mappings file is in the Files folder. Look inside it to learn more.
-* In the layout folder(s) you've chosen, you may edit the layout.ini files further if required. See below.
+* In the layout folder(s) you've chosen, you may edit the Layout.ini files further if required. See below.
     - Mod remaps, help image specifications, Extend key, key mappings etc can be set in the LayStack .ini files.
-    - Many layouts use a BaseLayout. Most mappings may be there, so the top layout.ini only has to change a few keys.
+    - Many layouts use a BaseLayout. Most mappings may be there, so the top Layout.ini only has to change a few keys.
 * To learn more about remaps, see the [_eD_Remap.ini][MapIni] file. They can even turn Colemak into QWERTY (oh no…!).
 * There's a file for named literals/PowerStrings. These are useable by layouts, Extend and dead keys.
 * There's a Dead Key file too. DKs are mapped as @###. Pressing the key then a release glyph may produce something new!
@@ -315,12 +315,12 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - There are KbdType (@K) and other abbreviations, but you could also type the path to a layout folder out in full.
     - The format is: `layout = ‹layout folder›:‹menu entry›,‹2nd layout folder›:‹2nd menu entry›` etc.
 * The [EPKL_Layouts][LayDef] .ini file(s) hold layout choices. The [EPKL_Settings][SetDef] file(s) hold general program settings.
-* The `layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
+* The `Layout.ini` files hold layout settings and mappings. They often point to and augment a `BaseLayout` file.
 * In theory, you could put all the info needed for a whole layout into any one of the layout stack files.
 <br>
 
 * Here's the "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
-    1. The `layout.ini` file in the chosen Layout folder gets the last word about remaps etc
+    1. The `Layout.ini` file in the chosen Layout folder gets the last word about remaps etc
     2. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
     3. The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
     4. The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
@@ -330,7 +330,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Settings priority and file selection during EPKL startup goes like this:
     - The `EPKL_Settings` files (`_Default` and, if present, `_Override`) determine program settings
     - The `EPKL_Layouts` files select the active layout folder(s)
-    - The layout folder's `layout.ini` file may select a `BaseLayout` to complement
+    - The layout folder's `Layout.ini` file may select a `BaseLayout` to complement
 <br>
 
 ![EPKL file priority relations chart, by Tanamr](./Other/Docs/EPKL_File-Relations-Map_Tanamr.png)
@@ -398,13 +398,13 @@ You can set pretty much any key to be a modifier of choice.
 * To make any key into a Left Shift key, just map that key to `LShift Modifier` – similar to a VK/SC key mapping.
 * Shift, Ctrl and AltGr (RAlt is AltGr on international layouts) affect the Shift State: Shift is +1, AltGr is +6.
 * So, the four main states are `0:1:6:7`. In most layouts there's also state `2` for Ctrl, but it isn't normally used.
-* In a `layout.ini` or its BaseLayout file there's a `ShiftStates` setting that specifies which states are used.
+* In a `Layout.ini` or its BaseLayout file there's a `ShiftStates` setting that specifies which states are used.
 * However, EPKL has more modifiers for you to play with, should you wish to: The magical **SwiSh & FliCK** are there for you!
 * SwiSh stands for "Swiss Shift" from the Windows "SGCaps", an extra Shift-type modifier on the CapsLock key.
 * FliCK got its name because of the other one, pretty much. It means "Flip Cap Key". Bear with me.  ฅʕ •ᴥ•ʔฅ
 * To use SwiSh, edit your layout's `ShiftStates` entry to add states by changing `7 ; 8` to `7 : 8`.
 * Then, add the new mappings to all state-mapped keys. To leave a state blank, map it to `--` as usual.
-* For Cmk-eD derived layouts, just set your `layout.ini` baseLayout setting to `BaseLayout_Cmk-eD_SwiSh`.
+* For Cmk-eD derived layouts, just set your `Layout.ini` baseLayout setting to `BaseLayout_Cmk-eD_SwiSh`.
 * Then add a `SwiSh Modifier` key definition somewhere. You could override RCtrl for instance.
 * Side note: It may be harder the other way around; in particular the Alt keys aren't easily mappable.
 * Try [SharpKeys][ShrpKy] for hard mod remapping? It's less flexible but very robust!

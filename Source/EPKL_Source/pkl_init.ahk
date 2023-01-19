@@ -12,7 +12,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"          ) 				; Used globally (used to be in pkl.ini)
 	setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 				; --"--
-	setPklInfo( "LayFileName", "layout.ini"             ) 				; --"--
+	setPklInfo( "LayFileName", "Layout.ini"             ) 				; --"--
 	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 				; Info dictionary file, mostly from internal tables
 	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
@@ -187,18 +187,18 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 }	; end fn initPklIni()
 
 													;   ###############################################################
-initLayIni() {  									;   ######################### layout.ini  #########################
+initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
 	;; ================================================================================================
-	;;  Find and read from the layout.ini file and, if applicable, BaseLayout/LayStack
+	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
 	
 	laysDir := "Layouts\"
 	thisLay := getLayInfo( "ActiveLay" ) 								; From initPklIni(). For example, Colemak\Cmk-eD\Cmk-eD_ANS.
 	layType := getLayStrInfo( thisLay )[4]  							; Returns layName as [1], L3A as [2] and L3A-from-string as [3]
-	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, layout.ini as usual.
+	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, Layout.ini as usual.
 	layType := st2VK ? SubStr(layType,1,-3) : layType   				; Make layType reflect actual layType, and set St2VK as necessary.
 	thisLay := StrReplace( thisLay, layType . "2VK", layType )
 	setLayInfo( "St2VK", st2VK )    									; This is tested for each layFile below
@@ -208,7 +208,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	setPklInfo( "Dir_LayIni"        , mainDir )
 	setPklInfo( "File_LayIni"       , mainLay )
 ;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
-;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in layout.ini overrides the first Layout_ setting
+;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in Layout.ini overrides the first Layout_ setting
 ;	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
 ;	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout
 	IniRead, basePath, %mainLay%, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
@@ -242,7 +242,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	setPklInfo( "DirStack", dirStck )
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
 	kbdType := _AnsiAns( kbdType )
-	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in layout.ini overrides the first Layout_ setting
+	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in Layout.ini overrides the first Layout_ setting
 	
 	imgsDir := pklIniRead( "img_MainDir", mainDir, "LayStk" )   		; Help imgs are in the main layout folder, unless otherwise specified.
 	setPklInfo( "Dir_LayImg", atKbdType( imgsDir ) )
@@ -261,7 +261,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	setPklInfo( "StringFile", strFile ) 								; This file should contain the string tables. As discussed above, it can't be a LayStack+1 (now).
 	
 	if ( not initialized ) && ( FileExist( mapFile ) ) { 				; Read/set remap dictionaries. Ensure the tables are read only once.
-		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file (layout.ini).
+		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file (Layout.ini).
 		secList .= pklIniRead( "__List", , layStck[2] ) 				; A list of sections in the second  LayStack file (BaseLayout).
 		remStck := InStr( secList, "Remaps" ) ? mapStck : mapFile   	; Only check the whole LayStack if [Remaps] is in secList, to save startup time.
 		cycStck := InStr( secList, "RemapCycles" ) ? mapStck : mapFile 	; InStr() is case insensitive.
@@ -299,7 +299,7 @@ initLayIni() {  									;   ######################### layout.ini  #############
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
 	st2VK   := getLayInfo("St2VK") && ( layFile == baseLay ) 			; State-2-VK layout type: BaseLay entries are made VK.  	; eD WIP: Use BaseStack here when implemented
 	layMap  := pklIniSect( layFile, "layout" )  						; An array of lines. Not End-of-line comment stripped (yet).
-	extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in layout.ini [global]. Can map it directly now.
+	extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in Layout.ini [global]. Can map it directly now.
 	( extKey ) ? layMap.Push("`r`n" . extKey . " = Extend Modifier") 	; Define the Extend key. Lifts earlier req of a layout entry.
 	For ix, row in layMap { 											; Loop parsing the layout 'key = entries' lines
 		pklIniKeyVal( row, key, entrys, 0, 0 )  						; Key SC and entries. No comment stripping here to avoid nuking the semicolon.

@@ -24,7 +24,7 @@ For Dutch locale Colemak, at the least we need accents easily accessible. There'
 - With the Compose key, you can always type `'ij`/`'IJ` followed by Compose to produce an ĳ/Ĳ digraph.
 - I've added Dutch specific completion to the Compose key so that i/I plus Compose complete to ij/IJ as well.
 - To use ij completion, you need to enable a Compose key that uses the `compose_adding` table.
-- If you decide that you do want the digraph ligature ĳ on your ISO key after all, uncomment it in your [layout.ini file][layini].
+- If you decide that you do want the digraph ligature ĳ on your ISO key after all, uncomment it in your [Layout.ini file][LayIni].
 - If you have the more advanced CoDeKey (Compose+DeadKey) enabled, its `@co0` DK gets a Compose,y/Y addition for ij/IJ.
 - You could if you wish, add more special letters to the CoDeKey `dk_Compose_0` (and `1`) table in the layout file.
 <br>
@@ -43,4 +43,4 @@ For Dutch locale Colemak, at the least we need accents easily accessible. There'
 
 
 [WikiIJ]: https://en.wikipedia.org/wiki/IJ_(digraph)#Encoding (Wikipedia on encoding the IJ digraph)
-[layini]: ./Cmk-eD-Nl_ISO_CurlAWideSym/layout.ini#L62
+[LayIni]: ./Cmk-eD-Nl_ISO_CurlAWideSym/Layout.ini#L62

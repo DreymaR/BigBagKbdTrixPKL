@@ -1,4 +1,4 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
+﻿DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
@@ -22,10 +22,10 @@ INFO: Some documentation notes
     - PKL using AHK v1.0: Script files need to be ANSI encoded. They don't support special letters well.
         - EPKL using AHK v1.1-Unicode: Supports scripts in UTF-8 w/ BOM.
     - EPKL .ini files may be UTF-8 encoded, with or without BOM. Source .ahk files should be UTF-8-BOM?
-        - PKL: Don't use end-of-line comments in the .ini files. OK in layout.ini because of tab parsing.
+        - PKL: Don't use end-of-line comments in the .ini files. OK in Layout.ini because of tab parsing.
         - EPKL: End-of-line comments are now safe.
-    - In layout.ini, for old PKL:
-        - Always use single tabs as separators in layout.ini, also between a VK code and the word 'VirtualKey'.
+    - In Layout.ini, for old PKL:
+        - Always use single tabs as separators in Layout.ini, also between a VK code and the word 'VirtualKey'.
         - The CapsLock key should have scan code 'CapsLock' instead of SC03A, if using 'extend_key = CapsLock'.
         - The Extend key should be mapped or it won't work, e.g., 'CapsLock = CAPITAL	VirtualKey'.
         - EPKL changes all of the above: Any whitespace delimits, and Extend is mapped as 'Extend Modifier'.

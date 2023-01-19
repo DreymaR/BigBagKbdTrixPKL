@@ -16,8 +16,8 @@ This is where EPKL keeps its layout files.
 	- Next comes the variant. These may be anything really, but they're often locales such as `BrPt` for Brazil/Portugal.
 	- The names of the layout folders themselves then contain the keyboard type (`ISO`/`ANS`), flanked with underscores.
 	- The last part is the mod. Again, anything's possible but mine are generally of the `CurlA(ngle)WideSym` type.
-* Every actual layout variant/mod folder must contain a `layout.ini` file. This file defines the layout.
-	- A `layout.ini` file may point at a `BaseLayout` file that defines common features for the main layout.
+* Every actual layout variant/mod folder must contain a `Layout.ini` file. This file defines the layout.
+	- A `Layout.ini` file may point at a `BaseLayout` file that defines common features for the main layout.
 	- Default common features for all layouts are in the `EPKL_Layouts` files in the main folder.
 	- This file hierarchy is known as the `LayStack`. There's a mini-stack for general settings too. See the [main EPKL Readme][EPKLgh].
 <br><br>
@@ -99,22 +99,22 @@ You can make your own version of, say, a locale layout variant – for instance,
     - In this example we'll make a German (De) Colemak[eD] with only the ISO-Angle mod instead of the provided CurlAngleWide.
     - Thus, copy `Cmk-eD-De_ISO_CurlAWide` in the [Colemak\Cmk-eD-De](../Layouts/Colemak/Cmk-eD-De) folder and rename the copy to `Cmk-eD-De_ISO_Angle`.
     - Instead of 'De' you could choose any locale tag you like such as 'MeinDe' to set it apart.
-* In that folder's layout.ini file, edit the remap and/or other relevant fields to represent the new settings.
+* In that folder's Layout.ini file, edit the remap and/or other relevant fields to represent the new settings.
     - Here, change `mapSC_layout = Cmk-CAW-_@K` to `mapSC_layout = Angle_@K` (`@K` is shorthand for ISO/ANS).
     - Some Extend layers like the main one use "hard" or positional remaps, which observe most ergo mods but not letter placements.
     - Here, `mapSC_extend = Angle_@K` too since Angle is a "hard" ergo mod. If using Curl-DH, you can move <kbd>Ctrl</kbd>+<kbd>V</kbd> with `Ext-CA--`.
     - The geometric ergo mods Angle and Wide alone are named `Angle` and `Wide`; `AWide` for both. For the Curl mods, use C/A/W/S letter abbreviations.
-    - If you don't know the name of your desired mod combo, look in a `layout.ini` file using that combo. Or in the [Remap file][MapIni] itself.
+    - If you don't know the name of your desired mod combo, look in a `Layout.ini` file using that combo. Or in the [Remap file][MapIni] itself.
 * Change any key mappings you want to tweak.
     - The keys are mapped by their native Scan Codes (SC), so, e.g., SC02C is the QWERTY/Colemak Z key even if it's moved around later.
     - However, I've also provided a more intuitive syntax, like `QW_Z` for the QWERTY Z key. See the next section to learn more about key mapping syntax.
     - The mappings in the De layout are okay as they are, but let's say we want to swap <kbd>V</kbd> and <kbd>Ö</kbd> (`QW_LG`) for the sake of example.
-    - In the `[layout]` section of layout.ini are the keys that are changed from the BaseLayout. `QW_LG` is there, state 0/1 mapped to ö/Ö.
+    - In the `[layout]` section of Layout.ini are the keys that are changed from the BaseLayout. `QW_LG` is there, state 0/1 mapped to ö/Ö.
     - To find the <kbd>V</kbd> key, see the `baseLayout = Colemak\BaseLayout_Cmk-eD` line and open that file. 
     - There's the <kbd>V</kbd> key, with the KLM code `QW_V` (scan code `SC02f`).
-    - Now, copy the `QW_V` key line from the BaseLayout file to your layout.ini `[layout]` section so it'll override the baseLayout.
+    - Now, copy the `QW_V` key line from the BaseLayout file to your Layout.ini `[layout]` section so it'll override the baseLayout.
     - Make sure the `QW_LG` line you want is also active and not commented out with a `;`, and then swap the key names (scan codes) for the two lines.
-    - Alternatively, you could just edit the mappings for the affected shift states of the two keys in the `layout.ini` file.
+    - Alternatively, you could just edit the mappings for the affected shift states of the two keys in the `Layout.ini` file.
     - The main shift state mappings are `0/1` for unshifted/shifted, and `6/7` for the AltGr states. See above for more info.
 * Now, if your `EPKL_Layouts_Override.ini` layout selection setting is right, you should get the variant you just made.
     - From the Layout/Settings menu, you should be able to see and select it using the right options. Then you can let EPKL restart itself.

@@ -8,8 +8,8 @@
 ;;  ####################### user area #######################
 /*
 WIP 	- Make the Settings GUI write to a Layout_Override.ini. Create it from a template in root?
-			- Explain in the template that it's for use in the layout directories, to override layout.ini settings.
-			- In the process: Finally rename all the layout.ini files to Layout.ini?!?
+			- Explain in the template that it's for use in the layout directories, to override Layout.ini settings.
+			- In the process: Finally rename all the Layout.ini files to Layout.ini?!?
 TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
@@ -68,7 +68,7 @@ WIP 	-
 ;		- Isn't the GUI updated after choosing KbdType? Doesn't _uiCheckLaySet() find LayVari and LayMods for an `-Orth` KbdType?
 
 ;	- WIP: A layout_Override.ini file too? So people (like me) can have a non-version controlled file for their personal layout changes.
-;		- Writing to the layout.ini file with the KeyMapper GUI should create an override if not present, like with the other overrides.
+;		- Writing to the Layout.ini file with the KeyMapper GUI should create an override if not present, like with the other overrides.
 
 ;	- TODO: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
 ;		- Next, specify which layer(s) goes which which key so you can have different Extend keys.
@@ -99,7 +99,7 @@ WIP 	-
 ;		- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
 ;	- TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-;		- Make BaseVariants so we don't have to repeat ourselves for locales. The layout.ini could just hold the ergo remaps.
+;		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
 ;		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
 ;		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
 ;		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
@@ -250,7 +250,7 @@ WIP 	-
 ;		- markColors = #c00:_E/_N/_K, #990:_B/_T/_F, #009:_J     ; Tarmak2 colors
 ;		- markColors = <CSV of marking specs>, similar to the remaps. Could have Tarmak1,Tarmak2,Tarmak3,#009:_J ?
 ;		- See https://forum.colemak.com/topic/1858-learn-colemak-in-steps-with-the-tarmak-layouts/p4/#p23659
-;		- Allow a section in layout.ini too!
+;		- Allow a section in Layout.ini too!
 ;		- Mark differently by state, as in the Tarmak images
 ;	- TODO: Make state images and DK image dirs ISO/ANSI aware?! Generate both in the HIG each time (plus Ortho?). Make layouts that can handle both. 
 ;		- How to handle special mappings? Could have [layout_###] sections.
@@ -304,7 +304,7 @@ WIP 	-
 ;	- TODO: A help fn to make layout images? Make the image large and opaque, then make a screenshot w/ GIMP and crop it. Or can I use the Windows Snipping Tool (Win+Shift+S)?
 ;	- TODO: AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
 ;		- New Text send mode for PowerStrings, if desired. Should handle line breaks without the brkMode setting.
-;	- TODO: Make the Japanese layout now, since dead keys support literals/ligatures and DK tables in layout.ini are possible.
+;	- TODO: Make the Japanese layout now, since dead keys support literals/ligatures and DK tables in Layout.ini are possible.
 ;	- TODO: Hebrew layout. Eventually, Arabic too.
 ;	- TODO: Mirrored one-hand typing as Remap, Extend or other layer?
 ;		- For Extend, would need a separate Ext modifier for it? E.g., NumPad0 or Down for foot or right-arm switching. But is that too clunky?
@@ -315,7 +315,7 @@ WIP 	-
 ;	- TODO: A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
 ;	- TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 ;		- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
-;		- If no layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
+;		- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
 ;; ================================================================================================
 ;;  eD ONHOLD:
@@ -329,7 +329,7 @@ WIP 	-
 ;		- Is the brain equally good at side-swapping and mirroring?
 ;	- Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
 ;		- Could keep everything in kbdType and adjust the reading of it to use the first and second substring.
-;		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in layout.ini anyway.
+;		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in Layout.ini anyway.
 ;	- Hardcode Tab instead of using &Tab after all? It's consistent to have both the whitespace characters Spc & Tab hardcoded this way.
 ;	- A dynamic key press indicator for help images, showing not just modifier layer but every press. Will it be fast enough? Needs a position table for each KbdForm.
 ;	- Make a Setting for which fn to run as Debug, so I don't have to recompile to switch debug fn()? Maybe overmuch, as the debug fn often needs recompiling anyway?
@@ -344,7 +344,7 @@ WIP 	-
 ;	- Some kaomoji have non-rendering glyphs, particularly eyes. Kawaii (Messenger), Joy face, Donger (Discord on phone). Just document and leave it at that.
 ;	- Go back on the Paste Extend key vs Ext1/2? It's ugly and a bit illogical since the layers are otherwise positional. But I get confused using Ext+D for Ctrl+V.
 ;	- Allow assigning several keys as Extend Modifier?
-;	- An EPKL sample layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
+;	- An EPKL sample Layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
 ;	- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
 
 
@@ -381,7 +381,7 @@ setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
 arg = %1% 													; Layout from command line parameter, if any
 initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
-initLayIni() 												; Read settings from layout.ini and layout part files
+initLayIni() 												; Read settings from Layout.ini and layout part files
 activatePKL()
 ;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 )   	; eD DEBUG
 

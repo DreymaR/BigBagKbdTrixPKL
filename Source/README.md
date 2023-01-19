@@ -40,8 +40,8 @@ Compiling manually
 Setup:
 ------
 1. Just compile right into your main EPKL folder, or move the resulting .exe file there.
-2. Adjust any extra settings in the layout.ini file in your layout folder.
-   See the Colemak-eD_ISO layout.ini and baseLayout.ini files as examples.
+2. Adjust any extra settings in the Layout.ini file in your layout folder.
+   See the Colemak-eD_ISO Layout.ini and baseLayout.ini files as examples.
 3. For generic EPKL settings, look in the Files folder, and the EPKL_Settings .ini file(s).
    Or, you can use the EPKL Layout/Settings menu to change stuff.
 4. Changes should ideally go in `_Override.ini` files instead of the Default files.

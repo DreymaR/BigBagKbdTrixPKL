@@ -1,7 +1,7 @@
 ﻿;; ================================================================================================
 ;;  EPKL Image module
 ;;  - Displays main and dead key help images by shift state, and Extend layers
-;;  - Separate background image and Shift/AltGr indicator overlay, configurable in layout.ini
+;;  - Separate background image and Shift/AltGr indicator overlay, configurable in Layout.ini
 ;;  - Transparent color for images (may work for the GUI window vs underlying windows now?)
 ;;  - Overall image opacity
 ;;  - Six positions with adjustable screen gutters and right/left push in addition to up/down
@@ -29,7 +29,7 @@ pkl_showHelpImage( activate = 0 )
 ;	static im.HorZone 					; Part of image width that activates horizontal push, in %
 ;	static im.BgPath 					; Background image file
 ;	static im.ShRoot 					; Shift image directory
-;	static im.BgColor 					; Image GUI background color is set from the (base)layout.ini
+;	static im.BgColor 					; Image GUI background color is set from the (base)Layout.ini
 ;	static im.Opacity 					; Global image opacity: 0 is invisible, 255 opaque
 	static imgX, imgY 					; Keep these for %var% use with the Gui commands
 	static imgW, imgH

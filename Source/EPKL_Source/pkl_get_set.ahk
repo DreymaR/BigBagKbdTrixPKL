@@ -269,7 +269,7 @@ getLayStrInfo( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbrevia
 	Return [ mLay, m3LA, s3LA, type ]   								; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
 }
 
-pklGetState() { 														; Get the 0:1:6:7 etc shift state as in layout.ini and img names
+pklGetState() { 														; Get the 0:1:6:7 etc shift state as in Layout.ini and img names
 	state :=  0
 	state +=  1 * getKeyState( "Shift" )
 ;	state +=  2 * getKeyState( "Ctrl" ) 								; AltGr registers Ctrl too; may have to get clever here. Ctrl && not Alt?

@@ -55,7 +55,7 @@ However, [there are still some real issues][RedCmkEs].
 - To alleviate the `UE` bigram (and `ÑO` if you put <kbd>Ñ</kbd> on a bracket and don't use the Wide mod), some suggest a `O-U` swap.
 - I'm really not sure, myself. I'd probably just use AngleWide or CAWS mods and "tank" the rest, like I do when typing my own language.
 - However, if you're convinced and adventurous, EPKL does support a `O-U` swap:
-    - Prepend the `mapSC_layout` entry in your `layout.ini` file with `O-U,`, so it reads `mapSC_layout    = O-U,` etc.
+    - Prepend the `mapSC_layout` entry in your `Layout.ini` file with `O-U,`, so it reads `mapSC_layout    = O-U,` etc.
     - Then refresh EPKL. The help images will not be updated; you can generate new ones if you have the Inkscape program.
 
 

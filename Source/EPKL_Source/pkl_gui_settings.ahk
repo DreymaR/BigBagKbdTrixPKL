@@ -195,7 +195,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Text,, % "`n"
 						. "`n* The default settings map CapsLock to a Backspace-on-tap, Extend-on-hold key."
 						. "`n* Press the Help button for useful info including a key code table."
-						. "`n* For keys defined by the (base-)layout, use the ""Submit to layout.ini"" button."
+						. "`n* For keys defined by the (base-)layout, use the ""Submit to Layout.ini"" button."
 						. "`n"
 						. "`n* VKey mappings simply move keys around. Modifier mappings are Shift-type."
 						. "`n* State maps specify the output for each modifier state, e.g., Shift + AltGr."
@@ -203,7 +203,7 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
 						. "`n"
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyMap, &Submit Key Mapping
-	GUI, UI:Add, Button, x+14   yp          gUIsubKeyLay, Submit to &layout.ini
+	GUI, UI:Add, Button, x+14   yp          gUIsubKeyLay, Submit to &Layout.ini
 	GUI, UI:Add, Button, xs+244 yp          gUIrevKey   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
@@ -238,14 +238,14 @@ UIselLay:   													; Handle UI Layout selections
 			if not RegExMatch( subDir, need . ".+_" ) 			; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
 			if not FileExist( ourDir . "\" . subDir . "\" . getPklInfo("LayFileName") )
-				Continue 										; Layout folders contain a layout.ini file
+				Continue 										; Layout folders contain a Layout.ini file
 			layDirs.Push( subDir )
 			layPath[ subDir ] := theDir . "\"
 		} 	; end For subDir
 		if not RegExMatch( theDir, need . ".+_" ) 				; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
 		if not FileExist( ourDir . "\" . getPklInfo("LayFileName") )
-			Continue 											; Layout folders contain a layout.ini file
+			Continue 											; Layout folders contain a Layout.ini file
 		layDirs.Push( theDir )
 		layPath[ theDir ] := ""
 	} 	; end For theDir
@@ -435,7 +435,7 @@ UIsubKeyMap: 													; Submit Key Mapping button pressed
 	_uiSubmit( [ _uiGetParams( "KeyMap" ) ] )
 Return
 
-UIsubKeyLay: 													; Submit Key Mapping to layout.ini button pressed
+UIsubKeyLay: 													; Submit Key Mapping to Layout.ini button pressed
 	_uiSubmit( [ _uiGetParams( "KeyLay" ) ] )
 Return
 

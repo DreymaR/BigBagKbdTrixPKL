@@ -25,7 +25,7 @@ In this folder are some files that aren't used by EPKL but may still be interest
 	- You'll need to install MSKLC from Microsoft's site. With it you can look at existing Win layouts and make new ones.
 	- If you do dabble in layout editing with MSKLC, you may have to edit your .klc file directly to get VK codes right.
 	- In Henri's guide you'll also learn to do advanced stuff like swapping system keys (e.g., CapsLock-to-Backspace).
-	- The original PKL was able to import .klc files to layout.ini files; in the future EPKL may also do that.
+	- The original PKL was able to import .klc files to Layout.ini files; in the future EPKL may also do that.
 - Other remap tools exist, such as the [Microsoft PowerToys Keyboard Manager][MSPTKM]. It looks like a quite powerful utility.
 	- However, it uses a low-level keyboard hook like EPKL does, and so the two should not be used together. Too bad.
 	- Also, like EPKL it doesn't perform so well with games according to Microsoft's page.
