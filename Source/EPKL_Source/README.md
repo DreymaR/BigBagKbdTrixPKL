@@ -500,9 +500,12 @@ VERSION HISTORY:
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
 * EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. OS DeadKey auto-detection.
-	- Timerless EPKL! All the processKey and runKey functions and timers were replaced by simply calling keyPressed() and sending KeyUp directly.
-		- This could remove the last bit of sluggishness and possibly allow EPKL to work with more games and the like. It could be pretty huge!
+	- Timerless EPKL! All key press (processKey and runKey) functions and timers were replaced by simply calling keyPressed() and sending KeyUp directly.
+		- This should remove the last bit of sluggishness and possibly allow EPKL to work with more games and the like. It could be pretty huge!
 		- Critical priority was given to some functions to improve timing for OSMs etc.
+			- Be careful w/ Critical though; it may lead to hard hangs if added indiscriminately. An example is the last part of keyPressed().
+		- Got hard hangs on EPKL dead keys on initial tests and suspected the DK Input fn, but it's probably innocent.
+		- CSGO experienced stuck keys in stress testing before, using https://keyboardchecker.com/ to show it. He reports that it's fixed now.
 	- You can hybridize a state-mapped layout type into state/VK by appending "2VK" to its layType. Example: For eD-type layouts, `layType = eD2VK`.
 		- This only affects the BaseLayout, so any mappings in layout.ini will work as before. It allows, e.g., locale VK/State hybrids from existing state maps.
 		- In the Layout Settings GUI, you can only choose `eD2VK` whenever there is an `eD` option. For any other state-map types, edit the layout setting manually.

@@ -31,7 +31,7 @@ DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It
 inputDK() { 												; Input the release key for a DK.
 	static endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
 			.  "{Left}{Right}{Up}{Down}{BS}{Esc}"
-			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; eD WIP: These keys don't work for canceling a DK, due to the NumPad VK issue? Their Ext counterparts work.
+			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; Note: These 6 keys don't work here if their NumPad VK is sent (AHK default).
 	Input, inKey, L1, %endDKs%  							; L1: Length 1. The EndKeys string contains ending keys that return an error.
 	IfInString, ErrorLevel, EndKey  						; The return is on the form "EndKey:Escape" etc.
 	{   													; Note that an OTB style ` {` is incompatible with this command
@@ -40,7 +40,7 @@ inputDK() { 												; Input the release key for a DK.
 	} else {
 		Return % inKey
 	}
-}   														; eD WIP: Can the Input command conflict with Timerless EPKL?!? Seems okay now.
+}
 
 pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given as `@###` where `###` is dkCode.
 	CurrNumOfDKs    := getKeyInfo( "CurrNumOfDKs" ) 		; Current # of dead keys active. 	; eD ONHOLD: Revert to global? No, because it's used in many files?
