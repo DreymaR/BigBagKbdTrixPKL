@@ -9,7 +9,6 @@
 /*
 WIP 	- Make the Settings GUI write to a Layout_Override.ini. Create it from a template in root?
 			- Explain in the template that it's for use in the layout directories, to override Layout.ini settings.
-			- In the process: Finally rename all the Layout.ini files to Layout.ini?!?
 TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
@@ -370,10 +369,10 @@ StringCaseSense, On 										; All string comparisons are case sensitive (AHK d
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
 setPklInfo( "pklVers", "1.4.1α" )    										; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
-setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files
+setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
 setPklInfo( "pklHdrB", "`r`n"
-		. ";;  for Portable Keyboard Layout by Máté Farkas [https://github.com/Portable-Keyboard-Layout]" . "`r`n"
-		. ";;  edition DreymaR (Øystein Bech-Aase, 2015-)  [https://github.com/DreymaR/BigBagKbdTrixPKL]" . "`r`n;`r`n" )
+		. ";;  for EPiKaL Portable Keyboard Layout (EPKL) by Øystein "DreymaR" Bech-Aase (2015-), based on PKL by Máté Farkas (2008-2010).`r`n
+		. ";`r`n" )
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
