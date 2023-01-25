@@ -371,7 +371,7 @@ setPklInfo( "pklVers", "1.4.1α" )    										; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
 setPklInfo( "pklHdrB", "`r`n"
-		. ";;  for EPiKaL Portable Keyboard Layout (EPKL) by Øystein "DreymaR" Bech-Aase (2015-), based on PKL by Máté Farkas (2008-2010).`r`n
+		. ";;  for EPiKaL Portable Keyboard Layout (EPKL) by Øystein ""DreymaR"" Bech-Aase (2015-), based on PKL by Máté Farkas (2008-2010).`r`n"
 		. ";`r`n" )
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
