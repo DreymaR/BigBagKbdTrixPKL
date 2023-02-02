@@ -1,7 +1,7 @@
 ﻿DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-### ***EPiKaL PortableKeyboardLayout** for Windows, with layouts*
+### ***EPiKaL PortableKeyboardLayout** for Windows, including several layouts*
 <br>
 
 ![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Colemak-ISO-CAWS_s0_EPKL.png)
@@ -10,25 +10,34 @@
 
 [Θώθ][ThothW] – What Is This?
 -----------------------------
-* This is a program that implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
+* **EPiKaL PKL**, as its name states, is a portable keyboard layout program.
+* Portable means that it doesn't have to be installed, just run inside its folder.
+* You can run it from a USB drive, remotely or on your PC like any other program.
+* EPKL can map key presses like the installed Windows layout does.
+* You can use it to change single keys, or remap the entire layout.
+* It also supports special keys and functions; see below for info.
+<br>
+
+* EPKL implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
     - That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout,…
 * … with or without my own `[eD]` AltGr layers and dead keys,…
 * … **ergonomic mods** both for **Colemak**, the **Tarmak** learning layouts and **other layouts**,…
 * … and the incredibly useful [**Extend**][BBText] layers which work with any layout.
-* **DreymaR's Big Bag of Keyboard Trickery** at [dreymar.colemak.org][orgBBT] is my main info site.
+* **DreymaR's Big Bag of Keyboard Trickery** at [**dreymar.colemak.org**][orgBBT] is my main info site.
     - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
     - <del>In the [old Forum BigBag][CmkBBT] there's a specific [topic for EPKL/Windows][CmkPKL] too. It's old though.</del>
 <br>
 
-* This repository holds the **EPiKaL PKL** layout program, with lots of improvements over the old abandonware PKL.
+* EPKL has lots of improvements over the old abandonware PKL by Máté Farkas (2008–2010).
 * Nearly all my Big Bag "tricks" are implemented for EPKL, as layouts and accessory files.
 * Some non-EPKL BigBag stuff can be found in the Other folder, such as other keyboard tools.
 * Some non-BigBag stuff can be found in EPKL too, including support for several other layouts.
     - I won't support just any other layout though, as I don't have time and energy to do so.
     - The layouts I have included for EPKL have all seemed interesting and/or promising to me.
-    - Note: This does _not_ include layouts such as Workman and Norman, that, albeit popular, I consider flawed designs for which there are far better options.
-    - It does include Dvorak although that layout is old now, together with some interesting Dvorak mods.
+    - Note: This does _not_ include certain layouts such as Workman and Norman.
+    - I consider those flawed designs for which there are far better options. Really.
+    - It does include Dvorak although that layout is old now, together with some Dvorak mods.
 <br>
 
 Getting EPKL up and running
@@ -51,7 +60,7 @@ Getting EPKL up and running
 
 * To choose a layout variant, select the **Layout/Settings…** menu option. The EPKL Settings User Interface pops up.
 * Choose a layout with your keyboard type, variant/locale and Curl/Angle/Wide etc preferences.
-    - There are two main layout types: VK which only moves your keys, and eD which maps each shift state.
+    - There are two main layout types: VK/SC which only moves your keys, and eD which maps each shift state.
     - There are several premade Locale variants, if you need to type in other languages. Check out which variants exist – they'll likely be eD variants.
     - There are several ergonomic variants, which you can read about in the Big Bag: Curl(DH), Angle, Wide, Sym…
 * Helpful help images are shown by default. To show them only when modifiers are pressed, change `img_HideStates` to `0` on the `Settings` tab. You can choose whether to show images at all, or which ones to show; see the [EPKL_Settings][SetDef] file for more explanations.
@@ -155,12 +164,28 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 
 "I don't want your layouts but I still want EPKL"
 -------------------------------------------------
-You may want to use some of EPKL's functionality without opting for one of the available layouts. That's possible too.
+You may want to use EPKL's functionality without opting for one of the available layouts. That's possible too.
 - You may of course make your own layout or layout variant. See [below](https://github.com/DreymaR/BigBagKbdTrixPKL#layout-variants--key-mappings) for more info.
 - But you may also run EPKL with your installed OS layout, to just get Extend and/or Compose. Or to map just a few keys.
 - To do that, use the System layout. It's designed to pass through the OS layout so whatever you have there will work with EPKL.
-- For now, any dead keys on an OS layout will unfortunately not work as they should with the EPKL System layout. You could eD map them...?
-- If you want an ergo mod for the Extend layer, you need to select/make the right mod combo.
+- If you want an ergo mod for the Extend layer, you need to select/make the right mod combo in the EPKL Layouts\System layout file.
+<br><br>
+
+Key and Layout Mapping Types: Key vs State
+------------------------------------------
+There are two main ways EPKL handles key presses intercepted by its keyboard hook:
+* **Key mapping** means that EPKL sends a new keypress event to the OS. It may be the same key or a different one.
+    - The types of key mapping available are by Scan Code (**SC**) or by Virtual Key (**VK**) code.
+    - These generally work the same. Windows translates between them as necessary.
+    - There's a set of intuitive KLM key code aliases. For instance, the VK code for the <kbd>Del</kbd> key is `vcDEL`.
+    - The "System" mapping is shorthand for simply SC mapping the key onto itself, allowing EPKL to see that key.
+* **State mapping** means that EPKL sends a character event onwards to the OS based on the current shift state.
+    - The shift state is affected by Shift (held or on a Sticky Mod timer), AltGr and other layer modifiers.
+    - The **eD** layout type is state mapped like my AltGr and dead key [Colemak-eD][BBT_eD] mappings.
+    - Including the custom SwiSh and FliCK modifiers, there are a lot of states available. See below.
+* Any key may be key or state mapped. Layouts will generally contain one or the other type, but may contain a mix.
+    - Wherever there is an eD-type layout available, you can use it as a key mapped one with the **eD2VK** type.
+    - The eD2VK layout type will read its BaseLayout only as key mapped. Any overriding mappings are read as-is.
 <br><br>
 
 EPKL & Games
@@ -173,7 +198,7 @@ In gaming a key is often held down for a longish time. This may lead to some pro
 * The underlying OS layout sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
 * When sending characters, AutoHotkey sends a KeyDown followed immediately by a KeyUp. So inbetween each sent KeyDown there will be an extra KeyUp.
     - The result of this is often choppy game controls. Also, the MonkeyType typing test site has a cheat detection that interprets this behavior as suspect.
-    - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These send only the KeyDown events from the OS with no KeyUp until you release the key.
+    - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These send only the KeyDown events from the OS, with no KeyUp until you release the key.
     - ShiftState maps like eD must still send input with KeyDown-KeyUp. If you use an eD-type layout, you can make EPKL sleep whenever your game is active.
 * You can suspend EPKL at any time with its Suspend hotkey (default `Ctrl+Shift+3`). If you want your layout in-game, you may have to use a [MSKLC install][PklKLC].
 * If you want EPKL to suspend itself when your game or webpage is active, you can use the `suspendingApps` setting; see the [Settings file][SetDef].
@@ -181,8 +206,8 @@ In gaming a key is often held down for a longish time. This may lead to some pro
 * For more info, consult the [Known Issues](https://github.com/DreymaR/BigBagKbdTrixPKL#known-issues) section below.
 <br><br>
 
-Layout Variants & Key Mappings
-------------------------------
+Making Layout Variants
+----------------------
 It's entirely possible to create new layout variants and tweak existing ones with EPKL. It can be a little daunting at first though!
 Mostly because there is so much functionality and complexity, which is actually a good thing but hard on the beginner.
 
@@ -258,7 +283,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - Actually, you may mix mapping types freely in any layout. Layout types are mainly a means of organizing mappings.
     - Furthermore, a state-mapped BaseLayout may be read as VK-mapped by setting layout type to `##2VK` – here, `eD2VK`.
     - VK/SC mapped keys work for Compose sequences, as well as Extend and DK releases.
-    - The DKs themselves are on state mappings only, as are Compose key definitions.
+    - The DKs themselves are on state mappings only, as are special key definitions (Compose and Repeat).
 * ISO (European/World) vs ANSI (US) vs other keyboard types
     - ISO boards have a <kbd>OEM_102</kbd> key between <kbd>Z</kbd> and <kbd>LShift</kbd>. It often holds `<>` or `-_`.
     - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. These boards send the same scan codes though.
@@ -291,7 +316,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 
 #### Techy tips for EPKL:
 * EPKL is Viper and CSGO approved! Some of the fastest typists in the world have tested it and found it responsive enough.
-    - If you type above around 150 Words Per Minute, some pace smoothing may occur. This shouldn't be a problem, mostly.
+    - If you type above around 150 Words Per Minute, a little pace smoothing may occur. This shouldn't be a problem, mostly.
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
@@ -460,6 +485,7 @@ _Øystein "DreymaR" Bech-Aase_
 [orgBBT]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTawi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
+[BBT_eD]: https://dreymar.colemak.org/layers-colemaked.html (about Colemak-eD layers, in DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)
