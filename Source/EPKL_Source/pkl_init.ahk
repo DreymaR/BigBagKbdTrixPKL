@@ -10,10 +10,10 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	;; ================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
-	setPklInfo( "File_PklSet", "EPKL_Settings"          ) 				; Used globally (used to be in pkl.ini)
-	setPklInfo( "File_PklLay", "EPKL_Layouts"           ) 				; --"--
-	setPklInfo( "LayFileName", "Layout.ini"             ) 				; --"--
-	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini"  ) 				; Info dictionary file, mostly from internal tables
+	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
+	setPklInfo( "File_PklLay", "EPKL_Layouts"          ) 				; --"--
+	setPklInfo( "LayFileName", "Layout"                ) 				; --"--
+	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini" ) 				; Info dictionary file, mostly from internal tables
 	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
@@ -22,7 +22,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	;; ================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
-	setFile := getPklInfo( "File_PklSet" ) 								; The default file name will still be available.
+	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
 	setStck := []
 	For ix, type in [ "", "_Override", "_Default" ] {
 		file := setFile . type . ".ini"
@@ -33,11 +33,11 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		MsgBox, %setFile% file NOT FOUND.`nEPKL cannot run without this file.`n`n• EPKL.exe must be run inside its home folder.`n• This folder must be uncompressed/extracted.
 		ExitApp
 	}
-	setPklInfo( "SetStack", setStck ) 									; Settings_Override, Settings_Default
-	setPklInfo( "AdvancedMode", bool(pklIniRead("advancedMode")) ) 		; Extra debug info etc
-	pklLays := getPklInfo( "File_PklLay" ) 								; EPKL_Layouts
+	setPklInfo( "SetStack", setStck )   								; Settings_Override, Settings_Default
+	setPklInfo( "AdvancedMode", bool(pklIniRead("advancedMode")) )  	; Extra debug info etc
+	pklLays := getPklInfo( "File_PklLay" )  							; EPKL_Layouts
 	pklLays := [ pklLays . "_Override.ini", pklLays . "_Default.ini" ] 	; Now an array of override and default
-	setPklInfo( "Arr_PklLay", pklLays )
+	setPklInfo( "pklLaysFiles", pklLays )
 	
 	lang := pklIniRead( "menuLanguage", "auto" ) 						; Load locale strings
 	if ( lang == "auto" )
@@ -204,14 +204,21 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "St2VK", st2VK )    									; This is tested for each layFile below
 	mainDir := bool( pklIniRead("compactMode") ) ? "." 
 			 : laysDir . thisLay 										; If in compact mode, use the EPKL root dir as mainDir
-	mainLay := mainDir . "\" . getPklInfo( "LayFileName" )  			; The path of the main layout .ini file
+	layFiNa := getPklInfo( "LayFileName" )
+	layFiPa := mainDir . "\" . layFiNa  								; Path to "Layout" .ini file(s)
+	mainLay := layFiPa . ".ini" 										; The path of the main layout .ini file
+	mainOvr := layFiPa . "_Override.ini" 								; Layout_Override.ini, if present
+	setPklInfo( "LayFileName"       , layFiNa . ".ini" )
 	setPklInfo( "Dir_LayIni"        , mainDir )
 	setPklInfo( "File_LayIni"       , mainLay )
 ;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
 ;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in Layout.ini overrides the first Layout_ setting
 ;	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
 ;	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout
-	IniRead, basePath, %mainLay%, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
+	IniRead, basePath, %mainOvr%, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
+;	( basePath != "" ) ? pklDebug( "" basePath, 2 )  ; eD DEBUG
+	if ( basePath == "" )
+		IniRead, basePath, %mainLay%, % "pkl", % "baseLayout", %A_Space%
 	basePath        := StrCom( basePath )   							; Strip comments, like in pklIniRead()
 	SplitPath, basePath, baseLay, baseDir   							; eD WIP: Manage to use pklIniRead() for this?! It should handle ..\ too.
 	useDots         := ( InStr( basePath, "..\" ) == 1 ) ? true : false
@@ -227,9 +234,9 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 		setPklInfo( "File_BasIni"   , "" )
 		pklWarning( "File '" . baseLay . "' not found!" )   			; "File not found" iff base is defined but not present
 	}
-	pklLays := getPklInfo( "Arr_PklLay" )
-	pklLays := [ mainLay, baseLay, pklLays[1], pklLays[2] ] 			; Could also concatenate w/, e.g., pklStck.push( pklLays* )
-	pklDirs := [ mainDir, baseDir, "."       , "."        ]
+	pklLays := getPklInfo( "pklLaysFiles" ) 							; EPKL_Layouts_Default and Override
+	pklLays := [ mainOvr, mainLay, baseLay, pklLays[1], pklLays[2] ] 	; Could also concatenate w/, e.g., pklStck.push( pklLays* )?
+	pklDirs := [ mainDir, mainDir, baseDir, "."       , "."        ]
 	layStck := []   													; The LayStack is the stack of layout info files
 	dirStck := []   													; eD WIP: Allow a BaseStack, where any BaseLayout can include others? SubBase?
 	For ix, file in pklLays {
@@ -238,7 +245,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			dirStck.push( pklDirs[ix] )
 		}
 	}	; end For file
-	setPklInfo( "LayStack", layStck )   								; Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
+	setPklInfo( "LayStack", layStck )   								; Layout_Override.ini, Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
 	kbdType := _AnsiAns( kbdType )
@@ -261,9 +268,11 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setPklInfo( "StringFile", strFile ) 								; This file should contain the string tables. As discussed above, it can't be a LayStack+1 (now).
 	
 	if ( not initialized ) && ( FileExist( mapFile ) ) { 				; Read/set remap dictionaries. Ensure the tables are read only once.
-		secList := pklIniRead( "__List", , layStck[1] ) 				; A list of sections in the topmost LayStack file (Layout.ini).
-		secList .= pklIniRead( "__List", , layStck[2] ) 				; A list of sections in the second  LayStack file (BaseLayout).
-		remStck := InStr( secList, "Remaps" ) ? mapStck : mapFile   	; Only check the whole LayStack if [Remaps] is in secList, to save startup time.
+		secList := ""
+		For ix, file in layStck {
+			secList .= pklIniRead( "__List", , layStck[ ix ] )  		; Check all section names in the LayStack
+		}
+		remStck := InStr( secList, "Remaps"      ) ? mapStck : mapFile 	; Only check the LayStack if [Remaps] is in secList, to save startup time.
 		cycStck := InStr( secList, "RemapCycles" ) ? mapStck : mapFile 	; InStr() is case insensitive.
 		mapTypes    := [ "scMapLay"    , "scMapExt"    , "vkMapMec"     ] 	; Map types: Main remap, Extend/"hard" remap, VK remap
 		mapSects    := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ] 	; Section names in the .ini file
@@ -290,7 +299,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	shStats := pklIniRead("shiftStates", shStats, "LayStk", "layout") 	; This was in [global] then [pkl]
 	setLayInfo( "LayHasAltGr", InStr( shStats, 6 ) ? 1 : 0 )
 	shStats := StrSplit( RegExReplace( shStats, "[ `t]+" ), ":" ) 		; Remove any whitespace and make it an array
-	for ix, state in shStats {
+	For ix, state in shStats {
 		shStats[ix] := Format( "{:i}", "0x" . state )   				; Use hex in layout files for states (above 9), but dec internally
 	}
 	setLayInfo( "shiftStates", shStats ) 								; An array of the active shift states. Used by the Help Image Generator (HIG).
@@ -567,7 +576,7 @@ _pklStckUp( The, theFile, at1 = 0 ) {   			; Add a support file to the bottom of
 }
 
 _pklLayRead( type, def = "--", prefix = "" ) {  	; Read kbd type/mods (used in pkl_init) and set Lay info
-	pklLays := getPklInfo( "Arr_PklLay" )
+	pklLays := getPklInfo( "pklLaysFiles" )
 	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
 	val := ( type = "KbdType" ) ? _AnsiAns( val ) : val
 	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts

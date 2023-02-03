@@ -7,8 +7,7 @@
 
 ;;  ####################### user area #######################
 /*
-WIP 	- Make the Settings GUI write to a Layout_Override.ini. Create it from a template in root?
-			- Explain in the template that it's for use in the layout directories, to override Layout.ini settings.
+WIP 	- Make the Settings GUI write to Layout_Override.ini. Create it from a template in root.
 TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
@@ -33,7 +32,7 @@ WIP 	-
 ;;  eD TOFIX/WIP:
 ;	- WIP: 
 
-;	- WIP: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it?
+;	- WIP: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it, or a setting?
 ;		- It's already started in the {Shift OSM} syntax, but not sure that'll work fully with the Ext-mods? They need to be dual-function.
 
 ;	- TOFIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!

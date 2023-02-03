@@ -195,15 +195,16 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Text,, % "`n"
 						. "`n* The default settings map CapsLock to a Backspace-on-tap, Extend-on-hold key."
 						. "`n* Press the Help button for useful info including a key code table."
-						. "`n* For keys defined by the (base-)layout, use the ""Submit to Layout.ini"" button."
+						. "`n* The ""Submit to Layout"" button overrides (base-)layout key mappings."
+						. "`n* The ""All"" button only works for keys not defined by the (base-)layout."
 						. "`n"
 						. "`n* VKey mappings simply move keys around. Modifier mappings are Shift-type."
 						. "`n* State maps specify the output for each modifier state, e.g., Shift + AltGr."
 						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
-						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
+;						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
 						. "`n"
-	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyMap, &Submit Key Mapping
-	GUI, UI:Add, Button, x+14   yp          gUIsubKeyLay, Submit to &Layout.ini
+	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyLay, &Submit to Layout
+	GUI, UI:Add, Button, x+14   yp          gUIsubKeyAll, To &All Layouts
 	GUI, UI:Add, Button, xs+244 yp          gUIrevKey   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
@@ -231,20 +232,21 @@ UIselLay:   													; Handle UI Layout selections
 	layPath := {} 												; Variant folders for locales etc may contain several mods
 	layDirs := [] 												; Layout folders hold the layouts themselves
 	For ix, theDir in _uiGetDir( mainDir ) { 					; Get a layout directory list for the chosen MainLay
-		ourDir := mainDir . "\" . theDir
+		ourDir  := mainDir . "\" . theDir
 		if not RegExMatch( theDir, need ) 						; '3LA-<LayType>'
 			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
+		layFiNa := getPklInfo( "LayFileName" )
 		For i2, subDir in _uiGetDir( ourDir ) { 				; Scan each subdir for variant folders
 			if not RegExMatch( subDir, need . ".+_" ) 			; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
-			if not FileExist( ourDir . "\" . subDir . "\" . getPklInfo("LayFileName") )
+			if not FileExist( ourDir . "\" . subDir . "\" . layFiNa )
 				Continue 										; Layout folders contain a Layout.ini file
 			layDirs.Push( subDir )
 			layPath[ subDir ] := theDir . "\"
 		} 	; end For subDir
 		if not RegExMatch( theDir, need . ".+_" ) 				; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
-		if not FileExist( ourDir . "\" . getPklInfo("LayFileName") )
+		if not FileExist( ourDir . "\" . layFiNa )
 			Continue 											; Layout folders contain a Layout.ini file
 		layDirs.Push( theDir )
 		layPath[ theDir ] := ""
@@ -431,8 +433,8 @@ UIsubSpcCmp: 													; Submit Special Key Compose button pressed
 	           , _uiGetParams( "SpcCm2" ) ] )
 Return
 
-UIsubKeyMap: 													; Submit Key Mapping button pressed
-	_uiSubmit( [ _uiGetParams( "KeyMap" ) ] )
+UIsubKeyAll: 													; Submit Key Mapping to EPKL_Layouts button pressed
+	_uiSubmit( [ _uiGetParams( "KeyAll" ) ] )
 Return
 
 UIsubKeyLay: 													; Submit Key Mapping to Layout.ini button pressed
@@ -454,8 +456,8 @@ UIrevSet:   													; Revert UI setting(s)
 Return
 
 UIrevKey:   													; Revert UI setting(s)
-	_uiRevert( [ _uiGetParams( "KeyMap" ) 
-	           , _uiGetParams( "KeyLay" ) ], "Key" )
+	_uiRevert( [ _uiGetParams( "KeyLay" ) 
+	           , _uiGetParams( "KeyAll" ) ], "Key" )
 Return
 
 	;; ================================================================================================
@@ -533,7 +535,7 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 	GUI, UI:Submit, Nohide  									; Refresh UI parameter values
 	layDir  := StrReplace( getLayInfo("ActiveLay"), "2VK" ) 	; Account for st2VK layTypes such as eD2VK
-	case    := inArray( [ "LaySel", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyMap", "KeyLay" ], which )
+	case    := inArray( [ "LaySel", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyLay", "KeyAll" ], which )
 	Return      ( case == 1 ) ? [ "layout = " . UI_LayFile . ":" . UI_LayMenu   , "LayoutPicker"
 		, "pkl"     , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  LaySel
 			:   ( case == 2 ) ? [ UI_SetThis . " = " . UI_SetLine               , "Settings"    
@@ -545,9 +547,9 @@ _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 			:   ( case == 5 ) ? [ "CoDeKeys" . " = " . UI_SpcCDLn               , "SpecialKeys" 
 		, "pkl"     , getPklInfo( "File_PklSet" )   , "_Default"            ] 	;  SpcCm2
 			:   ( case == 6 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  KeyMap
-			:   ( case == 7 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
 		, "layout"  , "Layouts\" . layDir . "\layout", ""                   ] 	;  KeyLay
+			:   ( case == 7 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
+		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  KeyAll
 			:   []
 }
 

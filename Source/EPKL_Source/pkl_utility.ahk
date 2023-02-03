@@ -4,7 +4,7 @@
 ;;  - Used primarily in pkl_init.ahk
 ;
 
-ReadRemaps( mapList, mapStck ) { 					; Parse a remap string to a CSV list of cycles (used in pkl_init)
+ReadRemaps( mapList, mapStck ) { 								; Parse a remap string to a CSV list of cycles (used in pkl_init)
 	mapCycList  := "" 											; Name -> actual list, or literal list
 	For ix, alist in pklIniCSVs( mapList, mapList, mapStck, "Remaps" ) { 	; mapFile
 		tmpCycle    := "" 							; Above, mapList is default to use a map unless it refers to another

@@ -1,7 +1,7 @@
 ﻿DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 
-### ***EPiKaL PortableKeyboardLayout** for Windows, including several layouts*
+### The ***EPiKaL Portable Keyboard Layout** program for Windows*
 <br>
 
 ![EPKL help image, for the Colemak-CAWS layout](./Layouts/Colemak/Colemak-ISO-CAWS_s0_EPKL.png)
@@ -15,7 +15,7 @@
 * You can run it from a USB drive, remotely or on your PC like any other program.
 * EPKL can map key presses like the installed Windows layout does.
 * You can use it to change single keys, or remap the entire layout.
-* It also supports special keys and functions; see below for info.
+* It also supports special keys and functions; read on for more info.
 <br>
 
 * EPKL implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
@@ -32,21 +32,21 @@
 * EPKL has lots of improvements over the old abandonware PKL by Máté Farkas (2008–2010).
 * Nearly all my Big Bag "tricks" are implemented for EPKL, as layouts and accessory files.
 * Some non-EPKL BigBag stuff can be found in the Other folder, such as other keyboard tools.
-* Some non-BigBag stuff can be found in EPKL too, including support for several other layouts.
+* Some non-BigBag stuff is found in EPKL too, including support for several other layouts.
     - I won't support just any other layout though, as I don't have time and energy to do so.
     - The layouts I have included for EPKL have all seemed interesting and/or promising to me.
     - Note: This does _not_ include certain layouts such as Workman and Norman.
     - I consider those flawed designs for which there are far better options. Really.
-    - It does include Dvorak although that layout is old now, together with some Dvorak mods.
+    - It does include Dvorak although that layout is dated now, together with some Dvorak mods.
 <br>
 
 Getting EPKL up and running
 ---------------------------
-* Download a full copy of this repository or just its executable resources.
+* Download a full copy of this repository, or just its executable resources.
     - Under **[Release][GitRel] Assets**, there's a .ZIP file with the files needed to run EPKL. Unzip and run!
     - For the newest updated Git **commit** with source code, instead **[Download ZIP][GitCom]** from the green `Code` button.
     - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
-    - Note that some virus protection programs overreact to Autohotkey (AHK) code using keyboard hooks.
+    - Note that some virus protection programs overreact to compiling Autohotkey (AHK) code of this type.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key…
     - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon…
@@ -118,7 +118,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
-- **TL;DR answer:**: Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO).
+- **TL;DR answer**: Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO).
 <br>
 
 #### What are the options?
@@ -245,9 +245,10 @@ More Know-How
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
-    - Layout, that is, the `Layout.ini` file in your chosen layout folder
-    - BaseLayout, which may be pointed to by the layout file
-    - Layouts_Override, which may be generated to hold your personal layout settings and mappings
+    - Layout_Override in your chosen layout folder, if present, holds personal key mappings and such
+    - Layout, that is, the `Layout.ini` main layout file in your chosen layout folder
+    - BaseLayout, which may be pointed to and overridden by the Layout file
+    - Layouts_Override, which may hold your personal layout settings and mappings
     - Layouts_Default, found in the root folder, holds default layout settings/mappings
     - Special dedicated files for Extend, DeadKeys, PowerStrings, Remaps etc etc.
 * **Remaps** are cycles of keys swapping places. This allows you turn one layout definition into another.
@@ -302,7 +303,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - The Layout Picker creates a `EPKL_Layouts_Override.ini` file if necessary, and writes to it.
     - For Extend (on by default), set an Extend file and map the Extend modifier to a key in your layout.
     - My _eD_Extend mappings file is in the Files folder. Look inside it to learn more.
-* In the layout folder(s) you've chosen, you may edit the Layout.ini files further if required. See below.
+* In the layout folder(s) you've chosen, you may edit the layout .ini files further if required. See below.
     - Mod remaps, help image specifications, Extend key, key mappings etc can be set in the LayStack .ini files.
     - Many layouts use a BaseLayout. Most mappings may be there, so the top Layout.ini only has to change a few keys.
 * To learn more about remaps, see the [_eD_Remap.ini][MapIni] file. They can even turn Colemak into QWERTY (oh no…!).
@@ -345,11 +346,12 @@ The layouts and setup files may take a little tweaking to get what you want. The
 <br>
 
 * Here's the "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
-    1. The `Layout.ini` file in the chosen Layout folder gets the last word about remaps etc
-    2. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    3. The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
-    4. The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
-    5. Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
+    1. A `Layout_Override.ini` file in the chosen Layout folder will get the last word about everything.
+    2. The `Layout.ini` file in the chosen Layout folder typically defines names, remaps and key overrides.
+    3. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
+    4. The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
+    5. The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
+    6. Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 <br>
 
 * Settings priority and file selection during EPKL startup goes like this:

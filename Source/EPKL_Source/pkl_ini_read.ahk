@@ -32,7 +32,7 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 	if ( not key )
 		Return
 	if ( layStck := ( iniFile == "LayStk" ) ? true : false ) {  		; The LayStack is a special case,
-		iniFile := getPklInfo( "LayStack" ) 							; going through all 4+ layout stack files.
+		iniFile := getPklInfo( "LayStack" ) 							; going through all (4+ or so) layout stack files.
 		iniDirs := getPklInfo( "DirStack" )
 	} else if ( iniFile == "PklSet" ) {
 		iniFile := getPklInfo( "SetStack" )
