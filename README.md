@@ -104,6 +104,8 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 <br>
 
 #### How do I get Colemak-DH with EPKL?
+**TL;DR:** Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO)
+
 - EPKL by default gives you the standard Colemak for the [ANSI keyboard type][ISOANS]. Now let's choose something else.
 - As described above, open up the `Layout/Settings…` GUI from the EPKL tray menu.
 - To get the right layout, you should know your keyboard type. `ISO` has a key between <kbd>Z</kbd> and <kbd>LShift</kbd>, `ANS` not.
@@ -118,7 +120,6 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
-- **TL;DR answer**: Press Ctrl+Shift+6 then select the CurlAngle mod for your keyboard type (ANS or ISO).
 <br>
 
 #### What are the options?
@@ -179,31 +180,38 @@ There are two main ways EPKL handles key presses intercepted by its keyboard hoo
     - These generally work the same. Windows translates between them as necessary.
     - There's a set of intuitive KLM key code aliases. For instance, the VK code for the <kbd>Del</kbd> key is `vcDEL`.
     - The "System" mapping is shorthand for simply SC mapping the key onto itself, allowing EPKL to see that key.
+    - The "Modifier" mapping is a special case. It's used for modifiers including Shift, Ctrl and Extend.
 * **State mapping** means that EPKL sends a character event onwards to the OS based on the current shift state.
     - The shift state is affected by Shift (held or on a Sticky Mod timer), AltGr and other layer modifiers.
-    - The **eD** layout type is state mapped like my AltGr and dead key [Colemak-eD][BBT_eD] mappings.
-    - Including the custom SwiSh and FliCK modifiers, there are a lot of states available. See below.
+    - In addition to single characters, the mapping can be all sorts of wondrous things. See below for info.
+    - The **eD** layout type is state mapped using my AltGr and dead key [Colemak-eD][BBT_eD] layers.
+    - Including the custom SwiSh and FliCK modifiers, there are a lot of states available in EPKL.
 * Any key may be key or state mapped. Layouts will generally contain one or the other type, but may contain a mix.
     - Wherever there is an eD-type layout available, you can use it as a key mapped one with the **eD2VK** type.
     - The eD2VK layout type will read its BaseLayout only as key mapped. Any overriding mappings are read as-is.
+* Note that key mapped and state mapped input events are sent differently. See the next section.
 <br><br>
 
 EPKL & Games
 ------------
 There are some pitfalls to using a keyboard remapping program like EPKL for gaming, which uses the keyboard very differently.
 
-TL;DR: Don't use eD-type (state mapped) layouts for gaming; eD2VK is okay. For key-intensive games like FPS, probably (auto-)suspend EPKL.
-
 In gaming a key is often held down for a longish time. This may lead to some problems:
 * The underlying OS layout sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
 * When sending characters, AutoHotkey sends a KeyDown followed immediately by a KeyUp. So inbetween each sent KeyDown there will be an extra KeyUp.
     - The result of this is often choppy game controls. Also, the MonkeyType typing test site has a cheat detection that interprets this behavior as suspect.
-    - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These send only the KeyDown events from the OS, with no KeyUp until you release the key.
-    - ShiftState maps like eD must still send input with KeyDown-KeyUp. If you use an eD-type layout, you can make EPKL sleep whenever your game is active.
+    - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These pass on the KeyDown events from the OS, and send KeyUp only on release.
+    - Shift state mapped keys as used by the eD layouts, send each mapping as character input with a KeyDown-then-KeyUp combo.
+* If you use a state mapped layout or your gaming is otherwise disturbed by EPKL, you can make the program sleep whenever your game is active.
 * You can suspend EPKL at any time with its Suspend hotkey (default `Ctrl+Shift+3`). If you want your layout in-game, you may have to use a [MSKLC install][PklKLC].
 * If you want EPKL to suspend itself when your game or webpage is active, you can use the `suspendingApps` setting; see the [Settings file][SetDef].
 * You could try setting the Windows Key Repeat speed as low as possible, but I'm unsure whether it'll really help.
 * For more info, consult the [Known Issues](https://github.com/DreymaR/BigBagKbdTrixPKL#known-issues) section below.
+<br>
+
+**TL;DR:**
+* Don't use eD-type (state mapped) layouts for gaming; VK/SC/System/eD2VK are okay
+* For key-intensive games like FPS, probably (auto-)suspend EPKL
 <br><br>
 
 Making Layout Variants
@@ -256,7 +264,7 @@ More Know-How
 * **Prefix-Entry Syntax** is a powerful enhancement for most kind of EPKL mappings
     - Prefix-Entry syntax can go in layout state mappings, DKs, Extend, PowerStrings, Compose entries...
     - Basically, it's any mapping starting with one of the characters `%→$§*α=β~†@Ð&¶®©` and then an entry
-    - It allows AHK Send syntax, sending Unicode points, EPKL DKs and PowerStrings
+    - It allows AHK Send syntax, sending Unicode points, EPKL DKs and PowerStrings – and more!
     - See below for more details
 <br>
 
@@ -333,6 +341,30 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL isn't always a robust solution for gaming etc. See the [Other folder][PklOth] for more options/info.
 <br>
 
+#### Prefix-Entry Syntax
+* As mentioned above, a state-mapped entry may be several useful things. Most of these are governed by P-E syntax.
+* The first character – the prefix – identifies its type. Allowed prefixes are `%→$§*α=β~†@Ð&¶®©`.
+* Should you need to start a literal string with one of the prefix characters, prefix it with `→` or `%`.
+* This is from the EPKL `Layout/Settings…` Key Mapper Help screen (press the Help button on the last tabs):
+```
+;;  ====================================================================================================================
+;;  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.
+;;  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.
+;;      →  |  %  : Send a literal string/ligature by the SendInput {Text} method
+;;      §  |  $  : Send a literal string/ligature by the SendMessage method
+;;      α  |  *  : Send ‹entry› as AHK syntax in which !+^# are modifiers, and {} contain key names
+;;      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state
+;;      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)
+;;      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)
+;;      ¶  |  &  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
+;;  - Any entry may start with «#»: '#' is one or more characters to display on help images for the following mapping.
+;;  - Other advanced state mappings:
+;;      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.
+;;      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.
+;;      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.
+;;  ====================================================================================================================
+```
+
 #### The LayStack and file relations explained further
 * As said before, the easy way to set layouts and settings is to let the `Layout/Settings…` GUI write your overrides.
 * If you still want to choose layouts manually, copy the Override_Example file to `EPKL_Layouts_Override.ini`.
@@ -349,8 +381,8 @@ The layouts and setup files may take a little tweaking to get what you want. The
     1. A `Layout_Override.ini` file in the chosen Layout folder will get the last word about everything.
     2. The `Layout.ini` file in the chosen Layout folder typically defines names, remaps and key overrides.
     3. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    4. The [EPKL_Layouts_Override][LayOvr], if present, can hold overriding layout choices etc
-    5. The [EPKL_Layouts_Default][LayDef] holds default and common settings/mappings
+    4. The [EPKL_Layouts_Override][LayOvr], if present, overrides default layout choices
+    5. The [EPKL_Layouts_Default][LayDef] holds default and common layout settings/mappings
     6. Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 <br>
 

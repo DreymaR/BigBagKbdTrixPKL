@@ -7,7 +7,7 @@
 
 ;;  ####################### user area #######################
 /*
-WIP 	- Make the Settings GUI write to Layout_Override.ini. Create it from a template in root.
+WIP 	- Make the Settings GUI write to Layout_Override.ini. Create it from a template in EPKL root.
 TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
@@ -366,7 +366,7 @@ SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: 
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.4.1α" )    										; EPKL Version
+setPklInfo( "pklVers", "1.4.1β" )    										; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
 setPklInfo( "pklHdrB", "`r`n"
