@@ -28,7 +28,7 @@ For a detailed version history, look further down.
 * EPKL v1.3.0: Compose/Completion and Repeat keys.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
-* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers.
+* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
 ```
 <br>
 
@@ -499,7 +499,7 @@ VERSION HISTORY:
 		- Also, Macron-Below on the Macron key, more special digits and several other new mappings. Reworked turnstiles on the Science DK.
 	- Added `FRST/WP` arrow symbols to the Macron DK. `FRST` is an arrow cross, `WP` left-right and up-down arrows. Single on unshifted, double on shifted and AltGr.
 		- These arrow symbol mappings are geometrically mapped in a Colemak-centric way. For another layout, revision is desirable.
-* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers.
+* EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
 	- Timerless EPKL! All key press (processKey and runKey) functions and timers were replaced by simply calling keyPressed() and sending KeyUp directly.
 		- This should remove the last bit of sluggishness and possibly allow EPKL to work with more games and the like. It could be pretty huge!
 		- Critical priority was given to some functions to improve timing for OSMs etc.
@@ -515,7 +515,7 @@ VERSION HISTORY:
 		- For ShiftStates in layout files, use hex values. Corresponding to the standard `0:1:6:7` plus SwiSh, are `8:9:e:f` – `a` is the Ctrl+SwiSh state.
 		- SwiSh/FliCK modifiers can be made Sticky (one-shot) via the stickyMods setting, like other modifiers.
 		- SwiSh and FliCK were kindly sponsored by Antoine Olivier (Rastast at the Colemak Discord, IKLProject on GitHub)! Thanks a lot – sorry about the delay!
-	- Added the possibility for a `Layout_Override.ini` file in the chosen layout folder, as a master override that avoids editing `Layout.ini` directly.
+	- Added the possibility for a `Layout_Override.ini` file in the active layout folder, as a master override that avoids editing `Layout.ini` directly.
 	- Added a new OS DeadKey detection routine `getWinLayDKs()` using a ToAscii DLL call; it returns -1 if the specified key/state is a Windows Layout DK.
 		- It runs on init/refresh. It returns a dictionary of `{ SC:DK-ShiftStates }`, like `{ "SC003" : "6:7", } (if SC003 has DKs on states 6 and 7).
 		- The old `Detect Dead Keys...` menu option was hidden and demoted to utility/debug routine #7.

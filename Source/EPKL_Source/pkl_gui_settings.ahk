@@ -65,7 +65,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddSel( "Mods, if any: " 										; Make a box wider than the previous one: "wp+100"
 			,       "LayMods"   , "Choose1"     , [ ui_NA ]             )
 																		; (A default here may fail on the first selection if a nonexisting combo is chosen)
-	_uiAddEdt( "`nIn the Layouts_Override [pkl] section: layout = " 		; eD WIP: Replace this with a ComboBox
+	_uiAddEdt( "`nIn the Layout(s)_Override [pkl] section: layout = " 		; eD WIP: Replace this with a ComboBox?
 			,       "LayFile"   , ""            , ui_WideTxt            )
 	layFiles    := [ "--"   , "<add layout>" ]  						; Default entry for the LayFile ComboBox
 ;	_uiAddSel( "`nIn the Layouts_Override [pkl] section: layout = " 		; eD WIP: For multi-layout select, make this a ComboBox. Use AltSubmit for position selection?
@@ -193,18 +193,18 @@ pklSetUI() { 													; EPKL Settings GUI
 	_uiAddEdt( "  =  "
 			,       "KeyLine"   , ""            , ui_WideTxt, "xs y+m" )
 	GUI, UI:Add, Text,, % "`n"
-						. "`n* The default settings map CapsLock to a Backspace-on-tap, Extend-on-hold key."
+						. "`n* Default settings map CapsLock to Backspace-on-tap, Extend-on-hold."
 						. "`n* Press the Help button for useful info including a key code table."
-						. "`n* The ""Submit to Layout"" button overrides (base-)layout key mappings."
-						. "`n* The ""All"" button only works for keys not defined by the (base-)layout."
+						. "`n* The ""Submit to Layout"" button overrides (base) layout key mappings."
+						. "`n* The ""For All"" button only works for keys not mapped in the (base) layout."
 						. "`n"
 						. "`n* VKey mappings simply move keys around. Modifier mappings are Shift-type."
-						. "`n* State maps specify the output for each modifier state, e.g., Shift + AltGr."
+						. "`n* State mappings specify the output for each modifier state, e.g., Shift + AltGr."
 						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
 ;						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
 						. "`n"
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyLay, &Submit to Layout
-	GUI, UI:Add, Button, x+14   yp          gUIsubKeyAll, To &All Layouts
+	GUI, UI:Add, Button, x+14   yp          gUIsubKeyAll, For &All Layouts
 	GUI, UI:Add, Button, xs+244 yp          gUIrevKey   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
@@ -235,7 +235,7 @@ UIselLay:   													; Handle UI Layout selections
 		ourDir  := mainDir . "\" . theDir
 		if not RegExMatch( theDir, need ) 						; '3LA-<LayType>'
 			Continue 											; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
-		layFiNa := getPklInfo( "LayFileName" )
+		layFiNa := getPklInfo( "LayFileName" ) . ".ini" 		; Layout.ini
 		For i2, subDir in _uiGetDir( ourDir ) { 				; Scan each subdir for variant folders
 			if not RegExMatch( subDir, need . ".+_" ) 			; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
@@ -433,12 +433,12 @@ UIsubSpcCmp: 													; Submit Special Key Compose button pressed
 	           , _uiGetParams( "SpcCm2" ) ] )
 Return
 
-UIsubKeyAll: 													; Submit Key Mapping to EPKL_Layouts button pressed
-	_uiSubmit( [ _uiGetParams( "KeyAll" ) ] )
-Return
-
 UIsubKeyLay: 													; Submit Key Mapping to Layout.ini button pressed
 	_uiSubmit( [ _uiGetParams( "KeyLay" ) ] )
+Return
+
+UIsubKeyAll: 													; Submit Key Mapping to EPKL_Layouts button pressed
+	_uiSubmit( [ _uiGetParams( "KeyAll" ) ] )
 Return
 
 UIrevLay: 														; Revert UI setting(s) by deleting any matching UI entries
@@ -535,28 +535,29 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
 _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 	GUI, UI:Submit, Nohide  									; Refresh UI parameter values
 	layDir  := StrReplace( getLayInfo("ActiveLay"), "2VK" ) 	; Account for st2VK layTypes such as eD2VK
+	layDir  := "Layouts\" . layDir . "\"
 	case    := inArray( [ "LaySel", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyLay", "KeyAll" ], which )
 	Return      ( case == 1 ) ? [ "layout = " . UI_LayFile . ":" . UI_LayMenu   , "LayoutPicker"
-		, "pkl"     , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  LaySel
+		, "pkl"     , getPklInfo( "File_PklLay" )   ] 							;  LaySel
 			:   ( case == 2 ) ? [ UI_SetThis . " = " . UI_SetLine               , "Settings"    
-		, "pkl"     , getPklInfo( "File_PklSet" )   , "_Default"            ] 	;  SetSel
+		, "pkl"     , getPklInfo( "File_PklSet" )   ] 							;  SetSel
 			:   ( case == 3 ) ? [ UI_SpcExLn                                    , "SpecialKeys" 
-		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  SpcExt
+		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  SpcExt
 			:   ( case == 4 ) ? [ UI_SpcCoLn                                    , "SpecialKeys" 
-		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  SpcCmp
+		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  SpcCmp
 			:   ( case == 5 ) ? [ "CoDeKeys" . " = " . UI_SpcCDLn               , "SpecialKeys" 
-		, "pkl"     , getPklInfo( "File_PklSet" )   , "_Default"            ] 	;  SpcCm2
+		, "pkl"     , getPklInfo( "File_PklSet" )   ] 							;  SpcCm2
 			:   ( case == 6 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , "Layouts\" . layDir . "\layout", ""                   ] 	;  KeyLay
+		, "layout"  , getPklInfo( "LayFileName" )   , layDir    ] 				;  KeyLay   	; Layout.ini file path is specified; its override template is at program root
 			:   ( case == 7 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , getPklInfo( "File_PklLay" )   , "_Override_Example"   ] 	;  KeyAll
+		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  KeyAll
 			:   []
 }
 
-_uiSubmit( parset ) {   										; WriteOverride calls for several sets of parameters 	; eD WIP
+_uiSubmit( parset ) {   										; WriteOverride calls for several sets of the 5 fn parameters
 	ui_Written  := false
 	For ix, pr in parset {
-		_uiWriteOverride( pr[1], pr[2], pr[3], pr[4], pr[5] ) 	; key_entry, module, section, ovrFile, tplFile
+		_uiWriteOverride( pr[1], pr[2], pr[3], pr[4], pr[5] ) 	; key_entry, module, section, ovrFile, ovrPath
 	} 	; end For pars
 	if ( ui_Written )
 		_uiMsg_RefreshPKL()
@@ -570,31 +571,33 @@ _uiRevert( parset, sel ) {  									; Revert changes, as above
 }
 
 _uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override. If necessary, make the file first.
-	, section = "pkl", ovrFile = "EPKL_Settings", tplFile = "" ) {
+	, section = "pkl", ovrFile = "EPKL_Settings", ovrPath = "" ) {  	; eD WIP: Allow the template to be in root! Separate path from filename, in ovrPath.
 	revert  := ui_Revert
 	a_SC    := "`;"
 	ini     := ".ini"
-	tplFile := ( tplFile ) ? ovrFile . tplFile : ""
-	ovrFile .= ( tplFile ) ? "_Override" : "" 					; If there isn't a template, use the main file as its override
-	if not FileExist( ovrFile . ini ) { 						; If there isn't an Override file...
+	ovrFile :=           ovrFile . "_Override"
+	ovrPath := ovrPath . ovrFile    							; The ovrPath is nothing if root; must end with "\" if not.
+	tplFile :=           ovrFile . "_Example"   				; All overrides are at EPKL root 	; eD WIP: This is default for all now! No more if tplFile.
+	if not FileExist( ovrPath . ini ) { 						; If there isn't an Override file...
 		if ( tplFile && not revert ) {  						; ...ask whether to generate one from a template.
+;			Return ( 1 ) ? pklDebug( "ovrFile:`n" . ovrFile . "`nOvrPath:`n" . ovrPath, 5 )  ; eD DEBUG
 			if _uiMsg_MakeFile( module, ovrFile, tplFile ) {
 				if not tmpFile := pklFileRead( tplFile . ini ) 	; Try to read the override template
 					Return false
 				laySect := "`r`n[layout]`r`n"
 				laySect := InStr( tmpFile, laySect ) ? laySect : ""
 				tmpFile := RegExReplace( tmpFile, "s)\R\[pkl\]\R\K.*" )
-				tmpFile .= laySect
-				if not pklFileWrite( tmpFile, ovrFile . ini ) 	; Try to write the override file
+				tmpFile .= laySect  							; Start out with the template header, but empty [pkl] and [layout] sections
+				if not pklFileWrite( tmpFile, ovrPath . ini ) 	; Try to write the override file
 					Return false
 			} else {
 				Return false
 			} 	; end if makeFile
 		} else {
-			pklInfo( "Override file not found:`n`n" . ovrFile, 3 )
+			pklInfo( "Override file not found:`n`n" . ovrPath, 3 )
 			Return false
 		} 	; end if tplFile
-	} 	; end if not FileExist ovrFile
+	} 	; end if not FileExist ovrPath
 	pklIniKeyVal( key_entry, key, entry )   					; Split the "key = entry" line
 	makeLine := false   										; Make the new line and tidy up old ones, ...
 	if revert { 												; ...or revert all previous changes.
@@ -608,9 +611,9 @@ _uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override.
 	} 	; end if revert
 	if not _uiMsg_Override( ms1, ms2, ms3, section, ovrFile ) 	; Write override, if desired and possible
 		Return false
-	if not tmpFile := pklFileRead( ovrFile . ini ) 				; The standard IniWrite writes to the end of the section. We want the start.
+	if not tmpFile := pklFileRead( ovrPath . ini )  			; The standard IniWrite writes to the end of the section. We want the start.
 		Return false
-	FileDelete, % ovrFile . ini 								; In order to rewrite the file and not just append to it, it must be deleted.
+	FileDelete, % ovrPath . ini 								; In order to rewrite the file and not just append to it, it must be deleted.
 	maxEntr := revert ? 0 : 4 									; Delete old UI entries with the same key over this number.
 	comText := a_SC . " Generated by the EPKL " . module . " UI, "
 	inSect  := false
@@ -637,7 +640,7 @@ _uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override.
 		secStrt := "s)\R\[" . section . "\]" 					; s: Match including line breaks
 		tmpFile := RegExReplace( tmpFile, secStrt . "\R\K(.*)", entry . "`r`n$1" )
 	}
-	if pklFileWrite( tmpFile, ovrFile . ini )   				; Write/revert the override
+	if pklFileWrite( tmpFile, ovrPath . ini )   				; Write/revert the override
 		ui_Written  := true  									; Files were changed, so ask whether to refresh EPKL
 } 	; end fn UI WriteOverride
 
@@ -646,11 +649,11 @@ _uiMsg_MakeFile( module, ovrFile, tplFile ) {
 (   															; (0x100: 2nd button default. 0x30: Warning. 0x3: Yes/No/Cancel)
 EPKL %module% Submit
 —————————————————————————————
-
+    															; Turns out a NSBP works to insert a line shift
 EPKL uses Override files for settings,
 to avoid messing with the Default files.
 No "%ovrFile%" file was detected.
-
+    
 Would you like to create one from %tplFile%.ini?
 )
 	IfMsgBox, OK
@@ -663,9 +666,9 @@ _uiMsg_Override( ms1, ms2, ms3, section, ovrFile ) {
 (
 EPKL %module% %ms2%
 —————————————————————————————
-
+    
 %ms3%
-
+    
 in the [%section%] section of %ovrFile%.ini?
 )
 	IfMsgBox, OK
@@ -678,9 +681,9 @@ _uiMsg_RefreshPKL( purpose = " to use the chosen setting(s)" ) {
 	MsgBox, 0x021, Refresh EPKL?,   		 					; 0x021: 1st button default. Exclamation/Question. OK/Cancel
 (
 Write successful.
-
+    
 Refresh EPKL now%purpose%?
-
+    
 You can also refresh it later by the tray menu,
 or by the Refresh hotkey (default Ctrl+Shift+5).
 )

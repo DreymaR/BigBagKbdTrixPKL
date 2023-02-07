@@ -47,7 +47,7 @@ pkl_set_tray_menu()
 			Menu, changeLayout, Check, %layName%
 			activeLayName := layName
 		}
-		ico := readLayoutIcons( "Layouts\" . layCode . "\" . getPklInfo( "LayFileName" ) )
+		ico := readLayoutIcons( "Layouts\" . layCode . "\" . getPklInfo( "LayFileName" ) . ".ini" )
 		Menu, changeLayout, Icon, %layName%, % ico.Fil1, % ico.Num1
 	}
 

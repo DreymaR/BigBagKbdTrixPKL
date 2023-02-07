@@ -208,7 +208,6 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	layFiPa := mainDir . "\" . layFiNa  								; Path to "Layout" .ini file(s)
 	mainLay := layFiPa . ".ini" 										; The path of the main layout .ini file
 	mainOvr := layFiPa . "_Override.ini" 								; Layout_Override.ini, if present
-	setPklInfo( "LayFileName"       , layFiNa . ".ini" )
 	setPklInfo( "Dir_LayIni"        , mainDir )
 	setPklInfo( "File_LayIni"       , mainLay )
 ;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
