@@ -117,8 +117,7 @@ for the current layout, or only default/state images?
 		Return
 	hig_callInkscape( HIG ) 									; Call Inkscape with all the SVG files at once now
 	sleepTime := 3 												; Time to wait between each file check, in s
-	Loop, 6
-	{
+	Loop % 6 {
 		if ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
 			Break
 		pklSplash( HIG.Title, "Waiting for images... " . A_Index * sleepTime . " s", 2.5 )

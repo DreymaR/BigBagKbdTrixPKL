@@ -101,7 +101,7 @@ modalTask=8192
 
 option = 0 
 ; Check for each radio button if it is set, looping on the variable names 
-Loop Parse, options, | 
+Loop, Parse, options, | 
 { 
    StringSplit option, A_LoopField, = 
    If (%option1% = 1) 

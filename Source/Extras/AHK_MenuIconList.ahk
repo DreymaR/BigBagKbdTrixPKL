@@ -5,7 +5,7 @@
 ; Author:         Script from online documentation modified by Jack Dunning
 ;                 https://autohotkey.com/docs/commands/ListView.htm#IL
 ; Script Function:
-;	Explore and select icons from any Windows file which embeds icon images (.exe, .dll, etc.)
+;   Explore and select icons from any Windows file which embeds icon images (.exe, .dll, etc.)
 ;
 /*
 This icon selection tool uses the ImageList in the ListView command to create an icon selection box.
@@ -29,16 +29,16 @@ Gui, font, s20
 Gui, Add, ListView, h415 w150 gIconNum, Icon 
 ImageListID := IL_Create(10,1,1)  ; Create an ImageList to hold 10 small icons.
 LV_SetImageList(ImageListID,1)    ; Assign the above ImageList to the current ListView.
-Loop                              ; Load the ImageList with a series of icons from the DLL.
-   {
+Loop {                            ; Load the ImageList with a series of icons from the DLL.
      Count := Image               ; Number of icons found
      Image := IL_Add(ImageListID, file, A_Index)  ; Omits the DLL's path so that it works on Windows 9x too.
 
      If (Image = 0)               ; When we run out of icons
-       Break                     
-   } 
-Loop, %Count%  ; Add rows to the ListView (for demonstration purposes, one for each icon).
+       Break
+   }
+Loop % Count {                    ; Add rows to the ListView (for demonstration purposes, one for each icon).
     LV_Add("Icon" . A_Index, "     " . A_Index)
+}
 LV_ModifyCol("Hdr")  ; Auto-adjust the column widths.
 Gui Show
 Return

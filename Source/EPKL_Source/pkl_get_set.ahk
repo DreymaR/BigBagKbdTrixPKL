@@ -169,14 +169,18 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		cmpStck := getPklInfo( "CmposrStck" )
 		CDKs    := pklIniCSVs( "CoDeKeys"     ) 				; An array of which named Compose keys are CoDeKeys – Compose+DeadKeys.
 		setLayInfo( "CoDeKeys"      , CDKs    ) 				; 
-		lengths := pklIniCSVs( "lengths", "4,3,2,1", cmpFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
-		setLayInfo( "composeLength" , lengths ) 				; Example: [ 4,3,2,1 ]
-		keyArr  := []
-		Loop % Max( lengths* ) {
-			keyArr.Push( "" )   								; Example: [ "", "", "", "" ] if 4 is the max compose length used
+;		seqLens := pklIniCSVs( "seqLens", "4,3,2,1", cmpFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
+;		seqLens = [10,9,8,7,6,5,4,3,2,1]    					; How many previous characters to use as Compose key sequences, prioritized 	; eD WIP: Scratch this.
+;		seqMax  := Max( seqLens* )  							; eD WIP: Use a single sequenceBuffer setting, read directly from the compose file.
+		seqMax  := pklIniRead( "bufSize", 16, cmpFile ) 		; How many previously typed characters to keep track of.
+		seqLens := [], keysArr := []
+		Loop % ix := seqMax {
+			seqLens.Push( ix-- ) 								; Process sequences from the longest to the shortest
+			keysArr.Push( "" )  								; Example: [ "", "", "", "" ] if 4 is the max compose length used
 		}
-		setKeyInfo( "NullKeys", keyArr )
-		setKeyInfo( "LastKeys", keyArr.Clone() ) 				; Used by the Compose/Completion key, via pkl_SendThis()
+		setLayInfo( "composeLength" , seqLens ) 				; Example: [ 4,3,2,1 ] for seqMax = 4.
+		setKeyInfo( "NullKeys", keysArr )
+		setKeyInfo( "LastKeys", keysArr.Clone() )   			; Used by the Compose/Completion key, via pkl_SendThis()
 		initialized := true
 	}
 	
@@ -198,9 +202,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			} else {
 				usedTables[ sct ] := sendBS 						; compTables[ section ] contains the sendBS info for that table section
 			}
-			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
+			For ix, len in seqLens { 								; Look for sequences of length for instance 1–4
 				keyArr%len% := {}   								; These reside in their own arrays, to reduce lookup time etc.
-			} 	; end for lengths
+			} 	; end for seqLens
 			For ix, mapFile in cmpStck { 							; Read from the LayStack+1
 				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 					if ( row == "" )
@@ -227,9 +231,9 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 						keyArr%len%[kyt] := val
 				} 	; end for row
 			} 	; end for mapFile
-			For ix, len in lengths { 								; Look for sequences of length for instance 1–4
+			For ix, len in seqLens { 								; Look for sequences of length for instance 1–4
 				setLayInfo( "comps_" . sct . len, keyArr%len% )
-			} 	; end for lengths
+			} 	; end for seqLens
 		} 	; end for sct in tables
 		cmpKeyTabs[ cmpKey ] := tables  							; For each named key, specify its required tables
 		tmp := ""

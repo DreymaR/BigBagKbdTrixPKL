@@ -56,17 +56,17 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 		pklWarning( "An empty/undefined Compose key was pressed:`n`n©" . compKey )
 		Return
 	}
-	LastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["¤","¤","¤","¤"]
-	lengths     := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
+	lastKeys    := getKeyInfo( "LastKeys" ) 					; Example: ["¤","¤","¤","¤"]
+	seqLengths  := getLayInfo( "composeLength" ) 				; Example: [ 4,3,2,1 ]
 	compTables  := getLayInfo( "composeTables" ) 				; Associative array of whether to send Backspaces or not for any given table
 	CoDeKeys    := getLayInfo( "CoDeKeys" ) 					; Array of which Compose keys are advanced CoDeKeys as well
 	key     := ""
-	For ix, chr in LastKeys { 									; Build a n-char key from LastKeys to match the Compose table
+	For ix, chr in lastKeys {   								; Build a n-char key from LastKeys to match the Compose table
 ;		ch  := SubStr( chr, 2, 1 )
 		chs .= chr
 		kys .= "_U" . formatUnicode( chr )  					; Format n single-char keys as a n×[_U####] hex string (4+ digits).
 ;		debug   .= " , " . chr
-	} 	; end for chr in LastKeys
+	} 	; end for chr in lastKeys
 	uni := false
 	if ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
 		uni := 5
@@ -84,9 +84,9 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 			Return
 		}
 	}
-	For ix, len in lengths { 									; Normally we compose up to 4+ characters, in a specified priority - usually longer first
+	For ix, len in seqLengths { 								; Normally we compose up to 4+ characters, in a specified priority - usually longer first
 		For ix, sct in tables {
-			keyArr  := getLayInfo( "comps_" . sct . len ) 		; Key arrays are marked both by ©-key names and lengths
+			keyArr  := getLayInfo( "comps_" . sct . len )   	; Key arrays are marked both by ©-key names and lengths
 			key     := SubStr( kys
 				, 1 + InStr( kys, "_", , 0, len ) ) 			; The rightmost len chars of kys
 			if ( keyArr.HasKey(key) ) {
@@ -106,7 +106,7 @@ pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key
 				Return  										; If a longer match is found, don't look for shorter ones
 			} 	; end if keyArr
 		} 	; end for sections
-	} 	; end for lengths
+	} 	; end for seqLengths
 	if inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
 		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
 	}
@@ -286,7 +286,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 		SendInput {Text}%theString%
 	} else if ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r  						; Parse by lines, sending Enter key presses between them
-		{ 														; - This is more robust since apps use different breaks
+		{   													; - This is more robust since apps use different breaks
 			if ( A_Index > 1 )
 				SendInput +{Enter}  							; Send Shift+Enter, which should be robust for msg boards.
 				Sleep 50 										; Wait so the Enter gets time to work. Need ~50 ms?

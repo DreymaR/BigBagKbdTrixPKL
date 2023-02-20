@@ -228,6 +228,10 @@ osmTimer3:  												; Timer label for the sticky mods
 	_osmClear( 3 )
 Return
 
+osmTimer4:  												; Timer label for the sticky mods 	; eD WIP: Should we use this, or is 3 enough?
+	_osmClear( 4 )
+Return
+
 _osmClear( osmN ) { 										; Clear a specified sticky mod
 	Critical
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
@@ -239,10 +243,9 @@ _osmClear( osmN ) { 										; Clear a specified sticky mod
 
 _osmClearAll() { 											; Clear all active sticky mods
 	Critical
-	Loop % getPklInfo( "osmMax" )
-	{
-	if ( getPklInfo( "osmKeyN" . A_Index ) != "" )
-		_osmClear( A_Index )
+	Loop % getPklInfo( "osmMax" ) {
+		if ( getPklInfo( "osmKeyN" . A_Index ) != "" )
+			_osmClear( A_Index )
 	}
 ;	( 1 ) ? pklDebug( "OSMs cleared", 0.3 )  ; eD DEBUG  	; eD WIP: Doesn't this get called after all?
 }

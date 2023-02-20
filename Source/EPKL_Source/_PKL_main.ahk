@@ -7,6 +7,15 @@
 
 ;;  ####################### user area #######################
 /*
+WIP 	- Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
+			- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp.
+			- One possibility might be to send keys for simple letters, but that's not robust against underlying layout. There's the ## mappings for that, too.
+TOFIX	- DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?! Is the BaseLayout wrong somehow? Or what?
+TOFIX	- Composing `'TH`/`'DH` isn't supposed to do anything, but it results in `'Þ`/`'Ð` anyway.
+TOFIX	- Definitely something strange when backspacing then hitting Repeat on MonkeyType. But I can't reproduce the problem in a document. Timing-related?
+			- Happens when I space to the next word before correcting? Still not able to reproduce. Is Ctrl+Back involved? That will confuse the buffer!
+			- It will happen when overshooting the buffer's length. Maybe I should just use a longer buffer all the time?
+			- If so, remove the setting concerning which lengths to process; it's clunky anyway! Instead, make it a buffer size setting.
 TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
@@ -24,6 +33,8 @@ WIP 	- Further getWinLayDKs() development
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
 TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
+TOFIX	- pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
+TONEXT	- Try to fix AltGr so we can move beyond AHK v1.1.27 which is old now. Ask at the AHK forums!
 WIP 	- 
 */
 
@@ -31,15 +42,15 @@ WIP 	-
 ;;  eD TOFIX/WIP:
 ;	- WIP: 
 
-;	- WIP: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it, or a setting?
+;	- TODO: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it, or a setting?
 ;		- It's already started in the {Shift OSM} syntax, but not sure that'll work fully with the Ext-mods? They need to be dual-function.
-
-;	- TOFIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
 
 ;	- TODO: The newLID pklJanitor routine doesn't quite work, since the locale gets preloaded on EPKL startup or smth. Need to restart EPKL then? Or just parts?
 
 ;	- TODO: A layout2/3/4 setting in layout files that can define Swish/Flick layers. Allows for instance a Greek layout added as Swish/Flick layers.
-;	- TODO: Lockable modifiers would be nice, especially for SwiSh/FliCK. For instance, RCtrl+SwiSh could lock/unlock SwiSh.
+;	- TODO: Lockable modifiers would be nice, especially for SwiSh/FliCK.
+;		- For instance, RCtrl+SwiSh could lock/unlock SwiSh: Hold RCtrl, then tap SwiSh to lock/unlock.
+;		- There could be a setting for mod-locking pairs? Like this: `SwiSh/RCtrl,LShift/RShift`.
 
 ;	- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
 ;	- WIP: It would be cool to make the Vim Help Sheet for Colemak available as a state image? Could, e.g., have it on state1 and show it whenever Shift is pressed.

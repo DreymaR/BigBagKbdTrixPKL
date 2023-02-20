@@ -576,11 +576,10 @@ _uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override.
 	a_SC    := "`;"
 	ini     := ".ini"
 	ovrFile :=           ovrFile . "_Override"
-	ovrPath := ovrPath . ovrFile    							; The ovrPath is nothing if root; must end with "\" if not.
-	tplFile :=           ovrFile . "_Example"   				; All overrides are at EPKL root 	; eD WIP: This is default for all now! No more if tplFile.
+	ovrPath := ovrPath . ovrFile    							; The ovrPath is nothing if its file is at root; must end with "\" if not.
+	tplFile :=           ovrFile . "_Example"   				; All override templates are now at EPKL root by default, so no need for tplPath here.
 	if not FileExist( ovrPath . ini ) { 						; If there isn't an Override file...
-		if ( tplFile && not revert ) {  						; ...ask whether to generate one from a template.
-;			Return ( 1 ) ? pklDebug( "ovrFile:`n" . ovrFile . "`nOvrPath:`n" . ovrPath, 5 )  ; eD DEBUG
+		if ( not revert ) { 	; ( tplFile && not revert ) { 	; ...ask whether to generate one from a template.
 			if _uiMsg_MakeFile( module, ovrFile, tplFile ) {
 				if not tmpFile := pklFileRead( tplFile . ini ) 	; Try to read the override template
 					Return false
