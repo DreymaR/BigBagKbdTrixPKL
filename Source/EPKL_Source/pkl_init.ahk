@@ -542,7 +542,7 @@ activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 		Suspend
 		Gosub afterSuspend
 	}
-	_pklJanitorLocaleVK( true ) 					; Force the first janitor locale update
+	_pklJanitorLocaleVK( true ) 					; Force the first janitor locale update by calling it with `true`
 ;	Gosub pklJanitorTic 							; Do the first janitor sweep right away
 }	; end fn
 

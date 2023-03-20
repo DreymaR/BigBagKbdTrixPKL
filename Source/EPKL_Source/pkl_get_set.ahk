@@ -276,7 +276,7 @@ getLayStrInfo( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbrevia
 pklGetState() { 														; Get the 0:1:6:7 etc shift state as in Layout.ini and img names
 	state :=  0
 	state +=  1 * getKeyState( "Shift" )
-;	state +=  2 * getKeyState( "Ctrl" ) 								; AltGr registers Ctrl too; may have to get clever here. Ctrl && not Alt?
+;	state +=  2 * getKeyState( "Ctrl" ) 								; AltGr registers Ctrl too since it's LCtrl+RAlt (<^>!); may have to get clever here?
 	state +=  6 * getLayInfo( "LayHasAltGr" ) * AltGrIsPressed()
 	state +=  8 * getKeyInfo( "ModState_SwiSh" )
 	state += 16 * getKeyInfo( "ModState_FliCK" )

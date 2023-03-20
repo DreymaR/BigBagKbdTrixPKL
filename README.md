@@ -35,7 +35,7 @@
 * Some non-BigBag stuff is found in EPKL too, including support for several other layouts.
     - I won't support just any other layout though, as I don't have time and energy to do so.
     - The layouts I have included for EPKL have all seemed interesting and/or promising to me.
-    - Note: This does _not_ include certain layouts such as Workman and Norman.
+    - Note: This does _not_ include certain oversold layouts such as Workman and Norman.
     - I consider those flawed designs for which there are far better options. Really.
     - It does include Dvorak although that layout is dated now, together with some Dvorak mods.
 <br>

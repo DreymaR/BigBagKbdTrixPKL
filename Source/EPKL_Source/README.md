@@ -538,3 +538,7 @@ VERSION HISTORY:
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
 * EPKL v1.?.?: WIP
+	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
+	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now deletes the queue.
+		- This fixes a problem with using the powerstrings for Delete Word, as they used to leave undesired characters in the lastKeys queue.
+	

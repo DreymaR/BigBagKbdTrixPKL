@@ -5,58 +5,63 @@
 ;; ================================================================================================
 ;
 
-;;  ####################### user area #######################
 /*
+;;  ####################### TODO list #######################
+
+;; ================================================================================================
+;;  Recent issues:
+WIP 	- 
+TODO	- 
+TOFIX	- 
+TONEXT	- 
+
+TOFIX	- APT?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
+			- Make a README, link to the GitHub site and implement the layout too, of course.
+
 WIP 	- Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
 			- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp.
-			- One possibility might be to send keys for simple letters, but that's not robust against underlying layout. There's the ## mappings for that, too.
-TOFIX	- DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?! Is the BaseLayout wrong somehow? Or what?
-TOFIX	- Composing `'TH`/`'DH` isn't supposed to do anything, but it results in `'Þ`/`'Ð` anyway.
-TOFIX	- Definitely something strange when backspacing then hitting Repeat on MonkeyType. But I can't reproduce the problem in a document. Timing-related?
-			- Happens when I space to the next word before correcting? Still not able to reproduce. Is Ctrl+Back involved? That will confuse the buffer!
-			- It will happen when overshooting the buffer's length. Maybe I should just use a longer buffer all the time?
-			- If so, remove the setting concerning which lengths to process; it's clunky anyway! Instead, make it a buffer size setting.
-TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
-			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
-			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
+			- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+
+TOFIX	- DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
+			- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
+			- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
+
 TOFIX	- For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
 			- Might using ToUnicodeEx make a difference?
 			- Reverting to listing DKs in the settings sounds like a defeat now...
 			- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
+
 TOFIX	- SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 			- The vmods don't need to be sticky for this to happen.
 			- Are they turned off somewhere on release? That'd account for them working only once.
-WIP 	- Further getWinLayDKs() development
+
+WIP 	- There are many composes with apostrophe; these may cause trouble for the CoDeKey when typing, e.g., `pow'r`. Move all acutes to, e.g., `''r`?
+
+;; ================================================================================================
+;;  eD TOFIX/WIP:
+
+TOFIX	- When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
+			- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
+			- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
+
+TODO	- Further getWinLayDKs() development
 			- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
 			- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
 			- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
 			- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 			- What about pkl_CheckForDKs() in pkl_send.ahk?
+
 TOFIX	- Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
+
 TOFIX	- pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
-TONEXT	- Try to fix AltGr so we can move beyond AHK v1.1.27 which is old now. Ask at the AHK forums!
-WIP 	- 
-*/
 
-;; ================================================================================================
-;;  eD TOFIX/WIP:
-;	- WIP: 
+TOFIX	- System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
 
-;	- TODO: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it, or a setting?
-;		- It's already started in the {Shift OSM} syntax, but not sure that'll work fully with the Ext-mods? They need to be dual-function.
-
-;	- TODO: The newLID pklJanitor routine doesn't quite work, since the locale gets preloaded on EPKL startup or smth. Need to restart EPKL then? Or just parts?
-
-;	- TODO: A layout2/3/4 setting in layout files that can define Swish/Flick layers. Allows for instance a Greek layout added as Swish/Flick layers.
-;	- TODO: Lockable modifiers would be nice, especially for SwiSh/FliCK.
-;		- For instance, RCtrl+SwiSh could lock/unlock SwiSh: Hold RCtrl, then tap SwiSh to lock/unlock.
-;		- There could be a setting for mod-locking pairs? Like this: `SwiSh/RCtrl,LShift/RShift`.
-
-;	- WIP: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
-;	- WIP: It would be cool to make the Vim Help Sheet for Colemak available as a state image? Could, e.g., have it on state1 and show it whenever Shift is pressed.
-;		- Could fix that using my colemak-vim-helpsheet.svg files.
-;		- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
-;		- The smallest text on the help image may not render well at the standard help image resolution?
+WIP 	- For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
+			- Cool idea: Make the Vim Help Sheet for Colemak available as a state image? Have it, e.g., on state1 to show it whenever Shift is pressed.
+			- Could fix that using my colemak-vim-helpsheet.svg files.
+			- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
+			- The smallest text on the help image may not render well at the standard help image resolution.
 
 ;	- TOFIX: The findWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
 ;		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
@@ -95,13 +100,7 @@ WIP 	-
 ;		- Maybe put ’ on the iso key instead of double acute?
 ;		- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
 
-;	- TODO: More GUI settings?
-;		- A Hotkeys settings panel?
-;		- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
-
 ;	- TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
-
-;	- TODO: Make a lock variant of modifiers. Which ones?
 
 ;	- WIP: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
 ;		- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
@@ -119,12 +118,15 @@ WIP 	-
 ;		- Make a separate .ini file section for it. Then read in the whole section and process it?
 
 ;	- TOFIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
+
 ;	- WIP: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
 ;	- WIP: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
 ;	- WIP: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
 ;		- May not work with WinSet, Transparent; I'm using that with the Help Images.
-;	- TOFIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬`. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` work. What gives?
+
+;	- TOFIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬` {DK_/,DK_=,g}. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` {DK_/,DK_=,v} work. What gives?
 ;		- Also iota/upsilon with dialytika and tonos don't work...?
+
 ;	- TOFIX: When selecting downwards with Extend and then using Extend-copy, sometimes an 'EXT' character (?) is made instead.
 
 ;	- TOFIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
@@ -143,15 +145,6 @@ WIP 	-
 ;	- WIP: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
 ;	- WIP: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
 ;		- Become a Great Composer!
-
-;	- TODO: Can we have a separate user working dir, so users have their settings elsewhere? Very nice idea!
-;		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
-;		- Make and look for overrides in the working dir, and defaults in the script dir.
-;		- Add a syntax or setting that lets the user specify using a layout dir (and BaseLayout?) in the working dir. Or just look for it there first, if different?
-;			- `User\` or `~\` could point to working dir, and `.\` continue to point to script dir? Need to make all file-reading operations aware of this!?
-;		- Might use a switch of working dir for some operations? Or, should things like the HIG just assume working dir and anyone wishing to use it must adjust?
-;			- This would make sense, in letting a user set individual settings in their working dir and getting images there too.
-;		- By default, the working dir can be Data which is the right place for it in the PortableApps standard (for backup).
 
 ;	- WIP: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
 ;		- This would allow the use of all @ codes in all LayStack files
@@ -211,6 +204,48 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TONEXT:
+
+TONEXT	- User working dir: All user files can be under a specified user root dir.
+			- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
+			- Make a userDir setting in Settings with `Data` as its default value, and read it in during early pkl_init.
+				- The Settings_Override specifying where to find user root would have to be at program root.
+					- Or? Could use Data as default? Then read it twice, to see if Data holds a Settings_Override. The Data dir could also hold templates?
+			- Any file read should look first under user root, and then if not found there program root.
+				- Keep tabs in a global array after first access attempt, to avoid looking for files so much?
+			- Keep Layout_Override.ini files in their correct layout folder paths but under user root then.
+			- Make and look for overrides in the working dir, and defaults in the script dir only?
+			- Can also have overriding help images this way. Make the HIG able to generate these under user root?
+				- This would make sense, letting a user set individual settings in their working dir and getting images there too.
+			- By default, the working dir root can be Data which is the right place for it in the PortableApps standard (for backup).
+			- Special syntax? `User\` or `~\` could point to working dir, and `.\` continue to point to script dir? Make all file-reading operations aware of this!?
+			- Might use a switch of working dir for some operations? Or, should things like the HIG just assume working dir and anyone wishing to use it must adjust?
+				- For users having their EPKL install in a non-writable area, the HIG would need to use the working dir as its work area anyway.
+
+TODO	- Modifier lock. For which modifiers?
+			- Extend lock? Maybe too confusing. But for, say, protracted numeric entry with Ext2 it could be useful?
+				- E.g., LShift+Mod2+Ext locks Ext2? Or, have a mapping within the Extend layer that locks it? And one that unlocks all Extend states.
+			- Make a more generic lockable modifier type, for SwiSh/FliCK etc (but hardly for Ctrl-lock?).
+				- For instance, RCtrl+SwiSh could lock/unlock SwiSh: Hold RCtrl, then tap SwiSh to lock/unlock.
+				- There could be a setting for mod-locking pairs? Like this: `SwiSh/RCtrl,LShift/RShift`.
+			- Could be a "lock the next modifier" mapping. Especially if we could make that dual-function on, say, the LCtrl key with a ToM timer?
+				- If, say, LShift is a mod-lock ToM, then it shouldn't be able to lock itself. Could it be both a sticky Shift and a mod-lock?
+
+TODO	- Layout preview image for the layout chooser. Could just change the normal help image temporarily?
+			- Show the help image of the chosen layout, with the right background. Allow any state image by pressing modifiers.
+
+TODO	- Try to fix AltGr so we can move beyond AHK v1.1.27 which is old now. Ask at the AHK forums!
+
+;	- TODO: Like SteveP's Seniply has it, make Ext-mods Sticky by default? Allow a Parse-Entry syntax for it, or a setting?
+;		- It's already started in the {Shift OSM} syntax, but not sure that'll work fully with the Ext-mods? They need to be dual-function.
+
+;	- TODO: The newLID pklJanitor routine doesn't quite work, since the locale gets preloaded on EPKL startup or smth. Need to restart EPKL then? Or just re-read parts?
+
+;	- TODO: A layout2/3/4 setting in layout files that can define Swish/Flick layers. Allows for instance a Greek layout added as Swish/Flick layers.
+
+;	- TODO: More GUI settings?
+;		- A Hotkeys settings panel?
+;		- Menu language choice (on the Settings tab), with a dropdown choice of the actual language files present?
+
 ;	- TODO: If we get Timerless EPKL working, maybe ToM can have better timing at last? Enabling exciting projects like HomeRowMods and a Shift+CoDeKey ToM.
 ;	- TODO: Once ToUnicode() and DetectDK() are working, it should be possible to generate help images from VK/SC layouts too?!
 ;	- TODO: SwiSh/FliCK should be the ideal way of implementing mirrored typing?
@@ -229,8 +264,6 @@ WIP 	-
 ;		- Maybe make the submit routine callable with arrays so it loops before asking for a restart?
 ;	- TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
 ;	- TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
-;	- TODO: UI Idea: Show the state0 (and state3 if available) image of the chosen layout, in the picker?! Preferably with the right background. 
-;		- Possible to extract the pic from pkl_gui_image?
 ;	- TODO: Personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
 ;	- TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
 ;	- TODO: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
@@ -249,6 +282,7 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD TODO:
+
 ;	- TODO: Use the off-Space thumb key as a Shift/CoDeKey ToM!
 ;			- Preserves SteveP's thumb Shift for compact boards, while allowing the fancy CoDeKey shift combos too.
 ;			- It's a sweet idea! But again, it requires better ToM timing than EPKL can currently deliver. So it'll have to wait, for now...
@@ -327,6 +361,7 @@ WIP 	-
 
 ;; ================================================================================================
 ;;  eD ONHOLD:
+
 ;	- Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
 ;	- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
 ;		- Issue: With Sticky Shift, the 2nd state mapping is sent shifted which is wrong if it was mapped to be something unshifted. Normal Shift does not.
@@ -348,15 +383,18 @@ WIP 	-
 ;	- Allow escaped semicolons (`;) in iniRead?
 ;	- Remove the Layouts submenu? Make it optional by .ini?
 ;	- Greek polytonic accents? U1F00-1FFE for circumflex(perispomeni), grave(varia), macron, breve. Not in all fonts! Don't use oxia here, as it's equivalent to tonos?
-;	- Extend lock? E.g., LShift+Mod2+Ext locks Ext2. Maybe too confusing. But for, say, protracted numeric entry it could be useful?
 ;	- Some kaomoji have non-rendering glyphs, particularly eyes. Kawaii (Messenger), Joy face, Donger (Discord on phone). Just document and leave it at that.
 ;	- Go back on the Paste Extend key vs Ext1/2? It's ugly and a bit illogical since the layers are otherwise positional. But I get confused using Ext+D for Ctrl+V.
 ;	- Allow assigning several keys as Extend Modifier?
 ;	- An EPKL sample Layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
 ;	- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
 
+;;  ####################### TODO done #######################
+*/
 
-;;  ####################### main      #######################
+
+;;  ####################### main code #######################
+
 #NoEnv
 #Persistent
 #NoTrayIcon
@@ -553,16 +591,17 @@ Return
 } debug5() {
 	getWinInfo() 										; Show the active window's title/process(exe)/class             (EPKL)
 } debug6() {
-;	getWinLayDKs()  									; eD WIP: Improved WinLayDK detection
-;	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 1 )  ; eD DEBUG
 	pklDebugCustomRoutine() 							; eD DEBUG – usually: Show OS & EPKL VK codes for the OEM keys
-;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
-;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
 } debug7() {
 	detectCurrentWinLayDeadKeys()   					; The old PKL DeadKey detection routine                         (hidden)
+} debug8() {
+	getWinLayDKs()  									; eD WIP: Improved WinLayDK detection
+	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 2 )  ; eD DEBUG
+;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
+;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
 } 	; end debug#
 
-;;  ####################### functions #######################
+;;  ####################### includes  #######################
 
 #Include pkl_init.ahk
 #Include pkl_gui_image.ahk      	; pkl_gui was too long; it's been split into help image and menu/about parts
@@ -577,19 +616,6 @@ Return
 #Include pkl_import.ahk         	; Import module, converting MSKLC layouts to EPKL format, and other import/conversion
 #Include pkl_make_img.ahk       	; Help image generator, calling Inkscape with an SVG template
 
-;;  ##################### modules (old) #####################
-/*
-#Include ext_Uni2Hex.ahk        	; HexUC by Laszlo Hars  								- moved into pkl_init.ahk
-#Include ext_MenuIcons.ahk      	; MI.ahk (http://www.autohotkey.com/forum/viewtopic.php?t=21991) - obviated
-#Include ext_SendUni.ahk        	; SendU by Farkas et al 								- obviated by Unicode AHK v1.1
-#Include ext_HashTable.ahk      	; Merged w/ CoHelper    								- obviated by AHK v1.1 associative arrays
-#Include getVKeyCodeFromName.ahk 	; (was VirtualKeyCodeFromName)  						- replaced w/ read from tables .ini file
-#Include getLangStrFromDigits.ahk 	; http://www.autohotkey.com/docs/misc/Languages.htm 	- replaced w/ .ini
-#Include ext_IniRead.ahk        	; http://www.autohotkey.net/~majkinetor/Ini/Ini.ahk 	- replaced with pkl_iniRead
-#Include getDKsOfOSActiveLay.ahk 	; Was getDeadKeysOfSystemsActiveLayout.ahk  			- replaced w/ read from tables .ini file
-#Include A_OSVersion.ahk        	; Moved into this file  								- removed as OSVersion <= VISTA are unsupported
-#Include getGlobal.ahk          	; Moved into pkl_getset.ahk 							- removed as it was only used for one variable
-#Include iniReadBoolean.ahk     	;   													- moved into pkl_iniRead and tweaked
-#Include detectDKsInCurrentLay.ahk 	; Was detectDeadKeysInCurrentLayout.ahk 				- moved into pkl_deadkey.ahk
-#Include pkl_locale.ahk         	;   													- moved into pkl_get_set.ahk
-*/
+;;  ####################### functions #######################
+
+;;  Functions and further subroutines are defined in the included files.

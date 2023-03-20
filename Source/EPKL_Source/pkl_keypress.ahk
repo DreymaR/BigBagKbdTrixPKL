@@ -23,10 +23,16 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 			SC  := GetKeySC(vk_HK) | 0x100  					; [149 ,151 ,14F ,147 ,14B ,148 ,14D ,150 ,152 ,153 ] are the normal SCs for the keys
 			vk_HK .= Format( "SC{:03X}", SC )   				; Send {vk##sc###} ensures that the normal key version is sent
 		} 	; end if capHK == VK
-		if        InStr( "VK08SC00E", vk_HK ) { 				; Backspace was pressed, so...
-			lastKeys( "pop1" )  								; ...remove the last entry in the Composer LastKeys queue
-		} else if InStr( "VK0DSC01C", vk_HK ) { 				; Enter     was pressed, so...
-			lastKeys( "null" )  								; ...delete the Composer LastKeys queue 	; eD WIP: Any others?
+		delQStr := "VK1B-SC001" . "VK0D-SC01C"  				; Keys that wipe the LastKeys queue: Esc(1B), Enter(0D), 
+				.  "VK2E-SC153" . "VK09-SC00F"  				;                                    Del(2E), Tab(09; not usually mapped)   	; eD WIP: Some Extend mappings too?
+		if        InStr( "VK08-SC00E", vk_HK ) { 				; Backspace was pressed, so...
+			if getKeyState( "Ctrl" ) {
+				lastKeys( "null" )  							; ...unless it was Ctrl+Back,...
+			} else {
+				lastKeys( "pop1" )  							; ...remove the last entry in the Composer LastKeys queue
+			}
+		} else if InStr( delQStr    , vk_HK ) { 				; SpecialKey was pressed, so...
+			lastKeys( "null" )  								; ...delete the Composer LastKeys queue.
 		} else {
 			_composeVK( HKey, vk_HK )   						; If the output is a single, printable character, add it to the Compose queue
 		}
