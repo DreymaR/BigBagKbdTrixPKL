@@ -123,7 +123,7 @@ ISRT/IndyRad noQU : 1.625   0.024   0.010   1.659   0.777     -0.005  -0.023  -0
 - In this analysis, simply swapping V and K and nothing else outperforms everything except ISRT!
     - In effect though, it creates an awkward non-SFB CK bigram which the analyzer doesn't pick up on.
     - VE/EV are also 3× more common than KE/EK and not too comfortable without alt-fingering.
-- For more analysis and comparison, see the [Test folder README][TestRM].
+- For more analysis and comparison, see the [WIP folder README][TestRM].
 <br><br>
 
 
@@ -141,7 +141,7 @@ I've been analyzing Nyfee's and other mods with the [Colemakmods analyzer][CM-An
 
 The ColemaQ mod consists of 3–4 simple key swaps from Colemak-DH and these aren't directly connected so it's easy to discuss and analyze them separately to gain some idea of their individual effects.
 
-I had a big A-ha! moment when I tried the V-K swap in ColemaQ (the only part of it that the analyzer actually liked, thus it made sense to test it out) and it created at least as many problems as it solved, given that I view the KN SFB as a zero-problem because I find it extremely easy to alt-finger. I also alt-finger LK easily enough, so I didn't find the V-K swap useful in sum since it creates other issues in turn that the analyzer didn't pick up on. I noticed the VE and CK bigrams, which aren't same-finger bigrams nor weak-finger near-bigrams but involve stretches that felt unpleasant to me from middle to index fingers. Their Colemak-DH counterparts, VK and CE, are less frequent.
+I had a big A-ha! moment when I tried the [Cmk-DH V-K swap][CmmV-K] from ColemaQ (the only part of it that the analyzer actually liked, thus it made sense to test it out) and it created at least as many problems as it solved, given that I view the KN SFB as a zero-problem because I find it extremely easy to alt-finger. I also alt-finger LK easily enough, so I didn't find the V-K swap useful in sum since it creates other issues in turn that the analyzer didn't pick up on. I noticed the VE and CK bigrams, which aren't same-finger bigrams nor weak-finger near-bigrams but involve stretches that felt unpleasant to me from middle to index fingers. Their Colemak-DH counterparts, VK and CE, are less frequent.
 
 The Q; swap seems entirely subjective to me at this point. I know its fans find it good somehow. Neither the analyzer nor I see any point in it, beyond a very minute reduction in SFB%. It's said that the QU roll is nice, but the QU bigram isn't at all bad without the swap and it isn't common either.
 
@@ -160,4 +160,5 @@ However, we've had people advertising this and similar mods as "objectively bett
 [CmQwww]: https://colemaq.github.io/ (ColemaQ web page)
 [CM-Ana]: http://colemakmods.github.io/mod-dh/analyze.html (Colemakmods Layout Analysis Tool)
 [NotGte]: https://notgate.github.io/layout/ (NotGate's layout page, home of the ISRT layout)
-[TestRM]: ../README.md (EPKL _Test folder README)
+[TestRM]: /Layouts/_WIP/README.md       (EPKL _WIP folder README)
+[CmmV-K]: /Layouts/_WIP/Cmk-eD_Kurl/    (EPKL Colemak-"Kurl" mod)
