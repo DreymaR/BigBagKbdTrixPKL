@@ -94,7 +94,7 @@ The Boo Layout
 
 
 [BB_Erg]: https://dreymar.colemak.org/ergo-mods.html (DreymaR's Big Bag of Tricks on ergo mods)
-[BB_AWi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (DreymaR's Big Bag of Tricks on Angle+Wide ergo mods)
-[BB_CAW]: https://dreymar.colemak.org/ergo-mods.html#CurlDH (DreymaR's Big Bag of Tricks on the Curl-DH ergo mod)
+[BB_AWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's Big Bag of Tricks on Angle+Wide ergo mods)
+[BB_CAW]: https://dreymar.colemak.org/ergo-mods.html#curl-dh (DreymaR's Big Bag of Tricks on the Curl-DH ergo mod)
 [PrgDvk]: https://www.kaufmann.no/roland/dvorak/ (Programmer Dvorak, by Roland Kaufmann)
 [BooLay]: ../Boo/ (The Boo layout in EPKL)

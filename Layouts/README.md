@@ -93,6 +93,7 @@ Entries are any-whitespace delimited.
 Layout variant tutorial
 -----------------------
 You can make your own version of, say, a locale layout variant – for instance, using an ergonomic mod combo that isn't provided out-of-the-box:
+
 * Determine which keyboard type (ISO/ANS), ergo mod and if applicable, existing locale variant you want to start from.
 * Determine whether you want to just move keys around by VirtualKey/ScanCode mappings or map all their shift states like Colemak-eD does.
 * Copy/Paste a promising layout folder and rename the result to what you want.
@@ -135,6 +136,19 @@ You can make your own version of, say, a locale layout variant – for instance,
     - To see the "Create help images…" menu option, `advancedMode` must be on in [EPKL_Settings][PklIni].
     - The HIG will make images for the currently active layout.
     - I recommend making state images only at first, since a full set of about 80 dead key images takes a _long_ time!
+<br><br>
+
+Layout locale naming
+--------------------
+I try to keep to the same locale naming standard as Linux X.Org (xkb-data). That is, the ISO letter codes for countries, languages and scripts.
+* Country and language codes can be seen in the Variant selections, primarily prepackaged for the Colemak main layout. 
+* Codes for scripts (such as Cyrillic or Hebrew) are used internally. Note that I use `Kyr` instead of `Cyrl` for Kyrillic script.
+* For most scripts, the 3-letter language code is used instead (Gre for Grek, Heb for Hebr etc), as per X.Org and Unicode tradition.
+
+The relevant ISO codes can be found at the following addresses:
+* 2-letter ISO codes - Country:  http://www.iso.org/iso/home/standards/country_codes/iso-3166-1_decoding_table.htm
+* 3-letter ISO codes - Language: http://www.loc.gov/standards/iso639-2/php/code_list.php
+* 4-letter ISO codes - Script:   http://www.unicode.org/iso15924/iso15924-codes.html
 <br>
 
 

@@ -15,18 +15,36 @@ WIPs:
 NEXT: 
 TODO: 
 
-2FIX: APT?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
-		- Make a README, link to the GitHub site and implement the layout too, of course.
+2FIX: APT shows?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
+		- The main layout detection doesn't filter out anything, no. It's just the variants etc that look for a Layout.ini file. Is that okay?
+			- Could implement a check at the end of UIselLay as to whether all settings (or just layType?) turn out empty, and if they do then remove the main layout in question?
+WIPs: APT & Co?
+			- Make a README, link to the GitHub site and implement the APTv3 layout too, of course.
+			- Unless... Is APTv3 a stable candidate anymore? Word has it, it's superseded by APTv4 which is still unstable.
+			- We already have Semimak-JQ and Canary, so consider adding the other "best candidates"?
+				- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
+				- APTv3, Nerps, Sturdy and Engram(?) look good in this comparison.
+			- Oxey for instance has several candidates, but it'd make sense to focus on one.
+
+WIPs: Improve GUI responsiveness by running some of its routines at init time.
+		- GUI startup is slow. Where are the bottlenecks? Try to tic-toc GUI startup?
+		- Heavy startup routines could be added to the setUIGlobals section, which is indeed run at init time.
+		- Could also make GUI startup more responsive by pre-initializing the GUI at init. As it is now, it's made from scratch each time.
+		- Candidate: Layout selection. Premake the list of eligible layouts (and LayType? KbdType? Variants? Mods?) beforehand.
 
 WIPs: Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
-		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp.
+		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
 		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
 
 2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
 		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
 		- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
+		- Call getWinLayDKs() (in pkl_deadkey) more robustly? No, it's the test for "śķιᶈForDK" in pkl_keypress that matters.
+			- But keyPressed( HKey ) in pkl_keypress handles eD2VK and VK keys the same? So why then is the DK ruined by one and not the other?
 
 2FIX: For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
+		- Both are missing their state 6 dead key, acute and tilde respectively. There are no other dead keys in the layout. The Cmk-eD layout gets state 6 registered.
 		- Might using ToUnicodeEx make a difference?
 		- Reverting to listing DKs in the settings sounds like a defeat now...
 		- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.

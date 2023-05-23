@@ -518,7 +518,7 @@ _Øystein "DreymaR" Bech-Aase_
 [CmkOrg]: https://www.colemak.org (The Colemak Community site)
 [orgBBT]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
-[BBTawi]: https://dreymar.colemak.org/ergo-mods.html#AngleWide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
+[BBTawi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
 [BBT_eD]: https://dreymar.colemak.org/layers-colemaked.html (about Colemak-eD layers, in DreymaR's Big Bag of Keyboard Tricks)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
