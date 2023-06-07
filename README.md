@@ -493,6 +493,12 @@ KNOWN ISSUES:
 * Virus programs may be skittish about compiling AHK code. You may get a `Threats found` notification, and your `epkl.exe` file doesn't get made.
     - The `ahk2exe` temp file will be interpreted as a Trojan. Even allowing the "Threat" doesn't always help, as compilation already failed.
     - Turn off `Windows Security → Virus & threat protection → Virus & threat protection settings → Real-time protection` temporarily to remedy this.
+* The AHK KeyHistory logs your last key presses (and what EPKL sends as a result), keeping them in memory unencrypted. This may feel unsafe to some.
+    - AHK KeyHistory is on by default, even if you've hidden it from the menu (by turning off Advanced Mode) and disabled its hotkey shortcut.
+    - To most users, the hypothetical risk of something devious digging into EPKL's memory to fish out your password from this log won't be a problem?
+    - To many users, the benefits of seeing which keys you just typed and what EPKL produced from it should outweigh any such concerns in my opinion.
+    - If you do wish to disable KeyHistory, however, find the `#KeyHistory` line in [`_PKL_Main.ahk`][SrcPMn] and set it to `0`. Then recompile EPKL.
+    - For more info about this topic, see [EPKL issue #63](https://github.com/DreymaR/BigBagKbdTrixPKL/issues/63) here on GitHub.
 <br>
 
 DONE/TODO:
@@ -547,3 +553,4 @@ _Øystein "DreymaR" Bech-Aase_
 [MapIni]: ./Files/_eD_Remap.ini (EPKL Remap file)
 [DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)
+[SrcPMn]: ./Source/EPKL_Source/_PKL_main.ahk

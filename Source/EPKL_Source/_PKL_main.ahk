@@ -15,6 +15,29 @@ WIPs:
 NEXT: 
 TODO: 
 
+WIPs: Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
+		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
+		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+		- A custom Send function could also have escape syntax for sneaky special syntax such as sending a "sleep()", that I've sometimes wanted/needed.
+
+2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
+		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
+		- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
+		- Call getWinLayDKs() (in pkl_deadkey) more robustly? No, it's the test for "śķιᶈForDK" in pkl_keypress that matters.
+			- But keyPressed( HKey ) in pkl_keypress handles eD2VK and VK keys the same? So why then is the DK ruined by one and not the other?
+
+2FIX: For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
+		- Both are missing their state 6 dead key, acute and tilde respectively. There are no other dead keys in the layout. The Cmk-eD layout gets state 6 registered.
+		- Might using ToUnicodeEx make a difference?
+		- Reverting to listing DKs in the settings sounds like a defeat now...
+		- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
+
+2FIX: PowerString name capitalization?
+		- Composing, say, `say'pkl` and `say'Pkl` both output the ¶saypkl PowerString. Case should matter.
+		- Checked whether a ¶sayPkl entry on the former sequence would work; it doesn't?
+		- This may be another case of needing to make PklIniRead generally case sensitive, as with DKs?!
+
 2FIX: APT shows?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
 		- The main layout detection doesn't filter out anything, no. It's just the variants etc that look for a Layout.ini file. Is that okay?
 			- Could implement a check at the end of UIselLay as to whether all settings (or just layType?) turn out empty, and if they do then remove the main layout in question?
@@ -32,22 +55,9 @@ WIPs: Improve GUI responsiveness by running some of its routines at init time.
 		- Could also make GUI startup more responsive by pre-initializing the GUI at init. As it is now, it's made from scratch each time.
 		- Candidate: Layout selection. Premake the list of eligible layouts (and LayType? KbdType? Variants? Mods?) beforehand.
 
-WIPs: Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
-		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
-		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
-		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
-
-2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
-		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
-		- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
-		- Call getWinLayDKs() (in pkl_deadkey) more robustly? No, it's the test for "śķιᶈForDK" in pkl_keypress that matters.
-			- But keyPressed( HKey ) in pkl_keypress handles eD2VK and VK keys the same? So why then is the DK ruined by one and not the other?
-
-2FIX: For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
-		- Both are missing their state 6 dead key, acute and tilde respectively. There are no other dead keys in the layout. The Cmk-eD layout gets state 6 registered.
-		- Might using ToUnicodeEx make a difference?
-		- Reverting to listing DKs in the settings sounds like a defeat now...
-		- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
+2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
+		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
+		- Repeat can compose from other composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
 
 2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 		- The vmods don't need to be sticky for this to happen.
@@ -422,6 +432,7 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 #MaxHotkeysPerInterval  300
 #MaxThreads             32
 #MaxMem                 128 								; Default 64 Mb. We need more than that for HIG image generation in its search-n-replace loop.
+#KeyHistory             24  								; NOTE: If you're concerned about the security risk of the AutoHotKey KeyHistory log, set this to 0 and recompile.
 
 SendMode Event
 SetKeyDelay,    -1  										; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
