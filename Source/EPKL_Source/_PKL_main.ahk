@@ -15,7 +15,7 @@ WIPs:
 NEXT: 
 TODO: 
 
-WIPs: Maybe I can emulate AHK Send so it doesn't send KeyUp even for state-mapped layouts?!?
+WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
 		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
 		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
