@@ -541,4 +541,6 @@ VERSION HISTORY:
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
 	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now deletes the queue.
 		- This fixes a problem with using the powerstrings for Delete Word, as they used to leave undesired characters in the lastKeys queue.
-	
+	- ToM mappings required a VK code before the slash but an AHK modifier name after. Now, you can use any modifier alias (VK or KLM name).
+		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
+		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64

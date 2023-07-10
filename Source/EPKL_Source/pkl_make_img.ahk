@@ -308,9 +308,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 ;			endStr  := SubStr( tempImg, psEo )  				; The file-string after the CO entry
 			tempImg := StrReplace( tempImg, fsDf . midStr . CO
 										  , fsSz . midStr . chr,, 1 )   	; It all comes together again.
-		} 	; end For chr
+		}	; end For chr
 ;;		tmp := ( aChr ) ? tmp . "`n" . CO . " - " . fsSz . ": '" . aChr . "'" : tmp
-	} 	; end For CO,SC in PngDic
+	}	; end For CO,SC in PngDic
 ;;		( 1 ) ? pklDebug( "" . tmp, 30 )  ; eD DEBUG
 	if ( HIG.Debug >= 3 )   	; eD DEBUG: Don't make files
 		Return

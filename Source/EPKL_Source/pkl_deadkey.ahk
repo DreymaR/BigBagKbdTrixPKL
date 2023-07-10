@@ -135,7 +135,7 @@ getWinLayDKs() {    													; Detect all DeadKeys of the active Windows lay
 			if ( DK == -1 ) ;{
 				dkS := dkS . ":" . ShSt
 ;			( SC == 0x003 && ShSt == 6 ) ? pklDebug( "SC/VK/ShSt: " . SC . "/" . VK . "/" . ShSt . "`nDK: " . DK . "`ndkS: " . dkS . "`nchr: [" . chr . "]", 3 )  ; eD DEBUG
-		} 	; end For states
+		}	; end For states
 		if ( dkS != "" ) {
 			sSC := Format("SC{:03X}",SC)    							; Reformat SC to scMap's "SC###" notation
 			mSC := scMap.HasKey(sSC) ? scMap[sSC] : sSC 				; Use the "SC###" string as key

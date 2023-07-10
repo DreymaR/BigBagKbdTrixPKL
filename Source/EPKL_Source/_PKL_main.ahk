@@ -19,7 +19,6 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
 		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
 		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
-		- A custom Send function could also have escape syntax for sneaky special syntax such as sending a "sleep()", that I've sometimes wanted/needed.
 
 2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
 		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
@@ -37,6 +36,7 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- Composing, say, `say'pkl` and `say'Pkl` both output the ¶saypkl PowerString. Case should matter.
 		- Checked whether a ¶sayPkl entry on the former sequence would work; it doesn't?
 		- This may be another case of needing to make PklIniRead generally case sensitive, as with DKs?!
+		- Only Composer respects case now, since it uses pklIniSect()?
 
 2FIX: APT shows?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
 		- The main layout detection doesn't filter out anything, no. It's just the variants etc that look for a Layout.ini file. Is that okay?
@@ -62,6 +62,10 @@ WIPs: Improve GUI responsiveness by running some of its routines at init time.
 2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 		- The vmods don't need to be sticky for this to happen.
 		- Are they turned off somewhere on release? That'd account for them working only once.
+
+TODO: Custom Send syntax!
+		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
+		- It could even have an escape for running other programs, or any command really, specified in .ini file entries.
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:

@@ -613,18 +613,25 @@ _mapKLM( ByRef key, type ) {
 }
 
 _checkModName( key ) {  							; Mod keys need only the first letters of their name
+	static modAlias := {  "Shift" : "SHF|SH|SHIFT"
+						, "Ctrl"  : "CTL|CT|CONTROL"
+						, "Alt"   : "ALT|AL|MENU"
+						, "Win"   : "WIN|WI|WIN" } 	; Translate VK names to AHK mod names
 	static modNames := [ "LShift", "RShift", "CapsLock", "Extend", "SGCaps"
 						, "LCtrl", "RCtrl", "LAlt", "RAlt", "LWin", "RWin"
-						, "SwiSh", "FliCK" ] 		; eD WIP: SwiSh (SGCaps) modifier, FliCK (FlipCapKey)
-	
+						, "SwiSh", "FliCK" ] 		; SwiSh (SGCaps) & FliCK (FlipCapKey) special mods
+	For modName, aliases in modAlias {
+		if RegExMatch( key, "i)^(?:vc)?([LR]?)(?:" . aliases . ")$", mat )
+			key := mat1 . modName   				; Is key an alias for a mod name (e.g., `LCONTROL`, `RWIN` or `vcLSH`)?
+	}	; end For modName (aliases)
 	For ix, modName in modNames {
 		if ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?
 			key := modName
 	}	; end For modName
 	if ( getLayInfo( "LayHasAltGr" ) && key == "RAlt" ) {
-		Return "AltGr" 								; RAlt as AltGr
+		Return "AltGr"  							; RAlt as AltGr
 	} else {
-		Return key 									; AHK modifier names, e.g., "RS" or "RSh" -> "RShift"
+		Return key  								; AHK modifier names, e.g., "RS" or "RSh" -> "RShift"
 	}
 }
 
