@@ -544,3 +544,6 @@ VERSION HISTORY:
 	- ToM mappings required a VK code before the slash but an AHK modifier name after. Now, you can use any modifier alias (VK or KLM name).
 		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64
+	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
+		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
+		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.

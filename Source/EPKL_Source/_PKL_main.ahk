@@ -38,15 +38,12 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- This may be another case of needing to make PklIniRead generally case sensitive, as with DKs?!
 		- Only Composer respects case now, since it uses pklIniSect()?
 
-2FIX: APT shows?!? It shouldn't show up in the layout selector since it holds no layout.ini file, but it does.
-		- The main layout detection doesn't filter out anything, no. It's just the variants etc that look for a Layout.ini file. Is that okay?
-			- Could implement a check at the end of UIselLay as to whether all settings (or just layType?) turn out empty, and if they do then remove the main layout in question?
 WIPs: APT & Co?
 			- Make a README, link to the GitHub site and implement the APTv3 layout too, of course.
 			- Unless... Is APTv3 a stable candidate anymore? Word has it, it's superseded by APTv4 which is still unstable.
 			- We already have Semimak-JQ and Canary, so consider adding the other "best candidates"?
 				- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
-				- APTv3, Nerps, Sturdy and Engram(?) look good in this comparison.
+				- APTv3, Nerps and Sturdy look good in that comparison. Possibly also Magic Sturdy, which EPKL could do.
 			- Oxey for instance has several candidates, but it'd make sense to focus on one.
 
 WIPs: Improve GUI responsiveness by running some of its routines at init time.
@@ -69,6 +66,11 @@ TODO: Custom Send syntax!
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
+
+2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
+		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
+		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
+		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
 
 2FIX: When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
@@ -206,6 +208,10 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 		- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 
+2FIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
+		- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
+		- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
+		- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
 2FIX: There are many composes with apostrophe; these may cause trouble for the CoDeKey when typing, e.g., `pow'r`. Move all acutes to, e.g., `''r`?
 2FIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
 		- It still doesn't work as it should, but the problem is hard to reproduce.
@@ -215,10 +221,6 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
 FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
 		- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
-2FIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
-		- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
-		- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
-		- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
 2FIX: Setting a hotkey to, e.g., <^<+6 (LeftCtrl & LeftShift & 6) doesn't work.
 2FIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
 		- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.

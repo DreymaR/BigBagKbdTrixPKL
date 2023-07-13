@@ -502,14 +502,15 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK img state suffix. Defaults to old ""/"sh"?
 	
 	;; ================================================================================================
-	;;  Read and set layout on/off icons and the tray menu
+	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )
 	setLayInfo( "Ico_On_File", ico.Fil1 )
 	setLayInfo( "Ico_On_Num_", ico.Num1 )
 	setLayInfo( "Ico_OffFile", ico.Fil2 )
 	setLayInfo( "Ico_OffNum_", ico.Num2 )
-	pkl_set_tray_menu()
+	pkl_set_tray_menu() 							; Initialize the Tray menu
+	init_Settings_UI()  							; Initialize the Settings GUI
 }	; end fn initLayIni()
 
 activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
