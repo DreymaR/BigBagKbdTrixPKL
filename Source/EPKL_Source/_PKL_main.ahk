@@ -15,6 +15,32 @@ WIPs:
 NEXT: 
 TODO: 
 
+2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
+		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
+		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65
+		- When I tried setting a high ToM Timer duration to test it, I couldn't activate Ext2 before the timer expired.
+			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
+			- It is as it should be, I guess?
+
+2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
+		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
+		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
+		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
+		- Could the mod-up sent on Extend key release be involved?
+
+WIPs: APT & Co?
+			- Make a README, link to the GitHub site and implement the APTv3 layout too, of course.
+			- Unless... Is APTv3 a stable candidate anymore? Word has it, it's superseded by APTv4 which is still unstable.
+			- We already have Semimak-JQ and Canary, so consider adding the other "best candidates"?
+				- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
+				- APTv3, Nerps and Sturdy look good in that comparison. Possibly also Magic Sturdy, which EPKL could do.
+			- Oxey for instance has several candidates, but it'd make sense to focus on one.
+
+WIPs: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
+		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
+		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
+		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
+
 WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
 		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
@@ -38,20 +64,6 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- This may be another case of needing to make PklIniRead generally case sensitive, as with DKs?!
 		- Only Composer respects case now, since it uses pklIniSect()?
 
-WIPs: APT & Co?
-			- Make a README, link to the GitHub site and implement the APTv3 layout too, of course.
-			- Unless... Is APTv3 a stable candidate anymore? Word has it, it's superseded by APTv4 which is still unstable.
-			- We already have Semimak-JQ and Canary, so consider adding the other "best candidates"?
-				- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
-				- APTv3, Nerps and Sturdy look good in that comparison. Possibly also Magic Sturdy, which EPKL could do.
-			- Oxey for instance has several candidates, but it'd make sense to focus on one.
-
-WIPs: Improve GUI responsiveness by running some of its routines at init time.
-		- GUI startup is slow. Where are the bottlenecks? Try to tic-toc GUI startup?
-		- Heavy startup routines could be added to the setUIGlobals section, which is indeed run at init time.
-		- Could also make GUI startup more responsive by pre-initializing the GUI at init. As it is now, it's made from scratch each time.
-		- Candidate: Layout selection. Premake the list of eligible layouts (and LayType? KbdType? Variants? Mods?) beforehand.
-
 2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
 		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
 		- Repeat can compose from other composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
@@ -66,11 +78,6 @@ TODO: Custom Send syntax!
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
-
-2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
-		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
-		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
-		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
 
 2FIX: When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
@@ -114,9 +121,6 @@ WIPs: With SC remaps, can we now actually remap the System layout? For instance,
 
 WIPs: A layout_Override.ini file too? So people (like me) can have a non-version controlled file for their personal layout changes.
 		- Writing to the Layout.ini file with the KeyMapper GUI should create an override if not present, like with the other overrides.
-
-TODO: Instead of getLayInfo( "ExtendKey" ), use an array that allows multiple keys to be used as Extend.
-		- Next, specify which layer(s) goes which which key so you can have different Extend keys.
 
 WIPs: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 		- I think the bulgarian =+ position should house Ѝ ѝ
@@ -316,6 +320,11 @@ TODO: Make a matrix image template, and use it for the Curl variants w/o Angle.
 ;; ================================================================================================
 ;;  eD TODO:
 
+TODO: Improve GUI responsiveness further.
+		- GUI startup is slow. Where are the bottlenecks? Try to tic-toc GUI startup?
+		- Globals initialization including folder scanning has been added to a function called at init time.
+		- Could also make GUI startup more responsive by pre-initializing the GUI at init. As it is now, it's made from scratch each time.
+		- Candidate: Layout selection. Premake the list of eligible layouts (and LayType? KbdType? Variants? Mods?) beforehand.
 TODO: Use the off-Space thumb key as a Shift/CoDeKey ToM!
 		- Preserves SteveP's thumb Shift for compact boards, while allowing the fancy CoDeKey shift combos too.
 		- It's a sweet idea! But again, it requires better ToM timing than EPKL can currently deliver. So it'll have to wait, for now...

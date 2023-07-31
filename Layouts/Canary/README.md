@@ -46,7 +46,7 @@ Here's a quote from Colby regarding the Canary layout [somewhat edited for brevi
 |   :---:   |
 |_The Canary-eD layout on an ANSI board, unshifted layer_|
 
-|![EPKL help image for Canray-eD on an ANSI board, AltGr+Shift layer](./Can-eD_ANS_Angle/state7.png)|
+|![EPKL help image for Canary-eD on an ANSI board, AltGr+Shift layer](./Can-eD_ANS_Angle/state7.png)|
 |   :---:   |
 |_The Canary-eD layout on an ANSI board, AltGr+Shift layer_|
 
