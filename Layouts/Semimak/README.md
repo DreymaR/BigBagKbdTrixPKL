@@ -15,7 +15,11 @@ The Semimak layout
 - It also models some new factors like skipgrams (disjointed SFBs).
 - For more info, see [the Semimak page on github.io][SemGit]
 - Also, here's an interesting [reflection on Semimak by Semilin][Sem200] after hitting 200 WPM with it.
+- An [**Angle**][ErgAWi] ergo mod is strongly recommended for this layout on row-staggered boards.
 - For sanity, I moved the Semimak-eD `‚‘’` quotes so their relative positions match Colemak-eD.
+<br>
+
+This layout gets special mention in [Getreuer's Alt Keyboard Layout guide][GetAKL]. Have a look!
 <br>
 
 #### Semimak vanilla:
@@ -76,6 +80,10 @@ Remap cycle from vanilla: Q > J > QU
 ```
 
 
-[SemGit]: https://semilin.github.io/semimak/ (Semimak on GitHub.io)
-[Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb (Semimak-JQ)
-[Sem200]: https://semilin.github.io/blog/hitting_200wpm.html (Semilin on hitting 200 WPM)
+[SemGit]: https://semilin.github.io/semimak/                    (Semimak on GitHub.io)
+[Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb         (Semimak-JQ)
+[Sem200]: https://semilin.github.io/blog/hitting_200wpm.html    (Semilin on hitting 200 WPM)
+[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
+[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
+[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)
+[GetAKL]: https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn (Pascal Getreuer's Alt Keyboard Layout guide)

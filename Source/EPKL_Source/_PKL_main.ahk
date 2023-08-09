@@ -28,13 +28,21 @@ TODO:
 		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
 		- Could the mod-up sent on Extend key release be involved?
 
-WIPs: APT & Co?
-			- Make a README, link to the GitHub site and implement the APTv3 layout too, of course.
-			- Unless... Is APTv3 a stable candidate anymore? Word has it, it's superseded by APTv4 which is still unstable.
-			- We already have Semimak-JQ and Canary, so consider adding the other "best candidates"?
-				- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
-				- APTv3, Nerps and Sturdy look good in that comparison. Possibly also Magic Sturdy, which EPKL could do.
-			- Oxey for instance has several candidates, but it'd make sense to focus on one.
+TODO: Even More Modern Alt Keyboard Layouts?
+		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
+			- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
+			- APT, Nerps, Sturdy and maybe Engram look good in Getreuer's comparison.
+		- APTv3 by Apsu (2021; the currently stable version) has been added now.  https://github.com/Apsu/APT
+			- Also Aptmak (it uses a thumb key)?
+		- Sturdy by Oxey (2022)  https://o-x-e-y.github.io/layouts/sturdy/index.html
+			- Oxey has several candidates, but it makes sense to focus on one. It has high rolls but still low redirects.
+			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?
+			- https://discord.com/channels/409502982246236160/1002128319770271834/1129455798368612484
+			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
+			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
+		- Nerps by Smudge (2022)
+		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
+		- Graphite (2022-12) by RDavison was also mentioned.  https://github.com/rdavison/graphite-layout
 
 WIPs: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.

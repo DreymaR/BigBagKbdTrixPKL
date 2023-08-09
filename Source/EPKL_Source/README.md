@@ -547,3 +547,7 @@ VERSION HISTORY:
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
+	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
+		- Using this framework, the APT(v3) layout by Apsu (2021-12) was added, with Angle, Wide and Sym ergo mods.
+	- The Sym-Mn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
+		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
