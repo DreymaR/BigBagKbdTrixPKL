@@ -132,13 +132,13 @@ extendKeyPress( HKey ) { 										; Process an Extend modified key press
 			if getKeyState( HKey, "P" ) {
 				pref .= modList[mod]
 			}
-		} 	; end For
+		}	; end For
 		Send {Blind}%pref%{%xVal%} 								; By default, take modifiers into account
 	} 	; end if
 	For HKey, mod in extMods {
 		if ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
-	} 	; end For
+	}	; end For
 	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 	Critical, Off   											; eD WIP: Is this necessary? Or will AHK always go non-critical after each fn?
 }
@@ -295,19 +295,17 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 ;}
 
 ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Used in keyPressed() and pkl_gui_image
-	ext := getLayInfo( "ExtendKey" )
+	ext := getLayInfo( "ExtendKey" ) 						; eD WIP: Here, the ExtendKey info is used. Replace it with a generic mod key array/fn? ModIsPressed()
 	Return ( ext && getKeyState( ext, "P" ) ) ? true : false
 }	; end fn
 
 _setExtendState( set = 0 ) { 							; Called from setModState. This function handles Extend key tap or hold.
-	static extendKey    := -1
 	static extMod1      := ""
 	static extMod2      := ""
 	static extHeld      := 0
 	static initialized  := false
 	
 	if ( not initialized ) {
-		extendKey       := getLayInfo( "ExtendKey" )
 		extMod1         := getPklInfo( "extendMod1" )
 		extMod2         := getPklInfo( "extendMod2" )
 		initialized     := true
@@ -321,57 +319,66 @@ _setExtendState( set = 0 ) { 							; Called from setModState. This function han
 		extHeld := 1 										; Guards against Extend key autorepeat
 	} else if ( set == 0 ) { 								; When the Extend key is released...
 		extendKeyPress( -1 ) 								; ...remove any Ext modifiers, and also...
-		Send {Shift Up}{Ctrl Up}{Alt Up} 					; ...remove physical modifiers to clean up. 	; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done
+;		Send {Shift Up}{Ctrl Up}{Alt Up} 					; ...remove physical modifiers to clean up. 	; eD WIP: Can we do without this now?
+															; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done?
 		extHeld := 0
 	}	; end if
 	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)
 }	; end fn _setExtendState
 
 setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDown/Up labels. Handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys.
-	static tapTime  := {} 									; We'll handle tap times for each key SC
 	static tomHeld  := {} 									; Is this key held down? Or check KeyState instead?
-													; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
-	tomMod  := getKeyInfo( HKey . "ToM" ) 					; Modifier name for this key
-	tomTime := getPklInfo( "tapModTime" )
+	static tapTime  := {} 									; We'll handle tap times for each key SC
+															; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
+	if ( HKey == -1 ) { 									; eD WIP: Call this fn w/ -1 to reset ToMs and the static variables.
+;		HKey    := getPklInfo( "tomKey" )
+		tomHeld  := {}
+		tapTime  := {}
+		setPklInfo( "tomKey", "" )  						; This is used by the ToM interrupt 	; eD WIP
+		setPklInfo( "tomMod", -1 )  						; Turn off this ToM key's todo status
+		SetTimer, tomTimer, Off
+		Return
+	}
 	
+	tomMod  := getKeyInfo( HKey . "ToM" )   				; Modifier name for this key
+	tomTime := getPklInfo( "tapModTime" )   				; The time delay that separates a tap from a hold
 	if ( set == 1 ) { 										; * If the key is pressed (or autorepeated)...
 		if ( ! tomHeld[HKey] ) { 							; Set only once per press
 			tomHeld[HKey] := 1 								; Mark key as held to guard against autorepeat
 			SetTimer, tomTimer, -%tomTime% 					; A run-once timer is more robust than checking the time...
 			tapTime[HKey] := A_TickCount + tomTime 			; ...but the time check is handy for key release? Or is release the default?
 			setPklInfo( "tomKey", HKey ) 					; The key is marked as active
-			setPklInfo( "tomMod", tomMod ) 					; The Mod is marked as "todo"
+			setPklInfo( "tomMod", tomMod ) 					; The key's ModName is marked as "todo"
 		}
 		Return
-	} else if ( set == -1 ) { 								; If the key is interrupted by another...
-		SetTimer, tomTimer, Off
-		setPklInfo( "tomKey", "" )
-		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: This isn't happening atm, as the lines that call it above are commented out pending more robustness
-		if getKeyState( HKey, "P" ) {
-			_setModState( tomMod, 1 ) 				; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
-			setPklInfo( "tomMod", -1 )
-		} else {
-			keyPressed( HKey )
-			tomHeld[HKey] := 0
-		}
+;	} else if ( set == -2 ) { 								; If the key is interrupted by another... 	; eD WIP: Not in use now/yet
+;		setTapOrModState( -1 )  							; Clear any ToM key settings
+;		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: This isn't happening atm, as the lines that call it above are commented out pending more robustness
+;		if getKeyState( HKey, "P" ) {
+;			_setModState( tomMod, 1 ) 						; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
+;			setPklInfo( "tomMod", -1 )
+;		} else {
+;			keyPressed( HKey )
+;			tomHeld[HKey] := 0
+;		}
 	} else { 												; If the key is released (unless interrupted first)...
-		SetTimer, tomTimer, Off
-		setPklInfo( "tomKey", "" )
+;		SetTimer, tomTimer, Off
+;		setPklInfo( "tomKey", "" )
 		tomHeld[HKey] := 0
-		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) ) 	; Is this not a used Extend key press?
+		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) )  	; Is this not a used Extend key press?  	; eD WIP: Uses ExtendKey. Make generic?
 		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
-			keyPressed( HKey )
-		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set... 	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
-			_setModState( tomMod, 0 )
+			keyPressed( HKey )  							; ...just send it as a tap.
+		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set earlier...
+			_setModState( tomMod, 0 )   					; ...unset the actual mod.  	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 		setLayInfo( "extendUsed", false )
+		setTapOrModState( -1 )  							; Clear any ToM key settings
 	}
 }	; end fn
 
-tomTimer: 													; There's only one timer as you won't be activating several ToM at once
+tomTimer:   												; There's only one timer as you won't be activating several ToM at once
 ;	pklDebug( "ToM: " HKey " > " getPklInfo( "tomMod" ) ) 	; eD DEBUG
 	_setModState( getPklInfo( "tomMod" ), 1 ) 				; When the timer goes off, set the ModState for the ToM key
-	setPklInfo( "tomKey", "" ) 								; This is used by the ToM interrupt 	; eD WIP
-	setPklInfo( "tomMod", -1 ) 								; Turn off this ToM key's todo status
+	setTapOrModState( -1 )  								; Clear any ToM key settings
 Return
 
 _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftState/modif vs Ctrl(+Shift)

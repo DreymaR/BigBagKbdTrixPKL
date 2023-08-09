@@ -425,7 +425,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 		}	; end loop entries
 	}	; end loop (parse layMap)
 	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
-		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use an extKeys[] array instead!
+		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use a modKeys[] array instead?!
 	}	; end For row in map
 	}	; end For layFile (parse layoutFiles)
 	

@@ -4,47 +4,52 @@
 ;
 
 pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
-	if pkl_CheckForDKs( ch ) {  			; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
+	if pkl_CheckForDKs( ch ) {  								; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
 		Return
 	}
 	char    := Chr(ch)
-	if ( ch > 32 ) { 						; ch > 128 works with Unicode AHK
-		this    := "{" . char . "}" 		; Normal char
+	if ( ch > 32 ) { 											; ch > 128 works with Unicode AHK
+		this    := "{" . char . "}" 							; Normal char
 	if InStr( getCurrentWinLayDeadKeys(), char ) 	; eD WIP: Improve this with real DK detection?! How does that work, really? A char may be both a DK release and not...!
-		this    .= "{Space}" 				; Send an extra space to release OS dead keys
+		this    .= "{Space}" 									; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
 		this    := "{Space}"
-		modif   := "{Blind}" 				; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
+		modif   := "{Blind}" 									; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
 	} else if ( ch == 9 ) {
 		this    := "{Tab}"
 	} else if ( ch > 0 && ch <= 26 ) {
 		; http://en.wikipedia.org/wiki/Control_character#How_control_characters_map_to_keyboards
-		this    := "^" . Chr( ch + 64 ) 	; Send Ctrl char
+		this    := "^" . Chr( ch + 64 ) 						; Send Ctrl char
 	} else if ( ch == 27 ) {
-		this    := "^{VKDB}" 				; Ctrl + [ (OEM_4) alias Escape				; eD TODO: Is this robust with ANSI/ISO VK?
+		this    := "^{VKDB}" 					; Ctrl + [ (OEM_4) alias Escape 	; eD TODO: Is this robust with ANSI/ISO VK?
 	} else if ( ch == 28 ) {
-		this    := "^{VKDC}" 				; Ctrl + \ (OEM_5) alias File Separator(?)
+		this    := "^{VKDC}" 					; Ctrl + \ (OEM_5) alias File Separator(?)
 	} else if ( ch == 29 ) {
-		this    := "^{VKDD}" 				; Ctrl + ] (OEM_6) alias Group Separator(?)
+		this    := "^{VKDD}" 					; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
 	if AltGrIsPressed()
-		this    := "{Text}" . char  		; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
-	pkl_SendThis( this, modif ) 			; Modif is only used for explicit mod mappings.
+		this    := "{Text}" . char  							; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
+	pkl_SendThis( this, modif ) 								; Modif is only used for explicit mod mappings.
 }
 
 pkl_SendThis( this, modif = "" ) {  							; Actually send a char/string. Also log the last sent character for Compose.
-	tht := RegExReplace( this, "\{Space\}|\{Blind\}" ) 			; Strip off any spaces sent to release OS deadkeys, and other such stuff
-	if        ( this == "{Space}" ) { 							; Replace space so it's recognizeable for LastKeys
+	tht := RegExReplace( this, "\{Space\}|\{Blind\}" )  		; Strip off any spaces sent to release OS deadkeys, and other such stuff
+	if        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
 	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
-	if ( StrLen( tht ) == 3 ) 									; Single-char keys are on the form "{¤}"
+	thtLen  := StrLen( tht )
+	if ( thtLen == 3 )  										; Single-char keys are on the form "{¤}"
 		lastKeys( "push", SubStr( tht, 2, 1 ) )
+;	if ( SubStr( tht, 0 ) == "}" ) { 							; Is this test ever necessary, or is everything on {] form?
+;		tht := SubStr( tht, 1, -1 ) . " DownR}" 				; eD WIP: Send characters too with DownR !? Nope, the KeyUp is still sent. Why?
+;		pklToolTip( "tht: " . tht ) 	; eD DEBUG
+;	} 	; eD WIP: Send w/ Down?
 ;	toggleAltGr := ( getAltGrState() ) ? true : false 	; && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
 ;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
-;		setAltGrState( 0 )  				; Release LCtrl+RAlt temporarily if applicable
-	Send %modif%%this%  					; eD WIP: This Send is what leads to unnecessary/stuck modifiers with AltGr! Workaround: Send AltGr presses as Text.
+;		setAltGrState( 0 )  									; Release LCtrl+RAlt temporarily if applicable
+	Send %modif%%this%  						; eD WIP: This Send is what leads to unnecessary/stuck modifiers with AltGr! Workaround: Send AltGr presses as Text.
 ;	if ( toggleAltGr )
 ;		setAltGrState( 1 )
 }
