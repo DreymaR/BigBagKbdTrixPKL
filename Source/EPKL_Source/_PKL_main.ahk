@@ -22,12 +22,6 @@ TODO:
 			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
 			- It is as it should be, I guess?
 
-2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
-		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
-		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
-		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
-		- Could the mod-up sent on Extend key release be involved?
-
 TODO: Even More Modern Alt Keyboard Layouts?
 		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
 			- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
@@ -71,6 +65,7 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- Checked whether a ¶sayPkl entry on the former sequence would work; it doesn't?
 		- This may be another case of needing to make PklIniRead generally case sensitive, as with DKs?!
 		- Only Composer respects case now, since it uses pklIniSect()?
+		- For now, circumvented the problem by renaming the capitalized PowerString like `¶say-Pkl`.
 
 2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
 		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
@@ -86,6 +81,12 @@ TODO: Custom Send syntax!
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:
+
+2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
+		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
+		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
+		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
+		- Could the mod-up sent on Extend key release be involved?
 
 2FIX: When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
 		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
@@ -265,6 +266,10 @@ NEXT: User working dir: All user files can be under a specified user root dir.
 		- Special syntax? `User\` or `~\` could point to working dir, and `.\` continue to point to script dir? Make all file-reading operations aware of this!?
 		- Might use a switch of working dir for some operations? Or, should things like the HIG just assume working dir and anyone wishing to use it must adjust?
 			- For users having their EPKL install in a non-writable area, the HIG would need to use the working dir as its work area anyway.
+
+TODO: A layout array to switch layouts, instead of reloading EPKL each time?!
+		- The longish delay between full EPKL restarts makes multi-layout usage a challenge
+		- Would have to use multi-dimensional dead key etc arrays too, then
 
 TODO: Modifier lock. For which modifiers?
 		- Extend lock? Maybe too confusing. But for, say, protracted numeric entry with Ext2 it could be useful?
