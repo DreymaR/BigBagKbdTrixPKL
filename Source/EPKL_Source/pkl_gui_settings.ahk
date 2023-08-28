@@ -255,7 +255,7 @@ UIselLay:   													; Handle UI Layout selections
 ;				tmp .= "`n" . dirPart[2]    							; eD DEBUG
 			} else {
 				layDirs.Push( dirPart[3] )
-				layPath[ dirPart[3] ] := dirPart[2]
+				layPath[ dirPart[3] ] := dirPart[2] . "\"
 ;				tmp .= "`n" . dirPart[2] . "  -->  " . dirPart[3]   	; eD DEBUG
 			}
 		}

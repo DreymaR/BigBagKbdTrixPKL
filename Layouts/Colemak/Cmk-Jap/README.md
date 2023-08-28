@@ -2,26 +2,26 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
-|![EPKL help image for Colemak on an ANSI board](./Cmk-eD/Cmk-eD_ANS/state0.png)|
-|   :---:   |
-|_The unmodified Colemak layout on an ANSI board_|
+![EPKL help image for Colemak on an ANSI board](/Layouts/Colemak/Colemak-ANS_s0_EPKL.png)
+
+_The unmodified Colemak layout on an ANSI keyboard_
 
 <br><br>
 
 Colemak-Jap Hiragana/Katakana/Kanji (Japanese) locale layout variants?
 ----------------------------------------------------------------------
-Sorry, but there are none at present.
+Sorry, but there are none at present. ごめんなさい.  &nbsp;&nbsp; ᏊᵕꈊᵕᏊ
 - EPKL is not quite equipped to handle the complexity of being a full IME for Kanji input.
 - Without Kanji, it's not useful enough to be able to input kana (single letters).
 - If you have an IME such as the standard Windows one, you can already type kana using latin letters.
 - Fortunately, with EPKL you can use the (QWERTY-based) Windows Japanese IME accompanied by an EPKL Colemak layout.
-- I did have an idea of using consonant keys as dead keys to produce kana, but for the above reasons it hasn't been developed further.
+- (I did have an idea of using consonant keys as dead keys to produce kana, but for the above reasons it hasn't been developed further.)
 - The JIS keyboard type is technically supported by EPKL, in addition to ISO and ANSI. But the function of special keys is still up to the OS layout.
 <br><br>
 
 Using an IME with installed Colemak
 -----------------------------------
-The most familiar and useful way for many to type Japanese is probably using the standard Windows IME.
+The most familiar and useful way for many to type Japanese is probably the standard Windows IME.
 - Unfortunately, that's not trivial since the standard Windows IMEs are linked to language – which means the QWERTY layout.
 - There is a way of relinking which layout is the default for a language. It involves Registry editing, so it's rather high-tech.
 - It's described in the Reddit post "[How to: Colemak for ... IMEs][IMEreg]". The Japanese language has the ID `00000411`.

@@ -393,7 +393,7 @@ VERSION HISTORY:
 	- Added the `{Text}` mode (AHK v1.1.27+) to PowerStrings, and made it default. It's more reliable for special characters.
 	- The `img_Positions` setting may define which help image positions are allowed. By default `TL,TM,TR,BL,BM,BR` (Top/Bottom + Left/Mid/Right).
 	- Made string matches case sensitive using StringCaseSense. Hope that didn't break anything...?
-	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b). It sent a space instead. The error was in pkl_Send().
+	- Fixed: Win+Spc was broken in commit "Repeat and Compose keys" (506e5b8) 2021-06-14. It sent a space instead. The error was in pkl_Send().
 	- In the `EPKL_HelpImgGen_Settings` file, the BrutalMode setting governs whether the EPKL HIG moves generated images straight into the layout folder.
 		- If this setting is true, generated images may overwrite any existing ones. Also, the `ImgGen_` temporary folder is deleted after use.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
@@ -551,3 +551,5 @@ VERSION HISTORY:
 		- Using this framework, the APT(v3) layout by Apsu (2021-12) was added, with Angle, Wide and Sym ergo mods.
 	- The Sym-Mn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
+	- Fixed: The Layout Selector GUI had a bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
+		- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
