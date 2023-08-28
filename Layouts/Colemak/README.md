@@ -2,7 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
-![EPKL help image for Dvorak-AWide on an ANSI board](./Colemak-ISO-Angle_s0_EPKL.png)
+![EPKL help image for Colemak on an ISO board](./Colemak-ISO-Angle_s0_EPKL.png)
 
 _The Colemak layout with the [Angle ergonomic mod][BB_AWi] on an ISO board_
 

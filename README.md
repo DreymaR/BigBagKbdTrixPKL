@@ -297,7 +297,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
     - ISO boards have a <kbd>OEM_102</kbd> key between <kbd>Z</kbd> and <kbd>LShift</kbd>. It often holds `<>` or `-_`.
     - In ISO OS layouts, `OEM_` virtual key codes differ from ANSI ones. These boards send the same scan codes though.
     - Brazilian ABNT boards are like ISO, but have two extra <kbd>ABNT</kbd> keys. These can be remapped by their scan codes.
-    - JIS (Japanese) etc are not supported so far. Sorry. Gomen-nasai. ごめんなさい.  &nbsp;&nbsp; ᏊᵕꈊᵕᏊ
+    - JIS (Japanese) etc are not fully supported so far. Sorry. Gomen-nasai. ごめんなさい.  &nbsp;&nbsp; ᏊᵕꈊᵕᏊ
 * Curl(DH), Angle and/or Wide ergonomic mods, moving some keys to more comfortable positions
     - Angle/Wide affect the "hard" key positions in the Layout.ini file, usually both for Layout and Extend
     - Curl(DH) is Colemak/Tarmak/Dvorak specific and for the most part should not affect Extend

@@ -51,7 +51,7 @@ Obviously, Colemak was developed for English but that's generally okay since the
 
 However, [there are still some real issues][RedCmkEs].
 - The <kbd>Z</kbd> key creates same-finger bigrams with <kbd>A</kbd>, and the `UE` SFB is quite common in Spanish.
-- You may use the Angle-Z (ANSI Angle) mod, so <kbd>Z</kbd> moves to the left index finger. This will solve the `AZ`/`ZA` SFB.
+- You may use the ANSI Angle(Z) mod, so <kbd>Z</kbd> moves to the left index finger. This will solve the `AZ`/`ZA` SFB.
 - To alleviate the `UE` bigram (and `ÑO` if you put <kbd>Ñ</kbd> on a bracket and don't use the Wide mod), some suggest a `O-U` swap.
 - I'm really not sure, myself. I'd probably just use AngleWide or CAWS mods and "tank" the rest, like I do when typing my own language.
 - However, if you're convinced and adventurous, EPKL does support a `O-U` swap:

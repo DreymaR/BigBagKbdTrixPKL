@@ -66,7 +66,7 @@ After a while of testing and getting feedback after the one-month Semimak speed 
 
 It's just a `Q > J > QU` cycle so it's no big change. Although Semi thinks it's "objectively" better and solves some problems with apostrophe n-grams, some of the fastest Semimak typists still prefer the original.
 
-In EPKL you can select Semimak-eD-JQ as a layout variant of Semimak-eD.
+In EPKL you can select Semimak-eD-JQ as a layout variant of Semimak-eD: In the `Layout Selector` GUI, use the `Variant/Locale` setting.
 <br>
 
 #### Semimak-JQ

@@ -14,7 +14,7 @@ The MTGAP layout
 - There are actually several variants of it for different board configurations.
 - EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
 - This layout can be used with the usual BigBag Angle and Sym ergonomic mods added, as seen above.
-    - The ANSI Angle-Z mod will displace Q to the middle. The Wide mods will displace X to the middle.
+    - The ANSI Angle(Z) mod will displace Q to the middle. The Wide mods will displace X to the middle.
     - Those are rare letters, but some bigrams like QU and XC may get trickier that way.
 <br>
 

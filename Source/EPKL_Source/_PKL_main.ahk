@@ -32,9 +32,10 @@ TODO: Even More Modern Alt Keyboard Layouts?
 			- Oxey has several candidates, but it makes sense to focus on one. It has high rolls but still low redirects.
 			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?
 			- https://discord.com/channels/409502982246236160/1002128319770271834/1129455798368612484
+			- Con: Like Nerps, it has a too common key – CM – in the SL position.
 			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
 			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
-		- Nerps by Smudge (2022)
+		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
 		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
 		- Graphite (2022-12) by RDavison was also mentioned.  https://github.com/rdavison/graphite-layout
 
@@ -225,10 +226,12 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
 		- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
 		- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
+2FIX: Every now and then (while using Extend?) EPKL becomes unresponsive to hotkeys and, e.g., changing tabs. Sometimes needs a menu Refresh/Restart.
+		- No good ideas what causes this! It's annoying and happens too often.
 2FIX: There are many composes with apostrophe; these may cause trouble for the CoDeKey when typing, e.g., `pow'r`. Move all acutes to, e.g., `''r`?
 2FIX: Help images show 3–4× at startup with a slightly longer Sleep to hopefully avoid a minimize-to-taskbar bug on the first hide image.
 		- It still doesn't work as it should, but the problem is hard to reproduce.
-2FIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Refresh related? Mouseover removes them.
+2FIX: Looks like there are multiple EPKL instances in the Tray now? Is that true? Can it be GUI windows? Can it be refresh related? Mouseover removes them.
 2FIX: Ext-Shift may get stuck until Ext is released. Not sure exactly how.
 2FIX: Help images for Colemak-Mirror don't show the apostrophe on AltGr even though it's functional and defined equivalently to the base state one.
 		- Debug on 6_BS doesn't show any differences; looks like &quot; is still generated.
