@@ -36,11 +36,11 @@ The <<NewLayout>> layout
 
 <br>
 
-|![EPKL help image for <<NewLayout>>-eD on an ANSI board, unshifted layer](./Can-eD_ANS_Angle/state0.png)|
+|![EPKL help image for <<NewLayout>>-eD on an ANSI board, unshifted layer](./<<New>>-eD_ANS_Angle/state0.png)|
 |   :---:   |
 |_The <<NewLayout>>-eD layout on an ANSI board, unshifted layer_|
 
-|![EPKL help image for <<NewLayout>>-eD on an ANSI board, AltGr+Shift layer](./Can-eD_ANS_Angle/state7.png)|
+|![EPKL help image for <<NewLayout>>-eD on an ANSI board, AltGr+Shift layer](./<<New>>-eD_ANS_Angle/state7.png)|
 |   :---:   |
 |_The <<NewLayout>>-eD layout on an ANSI board, AltGr+Shift layer_|
 

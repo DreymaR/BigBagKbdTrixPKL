@@ -553,3 +553,4 @@ VERSION HISTORY:
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: The Layout Selector GUI had a bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
 		- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
+	- Added the Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).

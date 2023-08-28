@@ -14,6 +14,7 @@ WIPs:
 2FIX: 
 NEXT: 
 TODO: 
+HOLD: 
 
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
 		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
@@ -21,23 +22,6 @@ TODO:
 		- When I tried setting a high ToM Timer duration to test it, I couldn't activate Ext2 before the timer expired.
 			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
 			- It is as it should be, I guess?
-
-TODO: Even More Modern Alt Keyboard Layouts?
-		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
-			- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
-			- APT, Nerps, Sturdy and maybe Engram look good in Getreuer's comparison.
-		- APTv3 by Apsu (2021; the currently stable version) has been added now.  https://github.com/Apsu/APT
-			- Also Aptmak (it uses a thumb key)?
-		- Sturdy by Oxey (2022)  https://o-x-e-y.github.io/layouts/sturdy/index.html
-			- Oxey has several candidates, but it makes sense to focus on one. It has high rolls but still low redirects.
-			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?
-			- https://discord.com/channels/409502982246236160/1002128319770271834/1129455798368612484
-			- Con: Like Nerps, it has a too common key – CM – in the SL position.
-			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
-			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
-		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
-		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
-		- Graphite (2022-12) by RDavison was also mentioned.  https://github.com/rdavison/graphite-layout
 
 WIPs: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
@@ -419,6 +403,23 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 
 ;; ================================================================================================
 ;;  eD ONHOLD:
+
+HOLD: Even More Modern Alt Keyboard Layouts?
+		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
+			- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
+			- APT, Nerps, Sturdy and maybe Engram look good in Getreuer's comparison.
+		- APTv3 by Apsu (2021; the currently stable version) has been added.  https://github.com/Apsu/APT
+			- Also add Aptmak? It uses a thumb key; EPKL could handle that (maybe w/ help from SharpKeys).
+		- Graphite (2022-12) by RDavison was also added after favorable mentions.  https://github.com/rdavison/graphite-layout
+		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
+		- Sturdy by Oxey (2022)?  https://o-x-e-y.github.io/layouts/sturdy/index.html
+			- Oxey has several candidates, but I'd focus on one. It has high rolls but still low redirects.
+			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?
+			- https://discord.com/channels/409502982246236160/1002128319770271834/1129455798368612484
+			- Con: Like Nerps, it has a too common key – CM – in the SL position.
+			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
+			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
+		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
 
 	- Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
 	- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
