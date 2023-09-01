@@ -35,9 +35,10 @@ I'd add a Sym mod to the brackets-equals-hyphen keys.
 #### Semimak AngleWide-ANSI:
 ```
 +----------------------------+
-| f l h v z  [  q w u o y  ; |
-| s r n t k  ]  c d e a i  \ |
-|  ' b m j  x /  p g , .     |
+| 1 2 3 4 5 6 = 7 8 9 0 -    |
+|  f l h v z [ q w u o y ; \ |
+|  s r n t k ] c d e a i     |
+|   ' b m j x / p g , .      |
 +----------------------------+
 ```
 
@@ -55,7 +56,7 @@ I'd add a Sym mod to the brackets-equals-hyphen keys.
 
 ![Semimak AngleWideSym-ISO help image](./Semimak_ISO-AWS_EPKL.png)
 
-_Semimak AngleWideSym on an ISO keyboard. The © key is a Compose key._
+_Semimak AngleWideSym on an ISO keyboard. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 

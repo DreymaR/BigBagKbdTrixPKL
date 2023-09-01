@@ -11,9 +11,9 @@ _The default <<NewLayout>> layout (using the Angle mod) on an ANSI keyboard_
 The <<NewLayout>> layout
 --------------------
 - This layout was made by <<Creator>>, <<Date>>.
-- ? It uses the [**Curl**][ErgCrl] mod principle, reducing lateral stretches to the middle home row positions.
-- ? An [**Angle**][ErgAWi] ergo mod is strongly recommended for this layout on row-staggered boards.
-- For more info, see [the <<NewLayout>> repo on GitHub][LayGit].
+- ? It may be said to use the [**Curl**][ErgCrl] mod principle, reducing lateral stretches to the middle home row positions.
+- ? An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
+- For more info, see [the <<NewLayout>> repo on GitHub][LayGit] and its [layout home page][LayHom].
 <br>
 
 #### The <<NewLayout>> layout on an ANSI board:
@@ -52,6 +52,12 @@ The <<NewLayout>> layout
 - 
 <br>
 
+- [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
+<br>
+
+- [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.
+<br>
+
 #### <<NewLayout>> (C)AWS-ISO:
 ```
 +----------------------------+
@@ -66,7 +72,7 @@ The <<NewLayout>> layout
 
 ![<<NewLayout>> (C)AWS-ISO help image](./<<NewLayout>>_ISO-AWS_EPKL.png)
 
-_The <<NewLayout>>-(C)AWS-ISO layout. The © key can be a Compose key if you wish._
+_The <<NewLayout>>-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 
@@ -74,6 +80,7 @@ _The <<NewLayout>>-(C)AWS-ISO layout. The © key can be a Compose key if you wis
 
 
 [LayGit]: https://github.com/<<Creator>>/<<NewLayout>> (The <<NewLayout>> layout on GitHub)
+[LayHom]: <<HomePage>>
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)

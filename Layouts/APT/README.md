@@ -80,7 +80,7 @@ The [**S**ym(bol)][ErgSym] mod should have <kbd>'</kbd> and <kbd>-</kbd> in good
 
 ![APTv3 (C)AWS-ISO help image](./APTv3_ISO-AWS_EPKL.png)
 
-_The APT-(C)AWS-ISO layout. The © key can be a Compose key if you wish._
+_The APT-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 

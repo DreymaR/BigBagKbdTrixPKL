@@ -16,7 +16,7 @@ Layout generation
 	- Then rename the ergo-mod subfolders' `New` part to your layout's first three letters.
 	- If you want other ergo mod combos, copy folders for them and try to name them right.
 	- If you have on/off icons, put them in the `_Res` folder and name them as by the examples.
-- Replace `<<NewLayout>> <<Creator>> <<New>>`, version/date etc. in all `Layout.ini` files (and BaseLayout).
+- Replace `<<NewLayout>> <<New>> <<Creator>>`, version/date etc. in all `Layout.ini` files (and BaseLayout).
 - Edit the key mappings. The simplest way is swapping their scan codes (before the `=` sign).
 - Consider if you need any special remaps for ergo mods; that can be tricky though...
 <br>

@@ -412,6 +412,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 			- Also add Aptmak? It uses a thumb key; EPKL could handle that (maybe w/ help from SharpKeys).
 		- Graphite (2022-12) by RDavison was also added after favorable mentions.  https://github.com/rdavison/graphite-layout
 		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
+			- Also, it seems unstable. According to Oxey, it's been "superseded by Nerbs and Gallium" in some respects.
 		- Sturdy by Oxey (2022)?  https://o-x-e-y.github.io/layouts/sturdy/index.html
 			- Oxey has several candidates, but I'd focus on one. It has high rolls but still low redirects.
 			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?

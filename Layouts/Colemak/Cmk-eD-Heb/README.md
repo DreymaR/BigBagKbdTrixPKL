@@ -74,6 +74,15 @@ Briefly:
 
 <br><br>
 
+Dead key tip
+------------
+If you don't want niqqud for your daily typing, then this isn't a layout for you, is it?
+
+Don't be too hasty my friend! See, special dead keys are very very useful for lots of things. If you wish, you could turn those two keys into pretty much whatever you want. 
+For instance, read about the CoDeKey that I use to make punctuation and more a lot more comfortable. Using EPKL, any mapping can produce nearly any output.
+
+<br><br>
+
 More Hebrew script resources
 ----------------------------
 Here are the Biblical-SIL layout states, for reference. The images contain Unicode codes for all relevant glyphs, both for modern and ancient/Biblical Hebrew.

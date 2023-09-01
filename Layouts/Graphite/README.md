@@ -82,7 +82,8 @@ Graphite variants
 <br>
 
 
-- For a [**W**ide][ErgAWi] modded Graphite variant, some special remaps from standard key positions are necessary.
+- [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
+- For a Wide modded Graphite variant, some special remaps from standard key positions are necessary.
 - The layout already moves its bracket keys to the top row, putting SC(;) and PL(=) in their places.
 <br>
 

@@ -65,7 +65,8 @@ To create a [**W**ide][ErgAWi] modded variant, there's a hurdle to overcome: The
 But on ANSI keyboards there is no key to the right of <kbd>'</kbd> as <kbd>\\</kbd> sits less accessibly above <kbd>Enter</kbd> instead. Apsu suggested that we go back to the old placements for these keys; however, be advised that this will bring back the `E ,` same-finger bigram that some dislike in the Colemak layout. That's probably an acceptable compromise if you want a Wide ergo mod.
 <br>
 
-[**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys. Non-Wide, you may use the same Sym mod as Colemak and other layouts that don't change symbol key positions do. With the Wide mods described above, the result is also quite similar to the Colemak-CAWS mod battery, with the possible exception of the keys mentioned (`SL CM PD SC`).
+[**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys. 
+Non-Wide, you may use the same Sym mod as Colemak and other layouts that don't change symbol key positions do. With the Wide mods described above, the result is also quite similar to the Colemak-CAWS mod battery, with the possible exception of the keys mentioned (`SL CM PD SC`).
 <br>
 
 #### Canary (C)AWS-ISO proposal, moving the period key:
@@ -92,7 +93,7 @@ But on ANSI keyboards there is no key to the right of <kbd>'</kbd> as <kbd>\\</k
 
 ![Canary (C)AWS-ISO help image](./Canary_ISO-AWS_EPKL.png)
 
-_The Canary-(C)AWS-ISO layout. The © key can be a Compose key if you wish._
+_The Canary-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 
