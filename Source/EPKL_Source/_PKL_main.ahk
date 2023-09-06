@@ -421,6 +421,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
 			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
 		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
+		- Dwarf/Whorf? ("Parented to CMini"?)
 
 	- Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
 	- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
