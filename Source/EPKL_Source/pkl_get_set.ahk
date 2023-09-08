@@ -261,16 +261,16 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 ;;  EPKL other Get/Set functions
 ;
 
-;;  TODO: Make this fn return other info parsed from a layout string as well? [ LayMain, LayPath, LayType, LayVari, KbdType, OthrMod ] ?
-getLayStrInfo( layStr ) {   											; Get the mainLay, 3LA (3-letter-abbreviation) and if present, the string's 3LA
+getLayStrInfo( layStr ) {   											; Get 1) LayMain, 2) 3LA (3-letter-abbreviation), 3) string/LayDir 3LA, ...
 	d3LA    := getPklInfo( "shortLays" ) 								; Global dictionary of '3LA' 3-letter layout name abbreviations. From pkl_init.
 	splt    := StrSplit( layStr, "\" )  								; LayMain can also contain a subfolder. Its name often starts w/ 3LA.
 	mLay    := splt[1]
 	m3LA    := ( d3LA[mLay] ) ? d3LA[mLay] : SubStr( mLay,1,3 ) 		; The 3LA found in the table, or just the 3 first letters of theLay.
-	endS    := splt[ splt.maxIndex() ]
-	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 		; The 3LA found in the string itself, if any.
-	type    := RegExMatch( layStr, mLay . "(?:\\.*)?\\" . m3LA . "-(\w+?)(?:-\w+?)?_", REMatch ), type := REMatch1
-	Return [ mLay, m3LA, s3LA, type ]   								; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
+	endS    := splt[ splt.maxIndex() ]  								; The last part of a full layStr will normally be the LayDir itself
+	s3LA    := InStr( endS, m3LA ) ? m3LA  : SubStr( endS,1,3 ) 		; The 3LA found in the string itself (the last part).
+	LayType := RegExMatch( layStr, mLay . "(?:\\.*)?\\" . m3LA . "-(\w+?)(?:-\w+?)?_", REMatch ), LayType := REMatch1
+;;  TODO: Make this fn return other info parsed from a layout string as well? [ LayMain, 3LA, LayPath, LayType, LayVari, KbdType, OthrMod ] ?
+	Return [ mLay, m3LA, s3LA, LayType ] 								; You may specify one output by calling, e.g., getLayStrInfo(str)[2].
 }
 
 pklGetState() { 														; Get the 0:1:6:7 etc shift state as in Layout.ini and img names

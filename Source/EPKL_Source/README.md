@@ -302,12 +302,12 @@ VERSION HISTORY:
 		- Select row then code to remap, then the same for the VK code that you're mapping to. Then mapping type. Finally, edit any state mappings etc. manually.
 		- For most modifiers, you can select Left/Right or use the generic mod. The modifier is used in Mod, Tap-or-Mod (ToM) and MoDK mappings.
 		- The mapping is written into the `Layouts_Override` file. If that key is also mapped in your (Base)Layout.ini, write the line to `Layout.ini` or it won't work.
-		- Added a `Write to Layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings. The default Submit button writes to `Layout_Override`.
+		- Added a `Write to Layout.ini` button to the KeyMapper. Such mappings will override other LayStack mappings by writing to the `Layout.ini` file.
 	- The Settings UI lets you choose between several EPKL settings. It shows their current value and any same-line comments. Edit their value and submit.
 		- The UI-adjustable settings have to be in the `Settings_Default` file and specified in the "setInGUI" entry of the `EPKL_Tables.ini` file.
 		- To allow the Settings UI to work, EPKL can now use a Settings Override/Default stack (like with the Layouts files) instead of just `EPKL_Settings.ini`.
 	- The ß§/þÞ/ŋŊ ligatures from the Colemak-eD AltGr layers were added to the RingAbove-Lig dead key as spares.
-	- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\MainLay\3LA-LT[-LayVar]_KbT[_Mods]`).
+	- Moved Cmk-eD/VK as subdirs under a Colemak folder, like other layouts are organized (`Layouts\LayMain\3LA-LT[-LayVar]_KbT[_Mods]`).
 	- The Tarmak layout folders were also renamed to use the standard format. Tarmak step # is now a Tm# Layout Variant.
 	- The layout shortcuts for EPKL_Layouts files were tweaked somewhat, renaming Variant from `@L` to `@V` and making the underscore before `@K` explicit.
 	- Switching Slash and Backslash for Wide modded Extend brings the WheelLeft/Right keys together. Used it for Colemak-ISO-CAWS. Less intuitive for (C)AWide Ext2.
@@ -376,7 +376,7 @@ VERSION HISTORY:
 		- Added a `BaseLayout_Cmk-eD-NoVK.ini` file with only direct state mappings. If the VK mappings cause you any trouble, point your `Layout.ini` to this one.
 		- Cut back on VK ## letter mappings in `BaseLayout_Cmk-eD.ini` again, as these cause some chained dead key outputs like ự and ậ to be preceded by an unwanted space.
 	- Added DK images for ANS AWide and CAWS, in addition to the existing vanilla and CAW. For ISO, we already have Angle, AWide, CAW and CAWS.
-	- Reworked the `@` layout codes. ErgoMod/`@E` is now HardMod/`@H`, as Curl/DH and Sym are also ergonomic mods. MainLay is now `@L` and the ergo mod ensemble `@E`.
+	- Reworked the `@` layout codes. ErgoMod/`@E` is now HardMod/`@H`, as Curl/DH and Sym are also ergonomic mods. LayMain is now `@L` and the ergo mod ensemble `@E`.
 	- Tidied up some complex remaps like `SL-BS,V-B` for Ext. Made `Ext-CAW(S)_@K` remaps instead. Ext1/2 images were also renamed/copied to be simpler and more consistent.
 	- The SL-BS swap is good for `Extend-CAWS_ISO`, bringing the WheelLeft/Right keys together. Since Ext1 and Ext2 use the same remap, it wasn't done for AWide/CAW.
 	- Background image files were renamed more consistently.
@@ -428,7 +428,7 @@ VERSION HISTORY:
 	- Fixed: A CapsLock off is sent at startup to avoid CapsLock being stuck on after an EPKL refresh.
 	- Fixed: Using relative paths for icon files, multiple layout selections wouldn't show the correct icons.
 	- Fixed: Setting any mod in the EPKL_Layouts file would make layout shortcuts that don't use mods fail.
-	- Fixed: Subfolder structure added to the MainLay parameter the Colemak and Tarmak layouts. Consistent naming scheme for all such subfolders.
+	- Fixed: Subfolder structure added to LayMain for the Colemak and Tarmak layouts. Consistent naming scheme for all such subfolders.
 	- Fixed: The Layout Selector would show non-existing mod combos for, e.g., ANS if there was a KbdType like ANS-Orth present
 	- Fixed: Capitalized sequences didn't compose if followed by a lowercase version in the table. Example: `LJ Lj lj → Ǉ ǉ ǉ`; `ǈ` didn't happen.
 	- Fixed: Pressing a DK twice released both its base characters instead of just one. Now only base char 0 (the s0 DK entry) is released.
@@ -516,6 +516,7 @@ VERSION HISTORY:
 		- SwiSh/FliCK modifiers can be made Sticky (one-shot) via the stickyMods setting, like other modifiers.
 		- SwiSh and FliCK were kindly sponsored by Antoine Olivier (Rastast at the Colemak Discord, IKLProject on GitHub)! Thanks a lot – sorry about the delay!
 	- Added the possibility for a `Layout_Override.ini` file in the active layout folder, as a master override that avoids editing `Layout.ini` directly.
+		- This allows a non-version-controlled copy of your layout file changes.
 	- Added a new OS DeadKey detection routine `getWinLayDKs()` using a ToAscii DLL call; it returns -1 if the specified key/state is a Windows Layout DK.
 		- It runs on init/refresh. It returns a dictionary of `{ SC:DK-ShiftStates }`, like `{ "SC003" : "6:7", } (if SC003 has DKs on states 6 and 7).
 		- The old `Detect Dead Keys...` menu option was hidden and demoted to utility/debug routine #7.
@@ -551,6 +552,9 @@ VERSION HISTORY:
 		- Using this framework, the APT(v3) layout by Apsu (2021-12) was added, with Angle, Wide and Sym ergo mods.
 	- The Sym-Mn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
-	- Fixed: The Layout Selector GUI had a bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
-		- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
+	- Fixed: Several Layout Selector GUI bugs.
+		- Fixed a Layout Selector bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
+			- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
+		- Fixed a Layout Selector bug that would allow an invalid KbdType to show up if another LayType had that KbdType.
+		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
 	- Added the Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).

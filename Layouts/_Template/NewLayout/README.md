@@ -16,15 +16,6 @@ The <<NewLayout>> layout
 - For more info, see [the <<NewLayout>> repo on GitHub][LayGit] and its [layout home page][LayHom].
 <br>
 
-#### The <<NewLayout>> layout on an ANSI board:
-```
-+-----------------------------+
-| q w e r t   y u i o p [ ] \ |
-| a s d f g   h j k l ; '     |
-|  z x c v b   n m , . /      |
-+-----------------------------+
-```
-
 #### The <<NewLayout>> layout on a ortho/matrix board:
 ```
 +----------------------------+
@@ -32,6 +23,15 @@ The <<NewLayout>> layout
 | a s d f g   h j k l ;  ' \ |
 | z x c v b   n m , . /      |
 +----------------------------+
+```
+
+#### The <<NewLayout>> layout on an ANSI board, with an Angle mod for correct lower-row stagger:
+```
++-----------------------------+
+| q w e r t   y u i o p [ ] \ |
+| a s d f g   h j k l ; '     |
+|  x c v b z   n m , . /      |
++-----------------------------+
 ```
 
 <br>

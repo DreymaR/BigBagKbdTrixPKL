@@ -16,6 +16,8 @@ NEXT:
 TODO: 
 HOLD: 
 
+WIPs: Add Sturdy? With WideSym?
+
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
 		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65
@@ -108,13 +110,6 @@ WIPs: Detect OS VK codes for all keys instead of just a select subset, so OS lay
 WIPs: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
 		- No, doesn't work; the SC don't get remapped at all. Ah well.
 		- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
-
-2FIX: In the Layout Selector GUI, choosing first `VK` then `ANS/ISO-Orth` lands you with a faulty selection (`Colemak\Cmk-VK-_` etc).
-		- If choosing it by arrows then proceeding to, say, `ANS`, the error remains. The boxes for Variant and Mods will be blank.
-		- Isn't the GUI updated after choosing KbdType? Doesn't _uiCheckLaySet() find LayVari and LayMods for an `-Orth` KbdType?
-
-WIPs: A layout_Override.ini file too? So people (like me) can have a non-version controlled file for their personal layout changes.
-		- Writing to the Layout.ini file with the KeyMapper GUI should create an override if not present, like with the other overrides.
 
 WIPs: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 		- I think the bulgarian =+ position should house Ѝ ѝ
@@ -411,15 +406,16 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 		- APTv3 by Apsu (2021; the currently stable version) has been added.  https://github.com/Apsu/APT
 			- Also add Aptmak? It uses a thumb key; EPKL could handle that (maybe w/ help from SharpKeys).
 		- Graphite (2022-12) by RDavison was also added after favorable mentions.  https://github.com/rdavison/graphite-layout
-		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
-			- Also, it seems unstable. According to Oxey, it's been "superseded by Nerbs and Gallium" in some respects.
 		- Sturdy by Oxey (2022)?  https://o-x-e-y.github.io/layouts/sturdy/index.html
 			- Oxey has several candidates, but I'd focus on one. It has high rolls but still low redirects.
 			- Oxey said that Sturdy has a "decent amount of users" but "people are dropping it" so not worth it now?
 			- https://discord.com/channels/409502982246236160/1002128319770271834/1129455798368612484
-			- Con: Like Nerps, it has a too common key – CM – in the SL position.
+			- Con: Like Nerps, it has a too common key – CM – in the SL position. However, Oxey had some ideas for Wide.
+				- https://www.reddit.com/r/KeyboardLayouts/comments/15zu2rn/comment/jysbcn8/?context=2
 			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
 			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
+		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
+			- Also, it seems unstable. According to Oxey, it's been "superseded by Nerbs and Gallium" in some respects.
 		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
 		- Dwarf/Whorf? ("Parented to CMini"?)
 
@@ -449,6 +445,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 	- Allow assigning several keys as Extend Modifier?
 	- An EPKL sample Layout.ini next to the original PKL one, to illustrate the diffs? Or, let the contents of the main README be enough?
 	- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
+	- Someone used CapsLock on double-tap Shift. Neat idea! Except for the double-tap SFB, of course. If you have both Shift keys, a chord could do it?!
 
 ;;  ####################### TODO done #######################
 */

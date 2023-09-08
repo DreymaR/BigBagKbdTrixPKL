@@ -18,7 +18,7 @@ Return
 
 init_Settings_UI() {    										; Initialize UI globals (run once by pkl_init; can't be done by setUIGlobals)
 	ui.NA       := "<none>" 									; For UI functions (Note: ui.### aren't control variables like UI_###)
-	ui.LayDirs  := _uiGetLayDirs()  							; Get a list of all layout directories under "Layouts"
+	ui.LayDirs  := _uiGetLayDirs()  							; Get a list of all Layout.ini directories under "Layouts" (valid or not)
 	ui.Revert   := false 										; For the GUI Reset button
 	ui.Written  := false 										; For whether EPKL Refresh is needed
 	ui.SepLine  := "————————————————" . "————————————————" . "————————————————" . "————" . "————" . "————" . "————"
@@ -40,7 +40,7 @@ init_Settings_UI() {    										; Initialize UI globals (run once by pkl_init;
 		if ( row > 0 )  										; Only show row 1-4 in the DDLs
 			ui.KLMs[ row ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	; Split by pipe
 	}	; end For KLM codes
-} 	; eD WIP: Are we fine now, or could we add more GUI init stuff here to shave time off GUI startup?!
+} 	; end init
 
 pklSetUI() { 													; EPKL Settings GUI
 	pklAppName  := getPklInfo( "pklName" )
@@ -68,9 +68,12 @@ pklSetUI() { 													; EPKL Settings GUI
 					.   "`n" . ui.SepLine 	; ————————————————————————————————————————————————
 	choices     := []   													; LayMain values: "Colemak", "Dvorak", ... , "Tarmak", ...
 	For ix, line in ui.LayDirs {
-		main    := StrSplit( line, "\" )[1]
+		mLSI     := getLayStrInfo( line )   								; 1) LayMain, 2) 3LA (3-letter-abbreviation) 3) string/LayDir 3LA
+		main    := mLSI[1]
 ;		rest    := SubStr( line, StrLen( main ) + 2 )
-		if InArray( choices, main ) || ( InStr( main, "_" ) == 1 )
+		if InArray( choices, main ) || ( InStr( main, "_" ) == 1 )  		; Any LayMain will be ignored if starting with `_`.
+			Continue
+		if ( mLSI[2] != mLSI[3] )   										; If the LayDir doesn't start with the LayMain's 3LA, ignore it.
 			Continue
 		choices.Push( main )
 	}
@@ -239,15 +242,15 @@ UIselLay:   													; Handle UI Layout selections
 	main    := UI_LayMain
 	mainDir := "Layouts\" . main
 	main3LA := getLayStrInfo( main )[2] 						; '3LA' 3-letter layout name abbreviation
-	nidl    := main3LA . "-" 									; Needle for the MainLay: '3LA-', e.g., 'Cmk-'  	; eD WIP: Include the start, maybe even "Layout\"?
+	mNidl   := main3LA . "-" 									; Needle for the LayMain: '3LA-', e.g., 'Cmk-'  	; eD WIP: Include the start, maybe even "Layout\"?
 	layDirs := []   											; Layout folders hold the layouts themselves, in Layout.ini files
 	layPath := {}   											; Variant folders for locales etc may contain several mod combos each
 ;	tmp := ""   														; eD DEBUG
 	For ix, theDir in ui.LayDirs {  							; From the list of layout folders, make arrays of subdirs/paths for the current LayMain
 		dirPart := StrSplit( theDir, "\" )
-		If ( InStr( theDir, main . "\" . nidl ) == 1 )  		; Make a list of layout folders for this LayMain...
+		If ( InStr( theDir, main . "\" . mNidl ) == 1 ) 		; Make a list of layout folders for this LayMain...
 		&& ( dirPart[4] == "" ) {   							; ...of right format and no less than two subdirs deep.
-			if not RegExMatch( theDir, nidl . ".+_" )   		; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
+			if not RegExMatch( theDir, mNidl . ".+_" )  		; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
 			If ( dirPart[3] == "" ) {   						; Layout folders may reside in variant folders
 				layDirs.Push( dirPart[2] )  	; eD WIP: Just leave mainDir on? 	; SubStr( theDir, StrLen( main ) + 2 )
@@ -261,20 +264,20 @@ UIselLay:   													; Handle UI Layout selections
 		}
 	} 	; end For LayDirs
 ;	( 1 ) ? pklDebug( "Listing for " . main . "`n" . tmp, 5 )   		; eD DEBUG
-	layTyps     := _uiCheckLaySet( layDirs, 1, 2, nidl   )  	; Get the available Lay Types for the chosen MainLay
+	layTyps     := _uiCheckLaySet( layDirs, 1, 2, mNidl  )  	; Get the available Layout Types for the chosen Main Layout
 	if inArray( layTyps, "eD" )
 		layTyps.InsertAt( inArray(layTyps,"eD"), "eD2VK" )  	; The special ##2VK layType reads a state-mapped BaseLayout as VK mapped
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list (eD, VK)
 	ui_layTyp3  := ( UI_LayType == "eD2VK" ) ? "eD" : UI_LayType
-	needle      := nidl . ui_layTyp3
-	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, nidl   )  	; Get the available Kbd Types for the chosen MainLay (and LayType?)
+	needle      := mNidl . ui_layTyp3
+	kbdTyps     := _uiCheckLaySet( layDirs, 2, 0, needle )  	; Get the available Kbd Types for the chosen LayMain and LayType
 	_uiControl( "LayKbTp", _uiPipeIt( kbdTyps, 1 ) )
-	needle      := nidl . ui_layTyp3 . ".*_" . UI_LayKbTp . "?(_|$)" 	; The bit after KbTp separates types like ISO-Orth from ISO
-	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle )  	; Get the available Layout Variants for the chosen MainLay/LayType/LayKbTp
+	needle      := mNidl . ui_layTyp3 . ".*_" . UI_LayKbTp . "?(_|$)" 	; The bit after KbTp separates types like ISO-Orth from ISO
+	layVari     := _uiCheckLaySet( layDirs, 1, 3, needle )  	; Get the available Layout Variants for the chosen LayMain/LayType/LayKbTp
 	_uiControl( "LayVari", _uiPipeIt( layVari, 1 ) )
 	layVariName := ( UI_LayVari == ui.NA ) ? "" : "-" . UI_LayVari
-	needle      := nidl . ui_layTyp3 . layVariName . "_" . UI_LayKbTp . "?(_|$)"
-	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle )  	; Get the available Mods for the chosen MainLay/LayType/LayKbTp/LayVari
+	needle      := mNidl . ui_layTyp3 . layVariName . "_" . UI_LayKbTp . "?(_|$)"
+	layMods     := _uiCheckLaySet( layDirs, 3, 0, needle )  	; Get the available Mods for the chosen LayMain/LayType/LayKbTp/LayVari
 	_uiControl( "LayMods", _uiPipeIt( layMods, 1 ) )
 	layModsName := ( UI_LayMods != ui.NA ) ? UI_LayMods : ""
 	layModsPref := ( layModsName ) ? "_" : ""
