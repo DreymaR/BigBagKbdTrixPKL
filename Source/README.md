@@ -6,7 +6,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 #### Formerly PKL[edition DreymaR] by DreymaR, 2017-, based on [PortableKeyboardLayout][PKLGit]
 #### ([Written By Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK])
 
-![EPKL help image, for the Colemak-CAWS layout](/Layouts/Colemak/Cmk-ISO-CAWS_s3_EPKL.png)
+![EPKL help image, for the Colemak-CAWS layout](/Layouts/Colemak/Cmk-ISO-CAWS_s6_EPKL.png)
 
 <br>
 

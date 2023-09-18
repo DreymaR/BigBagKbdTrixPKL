@@ -45,7 +45,7 @@ Colemak[eD]: Colemak - edition DreymaR
 
 <br>
 
-![EPKL help image for Colemak-CurlAWideSym on an ISO board](Cmk-ISO-CAWS_s3_EPKL.png)
+![EPKL help image for Colemak-CurlAWideSym on an ISO board](Cmk-ISO-CAWS_s6_EPKL.png)
 
 _Colemak-CAWS-ISO as above, showing the AltGr layer with dead keys marked in yellow_
 

@@ -80,7 +80,7 @@ _The <<NewLayout>>-(C)AWS-ISO layout. The © key can be a Compose key, or whatev
 
 
 [LayGit]: https://github.com/<<Creator>>/<<NewLayout>> (The <<NewLayout>> layout on GitHub)
-[LayHom]: <<HomePage>>
+[LayHom]: <<HomePage>> (The <<NewLayout>> layout home page)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)

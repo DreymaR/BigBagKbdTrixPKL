@@ -20,9 +20,9 @@ Implementation
 --------------
 To use any of these layouts, there are two main ways you can go:
 - If you want to see the layout in the Layout/Settings menu, copy it over to a fitting main `Layouts\` folder.
-    - Keep in mind that normally the first three letters of the MainLayout and layout variant folder must match.
+    - Keep in mind that normally the first three letters of the Main Layout and layout variant folder must match.
     - Thus, if you put a variant inside the Colemak folder its folder name should begin with `Cmk` to be seen.
-    - In any folder without a special abbreviation, just use the first three letters of its name.
+    - In any folder without a special abbreviation, just use the first three letters of its name as its "3LA".
 - You could also point to it in an active `layout = ` line in your `EPKL_Layouts_Override.ini` file under the `[pkl]` section.
     - If you haven't got one, copy-paste one from the `EPKL_Layouts_Override_Example` file.
     - Example: `layout = _WIP\Cmk-eD-QIx\Cmk-eD-QIx_ANS_CurlAngleSym:Cmk-TestLayout` for the Colemak-QI;x ANSI mod.

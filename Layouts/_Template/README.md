@@ -5,7 +5,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 The `NewLayout` subfolder in here contains a template for creating new EPKL layouts.
 There's a BaseLayout (using eD-type shift state mappings), and some ergo mod combos.
 
-The layout in this template is meant as an example. If you're curious, it's the [Canary layout][CanPKL].
+The layout in this template is meant as an example. If you're curious, it's the [Colemak layout][CmkPKL].
 <br>
 
 Layout generation
@@ -16,7 +16,7 @@ Layout generation
 	- Then rename the ergo-mod subfolders' `New` part to your layout's first three letters.
 	- If you want other ergo mod combos, copy folders for them and try to name them right.
 	- If you have on/off icons, put them in the `_Res` folder and name them as by the examples.
-- Replace `<<NewLayout>> <<New>> <<Creator>>`, version/date etc. in all `Layout.ini` files (and BaseLayout).
+- Replace `<<NewLayout>> <<New>> <<Creator>>`, `<<Version>>` etc. in all `Layout.ini` files (and BaseLayout).
 - Edit the key mappings. The simplest way is swapping their scan codes (before the `=` sign).
 - Consider if you need any special remaps for ergo mods; that can be tricky though...
 <br>
@@ -37,4 +37,4 @@ Screenshots
 	- Capture the whole help window with the Snipping Tool once it activates
 <br>
 
-[CanPKL]:  /Layouts/Canary/ (The Canary layout for EPKL)
+[CmkPKL]:  /Layouts/Colemak/ (The Colemak layout for EPKL)
