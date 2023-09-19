@@ -16,8 +16,6 @@ NEXT:
 TODO: 
 HOLD: 
 
-WIPs: Add Sturdy? With WideSym?
-
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
 		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65

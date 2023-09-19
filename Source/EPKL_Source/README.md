@@ -538,10 +538,10 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.?.?: WIP
+* EPKL v1.4.2: WIP
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
-	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now deletes the queue.
-		- This fixes a problem with using the powerstrings for Delete Word, as they used to leave undesired characters in the lastKeys queue.
+	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now delete the queue.
+		- This fixes a problem with using powerstrings for Delete Word, as they would leave undesired characters in the lastKeys queue.
 	- ToM mappings required a VK code before the slash but an AHK modifier name after. Now, you can use any modifier alias (VK or KLM name).
 		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64
@@ -549,7 +549,11 @@ VERSION HISTORY:
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
-		- Using this framework, the APT(v3) layout by Apsu (2021-12) was added, with Angle, Wide and Sym ergo mods.
+	- Using the NewLayout template framework, a few more modern layouts were added. Semimak-JQ and Canary were already in place.
+		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
+		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
+		- The Sturdy layout by Oxey, with an Angle ergo mod.
+		- Wide and Sym ergo mods are WIP for both Graphite and Sturdy, for now.
 	- The Sym-Mn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
@@ -557,4 +561,3 @@ VERSION HISTORY:
 			- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
 		- Fixed a Layout Selector bug that would allow an invalid KbdType to show up if another LayType had that KbdType.
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
-	- Added the Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
