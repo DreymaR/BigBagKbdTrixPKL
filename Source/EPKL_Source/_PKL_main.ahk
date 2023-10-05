@@ -16,6 +16,11 @@ NEXT:
 TODO: 
 HOLD: 
 
+2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
+		- Seems it works after the first suspension.
+		- Try to suspend/unsuspend EPKL once at startup then?
+		- But WHY would this be the case?
+
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
 		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65

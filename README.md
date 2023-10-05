@@ -499,6 +499,9 @@ KNOWN ISSUES:
     - To many users, the benefits of seeing which keys you just typed and what EPKL produced from it should outweigh any such concerns in my opinion.
     - If you do wish to disable KeyHistory, however, find the `#KeyHistory` line in [`_PKL_Main.ahk`][SrcPMn] and set it to `0`. Then recompile EPKL.
     - For more info about this topic, see [EPKL issue #63](https://github.com/DreymaR/BigBagKbdTrixPKL/issues/63) here on GitHub.
+* The `Ctrl+Shift+3` default shortcut doesn't always suspend EPKL.
+    - It seems to work after the first suspension (by any method). I have no explanation for this behavior.
+    - The workaround I use is to use its synonym `Ctrl+Shift+Backtick` (the \` character on the Tilde key).
 <br>
 
 DONE/TODO:
