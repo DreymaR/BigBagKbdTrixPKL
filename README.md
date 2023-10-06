@@ -172,8 +172,8 @@ You may want to use EPKL's functionality without opting for one of the available
 - If you want an ergo mod for the Extend layer, you need to select/make the right mod combo in the EPKL Layouts\System layout file.
 <br><br>
 
-Key and Layout Mapping Types: Key vs State
-------------------------------------------
+Key Mapping vs State Mapping
+----------------------------
 There are two main ways EPKL handles key presses intercepted by its keyboard hook:
 * **Key mapping** means that EPKL sends a new keypress event to the OS. It may be the same key or a different one.
     - The types of key mapping available are by Scan Code (**SC**) or by Virtual Key (**VK**) code.
@@ -197,7 +197,7 @@ EPKL & Games
 There are some pitfalls to using a keyboard remapping program like EPKL for gaming, which uses the keyboard very differently.
 
 In gaming a key is often held down for a longish time. This may lead to some problems:
-* The underlying OS layout sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
+* The OS keyboard/input driver sends repeated KeyDown key events that are picked up and processed by EPKL. KeyUp is only sent once, on key release.
 * When sending characters, AutoHotkey sends a KeyDown followed immediately by a KeyUp. So inbetween each sent KeyDown there will be an extra KeyUp.
     - The result of this is often choppy game controls. Also, the MonkeyType typing test site has a cheat detection that interprets this behavior as suspect.
     - The solution is to use a key mapped (VK/SC/eD2VK or System) layout. These pass on the KeyDown events from the OS, and send KeyUp only on release.
@@ -221,6 +221,47 @@ Mostly because there is so much functionality and complexity, which is actually 
 
 To learn more about key mappings and creating your own layout variants, please consult the [Layouts folder][PklLay] README.
 <br><br>
+
+Key Mapping Syntax
+------------------
+As seen above, there are two basic types of mapping: Key and state. 
+The format for EPKL state mapping is similar to [MSKLC][PklKLC], but more readable and also a lot more powerful.
+
+```
+[layout]
+;shiftStates    =           0   :   1   :   2   :   6   :   7       ;   8   :   9   :   e   :   f
+;; SC = VKEY       CStat    Base    Shift   Ctrl    AltGr   AGrSh   ;   SwiSh   SwShS   SwAGr   SwAGS
+```
+This shows the start of the layout section of an EPKL `Layout.ini` file. So, what are all those arcane abbreviations?
+* **SC**: The **Scan Code** of the key being mapped
+	- The SC can either use the `SC###` format like MSKLC or AHK uses, or my own KLM (KeyLayoutMap) format.
+	- Example: The QWERTY S key has scan code `SC01F`, and KLM name `QW_S`. See the [Remap file][MapIni] for more info.
+	- Note that the key can be moved around by remap loops later, if remaps are specified in the `Layout.ini` file.
+* **VKEY**: The **Virtual Key** (VK) code sent for this key
+	- The VK code determines what the OS sees when a key press is sent, in addition to the key output itself. So it affects hotkeys etc.
+	- If a key is Key Mapped, only the VKEY entry is used. This also holds true if an `eD`-type state mapped layout is run as `eD2VK`.
+	- Key mapped keys can either have the actual VK code of a key here, a SC or "System" (to just send the pressed key itself).
+	- If using KLM syntax, the VK code of a certain key is like the `QW###` code but with `vc###` instead. Example: `vc_S`.
+* **CStat**: The **Caps stat** for this key
+	- CStat is a number used by MSKLC to determine CapsLock behavior. It's the AND value of the states that are shifted with Caps.
+	- Example: If a key has letter and its capitalized counterpart on states 0/1, CStat is 1. If also on 6/7, it's 5 (4 + 1; see below).
+	- If a key is key mapped, this entry is the final one for that key and instead consists of the string `VKey` or `SKey`, or a synonym.
+* **State 0/1**: **Base** and **shifted** output
+	- While MSKLC has Unicode hex values for these entries, EPKL can take just a symbol – or any other valid entry like Prefix-Entry syntax!
+	- EPKL accepts normal whitespace between state entries. If you want the mapping to be whitespace, use special syntax. `Spc` is Space.
+	- If a state is mapped to `##`, that means this particular state is sent as key mapped. So you get whatever the OS layout has there.
+		- Key mapping works better with Windows shortcuts (such as Win+Number), but can cause issues if your OS layout is non-standard.
+* **State 2**: **Ctrl** state
+	- Most keys should not produce any output from the Ctrl state(s)! This is because `Ctrl+Key` is normally used for hotkeys.
+	- An exception is that `Ctrl+[` by convention outputs an `Escape` character for many layouts.
+* **State 6/7**: **AltGr** states
+	- The Alt key has value 4 and Ctrl 2, so why are the AltGr states numbered 6 and 7? Because Windows considers `AltGr = LCtrl + RAlt`.
+	- Note that only the 4 is used in the calculation of the `CStat`. Go figure.
+* **State 8/9/e/f/...**: **SwiSh & FliCK**!
+	- These are special EPKL modifier states; see the "More Modifiers" section. Most layouts don't use these states, so feel free to ignore.
+	- You need to have keys defined as SwiSh and/or FliCK modifiers to access those states, should you want to.
+	- The SwiSh (Swiss Shift) modifier adds 8 to the state, and FliCK (Flip Cap Key) adds 16 (not shown above).
+	- In the Colemak `BaseLayout_Cmk-eD_SwiSh.ini` file, I defined a suggestion of how to get accented letters etc using SwiSh & FliCK.
 
 More Know-How
 -------------
