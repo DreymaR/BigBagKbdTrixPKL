@@ -245,6 +245,7 @@ This shows the start of the layout section of an EPKL `Layout.ini` file. So, wha
 * **CStat**: The **Caps stat** for this key
 	- CStat is a number used by MSKLC to determine CapsLock behavior. It's the AND value of the states that are shifted with Caps.
 	- Example: If a key has letter and its capitalized counterpart on states 0/1, CStat is 1. If also on 6/7, it's 5 (4 + 1; see below).
+	- In most cases, though, this number isn't so important. If you're not sure, feel free to just ignore it.
 	- If a key is key mapped, this entry is the final one for that key and instead consists of the string `VKey` or `SKey`, or a synonym.
 * **State 0/1**: **Base** and **shifted** output
 	- While MSKLC has Unicode hex values for these entries, EPKL can take just a symbol – or any other valid entry like Prefix-Entry syntax!

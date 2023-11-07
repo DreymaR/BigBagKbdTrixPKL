@@ -16,9 +16,14 @@ NEXT:
 TODO: 
 HOLD: 
 
+HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or?
+		- However, the Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
+		- Also have a WS remap for other layouts like Sturdy (Semimak? etc?) that have stuff on the SL key.
+			- Already have `SymMn_W_ANS` for alt vs `SymQuMnW_ANS` for Cmk etc; look into its workings and usage.
+
 2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
 		- Seems it works after the first suspension.
-		- Try to suspend/unsuspend EPKL once at startup then?
+		- Try to suspend/unsuspend EPKL once at startup then? Is that possible?
 		- But WHY would this be the case?
 
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
