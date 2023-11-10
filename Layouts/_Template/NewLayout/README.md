@@ -11,7 +11,7 @@ _The default <<NewLayout>> layout (using the Angle mod) on an ANSI keyboard_
 The <<NewLayout>> layout
 --------------------
 - This layout was made by <<Creator>>, <<Date>>.
-- ? It may be said to use the [**Curl**][ErgCrl] mod principle, reducing lateral stretches to the middle home row positions.
+- ? It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - ? An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see [the <<NewLayout>> repo on GitHub][LayGit] and its [layout home page][LayHom].
 <br>

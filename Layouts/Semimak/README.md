@@ -10,12 +10,12 @@ _Semimak AngleSym on an ANSI keyboard_
 
 The Semimak layout
 ------------------
-- This layout was made by Semilin alias Semi based on novel analysis techniques.
+- This layout was made by Semilin alias Semi based on novel analysis techniques, 2021-07.
 - Among other things, it uses his finger speeds for modeling instead of subjective weights.
 - It also models some new factors like skipgrams (disjointed SFBs).
 - For more info, see [the Semimak page on github.io][SemGit]
 - Also, here's an interesting [reflection on Semimak by Semilin][Sem200] after hitting 200 WPM with it.
-- An [**Angle**][ErgAWi] ergo mod is strongly recommended for this layout on row-staggered boards.
+- An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For sanity, I moved the Semimak-eD `‚‘’` quotes so their relative positions match Colemak-eD.
 <br>
 

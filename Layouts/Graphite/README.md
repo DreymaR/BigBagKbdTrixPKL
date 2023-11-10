@@ -11,8 +11,8 @@ _The default Graphite layout (using the Angle mod) on an ANSI keyboard_
 The Graphite layout
 --------------------
 - This layout was made by Richard Davison alias 'stronglytyped', 2022-12.
-- It may be said to use the [**Curl**][ErgCrl] mod principle, reducing lateral stretches to the middle home row positions.
-- An [**Angle**][ErgAWi] ergo mod is useful and recommended for this layout on row-staggered boards.
+- It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
+- An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - It changes some shifted mappings; see below.
 - For more info, see [the Graphite repo on GitHub][LayGit].
 <br>
@@ -20,22 +20,19 @@ The Graphite layout
 #### The Graphite layout on a ortho/matrix board, showing base and shifted mappings:
 ```
 +----------------------------+
-| 1 2 3 4 5   6 7 8 9 0  [ ] |
 | b l d w z   ' f o u j  ; = |
 | n r t s g   y h a e i  , \ |
 | q x m c v   k p . - /      |
 +----------------------------+
-| ! @ # $ %   ^ & * ( )  { } |
 | B L D W Z   _ F O U J  : + |
 | N R T S G   Y H A E I  ? | |
 | Q X M C V   K P > " <      |
 +----------------------------+
 ```
 
-#### The Graphite layout on an ANSI board, with the Angle(Q) mod:
+#### The Graphite layout on an ANSI board, with an Angle(Q) ergo mod:
 ```
 +-----------------------------+
-| 1 2 3 4 5   6 7 8 9 0 [ ]   |
 | b l d w z   ' f o u j ; = \ |
 | n r t s g   y h a e i ,     |
 |  x m c v q   k p . - /      |
@@ -84,7 +81,7 @@ Graphite variants
 
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
 - For a Wide modded Graphite variant, some special remaps from standard key positions are necessary.
-- The layout already moves its bracket keys to the top row, putting SC(;) and PL(=) in their places.
+- The base Graphite layout already moves its bracket keys to the top row, putting SC(;) and PL(=) in their places.
 <br>
 
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.

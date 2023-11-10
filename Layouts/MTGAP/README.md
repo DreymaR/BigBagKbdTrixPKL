@@ -1,4 +1,4 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
+DreymaR's Big Bag Of Keyboard Tricks - EPKLn
 ===========================================
 <br>
 
@@ -9,7 +9,7 @@ _The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO boar
 
 The MTGAP layout
 ----------------
-- The [MTGAP][MTGAPm] layout designed by [Michael Dickens][MTGaPp] scores well in modern analysis.
+- The [MTGAP][MTGAPm] layout designed by [Michael Dickens][MTGaPp], 2010–2012, scores well in modern analysis.
 - It's a more radical layout than Colemak, changing everything around – even shift layers.
 - There are actually several variants of it for different board configurations.
 - EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
@@ -21,6 +21,23 @@ The MTGAP layout
 According to its designer: 
 Relative to Colemak and Dvorak, the MTGAP layout puts more priority on single-hand rolls and less on hand 
 alternation (notice the positions of TH, NE, ST and the fairly unusual feature of having O off the home row).
+<br>
+
+#### The MTGAP 30-key layout on a ortho/matrix board, showing base and shifted mappings:
+```
++----------------------------+
+| 1 2 3 4 5   6 7 8 9 0  - = |
+| y p o u j   k d l c w  [ ] |
+| i n e a ,   m h t s r  ' \ |
+| q z / . :   b f g v x      |
++----------------------------+
+| ! @ # $ %   ^ & * ( )  _ + |
+| Y P O U J   K D L C W  { } |
+| I N E A ;   M H T S R  " | |
+| Q Z < > ?   B F G V X      |
++----------------------------+
+```
+
 <br>
 
 |![EPKL help image for unshifted MTGAP on an ANSI board](./MTG-eD_ANS/state0.png)|

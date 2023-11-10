@@ -16,7 +16,7 @@ NEXT:
 TODO: 
 HOLD: 
 
-HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or?
+HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or not?
 		- However, the Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
 		- Also have a WS remap for other layouts like Sturdy (Semimak? etc?) that have stuff on the SL key.
 			- Already have `SymMn_W_ANS` for alt vs `SymQuMnW_ANS` for Cmk etc; look into its workings and usage.
