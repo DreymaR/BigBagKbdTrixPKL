@@ -62,7 +62,7 @@ As mentioned, the Canary layout on standard keyboards already contains a [**C**u
 <br>
 
 To create a [**W**ide][ErgAWi] modded variant, there's a hurdle to overcome: The lower-right punctuation keys have been rotated (`SL > CM > PD`) and so we can't just move the <kbd>/</kbd> key from the bottom right into the middle as usual. On ISO keyboards we may place <kbd>.</kbd> to the right of <kbd>A</kbd>, and if desired <kbd>;</kbd> in the place of <kbd>/</kbd> which then goes to the middle as usual. 
-But on ANSI keyboards there is no key to the right of <kbd>'</kbd> as <kbd>\\</kbd> sits less accessibly above <kbd>Enter</kbd> instead. Apsu suggested that we go back to the old placements for these keys; however, be advised that this will bring back the `E ,` same-finger bigram that some dislike in the Colemak layout. That's probably an acceptable compromise if you want a Wide ergo mod.
+But on ANSI keyboards there is no key to the right of <kbd>'</kbd> as <kbd>\\</kbd> sits less accessibly above <kbd>Enter</kbd> instead. Apsu suggested that we go back to the old placements for these keys; however, be advised that this will bring back the `E ,` same-finger bigram that some dislike in the Colemak layout. It may be an acceptable compromise if you want a Wide ergo mod.
 <br>
 
 [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys. 

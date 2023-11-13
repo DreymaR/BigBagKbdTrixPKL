@@ -16,10 +16,14 @@ NEXT:
 TODO: 
 HOLD: 
 
+WIPs: (Angle)WideSym variants of Sturdy and Graphite.
+
 HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or not?
 		- However, the Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
 		- Also have a WS remap for other layouts like Sturdy (Semimak? etc?) that have stuff on the SL key.
-			- Already have `SymMn_W_ANS` for alt vs `SymQuMnW_ANS` for Cmk etc; look into its workings and usage.
+
+			- Already have `SymMnW_ANS` (no Cmk-QU remap) for alt vs the standard `SymQuMnW_ANS`, for Cmk etc.
+		- An 'unSym' remap may be a good way of resetting sym mappings for some layouts (like Sturdy) before proceeding.
 
 2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
 		- Seems it works after the first suspension.
@@ -72,7 +76,7 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 
 TODO: Custom Send syntax!
 		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
-		- It could even have an escape for running other programs, or any command really, specified in .ini file entries.
+		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
 
 ;; ================================================================================================
 ;;  eD TOFIX/WIP:

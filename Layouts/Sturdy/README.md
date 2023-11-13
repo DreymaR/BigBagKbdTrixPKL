@@ -10,8 +10,8 @@ _The default Sturdy layout (using the Angle mod) on an ANSI keyboard_
 
 The Sturdy layout
 --------------------
-- This layout was made by Oxey, 2022-07, using his own analysis program.
-- It may be said to use the [**Curl**][ErgCrl] mod principle, reducing lateral stretches to the middle home row positions.
+- This layout was made by Oxey using his own 'Oxeylyzer' analysis program, 2022-07.
+- It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see its [layout home page][LayHom] and [the Oxeylyzer page][AnaHom].
 <br>
@@ -25,7 +25,7 @@ The Sturdy layout
 +----------------------------+
 ```
 
-#### The <<NewLayout>> layout on an ANSI board, with an Angle mod for correct lower-row stagger:
+#### The Sturdy layout on an ANSI board, with an Angle mod for correct lower-row stagger:
 ```
 +-----------------------------+
 | v m l c p   x f o u j [ ] \ |
@@ -52,30 +52,30 @@ Sturdy variants
 	- https://www.reddit.com/r/KeyboardLayouts/comments/15zu2rn/comment/jysbcn8/?context=2
 <br>
 
-	[Question: How would Oxey envision a Sturdy-Wide variant?]. On ISO I'd do this:
-
-	Sturdy (C)AW-ISO:
-	 v m l c p  \  x f o u j
-	 s t r d y  /  . n a e i ,
-	z k q g w  _ -  b h ' ;
-
+	[Question: How would Oxey envision a Sturdy-Wide variant?]
+	
+	On ISO I'd do this:
+	===  Sturdy (C)AW-ISO:  ===
+	 v m l c p  \  x f o u j    
+	 s t r d y  /  . n a e i ,  
+	z k q g w  _ -  b h ' ;     
+	
 	and on ANSI I think this would be good:
-
-	Sturdy Wide-ANSI:
-	v m l c p  /  x f o u , \
-	s t r d y  -  . n a e i
-	 z k q g w  j  b h ' ; 
-
-	But thinking about this now tells me that ANSI version isn't ideal. Probably angle with Z in that position would be better:
-
-	Sturdy (C)AW-ANSI; special Angle mod:
-	v m l c p  /  x f o u , \
-	s t r d y  -  . n a e i
-	 k q g w j  z  b h ' ; 
+	===  Sturdy Wide-ANSI:  ===
+	v m l c p  /  x f o u , \   
+	s t r d y  -  . n a e i     
+	 z k q g w  j  b h ' ;      (no Angle mod)
+	
+	But ... that ANSI version isn't ideal. Probably angle with Z in that position would be better:
+	=== Sturdy (C)AW-ANSI; special Angle mod: ===
+	v m l c p  /  x f o u , \   
+	s t r d y  -  . n a e i     
+	 k q g w j  z  b h ' ;      (Angle mod w/ Z <-> J swap)
 
 <br>
 
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
+- I discussed the bracket positions with Oxey, and he agrees that they may well go in the middle as with many other Wide layouts.
 - Sturdy-Wide is WIP at the moment.
 <br>
 
@@ -83,7 +83,7 @@ Sturdy variants
 - Sturdy-WideSym is WIP at the moment.
 <br>
 
-#### Sturdy (C)AWS-ISO proposal:
+#### Sturdy (C)AWS-ISO proposal, moving the comma key up:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -93,6 +93,15 @@ Sturdy variants
 +----------------------------+
 ```
 
+#### Sturdy (C)AWS-ANSI proposal, using Oxey's `J > Z > / > ,` loop:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  v m l c p [ x f o u , - / |
+|  s t r d y ] . n a e i     |
+|   k q g w j z b h ' ;      |
++----------------------------+
+```
 <br>
 
 ![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)

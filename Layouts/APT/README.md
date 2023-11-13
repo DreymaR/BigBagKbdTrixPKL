@@ -63,7 +63,7 @@ As mentioned, the APTv3 layout on standard keyboards already respects the [**C**
 Making a [**W**ide][ErgAWi] modded variant is pretty straightforward since the Slash key is in its usual position, and only SC and QU are different from Colemak. Since the function of the QU key on the lower row is to avoid same-finger bigrams (SFBs) with `O` and `A`, it could be replaced with SC if so desired; this was not deemed necessary.
 <br>
 
-The [**S**ym(bol)][ErgSym] mod should have <kbd>'</kbd> and <kbd>-</kbd> in good positions, at the least. For this layout, that's readily achievable by using only the `MN > LB` part of the Sym mod (not the `QU > SC` part of the Colemak etc. Sym mod).
+The [**S**ym(bol)][ErgSym] mod should have <kbd>'</kbd> and <kbd>-</kbd> in good positions, at the least. For this layout, that's readily achievable by using only the hyphen/`MN` part of the Sym mod – not the `QU > SC` part of Colemak etc., since the QWERTY `P` key holds the letter `Y` in APT.
 <br>
 
 #### APT (C)AWS-ANSI, using only the Sym-Mn partial ergo mod:

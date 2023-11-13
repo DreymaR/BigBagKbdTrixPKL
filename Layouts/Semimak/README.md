@@ -80,6 +80,29 @@ In EPKL you can select Semimak-eD-JQ as a layout variant of Semimak-eD: In the `
 Remap cycle from vanilla: Q > J > QU
 ```
 
+<br><br>
+
+Semimak(-JQ) Wide and AWS variants
+----------------------------------
+The Semimak layout doesn't really follow the [**C**url][ErgCrl] principle explicitly, although it doesn't put too common letters in the "middle trench" positions (QWERTY GH). So a Curl (C) mod isn't relevant for it.
+<br>
+
+Semimak's [**W**ide][ErgAWi] mod (right-hand keys one step to the right) is pretty straightforward since it doesn't change any of the symbol keys' positions. Semimak, consequently, can use the same Wide mods as Colemak and QWERTY.
+<br>
+
+The same goes for the [**S**ym(bol)][ErgSym] mod (prioritize the common <kbd>'"</kbd> and <kbd>-"</kbd> keys), with one little exception: Unlike Colemak, Semimak doesn't move the <kbd>;:</kbd> key up to the QWERTY P position. Therefore, it should use only the hyphen half of the Sym mods. EPKL has `Sym-Mn` remaps defined for this.
+<br>
+
+#### Semimak-JQ AWS-ISO, for a wide mod and a more accessible hyphen key position:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  f l h v z [ ' w u o y -   |
+|  s r n t k ] c d e a i ;   |
+| x j b m q _ / p g , .      |
++----------------------------+
+```
+
 
 [SemGit]: https://semilin.github.io/semimak/                    (Semimak on GitHub.io)
 [Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb         (Semimak-JQ)
