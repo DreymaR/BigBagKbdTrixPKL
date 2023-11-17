@@ -20,10 +20,12 @@ The Graphite layout
 #### The Graphite layout on a ortho/matrix board, showing base and shifted mappings:
 ```
 +----------------------------+
+| 1 2 3 4 5   6 7 8 9 0  [ ] |
 | b l d w z   ' f o u j  ; = |
 | n r t s g   y h a e i  , \ |
 | q x m c v   k p . - /      |
 +----------------------------+
+| ! @ # $ %   ^ & * ( )  { } |
 | B L D W Z   _ F O U J  : + |
 | N R T S G   Y H A E I  ? | |
 | Q X M C V   K P > " <      |
@@ -51,8 +53,8 @@ The Graphite layout
 
 <br><br>
 
-Graphite variants
-------------------
+Graphite-HB
+-----------
 - Graphite has four non-standard shift level mappings, see the figure below.
 - This affects the Quote (QU), Minus (MN), Comma (CM) and Slash (SL) keys.
 - I guess the idea is to make the double quote and question mark more accessible.
@@ -76,21 +78,25 @@ Graphite variants
 +----------------------------+
 ```
 
-<br>
+<br><br>
 
+Graphite Wide and Sym variants
+------------------------------
 
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
 - For a Wide modded Graphite variant, some special remaps from standard key positions are necessary.
 - The base Graphite layout already moves its bracket keys to the top row, putting SC(;) and PL(=) in their places.
 <br>
 
-- [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.
-- Graphite already moves most of the symbol keys around in its own fashion, so a further Sym mod shouldn't be necessary in this case.
-- If anything, I'd advise moving the Quote key to be more accessible. Especially if using the `HB` (keymap friendly) variant!
-- I'm really not sure where it should go though, as it has bigrams with `I` (and `O`) which shouldn't be made too awkward.
+- [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
+- Graphite already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod?
+- I'd advise moving the Quote key to be even more accessible. Especially if using the `HB` (keymap friendly) variant!
+- The best tack is to do a Sym mod for the hyphen only, as I prefer that to be on the upper row instead of the lower row.
+- For ISO that's easily achievable, but for ANSI you have no extra key to the right of Quote (Graphite Comma).
+- The solution for ANSI seems to be to bring Comma back to the lower row, and with that the `E,` same-finger bigram. Let me know if you have a better suggestion.
 <br>
 
-#### Proposed Graphite (C)AW(S)-ISO:
+#### Graphite (C)AW(S)-ISO proposal:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -100,9 +106,19 @@ Graphite variants
 +----------------------------+
 ```
 
+#### Graphite (C)AW(S)-ANSI proposal, with the comma under UE:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  b l d w z [ ' f o u j - ; |
+|  n r t s g ] y h a e i     |
+|   x m c v q / k p . ,      |
++----------------------------+
+```
+
 <br>
 
-I don't really feel that the details of WideSym mods are up to me at this point. Maybe Richard Davison has some thoughts on it?
+The details of Graphite WideSym modding aren't up to me alone, of course. I've asked Richard Davison for some thoughts on it.
 <br><br>
 
 

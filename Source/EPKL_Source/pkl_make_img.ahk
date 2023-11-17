@@ -374,7 +374,8 @@ hig_callInkscape( ByRef HIG ) {
 		}
 		pklSplash( HIG.Title, "Calling Inkscape with files " . minInx . "-" . maxInx . " of " . numFils . " [batch " . turn . "/" . turns . "] ...", 15 )
 		try {   													; Call Inkscape w/ cmd line options
-			RunWait % HIG.InkPath . HIG.inkOpts . inkFils   		; --without-gui is implicit for export commands.
+			RunWait % HIG.InkPath . HIG.inkOpts . inkFils   		; --without-gui is implicit for export commands, and since v1.1(?) deprecated.
+;			pklInfo( HIG.InkPath . HIG.inkOpts . inkFils, 30 )  	; eD DEBUG
 		} catch {
 			pklErrorMsg( "Running Inkscape failed." )
 			Return

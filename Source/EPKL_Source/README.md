@@ -549,12 +549,12 @@ VERSION HISTORY:
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
-	- Using the NewLayout template framework, a few more modern layouts were added. Semimak-JQ and Canary were already in place.
+	- Using the NewLayout template framework, a few more modern layouts were added; Semimak-JQ and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
 		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
 		- The Sturdy layout by Oxey, with an Angle ergo mod.
 		- Wide and Sym ergo mods are WIP for both Graphite and Sturdy, for now.
-	- The Sym-Mn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
+	- The SymMn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
 		- Fixed a Layout Selector bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.

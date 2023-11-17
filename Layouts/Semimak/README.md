@@ -84,7 +84,7 @@ The Semimak layout doesn't really follow the [**C**url][ErgCrl] principle explic
 Semimak's [**W**ide][ErgAWi] mod (right-hand keys one step to the right) is pretty straightforward since it doesn't change any of the symbol keys' positions. Semimak, consequently, can use the same Wide mods as Colemak and QWERTY.
 <br>
 
-The same goes for the [**S**ym(bol)][ErgSym] mod (prioritize the common <kbd>'"</kbd>/QU and <kbd>-_</kbd>/MN keys), with one little exception: Unlike Colemak, Semimak doesn't move the <kbd>;:</kbd>/SC key up to the QWERTY P position. Therefore, it should use only the hyphen half of the Sym mods. EPKL has `Sym-Mn` remaps defined for this.
+The same goes for the [**S**ym(bol)][ErgSym] mod to prioritize the common QU (<kbd>'"</kbd>) and MN (<kbd>-_</kbd>) keys, with one little exception: Unlike Colemak, Semimak doesn't move the SC (<kbd>;:</kbd>) key up to the QWERTY P position. Therefore, it should use only the hyphen half of the Sym mods. EPKL has `Sym-Mn` remaps defined for this.
 <br>
 
 #### Semimak-JQ AWS-ISO, for a wide mod and a more accessible hyphen key position:

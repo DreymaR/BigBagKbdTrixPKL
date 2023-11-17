@@ -16,7 +16,16 @@ NEXT:
 TODO: 
 HOLD: 
 
-WIPs: (Angle)WideSym variants of Sturdy and Graphite.
+WIPs: Sturdy (Angle)WideSym variants?
+
+2FIX: HIG only makes state0 (really state7, the last one!) plus a state0.svg.png (actual state0) instead of the four states it should.
+		- Did InkScape change somehow, with version 1.3? Raw SVG files are still created for all states, as normal.
+			- Seems to be a bug introduced in InkScape v1.3 (2023-07). It was reported for batch .pdf export but seems also to affect this .png export?
+			- Yup! Works w/ the standalone v1.2.1 install. Make a note in the docs about this issue.
+			- https://inkscape.org/~GordCaswell/%E2%98%85inkscape-portable-121
+
+2FIX: Holding MoDK-Ext then releasing it activates @ext0 even though Ext was held for > 1 s (over tapModTime = 200 ms).
+		- If the Ext-hold is used w/ another key, it goes back as it should.
 
 HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or not?
 		- However, the Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
@@ -427,9 +436,9 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 			- Possibly also Magic Sturdy by Ikcelaks, which EPKL could do...? It's what Getreuer uses.
 			- https://github.com/Ikcelaks/keyboard_layouts/blob/main/magic_sturdy/magic_sturdy.md
 		- Nerps by Smudge (2022)? I don't like its PD(.<) in the SL(/?) key position: Messes with the Wide mod, and just feels odd.
-			- Also, it seems unstable. According to Oxey, it's been "superseded by Nerbs and Gallium" in some respects.
-		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and people recommend adding it. Higher SFB% than CMK though!?
-		- Dwarf/Whorf? ("Parented to CMini"?)
+			- Also, it seems unstable. According to Oxey, it's been "superseded by Nerbs and Gallium" in some respects. No home page.
+		- Engram?  https://engram.dev/  by Arno Klein (2021) is also neat, and some recommended adding it. Higher SFB% than CMK though (corpus dependent)!?
+		- Dwarf/Whorf? ("Parented to CMini"?). No home pages?
 
 	- Allow a mapping like Modifier(#), to add # to the modifier level? Use it as single-argument mapping entry. Modifier(8) would be SwiSh.
 	- Instead of having to make special literal entries (`→` or similar) for unshifted characters in shifted states, make all character sends use Unicode/Text?
