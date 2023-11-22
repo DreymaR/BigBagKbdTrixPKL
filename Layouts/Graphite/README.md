@@ -91,12 +91,13 @@ Graphite Wide and Sym variants
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
 - Graphite already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod?
 - I'd advise moving the Quote key to be even more accessible. Especially if using the `HB` (keymap friendly) variant!
+- For Wide variants, a Sym mod is beneficial. I've proposed Graphite WideSym variants similar to my other WS layout variants.
 - The best tack is to do a Sym mod for the hyphen only, as I prefer that to be on the upper row instead of the lower row.
 - For ISO that's easily achievable, but for ANSI you have no extra key to the right of Quote (Graphite Comma).
 - The solution for ANSI seems to be to bring Comma back to the lower row, and with that the `E,` same-finger bigram. Let me know if you have a better suggestion.
 <br>
 
-#### Graphite (C)AW(S)-ISO proposal:
+#### Graphite (C)AWS-ISO proposal:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -106,7 +107,7 @@ Graphite Wide and Sym variants
 +----------------------------+
 ```
 
-#### Graphite (C)AW(S)-ANSI proposal, with the comma under UE:
+#### Graphite (C)AWS-ANSI proposal, with the comma under UE:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -118,7 +119,14 @@ Graphite Wide and Sym variants
 
 <br>
 
-The details of Graphite WideSym modding aren't up to me alone, of course. I've asked Richard Davison for some thoughts on it.
+The details of Graphite WideSym modding aren't up to me alone, of course. I've asked Richard Davison for his thoughts on it.
+<br>
+
+![Graphite (C)AWS-ISO help image](./Graphite_ISO-AWS_EPKL.png)
+
+_The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
+
+
 <br><br>
 
 

@@ -409,7 +409,7 @@ VERSION HISTORY:
 	- The img_HideStates setting can hide the `ext` layer image too, and even DK shift states specified as `dk#`; # is a shift state (0,1,6,7).
 	- The BaseLayout setting in Layout.ini can now take a `..\` syntax.
 	- Added ANS-Orth/ISO-Orth Colemak-eD. Images are still row-staggered, but this should clarify which ergo mods are for which board types.
-		- The bracket-lift Sym mod (Sym-Br) looks better on ortho boards than the standard (Sym-LBr). Images were made for both mod variants.
+		- The bracket-lift Sym mod (SymQM-Br) looks better on ortho boards than the standard (SymQM-LB). Images were made for both mod variants.
 	- Suspend by layout Locale ID. Should make EPKL work better for users of IMEs such as Korean, as they may conflict with non-QWERTY layouts.
 		- The suspendingLIDs setting uses 4-xdigit LID codes as found in the About... menu. Use the Locale ID, not the Language one.
 	- An `--` entry allows disabling EPKL hotkeys in the `EPKL_Settings_Override` file. Earlier, you'd have to use an unused key like `Sleep`.

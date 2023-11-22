@@ -9,11 +9,17 @@ _The default Sturdy layout (using the Angle mod) on an ANSI keyboard_
 <br><br>
 
 The Sturdy layout
---------------------
+-----------------
 - This layout was made by Oxey using his own 'Oxeylyzer' analysis program, 2022-07.
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see its [layout home page][LayHom] and [the Oxeylyzer page][AnaHom].
+<br>
+
+![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
+
+_The Sturdy layout. Image taken from its own [homepage][LayHom]._
+
 <br>
 
 #### The Sturdy layout on a ortho/matrix board:
@@ -46,16 +52,19 @@ The Sturdy layout
 
 <br><br>
 
-Sturdy variants
-------------------
-- Oxey's Reddit comment on Wide variants:
+Sturdy Wide and Sym variants
+----------------------------
+- [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
+- Sturdy-Wide is fairly simple for ISO keyboards, but for ANSI there's more of a problem since there isn't an extra key next to Enter.
+- Oxey has an elegant solution for Sturdy-AngleWide-ANSI, based on this discussion on Reddit:
 	- https://www.reddit.com/r/KeyboardLayouts/comments/15zu2rn/comment/jysbcn8/?context=2
+- I discussed the bracket positions with Oxey, and he agrees that they may well go in the middle as they do in many other Wide layouts.
 <br>
 
 	[Question: How would Oxey envision a Sturdy-Wide variant?]
 	
 	On ISO I'd do this:
-	===  Sturdy (C)AW-ISO:  ===
+	===  Sturdy AngleWide-ISO:  ===
 	 v m l c p  \  x f o u j    
 	 s t r d y  /  . n a e i ,  
 	z k q g w  _ -  b h ' ;     
@@ -67,23 +76,20 @@ Sturdy variants
 	 z k q g w  j  b h ' ;      (no Angle mod)
 	
 	But ... that ANSI version isn't ideal. Probably angle with Z in that position would be better:
-	=== Sturdy (C)AW-ANSI; special Angle mod: ===
+	=== Sturdy AW-ANSI; special Angle mod: ===
 	v m l c p  /  x f o u , \   
 	s t r d y  -  . n a e i     
 	 k q g w j  z  b h ' ;      (Angle mod w/ Z <-> J swap)
 
 <br>
 
-- [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
-- I discussed the bracket positions with Oxey, and he agrees that they may well go in the middle as with many other Wide layouts.
-- Sturdy-Wide is WIP at the moment.
-<br>
-
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.
-- Sturdy-WideSym is WIP at the moment.
+- Sturdy-WideSym was designed to harmonize with other BigBag WideSym variants.
+- For ANSI, the concession is that the Slash key ends up in a non-ideal position. It isn't that common, but still.
+	- If you prefer, you could swap Backslash and Slash I guess. ANSI just isn't as easily ergo-modded as ISO is.
 <br>
 
-#### Sturdy (C)AWS-ISO proposal, moving the comma key up:
+#### Sturdy (C)AWS-ISO, simply moving the comma key up:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -93,7 +99,7 @@ Sturdy variants
 +----------------------------+
 ```
 
-#### Sturdy (C)AWS-ANSI proposal, using Oxey's `J > Z > / > ,` loop:
+#### Sturdy (C)AWS-ANSI proposal, using Oxey's `J > Z > ,` loop:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -102,11 +108,18 @@ Sturdy variants
 |   k q g w j z b h ' ;      |
 +----------------------------+
 ```
+
 <br>
 
-![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
+![Sturdy (C)AWS-ISO help image](./Sturdy_ISO-AWS_EPKL.png)
 
-_The Sturdy layout. Image taken from its own [homepage][LayHom]._
+_The Sturdy-AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
+
+<br>
+
+![Sturdy (C)AWS-ANSI help image](./Sturdy_ANS-AWS_EPKL.png)
+
+_The Sturdy-AWS-ANSI layout. Note the changed J and Z positions._
 
 <br><br>
 

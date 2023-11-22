@@ -30,7 +30,8 @@ InkScape
 - Portable/Standalone InkScape can be downloaded either via the brilliant [PortableApps][PrtApp] platform, or via the InkScape site.
 <br>
 
-- **NOTE**: In Inkscape v1.3 there is a bug that affects batch export. Instead, please use any version between v1.0 and v1.2.1.
+- **NOTE**: In Inkscape v1.3 there is a bug that affects batch export. 
+- The bug will be fixed very soon (v1.3.1+), but meanwhile you may use any version between v1.0 and v1.2.1.
 - Here's a link to a [Inkscape v1.2.1 Standalone installer][Ink121], for this purpose.
 	- Put it anywhere you like, and edit the EPKL `InkscapePath` setting accordingly.
 
