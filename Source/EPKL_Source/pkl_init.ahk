@@ -1,4 +1,4 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPKL initialization
 ;;  - Load 1) general settings and layout choice, 2) the layout itself, 3) other stuff.
 ;
@@ -7,7 +7,7 @@
 initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
 													;   ###############################################################
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
@@ -19,7 +19,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
@@ -84,7 +84,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
@@ -190,7 +190,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
@@ -433,7 +433,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
@@ -474,7 +474,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	
 	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -501,7 +501,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgDir", dkImDir )
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK img state suffix. Defaults to old ""/"sh"?
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )

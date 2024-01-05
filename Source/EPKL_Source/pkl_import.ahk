@@ -1,4 +1,4 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPKL Layout Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
 ;;    - Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
 ;;    - WIP: Just use an _Inbox under layouts, and generate directly into the Layout dir? Check if existing then.
@@ -64,7 +64,7 @@ _importOneLayout( LIM )								; Function to import one layout via a template .i
 }
 
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  EPKL Compose Import module: Turn any X11-libs Compose file into an EPKL Compose table.
 ;;    - Works from the Files\Composer directory, turning a Compose.h file in _Inbox into .ini files.
 ;;    - Uses a template with a set of regular expression (RegEx) entries to generate the .ini file.
@@ -155,7 +155,7 @@ Large files may take some time.
 }
 
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  EPKL Import Module Process: Import a file and convert it using a specified set of regular expressions.
 ;
 

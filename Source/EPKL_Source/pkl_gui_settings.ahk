@@ -1,4 +1,4 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPKL Settings UI module
 ;;  - Handles the EPKL Layout/Settings... menu, consisting of several settings tabs
 ;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
@@ -60,7 +60,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; Multi-tab GUI. AltSubmit gets tab # not name.
 			, % "Layout||Settings|Special Keys|Key Mapper"  	; The tab followed by double pipes is default
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Layout Picker UI
 	;
 	GUI, UI:Add, Text, section  								; 'section' stores the x value for later
@@ -107,7 +107,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn1  gUIsubLaySel, &Submit Layout Choice
 	GUI, UI:Add, Button, xs+244 yp          gUIrevLay   , %SP%&Reset%SP% 	; Note: Using absolute pos., specify both x & y
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  General Settings UI
 	;
 	GUI, UI:Tab, 2
@@ -119,7 +119,7 @@ pklSetUI() { 													; EPKL Settings GUI
 			,       "SetThis"   , "Choose1 w160" , setThis  , "xs y+m" ) 		; Submits the entry itself
 	_uiAddEdt( "`nDefault value:"
 			,       "SetDefs"   , "Disabled"       , ui.WideTxt, "xs y+m" )
-	_uiAddEdt( "`nLine comments etc for this option:"
+	_uiAddEdt( "`nLine comments for this option:"
 			,       "SetComm"   , "Disabled"       , ui.WideTxt, "xs y+m" ) 	; "cGray" lets you select/view the whole line
 	_uiAddEdt( "`n`nSubmit this to the Settings_Override [pkl] section:"
 			,       "SetLine"   , ""            , ui.WideTxt, "xs y+m" )
@@ -130,7 +130,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn2  gUIsubSetSel, &Submit Setting%SP%
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSet   , %SP%&Reset%SP%
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Special Keys UI
 	;
 	GUI, UI:Tab, 3
@@ -173,7 +173,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSpc   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  Key Mapper UI [advanced]
 	;
 	GUI, UI:Tab, 4
@@ -229,7 +229,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	Gosub UIhitTab
 } 	; end fn pklSetUI
 
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  UI Control sections
 	;
 UIhitTab:   													; When a tab is selected, make its button the default.
@@ -385,7 +385,7 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n- The Windows ShiftStates are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number, and don't map the Ctrl state."
 ;	pesText :=  "    This is an overview of EPKL prefix-entry syntax:"
 	pesTabl :=  ""
-			.   "  X=======================================================================================================================X"
+			.   "  #=======================================================================================================================#"
 			. "`n  |  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.     |"
 			. "`n  |  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.  |"
 			. "`n  |      →  |  %  : Send a literal string/ligature by the SendInput {Text} method                                         |"
@@ -400,7 +400,7 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n  |      ®® |  ®# : Repeat the previous character. '#' may be a hex number. Nice for avoiding same-finger bigrams.        |"
 			. "`n  |      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |"
 			. "`n  |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |"
-			. "`n  X=======================================================================================================================X"
+			. "`n  #=======================================================================================================================#"
 	klmText :=  ""
 			.   "•   K E Y   C O D E S   A N D   R E M A P S"
 			. "`n"
@@ -472,7 +472,7 @@ UIrevKey:   													; Revert UI setting(s)
 	           , _uiGetParams( "KeyAll" ) ], "Key" )
 Return
 
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;;  UI functions
 	;
 _uiControl( var, values ) { 									; Update an UI Control with new values and, if applicable, choice

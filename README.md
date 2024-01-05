@@ -389,22 +389,22 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Should you need to start a literal string with one of the prefix characters, prefix it with `→` or `%`.
 * This is from the EPKL `Layout/Settings…` Key Mapper Help screen (press the Help button on the last tabs):
 ```
-;;  ====================================================================================================================
-;;  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.
-;;  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.
-;;      →  |  %  : Send a literal string/ligature by the SendInput {Text} method
-;;      §  |  $  : Send a literal string/ligature by the SendMessage method
-;;      α  |  *  : Send ‹entry› as AHK syntax in which !+^# are modifiers, and {} contain key names
-;;      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state
-;;      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)
-;;      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)
-;;      ¶  |  &  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…
-;;  - Any entry may start with «#»: '#' is one or more characters to display on help images for the following mapping.
-;;  - Other advanced state mappings:
-;;      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.
-;;      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.
-;;      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.
-;;  ====================================================================================================================
+#=======================================================================================================================#
+|  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.     |
+|  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.  |
+|      →  |  %  : Send a literal string/ligature by the SendInput {Text} method                                         |
+|      §  |  $  : Send a literal string/ligature by the SendMessage method                                              |
+|      α  |  *  : Send ‹entry› as AHK syntax in which !+^# are modifiers, and {} contain key names                      |
+|      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state                                               |
+|      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)                           |
+|      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)                           |
+|      ¶  |  &  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &Esc, &Tab…          |
+|  - Any entry may start with «#»: '#' is one or more characters to display on help images for the following mapping.   |
+|  - Other advanced state mappings:                                                                                     |
+|      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.        |
+|      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |
+|      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |
+#=======================================================================================================================#
 ```
 
 #### The LayStack and file relations explained further

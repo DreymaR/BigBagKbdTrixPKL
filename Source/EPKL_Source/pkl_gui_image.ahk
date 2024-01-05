@@ -1,4 +1,4 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPKL Image module
 ;;  - Displays main and dead key help images by shift state, and Extend layers
 ;;  - Separate background image and Shift/AltGr indicator overlay, configurable in Layout.ini
@@ -108,18 +108,18 @@ pkl_showHelpImage( activate = 0 )
 	if ( activate == 1 ) { 												; Activate the help image
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" ) 	; Tick off the Show Help Image menu item
 		GUI, HI:New, +AlwaysOnTop -Border -Caption +ToolWindow 			; Create a GUI for the help images
-					+LastFound +Owner, 				pklImgWin 			; Owner removes the task bar button?
+					+LastFound +Owner, 				pklHlpImg 			; Owner removes the task bar button?
 		GUI, HI:Margin, 0, 0
 		GUI, HI:Color, % im.BgColor
 		if ( im.Opacity > 0 && im.Opacity < 256 ) {
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
-			WinSet, TransColor, % im.BgColor, pklImgWin  				; eD WIP: This actually works, but if I resize the window it goes away again?
+			WinSet, TransColor, % im.BgColor, pklHlpImg  				; eD WIP: This actually works, but if I resize the window it goes away again?
 		}
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlBgImg ; AltSubmit 	; Make image controls stored in Help##### variables
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlKyImg ; AltSubmit
 		GUI, HI:Add, Pic, xm +BackgroundTrans vCtrlShImg ; AltSubmit
-		GUI, HI:Show, NA, 							pklImgWin
+		GUI, HI:Show, NA, 							pklHlpImg
 		
 		SetTimer, showHelpImage, 170 									; Redraw the help image every # ms (screen refresh takes 16.7 ms @ 60 Hz)
 	} else if ( activate == -1 ) { 										; Deactivate image
@@ -134,7 +134,7 @@ pkl_showHelpImage( activate = 0 )
 	CoordMode, Mouse, Screen 											; Mousing over the image pushes it away
 	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
-	if ( title == "pklImgWin" ) {
+	if ( title == "pklHlpImg" ) {
 		max     := im.PosArr.Length()
 		if ( mouseX - imgX < im.Mrg[5] ) { 								; Push +1/right (with wrap)
 			im.PosIx    := ( im.PosIx = max ) ? 1 : ++im.PosIx
@@ -201,7 +201,7 @@ pkl_showHelpImage( activate = 0 )
 	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
 	GuiControl, HI:, CtrlKyImg, *w%imgW% *h%imgH% %imgPath%
 	GuiControl, HI:, CtrlShImg, *w%imgW% *h%imgH% %imgShPath%
-	GUI, HI: Show, x%imgX% y%imgY% AutoSize NA, 		pklImgWin 		; Use AutoSize NA to avoid stealing focus
+	GUI, HI: Show, x%imgX% y%imgY% AutoSize NA, 		pklHlpImg 		; Use AutoSize NA to avoid stealing focus
 	} else {
 		GUI, HI:Hide
 	}

@@ -1,14 +1,14 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;
 
 /*
-;;  ####################### TODO 2 do #######################
+;;  ########################   TODO  »-->   ########################
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  Recent issues:
 WIPs: 
 2FIX: 
@@ -16,23 +16,28 @@ NEXT:
 TODO: 
 HOLD: 
 
-WIPs: Sturdy (Angle)WideSym variants?
+TODO: Actual settings shown in the Layout Picker and Special Keys tabs.
+		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
+		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
 
-2FIX: HIG only makes state0 (really state7, the last one!) plus a state0.svg.png (actual state0) instead of the four states it should.
-		- Did InkScape change somehow, with version 1.3? Raw SVG files are still created for all states, as normal.
-			- Seems to be a bug introduced in InkScape v1.3 (2023-07). It was reported for batch .pdf export but seems also to affect this .png export?
-			- Yup! Works w/ the standalone v1.2.1 install. Make a note in the docs about this issue.
-			- https://inkscape.org/~GordCaswell/%E2%98%85inkscape-portable-121
+NEXT: Add a Help button with a more generic help screen for the first Settings UI panel?
+NEXT: Move the text for the Settings UI help text to the language files?!
+		- Make a separate .ini file section for it. Then read in the whole section and process it?
+
+NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
+
+WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
+		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
+		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+
+TODO: Custom Send syntax!
+		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
+		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
 
 2FIX: Holding MoDK-Ext then releasing it activates @ext0 even though Ext was held for > 1 s (over tapModTime = 200 ms).
 		- If the Ext-hold is used w/ another key, it goes back as it should.
-
-HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or not?
-		- However, the Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
-		- Also have a WS remap for other layouts like Sturdy (Semimak? etc?) that have stuff on the SL key.
-
-			- Already have `SymMnW_ANS` (no Cmk-QU remap) for alt vs the standard `SymQuMnW_ANS`, for Cmk etc.
-		- An 'unSym' remap may be a good way of resetting sym mappings for some layouts (like Sturdy) before proceeding.
+		- It'd be nice to make an Extend key KeyUp deactivate any MoDK layers. But how to deactivate DK layers like that?
 
 2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
 		- Seems it works after the first suspension.
@@ -45,16 +50,6 @@ HOLD: Make WideSym a separate remap now? Simpler? Less confusing, maybe? Or not?
 		- When I tried setting a high ToM Timer duration to test it, I couldn't activate Ext2 before the timer expired.
 			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
 			- It is as it should be, I guess?
-
-WIPs: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
-		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
-		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
-		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
-
-WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
-		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
-		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
-		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
 
 2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
 		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
@@ -83,12 +78,15 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 		- The vmods don't need to be sticky for this to happen.
 		- Are they turned off somewhere on release? That'd account for them working only once.
 
-TODO: Custom Send syntax!
-		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
-		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
+TODO: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
+		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
+		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
+		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  eD TOFIX/WIP:
+
+2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?! Why does it even do this, again?!
 
 2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
 		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
@@ -100,16 +98,7 @@ TODO: Custom Send syntax!
 		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 		- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
 
-TODO: Further getWinLayDKs() development
-		- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
-		- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
-		- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
-		- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
-		- What about pkl_CheckForDKs() in pkl_send.ahk?
-
 2FIX: Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
-
-2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?!
 
 2FIX: System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
 
@@ -132,37 +121,6 @@ WIPs: With SC remaps, can we now actually remap the System layout? For instance,
 		- No, doesn't work; the SC don't get remapped at all. Ah well.
 		- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
 
-WIPs: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
-		- I think the bulgarian =+ position should house Ѝ ѝ
-		- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
-		- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
-		- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
-WIPs: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
-		- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
-		    (not used in the official orthography, but used in the still-popular 1918 orthography)
-		- Russian letters should also be accessible seeing how belarus is officially bilingual
-		- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
-		- The national layout uses `'` so the current mapping may suffice
-		- Maybe put ’ on the iso key instead of double acute?
-		- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
-
-TODO: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
-
-WIPs: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
-		- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
-
-TODO: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
-		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
-		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
-		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
-TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
-		- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
-
-TODO: Add a Help button with a more generic help screen for the first Settings UI panel?
-TODO: Move the text for the Settings UI help text to the language files?!
-		- Make a separate .ini file section for it. Then read in the whole section and process it?
-
 2FIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
 
 WIPs: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
@@ -177,10 +135,6 @@ WIPs: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=
 
 2FIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
 		- Is this because of the VK detection making an error? The ones that work both have V in its old place.
-
-TODO: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
-
-TODO: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
 
 TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
 		- Would destroying the GUI on DK activation help at all?
@@ -251,8 +205,47 @@ FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And chang
 TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 		- It works well! But then after a while it stops working?
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  eD TONEXT:
+
+TODO: As a `##` state map entry maps to a VK send, maybe add a `#<VK>` syntax to send another VK by its one-letter code or `0x##` code? `#A` for the `A` key, etc.
+		- That would encroach upon the AHK syntax, which we've mostly avoided thus far. But `Win+a` could still be easily enough sent by `α#a`, etc.
+
+NEXT: Further getWinLayDKs() development
+		- What to do w/ the detect/get/setCurrentWinLayDeadKeys() fns?
+		- Get rid of the systemDeadKeys setting, and update setCurrentWinLayDeadKeys() accordingly... unless it's still needed for pkl_Send()?!?
+		- Get rid of [DefaultLocaleTxt] and [DeadKeysFromLocID] in EPKL_Tables.ini and all language files?
+		- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
+		- What about pkl_CheckForDKs() in pkl_send.ahk?
+
+NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
+		- I think the bulgarian =+ position should house Ѝ ѝ
+		- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
+		- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
+		- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
+NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
+		- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
+		    (not used in the official orthography, but used in the still-popular 1918 orthography)
+		- Russian letters should also be accessible seeing how belarus is officially bilingual
+		- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
+		- The national layout uses `'` so the current mapping may suffice
+		- Maybe put ’ on the iso key instead of double acute?
+		- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
+
+NEXT: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
+
+NEXT: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
+		- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
+
+NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
+		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
+		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
+TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
+		- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
+
+TODO: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
 
 NEXT: User working dir: All user files can be under a specified user root dir.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
@@ -319,8 +312,6 @@ TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers a
 TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
 TODO: Personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
 TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
-TODO: A Wide mod that supports the QI;x or CTGAP bottom-right-half-row. Where he has `_B _H SL PD CM`, make the Wide mod `SL _B _H PD` and move CM up.
-		- Or... Would that suck? It replaces the safe E-SL SFB with E-B which is much worse?
 TODO: Add QWERTZ and AZERTY layouts? There are now remaps for them, and the rest should be doable with OEM VK detection.
 TODO: Provide a swap-LAlt-n-Caps RegEdit script, and a reversal one. Maybe add some more codes in the comments, see my old RegEdit scripts.
 TODO: Harmonize Ext and folder mod names? And/or make a shorthand for the @E=@C@H@O battery in addition to @K in layout files? And also the short variant like CAW(S)?
@@ -333,7 +324,7 @@ TODO: Make a matrix image template, and use it for the Curl variants w/o Angle.
 2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  eD TODO:
 
 TODO: Improve GUI responsiveness further.
@@ -417,8 +408,14 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 		- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 		- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
-;; ================================================================================================
+;;  ================================================================================================================================================================
 ;;  eD ONHOLD:
+
+HOLD: Make WideSym into a separate remap now? Simpler? Less confusing, or not?
+		- The Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
+		- Made WS remaps for alt layouts like Sturdy that shouldn't do pure Wide mods as they have stuff on the Slash key.
+		- We already have `SymMnW_@K` (no Cmk-QU remap) for alt layouts (vs `SymQuMnW_ANS`, for Cmk etc.).
+		- An 'UnSym' remap is a good way of resetting symkey mappings for some layouts (like Graphite) before proceeding.
 
 HOLD: Even More Modern Alt Keyboard Layouts?
 		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
@@ -468,11 +465,10 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 	- Auto language detection doesn't follow keyboard setup but system language. If you use a Non-English keyboard but Windows uses English, the auto language is English.
 	- Someone used CapsLock on double-tap Shift. Neat idea! Except for the double-tap SFB, of course. If you have both Shift keys, a chord could do it?!
 
-;;  ####################### TODO done #######################
+;;  ########################   <--«  TODO   ########################
 */
 
-
-;;  ####################### main code #######################
+;;  ########################    main code   ########################
 
 #NoEnv
 #Persistent
@@ -493,8 +489,8 @@ Process, Priority, , R  									; Real-time process priority (default is N for 
 SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: Make a separate user working dir, so users can have their settings elsewhere?
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
-setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" ) 					; EPKL Name
-setPklInfo( "pklVers", "1.4.1" )    										; EPKL Version
+setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" )  				; EPKL Name
+setPklInfo( "pklVers", "1.4.1 EOL" )    									; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL - used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
 setPklInfo( "pklHdrB", "`r`n"
@@ -503,17 +499,17 @@ setPklInfo( "pklHdrB", "`r`n"
 
 setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
-;global UIsel 												; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
-Gosub setUIGlobals 											; Set the globals needed for the settings UI (is this necessary?)
-arg = %1% 													; Layout from command line parameter, if any
-initPklIni( arg ) 											; Read settings from pkl.ini (now PklSet and PklLay)
-initLayIni() 												; Read settings from Layout.ini and layout part files
+;global UIsel   											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
+Gosub setUIGlobals  										; Set the globals needed for the settings UI (is this necessary?)
+arg = %1%   												; Layout from command line parameter, if any
+initPklIni( arg )   										; Read settings from pkl.ini (now PklSet and PklLay)
+initLayIni()    											; Read settings from Layout.ini and layout part files
 activatePKL()
-;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 )   	; eD DEBUG
+;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 ) 	; eD DEBUG
 
 Return  													; end of main
 
-;;  ####################### labels    #######################
+;;  ########################    labels      ########################
 
 ;;  eD WIP: Map AltGr to RAlt to prevent trouble?!
 ;;  The order of AltGr is always LCtrl then RAlt. Custom combos always have the * (wildcard) mod so they obey any mod state.
@@ -681,7 +677,7 @@ Return
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
 } 	; end debug#
 
-;;  ####################### includes  #######################
+;;  ########################    includes    ########################
 
 #Include pkl_init.ahk
 #Include pkl_gui_image.ahk      	; pkl_gui was too long; it's been split into help image and menu/about parts
@@ -696,6 +692,6 @@ Return
 #Include pkl_import.ahk         	; Import module, converting MSKLC layouts to EPKL format, and other import/conversion
 #Include pkl_make_img.ahk       	; Help image generator, calling Inkscape with an SVG template
 
-;;  ####################### functions #######################
+;;  ########################    functions   ########################
 
 ;;  Functions and further subroutines are defined in the included files.

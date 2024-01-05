@@ -538,16 +538,16 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.4.2: WIP
+* EPKL v1.4.2: Layout/Settings enhancements.
+	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
+		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
+		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
 	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now delete the queue.
 		- This fixes a problem with using powerstrings for Delete Word, as they would leave undesired characters in the lastKeys queue.
 	- ToM mappings required a VK code before the slash but an AHK modifier name after. Now, you can use any modifier alias (VK or KLM name).
 		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64
-	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
-		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
-		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
 	- Using the NewLayout template framework, a few more modern layouts were added; Semimak-JQ and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
@@ -561,3 +561,5 @@ VERSION HISTORY:
 			- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
 		- Fixed a Layout Selector bug that would allow an invalid KbdType to show up if another LayType had that KbdType.
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
+	- Fixed: HIG only made "state0.png" (really the last state) plus state0.svg.png (actual state0) instead of the state images it should.
+		- InkScape v1.3 (2023-07) has a bug affecting batch export. Should be fixed soon. The HIG works w/ the standalone v1.2.1 install.

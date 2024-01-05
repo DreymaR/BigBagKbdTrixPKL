@@ -1,4 +1,4 @@
-﻿;; ================================================================================================
+﻿;;  ================================================================================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;  - Calls Inkscape with a .SVG template to generate a set of .PNG help images
 ;;  - Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
@@ -165,9 +165,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 		if ( SC == "SC056" && getLayInfo( "Ini_KbdType" ) != "ISO" ) {
 			Continue 											; Ignore the ISO key on non-ISO images
 		}
-															;;  ###############################################################
-		if ( stateImg ) {   								;;  ################ Main layout shift state image ################
-															;;  ###############################################################
+															;;  ################################################################
+		if ( stateImg ) {   								;;  ################  MainLayout shift state image  ################
+															;;  ################################################################
 			ent     :=       getKeyInfo( SC . shSt       )  	; Current layout key/state main entry
 			ents    := ent . getKeyInfo( SC . shSt . "s" )  	; Two-part key/state entry
 			if ( not ent ) {
@@ -200,9 +200,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 				rel := hig_parseEntry( HIG, ents )  			; Prepare the entry for display vis-a-vis HIG «» tags
 				tag := ""
 			}
-															;;  ###############################################################
-		} else { 											;;  ################  Dead key shift state image  #################
-															;;  ###############################################################
+															;;  ################################################################
+		} else { 											;;  ################   Dead key shift state image   ################
+															;;  ################################################################
 			ent     := HIG.ImgDic[ idKey ]  					; Here, the entry is the base for the DK entry
 			rel     := DeadKeyValue( dkName, ent )  			; Get the DeadKeyValue for the current state/key...
 			if ( not ent || not rel )
@@ -220,7 +220,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	
 	if ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
-	;; ================================================================================================
+	;;  ================================================================================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "
