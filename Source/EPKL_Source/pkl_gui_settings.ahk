@@ -359,7 +359,7 @@ UIselKey:   													; Handle UI Key Mapping selections
 Return
 
 UIhlpShow:  													; Help button: Show the KeyMapper and other info Help GUI
-	hlpText :=  ""
+	mapHelp :=  ""
 ;			.   "EPKL Key Mapper help:"
 			. "`nFirstly: This is a complex topic! Please refer to the BigBag web pages and read inside the relevant EPKL files if you wish to understand it better."
 			. "`nDreymaR's Big Bag of Keyboard Tricks is found at: https://dreymar.colemak.org"
@@ -383,8 +383,8 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n- State mappings can be lots of different things, from simple characters via AHK syntax and PowerStrings to advanced dead or Compose/Completion/Repeat keys."
 			. "`n- Learn about EPKL Prefix-Entry syntax, Extend, dead keys, Compose and more in the main Readme file. Also in the Compose, DeadKeys, Extend and PowerStrings files."
 			. "`n- The Windows ShiftStates are: [#]  Unshifted  Shifted  Ctrl  AltGr  Shift+AltGr. Usually, ignore the initial CapsBehavior number, and don't map the Ctrl state."
-;	pesText :=  "    This is an overview of EPKL prefix-entry syntax:"
-	pesTabl :=  ""
+;			    "    This is an overview of EPKL prefix-entry syntax:"
+	pesHelp :=  ""
 			.   "  #=======================================================================================================================#"
 			. "`n  |  EPKL prefix-entry syntax is useable in layout state mappings, Extend, Compose, PowerString and dead key entries.     |"
 			. "`n  |  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.  |"
@@ -401,27 +401,26 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n  |      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |"
 			. "`n  |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |"
 			. "`n  #=======================================================================================================================#"
-	klmText :=  ""
+	klmHelp :=  ""
 			.   "•   K E Y   C O D E S   A N D   R E M A P S"
 			. "`n"
 			. "`n- EPKL maps keys using their scan codes. 'QW_' codes denote QWERTY locations, see the table below. Actual SC### scan codes work as well."
 			. "`n- Keys may get moved around by mod _Remaps_ such as ergo mods. When mapping something to a key, map to the unmodded location (the old 'N' key is still QW_N)."
-			. "`n- Example: Standard Colemak has G on the top row, where Colemak-DH has B. To edit the B key in Cmk-DH, still use its QWERTY (and Colemak) position QW_B."
+			. "`n- Example: Standard Colemak has G on the top row (QW_T), where Colemak-DH has B. To edit the B key in Cmk-DH, still use its QWERTY (and Colemak) position QW_B."
 			. "`n"
 			. "`n    This is a table of all KeyLayoutMap codes from the _eD_Remap.ini file, useable both as ""Map from QW"" Scan Codes and ""Map to vc"" Virtual Key codes."
 			. "`n    You can edit the key mapping lines directly to any valid key codes and mappings. The KLM codes to the right, for example, aren't in the dropdown lists."
 	GUI, UI_KEYHLP:New  , ToolWindow , EPKL Key Mapper Help
-	GUI, UI_KEYHLP:Add  , Text,      , % hlpText    			; Help introduction
-;	GUI, UI_KEYHLP:Add  , Text,      , % pesText    			; Syntax-Entry table w/ intro text
+	GUI, UI_KEYHLP:Add  , Text,      , % mapHelp    			; Help introduction
 	GUI, UI_KEYHLP:Font , s10 , Courier New
-	GUI, UI_KEYHLP:Add  , Text,      , % pesTabl . "`n"
+	GUI, UI_KEYHLP:Add  , Text,      , % pesHelp . "`n" 		; Syntax-Entry help table
 	GUI, UI_KEYHLP:Font 										; (Restore the default system font)
-	GUI, UI_KEYHLP:Add  , Text,      , % klmText    			; KLM key code table, generated above
+	GUI, UI_KEYHLP:Add  , Text,      , % klmHelp    			; KLM key code table, generated above
 	GUI, UI_KEYHLP:Font , s10 , Courier New
 	GUI, UI_KEYHLP:Add  , Text,      , % ui.KLMp . "`n" 		; The KLM table is made from the Remap file KLM table
 	GUI, UI_KEYHLP:Font
 	GUI, UI_KEYHLP:Add  , Button, gUIhlpHide Default, &Hide
-	GUI, UI_KEYHLP:Show , x16 y16 								; Show the help window in the screen corner
+	GUI, UI_KEYHLP:Show , x16 y16   							; Show the help window in the screen corner
 Return
 
 UIhlpHide:  													; Remove the Help GUI

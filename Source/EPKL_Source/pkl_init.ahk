@@ -15,6 +15,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "LayFileName", "Layout"                ) 				; --"--
 	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini" ) 				; Info dictionary file, mostly from internal tables
 	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
+	setPklInfo( "WinMatchDef", 2                       ) 				; Default TitleMatchMode for window recognition; 2 = Match partial title
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
@@ -72,7 +73,8 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}	; end For suspApp
-	_pklSetInf( "suspendingLIDs" ) 										; Layouts that suspend EPKL when active (actually CSV, but it's okay)
+	_pklSetInf( "suspendingMode" )  									; Window TitleMatchMode to use for suspendingApps
+	_pklSetInf( "suspendingLIDs" )  									; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
 	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
 	_pklSetInf( "stickyTime" ) 											; --"--
@@ -515,7 +517,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 
 activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	SetCapsLockState, Off 							; Remedy those pesky CapsLock hangups at restart
-	SetTitleMatchMode 2
+	SetTitleMatchMode % getPklInfo("WinMatchDef") 	; 2: "A window's title can contain WinTitle anywhere inside it to be a match"
 	DetectHiddenWindows on
 	WinGet, id, list, %A_ScriptName%
 	Loop % id {
@@ -558,7 +560,9 @@ changeLayout( nextLayout ) { 						; Rerun EPKL with a specified layout
 }
 
 _pklSetInf( pklInfo ) { 							; Simple setting for EPKL_Settings entries
-	setPklInfo( pklInfo, pklIniRead( pklInfo ) )
+	val := pklIniRead( pklInfo )
+	val := ( val == "--" ) ? "" : val
+	setPklInfo( pklInfo, val )
 }
 
 _pklStckUp( The, theFile, at1 = 0 ) {   			; Add a support file to the bottom of a LayStack clone

@@ -16,14 +16,12 @@ NEXT:
 TODO: 
 HOLD: 
 
-TODO: Actual settings shown in the Layout Picker and Special Keys tabs.
+NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
 		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
-
 NEXT: Add a Help button with a more generic help screen for the first Settings UI panel?
 NEXT: Move the text for the Settings UI help text to the language files?!
 		- Make a separate .ini file section for it. Then read in the whole section and process it?
-
 NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 
 WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?

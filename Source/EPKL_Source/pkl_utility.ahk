@@ -107,17 +107,21 @@ pklJanitorTic:
 Return
 
 _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
-	static suspendedByApp := false 								; (Their attributes are in the Settings file)
+	static suspendedByApp := false  							; (Their attributes are in the Settings file)
 	
-	if WinActive( "ahk_group SuspendingApps" ) { 				; If a specified window is active...
-		if ( not suspendedByApp ) { 							; ...and not already A_IsSuspended...
-			suspendedByApp := true
+	matchMode   := getPklInfo("suspendingMode")
+	if ( matchMode )
+		SetTitleMatchMode % getPklInfo("suspendingMode") 		; A custom window TitleMatchMode may be specified
+	if WinActive( "ahk_group SuspendingApps" ) { 				; If a window specified in the group is active...
+		if ( not suspendedByApp ) { 							; ...and not already A_IsSuspended,...
+			suspendedByApp := true  							; ...then auto-suspend that window.
 			Gosub suspendOn
 		}
 	} else if ( suspendedByApp ) {
 		suspendedByApp := false
 		Gosub suspendOff
 	}
+	SetTitleMatchMode % getPklInfo("WinMatchDef")   			; Return to EPKL's default TitleMatchMode
 }
 
 _pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
