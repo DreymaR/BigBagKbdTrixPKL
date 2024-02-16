@@ -16,6 +16,8 @@ NEXT:
 TODO: 
 HOLD: 
 
+WIPs: Ukrainian variants!
+
 NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
 		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?

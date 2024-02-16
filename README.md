@@ -15,23 +15,23 @@
 * You can run it from a USB drive, remotely or on your PC like any other program.
 * EPKL can map key presses like the installed Windows layout does.
 * You can use it to change single keys, or remap the entire layout.
-* It also supports special keys and functions; read on for more info.
+* It also supports special keys and functions. Read on for more info.
 <br>
 
-* EPKL implements my [**Big Bag Of Tricks**][orgBBT] for Windows!
+* EPKL implements my [**Big Bag of Keyboard Tricks**][orgBBT] for Windows!
     - That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout,…
 * … with or without my own `[eD]` AltGr layers and dead keys,…
 * … **ergonomic mods** both for **Colemak**, the **Tarmak** learning layouts and **other layouts**,…
 * … and the incredibly useful [**Extend**][BBText] layers which work with any layout.
-* **DreymaR's Big Bag of Keyboard Trickery** at [**dreymar.colemak.org**][orgBBT] is my main info site.
+* **DreymaR's Big Bag of Keyboard Tricks** at [**dreymar.colemak.org**][orgBBT] is my main info site.
     - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
     - <del>In the [old Forum BigBag][CmkBBT] there's a specific [topic for EPKL/Windows][CmkPKL] too. It's old though.</del>
 <br>
 
 * EPKL has lots of improvements over the old abandonware PKL by Máté Farkas (2008–2010).
 * Nearly all my Big Bag "tricks" are implemented for EPKL, as layouts and accessory files.
-* Some non-EPKL BigBag stuff can be found in the Other folder, such as other keyboard tools.
+* Some non-EPKL BigBag/Windows stuff can be found in the Other folder, such as other keyboard tools.
 * Some non-BigBag stuff is found in EPKL too, including support for several other layouts.
     - I won't support just any other layout though, as I don't have time and energy to do so.
     - The layouts I have included for EPKL have all seemed interesting and/or promising to me.
@@ -48,7 +48,7 @@ Getting EPKL up and running
     - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
     - Note that some virus protection programs overreact to compiling Autohotkey (AHK) code of this type.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
-    - If you insist on having the Caps key as Backspace instead of the superior and wonderful Extend key…
+    - If you insist on having the Caps key as Backspace instead of the superior Extend key…
     - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon…
     - … but please read the ["Can I map…"](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) section below first to know your options!
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
@@ -119,14 +119,14 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - The DH mod in itself is named `Curl` in EPKL, because that's what it does physically: The home row is curled like the curve of your fingers.
     - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
-    - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so! Please! Please!!!
+    - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so!!!
 <br>
 
 #### What are the options?
 - You'll notice that you can also select `Wide` and `Sym` ergo mods in most cases, up to a cool `CAWS` combo. Consult the [Big Bag][orgBBT].
     - All combos aren't pre-made as that'd be too much work for me. To create new ones yourself, see below.
 - The next image shows Colemak-DH on an ANSI keyboard, together with the Symbol mod which affects the right-hand symbol keys.
-    - In EPKL terms that's Colemak-eD_ANS_CurlAngleSym which may be abbreviated to Cmk-CAS in writing.
+    - In EPKL terms that's Colemak-eD_ANS_CurlAngleSym which may be abbreviated to Cmk-CAS.
     - Note the Angle(Z) mod that moves the XCDV keys one step to the left so your left wrist can be straight like on the right hand.
     - Every finger in the image has its own color, so make sure you do the Angle mod right!
 <br>
@@ -511,8 +511,8 @@ You can set pretty much any key to be a modifier of choice.
 * Try [SharpKeys][ShrpKy] for hard mod remapping? It's less flexible but very robust!
 <br><br>
 
-KNOWN ISSUES:
--------------
+KNOWN ISSUES
+------------
 * The AHK `Send` command used by some EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
     - This does produce a key press with the desired character/key.
     - However, when holding down a key for a while Windows really sends repeated `KeyDown` events and `KeyUp` only on key release.
@@ -546,19 +546,21 @@ KNOWN ISSUES:
     - The workaround I use is to use its synonym `Ctrl+Shift+Backtick` (the \` character on the Tilde key).
 <br>
 
-DONE/TODO:
-----------
+DONE/TODO
+---------
 For more info about past and future EPKL history, see the **[EPKL Advanced README][PklSrc]** in the EPKL_Source folder.
 <br>
 
 Credits/sources
 ---------------
-#### ~ The original [PKL][PKLGit] written by [Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK]
-#### ~ [EPKL][EPKLgh], formerly [PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-
-#### ~ Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors.
+* **The original [PKL][PKLGit] written by [Máté Farkas in 2008][PKLSFo] using [AutoHotkey][PKLAHK]**
+
+* **[EPKL][EPKLgh], formerly [PKL[edition DreymaR]][CmkPKL] by DreymaR, 2017-**
+
+* **Big thanks to the AutoHotkey people, Vortex(vVv), the Colemak Forum crowd and all other contributors**
 <br>
 
-_Finally, to all of you: Best of luck using EPKL!_
+_Finally, to all of you: Best of luck using EPKL!_<br>
 _Øystein "DreymaR" Bech-Aase_
 
 [PKLGit]: https://github.com/Portable-Keyboard-Layout/Portable-Keyboard-Layout/ (Old PKL on GitHub)
