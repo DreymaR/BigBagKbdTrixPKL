@@ -18,6 +18,15 @@ HOLD:
 
 WIPs: Ukrainian variants!
 
+TODO: Revisit the base Ext-tap layer
+		- All those URL and BBC tags aren't universally useful, not quite intuitive and probably better solved as sequences anyway.
+		- I'm missing a Ctrl+W shortcut, but {Ext-tap,w} is used for File Explorer now.
+		- A Ctrl+S shortcut also sounds nice, but that's Select Line now.
+		- While {Ext-tap,a/f} is SelectAll/Find, as expected, this strengthens the feeling that other commands like the above might be added to this layer.
+		- I'm not using the typing stuff. Probably doesn't feel handy enough in a typing flow? I do use my thumb keys then.
+
+2FIX: Normal DK and CoDeKey help images are updated according to shift state, but Ext-tap ones are not?!
+
 NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
 		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
@@ -470,6 +479,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 
 ;;  ########################    main code   ########################
 
+;#Requires AutoHotkey 1.1.27     							; This will be important when transitioning to AHK v2 in the future. At that point, use `2.0+` here.
 #NoEnv
 #Persistent
 #NoTrayIcon

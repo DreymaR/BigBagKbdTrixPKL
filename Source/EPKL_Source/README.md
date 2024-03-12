@@ -2,8 +2,8 @@
 ========================================================
 <br>
 
-- Version:  1.4.1
-- Compiled: 2023-02 from GitHub/DreymaR/BigBagKbdTrixPKL
+- Version:  1.4.1 End-Of-Life
+- Compiled: 2024-03 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
 
@@ -562,4 +562,4 @@ VERSION HISTORY:
 		- Fixed a Layout Selector bug that would allow an invalid KbdType to show up if another LayType had that KbdType.
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
 	- Fixed: HIG only made "state0.png" (really the last state) plus state0.svg.png (actual state0) instead of the state images it should.
-		- InkScape v1.3 (2023-07) has a bug affecting batch export. Should be fixed soon. The HIG works w/ the standalone v1.2.1 install.
+		- InkScape v1.3 (2023-07) had a bug affecting batch export. Should be fixed in later versions. The HIG works w/ the standalone v1.2.1 install.

@@ -23,6 +23,12 @@ The files in this folder aren't for EPKL but for Microsoft's MSKLC program.
 	- If you're eager to map CapsLock to Backspace though, please do consider that EPKL's Extend is so very much better!!!
 <br>
 
+- **NB: RESTART REQUIRED!!!**
+- I apologize for shouting, but even though I've mentioned this further down the page, it's still the most common MSKLC beginner's mistake.
+- So please: Before you go and ask what's wrong with your file or something, make sure you did a full system restart after installing.
+- If it still doesn't work after a restart, consult the rest of this page and Henri's guide for more info.
+<br>
+
 Colemak-eD for MSKLC
 --------------------
 Included are MSKLC installs for my Colemak-eD mappings, both for vanilla Colemak and the Cmk-CAWS ergonomic layout variant.
@@ -57,7 +63,7 @@ Installing a MSKLC Layout
 - To install a compiled layout, run the `setup.exe` program in its folder. Setup will choose the right `.msi` and `.dll` for you.
 - The keyboard verify log may well give a lot of warnings about glyphs being defined twice etc; these don't matter.
 - If you have the layout already on your system – let's say you've edited it a little – you must **uninstall** it before compiling.
-- NOTE: **You have to restart your computer** before you can choose the newly installed layout!
+- **NOTE: You have to restart your computer** before you can choose the newly installed layout! Really!
 <br>
 
 - Now you can select the new layout from `Language preferences` (in the tray menu if you have the Language Bar active)

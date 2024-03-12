@@ -11,10 +11,10 @@ In this folder are some files that aren't used by EPKL but may still be interest
 	- This AutoHotkey Key History menu item is shown only if advancedMode is set to yes in the EPKL_Settings.
 	- Even more info is seen on the [Keyboard Event Viewer][KbdEvt] page. It's a very informative tool.
 - There's a Registry Editor folder that may be used to change Windows low-level settings. Do this only with great care!
-	- It contains .reg files that should run with the MS RegEdit system program to modify the Windows Registry.
+	- It contains some .reg files that should run with the MS RegEdit system program to modify the Windows Registry.
 	- RegEdit files that remap keys, do so at the lowest level possible which will work everywhere such as in games.
-	- Remappings can happen at the HKEY_LOCAL_MACHINE\SYSTEM level (for all users) or HKEY_CURRENT_USER only.
-	- Only one such remap script will take effect at a time, so if you want to do two things you have to edit your .reg file.
+	- Remappings can happen at the HKEY_LOCAL_MACHINE\SYSTEM level (for all users) or HKEY_CURRENT_USER only. Local mapping may not work though?
+	- Only one such remap script will take effect at a time, so if you want to do two things at once you have to edit your .reg file accordingly.
 	- The SetWinApp script may be used to set what apps the labels "App1" and "App2" refer to, e.g., for the Extend1 layer.
 - Instead of using RegEdit scripts, you can use the [SharpKeys][ShrpKy] program which does most of the same more safely.
 	- I warmly recommend SharpKeys. It is available at the [Microsoft Store][ShrpMS] too, so it's quite official.
