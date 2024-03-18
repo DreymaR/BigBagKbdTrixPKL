@@ -378,8 +378,7 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * EPKL allows end-of-line comments (whitespace-semicolon) in .ini files. The old PKL only allowed them in layout entries.
 * You can use EPKL with a Virtual Machine. Set it to not capture the keyboard. System key strokes may not transfer then.
     - If you have a VM running Windows, another way is to run EPKL inside the VM of course.
-* Running EPKL with other (AutoHotkey) key mapping scripts may get confusing if there is so-called _hook competition_.
-    - When this happens, it becomes uncertain which hook gets which key press, with unpredictable results.
+* Running EPKL with other key mapping programs may be problematic due to _hook competition_. For more info, see [Known Issues](#known-issues) below.
 * EPKL isn't always a robust solution for gaming etc. See the [Other folder][PklOth] for more options/info.
 <br>
 
@@ -513,6 +512,11 @@ You can set pretty much any key to be a modifier of choice.
 
 KNOWN ISSUES
 ------------
+* Running EPKL with other key mapping programs may be problematic due to _hook competition_.
+    - When keyboard hooks compete, it becomes uncertain which hook gets which key press, with unpredictable results.
+    - Unfortunately, this includes some of the functionality of the popular [Microsoft PowerToys](https://apps.microsoft.com/detail/xp89dcgq3k6vld) tool suite.
+    - It also includes other AutoHotkey scripts using hotkeys.
+    - To some extent, you could include other scripts into EPKL if you know how to, or replicate their functionality within EPKL.
 * The AHK `Send` command used by some EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
     - This does produce a key press with the desired character/key.
     - However, when holding down a key for a while Windows really sends repeated `KeyDown` events and `KeyUp` only on key release.
