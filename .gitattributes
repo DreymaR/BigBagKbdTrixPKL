@@ -28,6 +28,8 @@ README       text
 *.svg        text eol=lf
 *.mk         text eol=lf
 *.sh         text eol=lf
+.gitignore     text eol=lf
+.gitattributes text eol=lf
 
 # Declare files that are truly binary and should not be modified:
 *.gif        binary

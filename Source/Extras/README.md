@@ -18,6 +18,10 @@ INFO: Some documentation notes
     https://msdn.microsoft.com/en-us/library/ms927178.aspx
     https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
   
+* Unicode/icon search links:
+    https://www.compart.com/en/unicode/
+    https://www.amp-what.com/unicode/search/
+  
 * "Anti-madness tips" for EPKL vs old PKL (by user Eraicos and me):
     - PKL using AHK v1.0: Script files need to be ANSI encoded. They don't support special letters well.
         - EPKL using AHK v1.1-Unicode: Supports scripts in UTF-8 w/ BOM.

@@ -563,3 +563,5 @@ VERSION HISTORY:
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
 	- Fixed: HIG only made "state0.png" (really the last state) plus state0.svg.png (actual state0) instead of the state images it should.
 		- InkScape v1.3 (2023-07) had a bug affecting batch export. Should be fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
+	- Reworked Ext-tap DK layers. The URL and BBC tags weren't universally useful, somewhat unintuitive and better solved as sequences anyway.
+		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around. Still uncertain about symbols for these layers, due to ToM timing.
