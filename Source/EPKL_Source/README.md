@@ -538,7 +538,7 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.4.2: Layout/Settings enhancements.
+* EPKL v1.4.2: Layout/Settings enhancements. Ext-tap reworked.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.

@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL initialization
 ;;  - Load 1) general settings and layout choice, 2) the layout itself, 3) other stuff.
 ;
@@ -7,7 +7,7 @@
 initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
 													;   ###############################################################
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
@@ -20,7 +20,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
@@ -86,7 +86,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
@@ -192,7 +192,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
@@ -359,19 +359,19 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			entr1   := _checkModName( entr1 )   						; Modifiers are stored as their AHK names, e.g., "RShift", "AltGr"...
 			extKey  := ( entr1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'. Special modifier.
 ;			entr1   := entr1 											; Set VK as modifier name
-			entr2   := -1   											; -1 = Modifier
+			entr2   := -1   											; -1 : Modifier
 		} else if RegExMatch( entr2, scStr ) {
 			qw  := SubStr( entr1, 3 )   								; Check for a KLM QW### ScanCode entry
 			iq  := ( InStr( entr1, "QW" ) == 1 && QWSCdic.HasKey( qw ) ) ? 1 : 0 	; This isn't case sensitive now.
 			entr1   := ( iq ) ? QWSCdic[ qw ] : entr1   				; Set the scan code for the key as its key info
-			entr2   := -3   											; -3 = ScanCode
+			entr2   := -3   											; -3 : ScanCode
 		} else {    													; The entry is either VK or state mapped. Remap its VK.
 			KLM     := _mapKLM( entr1, "VK" )   						; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
 			mpdVK   := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
 			mpdVK   :=    mapVK[mpdVK] ?    mapVK[mpdVK] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
 			mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
 			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
-			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 = VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
+			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 : VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
 			            : ( st2VK )               ? -2 : entr2  		; ...or in the case of a state entry, its Cap state
 		}
 		setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
@@ -435,7 +435,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
@@ -476,7 +476,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	
 	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -503,7 +503,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgDir", dkImDir )
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK img state suffix. Defaults to old ""/"sh"?
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )
@@ -524,7 +524,7 @@ activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 		id := id%A_Index% 							; If this isn't the first instance...
 		PostMessage, 0x398, 422,,, ahk_id %id% 		; ...send a "kill yourself" message to all instances.
 	}
-	Sleep, 20
+	Sleep % 20
 	
 	Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	Menu, Tray, Icon,,, 1 							; Freeze the tray icon
@@ -533,11 +533,11 @@ activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	ims := bool(pklIniRead("showHelpImage",true)) ? 2 : 3
 	Loop % ims {
 		pkl_showHelpImage( 2 ) 						; ...then toggle it off if necessary
-		Sleep, 42 									; The image flashes on startup if this is too long
-	} 												; Repeat image on/off to avoid minimize-to-taskbar bug 	; eD WIP: This is hacky but hopefully effective?!
+		Sleep % 42  								; The image flashes on startup if this is too long
+	}   											; Repeat image on/off to avoid minimize-to-taskbar bug 	; eD WIP: This is hacky but hopefully effective?!
 	setExtendInfo() 								; Prepare Extend info for the first time
 	
-	Sleep, 200 										; I don't want to kill myself...
+	Sleep % 200 									; I don't want to kill myself...
 	OnMessage( 0x398, "_MessageFromNewInstance" )
 	
 	SetTimer, pklJanitorTic,  1000  				; Perform regular tasks routine every 1 s
@@ -565,7 +565,7 @@ _pklSetInf( pklInfo ) { 							; Simple setting for EPKL_Settings entries
 	setPklInfo( pklInfo, val )
 }
 
-_pklStckUp( The, theFile, at1 = 0 ) {   			; Add a support file to the bottom of a LayStack clone
+_pklStckUp( The, theFile, at1 := 0 ) {  			; Add a support file to the bottom of a LayStack clone
 	theStck := getPklInfo( "LayStack" ).Clone() 	; Use a clone, or we'll edit the actual LayStack array
 	if FileExist( theFile ) {
 		if ( at1 ) { 								; If specified, add at a certain location instead
@@ -579,18 +579,18 @@ _pklStckUp( The, theFile, at1 = 0 ) {   			; Add a support file to the bottom of
 	Return theStck
 }
 
-_pklLayRead( type, def = "--", prefix = "" ) {  	; Read kbd type/mods (used in pkl_init) and set Lay info
+_pklLayRead( type, def := "--", prefix := "" ) { 	; Read kbd type/mods (used in pkl_init) and set Lay info
 	pklLays := getPklInfo( "pklLaysFiles" )
 	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
-	val := ( type = "KbdType" ) ? _AnsiAns( val ) : val
-	setLayInfo( "Ini_" . type, val )				; Stores KbdType etc for use with other parts
-	val := ( val == "--" ) ? "" : prefix . val		; Replace -- with nothing, otherwise use prefix
+	val := ( type == "KbdType" ) ? _AnsiAns( val ) : val
+	setLayInfo( "Ini_" . type, val )    			; Stores KbdType etc for use with other parts
+	val := ( val == "--" ) ? "" : prefix . val  	; Replace -- with nothing, otherwise use prefix
 ;	val := ( InStr( val, "<", 0 ) ) ? false : val 	; If the value is <N/A> or similar, return boolean false 	; eD WIP: Don't use that anymore
 	Return val
 }
 
-_AnsiAns( kbdt ) { 									; You're allowed to use ANSI as a more well-known synonym to the ANS KbdType
-	Return ( kbdt = "ANSI" ) ? "ANS" : kbdt
+_AnsiAns( kbdt ) {  								; You're allowed to use ANSI as a more well-known synonym to the ANS KbdType
+	Return ( kbdt == "ANSI" ) ? "ANS" : kbdt
 }
 
 _mapKLM( ByRef key, type ) {

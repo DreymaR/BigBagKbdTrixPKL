@@ -1,14 +1,14 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;
 
 /*
 ;;  ########################   TODO  »-->   ########################
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Recent issues:
 WIPs: 
 2FIX: 
@@ -34,6 +34,12 @@ WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 TODO: Custom Send syntax!
 		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
 		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
+		- For instance, use a syntax like `α{Sleep(500)}` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
+
+TODO: Files override?!
+		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
+		- Each supersection could have an entry specifying which file it overrides: _eD_Compose, _eD_DeadKeys, _eD_Extend, _eD_PwrStrings.
+		- Not _eD_Remap in this file, as it is already taken care of in the LayStack files?
 
 2FIX: Holding MoDK-Ext then releasing it activates @ext0 even though Ext was held for > 1 s (over tapModTime = 200 ms).
 		- If the Ext-hold is used w/ another key, it goes back as it should.
@@ -83,7 +89,7 @@ TODO: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
 		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  eD TOFIX/WIP:
 
 2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?! Why does it even do this, again?!
@@ -205,7 +211,7 @@ FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And chang
 TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 		- It works well! But then after a while it stops working?
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  eD TONEXT:
 
 TODO: As a `##` state map entry maps to a VK send, maybe add a `#<VK>` syntax to send another VK by its one-letter code or `0x##` code? `#A` for the `A` key, etc.
@@ -324,7 +330,7 @@ TODO: Make a matrix image template, and use it for the Curl variants w/o Angle.
 2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  eD TODO:
 
 TODO: Improve GUI responsiveness further.
@@ -408,7 +414,7 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 		- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 		- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  eD ONHOLD:
 
 HOLD: Make WideSym into a separate remap now? Simpler? Less confusing, or not?
@@ -502,8 +508,7 @@ setPklInfo( "initStart", A_TickCount )  					; eD DEBUG: Time EPKL startup
 ;;  Global variables are now largely replaced by the get/set info framework, and initialized in the init fns
 ;global UIsel   											; Variable for UI selection (use Control names to see which one) 	; NOTE: Can't use an object variable for UI (yet)
 Gosub setUIGlobals  										; Set the globals needed for the settings UI (is this necessary?)
-arg = %1%   												; Layout from command line parameter, if any
-initPklIni( arg )   										; Read settings from pkl.ini (now PklSet and PklLay)
+initPklIni( A_Args[1] ) 									; Read settings from pkl.ini (now PklSet and PklLay). Get layout from command line parameter (legacy %1%), if any.
 initLayIni()    											; Read settings from Layout.ini and layout part files
 activatePKL()
 ;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 ) 	; eD DEBUG

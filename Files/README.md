@@ -115,7 +115,7 @@ Co_BS = Browser_Favorites
 
 The crazy "PowerString 666" from the [`_eD_PwrStrings.ini`](./_eD_PwrStrings.ini) file:
 ```
-Pent    = <Multiline> 17 		; A 17 line string, defined below
+Penta   = <Multiline> 17 		; A 17 line string, defined below
 ;;  The purpose of this power(!)string is to improve Colemak's daemon summoning capabilities. \m/
 ;;  See https://forum.colemak.com/topic/2460-improving-colemaks-demon-summoning-abilities/
 Pent-01 = "\n             ______             \n"

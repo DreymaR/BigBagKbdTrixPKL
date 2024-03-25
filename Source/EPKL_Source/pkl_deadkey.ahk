@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL dead key functions
 ;;  - Handle EPKL's DKs
 ;;  - Detect OS (Windows Layout) DKs
@@ -150,7 +150,7 @@ setCurrentWinLayDeadKeys( deadkeys ) {
 	getCurrentWinLayDeadKeys( deadkeys, 1 )
 }
 
-getCurrentWinLayDeadKeys( newDKs = "", set = 0 ) {  		; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
+getCurrentWinLayDeadKeys( newDKs := "", set := 0 ) {    	; eD TODO: Make EPKL sensitive to a change of underlying Windows LocaleID?! Use SetTimer?
 	static DKs := 0
 	DKsOfSysLayout := pklIniRead( getWinLocaleID(), "", "PklDic", "DeadKeysFromLocID" )
 	if ( DKsOfSysLayout == "-2" )
@@ -200,7 +200,7 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 	CR  := "{Enter}"
 	SPC := A_Space
 	
-	notepadMode = 0
+	notepadMode := 0
 	txt := getPklInfo( "DetecDK_" .  "MSGBOX_TITLE" )
 	tx2 := getPklInfo( "DetecDK_" .  "MSGBOX" )
 	MsgBox 51, %txt%, %tx2%
@@ -208,9 +208,9 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 		Return
 	IfMsgBox Yes
 	{
-		notepadMode = 1
+		notepadMode := 1
 		Run Notepad
-		Sleep 1500
+		Sleep % 1500
 		txt := getPklInfo( "DetecDK_" .  "EDITOR" )
 		SendInput {Text}%txt%
 		Send %CR%%CR%
@@ -228,7 +228,7 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 		clipboard := ""
 		cha := Chr( ord )
 		Send {%cha%}{Space}+{Left}^{Ins}
-		Sleep 50
+		Sleep % 50
 		ClipWait
 		ifNotEqual clipboard, %SPC%
 			theWinLayDKs := theWinLayDKs . cha
@@ -244,7 +244,7 @@ detectCurrentWinLayDeadKeys()   						; Detects which keys in the OS layout are 
 	Send %CR%
 	
 	if ( notepadMode )
-		Sleep 1000
+		Sleep % 1000
 		Send !{F4}
 		Send {Right}									; Select "Don't save"
 	

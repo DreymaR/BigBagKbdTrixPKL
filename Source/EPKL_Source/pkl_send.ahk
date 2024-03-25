@@ -1,9 +1,9 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Send functions
 ;;  - Parse and send key presses and strings
 ;
 
-pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for send, w/ OS DK & special char handling
+pkl_Send( ch, modif := "" ) {   								; Process a single char/str with mods for send, w/ OS DK & special char handling
 	if pkl_CheckForDKs( ch ) {  								; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
 		Return
 	}
@@ -32,7 +32,7 @@ pkl_Send( ch, modif = "" ) { 									; Process a single char/str with mods for 
 	pkl_SendThis( this, modif ) 								; Modif is only used for explicit mod mappings.
 }
 
-pkl_SendThis( this, modif = "" ) {  							; Actually send a char/string. Also log the last sent character for Compose.
+pkl_SendThis( this, modif := "" ) {     						; Actually send a char/string. Also log the last sent character for Compose.
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" )  		; Strip off any spaces sent to release OS deadkeys, and other such stuff
 	if        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
@@ -54,7 +54,7 @@ pkl_SendThis( this, modif = "" ) {  							; Actually send a char/string. Also l
 ;		setAltGrState( 1 )
 }
 
-pkl_Composer( compKey = "" ) {  								; A post-hoc Compose method: Press a key mapped with ©###, and the preceding sequence will be composed
+pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key mapped with ©###, and the preceding sequence will be composed
 	compKeys    := getLayInfo( "composeKeys" )  				; Array of the compose tables for each ©-key in use
 	tables      := compKeys[ compKey ]  						; Array of the compose tables in use for this compKey
 	if ( tables[1] == "" ) { 									; Is this ©-key empty?
@@ -132,7 +132,7 @@ pkl_CheckForDKs( ch ) {
 	Return SpaceWasSentForSystemDKs
 }
 
-pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
+pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
 ;	Critical 													; eD WIP: Causes hangs after DKs etc?
 	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
 ;	tag     := hig_tag( entry )
@@ -194,7 +194,7 @@ pkl_ParseSend( entry, mode = "Input" ) { 						; Parse & Send Keypress/Extend/DK
 	Return psp  												; Return the recognized prefix
 }
 
-pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α entries.
+pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α entries.
 	Critical 													; eD WIP: Try to improve timing for OSMs
 	OSM := false , OSMs  := []
 	While InStr( enty, " OSM}" ) {  							; OneShotMod syntax: `{<mod> OSM}` activates <mod> as OSM once.
@@ -207,7 +207,7 @@ pkl_ParseAHK( ByRef enty, pfix = "" ) { 						; Special EPKL-AHK syntax addition
 	}
 	if ( OSM ) {
 		SendInput % pfix . enty 								; Send the entry before activating the OSM
-		Sleep 50
+		Sleep % 50
 		For ix, mod in OSMs {
 			setOneShotMod( mod )
 		}
@@ -240,7 +240,7 @@ pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard
 		pklDebug( "Clipboard not ready! Content:`n" . Content )
 	}
 	Send ^v 													; Wait 50-250 ms(?) after pasting before changing clipboard.
-	Sleep 250 													; See https://autohotkey.com/board/topic/10412-paste-plain-text-and-copycut/
+	Sleep % 250 												; See https://autohotkey.com/board/topic/10412-paste-plain-text-and-copycut/
 	Clipboard := clipSaved
 	VarSetCapacity( clipSaved, 0 )  							; Could probably just use := "" here, especially for large contents.
 }
@@ -295,7 +295,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 		{   													; - This is more robust since apps use different breaks
 			if ( A_Index > 1 )
 				SendInput +{Enter}  							; Send Shift+Enter, which should be robust for msg boards.
-				Sleep 50 										; Wait so the Enter gets time to work. Need ~50 ms?
+				Sleep % 50  									; Wait so the Enter gets time to work. Need ~50 ms?
 			if ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
 				Break
 		}	; end Loop Parse

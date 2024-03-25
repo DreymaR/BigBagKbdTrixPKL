@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Settings UI module
 ;;  - Handles the EPKL Layout/Settings... menu, consisting of several settings tabs
 ;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
@@ -60,7 +60,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; Multi-tab GUI. AltSubmit gets tab # not name.
 			, % "Layout||Settings|Special Keys|Key Mapper"  	; The tab followed by double pipes is default
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Layout Picker UI
 	;
 	GUI, UI:Add, Text, section  								; 'section' stores the x value for later
@@ -107,7 +107,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn1  gUIsubLaySel, &Submit Layout Choice
 	GUI, UI:Add, Button, xs+244 yp          gUIrevLay   , %SP%&Reset%SP% 	; Note: Using absolute pos., specify both x & y
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  General Settings UI
 	;
 	GUI, UI:Tab, 2
@@ -130,7 +130,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn2  gUIsubSetSel, &Submit Setting%SP%
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSet   , %SP%&Reset%SP%
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Special Keys UI
 	;
 	GUI, UI:Tab, 3
@@ -173,7 +173,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSpc   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  Key Mapper UI [advanced]
 	;
 	GUI, UI:Tab, 4
@@ -229,7 +229,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	Gosub UIhitTab
 } 	; end fn pklSetUI
 
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  UI Control sections
 	;
 UIhitTab:   													; When a tab is selected, make its button the default.
@@ -471,7 +471,7 @@ UIrevKey:   													; Revert UI setting(s)
 	           , _uiGetParams( "KeyAll" ) ], "Key" )
 Return
 
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;;  UI functions
 	;
 _uiControl( var, values ) { 									; Update an UI Control with new values and, if applicable, choice
@@ -486,14 +486,14 @@ _uiControl( var, values ) { 									; Update an UI Control with new values and,
 	GUI, UI:Submit, Nohide 										; Needed to update the GUI values (or maybe I could've used |%val% ?)
 }
 
-_uiAddEdt( iTxt, var, opts, editTxt, pos = "" ) { 				; Add an Edit box with text
+_uiAddEdt( iTxt, var, opts, editTxt, pos := "" ) {  			; Add an Edit box with text
 	if ( iTxt ) {
 		GUI, UI:Add, Text,           %pos% , % iTxt
 	}
 	GUI, UI:Add, Edit, vUI_%var% %opts%, % editTxt
 }
 
-_uiAddSel( iTxt, var, opts, listArr, pos = "", typ = "DDL" ) { 	; Add a DropDownList selection box with text and some choices
+_uiAddSel( iTxt, var, opts, listArr, pos := "", typ := "DDL" ) {    	; Add a DropDownList selection box with text and some choices
 	listStr := _uiPipeIt( listArr, 0, 0 )
 	if ( iTxt ) {
 		GUI, UI:Add, Text, %pos%, % "" . iTxt 					; Whitespace pad the text a little?
@@ -517,8 +517,8 @@ _uiGetLayDirs() {   											; Get a list of all Layouts directories, as an ar
 	Return dirs 												; All subdirectories of "Layouts" containing a "Layout.ini" file
 }
 
-_uiPipeIt( listArr, sort = 0, clear = 1 ) { 					; Convert an array to a pipe delimited list, e.g., for DDLs
-	For ix, elem in listArr { 									; eD WIP: Use IfObject to make it more robust?
+_uiPipeIt( listArr, sort := 0, clear := 1 ) {   				; Convert an array to a pipe delimited list, e.g., for DDLs
+	For ix, elem in listArr {   								; eD WIP: Use IfObject to make it more robust?
 		pipe        := ( listStr ) ? "|" : ""
 		listStr     .= pipe . elem
 	}	; end For
@@ -528,7 +528,7 @@ _uiPipeIt( listArr, sort = 0, clear = 1 ) { 					; Convert an array to a pipe de
 	Return listStr
 }
 
-_uiCheckLaySet( dirList, splitUSn, splitMNn = 0, needle = "" ) {
+_uiCheckLaySet( dirList, splitUSn, splitMNn := 0, needle := "" ) {
 	theList     := []
 	For ix, item in dirList {
 		splitUS := StrSplit( item, "_" )
@@ -583,8 +583,8 @@ _uiRevert( parset, sel ) {  									; Revert changes, as above
 	gosub UIsel%sel% 											; Refresh selection (UIselKey etc)
 }
 
-_uiWriteOverride( key_entry, module = "Settings" 				; Write a line to Override. If necessary, make the file first.
-	, section = "pkl", ovrFile = "EPKL_Settings", ovrPath = "" ) {  	; eD WIP: Allow the template to be in root! Separate path from filename, in ovrPath.
+_uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Override. If necessary, make the file first.
+	, section := "pkl", ovrFile := "EPKL_Settings", ovrPath := "" ) {   	; eD WIP: Allow the template to be in root! Separate path from filename, in ovrPath.
 	revert  := ui.Revert
 	a_SC    := "`;"
 	ini     := ".ini"
@@ -688,7 +688,7 @@ in the [%section%] section of %ovrFile%.ini?
 	Return false
 }
 
-_uiMsg_RefreshPKL( purpose = " to use the chosen setting(s)" ) {
+_uiMsg_RefreshPKL( purpose := " to use the chosen setting(s)" ) {
 	ui.Written  := false
 	MsgBox, 0x021, Refresh EPKL?,   		 					; 0x021: 1st button default. Exclamation/Question. OK/Cancel
 (

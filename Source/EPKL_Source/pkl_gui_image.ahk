@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Image module
 ;;  - Displays main and dead key help images by shift state, and Extend layers
 ;;  - Separate background image and Shift/AltGr indicator overlay, configurable in Layout.ini
@@ -8,18 +8,18 @@
 ;;  - Rescaling by hotkey
 ;
 
-pkl_showHelpImage( activate = 0 )
+pkl_showHelpImage( activate := 0 )
 {
 ;;  Parameter values:
-;;  Show    	 0 = display, if activated earlier
-;;  Init    	 1 = activate
-;;  Kill    	-1 = deactivate
-;;  Toggle  	 2 = toggle image
-;;  SuspOn  	 3 = suspend on
-;;  SuspOff 	-3 = suspend off
-;;  Zoom    	 5 = zoom in/out
-;;  Move    	 6 = move between positions
-;;  Opaq    	 7 = opaque/transparent
+;;  Show    	 0 : display, if activated earlier
+;;  Init    	 1 : activate
+;;  Kill    	-1 : deactivate
+;;  Toggle  	 2 : toggle image
+;;  SuspOn  	 3 : suspend on
+;;  SuspOff 	-3 : suspend off
+;;  Zoom    	 5 : zoom in/out
+;;  Move    	 6 : move between positions
+;;  Opaq    	 7 : opaque/transparent
 	
 	static im           := {} 			; Only one static now. But: Not compatible with %var% notation!
 ;	static im.Active    := 0 			; Whether the GUI is currently active; needed for toggling etc
@@ -136,16 +136,16 @@ pkl_showHelpImage( activate = 0 )
 	WinGetTitle, title, ahk_id %id%
 	if ( title == "pklHlpImg" ) {
 		max     := im.PosArr.Length()
-		if ( mouseX - imgX < im.Mrg[5] ) { 								; Push +1/right (with wrap)
-			im.PosIx    := ( im.PosIx = max ) ? 1 : ++im.PosIx
+		if ( mouseX - imgX < im.Mrg[5] ) {  							; Push +1/right (with wrap)
+			im.PosIx    := ( im.PosIx == max ) ? 1 : ++im.PosIx
 		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) { 				; Push -1/left   --"--
-			im.PosIx    := ( im.PosIx = 1 ) ? max : --im.PosIx
-		} else { 														; Push up/down, if available
+			im.PosIx    := ( im.PosIx == 1 ) ? max : --im.PosIx
+		} else {    													; Push up/down, if available
 			here        := im.PosArr[ im.PosIx ]
 			move        := ( here > 3 ) ? here - 3 : here + 3
 			movIx       := inArray( im.PosArr, move )
 			im.PosIx    := movIx ? movIx 
-						 : ( im.PosIx = max ) ? 1 : ++im.PosIx 			; If up/down isn't possible, move +1 instead
+						 : ( im.PosIx == max ) ? 1 : ++im.PosIx 		; If up/down isn't possible, move +1 instead
 		}
 		scaleImage  := 1
 	}
@@ -207,7 +207,7 @@ pkl_showHelpImage( activate = 0 )
 	}
 }
 
-imgPosDic( pos, def = 0 ) { 											; Get a numerical image position from a T/B+L/M/R one, if needed
+imgPosDic( pos, def := 0 ) {    										; Get a numerical image position from a T/B+L/M/R one, if needed
 	posDic  := { "TL" : 1, "TM" : 2, "TR" : 3
 			   , "BL" : 4, "BM" : 5, "BR" : 6 }
 	if inArray( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...

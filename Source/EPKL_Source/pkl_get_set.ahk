@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Get/Set ###Info module
 ;;  - Read and set global variables without having to declare them
 ;;  - Static associative dictionaries are used instead of most globals
@@ -39,7 +39,7 @@ setPklInfo( key, val )
 	Return getPklInfo( key, val, 1 )
 }
 
-getKeyInfo( key, val = "", set = 0 )
+getKeyInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
@@ -47,7 +47,7 @@ getKeyInfo( key, val = "", set = 0 )
 	Return pdic[key]
 }
 
-getLayInfo( key, val = "", set = 0 )
+getLayInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
@@ -55,7 +55,7 @@ getLayInfo( key, val = "", set = 0 )
 	Return pdic[key]
 }
 
-getPklInfo( key, val = "", set = 0 )
+getPklInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
 	if ( set == 1 )
@@ -63,7 +63,7 @@ getPklInfo( key, val = "", set = 0 )
 	Return pdic[key]
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  EPKL locale module
 ;;      Functions to set up locale strings
 ;;      Used by initPklIni() in pkl_init.ahk
@@ -112,7 +112,7 @@ _setHotkeyText( hk, localehk )
 	_getHotkeyText( hk, localehk, 1 )
 }
 
-_getHotkeyText( hk, localehk = "", set = 0 )
+_getHotkeyText( hk, localehk := "", set := 0 )
 {
 	static localizedHotkeys := ""
 	
@@ -154,7 +154,7 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 	Return str
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  EPKL Composer module
 ;;      Set up compose string tables from a file
 ;;      The tables are used by pkl_Composer() in pkl_send.ahk
@@ -170,7 +170,6 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		CDKs    := pklIniCSVs( "CoDeKeys"     ) 				; An array of which named Compose keys are CoDeKeys – Compose+DeadKeys.
 		setLayInfo( "CoDeKeys"      , CDKs    ) 				; 
 ;		seqLens := pklIniCSVs( "seqLens", "4,3,2,1", cmpFile ) 	; An array of the sequence lengths to look for. By default 1–n, longest first.
-;		seqLens = [10,9,8,7,6,5,4,3,2,1]    					; How many previous characters to use as Compose key sequences, prioritized 	; eD WIP: Scratch this.
 ;		seqMax  := Max( seqLens* )  							; eD WIP: Use a single sequenceBuffer setting, read directly from the compose file.
 		seqMax  := pklIniRead( "bufSize", 16, cmpFile ) 		; How many previously typed characters to keep track of.
 		seqLens := [], keysArr := []
@@ -242,7 +241,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 	setLayInfo( "composeTables" , usedTables )
 }
 
-lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previously sent characters for Compose
+lastKeys( cmd, chr := "" ) {    									; Manipulate the LastKeys array of previously sent characters for Compose
 	lastKeys := getKeyInfo( "LastKeys" )  							; A link to the actual LastKeys array (not a copy)
 	if        ( cmd == "push" ) { 									; Push one key to the lastKeys buffer
 		lastKeys.Push( chr )
@@ -257,7 +256,7 @@ lastKeys( cmd, chr = "" ) { 										; Manipulate the LastKeys array of previou
 ;	setKeyInfo( "LastKeys", lastKeys )  							; Since we're editing the actual LastKeys array, this isn't needed
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  EPKL other Get/Set functions
 ;
 

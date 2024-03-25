@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL key press functions
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
@@ -143,7 +143,7 @@ extendKeyPress( HKey ) { 										; Process an Extend modified key press
 	Critical, Off   											; eD WIP: Is this necessary? Or will AHK always go non-critical after each fn?
 }
 
-setExtendInfo( xLvl = 1 ) { 									; Update PKL info about the current Extend layer
+setExtendInfo( xLvl := 1 ) {    								; Update PKL info about the current Extend layer
 	setPklInfo( "extLvl", xLvl )
 	setLayInfo( "extendImg", getLayInfo( "extImg" . xLvl ) )
 }
@@ -166,12 +166,12 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 	}
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Set/get modifier key ShiftStates
 ;;      Process states of mods. Used in PKL_main; #etAltGrState() also in PKL_send.
 ;
 
-setModifierState( theMod, keyDown = 0 ) {   				; Can be called from a hotkey or with an AHK mod key name. Handles OneShotMods (OSM) too.
+setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or with an AHK mod key name. Handles OneShotMods (OSM) too.
 	Critical
 	osmKeys := getPklInfo( "stickyMods" )   				; One-Shot mods (CSV, but stored as a string)
 	osmLast := getPklInfo( "osmKeyN" . getPklInfo("osmN") ) ; The last set OSM
@@ -188,7 +188,7 @@ setModifierState( theMod, keyDown = 0 ) {   				; Can be called from a hotkey or
 	}
 }
 
-_setModState( theMod, keyDown = 1 ) {   					; Using 1/0 for true/false here.
+_setModState( theMod, keyDown := 1 ) {  					; Using 1/0 for true/false here.
 	Critical
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
@@ -265,7 +265,7 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 ;;  This is useful for notebook keyboards that do not have a right alt or AltGr key.
 ;;  It is usually not recommended, because fortunately many programs know the
 ;;  difference between AltGr and Alt+Ctrl.
-;ctrlAltIsAltGr  = no
+;	ctrlAltIsAltGr  := no
 ;	static CtrlAltlIsAltGr := -1
 ;	if ( CtrlAltlIsAltGr == -1 ) {
 ;		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
@@ -273,19 +273,19 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 	Return getKeyState( "RAlt" ) ; eD WIP AltGr: Removed || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
-;setAltGrState( keyDown ) {  								; The set fn calls get to reuse the static var. 	; eD WIP: Can we just use the normal _setModState() now?
+;setAltGrState( keyDown ) {     							; The set fn calls get to reuse the static var. 	; eD WIP: Can we just use the normal _setModState() now?
 ;	getAltGrState( keyDown, 1 )
 ;}
 
-;getAltGrState( keyDown = 0, set = 0 ) {
+;getAltGrState( keyDown := 0, set := 0 ) {
 ;	static AltGrState   := 0
 ;	if ( set == 1 ) {
 ;		AltGrState := ( keyDown ) ? 1 : 0
 ; ;		if ( keyDown == 1 ) {
-; ;			AltGrState = 1
+; ;			AltGrState := 1
 ; ;			Send {LCtrl Down}{RAlt Down}
 ; ;		} else {
-; ;			AltGrState = 0
+; ;			AltGrState := 0
 ; ;			Send {RAlt Up}{LCtrl Up}
 ; ;		}
 ;	} else {
@@ -299,7 +299,7 @@ ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Use
 	Return ( ext && getKeyState( ext, "P" ) ) ? true : false
 }	; end fn
 
-_setExtendState( set = 0 ) { 							; Called from setModState. This function handles Extend key tap or hold.
+_setExtendState( set := 0 ) {   							; Called from setModState. This function handles Extend key tap or hold.
 	static extMod1      := ""
 	static extMod2      := ""
 	static extHeld      := 0
@@ -323,12 +323,12 @@ _setExtendState( set = 0 ) { 							; Called from setModState. This function han
 															; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done?
 		extHeld := 0
 	}	; end if
-	setLayInfo( "extendUsed", false ) 						; Mark this as a fresh Extend key press (for ToM etc)
+	setLayInfo( "extendUsed", false )   					; Mark this as a fresh Extend key press (for ToM etc)
 }	; end fn _setExtendState
 
-setTapOrModState( HKey, set = 0 ) { 						; Called from the PKL_main tapOrModDown/Up labels. Handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys.
-	static tomHeld  := {} 									; Is this key held down? Or check KeyState instead?
-	static tapTime  := {} 									; We'll handle tap times for each key SC
+setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrModDown/Up labels. Handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys.
+	static tomHeld  := {}   								; Is this key held down? Or check KeyState instead?
+	static tapTime  := {}   								; We'll handle tap times for each key SC
 															; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
 	if ( HKey == -1 ) { 									; eD WIP: Call this fn w/ -1 to reset ToMs and the static variables.
 ;		HKey    := getPklInfo( "tomKey" )
@@ -383,7 +383,7 @@ Return
 
 _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftState/modif vs Ctrl(+Shift)
 	if getKeyState("Ctrl") {
-		state = 2
+		state := 2
 		if getKeyState("Shift") {
 			state++
 			if !getKeyInfo( HKey . state ) {
@@ -404,10 +404,10 @@ _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftStat
 }
 
 _pkl_CapsState( capState ) { 								; Handle CapsState vs Shift/Caps/SGCaps
-	res = 0
+	res := 0
 	if ( capState == 8 ) {
 		if getKeyState("CapsLock", "T")
-			res = 8
+			res := 8
 		if getKeyState("Shift")
 			res++
 	} else {

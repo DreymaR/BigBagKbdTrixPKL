@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Remap module
 ;;  - Functions to read and parse remap cycles for ergo mods and suchlike
 ;;  - Used primarily in pkl_init.ahk
@@ -93,7 +93,7 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 	Return pdic
 }	; end fn
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  EPKL janitor/activity module
 ;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app, perform cleanup etc.
 ;
@@ -150,7 +150,7 @@ _pklJanitorActivity() { 										; Suspend/exit EPKL after a certain time of in
 	}
 }
 
-_pklJanitorLocaleVK( force = false ) {  						; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
+_pklJanitorLocaleVK( force := false ) {     					; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
 	if ( not force && A_TimeIdle < 2000 )   					; Don't do this if the comp isn't unused for at least 2 s
 		Return
 	oldLID  := getPklInfo( "previousLocaleID" )
@@ -185,12 +185,12 @@ _pklJanitorCleanup() {
 	}
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Utility functions
 ;;      These are minor utility functions used by other parts of EPKL
 ;
 
-pklMsgBox( msg, s = "", p = "", q = "", r = "" ) { 				; Seems this is only used once in pkl_init now?
+pklMsgBox( msg, s := "", p := "", q := "", r := "" ) {  		; Seems this is only used once in pkl_init now?
 	msg := getPklInfo( "LocStr_" . msg )
 	For ix, it in [ "s", "p", "q", "r" ] {
 		msg := ( %it% == "" ) ? msg : StrReplace( msg, "#" . it . "#", %it% )
@@ -202,15 +202,15 @@ pklErrorMsg( text ) {
 	MsgBox, 0x10, EPKL ERROR, %text%`n`nError # %A_LastError% 	; Error type message box
 }
 
-pklWarning( text, time = 5 ) {
+pklWarning( text, time := 5 ) {
 	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
 }
 
-pklInfo( text, time = 4 ) {
+pklInfo( text, time := 4 ) {
 	MsgBox, 0x40, EPKL INFO: , %text%, %time%					; Info type message box (asterisk)
 }
 
-pklDebug( text, time = 2 ) {
+pklDebug( text, time := 2 ) {
 	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%					; Info type message box (asterisk)
 }
 
@@ -260,16 +260,21 @@ getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK nam
 	Return name
 }
 
-getWinLocaleID() { 											; Actual Win LocID; for LangID use A_Language.
-	WinGet, WinID,, A 										; The ID of the active window
+getWinLocaleID() {  										; Actual Win LocID; for LangID use A_Language.
+	WinGet, WinID,, A   									; The ID of the active window
 	WinThreadID := DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", 0)
 	WinLocaleID := DllCall("GetKeyboardLayout", "Int", WinThreadID)
 	WinLocaleID := ( WinLocaleID & 0xFFFFFFFF )>>16 		; Only use the last four xdigits
-	Return Format( "{:04x}", WinLocaleID ) 					; Return as 4-xdigit; used to be decimal
+	Return Format( "{:04x}", WinLocaleID )  				; Return as 4-xdigit; used to be decimal
 }
 
-fileOrAlt( file, altFile, errMsg = "", errDur = 2 ) { 		; Find a file/dir, or use the alternative
-	file := atKbdType( file ) 								; Replace '@K' w/ KbdType
+thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
+	FormatTime, theNow,, yyyy-MM-dd_HH-mm
+	Return theNow
+}
+
+fileOrAlt( file, altFile, errMsg := "", errDur := 2 ) { 	; Find a file/dir, or use the alternative
+	file := atKbdType( file )   							; Replace '@K' w/ KbdType
 	if FileExist( file )
 		Return file
 	if ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found and errMsg is set
@@ -281,7 +286,7 @@ atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper 
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }
 
-pklSplash( title, text, dur = 4.0 ) { 		; Default display duration in seconds
+pklSplash( title, text, dur := 4.0 ) {  	; Default display duration in seconds
 	SetTimer, KillSplash, Off 				; TrayTip and SplashText are hard to kill? SplashText is also deprecated.
 	Gui, pklSp:New, ToolWindow -SysMenu, %title% 	; GUI window w/ title, no buttons
 	Gui, pklSp:Margin, 24 					; Horizontal margin to allow the whole window title to be shown
@@ -295,7 +300,7 @@ KillSplash:
 	Gui, pklSp: Destroy 					;TrayTip 	;SplashTextOff
 Return
 
-pklTooltip( text, dur = 4.0 ) { 			; Default display duration in seconds
+pklTooltip( text, dur := 4.0 ) {    		; Default display duration in seconds
 	ToolTip % text
 	SetTimer, KillToolTip, % -1000 * dur
 }
@@ -304,7 +309,7 @@ KillToolTip:
 	ToolTip
 Return
 
-getPriority(procName="") { 					; Utility function to get process priority, by SKAN from the AHK forums
+getPriority( procName := "" ) { 			; Utility function to get process priority, by SKAN from the AHK forums
 	;;  https://autohotkey.com/board/topic/7984-ahk-functions-incache-cache-list-of-recent-items/page-3#entry75675
 	procList := { 16384 : "BelowNorm",    32 : "Normal"   , 32768 : "AboveNorm"
 				,    64 : "Low"      ,   128 : "High"     ,   256 : "Realtime"  }
@@ -345,7 +350,7 @@ bool( val ) { 												; Convert an entry to true or false (default)
 convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP
 	dum := "--" 											; The string is written as ANSI/CP0
 	VarSetCapacity( dum, StrPut( str, "UTF-8" ) ) 			; Ensure var capacity
-; 		* ((codePg="utf-16"||codePg="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
+; 		* ((codePg=="utf-16"||codePg=="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
 	len := StrPut( str, &dum, "UTF-8" ) 					; Copy/convert string (returns length in chars)
 	Return StrGet( &dum, "CP0" ) 							; Return str as UTF-8
 }
@@ -353,7 +358,7 @@ convertToANSI( str ) { 										; Use IniRead() w/ UTF-8 keys 	; eD WIP
 convertToUTF8( str ) { 										; Use IniRead() w/ UTF-8 instead of UTF-16 	; eD WIP
 	dum := "--" 											; The string is read as ANSI/CP0
 	VarSetCapacity( dum, StrPut( str, "CP0" ) ) 			; Ensure var capacity
-; 		* ((codePg="utf-16"||codePg="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
+; 		* ((codePg=="utf-16"||codePg=="cp1200") ? 2 : 1) ) 	;     ...in bytes (StrPut returns chars)
 	len := StrPut( str, &dum, "CP0" ) 						; Copy/convert string (returns length in chars)
 	Return StrGet( &dum, "UTF-8" ) 							; Return str as UTF-8
 }
@@ -364,7 +369,7 @@ formatUnicode( chr ) { 										; Format a character as a hex string, without t
 	Return  Format( "{:" . pad . "x}", chr ) 				; Format as a Unicode hex string [0x]#### (4+ digits)
 }
 
-inArray( haystack, needle, case = true ) {  				; Check if an array object has a certain value, and return its index
+inArray( haystack, needle, case := true ) {     			; Check if an array object has a certain value, and return its index
 	if !(IsObject(haystack)) || ( haystack.Length() == 0 )  ; (For associative arrays, you can use Array.HasKey() to find a key.)
 		Return false
 	needle      := ( case ) ? needle : loCase( needle ) 	; If desired, use caseless comparison
@@ -376,7 +381,7 @@ inArray( haystack, needle, case = true ) {  				; Check if an array object has a
 	Return false
 }
 
-joinArr( array, sep = "`r`n" ) { 							; Join an array by a separator to a string
+joinArr( array, sep := "`r`n" ) {   						; Join an array by a separator to a string
 	For ix, el in array
 		out .= sep . el
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
@@ -415,7 +420,7 @@ dllKbdState() { 																		; Get a &KeyState 256-byte array of the state 
 	Return &KeyState
 }
 
-pklModState( mode = "get", ShSt = 0 ) { 												; Get/Set a &ModState 256-byte array like KeyState, of the main three state mods
+pklModState( mode := "get", ShSt := 0 ) {   											; Get/Set a &ModState 256-byte array like KeyState, of the main three state mods
 	static VK_MODS  := { "Shift" : 0x10  , "Ctrl" : 0x11  , "Alt" : 0x12   } 			; This works w/ AltGr = Ctrl + Alt
 	setMods         := { "Shift" : 0     , "Ctrl" : 0     , "Alt" : 0      }
 	if ( ShSt & 4 ) ;{   																; AltGr
@@ -433,12 +438,12 @@ pklModState( mode = "get", ShSt = 0 ) { 												; Get/Set a &ModState 256-by
 	Return &ModState
 }
 
-dllMapVK( VK, mode = "chr" ) {  														; Call the MapVirtualKey DLL to determine SC/VK/ord/chr based on VK or SC (int) input
+dllMapVK( VK, mode := "chr" ) { 														; Call the MapVirtualKey DLL to determine SC/VK/ord/chr based on VK or SC (int) input
 	static mapModes :=  { "SC"  : 0 , "VK"  : 1 , "ord" : 2 , "chr" : 2 
 					    , "VKx" : 3 , "SCx" : 4 }   									; Similar to the GetKeyName/SC/VK AHK fns, but those mess w/ OS DKs etc.
 	mod := mapModes[ mode ] 															; The "Ex" mappings distinguish between left/right versions of keys; normal ones do not.
 	map := DllCall( "MapVirtualKey", "uint", VK, "uint", mod )  						; MapVirtualKey translates/maps VK into SC (0/4) or char ordinal (2), or SC to VK (1/3)
-	map := ( mode = "chr" ) ? Chr( map ) : map  										; Return the actual chr instead of its ordinal. Letter keys will be shifted (Win bug).
+	map := ( mode := "chr" ) ? Chr( map ) : map     									; Return the actual chr instead of its ordinal. Letter keys will be shifted (Win bug).
 	Return map
 }
 
@@ -462,4 +467,24 @@ pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() –
 		str .= InStr( "_GR|_LG", VKQWdic[oem] ) ? lin : "" 	; "VKC0|VKE2" "VKBD|VKDB|VKE2"
 	}
 	pklDebug( str, 60 )
+}
+
+;;  ============================================================================================================================================================
+;;  AHK v1 --> v2 Transition
+;;      The transition from AHK v1 to v2 seems very promising, but needs some work.
+;;      One thing that may ease it, would be to make some deprecated commands into temporary functions.
+;;      https://www.autohotkey.com/docs/v2/v2-changes.htm
+;
+;;  Blow-by-blow:
+;;    - All `var = value` has to go (replace with `:=`), and `=` in conditions too (replace with `==`)?
+;;    - Normal variable references are never enclosed in percent signs
+;;    - All old `if` are gone; `if expression` stays
+;;    - Super-globals are gone
+;;    - Gosub is gone. What to use for it?
+;;    - Sleep: No changes necessary? They say that all commands have become functions but the old syntax is still described on its help page for v2.
+;;        - It's because functions can be called without parentheses if the return value is not needed (except when called within an expression).
+;
+
+Sleep( delay ) {    										; This is part of the transition to AHK v2, replacing commands (`Sleep % #` and `Sleep, #`) with functions
+	Sleep % delay
 }

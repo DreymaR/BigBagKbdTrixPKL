@@ -1,33 +1,33 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Ini read module
 ;;  - Functions for reading and preprocessing sections and values from .ini data files
 ;
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Read a section of an .ini file
 ;;      Strips away blank and comment lines but not end-of-line comments by default
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
 ;
 
-pklIniSect( file, section = "pkl", strip = 0 ) 						; Read an .ini section as a line array
+pklIniSect( file, section := "pkl", strip := 0 )    				; Read an .ini section as a line array
 {
-	if not fileTxt := pklFileRead( file ) 							; Use "*P65001 <file>" to read UTF-8 .ini files
+	if not fileTxt := pklFileRead( file )   						; Use "*P65001 <file>" to read UTF-8 .ini files
 		ExitApp, 35
 	needle := "is)(?:^|\R)[ `t]*\[[ `t]*" . section . "[ `t]*\][^\R]*?\R\K(.*?)(?=$|\R[ `t]*\[)"
-	RegExMatch( fileTxt, needle, secTxt )							; is) = IgnoreCase, DotAll. \K = LookBehind.
-	secTxt := RegExReplace( secTxt, "`am)^[ `t]*;.*" )				; Strip comment lines (multiline mode, any \R)
-	secTxt := RegExReplace( secTxt, "\R([ `t]*\R)+", "`r`n" )		; Strip empty and whitespace lines
+	RegExMatch( fileTxt, needle, secTxt )   						; is) = IgnoreCase, DotAll. \K = LookBehind.
+	secTxt := RegExReplace( secTxt, "`am)^[ `t]*;.*" )  			; Strip comment lines (multiline mode, any \R)
+	secTxt := RegExReplace( secTxt, "\R([ `t]*\R)+", "`r`n" )   	; Strip empty and whitespace lines
 	secTxt := ( strip ) ? strCom( secTxt ) : secTxt 				; Strip end-of-line comments, if set
-	Return StrSplit( secTxt, "`n", "`r" ) 							; Return an array of lines
+	Return StrSplit( secTxt, "`n", "`r" )   						; Return an array of lines
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Read a (pkl).ini value
 ;;      Usage: val := pklIniRead( <key>, [default], [inifile(s)|shortstr], [section], [stripcomments] )
 ;;      Special key values return a section list or the contents of a section
 ;;      Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
-pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
+pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 1 )
 {
 	if ( not key )
 		Return
@@ -67,17 +67,17 @@ pklIniRead( key, default = "", iniFile = "PklSet", section = "pkl", strip = 1 )
 	Return val
 }
 
-pklIniCSVs( key, default = "", iniFile = "PklSet", section = "pkl"
-		  , sch = ",", ich = " `t" ) 									; Read a CSV-type .ini entry into an array
+pklIniCSVs( key, default := "", iniFile := "PklSet", section := "pkl"
+		  , splch := ",", ignch := " `t" )  							; Read a CSV-type .ini entry into an array
 {
 	val := pklIniRead( key, default, iniFile, section ) 				; The default could be, e.g., "400,300"
-	Return StrSplit( val, sch, ich ) 									; Split by sch, ignore ich
+	Return StrSplit( val, splch, ignch ) 									; Split by splch, ignore ignch
 }
 
-;;  ================================================================================================================================================================
+;;  ============================================================================================================================================================
 ;;  Helper functions for .ini and other file handling
 ;
-pklIniKeyVal( row, ByRef key, ByRef val, esc=0, com=1 ) 	; Because PKL doesn't always use IniRead? Why though?
+pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1 )   	; Because PKL doesn't always use IniRead? Why though?
 {
 	pos := InStr( row, "= " )   							; Spc after `=` is enforced. Avoids ambiguity vis-a-vis `<=> = ‹entry›` etc.
 	key := Trim( SubStr( row, 1, pos-1 ))
@@ -107,7 +107,7 @@ strEsc( str )												; Replace \# character escapes in a string
 	Return str
 }
 
-pklFileRead( file, name = "" ) { 							; Read a file
+pklFileRead( file, name := "" ) {   						; Read a file
 	name := ( name ) ? name : file
 	try { 													; eD NOTE: Use Loop, Read, ? Nah, 160 kB or so isn't big.
 		FileRead, content, *P65001 %file% 					; "*P65001 " is a way to read UTF-8 files
@@ -118,7 +118,7 @@ pklFileRead( file, name = "" ) { 							; Read a file
 	Return content
 }
 
-pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
+pklFileWrite( content, file, name := "" ) { 				; Write/Append to a file
 	name := ( name ) ? name : file
 	try {
 		FileAppend, %content%, %file%, UTF-8
@@ -127,9 +127,4 @@ pklFileWrite( content, file, name = "" ) { 					; Write/Append to a file
 		Return false
 	}
 	Return true
-}
-
-thisMinute() { 												; Use A_Now (local time) for a folder or other time stamp
-	FormatTime, theNow,, yyyy-MM-dd_HH-mm
-	Return theNow
 }

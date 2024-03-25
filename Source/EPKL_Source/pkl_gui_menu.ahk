@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL tray menu/GUI module
 ;;  - Handles the EPKL tray menu, and its About... GUI window
 ;
@@ -123,7 +123,7 @@ pkl_set_tray_menu()
 ;	OnMessage( 0x404, "_AHK_NOTIFYICON" )   							; Handle tray icon clicks. Using AHK defaults now.
 }
 
-_pklMenuAdd( item = "", label = "", mode = "add" ) { 					; Add a Tray menu item, registering it. In "def" mode, set the default item.
+_pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu item, registering it. In "def" mode, set the default item.
 	static inx  := 0 													; By default, adds and registers a menu item
 	static itmList  := []   											; Empty item/label will add a separator (mode doesn't really matter)
 	static posList  := []   											; Mode "def" instead sets the default menu item by (partial) name or pos.

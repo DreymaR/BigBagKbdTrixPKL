@@ -1,4 +1,4 @@
-﻿;;  ================================================================================================================================================================
+﻿;;  ============================================================================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;  - Calls Inkscape with a .SVG template to generate a set of .PNG help images
 ;;  - Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
@@ -220,7 +220,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	
 	if ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
-	;;  ================================================================================================================================================================
+	;;  ============================================================================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "
@@ -409,7 +409,7 @@ hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
 	Return ch
 }
 
-hig_tag( ent, retur = "tag" ) { 								; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
+hig_tag( ent, retur := "tag" ) {    							; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
 	tag := false
 	pre := SubStr( ent, 1, 1 )
 	if ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images

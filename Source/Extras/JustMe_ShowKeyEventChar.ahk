@@ -16,7 +16,7 @@ hKbdHook := DllCall( "SetWindowsHookEx", "int", 0x0D, "uint", RegisterCallback("
 OnExit, UnhookKeyboardAndExit
 Return
 
-;;  if ( A_CaretX=0 && A_CaretY=0 ) ; I don't want a Keylogger , but a CharLogger, I want real hotstring comparison, not multisequencedHotKey
+;;  if ( A_CaretX == 0 && A_CaretY == 0 ) ; I don't want a Keylogger , but a CharLogger, I want real hotstring comparison, not multisequencedHotKey
 ;;  but disrupt menu key ( alt, F10 )
 ;;  It's useful to call GetKeyBoardLayout often since it may change (Alt+Shift language change etc)
 LowLevelKeyboardProc(nCode, wParam, lParam) {
