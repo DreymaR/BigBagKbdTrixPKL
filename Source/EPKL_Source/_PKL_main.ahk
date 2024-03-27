@@ -25,6 +25,7 @@ NEXT: Add a Help button with a more generic help screen for the first Settings U
 NEXT: Move the text for the Settings UI help text to the language files?!
 		- Make a separate .ini file section for it. Then read in the whole section and process it?
 NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
+NEXT: In preparation of AHK v2, rework the Gosub-based routines in the pkl_gui_settings.ahk file.
 
 WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
