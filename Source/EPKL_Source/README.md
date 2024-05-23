@@ -566,3 +566,7 @@ VERSION HISTORY:
 		- InkScape v1.3 (2023-07) had a bug affecting batch export. Should be fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
 	- Reworked Ext-tap DK layers. The URL and BBC tags weren't universally useful, somewhat unintuitive and better solved as sequences anyway.
 		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around. Still uncertain about symbols for these layers, due to ToM timing.
+	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.
+		- The main purpose of `Unmapped` is to allow an Override file such as `Layout_Override.ini` to instruct EPKL to leave a key untouched.
+		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
+		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.

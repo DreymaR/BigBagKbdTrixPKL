@@ -36,8 +36,8 @@ If you want me to add a layout of your choice, the answer may be no. Even if you
 But you're free to ask! Who knows, maybe you pique my interest with a new and promising development in layout design.
 <br><br>
 
-Key mappings
-------------
+Key/state mappings
+------------------
 Most of my layouts have a base layout defined; their layout section may then change some keys. You can add key definitions following this pattern.
 
 Here are some full shift-state mappings with a legend:
@@ -77,7 +77,7 @@ Where:
     - Note that since EPKL can't know what this produces, a `##` mapped key state can't be used in, e.g., compose sequences.
 <br>
 
-Here are some VirtualKey/VKey and Modifier/Mod mappings. Any layout may contain all types of mappings.
+Here are some VirtualKey/VKey, Modifier/Mod and Single-Entry mappings. Any layout may contain all types of mappings.
 ```
 QW_J    = N         VKey            ; QW jJ  -> nN, a simple VK remapping
 RWin    = BACK      VirtualKey      ; RWin   -> Backspace (VKey)
@@ -86,6 +86,7 @@ SC149   = NEXT      VKey            ; PgUp   -> PgDn, using ScanCode and VK name
 QWPGU   = vcPGD     VKey            ; PgUp   -> PgDn, this time with my more intuitive KLM codes
 QWPGU   = qwPGD     SKey            ; PgUp   -> PgDn, this time with KLM scan code (SC) mapping
 QW_U    = System                    ; System mapped key. Uses whatever is on the system layout.
+QWCLK   = Disabled                  ; The CapsLock key will stop working while EPKL is running.
 ```
 Entries are any-whitespace delimited.
 <br><br>

@@ -27,15 +27,19 @@ NEXT: Move the text for the Settings UI help text to the language files?!
 NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 NEXT: In preparation of AHK v2, rework the Gosub-based routines in the pkl_gui_settings.ahk file.
 
-WIPs: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
+NEXT: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
 		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
 		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
 
-TODO: Custom Send syntax!
+TODO: Custom Send syntax, allowing other AHK commands to be "sent"!
 		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
 		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
-		- For instance, use a syntax like `α{Sleep(500)}` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
+		- For instance, use a syntax like `¢[[Sleep(500)]]` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
+			- May need a custom exec() fn for this, wrapping any and all commands we want to "send" this way (sleep, run, etc).
+			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
+			- Could use dynamic fn calling for the wrapper functions?
+			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
 
 TODO: Files override?!
 		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
@@ -80,6 +84,7 @@ TODO: Files override?!
 2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
 		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
 		- Repeat can compose from other composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
+		- Could be solved by adding DK output to the Compose queue. Might cause some trouble w/ how Back handles the queue then, but that's minor?
 
 2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
 		- The vmods don't need to be sticky for this to happen.
@@ -478,6 +483,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 ;;  ########################    main code   ########################
 
 ;#Requires AutoHotkey 1.1.27     							; This will be important when transitioning to AHK v2 in the future. At that point, use `2.0+` here.
+;#Warn                   									; This AHK directive is handy for spotting global/local variable conflicts etc. May give a lot of warnings though.
 #NoEnv
 #Persistent
 #NoTrayIcon

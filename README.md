@@ -172,20 +172,26 @@ You may want to use EPKL's functionality without opting for one of the available
 - If you want an ergo mod for the Extend layer, you need to select/make the right mod combo in the EPKL Layouts\System layout file.
 <br><br>
 
-Key Mapping vs State Mapping
-----------------------------
+Key vs State Mapping
+--------------------
 There are two main ways EPKL handles key presses intercepted by its keyboard hook:
 * **Key mapping** means that EPKL sends a new keypress event to the OS. It may be the same key or a different one.
     - The types of key mapping available are by Scan Code (**SC**) or by Virtual Key (**VK**) code.
     - These generally work the same. Windows translates between them as necessary.
     - There's a set of intuitive KLM key code aliases. For instance, the VK code for the <kbd>Del</kbd> key is `vcDEL`.
-    - The "System" mapping is shorthand for simply SC mapping the key onto itself, allowing EPKL to see that key.
-    - The "Modifier" mapping is a special case. It's used for modifiers including Shift, Ctrl and Extend.
+    - The `Modifier` mapping is a special case. It's used for modifiers including Shift, Ctrl and Extend.
+    - The mapping format for key mapping is `<KEY SC> = <VK CODE> VKey` (or `<SC> SKey`).
+* **Single-Entry mapping** can be handy for some special use cases.
+    - A `System` (or `SKey`) entry simply SC maps the key onto itself, allowing EPKL to see that key.
+    - A `Disabled` (or `--`) single-entry mapping does just that: Renders a key disabled and useless.
+    - A `Unmapped` (or `<>`) entry can be used by an override file to tell EPKL to leave that key alone.
+    - The mapping format for these commands is simply `<KEY SC> = <SINGLE ENTRY>`.
 * **State mapping** means that EPKL sends a character event onwards to the OS based on the current shift state.
     - The shift state is affected by Shift (held or on a Sticky Mod timer), AltGr and other layer modifiers.
     - In addition to single characters, the mapping can be all sorts of wondrous things. See below for info.
     - The **eD** layout type is state mapped using my AltGr and dead key [Colemak-eD][BBT_eD] layers.
     - Including the custom SwiSh and FliCK modifiers, there are a lot of states available in EPKL.
+    - The mapping format for state mapped keys is described in the [State Mapping Syntax](#state-mapping-syntax) section below.
 * Any key may be key or state mapped. Layouts will generally contain one or the other type, but may contain a mix.
     - Wherever there is an eD-type layout available, you can use it as a key mapped one with the **eD2VK** type.
     - The eD2VK layout type will read its BaseLayout only as key mapped. Any overriding mappings are read as-is.
@@ -214,17 +220,9 @@ In gaming a key is often held down for a longish time. This may lead to some pro
 * For key-intensive games like FPS, probably (auto-)suspend EPKL
 <br><br>
 
-Making Layout Variants
-----------------------
-It's entirely possible to create new layout variants and tweak existing ones with EPKL. It can be a little daunting at first though!
-Mostly because there is so much functionality and complexity, which is actually a good thing but hard on the beginner.
-
-To learn more about key mappings and creating your own layout variants, please consult the [Layouts folder][PklLay] README.
-<br><br>
-
-Key Mapping Syntax
-------------------
-As seen above, there are two basic types of mapping: Key and state. 
+State Mapping Syntax
+--------------------
+As seen in the [Key vs State Mapping](#key-vs-state-mapping) section above, there are two basic types of mapping: Key and shift/modifier state.
 The format for EPKL state mapping is similar to [MSKLC][PklKLC], but more readable and also a lot more powerful.
 
 ```
@@ -263,6 +261,15 @@ This shows the start of the layout section of an EPKL `Layout.ini` file. So, wha
 	- You need to have keys defined as SwiSh and/or FliCK modifiers to access those states, should you want to.
 	- The SwiSh (Swiss Shift) modifier adds 8 to the state, and FliCK (Flip Cap Key) adds 16 (not shown above).
 	- In the Colemak `BaseLayout_Cmk-eD_SwiSh.ini` file, I defined a suggestion of how to get accented letters etc using SwiSh & FliCK.
+<br><br>
+
+Making Layout Variants
+----------------------
+It's entirely possible to create new layout variants and tweak existing ones with EPKL. It can be a little daunting at first though!
+Mostly because there is so much functionality and complexity, which is actually a good thing but hard on the beginner.
+
+To learn more about key mappings and creating your own layout variants, please consult the [Layouts folder][PklLay] README.
+<br><br>
 
 More Know-How
 -------------

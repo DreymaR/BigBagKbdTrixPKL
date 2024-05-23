@@ -196,11 +196,11 @@ pkl_about()
 	basFile  :=             getPklInfo( "File_BasIni" )
 	menuSep  := "............................................................................................"
 	
-	if WinActive( aboutTitle ) { 								; Toggle the GUI off if it's the active window
+	if WinActive( aboutTitle ) {    							; Toggle the GUI off if it's the active window
 		GUI, AW: Destroy
 		Return
 	}
-	GUI, AW:New,       , %aboutTitle% 							; About... window (default GUI)
+	GUI, AW:New,       , %aboutTitle%   						; About... window (default GUI)
 	GUI, AW:Add, Text, , %pklAppName% v%pklVersion%
 	if ( pklProgURL != pklMainURL ) {
 		GUI, AW:Add, Edit, , %pklProgURL%

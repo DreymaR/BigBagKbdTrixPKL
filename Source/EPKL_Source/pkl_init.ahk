@@ -307,128 +307,133 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	
 	cmpKeys := []   													; Any Compose keys are registered before calling init_Composer().
 	For ix, layFile in layStck { 										; Loop parsing all the LayStack layout files
-	st2VK   := getLayInfo("St2VK") && ( layFile == baseLay ) 			; State-2-VK layout type: BaseLay entries are made VK.  	; eD WIP: Use BaseStack here when implemented
-	layMap  := pklIniSect( layFile, "layout" )  						; An array of lines. Not End-of-line comment stripped (yet).
-	extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in Layout.ini [global]. Can map it directly now.
-	( extKey ) ? layMap.Push("`r`n" . extKey . " = Extend Modifier") 	; Define the Extend key. Lifts earlier req of a layout entry.
-	For ix, row in layMap { 											; Loop parsing the layout 'key = entries' lines
-		pklIniKeyVal( row, key, entrys, 0, 0 )  						; Key SC and entries. No comment stripping here to avoid nuking the semicolon.
-		if InStr( "<NoKey><Blank>shiftStates", key ) 					; This could be mapped, but usually it's from pklIniKeyVal()
-			Continue 													; The shiftStates entry is special, defining the layout's states
-;		keyOrig := key  												; eD WIP: Can we make the System layout remappable, so you could apply ergomods etc to your OS layout?
-		KLM     := _mapKLM( key, "SC" ) 								; Co/QW-2-SC KLM remapping, if applicable
-		key     := scMapLay[ key ] ? scMapLay[ key ] : key 				; If there is a SC remapping, apply it
-		if ( getKeyInfo( key . "isSet" ) == "KeyIsSet" ) 				; If a key is at all defined, mark it as set
-			Continue
-		setKeyInfo( key . "isSet", "KeyIsSet" ) 						; Skip marked keys for the rest of the LayStack
-		entrys  := RegExReplace( entrys, "`t;[ ]{2,}`t", "Ş₡εɳŦŕ¥" ) 	; Conserve semicolon entries so they aren't comment-stripped
-		entrys  := StrReplace( strCom(entrys), "Ş₡εɳŦŕ¥", "`t;`t" ) 	; Strip end-of-line comments (whitespace-then-semicolon)
-		entrys  := RegExReplace( entrys, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
-		entry   := StrSplit( entrys, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
-		numEntr := entry.Length()
-		entr1   := ( numEntr > 0 ) ? entry[1] : ""
-		entr2   := ( numEntr > 1 ) ? entry[2] : ""
-		if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
-			tomEnts := StrSplit( entr1, "/" )   						;   Their VK entry is of the form 'VK/ModName'.
-			entr1   := tomEnts[1]
-			tapMod  := _checkModName( tomEnts[2] )
-			extKey  := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as an Extend key (for ExtendIsPressed)
-			setKeyInfo( key . "ToM", tapMod )
-		} else {
-			tapMod  := ""
-		}
-		keyVK := "VK" . Format( "{:X}", GetKeyVK( key ) )   			; Find the right VK code for the key's SC, from the active layout.
-		vkStr := "i)^(vkey|-2|vk|virtualkey)$"  						; RegEx needle for VK entries, ignoring case. Allow -2 or not?
-		scStr := "i)^(skey|-3|sc|scancode|system)$"  					; RegEx needle for SC entries  --"--
-		if RegExMatch( entr1, vkStr) {  								; VK map the key to itself if the first entry is a VKey synonym
-			numEntr   := 2
-			entr1     := keyVK  										; The right VK code for the key's SC, from the active layout.
-			entr2     := "VKey" 										; Note: This is the KLM vc=QWERTY mapping of that SC###.
-		} else if RegExMatch( entr1, scStr ) {  						; SC map the key to itself
-			numEntr   := 2
-			entr1     := key
-			entr2     := "ScanCode"
-		}
-		if ( numEntr < 2 )  || ( entr1 == "--" )    					; Any other empty or one-entry key mapping will deactivate the key
-							|| ( InStr(entr2,";") == 1 ) {   			; (This includes if the 2nd entry is a comment)
-			Hotkey, *%key%   ,  doNothing   							; The *SC### format maps the key regardless of modifiers.
-;			Hotkey, *%key% Up,  doNothing   							; eD WIP: Does a key Up doNothing help to unset better?
-			Continue 													; eD WIP: Is this working though? With base vs layout?
-		}
-		if ( InStr( "modifier", loCase(entr2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'Modifier', 'VKey' or 'SKey'
-			entr1   := _checkModName( entr1 )   						; Modifiers are stored as their AHK names, e.g., "RShift", "AltGr"...
-			extKey  := ( entr1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'. Special modifier.
-;			entr1   := entr1 											; Set VK as modifier name
-			entr2   := -1   											; -1 : Modifier
-		} else if RegExMatch( entr2, scStr ) {
-			qw  := SubStr( entr1, 3 )   								; Check for a KLM QW### ScanCode entry
-			iq  := ( InStr( entr1, "QW" ) == 1 && QWSCdic.HasKey( qw ) ) ? 1 : 0 	; This isn't case sensitive now.
-			entr1   := ( iq ) ? QWSCdic[ qw ] : entr1   				; Set the scan code for the key as its key info
-			entr2   := -3   											; -3 : ScanCode
-		} else {    													; The entry is either VK or state mapped. Remap its VK.
-			KLM     := _mapKLM( entr1, "VK" )   						; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
-			mpdVK   := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
-			mpdVK   :=    mapVK[mpdVK] ?    mapVK[mpdVK] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
-			mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
-			entr1   := mpdVK    										; Set the (mapped) VK## code as key info
-			entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 : VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
-			            : ( st2VK )               ? -2 : entr2  		; ...or in the case of a state entry, its Cap state
-		}
-		setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
-		setKeyInfo( key . "ent2", entr2 )   							; Set CapsState (`CAP`: 0-5 for states; -1 Mod; -2 VK; -3 SC)
-		if ( tapMod ) { 												; Tap-or-Modifier
-			Hotkey, *%key%   ,  tapOrModDown
-			Hotkey, *%key% Up,  tapOrModUp
-		} else if ( entr2 == -1 ) { 									; Set modifier keys, including Extend
-			Hotkey, *%key%   ,  modifierDown
-			Hotkey, *%key% Up,  modifierUp
-		} else if ( entr2 == -2 ) || ( entr2 == -3 ) {   				; Set VK/SC mapped keys, activated on down and released on up
-			Hotkey, *%key%   ,  keypressDown
-			Hotkey, *%key% Up,  keypressUp   							; In this case, A_ThisHotkey will contain a trailing ` UP`
-		} else {
-			Hotkey, *%key%   ,  keypressDown 							; Set state mapped keys; these use AHK Send (Down/Up)
-			Hotkey, *%key% Up,  doNothing   							; eD WIP: Only Down needed? Or is this an advantage?
-		}	; end if entries
-		if ( entr2 < 0 )
-			numEntr := 2 												; If the key is VK/SC/Mod, ignore any extra entries
-		Loop % numEntr - 2 { 											; Loop through all entries for the key, starting at #3
-			ks      := shStats[ A_Index ]   							; This shift state for this key
-			ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
-			if        ( StrLen( ksE ) == 0 ) { 							; Empty entry; ignore
+		st2VK   := getLayInfo("St2VK") && ( layFile == baseLay ) 			; State-2-VK layout type: BaseLay entries are made VK.  	; eD WIP: Use BaseStack here when implemented
+		layMap  := pklIniSect( layFile, "layout" )  						; An array of lines. Not End-of-line comment stripped (yet).
+		extKey  := pklIniRead( "extend_key","", layFile )   				; Extend was in Layout.ini [global]. Can map it directly now.
+		( extKey ) ? layMap.Push("`r`n" . extKey . " = Extend Modifier") 	; Define the Extend key. Lifts earlier req of a layout entry.
+		For ix, row in layMap { 											; Loop parsing the layout 'key = entries' lines
+			pklIniKeyVal( row, key, entrys, 0, 0 )  						; Key SC and entries. No comment stripping here to avoid nuking the semicolon.
+			if InStr( "<NoKey><Blank>shiftStates", key ) 					; This could be mapped, but usually it's from pklIniKeyVal() failure.
+				Continue 													; The shiftStates entry is special, defining the layout's states
+;			keyOrig := key  												; eD WIP: Can we make the System layout remappable, so you could apply ergomods etc to your OS layout?
+			KLM     := _mapKLM( key, "SC" ) 								; Co/QW-2-SC KLM remapping, if applicable
+			key     := scMapLay[ key ] ? scMapLay[ key ] : key 				; If there is a SC remapping, apply it
+			if ( getKeyInfo( key . "isSet" ) != "" )    					; Skip previously set keys for the rest of the LayStack
 				Continue
-			} else if ( StrLen( ksE ) == 1 ) { 							; Single character entry:
-;				setKeyInfo( key . ks . "s", "+" ) 						; eD WIP: Mark set states as '+' and empty as '-', to read the LayStack top-down? No, mark the keys.
-				setKeyInfo( key . ks , Ord(ksE) ) 						; Convert to ASCII/Unicode ordinal number; was Asc()
-			} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
-				setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
-			} else if ( ksE == "##" ) {
-				setKeyInfo( key . ks , -2 ) 							; Send this state {Blind} as its VK##
-				setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
-			} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) { 			; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
-				setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
+			setKeyInfo( key . "isSet", layFile )    						; If a key is at all defined, mark it as set for rest of the LayStack
+			entrys  := RegExReplace( entrys, "`t;[ ]{2,}`t", "Ş₡εɳŦŕ¥" ) 	; Conserve semicolon entries so they aren't comment-stripped
+			entrys  := StrReplace( strCom(entrys), "Ş₡εɳŦŕ¥", "`t;`t" ) 	; Strip end-of-line comments (whitespace-then-semicolon)
+			entrys  := RegExReplace( entrys, "[ `t]+", "`t" ) 				; Turn any consecutive whitespace into single tabs, so...
+			entry   := StrSplit( entrys, "`t" ) 							; The Tab delimiter and no padding requirements are lifted
+			numEntr := entry.Length()
+			entr1   := ( numEntr > 0 ) ? entry[1] : ""
+			entr2   := ( numEntr > 1 ) ? entry[2] : ""
+			if ( InStr( entr1, "/" ) ) { 									; Check for Tap-or-Modifier keys (ToM):
+				tomEnts := StrSplit( entr1, "/" )   						;   Their VK entry is of the form 'VK/ModName'.
+				entr1   := tomEnts[1]
+				tapMod  := _checkModName( tomEnts[2] )
+				extKey  := ( loCase( tapMod ) == "extend" ) ? key : extKey 	; Mark this key as an Extend key (for ExtendIsPressed)
+				setKeyInfo( key . "ToM", tapMod )
 			} else {
-				ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-				tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images
-				if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
-					setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
-					ksE := hig_untag( ksE ) 							; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
-				} 	; end if HIG tag
-				ks2 := SubStr( ksE, 2 )
-				if InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
-					if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
-						cmpKeys.Push( ks2 ) 							; Register Compose key for initialization
-					ksE := ks2  										; = : Send {Blind} - use current mod state
-				} else {												; * : Omit {Text}; use special !+^#{} AHK syntax
-					ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
-				}														; @&: Dead keys and named literals/strings
-				setKeyInfo( key . ks      , ksP ) 						; "key<state>"  is the entry prefix
-				setKeyInfo( key . ks . "s", ksE ) 						; "key<state>s" is the entry itself
-			}	; end if prefix
-		}	; end loop entries
-	}	; end loop (parse layMap)
-	if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
-		setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use a modKeys[] array instead?!
-	}	; end For row in map
+				tapMod  := ""
+			}	; end if ToM
+			keyVK   := "VK" . Format( "{:X}", GetKeyVK( key ) ) 			; Find the right VK code for the key's SC, from the active layout.
+			noStr   := "i)^(--|disabled)$"      							; -1; RegEx needle for disabled keys. MSKLC uses `-1` for state entries.
+			vkStr   := "i)^(vk|vkey|virtualkey)$"   						; -2; RegEx needle for VK entries, ignoring case. Don't use `-2` as entry.
+			scStr   := "i)^(sc|skey|scancode|system)$"  					; -3; RegEx needle for SC entries  --"--
+			unStr   := "i)^(<>|unmapped)$"  								; -4; RegEx needle for unmapped keys
+			if RegExMatch( entr1, noStr) {      							; This key is disabled.
+				Hotkey, *%key%   ,  doNothing   							; The *SC### format maps the key regardless of modifiers.
+;				Hotkey, *%key% Up,  doNothing   							; eD WIP: Does a key Up doNothing help to unset better?
+				Continue 													; eD WIP: Is this working though? With base vs layout?
+			} else if RegExMatch( entr1, vkStr) {   						; VK map the key to itself if the first entry is a VKey synonym
+				numEntr   := 2
+				entr1     := keyVK  										; The right VK code for the key's SC, from the active layout.
+				entr2     := "VKey" 										; Note: This is the KLM vc=QWERTY mapping of that SC###.
+			} else if RegExMatch( entr1, scStr ) {  						; SC map the key to itself
+				numEntr   := 2
+				entr1     := key
+				entr2     := "ScanCode"
+			} else if ( numEntr < 2 )   									; Any other empty or one-entry key mapping will leave the key ignored, ...
+								|| ( InStr(entr2,";") == 1 )    			;   ... also if the 2nd entry is a comment.
+								|| RegExMatch( entr1, unStr) {  			; (Explicit unmapping with unStr is only needed if there are more entries.)
+				Continue    												; This key is to be left unmapped. Since isSet is now set, it will be.
+			}	; end if Single-Entry
+			
+			if ( InStr( "modifier", loCase(entr2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'Modifier', 'VKey' or 'SKey'
+				entr1   := _checkModName( entr1 )   						; Modifiers are stored as their AHK names, e.g., "RShift", "AltGr"...
+				extKey  := ( entr1 == "Extend" ) ? key : extKey 			; Directly mapped 'key = Extend Modifier'. Special modifier.
+;				entr1   := entr1 											; Set VK as modifier name
+				entr2   := -1   											; -1 : Modifier
+			} else if RegExMatch( entr2, scStr ) {
+				qw  := SubStr( entr1, 3 )   								; Check for a KLM QW### ScanCode entry
+				iq  := ( InStr( entr1, "QW" ) == 1 && QWSCdic.HasKey( qw ) ) ? 1 : 0 	; This isn't case sensitive now.
+				entr1   := ( iq ) ? QWSCdic[ qw ] : entr1   				; Set the scan code for the key as its key info
+				entr2   := -3   											; -3 : ScanCode
+			} else {    													; The entry is either VK or state mapped. Remap its VK.
+				KLM     := _mapKLM( entr1, "VK" )   						; Co/QW-2-VK KLM remapping, if applicable. Can use Vc too.
+				mpdVK   := getVKnrFromName( entr1 ) 						; Translate to the four-digit VK## hex code (Uppercase)
+				mpdVK   :=    mapVK[mpdVK] ?    mapVK[mpdVK] : mpdVK 		; If necessary, convert VK(_OEM_#) key codes 	; kbdType == "ISO" && 
+				mpdVK   := vkMapMec[mpdVK] ? vkMapMec[mpdVK] : mpdVK 		; Remap the VKey here before assignment, if applicable.
+				entr1   := mpdVK    										; Set the (mapped) VK## code as key info
+				entr2   := RegExMatch( entr2, vkStr ) ? -2  				; -2 : VirtualKey (if "VKey" mapped or it's set as a eD2VK-type layout)
+							: ( st2VK )               ? -2 : entr2  		; ...or in the case of a state entry, its Cap state
+			}
+			setKeyInfo( key . "ent1", entr1 )   							; Set the "vkey" info (`VK_` in MSKLC layouts)
+			setKeyInfo( key . "ent2", entr2 )   							; Set CapsState (`CAP`: 0-5 for states; -1 Mod; -2 VK; -3 SC)
+			if ( tapMod ) { 												; Tap-or-Modifier
+				Hotkey, *%key%   ,  tapOrModDown
+				Hotkey, *%key% Up,  tapOrModUp
+			} else if ( entr2 == -1 ) { 									; Set modifier keys, including Extend
+				Hotkey, *%key%   ,  modifierDown
+				Hotkey, *%key% Up,  modifierUp
+			} else if ( entr2 == -2 ) || ( entr2 == -3 ) {   				; Set VK/SC mapped keys, activated on down and released on up
+				Hotkey, *%key%   ,  keypressDown
+				Hotkey, *%key% Up,  keypressUp   							; In this case, A_ThisHotkey will contain a trailing ` UP`
+			} else {
+				Hotkey, *%key%   ,  keypressDown 							; Set state mapped keys; these use AHK Send (Down/Up)
+				Hotkey, *%key% Up,  doNothing   							; eD WIP: Only Down needed? Or is this an advantage?
+			}	; end if entries
+			if ( entr2 < 0 )
+				numEntr := 2    											; If the key is VK/SC/Mod, ignore any extra entries
+			Loop % numEntr - 2 {    										; Loop through all entries for the key, starting at #3
+				ks      := shStats[ A_Index ]   							; This shift state for this key
+				ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
+				if        ( StrLen( ksE ) == 0 ) {  						; Empty entry; ignore
+					Continue
+				} else if ( StrLen( ksE ) == 1 ) {  						; Single character entry:
+;					setKeyInfo( key . ks . "s", "+" )   					; eD WIP: Mark set states as '+' and empty as '-', to read the LayStack top-down? No, mark the keys.
+					setKeyInfo( key . ks , Ord(ksE) )   					; Convert to ASCII/Unicode ordinal number; was Asc()
+				} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
+					setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
+				} else if ( ksE == "##" ) {
+					setKeyInfo( key . ks , -2 ) 							; Send this state {Blind} as its VK##
+					setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
+				} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) {  		; Spc: Special 'Spc' or '={Space}' entry for space; &Spc for instance, works differently.
+					setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
+				} else {
+					ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
+					tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images
+					if ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
+						setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
+						ksE := hig_untag( ksE ) 							; eD WIP: Or not? Just do this in ParseSend so DKs etc may use it too? Or both?
+					} 	; end if HIG tag
+					ks2 := SubStr( ksE, 2 )
+					if InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
+						if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
+							cmpKeys.Push( ks2 ) 							; Register Compose key for initialization
+						ksE := ks2  										; = : Send {Blind} - use current mod state
+					} else {    											; * : Omit {Text}; use special !+^#{} AHK syntax
+						ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
+					}														; @&: Dead keys and named literals/strings
+					setKeyInfo( key . ks      , ksP )   					; "key<state>"  is the entry prefix
+					setKeyInfo( key . ks . "s", ksE )   					; "key<state>s" is the entry itself
+				}	; end if prefix
+			}	; end loop entries
+		}	; end loop (parse layMap)
+		if ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
+			setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use a modKeys[] array instead?!
+		}	; end For row in map
 	}	; end For layFile (parse layoutFiles)
 	
 													;   ###############################################################
