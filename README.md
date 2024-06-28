@@ -50,7 +50,7 @@ Getting EPKL up and running
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
     - If you insist on having the Caps key as Backspace instead of the superior Extend key…
     - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon…
-    - … but please read the ["Can I map…"](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) section below first to know your options!
+    - … but first, read the ["Can I map…"](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) section below to know your options!
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 * To make EPKL start up automatically with Windows, [add a shortcut to it in the Startup folder][StrtUp]:
     - Create a shortcut to EPKL.exe (drag it while holding down <kbd>Alt</kbd>, or right-click and choose).
@@ -117,7 +117,7 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
     - If you're a simple USer without the need for such fanciness, leave the `Variant/Locale` setting at `<None>`.
 - Colemak-DH is an ergonomic Colemak mod or mod combo:
     - The DH mod in itself is named `Curl` in EPKL, because that's what it does physically: The home row is curled like the curve of your fingers.
-    - For standard row-staggered keyboards (whether ANSI or ISO), the `CurlAngle` mod equals the Colemak-DH layout.
+    - For standard row-staggered keyboards (whether ANSI or ISO), Colemak with the `CurlAngle` mod equals the Colemak-DH layout.
     - The `Curl`-only mod is for ortho keyboards.
     - Many newbs on row-stag boards don't understand why an [**Angle mod**][BBTawi] is needed. Please strive to do so!!!
 <br>

@@ -5,8 +5,6 @@
 
 keyPressed( HKey ) { 											; Executes a HotKey press – the actual processing part
 	Critical 													; Not all of this fn can have Critical priority, it seems: Hard hangs occurred when trying that.
-	modif := ""
-	state := 0
 	vk_HK := getKeyInfo( HKey . "ent1" ) 						; Key "VK_" info; usually VK/SC code.
 	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
 	
@@ -42,6 +40,9 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		_osmClearAll()  										; Clear any sticky mods after sending
 		Return
 	}	; end if VK/SC
+																; The part below might be a separate fn, e.g., sendKeyWithMods( HKey, CapHK )
+	modif := ""
+	state := 0
 	
 	if getLayInfo("LayHasAltGr") { 								; For AltGr layouts...
 		if AltGrIsPressed() { 									; If AltGr is down...
@@ -59,30 +60,30 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 				_pkl_CtrlState( HKey, capHK, state, modif )
 			}
 		}
-	} else { 													; For non-AltGr layouts...
+	} else {    												; For non-AltGr layouts...
 		if getKeyState("Alt") { 								; Alt is down
 			modif .= "!"
 			if ( ( getKeyState("RCtrl") || ( getKeyState("LCtrl") ) && !getKeyState("RAlt") ) )
 				modif .= "^"
-			state := _pkl_CapsState( capHK )					; CapsLock on?
+			state := _pkl_CapsState( capHK )    				; CapsLock on?
 		} else {
-			_pkl_CtrlState( HKey, capHK, state, modif )			; Ctrl is down
+			_pkl_CtrlState( HKey, capHK, state, modif ) 		; Ctrl is down
 		}
 	}	; end if LayHasAltGr
-	if ( getKeyState("LWin") || getKeyState("RWin") ) 			; Win is down
+	if ( getKeyState("LWin") || getKeyState("RWin") )   		; Win is down
 		modif .= "#"
-;	if ( getKeyState("LShift") || getKeyState("RShift") ) 		; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
+;	if ( getKeyState("LShift") || getKeyState("RShift") )   	; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
 ;		modif .= "+"
 	modif := InStr( modif, "!" ) ? "{Blind}" . modif : modif 	; Alt+F to File menu etc doesn't work without Blind if the Alt button is pressed.
 	state += getModState( "SwiSh" ) ? 0x08 : 0  				; SwiSh (SGCaps, state+08) modifier
 	state += getModState( "FliCK" ) ? 0x10 : 0  				; FliCK (Custom, state+16) modifier
+	Critical, Off   											; eD WIP: Where should Critical priority be turned off? Below keyPressed(), it caused hard hangs.
 	
 	Pri := getKeyInfo( HKey . state )   						; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" ) 					; Actual entry by state, if using a prefix
-	Critical, Off   											; eD WIP: Where should Critical priority be turned off? Moving it below keyPressed() caused hard hangs.
 	if ( Pri == "" ) {
 		Return
-	} else if ( state == "ent1" ) { 							; VirtualKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: Tried "VKey" here but then Ctrl+<key> fails?!
+	} else if ( state == "ent1" ) { 							; VKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: "VK" here made Ctrl+<key> fail?!
 		pkl_SendThis( "{" . Pri . "}", modif ) 					; (Without this, Ctrl+Shift+# keys are broken. Why?)
 	} else if ( Pri == -2 ) {   								; This state is sent as a VKey
 		_composeVK( HKey, Ent )     							; If the output is a single, printable character, add it to the Compose queue
@@ -97,49 +98,49 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	_osmClearAll()  											; If another key is pressed while a OSM is active, cancel the OSM
 }	; end fn keyPressed 										; eD WIP: Should _osmClearAll() be used more places above?
 
-extendKeyPress( HKey ) { 										; Process an Extend modified key press
+extendKeyPress( HKey ) {    									; Process an Extend modified key press
 	Critical
 	static extMods  := {}
-	static modList := { "" 										; Dictionary of modifiers vs their AHK codes
+	static modList := { ""  									; Dictionary of modifiers vs their AHK codes
 		.  "LShift" : "<+"  , "LCtrl" : "<^"  , "LAlt" : "<!"  , "LWin" : "<#"
 		,  "RShift" : ">+"  , "RCtrl" : ">^"  , "RAlt" : ">!"  , "RWin" : ">#"
 		,   "Shift" :  "+"  ,  "Ctrl" :  "^"  ,  "Alt" :  "!"  ,  "Win" :  "#" }
 	
 	if ( HKey == -1 ) { 										; Special call to reset the extMods
-		extMods := {} 											; Which Extend mods are in use
+		extMods := {}   										; Which Extend mods are in use
 		Return
 	}
 	xLvl := getPklInfo( "extLvl" )
-	xVal := getKeyInfo( HKey . "ext" . xLvl ) 					; The Extend entry/value for this key
+	xVal := getKeyInfo( HKey . "ext" . xLvl )   				; The Extend entry/value for this key
 	if ( xVal == "" )
 		Return
 	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) {
-		if ( getKeyState( HKey, "P" ) ) { 						; Mark the extMod as pressed
+		if ( getKeyState( HKey, "P" ) ) {   					; Mark the extMod as pressed
 			extMods[HKey] := mod
-;		} else { 												; eD WIP: This doesn't get triggered unless as Up hotkey is set!
+;		} else {    											; eD WIP: This doesn't get triggered unless as Up hotkey is set!
 ;			extMods.Delete( HKey )
 		}
-		setLayInfo( "extendUsed", true ) 						; Mark the Extend press as used (to avoid dual-use as ToM key etc)
+		setLayInfo( "extendUsed", true )    					; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 		Return
 	}
 	returnTo := getPklInfo( "extReturnTo" ) 					; Array of Ext layers to return to from the current one
 	setExtendInfo( returnTo[ xLvl ] )
 	pref := ""
-	if not pkl_ParseSend( xVal ) { 								; Unified prefix-entry syntax
+	if not pkl_ParseSend( xVal ) {  							; Unified prefix-entry syntax
 		if ( loCase( xVal ) == "backspace" )
 			lastKeys( "pop1" )
-		For HKey, mod in extMods { 								; Which Extend mods are depressed?
+		For HKey, mod in extMods {  							; Which Extend mods are depressed?
 			if getKeyState( HKey, "P" ) {
 				pref .= modList[mod]
 			}
 		}	; end For
-		Send {Blind}%pref%{%xVal%} 								; By default, take modifiers into account
+		Send {Blind}%pref%{%xVal%}  							; By default, take modifiers into account 	; eD WIP: Use normal plkSend instead?!
 	} 	; end if
 	For HKey, mod in extMods {
 		if ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
 	}	; end For
-	setLayInfo( "extendUsed", true ) 							; Mark the Extend press as used (to avoid dual-use as ToM key etc)
+	setLayInfo( "extendUsed", true )    						; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 	Critical, Off   											; eD WIP: Is this necessary? Or will AHK always go non-critical after each fn?
 }
 
@@ -175,14 +176,14 @@ setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or
 	Critical
 	osmKeys := getPklInfo( "stickyMods" )   				; One-Shot mods (CSV, but stored as a string)
 	osmLast := getPklInfo( "osmKeyN" . getPklInfo("osmN") ) ; The last set OSM
-	if ( keyDown ) { 																	; eD WIP: Avoid the OSM if already held?
+	if ( keyDown ) {    																; eD WIP: Avoid the OSM if already held?
 		if ( InStr( osmKeys, theMod ) && theMod != osmLast && ! ExtendIsPressed() ) { 	; eD WIP: Don't use Sticky mods when Ext is down?
 			setOneShotMod( theMod ) 						; Activate the OSM
 		} else {
 			_setModState( theMod, 1 )
 		}
 	} else {
-		if ( theMod == osmLast ) 							; If an active OSM...
+		if ( theMod == osmLast )    						; If an active OSM...
 			Return  										; ...don't release it yet.
 		_setModState( theMod, 0 )
 	}
@@ -193,12 +194,12 @@ _setModState( theMod, keyDown := 1 ) {  					; Using 1/0 for true/false here.
 	if ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
 ;	} else if ( theMod == "AltGr" ) {
-;		setAltGrState( keyDown ) 							; AltGr (not used now)  	; eD NOTE: For now, AltGr can't be sticky?
+;		setAltGrState( keyDown )    						; AltGr (not used now)  	; eD NOTE: For now, AltGr can't be sticky?
 	} else {
 		setKeyInfo( "ModState_" . theMod, keyDown ) 		; Standard modifier
 		UD := ( keyDown ) ? "Down" : "Up"   				; If a physical mod, send KeyDown/Up
 		if not inArray( [ "AltGr", "SwiSh", "FliCK" ], theMod )
-			Send {%theMod% %UD%} 							; NOTE: This autorepeats. Is that desirable?
+			Send {%theMod% %UD%}    						; NOTE: This autorepeats. Is that desirable?
 	}
 }
 
@@ -211,13 +212,13 @@ getModState( theMod ) { 									; This is needed for virtual modifiers. Returns
 setOneShotMod( theMod ) {   								; Activate a One-Shot Mod (OSM).
 	Critical
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . theMod, 0.3 )  ; eD DEBUG 	; eD WIP
-	static osmN := 0 										; OSM number counter
+	static osmN := 0    									; OSM number counter
 	
 	osmTime := getPklInfo( "stickyTime" )   				; StickyMod/OSM wait time
 	osmN    := Mod( osmN, getPklInfo("osmMax") )+1  		; Switch between the OSM timers to allow multiple concurrent OSMs
 	setPklInfo( "osmN"          , osmN   )
 	setPklInfo( "osmKeyN" . osmN, theMod )  				; Marks the OSM as active
-	SetTimer, osmTimer%osmN%, -%osmTime% 					; A timer to turn the OSM off again if unused (-time timers run once)
+	SetTimer, osmTimer%osmN%, -%osmTime%    				; A timer to turn the OSM off again if unused (-time timers run once)
 	_setModState( theMod, 1 )
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . osmN . " set:`n" . theMod . "`n`n" . osmTime . " ms", 0.5 )  ; eD DEBUG
 }
@@ -241,13 +242,13 @@ Return
 _osmClear( osmN ) { 										; Clear a specified sticky mod
 	Critical
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
-	theMod := getPklInfo( "osmKeyN" . osmN ) 				; ...but this is also called from elsewhere.
+	theMod := getPklInfo( "osmKeyN" . osmN )    			; ...but this is also called from elsewhere.
 	setPklInfo( "osmKeyN" . osmN , "" )
 	if ( theMod )
-		setModifierState( theMod, 0 ) 						; Release the modifier
+		setModifierState( theMod, 0 )   					; Release the modifier
 }
 
-_osmClearAll() { 											; Clear all active sticky mods
+_osmClearAll() {    										; Clear all active sticky mods
 	Critical
 	Loop % getPklInfo( "osmMax" ) {
 		if ( getPklInfo( "osmKeyN" . A_Index ) != "" )
@@ -273,7 +274,7 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 	Return getKeyState( "RAlt" ) ; eD WIP AltGr: Removed || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
 }
 
-;setAltGrState( keyDown ) {     							; The set fn calls get to reuse the static var. 	; eD WIP: Can we just use the normal _setModState() now?
+;setAltGrState( keyDown ) {  								; The set fn calls get to reuse the static var. 	; eD WIP: Can we just use the normal _setModState() now?
 ;	getAltGrState( keyDown, 1 )
 ;}
 

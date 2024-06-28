@@ -16,7 +16,23 @@ NEXT:
 TODO: 
 HOLD: 
 
-WIPs: Ukrainian variants!
+WIPs: Ukrainian "Ukromak"!
+		- https://forum.colemak.com/topic/2999-ukromak-rulemak-shared-cyrillic-layout-for-qmk-keyboards/#p25173
+
+NEXT: Rework Extend mappings so they use normal state mapping syntax. The current state of affairs just confuses people.
+		- This means that many current mappings that are just `<key>` must be changed to `β{<key>}`.
+		- The magic happens in extendKeyPress() in pkl_keypress.ahk, under `if not pkl_ParseSend()`.
+		- Here, `Send {Blind}%pref%{%xVal%}` is used after checking for ExtMods.
+
+NEXT: Toggle-type modifiers.
+		- Navigating web pages, I'd like to press a lot of PgUp/Dn and arrows without holding the Ext modifier which gets tiresome.
+		- I'd also like to stay in the NumPad layer for protracted number entry sessions, without holding down the Ext key.
+		- It might be good to have the lock within the layer. Say, Ext+` locks whatever Ext layer is active.
+			- For the current Ext+` mapping, it's enough to have that on Ext-tap+`.
+			- Or is double-tapping the modifier better, as it doesn't use up a mapping? That, however, would be a problem for ToM keys.
+		- But how to make it easy to get out of the layer again? Actually, just tapping the normal modifier should do the trick!
+		- Leave lockable layers out of Janitor cleanup? Or just use a long enough Janitor idle timer that it won't be an issue? Configurable?
+			- The _pklJanitorCleanup() fn is currently not active, seemingly without any negative impact. So that's okay?
 
 NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
