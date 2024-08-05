@@ -570,3 +570,4 @@ VERSION HISTORY:
 		- The main purpose of `Unmapped` is to allow an Override file such as `Layout_Override.ini` to instruct EPKL to leave a key untouched.
 		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
 		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
+	- Rewrote the Kaomoji mappings as PowerStrings, so they are easily and consistently useable both for Kaomoji DK mappings and Compose sequences.
