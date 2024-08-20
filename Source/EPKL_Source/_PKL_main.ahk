@@ -16,6 +16,9 @@ NEXT:
 TODO: 
 HOLD: 
 
+2FIX: Composes with apostrophe not working with eD2VK?!?
+		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
+
 WIPs: Ukrainian "Ukromak"!
 		- https://forum.colemak.com/topic/2999-ukromak-rulemak-shared-cyrillic-layout-for-qmk-keyboards/#p25173
 
