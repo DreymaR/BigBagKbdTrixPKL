@@ -239,6 +239,9 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 ;;  ============================================================================================================================================================
 ;;  eD TONEXT:
 
+TODO: Update the X11 Compose table to a newer version.
+		- Must re-import it, and then make a 3-way diff to include all my custom changes to the old one.
+
 TODO: As a `##` state map entry maps to a VK send, maybe add a `#<VK>` syntax to send another VK by its one-letter code or `0x##` code? `#A` for the `A` key, etc.
 		- That would encroach upon the AHK syntax, which we've mostly avoided thus far. But `Win+a` could still be easily enough sent by `α#a`, etc.
 
