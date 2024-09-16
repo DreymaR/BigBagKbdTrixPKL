@@ -373,12 +373,17 @@ The layouts and setup files may take a little tweaking to get what you want. The
 <br>
 
 #### Techy tips for EPKL:
-* EPKL is Viper and CSGO approved! Some of the fastest typists in the world have tested it and found it responsive enough.
-    - If you type above around 150 Words Per Minute, a little pace smoothing may occur. This shouldn't be a problem, mostly.
 * EPKL, being portable, doesn't need an install with admin rights to work. You must still be allowed to run programs.
 * I usually put a shortcut to EPKL.exe in my [Start Menu "Startup" folder][StrtUp] so it starts on logon, per user.
 * EPKL can also easily be used with the [PortableApps.com][PrtApp] menu by putting its folder in a `C:\PortableApps` folder.
     - If the PortableApps menu is run on logon it can start up EPKL for you too.
+* If you want to save space on your USB drive, you can make a more compact version. The files needed are:
+    - `EPKL.exe` and the `.ini` files in the main folder
+    - The `Files` folder
+    - In the `Layouts` folder: The layout subfolder(s) you're using, and any `BaseLayout` files defined there
+
+* EPKL is Viper and CSGO approved! Some of the fastest typists in the world have tested it and found it responsive enough.
+    - If you type above around 150 Words Per Minute, a little pace smoothing may occur. This shouldn't be a problem, mostly.
 * Look inside the various .ini files under Files and Layouts if you're interested! Much is explained there.
 * See my examples in the Extend file for some advanced mappings! These may be used in layouts and dead keys too.
 * EPKL uses both .ini and source files that may be UTF-8 Unicode encoded.

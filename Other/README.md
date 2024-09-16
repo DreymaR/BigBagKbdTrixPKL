@@ -4,7 +4,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 Other files info
 ----------------
-In this folder are some files that aren't used by EPKL but may still be interesting.
+In this folder are some files that aren't needed to run EPKL but may still be useful.
 
 - The Key code table is a list of keys and their various names. See the [Remap file][MapIni] for what EPKL uses.
 	- To see what keys are pressed and what output results, you can use the EPKL "AHK Key History..." menu.

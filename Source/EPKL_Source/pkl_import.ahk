@@ -66,17 +66,18 @@ _importOneLayout( LIM )								; Function to import one layout via a template .i
 
 ;;  ============================================================================================================================================================
 ;;  EPKL Compose Import module: Turn any X11-libs Compose file into an EPKL Compose table.
-;;    - Works from the Files\Composer directory, turning a Compose.h file in _Inbox into .ini files.
-;;    - Uses a template with a set of regular expression (RegEx) entries to generate the .ini file.
-;;    - Uses a keysymdef file to translate keysym names into Unicode points.
+;;    - It doesn't have a menu entry. I've run it using the Debug hotkey definable in _PKL_main.
+;;    - It works from the EPKL_Composer directory, making an .ini file from a Compose.h file in _Inbox.
+;;    - It uses a template with a set of regular expression (RegEx) entries to generate the .ini file.
+;;    - It uses a keysymdef file to translate keysym names into Unicode points.
 ;;    - Note: The usual X11 keysymdef.h doesn't always use Unicode! It's fine for normal characters.
-;;    - Instead, use the keysyms.txt file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) .
+;;    - Instead, I used the keysyms.txt file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) .
 ;
 
 importComposer() { 	;
 	CIM         := {} 											; Variables for the Compose Import module
 	CIM.Title   := "EPKL Compose Import Module"
-	CIM.Dir     := "Files\Composer\"
+	CIM.Dir     := "Other\EPKL_Composer\"
 	CIM.RegExes := CIM.Dir   . "RegEx_Composer.ini"
 	CIM.InDir   := CIM.Dir   . "_Inbox\"
 	CIM.SymFile := CIM.InDir . "KeySyms.ini" 					; KeySymDef.ini
@@ -92,7 +93,7 @@ importComposer() { 	;
  Composer Import Module
 —————————————————————————————
 
-From a compose.h file in Files\Composer\_Inbox,
+From a compose.h file in Other\EPKL_Composer\_Inbox,
 generate a Compose.ini file useable with EPKL.
 
 Do you wish to do this now?
