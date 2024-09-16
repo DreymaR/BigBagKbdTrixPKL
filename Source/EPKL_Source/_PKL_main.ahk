@@ -102,7 +102,7 @@ TODO: Files override?!
 
 2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
 		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
-		- Repeat can compose from other composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
+		- Repeat works after composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
 		- Could be solved by adding DK output to the Compose queue. Might cause some trouble w/ how Back handles the queue then, but that's minor?
 
 2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
@@ -526,7 +526,7 @@ SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: 
 StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" )  				; EPKL Name
-setPklInfo( "pklVers", "1.4.1 EOL" )    									; EPKL Version
+setPklInfo( "pklVers", "1.4.2α" )       									; EPKL Version
 setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL - used to be http://pkl.sourceforge.net/
 setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
 setPklInfo( "pklHdrB", "`r`n"

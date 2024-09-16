@@ -49,6 +49,8 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pklSetHotkey( "helpImageHotkey", "toggleHelpImage"     , "HK_ShowHelpImg"  ) 	; 1
 	pklSetHotkey( "changeLayHotkey", "rerunNextLayout"     , "HK_ChangeLayout" ) 	; 2
 	pklSetHotkey( "suspendMeHotkey", "toggleSuspend"       , "HK_Suspend"      ) 	; 3/` - 3 didn't work well?
+	pklSetHotkey( "doSuspendHotkey", "suspendOn"           , "HK_SuspendOn"    ) 	; ? - Not normally in use, but may help some.
+	pklSetHotkey( "unSuspendHotkey", "suspendOff"          , "HK_SuspendOff"   ) 	; ? - --"-- (https://github.com/DreymaR/BigBagKbdTrixPKL/issues/54)
 	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
 	pklSetHotkey( "refreshMeHotkey", "rerunSameLayout"     , "HK_Refresh"      ) 	; 5
 	pklSetHotkey( "settingUIHotkey", "changeSettings"      , "HK_SettingsUI"   ) 	; 6

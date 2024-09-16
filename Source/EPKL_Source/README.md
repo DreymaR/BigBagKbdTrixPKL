@@ -2,8 +2,8 @@
 ========================================================
 <br>
 
-- Version:  1.4.1 End-Of-Life
-- Compiled: 2024-03 from GitHub/DreymaR/BigBagKbdTrixPKL
+- Version:  1.4.2α
+- Compiled: 2024-09 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
 
@@ -29,7 +29,7 @@ For a detailed version history, look further down.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
 * EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
-* EPKL v1.4.2: Layout/Settings enhancements. Ext-tap rework.
+* EPKL v1.4.2: Layout/Settings enhancements. Ext mapping format. Ext-tap rework.
 ```
 <br>
 
@@ -539,7 +539,7 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.4.2: Layout/Settings enhancements. Ext-tap rework.
+* EPKL v1.4.2: Layout/Settings enhancements. Ext mapping format. Ext-tap rework.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
