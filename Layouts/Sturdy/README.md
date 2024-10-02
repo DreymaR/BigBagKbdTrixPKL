@@ -14,6 +14,7 @@ The Sturdy layout
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see its [layout home page][LayHom] and [the Oxeylyzer page][AnaHom].
+- If you're interested in further developments, also see the [Graphite][GraPKL] layout Readme.
 <br>
 
 ![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
@@ -126,8 +127,9 @@ _The Sturdy-AWS-ANSI layout. Note the changed J and Z positions._
 ![Oxey profile logo](./_Res/Oxey_GitHub.png)
 
 
-[LayHom]: https://o-x-e-y.github.io/layouts/sturdy/   (The Sturdy layout home page)
-[AnaHom]: https://github.com/O-X-E-Y/oxeylyzer                  (The Oxeylyzer layout analyzer home page)
+[LayHom]: https://o-x-e-y.github.io/layouts/sturdy/         (The Sturdy layout home page)
+[AnaHom]: https://github.com/O-X-E-Y/oxeylyzer              (The Oxeylyzer layout analyzer home page)
+[GraPKL]: ../Graphite/README.md                             (The Graphite layout in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)

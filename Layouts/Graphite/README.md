@@ -13,8 +13,10 @@ The Graphite layout
 - This layout was made by Richard Davison alias 'stronglytyped', 2022-12.
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- It changes some shifted mappings; see below.
+- Its standard variant changes some shifted mappings; see below.
 - For more info, see [the Graphite repo on GitHub][LayGit].
+- Graphite is similar to other recent layouts, like [Nerps (by Smudge)][NrpRed] and [Gallium (by GalileoBlues)][GalGit].
+- Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats scissors".
 <br>
 
 #### The Graphite layout on a ortho/matrix board, showing base and shifted mappings:
@@ -61,7 +63,8 @@ Graphite-HB
 - In my opinion, that's not quite worth it as it makes key remapping (VK maps, programmable boards/devices using the HID protocol) harder.
 - Consequently, I added a keymap-friendly variant, the `Graphite-HB` ("**HB**" for "Hardware Bound" or something – and for fun!).
 - You can select your preferred variant using the `Variant/Locale` setting in the `Layout Selector` GUI.
-- The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards. Hmmm...
+- The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
+- However, with EPKL it's possible to get around such problems elegantly by using a CodeKey or other [sequencing][BBTSeq] options.
 - The two variants use separate EPKL BaseLayout files with minor differences.
 <br>
 
@@ -135,7 +138,10 @@ _The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever yo
 _The Graphite layout. Image taken from its own [web page][LayGit]._
 
 
-[LayGit]: https://github.com/rdavison/graphite-layout (The Graphite layout on GitHub)
-[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
-[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
-[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)
+[LayGit]: https://github.com/rdavison/graphite-layout   (The Graphite layout on GitHub)
+[NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/ (Graphite comment in the Nerps post on Reddit)
+[GalGit]: https://github.com/GalileoBlues/Gallium       (The Gallium layout on GitHub)
+[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
+[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
+[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
+[BBTSeq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)

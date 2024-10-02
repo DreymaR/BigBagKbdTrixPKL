@@ -16,6 +16,8 @@ NEXT:
 TODO: 
 HOLD: 
 
+TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
+
 2FIX: Composes with apostrophe not working with eD2VK?!?
 		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
 
