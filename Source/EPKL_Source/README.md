@@ -571,3 +571,6 @@ VERSION HISTORY:
 		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
 		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
 	- Rewrote the Kaomoji mappings as PowerStrings, so they are easily and consistently useable both for Kaomoji DK mappings and Compose sequences.
+	- Tested whether GitHub Markdown can support `style="background-color:white;"` or similar html/MD to make layer images work with dark browser themes.
+		- Unfortunately, the result was negative. I found no solutions online; only plenty of complaints about this shortcoming of GF Markdown.
+	
