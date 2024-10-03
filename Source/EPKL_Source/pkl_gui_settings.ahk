@@ -169,8 +169,8 @@ pklSetUI() { 													; EPKL Settings GUI
 						. "`n* You could also achieve the same with the Key Mapper tab or direct file editing."
 						. "`n* Click Help for more info, and/or look inside the EPKL_Layouts .ini files."
 						. "`n"
-	GUI, UI:Add, Button, xs y%BL% vUI_Btn3  gUIsubSpcExt, &Submit Extend Key
-	GUI, UI:Add, Button, x+14   yp          gUIsubSpcCmp, Submit &Compose Key
+	GUI, UI:Add, Button, xs y%BL% vUI_Btn3  gUIsubSpcExt, Submit Caps&Lock
+	GUI, UI:Add, Button, x+14   yp          gUIsubSpcCmp, Submit &Compose
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSpc   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	

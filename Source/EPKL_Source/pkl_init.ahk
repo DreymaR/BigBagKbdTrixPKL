@@ -508,7 +508,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	dkImDir := fileOrAlt( atKbdType( pklIniRead( "img_DKeyDir"  		; Read/set DK image data
 						, ".\DeadkeyImg", "LayStk" ) ), mainDir )   	; Default DK img dir: Layout dir or DeadkeyImg
 	setLayInfo( "dkImgDir", dkImDir )
-	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK img state suffix. Defaults to old ""/"sh"?
+	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK help img state suffix. "" is the old ""/"sh" style.
 	
 	;;  ============================================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI

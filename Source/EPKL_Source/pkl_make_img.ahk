@@ -22,13 +22,13 @@ makeHelpImages() {
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . dksDir }
 	HIG.InkPath := pklIniRead( "InkscapePath"   ,       ,, "hig" )  	; HIG settings are in the EPKL_Settings file, under the [hig] section
 	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       ,, "hig" )  	; The SVG image template file to use
-	HIG.States  := pklIniRead( "imgStates"   , "0:1:6:7",, "hig" )  	; Which shift states, if present, to render
+	HIG.States  := pklIniRead( "HIG_imgStates", "0:1:6:7",,"hig" )  	; Which shift states, if present, to render
 	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis" ,       ,, "hig" )  	; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
 	if ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
-	HIG.Debug   := pklIniRead( "DebugMode"      , false ,, "hig" )  	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
-	HIG.Brute   := pklIniRead( "Efficiency"     , 0     ,, "hig" )  	; Move images to layout folder if >=1, overwrite current ones if >=2.
-	HIG.ShowKey := pklIniRead( "DebugKeyID"     , "N/A" ,, "hig" )  	; Debug: Show info on this idKey during image generation.
+	HIG.Debug   := pklIniRead( "HIG_DebugMode"  , false ,, "hig" )  	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
+	HIG.Brute   := pklIniRead( "HIG_Efficiency" , 0     ,, "hig" )  	; Move images to layout folder if >=1, overwrite current ones if >=2.
+	HIG.ShowKey := pklIniRead( "HIG_DebugKeyID" , "N/A" ,, "hig" )  	; Debug: Show info on this idKey during image generation.
 	HIG.MkNaChr := pklIniRead( "imgNonCharMark" , 0x25af,, "hig" )  	; U+25AF  White Rectangle
 	HIG.MkDkBas := pklIniRead( "dkBaseCharMark" , 0x2b24,, "hig" )  	; U+2B24  Black Large Circle
 	HIG.MkDkCmb := pklIniRead( "dkCombCharMark" , 0x25cc,, "hig" )  	; U+25CC  Dotted Circle
@@ -40,8 +40,8 @@ makeHelpImages() {
 ;	HIG.MkOther := pklIniRead( "k_OtherKeyMark" , 0x25cf,, "hig" )  	; U+25CF  Black Circle
 	HIG.MkEllip :=                                0x22ef 				; U+22EF  Midline horizontal ellipsis
 	
-	HIG.fontDef := pklIniRead( "fontDefault"    , 32    ,, "hig" )  	; The default font size used in the file template is 32px
-	HIG.fontSiz := pklIniCSVs( "fontSizes"      , 32    ,, "hig" )  	; Array of font sizes to use depending on number of glyphs
+	HIG.fontDef := pklIniRead( "imgFontDefault" , 32    ,, "hig" )  	; The default font size used in the file template is 32px
+	HIG.fontSiz := pklIniCSVs( "imgFontSizes"   , 32    ,, "hig" )  	; Array of font sizes to use depending on number of glyphs
 	HIG.fontSiz := ( HIG.fontSiz.Length() == 1 )    					; If there's only one size, make it also work for two character entries
 					? [ HIG.fontSiz[1], HIG.fontSiz[1] ] : HIG.fontSiz
 	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     ,, "hig" )
@@ -51,12 +51,12 @@ makeHelpImages() {
 	HIG.inkOpts := " --export-type=""png""" 							; Prior to Inkscape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	HIG.inkFile := []   												; Array of the .SVG image file paths used to call Inkscape with
-	HIG.maxFils := pklIniRead( "batchSize"      , 64    ,, "hig" )  	; Batch size for Inkscape calls. It couldn't handle more than ≈80 files at once.
+	HIG.maxFils := pklIniRead( "HIG_BatchSize"  , 64    ,, "hig" )  	; Batch size for Inkscape calls. It couldn't handle more than ≈80 files at once.
 	
 	makeMsgStr  := ( onlyMakeDK ) ? "`n`nNOTE: Only creating images for DK:`n" . onlyMakeDK . "." 	: ""
 	makeMsgStr  .= ( HIG.Debug  ) ? "`n`nDEBUG Level " . HIG.Debug  								: ""
 	makeMsgStr  .= ( HIG.Brute  ) ? "`n`nEFFICIENCY: IMAGES WILL BE MOVED TO THE LAYOUT FOLDER." 	: ""
-	makeMsgStr  .= ( HIG.Brute == 1 ) ? "`n  (They will not overwrite existing images.)"  			: ""
+	makeMsgStr  .= ( HIG.Brute == 1 ) ? "`n  (They will NOT OVERWRITE any existing images.)"    	: ""
 	makeMsgStr  .= ( HIG.Brute > 1  ) ? "`nANY EXISTING IMAGES WILL BE OVERWRITTEN!"    			: ""
 	SetTimer, ChangeButtonNamesHIG, 100 						; Timer routine to change the MsgBox button texts
 	MsgBox, 0x133, Make Help Images?, 							; MsgBox type 0x3[Yes/No/Cancel] + 0x30[Warning] + 0x100[2nd button is default]
@@ -66,10 +66,12 @@ EPKL Help Image Generator
 
 Using Inkscape, make a help image for each Shift/AltGr state
 and dead key under a subfolder of the current layout folder.
-These may then be moved up to the folder for use with EPKL.
+
+These may then be moved up to the folder for use with EPKL, 
+depending on the 'HIG_Efficiency' setting in EPKL_Settings.
 
 Do you want to make a full set of all help images
-for the current layout, or only default/state images?
+for the current layout, or only the main state images?
 (Many Inkscape calls will take a long time!)%makeMsgStr%
 )
 	IfMsgBox, Cancel
@@ -125,7 +127,7 @@ for the current layout, or only default/state images?
 	}
 	FileMove    % HIG.ImgDirs["root"] . "\*.svg", % HIG.ImgDirs["raw"]
 	FileMove    % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
-	delTmpFiles := pklIniRead( "delTmpSvgFiles" , 0,, "hig" ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
+	delTmpFiles := pklIniRead( "HIG_DelTmpSVGs" , 0,, "hig" ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
 	delTmpFiles := ( HIG.Brute >= 1 ) ? 2 : delTmpFiles
 	if        ( delTmpFiles == 2 ) {
 		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir
@@ -435,5 +437,5 @@ ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or
 	SetTimer, ChangeButtonNamesHIG, Off
 	WinActivate
 	ControlSetText, Button1, &Full
-	ControlSetText, Button2, &Make
+	ControlSetText, Button2, &Main
 Return
