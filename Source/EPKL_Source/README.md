@@ -553,8 +553,8 @@ VERSION HISTORY:
 	- Using the NewLayout template framework, a few more modern layouts were added; Semimak-JQ and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
 		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
-		- The Sturdy layout by Oxey, with an Angle ergo mod.
-		- Wide and Sym ergo mods are WIP for both Graphite and Sturdy, for now.
+		- The Sturdy layout by Oxey, with an Angle ergo mod. Wide and Sym ergo mods are WIP for Sturdy (and Graphite), for now.
+		- The Gallium layout by Bryson James alias 'GalileoBlues'. Also a "Galliard" variant w/ symbol key mappings as in Cmk-CAWS.
 	- The SymMn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
@@ -563,7 +563,7 @@ VERSION HISTORY:
 		- Fixed a Layout Selector bug that would allow an invalid KbdType to show up if another LayType had that KbdType.
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
 	- Fixed: HIG only made "state0.png" (really the last state) plus state0.svg.png (actual state0) instead of the state images it should.
-		- InkScape v1.3 (2023-07) had a bug affecting batch export. Should be fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
+		- InkScape v1.3 (2023-07) had a bug affecting batch export. Fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
 	- Reworked Ext-tap DK layers. The URL and BBC tags weren't universally useful, somewhat unintuitive and better solved as sequences anyway.
 		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around. Still uncertain about symbols for these layers, due to ToM timing.
 	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.

@@ -16,6 +16,10 @@ NEXT:
 TODO: 
 HOLD: 
 
+TODO: Add the Canaria variant of Canary, which is said to be much better for Spanish/Spanglish.
+		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).
+		- https://github.com/christoofar/canaria
+
 TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
 
 2FIX: Composes with apostrophe not working with eD2VK?!?
@@ -61,6 +65,12 @@ TODO: Custom Send syntax, allowing other AHK commands to be "sent"!
 			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
 			- Could use dynamic fn calling for the wrapper functions?
 			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
+
+NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
+		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
+		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
 TODO: Files override?!
 		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
@@ -134,12 +144,6 @@ TODO: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 2FIX: Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
 
 2FIX: System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
-
-WIPs: For the System layout having state help images makes no sense. Remedy this? Use LayInfo("shiftStates"). But atm, not having the shift states active ruins OS DKs.
-		- Cool idea: Make the Vim Help Sheet for Colemak available as a state image? Have it, e.g., on state1 to show it whenever Shift is pressed.
-		- Could fix that using my colemak-vim-helpsheet.svg files.
-		- Ideally, different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
-		- The smallest text on the help image may not render well at the standard help image resolution.
 
 2FIX: The findWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
 		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
@@ -273,15 +277,7 @@ NEXT: A debug hotkey to generate a set of help images on the fly using default s
 NEXT: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
 		- Read in all DK tables in use at startup instead of each entry as needed then? Faster use, slower startup, more memory usage. Acceptable?
 
-NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
-		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
-		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
-		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
-TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
-		- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
-
-TODO: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
+NEXT: Move all override (and settings?) files to the Data folder? More compatible w/ the PortableApps format (backup++), but less clear?
 
 NEXT: User working dir: All user files can be under a specified user root dir.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/34
@@ -362,6 +358,10 @@ TODO: Make a matrix image template, and use it for the Curl variants w/o Angle.
 
 ;;  ============================================================================================================================================================
 ;;  eD TODO:
+
+TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
+		- That'd be more similar to the modularity of my XKB-data files.
+		- This would facilitate hybrid layout types such as VK-numbers (to allow Win+Number shortcuts), VK-letters/eD-symbols...
 
 TODO: Improve GUI responsiveness further.
 		- GUI startup is slow. Where are the bottlenecks? Try to tic-toc GUI startup?
@@ -447,6 +447,13 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 ;;  ============================================================================================================================================================
 ;;  eD ONHOLD:
 
+HOLD: For the System layout having state help images makes no sense. Remedy this?
+		- Use LayInfo("shiftStates")? But atm, not having the shift states active ruins OS DKs.
+		- Cool idea: Make the Vim Help Sheet for Colemak available as a state image? Have it, e.g., on state1 to show it whenever Shift is pressed.
+		- Did this, using my colemak-vim-helpsheet.svg files.
+		- Ideally, should have different images depending on ergo mods. At least, ISO/ANS -(A)-- + CA-- + CAWS.
+		- Problem: The smallest text on the help image doesn't render well at the standard help image resolution.
+
 HOLD: Make WideSym into a separate remap now? Simpler? Less confusing, or not?
 		- The Wide mod is already split by row (except RB and BS) which is quite instructive and consistent.
 		- Made WS remaps for alt layouts like Sturdy that shouldn't do pure Wide mods as they have stuff on the Slash key.
@@ -456,7 +463,7 @@ HOLD: Make WideSym into a separate remap now? Simpler? Less confusing, or not?
 HOLD: Even More Modern Alt Keyboard Layouts?
 		- We already have Semimak-JQ (2021) and Canary (2022), so consider adding some other "best candidates".
 			- https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn
-			- APT, Nerps, Sturdy and maybe Engram look good in Getreuer's comparison.
+			- APT, Nerps, Sturdy and maybe Engram look good in Getreuer's comparison. [Also, Gallium and Graphite now, ++.]
 		- APTv3 by Apsu (2021; the currently stable version) has been added.  https://github.com/Apsu/APT
 			- Also add Aptmak? It uses a thumb key; EPKL could handle that (maybe w/ help from SharpKeys).
 		- Graphite (2022-12) by RDavison was also added after favorable mentions.  https://github.com/rdavison/graphite-layout

@@ -10,13 +10,16 @@ _The default Graphite layout (using the Angle mod) on an ANSI keyboard_
 
 The Graphite layout
 --------------------
-- This layout was made by Richard Davison alias 'stronglytyped', 2022-12.
+- This layout was made by Richard Davison alias 'strongly-typed', 2022-12, as a development from [Sturdy][StrPKL].
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- Its standard variant changes some shifted mappings; see below.
-- For more info, see [the Graphite repo on GitHub][LayGit].
-- Graphite is similar to other recent layouts, like [Nerps (by Smudge)][NrpRed] and [Gallium (by GalileoBlues)][GalGit].
+- For more info, see [the Graphite repo on GitHub][GraGit].
+- Graphite is similar to other recent layouts, like [Nerps (by Smudge)][NrpGra] and [Gallium (by GalileoBlues)][GalGit].
+- It is, in fact, amazing how Graphite and [Gallium][GalPKL] are virtually the same layout, albeit developed independently!
+<br>
+
 - Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats scissors".
+- Its standard variant changes some shifted mappings; see below.
 <br>
 
 #### The Graphite layout on a ortho/matrix board, showing base and shifted mappings:
@@ -68,7 +71,7 @@ Graphite-HB
 - The two variants use separate EPKL BaseLayout files with minor differences.
 <br>
 
-#### Graphite's altered shift state mappings, as per its [web page][LayGit]:
+#### Graphite's altered shift state mappings, as per its [web page][GraGit]:
 ```
 +----------------------------+
 | b l d w z   ' f o u j  ; = |
@@ -100,7 +103,7 @@ Graphite Wide and Sym variants
 - The solution for ANSI seems to be to bring Comma back to the lower row, and with that the `E,` same-finger bigram. Let me know if you have a better suggestion.
 <br>
 
-#### Graphite (C)AWS-ISO proposal:
+#### Graphite AWS-ISO proposal:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -110,7 +113,7 @@ Graphite Wide and Sym variants
 +----------------------------+
 ```
 
-#### Graphite (C)AWS-ANSI proposal, with the comma under UE:
+#### Graphite AWS-ANSI proposal, with the comma under UE:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -135,12 +138,15 @@ _The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever yo
 
 ![Graphite image from its web site](./_Res/Graphite_Web.png)
 
-_The Graphite layout. Image taken from its own [web page][LayGit]._
+_The Graphite layout. Image taken from its own [web page][GraGit]._
 
 
-[LayGit]: https://github.com/rdavison/graphite-layout   (The Graphite layout on GitHub)
-[NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/ (Graphite comment in the Nerps post on Reddit)
-[GalGit]: https://github.com/GalileoBlues/Gallium       (The Gallium layout on GitHub)
+[GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
+[GalGit]: https://github.com/GalileoBlues/Gallium                   (The Gallium layout on GitHub)
+[NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
+[NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/ (Graphite comment in the Nerps post on Reddit)
+[StrPKL]: ../Sturdy/                                                (The Sturdy layout in EPKL)
+[GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
