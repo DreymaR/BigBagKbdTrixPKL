@@ -81,8 +81,8 @@ Gallium variants
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
 - Thus, I made a "Galliard" variant with sym key placements like, e.g., Colemak-CAWS.
 - It may be a little easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
-- This incurs some worse punctuation bigrams like `E,`. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
-- The `O'` bigram is better this way, but the more common `I'` bigram is worse. Again, this is alleviated by the CoDeKey.
+- This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
+- The `O'` bigram is better this way, but the more common `I'` bigram is worse. Again, the CoDeKey solves it.
 - The `YOU'` tetragram is actually an outward roll on Galliard, albeit with a lateral stretch. Whee!
 - I asked GalileoBlues on his [Gallium repo on GitHub][GalIs5], and got a go for publishing this variant.
 <br>

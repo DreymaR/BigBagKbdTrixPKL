@@ -18,7 +18,7 @@ The Graphite layout
 - It is, in fact, amazing how Graphite and [Gallium][GalPKL] are virtually the same layout, albeit developed independently!
 <br>
 
-- Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats scissors".
+- Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats [scissors][GraSci]".
 - Its standard variant changes some shifted mappings; see below.
 <br>
 
@@ -63,12 +63,13 @@ Graphite-HB
 - Graphite has four non-standard shift level mappings, see the figure below.
 - This affects the Quote (QU), Minus (MN), Comma (CM) and Slash (SL) keys.
 - I guess the idea is to make the double quote and question mark more accessible.
-- In my opinion, that's not quite worth it as it makes key remapping (VK maps, programmable boards/devices using the HID protocol) harder.
+- In my opinion, that's not quite worth it as it makes key remapping (VK maps, programmable boards/devices using the HID protocol) a lot harder.
 - Consequently, I added a keymap-friendly variant, the `Graphite-HB` ("**HB**" for "Hardware Bound" or something – and for fun!).
 - You can select your preferred variant using the `Variant/Locale` setting in the `Layout Selector` GUI.
 - The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
-- However, with EPKL it's possible to get around such problems elegantly by using a CodeKey or other [sequencing][BBTSeq] options.
-- The two variants use separate EPKL BaseLayout files with minor differences.
+- However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTSeq] options.
+- The two variants use separate EPKL BaseLayout files with minor differences. Given the similarity to [Gallium][GalPKL], a remap from that could also work.
+- Another option for quote/apostrophe fans, is to use Gallium instead. Like, say, Colemak, it delegates the `J` key to that awkward position.
 <br>
 
 #### Graphite's altered shift state mappings, as per its [web page][GraGit]:
@@ -145,9 +146,12 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [GalGit]: https://github.com/GalileoBlues/Gallium                   (The Gallium layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
 [NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/ (Graphite comment in the Nerps post on Reddit)
+[GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors (The Graphite README on Scissors)
 [StrPKL]: ../Sturdy/                                                (The Sturdy layout in EPKL)
 [GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
 [BBTSeq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)
+[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
+
