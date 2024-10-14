@@ -26,7 +26,7 @@ For Dutch locale Colemak, at the least we need accents easily accessible. There'
 - To use ij completion, you need to enable a Compose key that uses the `compose_adding` table.
 - If you decide that you do want the digraph ligature ĳ on your ISO key after all, uncomment it in your [Layout.ini file][LayIni].
 - If you have the more advanced CoDeKey (Compose+DeadKey) enabled, its `@co0` DK gets a Compose,y/Y addition for ij/IJ.
-- You could if you wish, add more special letters to the CoDeKey `dk_Compose_0` (and `1`) table in the layout file.
+- You could if you wish, add more special letters to the CoDeKey `dk_CoDeKey_0` (and `1`) table in the layout file.
 <br>
 
 |![EPKL help image for Colemak-eD-Nl AngleWide on an ISO board, unshifted state](./Cmk-eD-Nl_ISO_AWide/state0.png)|

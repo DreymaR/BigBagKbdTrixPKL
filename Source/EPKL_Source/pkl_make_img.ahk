@@ -193,7 +193,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 				rel := Chr( HIG.ChRepet )
 				tag := HIG.MkRepet
 			} else if ( ent == "©" ) {  						; Compose/Context key
-				dkName := getKeyInfo( "@co0" )  				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_Compose_0.
+				dkName := getKeyInfo( "@co0" )  				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_CoDeKey_0.
 				if ( dkName )
 					HIG.DKNames[ "co0" ] := dkName  			; Add it to the DK list so its help images are generated.
 				rel := Chr( HIG.ChComps )
