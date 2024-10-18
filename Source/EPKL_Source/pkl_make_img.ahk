@@ -374,7 +374,7 @@ hig_callInkscape( ByRef HIG ) {
 		Loop % 1 + maxInx - minInx {
 			inkFils .= " " . HIG.inkFile[ minInx + A_Index - 1 ] 	; Precede and join by spaces 	;	inkFils := " " . joinArr( HIG.inkFile, " " )
 		}
-		pklSplash( HIG.Title, "Calling Inkscape with files " . minInx . "-" . maxInx . " of " . numFils . " [batch " . turn . "/" . turns . "] ...", 15 )
+		pklSplash( HIG.Title, "Calling Inkscape with files " . minInx . "-" . maxInx . " of " . numFils . " [batch " . turn . "/" . turns . "] ...", 8 )
 		try {   													; Call Inkscape w/ cmd line options
 			RunWait % HIG.InkPath . HIG.inkOpts . inkFils   		; --without-gui is implicit for export commands, and since v1.1(?) deprecated.
 ;			pklInfo( HIG.InkPath . HIG.inkOpts . inkFils, 30 )  	; eD DEBUG

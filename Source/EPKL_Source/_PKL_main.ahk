@@ -447,6 +447,11 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 ;;  ============================================================================================================================================================
 ;;  eD ONHOLD:
 
+HOLD: Default positional special DK mappings are messed up for non-Cmk layouts. Should there be a DK remap possibility?
+		- This affects primarily the CoDeKey (@co0) and Ext-tap (@ex0/1) layers.
+		- This issue is layout-based, making (Base-)Layout files the right place to override the mappings - for now.
+		- At some point, a proper Remap option for positional DK layers would be neat.
+
 HOLD: For the System layout having state help images makes no sense. Remedy this?
 		- Use LayInfo("shiftStates")? But atm, not having the shift states active ruins OS DKs.
 		- Cool idea: Make the Vim Help Sheet for Colemak available as a state image? Have it, e.g., on state1 to show it whenever Shift is pressed.
