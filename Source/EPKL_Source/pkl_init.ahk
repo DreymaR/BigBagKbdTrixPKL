@@ -7,7 +7,7 @@
 initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
 													;   ###############################################################
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
@@ -20,7 +20,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
@@ -54,11 +54,12 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
 	pklSetHotkey( "refreshMeHotkey", "rerunSameLayout"     , "HK_Refresh"      ) 	; 5
 	pklSetHotkey( "settingUIHotkey", "changeSettings"      , "HK_SettingsUI"   ) 	; 6
-	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 7
-	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 8 - Hidden from menu
-	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; 9 - Hidden from menu 	; eD WIP: Use this for something better?
+	pklSetHotkey( "runAppDirHotkey", "openAppDir"          , "HK_OpenAppDir"   ) 	; 7
+	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 8
+	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 9 - Hidden from menu
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
 	pklSetHotkey( "epklDebugHotkey", "epklDebugUtil"       , "HK_DebugUtil"    ) 	; = - Hidden from menu
+	pklSetHotkey( "moveImageHotkey", "moveHelpImage"       , "HK_MoveHelpImg"  ) 	; ? - Hidden from menu
 	#MaxThreadsBuffer       Off 										; Turn on hotkey buffering for subsequent hotkeys (key presses)
 	
 	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )  		; eD WIP: Better DK detection fn!
@@ -88,7 +89,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
@@ -194,7 +195,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
@@ -442,7 +443,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
@@ -483,7 +484,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	
 	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -510,7 +511,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgDir", dkImDir )
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK help img state suffix. "" is the old ""/"sh" style.
 	
-	;;  ============================================================================================================================================================
+	;;  ========================================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )

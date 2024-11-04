@@ -75,6 +75,22 @@ Gallium variants
 - Therefore, in the Angle-modded variants you'll find Q-X swapped back. You can remove the remap if you wish.
 - The Q-X configuration is more easily Angle modded on ANSI boards: Q in the middle seems more favorable.
 - It is also consistent with Graphite, and keeps the finger assignments of layouts like QWERTY and Colemak.
+<br><br>
+
+- Apart from QX, the sole difference between the left hand of Gallium and Graphite is CV vs WZ on the upper/lower row.
+- Graphite's C-V (low) and W (up) look a bit easier to learn for Colemak or QWERTY users, preserving their row assignments.
+- For me though, the `QW_F`-`QW_R` bigram is much easier than its downward counterpart, being altable on a row-stag board.
+- Therefore, I'm with Gallium moving C up to make the `SC/CS` bigrams easier, at the cost of the rarer `SW/WS` ones.
+- Here's an AKL Discord server analysis of the frequencies involved, using their `cmini` bot with the Shai corpus:
+
+```
+sc + cs: 0.13%
+  sc: 0.11%
+  cs: 0.02%
+sw + ws: 0.07%
+  sw: 0.03%
+  ws: 0.04%
+```
 <br>
 
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.

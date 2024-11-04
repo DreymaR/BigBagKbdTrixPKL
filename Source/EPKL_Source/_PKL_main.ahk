@@ -20,8 +20,6 @@ TODO: Add the Canaria variant of Canary, which is said to be much better for Spa
 		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).
 		- https://github.com/christoofar/canaria
 
-TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
-
 2FIX: Composes with apostrophe not working with eD2VK?!?
 		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
 
@@ -244,6 +242,8 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 
 ;;  ============================================================================================================================================================
 ;;  eD TONEXT:
+
+TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
 
 TODO: Update the X11 Compose table to a newer version.
 		- Must re-import it, and then make a 3-way diff to include all my custom changes to the old one.
@@ -695,6 +695,10 @@ Return
 doNothing:
 Return
 
+openAppDir:
+	openAppDir() 										; Open this program's folder in File Explorer
+Return
+
 getWinInfo:
 	getWinInfo() 										; Show the active window's title/process(exe)/class
 Return
@@ -716,10 +720,12 @@ Return
 } debug5() {
 	getWinInfo() 										; Show the active window's title/process(exe)/class             (EPKL)
 } debug6() {
-	pklDebugCustomRoutine() 							; eD DEBUG – usually: Show OS & EPKL VK codes for the OEM keys
+	menuIconList()  									; List menu icons in a specified file
 } debug7() {
-	detectCurrentWinLayDeadKeys()   					; The old PKL DeadKey detection routine                         (hidden)
+	pklDebugCustomRoutine() 							; eD DEBUG – usually: Show OS & EPKL VK codes for the OEM keys
 } debug8() {
+	detectCurrentWinLayDeadKeys()   					; The old PKL DeadKey detection routine                         (hidden)
+} debug9() {
 	getWinLayDKs()  									; eD WIP: Improved WinLayDK detection
 	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 2 )  ; eD DEBUG
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format

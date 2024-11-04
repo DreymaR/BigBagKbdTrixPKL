@@ -21,8 +21,9 @@ pkl_set_tray_menu()
 					,   "setting" : [ "LaysSetts" , "SettingsUI"   ]		; ^+6
 					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+7
 					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
-					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+9 - Don't show this to avoid clutter
+					,   "openApp" : [ "RunAppDir" , "OpenAppDir"   ]		; ^+? - Don't show this to avoid clutter
 					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
+					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+? - Don't show this to avoid clutter
 					,   "debugMe" : [ ""          , "DebugUtil"    ] } 		; ^+= - Don't show the Debug/Utility hotkey
 	For item, val in menuItems
 	{
@@ -68,6 +69,7 @@ pkl_set_tray_menu()
 	
 	_pklMenuAdd( aboutMeMenuItem, "showAbout"       ) 				; About
 	_pklMenuAdd( settingMenuItem, "changeSettings"  ) 				; Layouts/Settings UI
+	_pklMenuAdd( openAppMenuItem, "openAppDir"      ) 				; Open (or focus on) the app folder
 	if ( ShowMoreInfo ) {
 		_pklMenuAdd( keyHistMenuItem, "keyHistory"      ) 				; Key history
 ;		_pklMenuAdd( deadKeyMenuItem, "detectCurrentWinLayDeadKeys" ) 	; Detect OS DKs (old PKL module)
@@ -103,13 +105,14 @@ pkl_set_tray_menu()
 	
 	; eD: Icon lists with numbers can be found using the enclosed Source\Extras\AHK_MenuIconList.ahk script.
 	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMe icon - about/question
-	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 317: Blue cogs)
+	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 315: Blue cogs)
+	Menu, Tray, Icon,      %openAppMenuItem%,  shell32.dll ,   4 		; showImg icon - folder (same as 5 and others?)
 	if ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
 ;		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
 		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImg icon - painting on screen
 	}
-	Menu, Tray, Icon,  %refreshMenuItem%,  shell32.dll , 239 			; refresh icon - refresh arrows
+	Menu, Tray, Icon,      %refreshMenuItem%,  shell32.dll , 239 		; refresh icon - refresh arrows
 	Menu, Tray, Icon,      %showImgMenuItem%,  shell32.dll , 174 		; showImg icon - keyboard (116: film)
 	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImg icon - spyglass
 ;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImg icon - speeding window
