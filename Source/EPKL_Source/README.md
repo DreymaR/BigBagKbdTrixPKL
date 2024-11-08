@@ -574,5 +574,6 @@ VERSION HISTORY:
 	- Tested whether GitHub Markdown can support `style="background-color:white;"` or similar html/MD to make layer images work with dark browser themes.
 		- Unfortunately, the result was negative. I found no solutions online; only plenty of complaints about this shortcoming of GF Markdown.
 	- Tweaked the dialog GUI and several settings' names for the HIG, to hopefully be a little more descriptive.
-	- A `runAppDir` hotkey that opens or focuses on the main EPKL folder. Ctrl+Shift+9 was available.
-
+	- A `runTarget` hotkey that by default opens or focuses on the main EPKL folder. Ctrl+Shift+7 was available, by moving the MoveImage Hotkey.
+		- Any location, file or app can be set as the `openMenuTarget`. Files and folders are opened by their default programs.
+	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.

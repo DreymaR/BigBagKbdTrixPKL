@@ -447,8 +447,8 @@ dllMapVK( VK, mode := "chr" ) { 														; Call the MapVirtualKey DLL to de
 	Return map
 }
 
-openAppDir() {  											; Open this program's folder in File Explorer   	; eD WIP: A setting for which dir(s) to open?
-	Run %A_ScriptDir%   									; Run the target in the default way - here, File Explorer - or focus on it if already open
+runTarget( target := "." ) {    							; Run/open a target (default: This program's folder, in File Explorer)
+	Run % target    										; Run the target in its default way - e.g., File Explorer - or focus on it if already open
 }
 
 pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
@@ -478,32 +478,34 @@ menuIconList() {    										; Taken from the AHK_MenuIconList.ahk script
 	;;          https://autohotkey.com/docs/commands/ListView.htm#IL
 	;;  Script Function:
 	;;          Explore and select icons from any Windows file which embeds icon images (.exe, .dll, etc.)
-	defIconPath := "C:\Windows\System32\shell32.dll"    	;iconFile := "C:\Windows\System32\shell32.dll"
-	FileSelectFile, iconFile, 32,%defIconPath%, Pick a file to check icons., *.*
-	if not iconFile
+	global iconFile                     					; Global so MenuIconNum can see it
+	iconFile    := ""                   					; Needs to be reset each run
+	defIcoPath  := "C:\Windows\System32\shell32.dll"
+	FileSelectFile, iconFile, 32, %defIcoPath%, Pick a file to check icons., *.*
+	if ( iconFile == "" )
 		Return
 	GUI, MIL:Font, s20
 	GUI, MIL:Add, ListView, h415 w150 gMenuIconNum, Icons 	; Uses a ListView GUI (https://www.autohotkey.com/docs/v1/lib/ListView.htm)
 	GUI, MIL:Default                    					; Necessary for LV_ commands, it seems
-	ImageListID := IL_Create(10,1,1)    					; Create a LV ImageList to hold 10 small icons.
-	LV_SetImageList(ImageListID,1)      					; Assign the above ImageList to the current ListView.
-	Loop {                              					; Load the ImageList with a series of icons from the DLL.
+	ImageListID := IL_Create(10,1,1)    					; Create a LV ImageList to hold 10 small icons
+	LV_SetImageList(ImageListID,1)      					; Assign the above ImageList to the current ListView
+	Loop {                              					; Load the ImageList with a series of icons from the DLL
 		 IconCount := Image             					; Number of icons found
-		 Image := IL_Add(ImageListID, iconFile, A_Index) 	; Omits the DLL's path so that it works on Windows 9x too.
+		 Image := IL_Add(ImageListID, iconFile, A_Index) 	; Omits the DLL's path so that it works on Windows 9x too
 		 If (Image = 0)                 					; When we run out of icons
 		   Break
 	   }
-	Loop % IconCount {                  					; Add rows to the ListView (for demonstration purposes, one for each icon).
+	Loop % IconCount {                  					; Add rows to the ListView (for demonstration purposes, one for each icon)
 		LV_Add("Icon" . A_Index, "     " . A_Index)
 	}
-	LV_ModifyCol("Hdr")                 					; Auto-adjust the column widths.
+	LV_ModifyCol("Hdr")                 					; Auto-adjust the column widths
 	GUI, MIL:Show
 	Return
 }
 
 MenuIconNum:
 	Clipboard := iconFile . ", " . A_EventInfo
-	Msgbox % Clipboard . "`r     added to Clipboard!"
+	Msgbox % "'" . Clipboard . "'`n     added to Clipboard!"
 Return
 
 ;;  ============================================================================================================================================================

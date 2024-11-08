@@ -21,7 +21,7 @@ pkl_set_tray_menu()
 					,   "setting" : [ "LaysSetts" , "SettingsUI"   ]		; ^+6
 					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+7
 					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
-					,   "openApp" : [ "RunAppDir" , "OpenAppDir"   ]		; ^+? - Don't show this to avoid clutter
+					,   "openApp" : [ "RunTarget" , "OpenTarget"   ]		; ^+? - Don't show this to avoid clutter
 					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
 					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+? - Don't show this to avoid clutter
 					,   "debugMe" : [ ""          , "DebugUtil"    ] } 		; ^+= - Don't show the Debug/Utility hotkey
@@ -69,7 +69,7 @@ pkl_set_tray_menu()
 	
 	_pklMenuAdd( aboutMeMenuItem, "showAbout"       ) 				; About
 	_pklMenuAdd( settingMenuItem, "changeSettings"  ) 				; Layouts/Settings UI
-	_pklMenuAdd( openAppMenuItem, "openAppDir"      ) 				; Open (or focus on) the app folder
+	_pklMenuAdd( openAppMenuItem, "openTarget"      ) 				; Open (or focus on) the app folder
 	if ( ShowMoreInfo ) {
 		_pklMenuAdd( keyHistMenuItem, "keyHistory"      ) 				; Key history
 ;		_pklMenuAdd( deadKeyMenuItem, "detectCurrentWinLayDeadKeys" ) 	; Detect OS DKs (old PKL module)

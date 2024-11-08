@@ -695,8 +695,8 @@ Return
 doNothing:
 Return
 
-openAppDir:
-	openAppDir() 										; Open this program's folder in File Explorer
+openTarget:
+	runTarget( getPklInfo( "openMenuTarget" ) ) 		; Open the chosen target (default A_ScriptDir, in File Explorer)
 Return
 
 getWinInfo:

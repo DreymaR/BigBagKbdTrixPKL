@@ -7,7 +7,7 @@
 initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
 													;   ###############################################################
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
@@ -20,7 +20,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
@@ -54,7 +54,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	pklSetHotkey( "exitMeNowHotkey", "exitPKL"             , "HK_ExitApp"      ) 	; 4
 	pklSetHotkey( "refreshMeHotkey", "rerunSameLayout"     , "HK_Refresh"      ) 	; 5
 	pklSetHotkey( "settingUIHotkey", "changeSettings"      , "HK_SettingsUI"   ) 	; 6
-	pklSetHotkey( "runAppDirHotkey", "openAppDir"          , "HK_OpenAppDir"   ) 	; 7
+	pklSetHotkey( "runTargetHotkey", "openTarget"          , "HK_OpenTarget"   ) 	; 7
 	pklSetHotkey( "zoomImageHotkey", "zoomHelpImage"       , "HK_ZoomHelpImg"  ) 	; 8
 	pklSetHotkey( "opaqImageHotkey", "opaqHelpImage"       , "HK_OpaqHelpImg"  ) 	; 9 - Hidden from menu
 	pklSetHotkey( "procStatsHotkey", "getWinInfo"          , "HK_AhkWinInfo"   ) 	; 0 - Hidden from menu
@@ -65,9 +65,10 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )  		; eD WIP: Better DK detection fn!
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
-	_pklSetInf( "cleanupTimeOut" )  									; Time idle (sec) before mods etc are cleaned up
-	_pklSetInf( "suspendTimeOut" )  									; Time idle (min) before program suspends itself
-	_pklSetInf( "exitAppTimeOut" )  									; Time idle (min) before program exits itself
+	_pklSetInf( "openMenuTarget", "." ) 								; Target to open by menu/HK; default A_ScriptDir
+	_pklSetInf( "cleanupTimeOut", 4 )   								; Time idle (sec) before mods etc are cleaned up
+	_pklSetInf( "suspendTimeOut", 0 )   								; Time idle (min) before program suspends itself
+	_pklSetInf( "exitAppTimeOut", 0 )   								; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" ) { 					; Programs that suspend EPKL when active
 		if ( suspApp == "--" )
 			Break
@@ -76,20 +77,20 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}	; end For suspApp
-	_pklSetInf( "suspendingMode" )  									; Window TitleMatchMode to use for suspendingApps
-	_pklSetInf( "suspendingLIDs" )  									; Layouts that suspend EPKL when active (actually CSV, but it's okay)
+	_pklSetInf( "suspendingMode", "--" )    							; Window TitleMatchMode to use for suspendingApps
+	_pklSetInf( "suspendingLIDs", "--" )    							; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
-	_pklSetInf( "stickyMods" ) 											; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
-	_pklSetInf( "stickyTime" ) 											; --"--
+	_pklSetInf( "stickyMods", "LShift" )    							; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
+	_pklSetInf( "stickyTime", 600 )         							; --"--
 	
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
 	setPklInfo( "extendMod1", ( extMods[1] ) ? extMods[1] : "" )
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
-	_pklSetInf( "extendTaps" )  										; --"--
-	_pklSetInf( "tapModTime" )  										; Tap-or-Mod time
+;	_pklSetInf( "extendTaps" )  										; --"--
+	_pklSetInf( "tapModTime", 200 )         							; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
@@ -195,7 +196,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
@@ -443,7 +444,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	if getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
@@ -484,7 +485,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	
 	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -511,7 +512,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgDir", dkImDir )
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK help img state suffix. "" is the old ""/"sh" style.
 	
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )
@@ -567,9 +568,9 @@ changeLayout( nextLayout ) { 						; Rerun EPKL with a specified layout
 		Run %A_AhkPath% /f %A_ScriptName% %nextLayout%
 }
 
-_pklSetInf( pklInfo ) { 							; Simple setting for EPKL_Settings entries
-	val := pklIniRead( pklInfo )
-	val := ( val == "--" ) ? "" : val
+_pklSetInf( pklInfo, def := "" ) {  				; Simple setting for EPKL_Settings entries
+	val := pklIniRead( pklInfo, def )   			; Returns def if not found
+	val := ( val == "--" ) ? "" : val   			; An `--` entry means empty (useful for overrides)
 	setPklInfo( pklInfo, val )
 }
 

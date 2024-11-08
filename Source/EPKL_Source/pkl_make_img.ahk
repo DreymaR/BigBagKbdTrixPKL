@@ -222,7 +222,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	
 	if ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
-	;;  ========================================================================================================================================================
+	;;  ====================================================================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "

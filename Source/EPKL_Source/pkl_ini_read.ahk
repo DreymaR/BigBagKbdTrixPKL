@@ -56,7 +56,7 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 			Break
 	}	; end For theFile
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
-	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR)
+	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR; EPKL uses "")
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
 	if        ( SubStr( val, 1, 3 ) == "..\" ) {						; "..\" syntax for layout dirs
 		val := hereDir . "\.." . SubStr( val, 3 )

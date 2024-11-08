@@ -105,8 +105,9 @@ pkl_showHelpImage( activate := 0 )
 	}
 	state := pklGetState()
 	
-	if ( activate == 1 ) { 												; Activate the help image
+	if ( activate == 1 ) {  											; Activate the help image
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" ) 	; Tick off the Show Help Image menu item
+;		GUI, HI:Default 												; Make sure we're the default GUI now. Necessary, or not?
 		GUI, HI:New, +AlwaysOnTop -Border -Caption +ToolWindow 			; Create a GUI for the help images
 					+LastFound +Owner, 				pklHlpImg 			; Owner removes the task bar button?
 		GUI, HI:Margin, 0, 0
