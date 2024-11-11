@@ -1,4 +1,4 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;  - Calls Inkscape with a .SVG template to generate a set of .PNG help images
 ;;  - Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file

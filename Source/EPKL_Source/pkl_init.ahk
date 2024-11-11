@@ -1,4 +1,4 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPKL initialization
 ;;  - Load 1) general settings and layout choice, 2) the layout itself, 3) other stuff.
 ;
@@ -88,7 +88,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
 ;	_pklSetInf( "extendTaps" )  										; --"--
 	_pklSetInf( "tapModTime", 200 )         							; Tap-or-Mod time
-;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: It has a side effect ruining OS DKs.  	; eD FIXED
+;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: Its side effect ruins OS DKs.  	; eD FIXED
 	
 	;;  ====================================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)

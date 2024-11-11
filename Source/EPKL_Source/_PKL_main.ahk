@@ -1,14 +1,14 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;
 
 /*
 ;;  ########################   TODO  »-->   ########################
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  Recent issues:
 WIPs: 
 2FIX: 
@@ -124,7 +124,7 @@ TODO: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
 		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  eD TOFIX/WIP:
 
 2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?! Why does it even do this, again?!
@@ -240,7 +240,7 @@ FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And chang
 TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 		- It works well! But then after a while it stops working?
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  eD TONEXT:
 
 TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
@@ -356,7 +356,7 @@ TODO: Make a matrix image template, and use it for the Curl variants w/o Angle.
 2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  eD TODO:
 
 TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
@@ -444,7 +444,7 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 		- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 		- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  eD ONHOLD:
 
 HOLD: Default positional special DK mappings are messed up for non-Cmk layouts. Should there be a DK remap possibility?

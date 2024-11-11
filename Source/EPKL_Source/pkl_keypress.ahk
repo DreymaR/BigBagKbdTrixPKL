@@ -1,4 +1,4 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPKL key press functions
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
@@ -155,7 +155,7 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 		skipForDK       := false
 		Return
 	}
-	iVK := Format( "{:i}", "0x" . SubStr( vk_HK, 3, 2 ) )   	; VK as int. This should be robust for vk##sc### mappings too. GetKeyName/VK messes w/ OS DKs; avoid that.
+	iVK := Format( "{:i}", "0x" . SubStr( vk_HK, 3, 2 ) )   	; VK as int should be robust for vk##sc### mappings. GetKeyName/VK messes w/ OS DKs; don't.
 	key := dllMapVK( iVK, "chr" )   							; GetKeyName() returns the base (unshifted) key name. We use a DLL call to avoid it here.
 	if ( StrLen(key) == 1 ) {   								; Normal letters/numbers/symbols are single-character
 		iSC := Format( "{:i}", "0x" . SubStr( HKey, 3 ) )   	; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
@@ -167,7 +167,7 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 	}
 }
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  Set/get modifier key ShiftStates
 ;;      Process states of mods. Used in PKL_main; #etAltGrState() also in PKL_send.
 ;
@@ -354,7 +354,7 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 		Return
 ;	} else if ( set == -2 ) { 								; If the key is interrupted by another... 	; eD WIP: Not in use now/yet
 ;		setTapOrModState( -1 )  							; Clear any ToM key settings
-;		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: This isn't happening atm, as the lines that call it above are commented out pending more robustness
+;		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: Not happening atm, as the calls to it above are ;-ed out pending more robustness
 ;		if getKeyState( HKey, "P" ) {
 ;			_setModState( tomMod, 1 ) 						; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 ;			setPklInfo( "tomMod", -1 )

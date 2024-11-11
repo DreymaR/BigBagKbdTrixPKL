@@ -1,4 +1,4 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPKL Layout Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
 ;;    - Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
 ;;    - WIP: Just use an _Inbox under layouts, and generate directly into the Layout dir? Check if existing then.
@@ -64,7 +64,7 @@ _importOneLayout( LIM )								; Function to import one layout via a template .i
 }
 
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  EPKL Compose Import module: Turn any X11-libs Compose file into an EPKL Compose table.
 ;;    - It doesn't have a menu entry. I've run it using the Debug hotkey definable in _PKL_main.
 ;;    - It works from the EPKL_Composer directory, making an .ini file from a Compose.h file in _Inbox.
@@ -104,7 +104,7 @@ Large files may take some time.
 	if FileExist( CIM.SymFile ) {
 		pklSplash( CIM.Title, "Found key file " . CIM.SymFile . "`nProceeding..." )
 	} else {
-		fileStr := imp_convertFile( CIM, CIM.SymOrig, CIM.SymFile, "KeySyms", "Key symbol definition file for the " . CIM.Title, false ) 	; don't write the file yet
+		fileStr := imp_convertFile( CIM, CIM.SymOrig, CIM.SymFile, "KeySyms", "Key symbol definition file for the " . CIM.Title, false ) 	; don't save yet
 		if not fileStr
 			Return false
 ;			pklErrorMsg( "Original KeySym file not found!`nExiting " . CIM.Title )
@@ -118,13 +118,13 @@ Large files may take some time.
 		if not pklFileWrite( fileStr, CIM.SymFile )
 			Return false
 	}
-	fileStr := imp_convertFile( CIM, CIM.CmpOrig, CIM.CmpFile, "XCompose" ,    "Compose definition file for the " . CIM.Title, false ) 	; don't write the file yet
-	if not fileStr 												; Is there a 5000 lines limit to the FileRead? We can trim X compose files to under that manually.
+	fileStr := imp_convertFile( CIM, CIM.CmpOrig, CIM.CmpFile, "XCompose" ,    "Compose definition file for the " . CIM.Title, false ) 	; don't save yet
+	if not fileStr  											; Is there a 5000 line limit to FileRead? We can trim X compose files under that manually.
 		Return false
 	pklSplash( CIM.Title, "Recomposing composes... Hang on...", 30 )
 	shorts  := { "ascii"    : "ASC" , "Greek_"     : "Gre_", "Arabic_"     : "Ara_"
 			   , "hebrew_"  : "Heb_", "Cyrillic_"  : "Cyr_", "Ukrainian_"  : "Ukr_" }
-	For ix, row in pklIniSect( CIM.SymFile, "KeySyms" ) { 		; Read the list key symbol definitions. KeySym -> U####[#], so 4 keys will be 23-27 chars long... or?
+	For ix, row in pklIniSect( CIM.SymFile, "KeySyms" ) {   	; Read list key symbol defs. KeySym -> U####[#], so 4 keys will be 23-27 chars long... or?
 		pklIniKeyVal( row, key, val, 0 ) 						; Read without character escapes (with comment stripping)
 		fileStr := StrReplace( fileStr, "<" . key . ">", val )
 		For src, rep in shorts { 								; Replace long strings in [KeySym] names
@@ -156,7 +156,7 @@ Large files may take some time.
 }
 
 
-;;  ============================================================================================================================================================
+;;  ========================================================================================================================================================
 ;;  EPKL Import Module Process: Import a file and convert it using a specified set of regular expressions.
 ;
 

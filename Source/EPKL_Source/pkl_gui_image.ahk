@@ -1,4 +1,4 @@
-﻿;;  ============================================================================================================================================================
+﻿;;  ========================================================================================================================================================
 ;;  EPKL Image module
 ;;  - Displays main and dead key help images by shift state, and Extend layers
 ;;  - Separate background image and Shift/AltGr indicator overlay, configurable in Layout.ini

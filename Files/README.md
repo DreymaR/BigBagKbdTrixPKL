@@ -141,7 +141,7 @@ Pent-17 =   "           `^^^^^^^`            \n"
 KLM remapping codes used in the [`_eD_Remap`](./_eD_Remap.ini) file:
 ```
 ;;  This is a table of KeyLayoutMap (KLM) codes from the _eD_Remap.ini file. You can use QW### or Co### for EPKL Scan Code (SC) and Virtual Key (VK) names.
-;;  KLM codes are intuitive and make no difference between ANSI & ISO board types. Examples: QW_E, Co_F, QW_CM, QWSPC. For VK, vc=QW codes make the most sense.
+;;  KLM codes are intuitive and make no difference between ANSI & ISO board types. Examples: QW_E, Co_F, QW_CM, QWSPC. For VK, use vc(=QW) codes.
 ;;  XX======+======+======+======+======+======+======+======+======+======+======+======+======XX======+======XX======+======+======XX======+======+======+======XX
 ;;  ||Esc   |F1    |F2    |F3    |F4    |F5    |F6    |F7    |F8    |F9    |F10   |F11   |F12   ||Back  |Menu  ||PrtSc |ScrLk |Pause ||NumLk |KP /  |KP *  |KP -  ||
 ;QW || ESC  | _F1  | _F2  | _F3  | _F4  | _F5  | _F6  | _F7  | _F8  | _F9  | F10  | F11  | F12  || BSP  | APP  || PSC  | SLK  | PAU  || NLK  | PDV  | PMU  | PMN  ||
