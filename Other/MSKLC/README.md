@@ -14,13 +14,14 @@ The files in this folder aren't for EPKL but for Microsoft's MSKLC program.
 <br>
 
 - MSKLC can be installed from [Microsoft's Download Center][MSKLCd]. With it you can look at existing Win layouts and make new ones.
+- The installer needs the Microsoft [.NET Framework v3.5][dNet35] (not the latest version), so get and install that first.
 - This is Microsoft's own tool for generating installable layouts. It was made chiefly for creating QWERTY locale variants.
 - As such, it's a bit limited and confusing. Actually, the underlying code can do a lot more but the user interface has limits.
 - One such limit is that VK (VirtualKey) codes aren't shown in the GUI. These affect system shortcuts such as `Ctrl+<letter>`.
 - If you dabble in layout editing with MSKLC, you may have to edit your .klc file directly to get VK codes right.
 - For a good guide to basic and advanced MSKLC usage, see [Henri's MSKLC Guide][MSKLCg].
 	- In Henri's guide you'll also learn to do advanced stuff like swapping system keys (e.g., CapsLock-to-Backspace).
-	- If you're eager to map CapsLock to Backspace though, please do consider that EPKL's Extend is so very much better!!!
+	- If you're eager to map CapsLock to Backspace though, please do consider that EPKL's Extend is a whole lot better!!!
 <br>
 
 - **NB: RESTART REQUIRED!!!**
@@ -60,6 +61,7 @@ _Colemak-CurlAngleWideSym layout, alias Cmk-CAWS, on an ISO keyboard._<br>_AltGr
 Installing a MSKLC Layout
 -------------------------
 - To install a layout from a `.klc` file, it must first be compiled using the `Build DLL and Setup Package` menu option in MSKLC.
+- First, you may want to set its default folder to something else than the default `My Documents` (lower right button).
 - To install a compiled layout, run the `setup.exe` program in its folder. Setup will choose the right `.msi` and `.dll` for you.
 - The keyboard verify log may well give a lot of warnings about glyphs being defined twice etc; these don't matter.
 - If you have the layout already on your system – let's say you've edited it a little – you must **uninstall** it before compiling.
@@ -102,7 +104,8 @@ Technicalities
 
 
 [MyCAWS]: ./Cmk-CAWS-eD-ISO.klc (DreymaR's MSKLC Colemak-CAWS layout file)
-[MSKLCd]: https://www.microsoft.com/en-us/download/details.aspx?id=102134 (MSKLC download at the Microsoft Download Center)
+[MSKLCd]: https://www.microsoft.com/en-us/download/details.aspx?id=102134                       (MSKLC download at the Microsoft Download Center)
+[dNet35]: https://dotnet.microsoft.com/en-us/download/dotnet-framework/net35-sp1                (Microsoft .NET Framework v3.5 downloads)
 [MSKLCg]: https://msklc-guide.github.io/ (Henri's MSKLC Guide)
 [BBergo]: https://dreymar.colemak.org/ergo-mods.html (DreymaR's Big Bag of Keyboard Tricks, on ergo mods)
 [BBeDdk]: https://dreymar.colemak.org/layers-colemaked.html (DreymaR's Big Bag of Keyboard Tricks, on Colemak[eD])
