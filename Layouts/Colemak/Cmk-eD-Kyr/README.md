@@ -2,7 +2,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
-![EPKL help image for Colemak-eD-Ru on an ANSI board](./Rulemak_ANS_EPKL.png)
+![EPKL help image for Colemak-eD-Rus on an ANSI board](./Rulemak_ANS_EPKL.png)
 
 <br>
 
@@ -15,28 +15,37 @@ This may be supplemented with Curl(DH) and Sym mods to provide Colemak-CAW(S) wi
 Some locales traditionally use ANSI keyboards though, and some prefer to use the AltGr key instead of dead keys. So there may be other variants available.
 <br><br>
 
-Colemak-Ru/Bg "Rulemak" & "Bulmak" Kyrillic phonetic layout variants
---------------------------------------------------------------------
-- These are the Rulemak mappings devised by GHen on the Colemak Forum
-- Homepage: http://forum.colemak.com/viewtopic.php?id=519
+Colemak-Rus/Bul/Ukr "Rulemak"/"Bulmak"/"Ukromak" Kyrillic phonetic layout variants
+----------------------------------------------------------------------------------
+- These are based on the [Rulemak (Rus)][CmkRus] mappings devised by Geert Hendricks; GHen on the Colemak Forum.
 - Version : 1.5 (2017-01-10)
-- For Bulgarian and similar variants, some remaps are necessary such as C vs H.
+- For [Bulgarian (Bul)][CmkBul] and similar variants, some remaps are necessary such as C vs H.
+- For [Ukrainian (Ukr)][CmkUkr] variants, some letters (like `ёЁ`) have other versions (like `їЇ`).
 <br>
 
-|![EPKL help image for Colemak-eD-Ru CAWS on an ISO board, unshifted state](./Cmk-eD-Ru_ISO_CurlAWideSym/state0.png)|
+|![EPKL help image for Colemak-eD-Rus CAWS on an ISO board, unshifted state](./Cmk-eD-Rus_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-Ru_ISO_CAWS, unshifted state_|
+|_Colemak-eD-Rus_ISO_CAWS, unshifted state_|
 
-|![EPKL help image for Colemak-eD-Ru CAWS on an ISO board, AltGr state](./Cmk-eD-Ru_ISO_CurlAWideSym/state6.png)|
+<br>
+
+|![EPKL help image for Colemak-eD-Bul CAWS on an ISO board, unshifted state](./Cmk-eD-Bul_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-Ru_ISO_CAWS, AltGr state_|
+|_Colemak-eD-Bul_ISO_CAWS, unshifted state_|
 
-<br><br>
+<br>
 
-|![EPKL help image for Colemak-eD-Bg CAWS on an ISO board, unshifted state](./Cmk-eD-Bg_ISO_CurlAWideSym/state0.png)|
+|![EPKL help image for Colemak-eD-Ukr CAWS on an ISO board, unshifted state](./Cmk-eD-Ukr_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
-|_Colemak-eD-Bg_ISO_CAWS, unshifted state_|
+|_Colemak-eD-Ukr_ISO_CAWS, unshifted state_|
 
-|![EPKL help image for Colemak-eD-Bg CAWS on an ISO board, AltGr state](./Cmk-eD-Bg_ISO_CurlAWideSym/state6.png)|
+<br>
+
+|![EPKL help image for Colemak-eD-Ukr CAWS on an ISO board, AltGr state](./Cmk-eD-Ukr_ISO_CurlAWideSym/state6.png)|
 |   :---:   |
-|_Colemak-eD-Bg_ISO_CAWS, AltGr state_|
+|_Colemak-eD-Ukr_ISO_CAWS, AltGr state_|
+
+
+[CmkRus]: http://forum.colemak.com/viewtopic.php?id=519                                                     	(Colemak Forum post on Rulemak)
+[CmkBul]: http://forum.colemak.com/viewtopic.php?id=519                                                     	(Colemak Forum post on Bulmak)
+[CmkUkr]: https://forum.colemak.com/topic/2999-ukromak-rulemak-shared-cyrillic-layout-for-qmk-keyboards/    	(Colemak Forum post on Ukromak)

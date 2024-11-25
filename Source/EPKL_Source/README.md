@@ -577,3 +577,5 @@ VERSION HISTORY:
 	- A `runTarget` hotkey that by default opens or focuses on the main EPKL folder. Ctrl+Shift+7 was available, by moving the MoveImage Hotkey.
 		- Any location, file or app can be set as the `openMenuTarget`. Files and folders are opened by their default programs.
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
+	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
+		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.

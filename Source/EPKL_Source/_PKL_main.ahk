@@ -16,15 +16,14 @@ NEXT:
 TODO: 
 HOLD: 
 
+2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
+
 TODO: Add the Canaria variant of Canary, which is said to be much better for Spanish/Spanglish.
 		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).
 		- https://github.com/christoofar/canaria
 
 2FIX: Composes with apostrophe not working with eD2VK?!?
 		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
-
-WIPs: Ukrainian "Ukromak"!
-		- https://forum.colemak.com/topic/2999-ukromak-rulemak-shared-cyrillic-layout-for-qmk-keyboards/#p25173
 
 NEXT: Rework Extend mappings so they use normal state mapping syntax. The current state of affairs just confuses people.
 		- This means that many current mappings that are just `<key>` must be changed to `β{<key>}`.
@@ -66,8 +65,9 @@ TODO: Custom Send syntax, allowing other AHK commands to be "sent"!
 
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
-		- The Cmk-Kyr BaseLayout could for instance base itself on the Cmk-eD BaseLayout and then Cmk-Ru-CAWS on Cmk-Kyr w/ remaps; Bg with its own variant.
-		- Guard against infinite recursion. Limit LayStack depth to a few more layers? Two more could be nice, for instance one locale plus one with extra composes?
+		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
+		- Guard against infinite recursion. Limit LayStack depth to a few more layers?
+		- Two more levels could be nice? For instance, one locale plus one with, e.g., extra composes?
 		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
 TODO: Files override?!
