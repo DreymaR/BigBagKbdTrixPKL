@@ -10,13 +10,14 @@ Layouts info
 ------------
 This is where EPKL keeps its layout files.
 * Layout folders can be organized by main layout, variants and mods. But they don't have to be.
-* The folder name describes its features.
+* A main layout folder can organize a tree of variant and mod subfolders.
+* Layout variant/mod folder names describe layout/variant/mod features. These are used by the Layout Selector.
 	- It starts with a three-letter abbreviation (`3LA`) for the main layout.
 	- Next (preceded with a hyphen) follows the layout type, such as `VK` (VirtualKey) or `eD` (my state mappings).
-	- Next comes the variant. These may be anything really, but they're often locales such as `BrPt` for Brazil/Portugal.
+	- Next comes the variant. These may be anything really – they're often locales such as `BrPt` for Brazil/Portugal.
 	- The names of the layout folders themselves then contain the keyboard type (`ISO`/`ANS`), flanked with underscores.
-	- The last part is the mod. Again, anything's possible but mine are generally of the `CurlA(ngle)WideSym` type.
-* Every actual layout variant/mod folder must contain a `Layout.ini` file. This file defines the layout.
+	- The last part is the mod. Again, anything's allowed; mine are generally a `CurlA(ngle)WideSym` [ergonomic][BBtErg] combo.
+* Every layout variant/mod folder must contain a `Layout.ini` file. This file defines the layout.
 	- A `Layout.ini` file may point at a `BaseLayout` file that defines common features for the main layout.
 	- Default common features for all layouts are in the `EPKL_Layouts` files in the main folder.
 	- This file hierarchy is known as the `LayStack`. There's a mini-stack for general settings too. See the [main EPKL Readme][EPKLgh].
@@ -25,9 +26,9 @@ This is where EPKL keeps its layout files.
 Available layouts
 -----------------
 I don't try to provide all possible layouts with EPKL, obviously. The ones you will find here are in these categories:
-* Useful and recommended, such as Colemak(!) or, say, Canary(?)
+* Useful and recommended, such as Colemak(!) or, say, Canary/Gallium/Graphite/...?
 * Of historical interest, such as Dvorak or QWERTY
-* Interesting to me and of some promise at the time (Boo, ISRT, MTGAP, Semimak etc)
+* Interesting to me and of some promise at the time (Boo, ISRT, MTGAP, Semimak, Sturdy etc)
 * Just for fun! (Foalmak, QUARTZ)
 <br>
 
@@ -153,15 +154,16 @@ The relevant ISO codes can be found at the following addresses:
 <br>
 
 
-[EPKLgh]: https://github.com/DreymaR/BigBagKbdTrixPKL/ (EPKL on GitHub)
-[SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx (Scan code list at MSDN)
-[VKCAHK]: https://autohotkey.com/docs/KeyList.htm (Virtual key list in the AHK docs)
+[EPKLgh]: https://github.com/DreymaR/BigBagKbdTrixPKL/                      (EPKL on GitHub)
+[SCMSDN]: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx   (Scan code list at MSDN)
+[VKCAHK]: https://autohotkey.com/docs/KeyList.htm                           (Virtual key list in the AHK docs)
 [InkPrt]: https://portableapps.com/apps/graphics_pictures/inkscape_portable (Inkscape v1.0 at PortableApps.com)
-[ISOANS]: https://deskthority.net/wiki/ANSI_vs_ISO (Deskthority on ANSI vs ISO keyboard models)
-[KeyTab]: ../Other/KeyCodeTable.txt (KeyCodeTable.txt)
-[LayOvr]: ../EPKL_Layouts_Override_Example.ini (EPKL_Layouts_Override example file)
-[LayDef]: ../EPKL_Layouts_Default.ini (EPKL_Layouts_Default file)
-[PklIni]: ../EPKL_Settings_Default.ini (EPKL Settings file)
-[MapIni]: ../Files/_eD_Remap.ini (EPKL Remap file)
-[DKsIni]: ../Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
-[CmpIni]: ../Files/_eD_Compose.ini (EPKL Compose file)
+[ISOANS]: https://deskthority.net/wiki/ANSI_vs_ISO                          (Deskthority on ANSI vs ISO keyboard models)
+[BbtErg]: https://dreymar.colemak.org/ergo-mods.html                        (Dreymar's Big Bag Of Keyboard Trix, on Ergo Mods)
+[KeyTab]: ../Other/KeyCodeTable.txt                                         (KeyCodeTable.txt)
+[LayOvr]: ../EPKL_Layouts_Override_Example.ini                              (EPKL_Layouts_Override example file)
+[LayDef]: ../EPKL_Layouts_Default.ini                                       (EPKL_Layouts_Default file)
+[PklIni]: ../EPKL_Settings_Default.ini                                      (EPKL Settings file)
+[MapIni]: ../Files/_eD_Remap.ini                                            (EPKL Remap file)
+[DKsIni]: ../Files/_eD_DeadKeys.ini                                         (EPKL DeadKeys file)
+[CmpIni]: ../Files/_eD_Compose.ini                                          (EPKL Compose file)

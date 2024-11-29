@@ -48,8 +48,8 @@ Getting EPKL up and running
     - For releases, the `EPKL.exe` binary is included. For commits, you must run `Compile_EPKL.bat` to produce it.
     - Note that some virus protection programs overreact to compiling Autohotkey (AHK) code of this type.
 * **FAST LANE:** If you simply want "vanilla Colemak" on a US/ANSI keyboard, just run EPKL.exe and type!
-    - If you insist on having the Caps key as Backspace instead of the superior Extend key…
-    - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon…
+    - If you insist on having the Caps key as Backspace instead of the superior Extend key …
+    - … you can use the `Special Keys` tab of the `Layout/Settings` menu to do that …
     - … but first, read the ["Can I map…"](https://github.com/DreymaR/BigBagKbdTrixPKL#can-i-map-the-caps-key-to-backspace) section below to know your options!
 * Run EPKL.exe inside its main folder in any way you like! Check its tray menu in the bottom right-hand corner.
 * To make EPKL start up automatically with Windows, [add a shortcut to it in the Startup folder][StrtUp]:
@@ -148,7 +148,7 @@ Using Extend, you can easily press <kbd>Ext</kbd>+<kbd>O</kbd> for <kbd>Backspac
 If you're still convinced you want to lose out on all that power and flexibility, then there are several ways you can do this:
 - **By Menu:** On the Layout/Settings menu's Special Keys tab, select your Caps key's desired behavior then allow EPKL to restart.
 - **By KeyMapper:** On the Layout/Settings KeyMapper tab, make a `VKey` or `SKey`-type <kbd>CLK</kbd> to <kbd>BSP</kbd> mapping and submit it.
-- **By File:** In your `EPKL_Layouts_` .ini file (Default or, if present, Override), find or make these lines under the `[layout]` section.
+- **By File:** In your [EPKL_Layouts file][LayDef] (Default or, if present, Override), find/make these lines under the `[layout]` section:
 ```
 ;QWCLK = BACK    	VKey 		; SC03a: CapsLock as Backspace (CAPITAL -> BACK)
 QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
@@ -158,6 +158,7 @@ QWCLK = Extend  	Mod 		; SC03a: CapsLock as the Extend modifier
 - Note the bottom line there? You can actually have both: Backspace on tapping <kbd>Caps</kbd>, Extend on holding it!
 - It's actually the default setting for the KeyMapper tab of the Layout/Settings dialog. Press the Submit button and you're on.
 <br>
+    - … in the [Layouts Default file][LayDef] find the first `;QWCLK = BACK` etc line and remove that semicolon …
 
 ![EPKL settings dialog](./Other/Docs/EPKL_Settings-UI.png)
 

@@ -16,7 +16,11 @@ NEXT:
 TODO: 
 HOLD: 
 
+WIPs: Make Galliard a proper Gallium variant. Could just point to the current Gal-AWS.
+		- Introduce Gralmak: Galliard with Graphite WZ/CV. It's more similar to Cmk, keeping row assignments.
+
 2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
+		- Could it be because some key combos change system layout now? (How?)
 
 TODO: Add the Canaria variant of Canary, which is said to be much better for Spanish/Spanglish.
 		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).

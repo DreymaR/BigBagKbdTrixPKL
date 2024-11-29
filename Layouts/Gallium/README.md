@@ -24,7 +24,6 @@ The Gallium layout
 ![Gallium Angle-ANSI help image](./Gallium_ANS-A_EPKL.png)
 
 _The Gallium layout (using the Angle mod) on an ANSI keyboard_
-
 <br>
 
 - The question of whether Q-X or X-Q works best for the two bottom-left positions, is discussed below.
@@ -50,7 +49,6 @@ _The Gallium layout (using the Angle mod) on an ANSI keyboard_
 |  x m w z q   k p ' ; .      |
 +-----------------------------+
 ```
-
 <br>
 
 |![EPKL help image for Gallium-eD on an ANSI board, unshifted layer](./Gal-eD_ANS_Angle/state0.png)|
@@ -73,14 +71,14 @@ Gallium variants
 - The layout's page says "this barely affects the stats and is overall a miniscule change". But is it needed then?
 - Personally, I see little gain and some issues with this "castling". I'd like to keep Q and X on their old columns.
 - Therefore, in the Angle-modded variants you'll find Q-X swapped back. You can remove the remap if you wish.
-- The Q-X configuration is more easily Angle modded on ANSI boards: Q in the middle seems more favorable.
+- The Q-X configuration is more easily Angle modded on ANSI boards than X-Q: Q in the middle is more favorable.
 - It is also consistent with Graphite, and keeps the finger assignments of layouts like QWERTY and Colemak.
 <br><br>
 
 - Apart from QX, the sole difference between the left hand of Gallium and Graphite is CV vs WZ on the upper/lower row.
-- Graphite's C-V (low) and W (up) look a bit easier to learn for Colemak or QWERTY users, preserving their row assignments.
+- Graphite's C-V (low) and W (up) look easier to learn for Colemak or QWERTY users, by preserving their row assignments.
 - For me though, the `QW_F`-`QW_R` bigram is much easier than its downward counterpart, being altable on a row-stag board.
-- Therefore, I'm with Gallium moving C up to make the `SC/CS` bigrams easier, at the cost of the rarer `SW/WS` ones.
+- Therefore, I'm mostly with Gallium moving C up to make the `SC/CS` bigrams easier, at the cost of the rarer `SW/WS` ones.
 - Here's an AKL Discord server analysis of the frequencies involved, using their `cmini` bot with the Shai corpus:
 
 ```
@@ -97,21 +95,22 @@ sw + ws: 0.07%
 - Gallium keeps the number row and brackets in their traditional places, making Wide configs staightforward.
 - For AngleWide mod combos, I use the Q-X swap as mentioned. On ANSI boards, this puts `Q` in the middle.
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.
-- Gallium already moves most of the symbol keys around in its own fashion, so many users may not want a further Sym mod.
+- Gallium already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod.
 - As seen below though, the Galliard variant is in itself a Sym (UnSym) mod, making for familiar AngleWideSym combos.
 <br><br>
 
 
 Galliard
-----------
+--------
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
 - Thus, I made a "Galliard" variant with sym key placements like, e.g., Colemak-CAWS.
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Gallium! Learn Galliard first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
-- The `O'` bigram is better this way, but the more common `I'` bigram is worse. Using the CoDeKey solves that.
+- The `O'` bigram is better this way, but the more common `I'` bigram is worse. Using a CoDeKey solves that.
 - The `YOU'` tetragram is actually an outward roll on Galliard, albeit with a lateral stretch. Whee!
 - I asked GalileoBlues on his [Gallium repo on GitHub][GalIs5], and got a go for publishing this variant.
+- Also see the README for the similar [Gralmak][Gralmk] Graphite variant.
 <br>
 
 #### Gallium AWS-ISO "Galliard":
@@ -123,7 +122,6 @@ Galliard
 | q x m w z _ / k p , .      |
 +----------------------------+
 ```
-
 <br>
 
 ![Gallium (C)AWS-ISO help image](./Gallium_ISO-AWS_EPKL.png)
@@ -131,7 +129,6 @@ Galliard
 _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
-
 
 ![Gallium image from its web site](./_Res/Gallium-RowStag_Web.png)
 
@@ -142,6 +139,7 @@ _The Gallium layout, Rowstag version. Image taken from its own [web page][GalGit
 [GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
 [GraPKL]: ../Graphite/                                              (The Graphite layout in EPKL)
+[Gralmk]: ../Graphite/README.md#gralmak                             (The Gralmak Graphite layout variant)
 [GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5          (GitHub issue on adding Gallium to EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
