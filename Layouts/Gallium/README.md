@@ -92,7 +92,7 @@ sw + ws: 0.07%
 <br>
 
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
-- Gallium keeps the number row and brackets in their traditional places, making Wide configs staightforward.
+- Gallium keeps the number row and brackets in their traditional places, making Wide configs straightforward.
 - For AngleWide mod combos, I use the Q-X swap as mentioned. On ANSI boards, this puts `Q` in the middle.
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'</kbd> (Apostrophe/Quote) and <kbd>-</kbd> (Hyphen/Underscore) keys.
 - Gallium already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod.
@@ -104,9 +104,12 @@ Galliard
 --------
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
 - Thus, I made a "Galliard" variant with sym key placements like, e.g., Colemak-CAWS.
+- The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Gallium! Learn Galliard first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
+<br>
+
 - The `O'` bigram is better this way, but the more common `I'` bigram is worse. Using a CoDeKey solves that.
 - The `YOU'` tetragram is actually an outward roll on Galliard, albeit with a lateral stretch. Whee!
 - I asked GalileoBlues on his [Gallium repo on GitHub][GalIs5], and got a go for publishing this variant.

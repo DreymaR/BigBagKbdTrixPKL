@@ -424,7 +424,7 @@ VERSION HISTORY:
 	- For the Nl locale, the ISO key was reclaimed as Compose! Kept <kbd>ij</kbd> on the images. Note that composing ij/IJ makes the ĳ/Ĳ ligature.
 		-  Also, a Compose completion was added so that <kbd>i</kbd>,<kbd>©</kbd> → `ij`.
 	- Esperanto variant, based on Compose. Like the normal Colemak-eD but with composes for ĉĝĵŝŭ added.
-		- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. To type X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
+		- Compose key on <kbd>X</kbd> for ANSI, since X isn't used in Esperanto. For X, hit <kbd>K</kbd>, <kbd>X</kbd> or <kbd>AltGr</kbd><kbd>X</kbd>.
 	- Added Hebrew layouts. See the `Cmk-eD-Heb` layout folder and the Forum Locale post.
 	- Fixed: A CapsLock off is sent at startup to avoid CapsLock being stuck on after an EPKL refresh.
 	- Fixed: Using relative paths for icon files, multiple layout selections wouldn't show the correct icons.
@@ -490,7 +490,9 @@ VERSION HISTORY:
 		- That way, you only have to uncomment the first `;[pkl]` to get Tarmak! Much simpler. Also, more settings can be uncommented and ready.
 	- Tidied up the Tarmak layout files, using existing BaseLayout/remaps instead of explicit VK mappings.
 	- Separated the layout shorthand `@L` into LayMain (`@L`) and LayPath (`@P`). It's clearer, and you can use `@L` as LayName in description strings.
-	- Dead key images for Colemak-CAW variants now point to CAWS images since I'll be trying to support only the best and most popular combos.
+	- Decided to support DK images and suchlike mainly for Cmk vanilla, CA and CAWS. I consider these the best and/or most popular combos.
+		- Dropped Cmk-CAW support for she sake of my own sanity; there are now links to CAWS DeadKey images in files.
+		- I don't think a lot of people use plain AWide today. And they can always generate their own images.
 	- Added the Semimak-JQ variant. It's a simple `Q > J > QU` cycle from the original.
 	- Reworked the Greek Colemak locale layouts, replacing the rare diaeresis letters on Q and ISO with Tonos/Diaeresis DKs and the default Compose.
 		- Note that the Compose method allows accented/polytonic Greek letters to be written as sequences using punctuation.
@@ -552,9 +554,10 @@ VERSION HISTORY:
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
 	- Using the NewLayout template framework, a few more modern layouts were added; Semimak-JQ and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
-		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
 		- The Sturdy layout by Oxey, with an Angle ergo mod. Wide and Sym ergo mods are WIP for Sturdy (and Graphite), for now.
-		- The Gallium layout by Bryson James alias 'GalileoBlues'. Also a "Galliard" variant w/ symbol key mappings as in Cmk-CAWS.
+		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
+		- The very similiar Gallium layout by Bryson James alias 'GalileoBlues'.
+		- With the Gallium & Graphite layouts, "Galliard" and "Gralmak" variants w/ symbol key mappings as in Cmk-CAWS.
 	- The SymMn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.

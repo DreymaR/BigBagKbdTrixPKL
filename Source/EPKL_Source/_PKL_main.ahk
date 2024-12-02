@@ -8,64 +8,14 @@
 /*
 ;;  ########################   TODO  »-->   ########################
 
+WIPs: Recent and/or ongoing issues and projects
+2FIX: Unresolved issues and bugs
+NEXT: Improvements I'd really like to get around to soon
+TODO: Improvements that are deemed worthy and useful, sometime
+HOLD: Thoughts and suggestions that weren't that good after all, or currently infeasible
+
 ;;  ========================================================================================================================================================
-;;  Recent issues:
-WIPs: 
-2FIX: 
-NEXT: 
-TODO: 
-HOLD: 
-
-WIPs: Make Galliard a proper Gallium variant. Could just point to the current Gal-AWS.
-		- Introduce Gralmak: Galliard with Graphite WZ/CV. It's more similar to Cmk, keeping row assignments.
-
-2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
-		- Could it be because some key combos change system layout now? (How?)
-
-TODO: Add the Canaria variant of Canary, which is said to be much better for Spanish/Spanglish.
-		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).
-		- https://github.com/christoofar/canaria
-
-2FIX: Composes with apostrophe not working with eD2VK?!?
-		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
-
-NEXT: Rework Extend mappings so they use normal state mapping syntax. The current state of affairs just confuses people.
-		- This means that many current mappings that are just `<key>` must be changed to `β{<key>}`.
-		- The magic happens in extendKeyPress() in pkl_keypress.ahk, under `if not pkl_ParseSend()`.
-		- Here, `Send {Blind}%pref%{%xVal%}` is used after checking for ExtMods.
-
-NEXT: Toggle-type modifiers.
-		- Navigating web pages, I'd like to press a lot of PgUp/Dn and arrows without holding the Ext modifier which gets tiresome.
-		- I'd also like to stay in the NumPad layer for protracted number entry sessions, without holding down the Ext key.
-		- It might be good to have the lock within the layer. Say, Ext+` locks whatever Ext layer is active.
-			- For the current Ext+` mapping, it's enough to have that on Ext-tap+`.
-			- Or is double-tapping the modifier better, as it doesn't use up a mapping? That, however, would be a problem for ToM keys.
-		- But how to make it easy to get out of the layer again? Actually, just tapping the normal modifier should do the trick!
-		- Leave lockable layers out of Janitor cleanup? Or just use a long enough Janitor idle timer that it won't be an issue? Configurable?
-			- The _pklJanitorCleanup() fn is currently not active, seemingly without any negative impact. So that's okay?
-
-NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
-		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
-		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
-NEXT: Add a Help button with a more generic help screen for the first Settings UI panel?
-NEXT: Move the text for the Settings UI help text to the language files?!
-		- Make a separate .ini file section for it. Then read in the whole section and process it?
-NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
-NEXT: In preparation of AHK v2, rework the Gosub-based routines in the pkl_gui_settings.ahk file.
-
-NEXT: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
-		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
-		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
-		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
-
-TODO: Custom Send syntax, allowing other AHK commands to be "sent"!
-		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
-		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
-		- For instance, use a syntax like `¢[[Sleep(500)]]` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
-			- May need a custom exec() fn for this, wrapping any and all commands we want to "send" this way (sleep, run, etc).
-			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
-			- Could use dynamic fn calling for the wrapper functions?
-			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
+;;  eD WIPs/2FIX:
 
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
@@ -74,38 +24,8 @@ NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Two more levels could be nice? For instance, one locale plus one with, e.g., extra composes?
 		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
-TODO: Files override?!
-		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
-		- Each supersection could have an entry specifying which file it overrides: _eD_Compose, _eD_DeadKeys, _eD_Extend, _eD_PwrStrings.
-		- Not _eD_Remap in this file, as it is already taken care of in the LayStack files?
-
-2FIX: Holding MoDK-Ext then releasing it activates @ext0 even though Ext was held for > 1 s (over tapModTime = 200 ms).
-		- If the Ext-hold is used w/ another key, it goes back as it should.
-		- It'd be nice to make an Extend key KeyUp deactivate any MoDK layers. But how to deactivate DK layers like that?
-
-2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
-		- Seems it works after the first suspension.
-		- Try to suspend/unsuspend EPKL once at startup then? Is that possible?
-		- But WHY would this be the case?
-
-2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
-		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
-		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65
-		- When I tried setting a high ToM Timer duration to test it, I couldn't activate Ext2 before the timer expired.
-			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
-			- It is as it should be, I guess?
-
-2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
-		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
-		- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
-		- Call getWinLayDKs() (in pkl_deadkey) more robustly? No, it's the test for "śķιᶈForDK" in pkl_keypress that matters.
-			- But keyPressed( HKey ) in pkl_keypress handles eD2VK and VK keys the same? So why then is the DK ruined by one and not the other?
-
-2FIX: For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
-		- Both are missing their state 6 dead key, acute and tilde respectively. There are no other dead keys in the layout. The Cmk-eD layout gets state 6 registered.
-		- Might using ToUnicodeEx make a difference?
-		- Reverting to listing DKs in the settings sounds like a defeat now...
-		- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
+2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
+		- Could it be because some key combos change system layout now? (How?)
 
 2FIX: PowerString name capitalization?
 		- Composing, say, `say'pkl` and `say'Pkl` both output the ¶saypkl PowerString. Case should matter.
@@ -114,72 +34,16 @@ TODO: Files override?!
 		- Only Composer respects case now, since it uses pklIniSect()?
 		- For now, circumvented the problem by renaming the capitalized PowerString like `¶say-Pkl`.
 
-2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
-		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
-		- Repeat works after composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
-		- Could be solved by adding DK output to the Compose queue. Might cause some trouble w/ how Back handles the queue then, but that's minor?
-
-2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
-		- The vmods don't need to be sticky for this to happen.
-		- Are they turned off somewhere on release? That'd account for them working only once.
-
-TODO: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
-		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
-		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
-		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
-
-;;  ========================================================================================================================================================
-;;  eD TOFIX/WIP:
-
-2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?! Why does it even do this, again?!
-
-2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
-		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
-		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
-		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
-		- Could the mod-up sent on Extend key release be involved?
-
-2FIX: When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
-		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
-		- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
-
-2FIX: Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
-
-2FIX: System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
-
-2FIX: The findWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
-		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
-		- Therefore, OEM keys should probably be treated differently from remapped keys (AZERTY, Cmk-CAWS etc). In some cases, a key can be both! Char-to-VK?
-2FIX: SC remap the OEMdic, or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
-		- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
-		- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
-		- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
 WIPs: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
 
 WIPs: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
 		- No, doesn't work; the SC don't get remapped at all. Ah well.
 		- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
 
-2FIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
-
 WIPs: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
 WIPs: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
 WIPs: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
 		- May not work with WinSet, Transparent; I'm using that with the Help Images.
-
-2FIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬` {DK_/,DK_=,g}. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` {DK_/,DK_=,v} work. What gives?
-		- Also iota/upsilon with dialytika and tonos don't work...?
-
-2FIX: When selecting downwards with Extend and then using Extend-copy, sometimes an 'EXT' character (?) is made instead.
-
-2FIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
-		- Is this because of the VK detection making an error? The ones that work both have V in its old place.
-
-TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
-		- Would destroying the GUI on DK activation help at all?
-
-WIPs: Decide on supporting DK images and suchlike only for Cmk vanilla, CA and CAWS. Drop CAW support for sanity; link to CAWS in files.
-		- There is also AWide support today. But... I don't think a lot of people use it? And they can always be asked to generate their own.
 
 WIPs: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
 WIPs: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
@@ -215,10 +79,86 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 		- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 
-2FIX: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
-		- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
-		- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
-		- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
+;;  ========================================================================================================================================================
+;;  eD 2FIX:
+
+2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
+		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
+		- Repeat works after composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
+		- Could be solved by adding DK output to the Compose queue. Might cause some trouble w/ how Back handles the queue then, but that's minor?
+
+2FIX: SwiSh/FliCK modifiers don't stay active while held but effectivly become one-shot. And AltGr messes w/ them. Happened both on QW_LG and QWRCT.
+		- The vmods don't need to be sticky for this to happen.
+		- Are they turned off somewhere on release? That'd account for them working only once.
+
+2FIX: Composes with apostrophe not working with eD2VK?!?
+		- `^a` produces â but `'e` not é, etc. The culprit is the ' not being accessible from the underlying layout (registers as `o`).
+
+2FIX: Holding MoDK-Ext then releasing it activates @ext0 even though Ext was held for > 1 s (over tapModTime = 200 ms).
+		- If the Ext-hold is used w/ another key, it goes back as it should.
+		- It'd be nice to make an Extend key KeyUp deactivate any MoDK layers. But how to deactivate DK layers like that?
+
+2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
+		- Seems it works after the first suspension.
+		- Try to suspend/unsuspend EPKL once at startup then? Is that possible?
+		- But WHY would this be the case?
+
+2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
+		- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
+		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/65
+		- When I tried setting a high ToM Timer duration to test it, I couldn't activate Ext2 before the timer expired.
+			- This is because of the tap (MoDK) getting registered, understandably. Would a working ToM interrupt help?
+			- It is as it should be, I guess?
+
+2FIX: DK detection works for my eD2VK layout, but not its pure VK counterpart. What gives?!
+		- Is the BaseLayout wrong somehow? No, copying a key mapping from the Colemak-VK BaseLayout to the eD(2VK) Layout_Override preserves DK functionality.
+		- Also, do DK detection when it's set to auto, and the old way otherwise? Then, what about when there is a table entry?
+		- Call getWinLayDKs() (in pkl_deadkey) more robustly? No, it's the test for "śķιᶈForDK" in pkl_keypress that matters.
+			- But keyPressed( HKey ) in pkl_keypress handles eD2VK and VK keys the same? So why then is the DK ruined by one and not the other?
+
+2FIX: For the NNO WinLay, it registers SC00D as "1" and SC01B as "0:6"; they should be "1:6" (àá) and "0:1:6" (äâã), resp.?! How come some states get lost?!
+		- Both are missing their state 6 dead key, acute and tilde respectively. There are no other dead keys in the layout. The Cmk-eD layout gets state 6 registered.
+		- Might using ToUnicodeEx make a difference?
+		- Reverting to listing DKs in the settings sounds like a defeat now...
+		- Test it on the Colemak-eD MSKLC, since it has a ton of DKs? Only on levels 0:1 or 6 though.
+
+2FIX: pkl_init runs through the layout twice. Is that really necessary, or does it simply double startup time?! Why does it even do this, again?!
+
+2FIX: A ToM Caps/Ext key stops working as CapsLock after a while.
+		- Initially, both work fine but after a while only the Extend-on-hold functions as it should.
+		- Ext+Esc still toggles CapsLock as expected, and Caps-tap will turn that off. But not on, once it stops working.
+		- https://www.reddit.com/r/Colemak/comments/14tmlvj/how_do_i_change_epkls_ext_key_to_say_lshcaps/
+		- Could the mod-up sent on Extend key release be involved?
+
+2FIX: When holding Extend-mousing for long with Timerless EPKL, there is still a hotkey queue. Probably the AHK hotkey buffer itself.
+		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
+		- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
+
+2FIX: Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
+
+2FIX: System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
+
+2FIX: The findWinLayVKs() fn is doing something wrong now? Trying to use the whole SCVKdic produces lots of strange entries...?!
+		- Maybe I'm thinking all wrong about this though! There are two different issues at play: Where the OEM keys actually are, and how to remap keys.
+		- Therefore, OEM keys should probably be treated differently from remapped keys (AZERTY, Cmk-CAWS etc). In some cases, a key can be both! Char-to-VK?
+2FIX: SC remap the OEMdic, or layouts with ergo remaps will get it wrong. Example: Ctrl+Z on Angle stopped working when remapping QW_LG VK by SC.
+		- In pkl_init, make a pdic[SC] = VK where SC is the remapped SC codes for the OEM keys, and VK what VK they're mapped to (or -1 if VKey mapped)
+		- And/or a VK(ANSI)-to-VK(OS-layout) remap pdic?
+		- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
+
+2FIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
+
+2FIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬` {DK_/,DK_=,g}. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` {DK_/,DK_=,v} work. What gives?
+		- Also iota/upsilon with dialytika and tonos don't work...?
+
+2FIX: When selecting downwards with Extend and then using Extend-copy, sometimes an 'EXT' character (?) is made instead.
+
+2FIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
+		- Is this because of the VK detection making an error? The ones that work both have V in its old place.
+
+TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
+		- Would destroying the GUI on DK activation help at all?
+
 2FIX: Every now and then (while using Extend?) EPKL becomes unresponsive to hotkeys and, e.g., changing tabs. Sometimes needs a menu Refresh/Restart.
 		- No good ideas what causes this! It's annoying and happens too often.
 2FIX: There are many composes with apostrophe; these may cause trouble for the CoDeKey when typing, e.g., `pow'r`. Move all acutes to, e.g., `''r`?
@@ -244,8 +184,71 @@ FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And chang
 TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl on some rare keys like Q or D/H would be much better than awkward pinky chording.
 		- It works well! But then after a while it stops working?
 
+2FIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
+		- Sort of fixed it by making the new disp0 entry that can display any string on the DK's key in the help image.
+2FIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
+2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
+2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
+
 ;;  ========================================================================================================================================================
 ;;  eD TONEXT:
+
+NEXT: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
+		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
+		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
+		- Next up, maybe specify which layer(s) goes which which key so you can have different Extend keys? A dedicated Ext2 key if you want.
+
+NEXT: Update to newer AHK! v1.1.28.00 worked mostly but not for AltGr which sends Alt and gets Ctrl stuck. v1.1.27.07 works fully.
+		- AHK version history: "Optimised detection of AltGr on Unicode builds. This fixes a delay which occurred at startup (v1.1.27) or the first Send call (earlier)."
+		- After update past v1.1.28, we can use StrSplit() with MaxParts to allow layout variant names with hyphens in them!
+		- Should then be able to go to v1.1.30.03 right away, but check for v1.1.31? That version has added an actual switch command, though!!!
+
+NEXT: Add the Canaria variant of Canary, which is said to be much better for Spanish/Spanglish.
+		- Compared to standard Canary, it has a J-X swap, AltGr mappings like EsAlt, and grave/tilde DKs (already in eD).
+		- https://github.com/christoofar/canaria
+
+NEXT: Rework Extend mappings so they use normal state mapping syntax. The current state of affairs just confuses people.
+		- This means that many current mappings that are just `<key>` must be changed to `β{<key>}`.
+		- The magic happens in extendKeyPress() in pkl_keypress.ahk, under `if not pkl_ParseSend()`.
+		- Here, `Send {Blind}%pref%{%xVal%}` is used after checking for ExtMods.
+
+NEXT: Toggle-type modifiers.
+		- Navigating web pages, I'd like to press a lot of PgUp/Dn and arrows without holding the Ext modifier which gets tiresome.
+		- I'd also like to stay in the NumPad layer for protracted number entry sessions, without holding down the Ext key.
+		- It might be good to have the lock within the layer. Say, Ext+` locks whatever Ext layer is active.
+			- For the current Ext+` mapping, it's enough to have that on Ext-tap+`.
+			- Or is double-tapping the modifier better, as it doesn't use up a mapping? That, however, would be a problem for ToM keys.
+		- But how to make it easy to get out of the layer again? Actually, just tapping the normal modifier should do the trick!
+		- Leave lockable layers out of Janitor cleanup? Or just use a long enough Janitor idle timer that it won't be an issue? Configurable?
+			- The _pklJanitorCleanup() fn is currently not active, seemingly without any negative impact. So that's okay?
+
+NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
+		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
+		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
+NEXT: Add a Help button with a more generic help screen for the first Settings UI panel?
+NEXT: Move the text for the Settings UI help text to the language files?!
+		- Make a separate .ini file section for it. Then read in the whole section and process it?
+NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
+NEXT: In preparation of AHK v2, rework the Gosub-based routines in the pkl_gui_settings.ahk file.
+
+NEXT: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
+		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
+		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+
+NEXT: Custom Send syntax, allowing other AHK commands to be "sent"!
+		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
+		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
+		- For instance, use a syntax like `¢[[Sleep(500)]]` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
+			- May need a custom exec() fn for this, wrapping any and all commands we want to "send" this way (sleep, run, etc).
+			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
+			- Could use dynamic fn calling for the wrapper functions?
+			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
+
+NEXT: Files override?!
+		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
+		- Each supersection could have an entry specifying which file it overrides: _eD_Compose, _eD_DeadKeys, _eD_Extend, _eD_PwrStrings.
+		- Not _eD_Remap in this file, as it is already taken care of in the LayStack files?
 
 TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
 
@@ -340,8 +343,6 @@ TODO: OS DK detection sucks.
 TODO: Ext layers by app/window? Like auto-Suspend. Could be handy for ppl w/ apps using odd shortcuts.
 TODO: Look into this Github README template? https://github.com/Louis3797/awesome-readme-template
 TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
-2FIX: The HIG doesn't make space between dual accents anymore? They coalesce on AltGr+8 now.
-		- Sort of fixed it by making the new disp0 entry that can display any string on the DK's key in the help image.
 TODO: Rework the GUI submit to allow multi-submit/reset on tabs that have more than one submit. 
 		- Maybe make the submit routine callable with arrays so it loops before asking for a restart?
 TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
@@ -356,9 +357,6 @@ TODO: Harmonize Ext and folder mod names? And/or make a shorthand for the @E=@C@
 		- Use CAngle or CA--, etc? CAngle is more intuitive, but CA more consistent with CAW(S). 
 TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. 
 		- Maybe that should be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM KbdTypes?
-2FIX: I messed up Gui Show for the images earlier, redoing it for each control with new img titles each time. Maybe now I could make transparent color work? No...?
-2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
-2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
 ;;  ========================================================================================================================================================
 ;;  eD TODO:

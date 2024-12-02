@@ -68,8 +68,7 @@ Graphite-HB
 - The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
 - However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTSeq] options.
 - The two variants use separate EPKL BaseLayout files with minor differences.
-- Given the similarity to [Gallium][GalPKL], a remap from that could also work. The special dead key mappings still benefit from separate files.
-- Another option for quote key fans, is to use Gallium instead. Like, say, Colemak, it delegates the `J` key to that awkward position.
+- Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead. Like, say, Colemak, it delegates the `J` key to that awkward position.
 <br>
 
 #### Graphite's altered shift state mappings, as per its [web page][GraGit]:
@@ -137,12 +136,15 @@ _The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever yo
 Gralmak
 -------
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
-- Like the [Gallium][GalPKL] layout and Colemak, I want the J in the middle and Quote on pinky.
-- Like Graphite-HB, I don't want to change Shift states between keys.
 - Thus, I made a "Gralmak" variant with sym key placements like, e.g., Colemak-CAWS.
+- The name plays on Graphite-Gallium, and how we're questing for the mythical "Holy Gra(i)l" of layouts!
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
+<br>
+
+- Like the [Gallium][GalPKL] layout and Colemak, I want the J in the middle and Quote on pinky.
+- Like Graphite-HB, I don't want to change Shift states between keys.
 - Also see the README for the similar [Galliard][Gallrd] Gallium variant.
 
 #### Graphite AWS-ISO "Gralmak":
