@@ -404,7 +404,7 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n  |  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.  |"
 			. "`n  |      →  |  %  : Send a literal string/ligature by the SendInput {Text} method                                         |"
 			. "`n  |      §  |  $  : Send a literal string/ligature by the SendMessage method                                              |"
-			. "`n  |      α  |  *  : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names                        |"
+			. "`n  |      α  |  *  : Send entry as AHK syntax in which +^!# are modifiers, and {} contain key names                        |"
 			. "`n  |      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state                                               |"
 			. "`n  |      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)                           |"
 			. "`n  |      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)                           |"

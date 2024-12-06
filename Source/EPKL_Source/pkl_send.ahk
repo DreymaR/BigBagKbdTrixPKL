@@ -155,7 +155,7 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	} else if ( enty == "{CapsLock}" ) { 						; CapsLock toggle. Stops further entries from misusing Caps?
 		togCap  := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
-	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special !+^#{} syntax, omitting {Text}
+	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := ""
 		if pkl_ParseAHK( enty, pfix )   						;      Special EPKL-AHK syntax additions

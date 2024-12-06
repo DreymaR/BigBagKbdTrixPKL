@@ -17,6 +17,8 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ========================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+WIPs: Galliard/Gralmak ortho, w/o AngleWide.
+
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
 		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.

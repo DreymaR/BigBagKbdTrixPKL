@@ -427,7 +427,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 						if ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
 							cmpKeys.Push( ks2 ) 							; Register Compose key for initialization
 						ksE := ks2  										; = : Send {Blind} - use current mod state
-					} else {    											; * : Omit {Text}; use special !+^#{} AHK syntax
+					} else {    											; * : Omit {Text}; use special +^!#{} AHK syntax
 						ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
 					}														; @&: Dead keys and named literals/strings
 					setKeyInfo( key . ks      , ksP )   					; "key<state>"  is the entry prefix

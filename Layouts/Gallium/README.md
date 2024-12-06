@@ -77,17 +77,14 @@ Gallium variants
 
 - Apart from QX, the sole difference between the left hand of Gallium and Graphite is CV vs WZ on the upper/lower row.
 - Graphite's C-V (low) and W (up) look easier to learn for Colemak or QWERTY users, by preserving their row assignments.
-- For me though, the `QW_F`-`QW_R` bigram is much easier than its downward counterpart, being altable on a row-stag board.
-- Therefore, I'm mostly with Gallium moving C up to make the `SC/CS` bigrams easier, at the cost of the rarer `SW/WS` ones.
-- Here's an AKL Discord server analysis of the frequencies involved, using their `cmini` bot with the Shai corpus:
+- The `QW_F`-`QW_R` bigram is easier than its downward counterpart for me though, being more altable on a row-stag board.
+- Thus, it depends on your priorities and tastes.
+- Here's an AKL Discord server `cmini` bot analysis of the `S-C` vs `S-W` bigram frequencies involved (the others are rare):
 
 ```
-sc + cs: 0.13%
-  sc: 0.11%
-  cs: 0.02%
-sw + ws: 0.07%
-  sw: 0.03%
-  ws: 0.04%
+Using the Shai corpus:
+sc + cs: 0.13%    ( sc: 0.11% , cs: 0.02% )
+sw + ws: 0.07%    ( sw: 0.03% , ws: 0.04% )
 ```
 <br>
 

@@ -22,7 +22,7 @@ Overview over the EPKL Prefix-Entry and other advanced syntax for mappings, usea
 |  - There are two equivalent prefixes for each entry type: One easy-to-type ASCII, one from the eD Shift+AltGr layer.  |
 |      →  |  %  : Send a literal string/ligature by the SendInput {Text} method                                         |
 |      §  |  $  : Send a literal string/ligature by the SendMessage method                                              |
-|      α  |  *  : Send ‹entry› as AHK syntax in which !+^# are modifiers, and {} contain key names                      |
+|      α  |  *  : Send ‹entry› as AHK syntax in which +^!# are modifiers, and {} contain key names                      |
 |      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state                                               |
 |      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)                           |
 |      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)                           |

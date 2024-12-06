@@ -582,3 +582,6 @@ VERSION HISTORY:
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
+	- Added WheelUp/Dn to Ext-tap, on the same keys as on Ext (Cmk W/R). Moves on Cmk: `Cap` Pp → Ll, `^w` Ww → Pp, `w³?` L → U.
+		- This is handy for scrolling (web) pages, in conjunction with the other Ext/Ext-Tap MouseWheel and PgUp/Dn mappings.
+

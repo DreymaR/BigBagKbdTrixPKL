@@ -65,7 +65,7 @@ Where:
     - If the mapping starts with `«#»` where # is one or more characters, these are used for Help Images.
     - `→ | % ‹entry›` : Send a literal string/ligature by the SendInput {Text}‹entry› method
     - `§ | $ ‹entry›` : Send a literal string/ligature by the SendMessage ‹entry› method
-    - `α | * ‹entry›` : Send entry as AHK syntax in which !+^# are modifiers, and {} contain key names
+    - `α | * ‹entry›` : Send entry as AHK syntax in which +^!# are modifiers, and {} contain key names
     - `β | = ‹entry›` : Send {Blind}‹entry›, keeping the current modifier state
     - `† | ~ ‹entry›` : Send the 4-digit hex Unicode point U+<entry>
     - `Ð | @ ‹entry›` : Send the current layout's dead key named ‹entry› (often a 3-character code)
