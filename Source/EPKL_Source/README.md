@@ -567,21 +567,21 @@ VERSION HISTORY:
 		- Any LayDir not starting with the LayMain's 3LA (usually the 3 first letters) is not shown in the Layout Selector anymore.
 	- Fixed: HIG only made "state0.png" (really the last state) plus state0.svg.png (actual state0) instead of the state images it should.
 		- InkScape v1.3 (2023-07) had a bug affecting batch export. Fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
+	- Tweaked the dialog GUI and several settings' names for the HIG, to hopefully be a little more descriptive.
 	- Reworked Ext-tap DK layers. The URL and BBC tags weren't universally useful, somewhat unintuitive and better solved as sequences anyway.
 		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around. Still uncertain about symbols for these layers, due to ToM timing.
+		- Added WheelUp/Dn to Ext-tap, on the same keys as on Ext (Cmk W/R). Moves on Cmk: `Cap` Pp → Ll, `^w` Ww → Pp, `w³?` L → U.
+			- This is handy for scrolling (web) pages, in conjunction with the other Ext/Ext-Tap MouseWheel and PgUp/Dn mappings.
 	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.
 		- The main purpose of `Unmapped` is to allow an Override file such as `Layout_Override.ini` to instruct EPKL to leave a key untouched.
 		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
 		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
 	- Rewrote the Kaomoji mappings as PowerStrings, so they are easily and consistently useable both for Kaomoji DK mappings and Compose sequences.
-	- Tested whether GitHub Markdown can support `style="background-color:white;"` or similar html/MD to make layer images work with dark browser themes.
+	- Tested whether GitHub Markdown can support `style="background-color:white;"` or similar html/MD 
+		- This could make EPKL layer images work with dark browser themes. Today those are shown as black-on-dark.
 		- Unfortunately, the result was negative. I found no solutions online; only plenty of complaints about this shortcoming of GF Markdown.
-	- Tweaked the dialog GUI and several settings' names for the HIG, to hopefully be a little more descriptive.
 	- A `runTarget` hotkey that by default opens or focuses on the main EPKL folder. Ctrl+Shift+7 was available, by moving the MoveImage Hotkey.
 		- Any location, file or app can be set as the `openMenuTarget`. Files and folders are opened by their default programs.
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
-	- Added WheelUp/Dn to Ext-tap, on the same keys as on Ext (Cmk W/R). Moves on Cmk: `Cap` Pp → Ll, `^w` Ww → Pp, `w³?` L → U.
-		- This is handy for scrolling (web) pages, in conjunction with the other Ext/Ext-Tap MouseWheel and PgUp/Dn mappings.
-

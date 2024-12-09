@@ -19,15 +19,23 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs: Galliard/Gralmak ortho, w/o AngleWide.
 
+WIPs: Further fixes for the Ext-tap layer?
+		- The NEIO `!,.?` mappings are meh, and seem to be working a lot better on CoDeKey.
+		- Something with arrow keys? In analogy to other nav with versions both on Ext and Ext-tap/CDK.
+			- Ctrl(+Shift)+Arrows? What, then, for Up/Down? Better with just 4(?)x arrows?
+			- If reclaiming the UNEI arrow cross, Cmk Ext-tap `U`(RL) (Gal-Gra `O`() ) is affected. Move to Cmk `O`?
+			- The parentheses should remain on Cmk U/Y, so for Gal-Gra they go to U.
+
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
 		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
-		- Guard against infinite recursion. Limit LayStack depth to a few more layers?
-		- Two more levels could be nice? For instance, one locale plus one with, e.g., extra composes?
+		- Just the Variant level, for now? Or could two more levels be nice? For instance, one locale plus one with, e.g., extra composes?
+		- If going with multi-level, guard against infinite recursion. Limit LayStack depth to a few more layers?
 		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
 2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
 		- Could it be because some key combos change system layout now? (How?)
+		- I also keep losing Ext Ctrl+Tab? What gives?
 
 2FIX: PowerString name capitalization?
 		- Composing, say, `say'pkl` and `say'Pkl` both output the ¶saypkl PowerString. Case should matter.
