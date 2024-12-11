@@ -19,12 +19,14 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs: Galliard/Gralmak ortho, w/o AngleWide.
 
-WIPs: Further fixes for the Ext-tap layer?
+WIPs: Further tweaks for the Ext-tap layer?
 		- The NEIO `!,.?` mappings are meh, and seem to be working a lot better on CoDeKey.
-		- Something with arrow keys? In analogy to other nav with versions both on Ext and Ext-tap/CDK.
+		- Something with arrow keys? In analogy to other nav layers with versions both on Ext and Ext-tap/CDK.
 			- Ctrl(+Shift)+Arrows? What, then, for Up/Down? Better with just 4(?)x arrows?
-			- If reclaiming the UNEI arrow cross, Cmk Ext-tap `U`(RL) (Gal-Gra `O`() ) is affected. Move to Cmk `O`?
-			- The parentheses should remain on Cmk U/Y, so for Gal-Gra they go to U.
+		- N - Delete Prevous Word++? But Delete Next Word or Current Line are meh, I'd prefer Cut or selection then?
+			- N - Ctrl+Back; E - Cut Current Line?; I - Cut Next Word?
+			- O - Ctrl+Back! Since Ext-O is Back, perfect! Keep `!` for N, then?
+		- Move #e to Ext-tap E. What, then, on G? #x for the QuickLink menu?
 
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
