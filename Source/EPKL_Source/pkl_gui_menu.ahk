@@ -40,10 +40,10 @@ pkl_set_tray_menu()
 	Loop % numOfLayouts { 										; Layouts menu list w/ icons
 		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
 		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
-		if ( layCode == "<N/A>" ) 								; Empty name entries cause an icon error below
+		If ( layCode == "<N/A>" ) 								; Empty name entries cause an icon error below
 			Continue
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
-		if ( layCode == activeLayout ) {
+		If ( layCode == activeLayout ) {
 			Menu, changeLayout, Default, %layName%
 			Menu, changeLayout, Check, %layName%
 			activeLayName := layName
@@ -52,7 +52,7 @@ pkl_set_tray_menu()
 		Menu, changeLayout, Icon, %layName%, % ico.Fil1, % ico.Num1
 	}
 
-	if ( A_IsCompiled ) {
+	If ( A_IsCompiled ) {
 		Menu, Tray, NoStandard  								; No standard AHK tray menu items
 	} else {
 		SplitPath, A_AhkPath,, AhkDir
@@ -70,7 +70,7 @@ pkl_set_tray_menu()
 	_pklMenuAdd( aboutMeMenuItem, "showAbout"       ) 				; About
 	_pklMenuAdd( settingMenuItem, "changeSettings"  ) 				; Layouts/Settings UI
 	_pklMenuAdd( openAppMenuItem, "openTarget"      ) 				; Open (or focus on) the app folder
-	if ( ShowMoreInfo ) {
+	If ( ShowMoreInfo ) {
 		_pklMenuAdd( keyHistMenuItem, "keyHistory"      ) 				; Key history
 ;		_pklMenuAdd( deadKeyMenuItem, "detectCurrentWinLayDeadKeys" ) 	; Detect OS DKs (old PKL module)
 ;		_pklMenuAdd( importsMenuItem, "importLayouts"   ) 				; Import Module
@@ -81,7 +81,7 @@ pkl_set_tray_menu()
 	_pklMenuAdd( zoomImgMenuItem, "zoomHelpImage"   ) 				; Zoom image
 ;	_pklMenuAdd( moveImgMenuItem, "moveHelpImage"   ) 				; Move image
 ;	_pklMenuAdd( opaqImgMenuItem, "opaqHelpImage"   ) 				; Opaque/transparent image
-	if ( numOfLayouts > 1 ) {
+	If ( numOfLayouts > 1 ) {
 		_pklMenuAdd( ,, "sep" ) 										; --------
 		_pklMenuAdd( layoutsMenu    , ":changeLayout"    )  			; Layouts submenu (denoted by a leading colon)
 		_pklMenuAdd( chngLayMenuItem, "rerunNextLayout" ) 				; Change/cycle layout
@@ -97,7 +97,7 @@ pkl_set_tray_menu()
 
 	Menu, Tray, Click, 2
 	_pklMenuAdd( pklIniRead( "trayMenuDefault", suspendMenuItem ),, "def" ) 	; Set the tray menu default item
-;	if ( numOfLayouts > 1 ) {
+;	If ( numOfLayouts > 1 ) {
 ;		Menu, Tray, Default, %chngLayMenuItem%
 ;	} else {
 ;		Menu, Tray, Default, %suspendMenuItem%
@@ -107,7 +107,7 @@ pkl_set_tray_menu()
 	Menu, Tray, Icon,      %aboutMeMenuItem%,  shell32.dll ,  24 		; aboutMe icon - about/question
 	Menu, Tray, Icon,      %settingMenuItem%,  shell32.dll ,  72 		; showImg icon - cogwheels in window (91: Cogs over window; 315: Blue cogs)
 	Menu, Tray, Icon,      %openAppMenuItem%,  shell32.dll ,   4 		; showImg icon - folder (same as 5 and others?)
-	if ( ShowMoreInfo ) {
+	If ( ShowMoreInfo ) {
 		Menu, Tray, Icon,  %keyHistMenuItem%,  shell32.dll , 222 		; keyHist icon - info
 ;		Menu, Tray, Icon,  %deadKeyMenuItem%,  shell32.dll , 172 		; deadKey icon - search
 		Menu, Tray, Icon,  %makeImgMenuItem%,  shell32.dll , 142 		; makeImg icon - painting on screen
@@ -117,7 +117,7 @@ pkl_set_tray_menu()
 	Menu, Tray, Icon,      %zoomImgMenuItem%,  shell32.dll ,  23 		; zoomImg icon - spyglass
 ;	Menu, Tray, Icon,      %moveImgMenuItem%,  shell32.dll ,  25 		; moveImg icon - speeding window
 ;	Menu, Tray, Icon,      %opaqImgMenuItem%,  shell32.dll ,  90 		; opaqImg icon - double windows
-	if ( numOfLayouts > 1 ) {
+	If ( numOfLayouts > 1 ) {
 		Menu, Tray, Icon,  %layoutsMenu%    ,  shell32.dll ,  44 		; layouts menu icon - star
 		Menu, Tray, Icon,  %chngLayMenuItem%,  shell32.dll , 138 		; chngLay icon - forward arrow
 	}
@@ -131,15 +131,15 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 	static itmList  := []   											; Empty item/label will add a separator (mode doesn't really matter)
 	static posList  := []   											; Mode "def" instead sets the default menu item by (partial) name or pos.
 	
-	if ( mode == "def" ) {
-		if ( SubStr( item, 0 ) == "&" ) {   							; Positional entry on the form #& selects the #th menu item – including separators
+	If ( mode == "def" ) {
+		If ( SubStr( item, 0 ) == "&" ) {   							; Positional entry on the form #& selects the #th menu item – including separators
 			num := SubStr( item, 1, -1 )
 			len := posList.MaxIndex()   								; If bigger than the last position, use the second-to-last one (Suspend, not Exit) as def.
 			num := ( num > len ) ? posList[ len - 1 ] : posList[ num ] 	; The posList[] array contains actual menu item positions disregarding separators
 			def := num . "&"
 		} else {
 			For ix, line in itmList {
-				if InStr( line, item ) { 								; Partial text matching is allowed.
+				If InStr( line, item ) { 								; Partial text matching is allowed.
 					def := itmList[ ix ]
 					Break   											; Use the first (partial) match found.
 				}
@@ -153,7 +153,7 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 	} else {
 		inx += 1
 		Menu, Tray, Add, %item%, %label%
-		if ( item != "" ) { 											; No item/label means a separator line
+		If ( item != "" ) { 											; No item/label means a separator line
 			itmList.Push( item ) 										; Stores the full string   of item N
 			posList.Push( inx  ) 										; Stores the real position of item N
 		}
@@ -199,13 +199,13 @@ pkl_about()
 	basFile  :=             getPklInfo( "File_BasIni" )
 	menuSep  := "............................................................................................"
 	
-	if WinActive( aboutTitle ) {    							; Toggle the GUI off if it's the active window
+	If WinActive( aboutTitle ) {    							; Toggle the GUI off if it's the active window
 		GUI, AW: Destroy
 		Return
 	}
 	GUI, AW:New,       , %aboutTitle%   						; About... window (default GUI)
 	GUI, AW:Add, Text, , %pklAppName% v%pklVersion%
-	if ( pklProgURL != pklMainURL ) {
+	If ( pklProgURL != pklMainURL ) {
 		GUI, AW:Add, Edit, , %pklProgURL%
 		GUI, AW:Add, Text, , Based on Portable Keyboard Layout v0.4
 	}
@@ -223,7 +223,7 @@ pkl_about()
 	text .= locCompany   . ": " . layComp
 	GUI, AW:Add, Text, , %text% 								; Layout info
 	GUI, AW:Add, Edit, , %layPage%
-	if getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
+	If getPklInfo( "AdvancedMode" ) { 							; Advanced Mode shows more info
 		GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
 		text :=   "Compiled with AutoHotKey version: " . A_AhkVersion               . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
@@ -244,7 +244,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 		iniIco  := fileOrAlt( pklIniRead( "icons_OnOff",, layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon ) 	; If not specified in layout file or in dir, use this
 		icoNum%ix%  := 1
-		if FileExist( dirIco ) {
+		If FileExist( dirIco ) {
 			icoFil%ix%  := dirIco
 		} else if FileExist( iniIco ) {
 			icoFil%ix%  := iniIco
@@ -268,7 +268,7 @@ _FixAmpInMenu( menuItem )
 /*
 	_AHK_NOTIFYICON(wParam, lParam)			; Called by tray icon clicks w/ OnMessage( 0x404 ). Now disabled.
 	{
-		if ( lParam == 0x205 ) { 			; WM_RBUTTONUP
+		If ( lParam == 0x205 ) { 			; WM_RBUTTONUP
 			Return
 		} else if ( lParam == 0x201 ) { 	; WM_LBUTTONDOWN
 			Gosub ToggleSuspend				; This suspends EPKL on tray icon single-click

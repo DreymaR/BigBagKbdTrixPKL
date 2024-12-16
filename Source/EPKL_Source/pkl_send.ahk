@@ -4,13 +4,13 @@
 ;
 
 pkl_Send( ch, modif := "" ) {   								; Process a single char/str with mods for send, w/ OS DK & special char handling
-	if pkl_CheckForDKs( ch ) {  								; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
+	If pkl_CheckForDKs( ch ) {  								; Check for OS dead keys that require sending a space. Also, somehow necessary for DK sequencing.
 		Return
 	}
 	char    := Chr(ch)
-	if ( ch > 32 ) { 											; ch > 128 works with Unicode AHK
+	If ( ch > 32 ) { 											; ch > 128 works with Unicode AHK
 		this    := "{" . char . "}" 							; Normal char
-	if InStr( getCurrentWinLayDeadKeys(), char ) 	; eD WIP: Improve this with real DK detection?! How does that work, really? A char may be both a DK release and not...!
+	If InStr( getCurrentWinLayDeadKeys(), char ) 	; eD WIP: Improve this with real DK detection?! How does that work, really? A char may be both a DK release and not...!
 		this    .= "{Space}" 									; Send an extra space to release OS dead keys
 	} else if ( ch == 32 ) {
 		this    := "{Space}"
@@ -27,37 +27,37 @@ pkl_Send( ch, modif := "" ) {   								; Process a single char/str with mods fo
 	} else if ( ch == 29 ) {
 		this    := "^{VKDD}" 					; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
-	if AltGrIsPressed()
+	If AltGrIsPressed()
 		this    := "{Text}" . char  							; Send as Text for AltGr layers to avoid a stuck LCtrl. Doesn't work with the Win key.
 	pkl_SendThis( this, modif ) 								; Modif is only used for explicit mod mappings.
 }
 
 pkl_SendThis( this, modif := "" ) {     						; Actually send a char/string. Also log the last sent character for Compose.
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" )  		; Strip off any spaces sent to release OS deadkeys, and other such stuff
-	if        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
+	If        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
 	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
 		tht := "{" . SubStr( this, len+1 ) . "}"
 	}
 	thtLen  := StrLen( tht )
-	if ( thtLen == 3 )  										; Single-char keys are on the form "{¤}"
+	If ( thtLen == 3 )  										; Single-char keys are on the form "{¤}"
 		lastKeys( "push", SubStr( tht, 2, 1 ) )
-;	if ( SubStr( tht, 0 ) == "}" ) { 							; Is this test ever necessary, or is everything on {] form?
+;	If ( SubStr( tht, 0 ) == "}" ) { 							; Is this test ever necessary, or is everything on {] form?
 ;		tht := SubStr( tht, 1, -1 ) . " DownR}" 				; eD WIP: Send characters too with DownR !? Nope, the KeyUp is still sent. Why?
 ;		pklToolTip( "tht: " . tht ) 	; eD DEBUG
 ;	} 	; eD WIP: Send w/ Down?
 ;	toggleAltGr := ( getAltGrState() ) ? true : false 	; && SubStr( A_ThisHotkey , -3 ) != " Up"  	; eD WIP: Test EPKL without this
-;	if ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
+;	If ( toggleAltGr ) 	; eD WIP: Is this ever active?!? Does it just lead to a lot of unneccesary sends?
 ;		setAltGrState( 0 )  									; Release LCtrl+RAlt temporarily if applicable
 	Send %modif%%this%  						; eD WIP: This Send is what leads to unnecessary/stuck modifiers with AltGr! Workaround: Send AltGr presses as Text.
-;	if ( toggleAltGr )
+;	If ( toggleAltGr )
 ;		setAltGrState( 1 )
 }
 
 pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key mapped with ©###, and the preceding sequence will be composed
 	compKeys    := getLayInfo( "composeKeys" )  				; Array of the compose tables for each ©-key in use
 	tables      := compKeys[ compKey ]  						; Array of the compose tables in use for this compKey
-	if ( tables[1] == "" ) { 									; Is this ©-key empty?
+	If ( tables[1] == "" ) { 									; Is this ©-key empty?
 		pklWarning( "An empty/undefined Compose key was pressed:`n`n©" . compKey )
 		Return
 	}
@@ -73,14 +73,14 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 ;		debug   .= " , " . chr
 	} 	; end for chr in lastKeys
 	uni := false
-	if ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
+	If ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
 		uni := 5
 	} else if ( SubStr( chs, -4, 1 ) == "U" ) {
 		uni := 4
 	}
-	if ( uni ) {
+	If ( uni ) {
 		chs := SubStr( chs, 1 - uni )
-		if isHex( chs ) {
+		If isHex( chs ) {
 			chr := chr( "0x" . chs )
 			uni += 1
 			SendInput {Backspace %uni%}
@@ -94,16 +94,16 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 			keyArr  := getLayInfo( "comps_" . sct . len )   	; Key arrays are marked both by ©-key names and lengths
 			key     := SubStr( kys
 				, 1 + InStr( kys, "_", , 0, len ) ) 			; The rightmost len chars of kys
-			if ( keyArr.HasKey(key) ) {
+			If ( keyArr.HasKey(key) ) {
 				val := keyArr[key]
 				bsp := len * compTables[ sct ]  				; The first char of the entry is whether to send Backs (eating patterns)
 				SendInput {Backspace %bsp%} 					; Send Back according to key length. Undo won't work as it may remove several characters per press.
 				ent := val
-				if not pkl_ParseSend( ent ) { 					; Unified prefix-entry syntax
+				If not pkl_ParseSend( ent ) { 					; Unified prefix-entry syntax
 					ent := strEsc( ent ) 						; Escape special chars with backslashes (not necessary for a single \ )
 					SendInput {Text}%ent% 						; Send the entry as {Text} by default
 				}
-				if ( StrLen( ent ) == 1 ) {
+				If ( StrLen( ent ) == 1 ) {
 					lastKeys( "push", ent ) 					; Push single-char Compose releases to the queue for further composing
 				} else {
 				lastKeys( "null" )  							; Reset the last-keys-pressed buffer 	; eD WIP: If the output is single-char, push it instead!
@@ -112,7 +112,7 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 			} 	; end if keyArr
 		} 	; end for sections
 	} 	; end for seqLengths
-	if inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
+	If inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
 		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
 	}
 ;		( len == 2 && sct == "x11" ) ? pklDebug( "LastKeys: " . debug . "`nkys: " . kys . "`nlen: '" . len . "`n`nval: '" . val, 3 )  ; eD DEBUG
@@ -121,11 +121,11 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 pkl_CheckForDKs( ch ) {
 	static SpaceWasSentForSystemDKs := false
 	
-	if ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
+	If ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
 		SpaceWasSentForSystemDKs := false   					; eD WIP: Because "CurrNumOfDKs" is for EPKL DKs, but this is for OS DKs?!?
 	} else {
 		setKeyInfo( "CurrBaseKey" , ch ) 						; DK(s) active, so record the pressed key as Base key
-		if ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it
+		If ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
 		SpaceWasSentForSystemDKs := true
 	}
@@ -133,20 +133,17 @@ pkl_CheckForDKs( ch ) {
 }
 
 pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
-;	Critical 													; eD WIP: Causes hangs after DKs etc?
+;	Critical    												; eD WIP: Causes hangs after DKs etc?
 	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
-;	tag     := hig_tag( entry )
-;	if ( higMode && tag )
-;		Return "Ħ"
 	entry   := hig_untag( entry )   							; If there is an initial HIG tag of the form «#», lop it off 	; eD WIP
 	psp     := SubStr( entry, 1, 1 )    						; Look for a Parse syntax prefix
-	if not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's far less clear to read here
+	If not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's less readable.
 		Return false
-	if ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something to qualify
+	If ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something to qualify
 		Return false
 	pfix    := -1   											; Prefix for the Send commands, such as {Blind}
 	enty    := SubStr( entry, 2 )
-	if        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
+	If        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
 		mode    := "Input"
 		pfix    := "{Text}"
 	} else if ( psp == "$" || psp == "§" ) { 					; $§ : Literal/string by EPKL SendMessage
@@ -158,11 +155,11 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := ""
-		if pkl_ParseAHK( enty, pfix )   						;      Special EPKL-AHK syntax additions
+		If pkl_ParseAHK( enty, pfix )   						;      Special EPKL-AHK syntax additions
 			Return psp
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		pfix    := "{Blind}"
-		if pkl_ParseAHK( enty, pfix )
+		If pkl_ParseAHK( enty, pfix )
 			Return psp
 	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
@@ -178,8 +175,8 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	} else if ( psp == "©" ) {  								; ©### : Named Compose/Completion key – compose previous key(s)
 		pkl_Composer( enty )
 	}
-	if ( pfix != -1 && ! higMode ) {    						; Send if recognized and not ParseOnly/HIG
-		if ( enty && mode == "SendThis" ) { 
+	If ( pfix != -1 && ! higMode ) {    						; Send if recognized and not ParseOnly/HIG
+		If ( enty && mode == "SendThis" ) { 
 			pkl_Send( "", pfix . enty ) 						; Used by keyPressed()
 		} else if ( mode == "SendMess"  ) {
 			pkl_SendMessage( enty )
@@ -205,7 +202,7 @@ pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax addit
 		enty := StrReplace( enty, "{" . mod . " OSM}" ) 		; Remove the special syntax, replacing `{<mod> OSM}` with nothing.
 		OSMs.Push( mod )
 	}
-	if ( OSM ) {
+	If ( OSM ) {
 		SendInput % pfix . enty 								; Send the entry before activating the OSM
 		Sleep % 50
 		For ix, mod in OSMs {
@@ -235,7 +232,7 @@ pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard
 ;	Clipboard := Clipboard 										; Cast the clipboard content as text (use expression to avoid trimming)
 	Clipboard := string
 	ClipWait 1  												; Wait some seconds for the clipboard to contain text
-	if ( ErrorLevel ) {
+	If ( ErrorLevel ) {
 		Content := ( Clipboard ) ? Clipboard : "<empty>"
 		pklDebug( "Clipboard not ready! Content:`n" . Content )
 	}
@@ -246,9 +243,9 @@ pkl_SendClipboard( string ) { 									; Send a string quickly via the Clipboard
 }
 
 _strSendMode( string, strMode ) {
-	if ( not string )
+	If ( not string )
 		Return true
-	if        ( strMode == "Input"     ) {  			; Send by the standard SendInput method. Used to be {Raw}.
+	If        ( strMode == "Input"     ) {  			; Send by the standard SendInput method. Used to be {Raw}.
 		SendInput {Text}%string% 						; - May take time, and any modifiers released meanwhile will get stuck!
 	} else if ( strMode == "Text"      ) {  			; Send by the SendInput {Text} method (AHK v1.1.27+)
 		SendInput {Text}%string% 						; - More reliable? Only backtick characters are translated.
@@ -269,7 +266,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 	static brkMode
 	static initialized  := false
 	
-	if ( not initialized ) {
+	If ( not initialized ) {
 		strFile := getPklInfo( "StringFile" )   				; The file containing named string tables
 		strMode := pklIniRead( "strMode", "Message", strFile ) 	; Mode for sending strings: "Input", "Message", "Paste"
 		brkMode := pklIniRead( "brkMode", "+Enter" , strFile ) 	; Mode for handling line breaks: "+Enter", "n", "rn"
@@ -278,9 +275,9 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 	
 	Critical    												; eD WIP: Is Critical right here?
 	theString := pklIniRead( strName, , strFile, "strings" ) 	; Read the named string's entry (w/ comment stripping)
-	if pkl_ParseSend( theString ) 								; Unified prefix-entry syntax; only for single line entries
+	If pkl_ParseSend( theString ) 								; Unified prefix-entry syntax; only for single line entries
 		Return
-	if ( SubStr( theString, 1, 11 ) == "<Multiline>" ) { 		; Multiline string entry
+	If ( SubStr( theString, 1, 11 ) == "<Multiline>" ) { 		; Multiline string entry
 		Loop % SubStr( theString, 13 ) {
 			IniRead, val, %strFile%, strings, % strName . "-" . Format( "{:02}", A_Index )
 			mltString .= val 									; IniRead is a bit faster than pklIniRead() (1-2 s on a 34 line str)
@@ -288,20 +285,20 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 		theString := mltString
 	}
 	theString := strEsc( theString ) 							; Replace \# escapes
-	if ( strMode == "Text" ) {
+	If ( strMode == "Text" ) {
 		SendInput {Text}%theString%
 	} else if ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r  						; Parse by lines, sending Enter key presses between them
 		{   													; - This is more robust since apps use different breaks
-			if ( A_Index > 1 )
+			If ( A_Index > 1 )
 				SendInput +{Enter}  							; Send Shift+Enter, which should be robust for msg boards.
 				Sleep % 50  									; Wait so the Enter gets time to work. Need ~50 ms?
-			if ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
+			If ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
 				Break
 		}	; end Loop Parse
 	} else { 													; Send string as a single block with line break characters
 		StrReplace( theString, "`r`n", "`n" ) 					; Ensure that any existing `r`n are kept as single line breaks
-		if ( brkMode == "rn" )
+		If ( brkMode == "rn" )
 			StrReplace( theString, "`n", "`r`n" )
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
 	}	; end if brkMode

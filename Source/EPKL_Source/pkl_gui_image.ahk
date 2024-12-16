@@ -38,7 +38,7 @@ pkl_showHelpImage( activate := 0 )
 	static CtrlShImg 					; --"--
 	static initialized  := false
 	
-	if ( not initialized ) { 			; First-time initialization
+	If ( not initialized ) { 			; First-time initialization
 		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default Dir_LayIni
 		im.DK1Dir   := getPklInfo( "Dir_LayIni" ) . "\DeadkeyImg" 			; The 1st DK img dir is local, if found
 		im.DK2Dir   := getLayInfo( "dkImgDir" )  							; The 2nd DK img dir, if set
@@ -55,7 +55,7 @@ pkl_showHelpImage( activate := 0 )
 		im.PosArr   := []
 		For ix, pos in tmpPosArr {
 			pos     := imgPosDic( pos, false )
-			if ( pos && not inArray( im.PosArr, pos ) ) {
+			If ( pos && not inArray( im.PosArr, pos ) ) {
 				im.PosArr.Push( pos )
 			}
 		}
@@ -77,9 +77,9 @@ pkl_showHelpImage( activate := 0 )
 		initialized := true
 	}	; end first-time initialization
 	
-	if ( activate == 2 ) 												; Toggle image
+	If ( activate == 2 ) 												; Toggle image
 		activate    := 1 - 2 * im.Active
-	if        ( activate == 1 ) { 		; Activate
+	If        ( activate == 1 ) { 		; Activate
 		im.Active   := 1
 	} else if ( activate == -1 ) { 										; Deactivate
 		im.Active   := 0
@@ -88,12 +88,12 @@ pkl_showHelpImage( activate := 0 )
 		activate    := -1
 		im.Active   := 0
 	} else if ( activate == -3 ) { 										; Suspend off
-		if ( im.ActiveBeforeSuspend == 1 && im.Active != 1) {
+		If ( im.ActiveBeforeSuspend == 1 && im.Active != 1) {
 			activate    := 1
 			im.Active   := 1
 		}
 	} else if ( activate == 5 ) { 										; Zoom in/out
-		if ( ++im.ZoomNr > im.Zooms.Length() )
+		If ( ++im.ZoomNr > im.Zooms.Length() )
 			im.ZoomNr   := 1
 		scaleImage  := 1
 	} else if ( activate == 6 ) { 										; Move image +1 position
@@ -105,14 +105,14 @@ pkl_showHelpImage( activate := 0 )
 	}
 	state := pklGetState()
 	
-	if ( activate == 1 ) {  											; Activate the help image
+	If ( activate == 1 ) {  											; Activate the help image
 		Menu, Tray, Check, % getPklInfo( "LocStr_ShowHelpImgMenu" ) 	; Tick off the Show Help Image menu item
 ;		GUI, HI:Default 												; Make sure we're the default GUI now. Necessary, or not?
 		GUI, HI:New, +AlwaysOnTop -Border -Caption +ToolWindow 			; Create a GUI for the help images
 					+LastFound +Owner, 				pklHlpImg 			; Owner removes the task bar button?
 		GUI, HI:Margin, 0, 0
 		GUI, HI:Color, % im.BgColor
-		if ( im.Opacity > 0 && im.Opacity < 256 ) {
+		If ( im.Opacity > 0 && im.Opacity < 256 ) {
 			WinSet, Transparent, % im.Opacity
 		} else if ( im.Opacity == -1 ) {
 			WinSet, TransColor, % im.BgColor, pklHlpImg  				; eD WIP: This actually works, but if I resize the window it goes away again?
@@ -129,15 +129,15 @@ pkl_showHelpImage( activate := 0 )
 		GUI, HI:Destroy
 		Return
 	}
-	if ( im.Active == 0 )
+	If ( im.Active == 0 )
 		Return
 	
 	CoordMode, Mouse, Screen 											; Mousing over the image pushes it away
 	MouseGetPos, mouseX, , id
 	WinGetTitle, title, ahk_id %id%
-	if ( title == "pklHlpImg" ) {
+	If ( title == "pklHlpImg" ) {
 		max     := im.PosArr.Length()
-		if ( mouseX - imgX < im.Mrg[5] ) {  							; Push +1/right (with wrap)
+		If ( mouseX - imgX < im.Mrg[5] ) {  							; Push +1/right (with wrap)
 			im.PosIx    := ( im.PosIx == max ) ? 1 : ++im.PosIx
 		} else if ( mouseX - imgX > imgW - im.Mrg[5] ) { 				; Push -1/left   --"--
 			im.PosIx    := ( im.PosIx == 1 ) ? max : --im.PosIx
@@ -151,7 +151,7 @@ pkl_showHelpImage( activate := 0 )
 		scaleImage  := 1
 	}
 	
-	if getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
+	If getKeyInfo( "CurrNumOfDKs" ) { 									; DeadKey image
 		thisDK  := getKeyInfo( "CurrNameOfDK" )
 		pathDK  := FileExist( im.DK1Dir . "\" . thisDK . "*.*" )  		; Look for DK imgs in two dirs: Set, and local
 							? im.DK1Dir . "\" . thisDK
@@ -176,10 +176,10 @@ pkl_showHelpImage( activate := 0 )
 		stateOn := state
 	}
 	imgPath := inArray( im.HiddenS, stateOn, 0 ) ? "" : imgPath 		; Hide specified states (caseless comparison)
-	if ( imgPath )
+	If ( imgPath )
 		imgPath := FileExist( imgPath ) ? imgPath : im.LayDir . "\state0.png" 	; The fallback image is state0
 	
-	if ( scaleImage ) {
+	If ( scaleImage ) {
 		imgW        := Ceil( im.Width_ * im.Zooms[ im.ZoomNr ] / 100 )
 		imgH        := Ceil( im.Height * im.Zooms[ im.ZoomNr ] / 100 )
 		im.Mrg[5]   := Floor( imgW * im.HorZone / 100 ) 				; Horz. push zone, in px
@@ -196,7 +196,7 @@ pkl_showHelpImage( activate := 0 )
 	}
 	im.Prev     := imgPath
 	
-	if ( imgPath ) {
+	If ( imgPath ) {
 	imgBgPath   := im.BgPath 											; Bg image
 	imgShPath   := im.ShRoot . "\state" . state . ".png" 				; Shift state markers
 	GuiControl, HI:, CtrlBgImg, *w%imgW% *h%imgH% %imgBgPath%
@@ -211,7 +211,7 @@ pkl_showHelpImage( activate := 0 )
 imgPosDic( pos, def := 0 ) {    										; Get a numerical image position from a T/B+L/M/R one, if needed
 	posDic  := { "TL" : 1, "TM" : 2, "TR" : 3
 			   , "BL" : 4, "BM" : 5, "BR" : 6 }
-	if inArray( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...
+	If inArray( [ 1, 2, 3, 4, 5, 6 ], pos ) { 							; Image positions may be numeric 1–6 already...
 		posNr   := pos
 	} else if posDic.HasKey( pos ) { 									; ...or in the posDic conversion array...
 		posNr   := posDic[ pos ]

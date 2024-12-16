@@ -9,7 +9,7 @@ ReadRemaps( mapList, mapStck ) { 								; Parse a remap string to a CSV list of
 	For ix, alist in pklIniCSVs( mapList, mapList, mapStck, "Remaps" ) { 	; mapFile
 		tmpCycle    := "" 							; Above, mapList is default to use a map unless it refers to another
 		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
-			if ( SubStr( list, 1, 1 ) == "^" ) { 				; A cycle reference...
+			If ( SubStr( list, 1, 1 ) == "^" ) { 				; A cycle reference...
 				theMap  := SubStr( list, 2 ) 					; ...adds the cycle the list refers to directly
 			} else if ( alist != mapList ) { 					; This should safeguard against infinite loops
 				theMap  := ReadRemaps( list, mapStck ) 			; Refers to another map -> Self recursion
@@ -27,7 +27,7 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 	mapFile := IsObject( mapStck ) ? mapStck[mapStck.Length()] : mapStck 		; Use a file stack, or just one file
 	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
-	if ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
+	If ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
 		pdic := ReadKeyLayMapPDic( "SC", "SC", mapFile )
 	rdic    := pdic.Clone()										; Reverse dictionary (instead of if loop)?
 	tdic	:= {}												; Temporary dictionary used while mapping loops
@@ -35,21 +35,21 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 		fullCycle := ""
 		For ix, plist in StrSplit( clist, "+", " `t" ) { 		; Parse and merge composite cycles by plus sign
 			thisCycle := pklIniRead( plist , "", mapStck, "RemapCycles" ) 	; mapFile
-			if ( not thisCycle )
+			If ( not thisCycle )
 				pklWarning( "Remap element '" . plist . "' not found", 3 )
 			thisType  := SubStr( thisCycle, 1, 2 )				; KLM map type, such as TC for TMK-like Colemak
 ;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
 			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and wrapping pipes
 			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
 		}	; end For plist
-		if ( mapType == "SC" )									; Remap pdic from thisType to SC
+		If ( mapType == "SC" )									; Remap pdic from thisType to SC
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
 		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) { 	; Parse cycle to minicycles:  | a | b / c | d | e |
 			thisCycle   := StrSplit( minCycl, "|", " `t" ) 		; Parse cycle by pipe, and create mapping pdic
 			numSteps    := thisCycle.Length()
 			Loop % numSteps { 									; Loop to get proper key codes
 				this := thisCycle[ A_Index ]
-				if ( mapType == "SC" ) { 						; Remap from thisType to SC
+				If ( mapType == "SC" ) { 						; Remap from thisType to SC
 					thisCycle[ A_Index ] := mapDic[ this ]
 				} else if ( mapType == "VK" )  { 				; Remap from VK name/code to VK code
 					thisCycle[ A_Index ] := getVKnrFromName( this ) 	; VK maps use VK## format codes
@@ -79,9 +79,9 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
 		valRow := pklIniCSVs( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; --"--
 		For ix, key in keyRow { 								; (Robust against keyRow shorter than valRow)
-			if ( ix > valRow.Length() ) 						; End of val row
+			If ( ix > valRow.Length() ) 						; End of val row
 				Break
-			if ( not key )  									; Empty key entry (e.g., double pipes)
+			If ( not key )  									; Empty key entry (e.g., double pipes)
 				Continue
 			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC### key
 			key := ( keyType == "VK" ) ? getVKnrFromName( key ) : key
@@ -110,10 +110,10 @@ _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 	static suspendedByApp := false  							; (Their attributes are in the Settings file)
 	
 	matchMode   := getPklInfo("suspendingMode")
-	if ( matchMode )
+	If ( matchMode )
 		SetTitleMatchMode % getPklInfo("suspendingMode") 		; A custom window TitleMatchMode may be specified
-	if WinActive( "ahk_group SuspendingApps" ) { 				; If a window specified in the group is active...
-		if ( not suspendedByApp ) { 							; ...and not already A_IsSuspended,...
+	If WinActive( "ahk_group SuspendingApps" ) { 				; If a window specified in the group is active...
+		If ( not suspendedByApp ) { 							; ...and not already A_IsSuspended,...
 			suspendedByApp := true  							; ...then auto-suspend that window.
 			Gosub suspendOn
 		}
@@ -128,8 +128,8 @@ _pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
 	static suspendedByLID := false 								; (They're specified by LID as seen in About...)
 
 	suspendingLIDs := getPklInfo( "suspendingLIDs" )
-	if InStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
-		if ( not suspendedByLID ) { 							; ...and not already A_IsSuspended...
+	If InStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
+		If ( not suspendedByLID ) { 							; ...and not already A_IsSuspended...
 			suspendedByLID := true
 			Gosub suspendOn
 		}
@@ -143,7 +143,7 @@ _pklJanitorActivity() { 										; Suspend/exit EPKL after a certain time of in
 	suspTime := getPklInfo( "suspendTimeOut" ) * 60000 			; Convert from min to ms
 	exitTime := getPklInfo( "exitAppTimeOut" ) * 60000 			; Convert from min to ms
 	idleTime := A_TimeIdle 										; eD WIP: Use TimeIdlePhysical instead?
-	if ( exitTime && idleTime > exitTime ) {
+	If ( exitTime && idleTime > exitTime ) {
 		Gosub exitPKL
 	} else if ( suspTime && not A_IsSuspended && idleTime > suspTime ) {
 		Gosub suspendOn
@@ -151,11 +151,11 @@ _pklJanitorActivity() { 										; Suspend/exit EPKL after a certain time of in
 }
 
 _pklJanitorLocaleVK( force := false ) {     					; Renew VK codes: OEM key VKs vary by locale for ISO system layouts
-	if ( not force && A_TimeIdle < 2000 )   					; Don't do this if the comp isn't unused for at least 2 s
+	If ( not force && A_TimeIdle < 2000 )   					; Don't do this if the comp isn't unused for at least 2 s
 		Return
 	oldLID  := getPklInfo( "previousLocaleID" )
 	newLID  := getWinLocaleID()
-	if ( oldLID != newLid ) {
+	If ( oldLID != newLid ) {
 ;		( 1 ) ? pklDebug( "System layout LID change: " . oldLID . "->" . newLID, 1 )  ; eD DEBUG
 		getWinLayVKs()
 		getWinLayDKs()  										; Get the Windows Layout's DKs  	; eD WIP
@@ -166,14 +166,14 @@ _pklJanitorLocaleVK( force := false ) {     					; Renew VK codes: OEM key VKs v
 
 _pklJanitorCleanup() {
 	timeOut := getPklInfo( "cleanupTimeOut" ) * 1000 			; The timeout in s is converted to ms
-	if ( A_TimeIdle > timeOut ) { 					 			; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
-		if getPklInfo( "cleanupDone" ) 							; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
+	If ( A_TimeIdle > timeOut ) { 					 			; eD WIP: Use TimeIdlePhysical w/ mouse hook as well?
+		If getPklInfo( "cleanupDone" ) 							; Avoid repeating this every timer interval 	; eD WIP: Or use a one-shot timer instead?
 			Return
-		if not ExtendIsPressed()
+		If not ExtendIsPressed()
 			extendKeyPress( -1 ) 								; Clean up any loose Ext mods
 		For ix, mod in [ "LShift", "LCtrl", "LAlt", "LWin" 			; "Shift", "Ctrl", "Alt", "Win" are just the L# mods
 					   , "RShift", "RCtrl", "RAlt", "RWin" ] { 		; eD WIP: What does it take to ensure no stuck mods?
-			if getKeyState( mod ) {
+			If getKeyState( mod ) {
 				Return 											; If the key is being held down, leave it be, otherwise...
 			} else {
 				Send % "{" . mod . " Up}" 						; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
@@ -216,10 +216,10 @@ pklDebug( text, time := 2 ) {
 
 pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) { 				; Set a menu hotkey (used in pkl_init)
 	For ix, hkey in pklIniCSVs( hkIniName ) {
-		if ( hkey == "" || hkey == "--" )
+		If ( hkey == "" || hkey == "--" )
 			Break
 		Hotkey, %hkey%, %gotoLabel%
-		if ( ix == 1 )
+		If ( ix == 1 )
 			setPklInfo( pklInfoTag, hkey )
 	}	; end For hkey
 }	; end fn
@@ -254,7 +254,7 @@ getWinLayVKs() {    										; Find the VK values for the current Win layout's 
 
 getVKnrFromName( name ) { 									; Get the 4-digit hex VK## code from a VK name
 	name := upCase( name )
-	if ( not RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
+	If ( not RegExMatch( name, "^VK[0-9A-F]{2}$" ) == 1 ) {	; Check if the name is already VK##
 		name := "VK" . pklIniRead( "VK_" . name, "00", "PklDic", "VKeyCodeFromName" )
 	}
 	Return name
@@ -275,9 +275,9 @@ thisMinute() { 												; Use A_Now (local time) for a folder or other time s
 
 fileOrAlt( file, altFile, errMsg := "", errDur := 2 ) { 	; Find a file/dir, or use the alternative
 	file := atKbdType( file )   							; Replace '@K' w/ KbdType
-	if FileExist( file )
+	If FileExist( file )
 		Return file
-	if ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found and errMsg is set
+	If ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found and errMsg is set
 		pklWarning( errMsg, errDur )
 	Return altFile
 }
@@ -331,13 +331,13 @@ upCase( str ) {
 }
 
 isInt( this ) { 											; AHK cannot use "is <type>" in expressions...
-	if this is integer  									; ...so use this wrapper function instead.
+	If this is integer  									; ...so use this wrapper function instead.
 		Return true 										; [This includes hex numbers starting with "0x"]
 	Return false 											; Else. May not be strictly necessary in AHK syntax.
 }
 
 isHex( this ) { 											; AHK cannot use "is <type>" in expressions...
-	if this is xdigit   									; ...so use this wrapper function instead.
+	If this is xdigit   									; ...so use this wrapper function instead.
 		Return true
 	Return false
 }
@@ -370,12 +370,12 @@ formatUnicode( chr ) { 										; Format a character as a hex string, without t
 }
 
 inArray( haystack, needle, case := true ) {     			; Check if an array object has a certain value, and return its index
-	if !(IsObject(haystack)) || ( haystack.Length() == 0 )  ; (For associative arrays, you can use Array.HasKey() to find a key.)
+	If !(IsObject(haystack)) || ( haystack.Length() == 0 )  ; (For associative arrays, you can use Array.HasKey() to find a key.)
 		Return false
 	needle      := ( case ) ? needle : loCase( needle ) 	; If desired, use caseless comparison
 	For ix, value in haystack {
 		value   := ( case ) ? value  : loCase( value  )
-		if ( value == needle )
+		If ( value == needle )
 			Return ix
 	}
 	Return false
@@ -399,8 +399,8 @@ dllToUni( iVK, iSC ) {  																; Call the OS layout to translate VK/SC 
 	winDKs  := getPklInfo( "WinLayDKs" ) 												; Couldn't run getWinLayDKs() here, as it messes up OS-DKs. Leave it to pklJanitor.
 	sSC     := Format( "SC{:03X}", iSC ) 												; Reformat int SC to scMap's "SC###" notation
 ;	pklTooltip( "SC: " . sSC . "  DKs: " . winDKs[sSC] . "  ShSt: " . state, 1 ) 		; eD DEBUG: Use remapped SC
-	if winDKs.HasKey( sSC ) ;{   														; If this key holds an OS DK ...
-		if InStr( winDKs[sSC], "" . state ) 											; ... and the shift state matches, ...
+	If winDKs.HasKey( sSC ) ;{   														; If this key holds an OS DK ...
+		If InStr( winDKs[sSC], "" . state ) 											; ... and the shift state matches, ...
 			Return % "śķιᶈForDK" 														; ... don't proceed to the DLL call (twice) to avoid disturbing the DK.
 	map := dllMapVK( iVK, "ord" )   													; Get ordinal of VK's (base keyname) mapping; (map>0) tests isNoDK? No, it doesn't.
 	TID := DllCall( "GetWindowThreadProcessId", "Int", WinExist("A"), "Int", 0 ) 		; TID: Window  Thread Process ID
@@ -410,7 +410,7 @@ dllToUni( iVK, iSC ) {  																; Call the OS layout to translate VK/SC 
 	VarSetCapacity( theChar, 32 )   													; The result may be a buffer with several chars (if so, these are not good here)
 	DK  := DllCall( "ToUnicodeEx",  "UInt", iVK, "UInt", iSC, "UInt", dllKbdState() 	; The call needs a 256-byte &KeyState array (or, is just the ModState needed?).
 		          , "Str", theChar, "UInt", 64, "UInt",  1, "UInt", HKL )   			; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
-	if ( map > 0 ) && ( DK == 1 ) && ( Ord(theChar) > 0x1F ) 							; Avoid returning multi-char results and Ctrl chars (0x00–0x1F)
+	If ( map > 0 ) && ( DK == 1 ) && ( Ord(theChar) > 0x1F ) 							; Avoid returning multi-char results and Ctrl chars (0x00–0x1F)
 		Return theChar  																; https://www.autohotkey.com/boards/viewtopic.php?t=1040
 }
 
@@ -423,14 +423,14 @@ dllKbdState() { 																		; Get a &KeyState 256-byte array of the state 
 pklModState( mode := "get", ShSt := 0 ) {   											; Get/Set a &ModState 256-byte array like KeyState, of the main three state mods
 	static VK_MODS  := { "Shift" : 0x10  , "Ctrl" : 0x11  , "Alt" : 0x12   } 			; This works w/ AltGr = Ctrl + Alt
 	setMods         := { "Shift" : 0     , "Ctrl" : 0     , "Alt" : 0      }
-	if ( ShSt & 4 ) ;{   																; AltGr
+	If ( ShSt & 4 ) ;{   																; AltGr
 		setMods["Ctrl"] := 1 , setMods["Alt"] := 1
-	if ( ShSt & 1 ) ;{   																; Shift
+	If ( ShSt & 1 ) ;{   																; Shift
 		setMods["Shift"] := 1
 	VarSetCapacity( ModState, 256, 0 )  												; A 256-byte string array prefilled with zeros
 	For mod, modVK in VK_MODS {
 		modDown := ( mode == "set" ) ? setMods[ mod ] : GetKeyState( mod )  			; Either set the mods' states from an array, or get it from key states
-		if ( modDown )  																; The modifier is pressed (if using GetKeyState(), "P" is for physical)
+		If ( modDown )  																; The modifier is pressed (if using GetKeyState(), "P" is for physical)
 			NumPut( 0x80, ModState, modVK + 0, "UChar" )
 ;		( ShSt == 6 ) ? pklDebug( "mod: " . mod . " (" . modVK . ")`nShSt: " . ShSt . "`nmodDn: " . modDown , 2 )  ; eD DEBUG
 	} 	; end for
@@ -482,7 +482,7 @@ menuIconList() {    										; Taken from the AHK_MenuIconList.ahk script
 	iconFile    := ""                   					; Needs to be reset each run
 	defIcoPath  := "C:\Windows\System32\shell32.dll"
 	FileSelectFile, iconFile, 32, %defIcoPath%, Pick a file to check icons., *.*
-	if ( iconFile == "" )
+	If ( iconFile == "" )
 		Return
 	GUI, MIL:Font, s20
 	GUI, MIL:Add, ListView, h415 w150 gMenuIconNum, Icons 	; Uses a ListView GUI (https://www.autohotkey.com/docs/v1/lib/ListView.htm)

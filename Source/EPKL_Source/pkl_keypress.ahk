@@ -8,14 +8,14 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	vk_HK := getKeyInfo( HKey . "ent1" ) 						; Key "VK_" info; usually VK/SC code.
 	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
 	
-	if ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
+	If ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
 		_osmClearAll()  										; ...clear any sticky mods, then...
 		extendKeyPress( HKey )  								; ...process the Extend key press.
 		Return
 	}	; end if ExtPressed
 	
-	if ( capHK < -1 ) { 										; The key is VK or SC mapped, so just send its VK## and/or SC### code.
-		if ( capHK == -2 ) && inArray( [ "VK2D", "VK2E"  		; [PgUp,PgDn,End ,Home,Left,Up ,Right,Down,Ins ,Del ] are sent as their NumPad versions by AHK, as...
+	If ( capHK < -1 ) { 										; The key is VK or SC mapped, so just send its VK## and/or SC### code.
+		If ( capHK == -2 ) && inArray( [ "VK2D", "VK2E"  		; [PgUp,PgDn,End ,Home,Left,Up ,Right,Down,Ins ,Del ] are sent as their NumPad versions by AHK, as...
 				, "VK21", "VK22", "VK23", "VK24"    			; [VK21,VK22,VK23,VK24,VK25,VK26,VK27,VK28,VK2D,VK2E] are degenerate VK codes for both versions
 				, "VK25", "VK26", "VK27", "VK28" ], vk_HK ) { 	; [049 ,051 ,04F ,047 ,04B ,048 ,04D ,050 ,052 ,053 ] are the NumPad SCs for the keys
 			SC  := GetKeySC(vk_HK) | 0x100  					; [149 ,151 ,14F ,147 ,14B ,148 ,14D ,150 ,152 ,153 ] are the normal SCs for the keys
@@ -23,8 +23,8 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		} 	; end if capHK == VK
 		delQStr := "VK1B-SC001" . "VK0D-SC01C"  				; Keys that wipe the LastKeys queue: Esc(1B), Enter(0D), 
 				.  "VK2E-SC153" . "VK09-SC00F"  				;                                    Del(2E), Tab(09; not usually mapped)   	; eD WIP: Some Extend mappings too?
-		if        InStr( "VK08-SC00E", vk_HK ) { 				; Backspace was pressed, so...
-			if getKeyState( "Ctrl" ) {
+		If        InStr( "VK08-SC00E", vk_HK ) { 				; Backspace was pressed, so...
+			If getKeyState( "Ctrl" ) {
 				lastKeys( "null" )  							; ...unless it was Ctrl+Back,...
 			} else {
 				lastKeys( "pop1" )  							; ...remove the last entry in the Composer LastKeys queue
@@ -34,7 +34,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		} else {
 			_composeVK( HKey, vk_HK )   						; If the output is a single, printable character, add it to the Compose queue
 		}
-;		if inArray( [ "SC002","SC003","SC004" ], HKey )
+;		If inArray( [ "SC002","SC003","SC004" ], HKey )
 ;			pklTooltip( HKey . " " . capHK ), Return 	; eD DEBUG
 		Send {Blind}{%vk_HK% DownR} 							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
 		_osmClearAll()  										; Clear any sticky mods after sending
@@ -44,16 +44,16 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	modif := ""
 	state := 0
 	
-	if getLayInfo("LayHasAltGr") { 								; For AltGr layouts...
-		if AltGrIsPressed() { 									; If AltGr is down...
+	If getLayInfo("LayHasAltGr") { 								; For AltGr layouts...
+		If AltGrIsPressed() { 									; If AltGr is down...
 			sh := getKeyState("Shift")
-			if ( (capHK & 4) && getKeyState("CapsLock", "T") ) 	; The CapState property of a key determines whether CapsLock affects Shift
+			If ( (capHK & 4) && getKeyState("CapsLock", "T") ) 	; The CapState property of a key determines whether CapsLock affects Shift
 				sh := 1 - sh
 			state := 6 + sh 									; eD WIP: The ShiftState calc. is a mess. Prepare for SGCaps in the mix by simplifying this mess?
 		} else {
-			if getKeyState("LAlt") { 							; LAlt on AltGr layout
+			If getKeyState("LAlt") { 							; LAlt on AltGr layout
 				modif .= "!"
-				if getKeyState("RCtrl")
+				If getKeyState("RCtrl")
 					modif .= "^"
 				state := _pkl_CapsState( capHK )
 			} else {
@@ -61,18 +61,18 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 			}
 		}
 	} else {    												; For non-AltGr layouts...
-		if getKeyState("Alt") { 								; Alt is down
+		If getKeyState("Alt") { 								; Alt is down
 			modif .= "!"
-			if ( ( getKeyState("RCtrl") || ( getKeyState("LCtrl") ) && !getKeyState("RAlt") ) )
+			If ( ( getKeyState("RCtrl") || ( getKeyState("LCtrl") ) && !getKeyState("RAlt") ) )
 				modif .= "^"
 			state := _pkl_CapsState( capHK )    				; CapsLock on?
 		} else {
 			_pkl_CtrlState( HKey, capHK, state, modif ) 		; Ctrl is down
 		}
 	}	; end if LayHasAltGr
-	if ( getKeyState("LWin") || getKeyState("RWin") )   		; Win is down
+	If ( getKeyState("LWin") || getKeyState("RWin") )   		; Win is down
 		modif .= "#"
-;	if ( getKeyState("LShift") || getKeyState("RShift") )   	; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
+;	If ( getKeyState("LShift") || getKeyState("RShift") )   	; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
 ;		modif .= "+"
 	modif := InStr( modif, "!" ) ? "{Blind}" . modif : modif 	; Alt+F to File menu etc doesn't work without Blind if the Alt button is pressed.
 	state += getModState( "SwiSh" ) ? 0x08 : 0  				; SwiSh (SGCaps, state+08) modifier
@@ -81,7 +81,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	
 	Pri := getKeyInfo( HKey . state )   						; Primary entry by state; may be a prefix
 	Ent := getKeyInfo( HKey . state . "s" ) 					; Actual entry by state, if using a prefix
-	if ( Pri == "" ) {
+	If ( Pri == "" ) {
 		Return
 	} else if ( state == "ent1" ) { 							; VKey. <key>vkey is set to Modifier or VK name.  	; eD WIP: "VK" here made Ctrl+<key> fail?!
 		pkl_SendThis( "{" . Pri . "}", modif ) 					; (Without this, Ctrl+Shift+# keys are broken. Why?)
@@ -92,7 +92,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		pkl_Send( Pri, modif )
 	} else {
 		Ent := ( Ent == "" ) ? getKeyInfo( HKey . "0s" ) : Ent	; Default to ShiftState 0 if entry is empty
-		if pkl_ParseSend( Pri . Ent, "SendThis" )   			; Unified prefix-entry syntax
+		If pkl_ParseSend( Pri . Ent, "SendThis" )   			; Unified prefix-entry syntax
 			Return  											; Skip osmClearAll in this case
 	}	; end if Pri
 	_osmClearAll()  											; If another key is pressed while a OSM is active, cancel the OSM
@@ -106,16 +106,16 @@ extendKeyPress( HKey ) {    									; Process an Extend modified key press
 		,  "RShift" : ">+"  , "RCtrl" : ">^"  , "RAlt" : ">!"  , "RWin" : ">#"
 		,   "Shift" :  "+"  ,  "Ctrl" :  "^"  ,  "Alt" :  "!"  ,  "Win" :  "#" }
 	
-	if ( HKey == -1 ) { 										; Special call to reset the extMods
+	If ( HKey == -1 ) { 										; Special call to reset the extMods
 		extMods := {}   										; Which Extend mods are in use
 		Return
 	}
 	xLvl := getPklInfo( "extLvl" )
 	xVal := getKeyInfo( HKey . "ext" . xLvl )   				; The Extend entry/value for this key
-	if ( xVal == "" )
+	If ( xVal == "" )
 		Return
-	if ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) {
-		if ( getKeyState( HKey, "P" ) ) {   					; Mark the extMod as pressed
+	If ( RegExMatch( xVal, "i)^([LR]?(?:Shift|Alt|Ctrl|Win))$", mod ) == 1 ) {
+		If ( getKeyState( HKey, "P" ) ) {   					; Mark the extMod as pressed
 			extMods[HKey] := mod
 ;		} else {    											; eD WIP: This doesn't get triggered unless as Up hotkey is set!
 ;			extMods.Delete( HKey )
@@ -126,18 +126,18 @@ extendKeyPress( HKey ) {    									; Process an Extend modified key press
 	returnTo := getPklInfo( "extReturnTo" ) 					; Array of Ext layers to return to from the current one
 	setExtendInfo( returnTo[ xLvl ] )
 	pref := ""
-	if not pkl_ParseSend( xVal ) {  							; Unified prefix-entry syntax
-		if ( loCase( xVal ) == "backspace" )
+	If not pkl_ParseSend( xVal ) {  							; Unified prefix-entry syntax
+		If ( loCase( xVal ) == "backspace" )
 			lastKeys( "pop1" )
 		For HKey, mod in extMods {  							; Which Extend mods are depressed?
-			if getKeyState( HKey, "P" ) {
+			If getKeyState( HKey, "P" ) {
 				pref .= modList[mod]
 			}
 		}	; end For
 		Send {Blind}%pref%{%xVal%}  							; By default, take modifiers into account 	; eD WIP: Use normal plkSend instead?!
 	} 	; end if
 	For HKey, mod in extMods {
-		if ( not getKeyState( HKey, "P" ) )
+		If ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
 	}	; end For
 	setLayInfo( "extendUsed", true )    						; Mark the Extend press as used (to avoid dual-use as ToM key etc)
@@ -151,18 +151,18 @@ setExtendInfo( xLvl := 1 ) {    								; Update PKL info about the current Exte
 
 _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable character, add it to the Compose queue
 	static skipForDK    := false
-	if skipForDK {  											; If the previous key press was an OS DK, skip the next press too to allow its release.
+	If skipForDK {  											; If the previous key press was an OS DK, skip the next press too to allow its release.
 		skipForDK       := false
 		Return
 	}
 	iVK := Format( "{:i}", "0x" . SubStr( vk_HK, 3, 2 ) )   	; VK as int should be robust for vk##sc### mappings. GetKeyName/VK messes w/ OS DKs; don't.
 	key := dllMapVK( iVK, "chr" )   							; GetKeyName() returns the base (unshifted) key name. We use a DLL call to avoid it here.
-	if ( StrLen(key) == 1 ) {   								; Normal letters/numbers/symbols are single-character
+	If ( StrLen(key) == 1 ) {   								; Normal letters/numbers/symbols are single-character
 		iSC := Format( "{:i}", "0x" . SubStr( HKey, 3 ) )   	; This should be okay, as KeyUp events don't get processed here? Just pure SC###.
 		chr := dllToUni( iVK, iSC ) 							; Get the actual char (using a ToUnicode DLL call)
 ;		pklTooltip( "VK: " iVK "`nSC: " iSC "`nkey: [" key "]`nchr: [" chr "]`nord: " formatUnicode(chr), 2 )   	; eD DEBUG
 		skipForDK   := ( chr == "śķιᶈForDK" ) ? true : false
-		if ( StrLen(chr) == 1 ) 								; If the output from the OS layout is a printable single character...
+		If ( StrLen(chr) == 1 ) 								; If the output from the OS layout is a printable single character...
 			lastKeys( "push", chr ) 							; ...push it to the Compose queue
 	}
 }
@@ -176,14 +176,14 @@ setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or
 	Critical
 	osmKeys := getPklInfo( "stickyMods" )   				; One-Shot mods (CSV, but stored as a string)
 	osmLast := getPklInfo( "osmKeyN" . getPklInfo("osmN") ) ; The last set OSM
-	if ( keyDown ) {    																; eD WIP: Avoid the OSM if already held?
-		if ( InStr( osmKeys, theMod ) && theMod != osmLast && ! ExtendIsPressed() ) { 	; eD WIP: Don't use Sticky mods when Ext is down?
+	If ( keyDown ) {    																; eD WIP: Avoid the OSM if already held?
+		If ( InStr( osmKeys, theMod ) && theMod != osmLast && ! ExtendIsPressed() ) { 	; eD WIP: Don't use Sticky mods when Ext is down?
 			setOneShotMod( theMod ) 						; Activate the OSM
 		} else {
 			_setModState( theMod, 1 )
 		}
 	} else {
-		if ( theMod == osmLast )    						; If an active OSM...
+		If ( theMod == osmLast )    						; If an active OSM...
 			Return  										; ...don't release it yet.
 		_setModState( theMod, 0 )
 	}
@@ -191,20 +191,20 @@ setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or
 
 _setModState( theMod, keyDown := 1 ) {  					; Using 1/0 for true/false here.
 	Critical
-	if ( theMod == "Extend" ) { 							; Extend
+	If ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
 ;	} else if ( theMod == "AltGr" ) {
 ;		setAltGrState( keyDown )    						; AltGr (not used now)  	; eD NOTE: For now, AltGr can't be sticky?
 	} else {
 		setKeyInfo( "ModState_" . theMod, keyDown ) 		; Standard modifier
 		UD := ( keyDown ) ? "Down" : "Up"   				; If a physical mod, send KeyDown/Up
-		if not inArray( [ "AltGr", "SwiSh", "FliCK" ], theMod )
+		If not inArray( [ "AltGr", "SwiSh", "FliCK" ], theMod )
 			Send {%theMod% %UD%}    						; NOTE: This autorepeats. Is that desirable?
 	}
 }
 
 getModState( theMod ) { 									; This is needed for virtual modifiers. Returns 1/0 (true/false).
-;	if ( theMod == "AltGr" )
+;	If ( theMod == "AltGr" )
 ;		Return getAltGrState()
 	Return getKeyInfo( "ModState_" . theMod )   			; Physical ones are simply depressed in _setModState().
 }
@@ -244,14 +244,14 @@ _osmClear( osmN ) { 										; Clear a specified sticky mod
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
 	theMod := getPklInfo( "osmKeyN" . osmN )    			; ...but this is also called from elsewhere.
 	setPklInfo( "osmKeyN" . osmN , "" )
-	if ( theMod )
+	If ( theMod )
 		setModifierState( theMod, 0 )   					; Release the modifier
 }
 
 _osmClearAll() {    										; Clear all active sticky mods
 	Critical
 	Loop % getPklInfo( "osmMax" ) {
-		if ( getPklInfo( "osmKeyN" . A_Index ) != "" )
+		If ( getPklInfo( "osmKeyN" . A_Index ) != "" )
 			_osmClear( A_Index )
 	}
 ;	( 1 ) ? pklDebug( "OSMs cleared", 0.3 )  ; eD DEBUG  	; eD WIP: Doesn't this get called after all?
@@ -268,7 +268,7 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 ;;  difference between AltGr and Alt+Ctrl.
 ;	ctrlAltIsAltGr  := no
 ;	static CtrlAltlIsAltGr := -1
-;	if ( CtrlAltlIsAltGr == -1 ) {
+;	If ( CtrlAltlIsAltGr == -1 ) {
 ;		CtrlAltlIsAltGr := getKeyInfo( "RAltAsAltGrLocale" ) || getKeyInfo( "CtrlAltIsAltGr" )
 ;	}
 	Return getKeyState( "RAlt" ) ; eD WIP AltGr: Removed || ( CtrlAltlIsAltGr && getKeyState( "Ctrl" ) && getKeyState( "Alt" ) )
@@ -280,9 +280,9 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 
 ;getAltGrState( keyDown := 0, set := 0 ) {
 ;	static AltGrState   := 0
-;	if ( set == 1 ) {
+;	If ( set == 1 ) {
 ;		AltGrState := ( keyDown ) ? 1 : 0
-; ;		if ( keyDown == 1 ) {
+; ;		If ( keyDown == 1 ) {
 ; ;			AltGrState := 1
 ; ;			Send {LCtrl Down}{RAlt Down}
 ; ;		} else {
@@ -306,14 +306,14 @@ _setExtendState( set := 0 ) {   							; Called from setModState. This function 
 	static extHeld      := 0
 	static initialized  := false
 	
-	if ( not initialized ) {
+	If ( not initialized ) {
 		extMod1         := getPklInfo( "extendMod1" )
 		extMod2         := getPklInfo( "extendMod2" )
 		initialized     := true
 	}
 	
 ;	_osmClearAll() 											; eD WIP: Don't mix ToM and Extend? Nope, this didn't work and landed us with a stuck Caps key!
-	if ( set == 1 ) && ( ! extHeld ) { 						; Determine multi-Extend layer w/ extMods
+	If ( set == 1 ) && ( ! extHeld ) { 						; Determine multi-Extend layer w/ extMods
 		xLvl  := getKeyState( extMod1, "P" ) ? 2 : 1 		; ExtMod1 -> ExtLvl +1
 		xLvl  += getKeyState( extMod2, "P" ) ? 2 : 0 		; ExtMod2 -> ExtLvl +2
 		setExtendInfo( xLvl ) 								; Update Extend layer info
@@ -331,7 +331,7 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 	static tomHeld  := {}   								; Is this key held down? Or check KeyState instead?
 	static tapTime  := {}   								; We'll handle tap times for each key SC
 															; eD WIP: Make tomHeld a push-pop array of held keys? To allow multiple concurrent ToM.
-	if ( HKey == -1 ) { 									; eD WIP: Call this fn w/ -1 to reset ToMs and the static variables.
+	If ( HKey == -1 ) { 									; eD WIP: Call this fn w/ -1 to reset ToMs and the static variables.
 ;		HKey    := getPklInfo( "tomKey" )
 		tomHeld  := {}
 		tapTime  := {}
@@ -343,8 +343,8 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 	
 	tomMod  := getKeyInfo( HKey . "ToM" )   				; Modifier name for this key
 	tomTime := getPklInfo( "tapModTime" )   				; The time delay that separates a tap from a hold
-	if ( set == 1 ) { 										; * If the key is pressed (or autorepeated)...
-		if ( ! tomHeld[HKey] ) { 							; Set only once per press
+	If ( set == 1 ) { 										; * If the key is pressed (or autorepeated)...
+		If ( ! tomHeld[HKey] ) { 							; Set only once per press
 			tomHeld[HKey] := 1 								; Mark key as held to guard against autorepeat
 			SetTimer, tomTimer, -%tomTime% 					; A run-once timer is more robust than checking the time...
 			tapTime[HKey] := A_TickCount + tomTime 			; ...but the time check is handy for key release? Or is release the default?
@@ -355,7 +355,7 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 ;	} else if ( set == -2 ) { 								; If the key is interrupted by another... 	; eD WIP: Not in use now/yet
 ;		setTapOrModState( -1 )  							; Clear any ToM key settings
 ;		pklDebug( "caught interrupted ToM!", 0.5 )  		; ED DEBUG: Not happening atm, as the calls to it above are ;-ed out pending more robustness
-;		if getKeyState( HKey, "P" ) {
+;		If getKeyState( HKey, "P" ) {
 ;			_setModState( tomMod, 1 ) 						; eD WIP: This is fishy! Keys get transposed, sometime also wrongly shifted (st -> Ts).
 ;			setPklInfo( "tomMod", -1 )
 ;		} else {
@@ -367,9 +367,9 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 ;		setPklInfo( "tomKey", "" )
 		tomHeld[HKey] := 0
 		extUsed := ( HKey == getLayInfo( "ExtendKey" ) && getLayInfo( "extendUsed" ) )  	; Is this not a used Extend key press?  	; eD WIP: Uses ExtendKey. Make generic?
-		if ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
+		If ( A_TickCount < tapTime[HKey] ) && ! extUsed 	; If the key was tapped (and not used as Extend mod)...
 			keyPressed( HKey )  							; ...just send it as a tap.
-		if ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set earlier...
+		If ( getPklInfo( "tomMod" ) == -1 ) 				; If the mod was set earlier...
 			_setModState( tomMod, 0 )   					; ...unset the actual mod.  	; eD WIP: Or unset the mod anyway? What if the real mod key is being held?
 		setLayInfo( "extendUsed", false )
 		setTapOrModState( -1 )  							; Clear any ToM key settings
@@ -383,14 +383,14 @@ tomTimer:   												; There's only one timer as you won't be activating seve
 Return
 
 _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftState/modif vs Ctrl(+Shift)
-	if getKeyState("Ctrl") {
+	If getKeyState("Ctrl") {
 		state := 2
-		if getKeyState("Shift") {
+		If getKeyState("Shift") {
 			state++
-			if !getKeyInfo( HKey . state ) {
+			If !getKeyInfo( HKey . state ) {
 				state--
 				modif .= "+"
-				if !getKeyInfo( HKey . state ) { 			; If no ShiftState entry, send as virtual key
+				If !getKeyInfo( HKey . state ) { 			; If no ShiftState entry, send as virtual key
 					state := "ent1" 	; "VKey"
 					modif .= "^"
 				}
@@ -406,14 +406,14 @@ _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftStat
 
 _pkl_CapsState( capState ) { 								; Handle CapsState vs Shift/Caps/SGCaps
 	res := 0
-	if ( capState == 8 ) {
-		if getKeyState("CapsLock", "T")
+	If ( capState == 8 ) {
+		If getKeyState("CapsLock", "T")
 			res := 8
-		if getKeyState("Shift")
+		If getKeyState("Shift")
 			res++
 	} else {
 		res := getKeyState("Shift")
-		if ( (capState & 1) && getKeyState("CapsLock", "T") )
+		If ( (capState & 1) && getKeyState("CapsLock", "T") )
 			res := 1 - res
 	}
 	Return res

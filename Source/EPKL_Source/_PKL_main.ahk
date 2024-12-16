@@ -17,6 +17,9 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ========================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+2FIX: Lop any HIG tags off entries early in pkl_init and pkl_deadkey, storing it in a `Ħ` sub-entry.
+		- Then, make the HIG look for such an entry instead of detecting tags itself.
+
 WIPs: Galliard/Gralmak ortho, w/o AngleWide.
 
 WIPs: Further tweaks for the Ext-tap layer?
@@ -693,7 +696,7 @@ toggleSuspend:  											; Menu "Suspend"
 Return
 
 afterSuspend:
-	if ( A_IsSuspended ) {
+	If ( A_IsSuspended ) {
 		pkl_showHelpImage(  3 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_OffFile" ), % getLayInfo( "Ico_OffNum_" )
 	} else {

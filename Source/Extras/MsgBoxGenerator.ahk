@@ -204,12 +204,12 @@ Menu, Tray, Tip, AHK MsgBox generator`nBy r0lZ`, September 2011
 
 if (! A_IsCompiled) { 
     tmp = %A_ScriptDir%\%APPTITLE%.ico 
-    if (FileExist(tmp)) 
+    If (FileExist(tmp)) 
         Menu, Tray, Icon, %tmp% 
-    else 
+    Else 
         Menu, Tray, Icon 
     tmp = 
-} else 
+} Else 
     Menu, Tray, Icon 
 
 BuildMainGUI() 
@@ -225,13 +225,13 @@ Exit:
 CleanExit: 
     FileDelete, %A_Temp%\MsgBoxTest.ahk 
     ExitApp 
-return 
+Return 
 
 
 ; **************************** Main GUI *********************** 
 OpenMainGui: 
     Gui, Show 
-return 
+Return 
 
 BuildMainGUI() 
 { 
@@ -317,20 +317,20 @@ BuildMainGUI()
 GuiChanged: 
     Gui, Submit, NoHide 
     val := ButtonsVal -1 
-    if (val == 0) { 
+    If (val == 0) { 
         GuiControl, Disable, &2 
         GuiControl, Disable, &3 
         DefaultButtonVal = 1 
         GuiControl, , DefaultButtonVal, 1 
     } 
-    else if (val == 1 || val == 4) { 
+    Else If (val == 1 || val == 4) { 
         GuiControl, Enable, &2 
         GuiControl, Disable, &3 
-        if (DefaultButtonVal > 2) { 
+        If (DefaultButtonVal > 2) { 
             DefaultButtonVal = 2 
             GuiControl, , &2, 1 
         } 
-    } else { 
+    } Else { 
         GuiControl, Enable, &2 
         GuiControl, Enable, &3 
     } 
@@ -338,29 +338,29 @@ GuiChanged:
     val += HelpButton ? 16384 : 0 
 
     IconVal := LV_GetNext() 
-    if (IconVal != 1) { 
+    If (IconVal != 1) { 
         val += (6 - IconVal) * 16 
-        if (iconval == 2) 
+        If (iconval == 2) 
             iconnum = 5 
-        else if (iconval == 3) 
+        Else If (iconval == 3) 
             iconnum = 2 
-        else if (iconval == 4) 
+        Else If (iconval == 4) 
             iconnum = 3 
-        else 
+        Else 
             iconnum = 4 
-    } else 
+    } Else 
         iconnum = 0 
 
 
-    if (WindowVal == 2) 
+    If (WindowVal == 2) 
         val += 8192 
-    else if (WindowVal == 3) 
+    Else If (WindowVal == 3) 
         val += 4096 
-    else if (WindowVal == 4) 
+    Else If (WindowVal == 4) 
         val += 262144 
-    if RightJustify 
+    If RightJustify 
         val += 524288 
-    if RightToLeft 
+    If RightToLeft 
         val += 1048576 
 
     ; convert options value to hex 
@@ -373,138 +373,138 @@ GuiChanged:
     StringReplace, Message, Message, `n, ``n, 1 
     st = MsgBox, %val%, %Title%, %Message% 
 
-    if (TimeoutOn && Timeout <= 0) { 
+    If (TimeoutOn && Timeout <= 0) { 
         TimeoutOn = 0 
         GuiControl, , TimeoutOn, 0 
         GuiControl, , Timeout, 1 
         soundbeep 
     } 
-    if (TimeoutOn) { 
+    If (TimeoutOn) { 
         GuiControl, Enable, Timeout 
         GuiControl, Enable, TimeoutS 
         st = %st%, %Timeout% 
-    } else { 
+    } Else { 
         Timeout = 0 
         GuiControl, Disable, Timeout 
         GuiControl, Disable, TimeoutS 
     } 
 
-    if (iconnum && FileExist(A_WinDir . "\system32\user32.dll")) { 
+    If (iconnum && FileExist(A_WinDir . "\system32\user32.dll")) { 
         SB_SetParts(22) 
         SB_SetIcon("user32.dll", iconnum) 
-    } else { 
+    } Else { 
         SB_SetParts(0) 
     } 
     SB_SetText(st, 2) 
-    if (ShowTrayTips) { 
+    If (ShowTrayTips) { 
         GoSub, GenCode 
         TrayTip, MsgBox code:, %code%, 10, 1 
     } 
-return 
+Return 
 
 CopyNum: 
     GoSub, GuiChanged 
     Clipboard = %val% 
-return 
+Return 
 
 CopyCode: 
     GoSub, GuiChanged 
     GoSub, GenCode 
     clipboard = %code% 
-return 
+Return 
 
 GenCode: 
     code = MsgBox, %val%, %Title%, %Message% 
-    if (IncludeBrackets) 
+    If (IncludeBrackets) 
         s = `n{`n`n} 
-    else 
+    Else 
         s = `n 
-    if (TimeoutOn) 
+    If (TimeoutOn) 
         code = %code%, %Timeout% 
-    if (ButtonsVal == 1 && TimeoutOn) 
+    If (ButtonsVal == 1 && TimeoutOn) 
         code = %code%`nIfMsgBox, OK%s% 
-    if (ButtonsVal == 2) 
+    If (ButtonsVal == 2) 
         code = %code%`nIfMsgBox, OK%s%`nIfMsgBox, Cancel%s% 
-    if (ButtonsVal == 3) 
+    If (ButtonsVal == 3) 
         code = %code%`nIfMsgBox, Abort%s%`nIfMsgBox, Retry%s%`nIfMsgBox, Ignore%s% 
-    if (ButtonsVal == 4) 
+    If (ButtonsVal == 4) 
         code = %code%`nIfMsgBox, Yes%s%`nIfMsgBox, No%s%`nIfMsgBox, Cancel%s% 
-    if (ButtonsVal == 5) 
+    If (ButtonsVal == 5) 
         code = %code%`nIfMsgBox, Yes%s%`nIfMsgBox, No%s% 
-    if (ButtonsVal == 6) 
+    If (ButtonsVal == 6) 
         code = %code%`nIfMsgBox, Retry%s%`nIfMsgBox, Cancel%s% 
-    if (ButtonsVal == 7) 
+    If (ButtonsVal == 7) 
         code = %code%`nIfMsgBox, Cancel%s%`nIfMsgBox, Try Again%s%`nIfMsgBox, Continue%s% 
-    if (TimeoutOn) 
+    If (TimeoutOn) 
         code = %code%`nIfMsgBox, Timeout%s% 
     code = %code%`n 
-return 
+Return 
 
 Test: 
     GoSub, GuiChanged 
     cmd = MsgBox, %val%, %Title%, %Message% 
-    if TimeoutOn 
+    If TimeoutOn 
         cmd = %cmd%, %Timeout% 
     FileDelete, %A_Temp%\MsgBoxTest.ahk 
-    if (HelpButton) { 
+    If (HelpButton) { 
         code = Gui, Show, Hide, %Title%`nGui, +OwnDialogs`nOnMessage(0x53, "WM_HELP")`n%cmd%`nexitapp`nWM_HELP()`n{`n MsgBox, 64, Help - %Title%, This is a dummy help message., 3`n}`n 
         FileAppend, %code%`n, %A_Temp%\MsgBoxTest.ahk 
         code = 
-    } else { 
+    } Else { 
         FileAppend, %cmd%`n, %A_Temp%\MsgBoxTest.ahk 
     }    
     Run, "%A_Temp%\MsgBoxTest.ahk", %A_Temp%, UseErrorLevel 
-return 
+Return 
 
 GuiClose: 
 GuiEscape: 
     GoSub, GuiChanged 
     Gui, Hide 
-return 
+Return 
 
 ToggleAlwaysOnTop: 
     alwaysontop := ! alwaysontop 
     Menu, OptionsMenu, ToggleCheck, Always on top 
-    if (alwaysontop) 
+    If (alwaysontop) 
         Gui, +AlwaysOnTop 
-    else 
+    Else 
         Gui, -AlwaysOnTop 
-return 
+Return 
 
 ToggleSuspend: 
     Suspend, Toggle 
     Menu, OptionsMenu, ToggleCheck, Enable Ctrl-Shift-M hotkey 
-return 
+Return 
 
 ToggleTrayTips: 
     ShowTrayTips := ! ShowTrayTips 
     Menu, OptionsMenu, ToggleCheck, Show tray tips 
-    if (ShowTrayTips) 
+    If (ShowTrayTips) 
         GoSub, GuiChanged 
-    else 
+    Else 
         TrayTip 
-return 
+Return 
 
 ToggleBrackets: 
     IncludeBrackets := ! IncludeBrackets 
     Menu, OptionsMenu, ToggleCheck, Include brackets in code 
-    if (ShowTrayTips) 
+    If (ShowTrayTips) 
         GoSub, GuiChanged 
-return 
+Return 
 
 ^+m:: 
     GoSub, GuiChanged 
     GoSub, GenCode 
     SetKeyDelay, 0 
     SendRaw, %code% 
-return 
+Return 
 
 ; **************** GUI 2: Input an option number ************************** 
 
 InputNumber: 
     GoSub, GuiChanged 
     num := InputNumber(val) 
-return 
+Return 
 
 InputNumber(defaultnum) 
 { 
@@ -541,7 +541,7 @@ InputNumber(defaultnum)
     GuiControl, , &%val%, 1 
 
     val := (InputNum & 7) + 1 
-    if (val > 7) { 
+    If (val > 7) { 
         val = 1 
         soundbeep 
     } 
@@ -550,23 +550,23 @@ InputNumber(defaultnum)
     GuiControl, , HelpButton, % round((InputNum & 0x4000) / 0x4000) 
 
     val := round((InputNum & 0x70) / 0x10) 
-    if (val == 0) 
+    If (val == 0) 
         LV_Modify(1, "Select Focus") 
-    else 
+    Else 
         LV_Modify(6 - val, "Select Focus") 
 
     val := InputNum & 0x63000 
-    if (val == 0) 
+    If (val == 0) 
         GuiControl, Choose, WindowVal, 1 
-    else if (val == 0x1000) 
+    Else If (val == 0x1000) 
         GuiControl, Choose, WindowVal, 3 
-    else if (val == 0x2000) 
+    Else If (val == 0x2000) 
         GuiControl, Choose, WindowVal, 2 
-    else if (val == 0x40000) 
+    Else If (val == 0x40000) 
         GuiControl, Choose, WindowVal, 4 
-    else if (val == 0x20000) 
+    Else If (val == 0x20000) 
         GuiControl, Choose, WindowVal, 5 
-    else { 
+    Else { 
         Soundbeep 
         GuiControl, Choose, WindowVal, 1 
     } 
@@ -576,7 +576,7 @@ InputNumber(defaultnum)
 
     GoSub, 2GuiClose 
     GoSub, GuiChanged 
-return 
+Return 
 
 2GuiEscape: 
 2GuiClose: 
@@ -585,4 +585,4 @@ return
     Gui, 1:Default 
     Gui, 1:+LastFound 
     WinActivate 
-return
+Return

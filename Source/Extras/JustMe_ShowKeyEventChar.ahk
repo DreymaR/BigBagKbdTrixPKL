@@ -16,7 +16,7 @@ hKbdHook := DllCall( "SetWindowsHookEx", "int", 0x0D, "uint", RegisterCallback("
 OnExit, UnhookKeyboardAndExit
 Return
 
-;;  if ( A_CaretX == 0 && A_CaretY == 0 ) ; I don't want a Keylogger , but a CharLogger, I want real hotstring comparison, not multisequencedHotKey
+;;  If ( A_CaretX == 0 && A_CaretY == 0 ) ; I don't want a Keylogger , but a CharLogger, I want real hotstring comparison, not multisequencedHotKey
 ;;  but disrupt menu key ( alt, F10 )
 ;;  It's useful to call GetKeyBoardLayout often since it may change (Alt+Shift language change etc)
 LowLevelKeyboardProc(nCode, wParam, lParam) {
@@ -32,9 +32,9 @@ LowLevelKeyboardProc(nCode, wParam, lParam) {
 	log := "" ; "lParam " Format( "{:X}", lParam ) "`n" ; "code " nCode " | event " wParam "`n"
 	log .= "VK " VK "`n"
 	log .= "SC " SC fStr
-	if !( isInj ) { 																	; Only physical input (Injected flag is zero)
+	If !( isInj ) { 																	; Only physical input (Injected flag is zero)
 		theChar := ToUnicodeEx( VK, SC )
-		if ( ( theChar ) && !( keyUp ) ) {  											; If there is a char and it's a KeyDown event...
+		If ( ( theChar ) && !( keyUp ) ) {  											; If there is a char and it's a KeyDown event...
 			log .= "`nChar [" theChar "]"   											; ...log it.
 			Tooltip % log
 		}
@@ -57,7 +57,7 @@ ToUnicodeEx( VK, SC ) { 																; Call the OS layout to translate VK/SC 
 	VarSetCapacity( theChar, 32 )   													; The result may be a buffer with several chars (if so, these are not good here)
 	DK  := DllCall( "ToUnicodeEx", "UInt", VK, "UInt", SC, "UInt", &KeyState, "Str", theChar, "UInt", 64, "UInt", 1, "UInt", HKL)
 	Map := DllCall( "MapVirtualKey", "uint", VK, "uint", 2 ) 							; MapVirtualKey translates/maps VK into SC (0) or char (2), or SC to VK (1/3)
-	if ( DK == 1 ) && ( Map > 0 )   													; Is it the same as AHK's GetKeyName() fn, for this purpose? Used here to detect DKs.
+	If ( DK == 1 ) && ( Map > 0 )   													; Is it the same as AHK's GetKeyName() fn, for this purpose? Used here to detect DKs.
 		Return theChar  																; DK: -1 for DeadKey, 0 for none, 1 for a char, 2+ for several
 }
 

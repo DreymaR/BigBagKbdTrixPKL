@@ -46,12 +46,12 @@ The classic remapping of the form `a::b` actually consists of:
 *a::
 SetKeyDelay -1
 Send {Blind}{b DownR}
-return
+Return
 
 *a up::
 SetKeyDelay -1
 Send {Blind}{b Up}
-return
+Return
 ```
 
 The `DownR` format replaced `DownTemp` with AHK v1.1.27. It tells other Send command to ignore this key's down state.

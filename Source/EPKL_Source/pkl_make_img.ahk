@@ -24,7 +24,7 @@ makeHelpImages() {
 	HIG.OrigImg := pklIniRead( "svgImgTemplate" ,       ,, "hig" )  	; The SVG image template file to use
 	HIG.States  := pklIniRead( "HIG_imgStates", "0:1:6:7",,"hig" )  	; Which shift states, if present, to render
 	onlyMakeDK  := pklIniRead( "dkOnlyMakeThis" ,       ,, "hig" )  	; Remake specified DK imgs (easier to test this var w/o using pklIniCSVs)
-	if ( onlyMakeDK )
+	If ( onlyMakeDK )
 		HIG.ImgDirs[ "dkey" ] := HIG.ImgDirs[ "root" ]
 	HIG.Debug   := pklIniRead( "HIG_DebugMode"  , false ,, "hig" )  	; Debug level: Don't call Inkscape if >= 2, make no files if >= 3.
 	HIG.Brute   := pklIniRead( "HIG_Efficiency" , 0     ,, "hig" )  	; Move images to layout folder if >=1, overwrite current ones if >=2.
@@ -79,16 +79,16 @@ for the current layout, or only the main state images?
 	IfMsgBox, No 					; Make only the state images, not the full set with deadkey images
 		stateImgOnly := true
 	stateImgOnly := ( onlyMakeDK ) ? false : stateImgOnly 		; StateImgOnly overrides DK images, unless DK only is set
-	if not FileExist( HIG.InkPath ) {
+	If not FileExist( HIG.InkPath ) {
 		pklErrorMsg( "You must set a path to a working copy of Inkscape in the Settings file!" )
 		Return
 	}
 	pklSplash( HIG.Title, "Starting...", 2.5 ) 					;MsgBox, 0x41, %HIG.Title%, Starting..., 2.0
-	if ( HIG.Debug < 3 ) {
+	If ( HIG.Debug < 3 ) {
 		try {
 			For dirTag, theDir in HIG.ImgDirs 						; Make directories
 			{
-				if ( dirTag == "dkey" && ( stateImgOnly || onlyMakeDK ) )
+				If ( dirTag == "dkey" && ( stateImgOnly || onlyMakeDK ) )
 					Continue
 				FileCreateDir % theDir
 			}
@@ -109,18 +109,18 @@ for the current layout, or only the main state images?
 	HIG.imgType := "DKSS"
 	HIG.DKNames := ( onlyMakeDK ) ? StrSplit( onlyMakeDK, "," ) : HIG.DKNames
 	For ix, dkName in HIG.DKNames { 							; Dead key loop
-		if ( stateImgOnly )
+		If ( stateImgOnly )
 			Break
 		HIG.imgName := dkName
 		For ix, state in shiftStates
 			hig_makeImgDicThenImg( HIG, state )
 	}
-	if ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call Inkscape
+	If ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call Inkscape
 		Return
 	hig_callInkscape( HIG ) 									; Call Inkscape with all the SVG files at once now
 	sleepTime := 3 												; Time to wait between each file check, in s
 	Loop % 6 {
-		if ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
+		If ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
 			Break
 		pklSplash( HIG.Title, "Waiting for images... " . A_Index * sleepTime . " s", 2.5 )
 		Sleep % sleepTime * 1000
@@ -129,12 +129,12 @@ for the current layout, or only the main state images?
 	FileMove    % HIG.ImgDirs["dkey"] . "\*.svg", % HIG.ImgDirs["raw"]
 	delTmpFiles := pklIniRead( "HIG_DelTmpSVGs" , 0,, "hig" ) 	; 0: Don't delete. 1: Recycle. 2: Delete.
 	delTmpFiles := ( HIG.Brute >= 1 ) ? 2 : delTmpFiles
-	if        ( delTmpFiles == 2 ) {
+	If        ( delTmpFiles == 2 ) {
 		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir
 	} else if ( delTmpFiles == 1 ) {
 		FileRecycle     % HIG.ImgDirs["raw"]
 	}
-	if ( HIG.Brute >= 1 ) {
+	If ( HIG.Brute >= 1 ) {
 		flg := ( HIG.Brute >= 2 ) ? 1 : 0 						; Flag 1: Overwrite existing files
 		FileMove    % HIG.ImgDirs["root"] . "\*.png", % layDir, flg
 		FileCopyDir % HIG.ImgDirs["dkey"] ,  % layDir . dksDir, flg
@@ -145,15 +145,15 @@ for the current layout, or only the main state images?
 }
 
 hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help image by a pdic.
-	if not InStr( HIG.States, Format("{:x}",shSt) ) 			; If this state isn't marked for rendering, skip it (hex comparison)
+	If not InStr( HIG.States, Format("{:x}",shSt) ) 			; If this state isn't marked for rendering, skip it (hex comparison)
 		Return
 	stateImg    := ( HIG.imgType == "ShSt" ) ? true : false 	; Base shift state image
-	if ( HIG.imgType == "DKSS" ) { 								; Dead key shift state image
+	If ( HIG.imgType == "DKSS" ) { 								; Dead key shift state image
 		dkName := HIG.imgName 									; DK name is used here and later
 ;		dkMk := {}
 ;		For ix, rel in [ 0, 1, 4, 5, 6, 7 ] { 					; Loop through DK releases to be marked, see the Deadkeys file
 ;			dkV := DeadKeyValue( dkName, "s" . rel ) 			; Get the DeadKeyValue for the special entries
-;			if dkV
+;			If dkV
 ;				dkMk[ hig_aChr( dkV ) ] := true 				; Base char and comb. accents will be marked
 ;	( dkV == 180 ) ? pklDebug( "`ndkV: " . dkV . "`nrel: " . rel . "`nChr: " Chr(dkV) . "`n1Ch: " hig_aChr(dkV), 6 )  ; eD DEBUG
 ;		}	; end For release
@@ -164,15 +164,15 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 		rel := ""   											; Release mapping
 		tag := ""
 		idKey   := shSt . CO
-		if ( SC == "SC056" && getLayInfo( "Ini_KbdType" ) != "ISO" ) {
+		If ( SC == "SC056" && getLayInfo( "Ini_KbdType" ) != "ISO" ) {
 			Continue 											; Ignore the ISO key on non-ISO images
 		}
 															;;  ################################################################
-		if ( stateImg ) {   								;;  ################  MainLayout shift state image  ################
+		If ( stateImg ) {   								;;  ################  MainLayout shift state image  ################
 															;;  ################################################################
 			ent     :=       getKeyInfo( SC . shSt       )  	; Current layout key/state main entry
 			ents    := ent . getKeyInfo( SC . shSt . "s" )  	; Two-part key/state entry
-			if ( not ent ) {
+			If ( not ent ) {
 				Continue
 			} else if ( ent == "@" ) { 							; Entry is a DeadKey; was "dk"
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
@@ -194,7 +194,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 				tag := HIG.MkRepet
 			} else if ( ent == "©" ) {  						; Compose/Context key
 				dkName := getKeyInfo( "@co0" )  				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_CoDeKey_0.
-				if ( dkName )
+				If ( dkName )
 					HIG.DKNames[ "co0" ] := dkName  			; Add it to the DK list so its help images are generated.
 				rel := Chr( HIG.ChComps )
 				tag := HIG.MkComps
@@ -207,7 +207,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 															;;  ################################################################
 			ent     := HIG.ImgDic[ idKey ]  					; Here, the entry is the base for the DK entry
 			rel     := DeadKeyValue( dkName, ent )  			; Get the DeadKeyValue for the current state/key...
-			if ( not ent || not rel )
+			If ( not ent || not rel )
 				Continue
 			tag     := DkMk.HasKey( hig_aChr(rel) ) 
 						? "MrkdDK" : "" 						; The DKVal is in the base/mark list, so mark it for display
@@ -220,20 +220,20 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nidKey: " . idKey . "`nent: " . ent . "`nents: " . ents . "`nrel: " . rel . "`ntag: " . tag . "`nChr: " Chr(rel), 6 )  ; eD DEBUG
 	}	; end For CO, SC
 	
-	if ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
+	If ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
 	;;  ====================================================================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "
-	if ( HIG.Empty ) {
+	If ( HIG.Empty ) {
 		pklSplash( HIG.Title, "Layout " . HIG.imgMake . "`n" . preName . "state" . shSt . "`nempty - skipping.", 1.5 )
 		Return
 	} else {
 		pklSplash( HIG.Title, "Making " . HIG.imgMake . " image for:`n`n" . preName . "state" . shSt . "`n", 2.0 )
 	}
 	
-	if ( stateImg ) {
+	If ( stateImg ) {
 		indx    := shSt
 		imgName := HIG.imgName . shSt
 	} else { 													; e.g., "dk_breve"
@@ -243,7 +243,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	}
 	svgFile     := HIG.destDir . "\" . imgName . ".svg" 		; Was in HIG.ImgDirs["raw"] but multi-file call can't specify different destination paths
 	
-	if not tempImg := pklFileRead( HIG.OrigImg, "SVG template" )
+	If not tempImg := pklFileRead( HIG.OrigImg, "SVG template" )
 		Return
 	;;  Constants used in image search-n-replace below are defined outside the `For CO,SC` loop for speed
 ;	imgLen  := StrLen( tempImg ) 							; Should be around 159,509 characters for my SVG template
@@ -259,12 +259,12 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 		idKey   := indx . CO
 		chrVal  := HIG.ImgDic[ idKey       ]
 		chrTag  := HIG.ImgDic[ idKey . "¤" ] 					; Tags such as "DK_Key" for a Dead Key
-		if ( not chrVal ) { 									; Empty entry
+		If ( not chrVal ) { 									; Empty entry
 			aChr := "" 											; Alpha layer char
 			dChr := "" 											; DKey layer char (mark, by default bold yellow)
 		} else if ( chrTag == "DK_Key" ) {  					; Dead key (full dk Name, or classic name if used)
 			dkD1 := DeadKeyValue( chrVal, "disp0" ) 			; There may be a display tag entry
-			if ( dkD1 ) {
+			If ( dkD1 ) {
 				aChr := SubStr( dkD1, 2, -1 )   				; A display entry will be enclosed in, e.g., «».
 			} else {
 				dkD1 := DeadKeyValue( chrVal, "disp1" ) 			; Get the display base char for the dead key
@@ -272,7 +272,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 				comb := hig_combAcc( dkD1 ) ? " " : "" 				; Pad combining accents w/ a space for better display
 				aChr := comb . hig_makeChr( dkD1 ) 					; Note: Padding may lead to unwanted lateral shift
 				dkD2 := DeadKeyValue( chrVal, "disp2" ) 			; Get the alternate display base char, if it exists
-				if ( dkD2 ) && ( dkD2 != dkD1 ) { 					; If there is a second display char, show both
+				If ( dkD2 ) && ( dkD2 != dkD1 ) { 					; If there is a second display char, show both
 					comb := hig_combAcc( dkD2 ) ? " " : ""  		; Note: Padding works well for some but not others.
 					aChr := aChr . comb . hig_makeChr( dkD2 )
 				}
@@ -314,9 +314,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 ;;		tmp := ( aChr ) ? tmp . "`n" . CO . " - " . fsSz . ": '" . aChr . "'" : tmp
 	}	; end For CO,SC in PngDic
 ;;		( 1 ) ? pklDebug( "" . tmp, 30 )  ; eD DEBUG
-	if ( HIG.Debug >= 3 )   	; eD DEBUG: Don't make files
+	If ( HIG.Debug >= 3 )   	; eD DEBUG: Don't make files
 		Return
-	if not pklFileWrite( tempImg, svgFile   					; Save the changed image file in a temp folder
+	If not pklFileWrite( tempImg, svgFile   					; Save the changed image file in a temp folder
 						, "temporary SVG file" ) 				; Note: Inkscape SVG is UTF-8, w/ Linux line endings
 		Return
 	HIG.inkFile.Push( svgFile ) 								; In Inkscape v1.0, the "--file" option is gone, but multiple files can be used
@@ -324,7 +324,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 
 hig_aChr( ent ) {   											; Get a single-character entry in various formats (number, hex, prefix syntax)
 	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
-	if ( not ent + 0 )  										; Non-numeric entry
+	If ( not ent + 0 )  										; Non-numeric entry
 		ent := ( StrLen(ent) == 1 ) ? Ord(ent) : "" 			; Convert single-char literals to their ordinal value
 	Return  ent 												; Longer entries would be converted to ""
 }
@@ -332,7 +332,7 @@ hig_aChr( ent ) {   											; Get a single-character entry in various formats
 hig_ParsePrefix( ByRef ent ) {  					  			; Check for tag or prefix-entry syntax, without sending
 	psp     := pkl_ParseSend( ent, "HIG" )  					; Will return a prefix only if one is recognized
 	ntry    := SubStr( ent, 2 ) 								; This function may change the value of ent
-	if        hig_tag( ent ) {  								; Specified `«#»` HIG tag for display
+	If        hig_tag( ent ) {  								; Specified `«#»` HIG tag for display
 		psp := "Ħ"
 		ent := hig_tag( ent )
 	} else if InStr( "~†", psp ) {  							; ~ : Hex Unicode point U+####
@@ -349,7 +349,7 @@ hig_ParsePrefix( ByRef ent ) {  					  			; Check for tag or prefix-entry syntax
 hig_parseEntry( ByRef HIG, ent ) {  							; Parse a state or DK mapping for help image display
 	naChr   := Chr( HIG.MkNaChr )   							; Not-a-char mark, default U+25AF Rect.
 	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
-	if ( psp && psp != "Ħ" ) {  ;InStr( "*α=β@Ð&¶", psp ) { 	; AHK string(*α), Blind send(=β), DK(@Ð), PwrString(&¶)
+	If ( psp && psp != "Ħ" ) {  ;InStr( "*α=β@Ð&¶", psp ) { 	; AHK string(*α), Blind send(=β), DK(@Ð), PwrString(&¶)
 		ent := "·" . psp . "·"  								; Show untagged prefix-entries as the prefix between dots
 ;	} 	; end if psp 		; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
 	} else if ( not isInt(ent) ) {  							; eD WIP: Must not mark "dc_" keys here! Add if else to the above?
@@ -414,9 +414,9 @@ hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
 hig_tag( ent, retur := "tag" ) {    							; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
 	tag := false
 	pre := SubStr( ent, 1, 1 )
-	if ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images
+	If ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images
 		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`
-		if ( pos ) {
+		If ( pos ) {
 			tag :=       SubStr( ent, 2, pos - 2 )
 			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
 		} else {

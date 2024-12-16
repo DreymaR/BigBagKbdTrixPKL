@@ -37,7 +37,7 @@ init_Settings_UI() {    										; Initialize UI globals (run once by pkl_init;
 		keyRow  := RegExReplace( rawRow, "[|]{2}.*", "|" )  	; Delete any mappings after a double pipe, as...
 		keyRow  := RegExReplace( keyRow, "[ `t]*" ) 			;   ...these are advanced and clutter up the selector
 		keyRow  := ( row == 1 ) ? keyRow . "BSP|" : keyRow 		; The KLM map has Backspace on row 0 beyond the ||.
-		if ( row > 0 )  										; Only show row 1-4 in the DDLs
+		If ( row > 0 )  										; Only show row 1-4 in the DDLs
 			ui.KLMs[ row ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	; Split by pipe
 	}	; end For KLM codes
 	ui.SEnt := "System|VKey|Disabled|Unmapped|" 				; Single-Entry key mappings
@@ -46,7 +46,7 @@ init_Settings_UI() {    										; Initialize UI globals (run once by pkl_init;
 pklSetUI() { 													; EPKL Settings GUI
 	pklAppName  := getPklInfo( "pklName" )
 	winTitle    := "EPKL Settings"
-	if WinActive( winTitle ) {  								; Toggle the GUI off if it's the active window
+	If WinActive( winTitle ) {  								; Toggle the GUI off if it's the active window
 		GUI, UI: Destroy
 		Return
 	}
@@ -72,9 +72,9 @@ pklSetUI() { 													; EPKL Settings GUI
 		mLSI     := getLayStrInfo( line )   								; 1) LayMain, 2) 3LA (3-letter-abbreviation) 3) string/LayDir 3LA
 		main    := mLSI[1]
 ;		rest    := SubStr( line, StrLen( main ) + 2 )
-		if InArray( choices, main ) || ( InStr( main, "_" ) == 1 )  		; Any LayMain will be ignored if starting with `_`.
+		If InArray( choices, main ) || ( InStr( main, "_" ) == 1 )  		; Any LayMain will be ignored if starting with `_`.
 			Continue
-		if ( mLSI[2] != mLSI[3] )   										; If the LayDir doesn't start with the LayMain's 3LA, ignore it.
+		If ( mLSI[2] != mLSI[3] )   										; If the LayDir doesn't start with the LayMain's 3LA, ignore it.
 			Continue
 		choices.Push( main )
 	}
@@ -251,7 +251,7 @@ UIselLay:   													; Handle UI Layout selections
 		dirPart := StrSplit( theDir, "\" )
 		If ( InStr( theDir, main . "\" . mNidl ) == 1 ) 		; Make a list of layout folders for this LayMain...
 		&& ( dirPart[4] == "" ) {   							; ...of right format and no less than two subdirs deep.
-			if not RegExMatch( theDir, mNidl . ".+_" )  		; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
+			If not RegExMatch( theDir, mNidl . ".+_" )  		; '3LA-<LayType>[-<LayVar>]_<KbdType>[_<LayMods>]'
 				Continue 										; Layout folders have a name on the form 3LA-LT[-LV]_KbT[_Mods]
 			If ( dirPart[3] == "" ) {   						; Layout folders may reside in variant folders
 				layDirs.Push( dirPart[2] )  	; eD WIP: Just leave mainDir on? 	; SubStr( theDir, StrLen( main ) + 2 )
@@ -266,7 +266,7 @@ UIselLay:   													; Handle UI Layout selections
 	} 	; end For LayDirs
 ;	( 1 ) ? pklDebug( "Listing for " . main . "`n" . tmp, 5 )   		; eD DEBUG
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, mNidl  )  	; Get the available Layout Types for the chosen Main Layout
-	if inArray( layTyps, "eD" )
+	If inArray( layTyps, "eD" )
 		layTyps.InsertAt( inArray(layTyps,"eD"), "eD2VK" )  	; The special ##2VK layType reads a state-mapped BaseLayout as VK mapped
 	_uiControl( "LayType", _uiPipeIt( layTyps, 1 ) ) 			; Update the LayType list (eD, VK)
 	ui_layTyp3  := ( UI_LayType == "eD2VK" ) ? "eD" : UI_LayType
@@ -352,19 +352,19 @@ UIselKey:   													; Handle UI Key Mapping selections
 			:   ( case == 6 ) ? UI_KeyCodV
 			:                   " --"
 	_uiControl( "KeyLine", mapping )
-	if InStr( "126", case ) {   								; These key types don't use the modifier controls
+	If InStr( "126", case ) {   								; These key types don't use the modifier controls
 		GuiControl, Disable , UI_KeyModL 						; Modifier controls
 		GuiControl, Disable , UI_KeyModN
 	} else {
 		GuiControl, Enable  , UI_KeyModL
 		GuiControl, Enable  , UI_KeyModN
 	} 	; if VK/State/Single
-	if InStr( "36", case ) {
+	If InStr( "36", case ) {
 		GuiControl, Disable , UI_KeyRowV 						; VK row control
 	} else {
 		GuiControl, Enable  , UI_KeyRowV
 	} 	; if Mod/Single
-	if ( case == 3 ) {
+	If ( case == 3 ) {
 		GuiControl, Disable , UI_KeyCodV 						; VK code control
 	} else {
 		GuiControl, Enable  , UI_KeyCodV
@@ -492,7 +492,7 @@ _uiControl( var, values ) { 									; Update an UI Control with new values and,
 	var := "UI_" . var  										; Name of the global UI var
 	val := %var% 												; Content of the UI var
 	GuiControl, , %var%, %values% 								; This also works for edit/text controls
-	if InStr( values, val ) { 									; Try to keep the chosen option in a DDL, or take the first choice
+	If InStr( values, val ) { 									; Try to keep the chosen option in a DDL, or take the first choice
 		GuiControl, ChooseString, %var%, %val%
 	} else {
 		GuiControl, Choose      , %var%, 1
@@ -501,7 +501,7 @@ _uiControl( var, values ) { 									; Update an UI Control with new values and,
 }
 
 _uiAddEdt( iTxt, var, opts, editTxt, pos := "" ) {  			; Add an Edit box with text
-	if ( iTxt ) {
+	If ( iTxt ) {
 		GUI, UI:Add, Text,           %pos% , % iTxt
 	}
 	GUI, UI:Add, Edit, vUI_%var% %opts%, % editTxt
@@ -509,7 +509,7 @@ _uiAddEdt( iTxt, var, opts, editTxt, pos := "" ) {  			; Add an Edit box with te
 
 _uiAddSel( iTxt, var, opts, listArr, pos := "", typ := "DDL" ) {    	; Add a DropDownList selection box with text and some choices
 	listStr := _uiPipeIt( listArr, 0, 0 )
-	if ( iTxt ) {
+	If ( iTxt ) {
 		GUI, UI:Add, Text, %pos%, % "" . iTxt 					; Whitespace pad the text a little?
 	} else {
 		opts .= " " . pos
@@ -525,7 +525,7 @@ _uiGetLayDirs() {   											; Get a list of all Layouts directories, as an ar
 	Loop, Files, % layDir . "\*", DR    						; Recursively find all subdirectories of layDir
 	{
 		theDir := A_LoopFileFullPath    						; For AHK v1.1.28+, A_LoopFilePath may be a better name
-		if ( SubStr( theDir, 1, 1 ) != "_" ) && FileExist( theDir . "\" . layFiNa )
+		If ( SubStr( theDir, 1, 1 ) != "_" ) && FileExist( theDir . "\" . layFiNa )
 			dirs.Push( SubStr( theDir, StrLen(layDir)+2 ) ) 	; Return directory paths without the initial layDir part
 	}
 	Return dirs 												; All subdirectories of "Layouts" containing a "Layout.ini" file
@@ -536,7 +536,7 @@ _uiPipeIt( listArr, sort := 0, clear := 1 ) {   				; Convert an array to a pipe
 		pipe        := ( listStr ) ? "|" : ""
 		listStr     .= pipe . elem
 	}	; end For
-	if sort
+	If sort
 		Sort, listStr, D| U 									; Sort options: U - Unique, D# - use # as delimiter
 	listStr := ( clear ) ? "|" . listStr : listStr 				; Prepend "|" if replacing the list
 	Return listStr
@@ -549,11 +549,11 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn := 0, needle := "" ) {
 		splitMN := StrSplit( splitUS[splitUSn], "-" )
 		match   := ( splitMNn ) ? splitMN[splitMNn] : splitUS[splitUSn]
 		match   := ( match ) ? match : ui.NA 					; If there isn't a third part, there's no variant/mods
-		if ( needle ) { 										; Check if this match works with the other chosen ones
-			if not RegExMatch( item, needle ) 					; InStr( item, needle ) for a simple search
+		If ( needle ) { 										; Check if this match works with the other chosen ones
+			If not RegExMatch( item, needle ) 					; InStr( item, needle ) for a simple search
 				Continue
 		} 	; end if needle
-		if not inArray( theList, match ) 						; Add the match if it isn't added yet
+		If not inArray( theList, match ) 						; Add the match if it isn't added yet
 			theList.Push( match )
 	}	; end For
 	Return theList  											; Return an array of the relevant layout settings
@@ -586,7 +586,7 @@ _uiSubmit( parset ) {   										; WriteOverride calls for several sets of the 
 	For ix, pr in parset {
 		_uiWriteOverride( pr[1], pr[2], pr[3], pr[4], pr[5] ) 	; key_entry, module, section, ovrFile, ovrPath
 	}	; end For pars
-	if ( ui.Written )
+	If ( ui.Written )
 		_uiMsg_RefreshPKL()
 }
 
@@ -605,16 +605,16 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 	ovrFile :=           ovrFile . "_Override"
 	ovrPath := ovrPath . ovrFile    							; The ovrPath is nothing if its file is at root; must end with "\" if not.
 	tplFile :=           ovrFile . "_Example"   				; All override templates are now at EPKL root by default, so no need for tplPath here.
-	if not FileExist( ovrPath . ini ) { 						; If there isn't an Override file...
-		if ( not revert ) { 	; ( tplFile && not revert ) { 	; ...ask whether to generate one from a template.
-			if _uiMsg_MakeFile( module, ovrFile, tplFile ) {
-				if not tmpFile := pklFileRead( tplFile . ini ) 	; Try to read the override template
+	If not FileExist( ovrPath . ini ) { 						; If there isn't an Override file...
+		If ( not revert ) { 	; ( tplFile && not revert ) { 	; ...ask whether to generate one from a template.
+			If _uiMsg_MakeFile( module, ovrFile, tplFile ) {
+				If not tmpFile := pklFileRead( tplFile . ini ) 	; Try to read the override template
 					Return false
 				laySect := "`r`n[layout]`r`n"
 				laySect := InStr( tmpFile, laySect ) ? laySect : ""
 				tmpFile := RegExReplace( tmpFile, "s)\R\[pkl\]\R\K.*" )
 				tmpFile .= laySect  							; Start out with the template header, but empty [pkl] and [layout] sections
-				if not pklFileWrite( tmpFile, ovrPath . ini ) 	; Try to write the override file
+				If not pklFileWrite( tmpFile, ovrPath . ini ) 	; Try to write the override file
 					Return false
 			} else {
 				Return false
@@ -626,7 +626,7 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 	} 	; end if not FileExist ovrPath
 	pklIniKeyVal( key_entry, key, entry )   					; Split the "key = entry" line
 	makeLine := false   										; Make the new line and tidy up old ones, ...
-	if revert { 												; ...or revert all previous changes.
+	If revert { 												; ...or revert all previous changes.
 		ms1 := "Reset Override?"
 		ms2 := "Reset"
 		ms3 := "Revert this UI generated setting to default:`n`n" . key
@@ -635,9 +635,9 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 		ms2 := "Submit"
 		ms3 := "Write this setting override:`n`n" . key . " = " . entry
 	} 	; end if revert
-	if not _uiMsg_Override( ms1, ms2, ms3, section, ovrFile ) 	; Write override, if desired and possible
+	If not _uiMsg_Override( ms1, ms2, ms3, section, ovrFile ) 	; Write override, if desired and possible
 		Return false
-	if not tmpFile := pklFileRead( ovrPath . ini )  			; The standard IniWrite writes to the end of the section. We want the start.
+	If not tmpFile := pklFileRead( ovrPath . ini )  			; The standard IniWrite writes to the end of the section. We want the start.
 		Return false
 	FileDelete, % ovrPath . ini 								; In order to rewrite the file and not just append to it, it must be deleted.
 	maxEntr := revert ? 0 : 4 									; Delete old UI entries with the same key over this number.
@@ -646,14 +646,14 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 	rows    := ""
 	count   := 0
 	For ix, row in StrSplit( tmpFile, "`r`n" ) { 				; Parse the file by rows (could use "`n", "`r" )
-		if ( InStr( row, "[" . section . "]" ) == 1 ) { 		; We're in the right section
+		If ( InStr( row, "[" . section . "]" ) == 1 ) { 		; We're in the right section
 			inSect := ix 		; true
 		} else if ( inSect ) { 	; && ix > inSect
-			if RegExMatch( row, "\[.+\]" ) { 					; Start of next section 	; ( InStr( row, "[" ) == 1 )
+			If RegExMatch( row, "\[.+\]" ) { 					; Start of next section 	; ( InStr( row, "[" ) == 1 )
 				inSect := false
 			}
-			if ( InStr( row, comText ) && InStr( row, key . " = " ) ) {
-				if ( count++ >= maxEntr ) 						; Only count UI generated lines with the same key
+			If ( InStr( row, comText ) && InStr( row, key . " = " ) ) {
+				If ( count++ >= maxEntr ) 						; Only count UI generated lines with the same key
 					Continue 									; Delete/skip old lines if too many
 				row := ( SubStr( row, 1, 1 ) == a_SC ) ? row : a_SC . row 	; Comment out old submitted lines
 			} 	; end if InStr
@@ -661,12 +661,12 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 		rows := rows . "`r`n" . row
 	}	; end For row
 	tmpFile := SubStr( rows, 3 ) 								; Lop off the initial line break from 'rows =' above
-	if not revert {
+	If not revert {
 		entry   := key . " = " . entry . " `t`t" . comText . thisMinute()
 		secStrt := "s)\R\[" . section . "\]" 					; s: Match including line breaks
 		tmpFile := RegExReplace( tmpFile, secStrt . "\R\K(.*)", entry . "`r`n$1" )
 	}
-	if pklFileWrite( tmpFile, ovrPath . ini )   				; Write/revert the override
+	If pklFileWrite( tmpFile, ovrPath . ini )   				; Write/revert the override
 		ui.Written  := true  									; Files were changed, so ask whether to refresh EPKL
 } 	; end fn UI WriteOverride
 

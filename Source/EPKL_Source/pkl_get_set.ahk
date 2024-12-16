@@ -42,7 +42,7 @@ setPklInfo( key, val )
 getKeyInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
-	if ( set == 1 )
+	If ( set == 1 )
 		pdic[key]   := val
 	Return pdic[key]
 }
@@ -50,7 +50,7 @@ getKeyInfo( key, val := "", set := 0 )
 getLayInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
-	if ( set == 1 )
+	If ( set == 1 )
 		pdic[key]   := val
 	Return pdic[key]
 }
@@ -58,7 +58,7 @@ getLayInfo( key, val := "", set := 0 )
 getPklInfo( key, val := "", set := 0 )
 {
 	static pdic     := {}
-	if ( set == 1 )
+	If ( set == 1 )
 		pdic[key]   := val
 	Return pdic[key]
 }
@@ -73,7 +73,7 @@ pkl_locale_load( lang )
 {
 	static initialized  := false 	; Defaults are read only once, as this function is run on layout change too 	; eD WIP: Does that really work, or matter?
 	
-	if ( not initialized ) {    								; Read/set default locale string list
+	If ( not initialized ) {    								; Read/set default locale string list
 		For ix, sectName in [ "DefaultLocaleStr", "DefaultLocaleTxt" ] { 	; Read defaults from the EPKL_Tables file
 			For ix, row in pklIniSect( getPklInfo( "File_PklDic" ), sectName ) { 	; Read default locale strings (key/value)
 				pklIniKeyVal( row, key, val, 1 ) 				; Extraction with \n escape replacement
@@ -85,11 +85,11 @@ pkl_locale_load( lang )
 	
 	file := lang . ".ini"
 	file := ( bool(pklIniRead("compactMode")) ) ? file : "Files\Languages\" . file
-	if not FileExist( file ) 									; If the language file isn't found, we'll just use the defaults
+	If not FileExist( file ) 									; If the language file isn't found, we'll just use the defaults
 		Return
 	For ix, row in pklIniSect( file, "pkl" ) { 					; Read the main locale strings frome the PKL section
 		pklIniKeyVal( row, key, val, 1 ) 						; A more compact way than before (but still in a loop)
-		if ( val != "" ) { 						; LocStr_ 00-22,LaysSetts,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
+		If ( val != "" ) { 						; LocStr_ 00-22,LaysSetts,AHKeyHist,MakeImage,ImportKLC,ZoomImage,MoveImage,RefreshMe...
 			key := ( key <= 9 ) 
 					? SubStr("00" . key, -1) : key 				; If key is #, zero pad it to 0# instead
 			setPklInfo( "LocStr_" . key , val ) 				; pklLocaleStrings( key, val, 1 )
@@ -116,11 +116,11 @@ _getHotkeyText( hk, localehk := "", set := 0 )
 {
 	static localizedHotkeys := ""
 	
-	if ( set == 1 ) {
+	If ( set == 1 ) {
 		setKeyInfo( "HKtxt_" . hk, localehk )
 		localizedHotkeys    .= " " . hk
 	} else {
-		if ( hk == "all" )
+		If ( hk == "all" )
 			Return localizedHotkeys
 		Return getKeyInfo( "HKtxt_" . hk )
 	}
@@ -164,7 +164,7 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all detected ©-keys
 	static initialized  := false
 	
-	if ( not initialized ) {
+	If ( not initialized ) {
 		cmpFile := getPklInfo( "CmposrFile" )
 		cmpStck := getPklInfo( "CmposrStck" )
 		CDKs    := pklIniCSVs( "CoDeKeys"     ) 				; An array of which named Compose keys are CoDeKeys – Compose+DeadKeys.
@@ -183,7 +183,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		initialized := true
 	}
 	
-	if compKeys.IsEmpty()
+	If compKeys.IsEmpty()
 		Return
 	usedTables  := {} 											; Array of the compose tables in use, with sendBS info
 	cmpKeyTabs  := {} 											; Array of table arrays for each ©-key
@@ -191,12 +191,12 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 		tables  := pklIniCSVs( cmpKey, , cmpStck, "compose-tables" )
 		For ix, sct in tables { 									; [ "+dynCmk", "x11" ] etc.
 			sendBS      := 1
-			if ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
+			If ( SubStr( sct, 1, 1 ) == "+" ) { 					; Non-eating Compose sections are marked with a "+" sign
 				sct     := SubStr( sct, 2 )
 				tables[ ix ] := sct 								; Rewrite this tables entry without the "+" sign.
 				sendBS  := 0 										; Don't send Backspaces before the compose entry
 			}
-			if usedTables.HasKey( sct ) {
+			If usedTables.HasKey( sct ) {
 				Continue 											; This table was already read in, so proceed to the next one for this key
 			} else {
 				usedTables[ sct ] := sendBS 						; compTables[ section ] contains the sendBS info for that table section
@@ -206,14 +206,14 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			} 	; end for seqLens
 			For ix, mapFile in cmpStck { 							; Read from the LayStack+1
 				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
-					if ( row == "" )
+					If ( row == "" )
 						Continue
 					pklIniKeyVal( row, key, val ) 						; Compose table key,val pairs
-					if ( RegExMatch(key,"U[[:xdigit:]]{4}") != 1 ) { 	; The key is a sequence of characters instead of a sequence of hex strings
+					If ( RegExMatch(key,"U[[:xdigit:]]{4}") != 1 ) { 	; The key is a sequence of characters instead of a sequence of hex strings
 						kyt := ""
 						kys := ""
 						For ix, chr in StrSplit( key ) { 				; Format the character string to a U####[_U####]* key
-							if ( ix == 1 ) { 
+							If ( ix == 1 ) { 
 								cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
 							} else {
 								cht := chr
@@ -226,7 +226,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 					} 	; end if string
 					dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
 					keyArr%len%[key] := val
-					if ( kyt && keyArr%len%[kyt] == "" ) 				; Only write the Titlecase entry if previously undefined.
+					If ( kyt && keyArr%len%[kyt] == "" ) 				; Only write the Titlecase entry if previously undefined.
 						keyArr%len%[kyt] := val
 				} 	; end for row
 			} 	; end for mapFile
@@ -243,7 +243,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 
 lastKeys( cmd, chr := "" ) {    									; Manipulate the LastKeys array of previously sent characters for Compose
 	lastKeys := getKeyInfo( "LastKeys" )  							; A link to the actual LastKeys array (not a copy)
-	if        ( cmd == "push" ) { 									; Push one key to the lastKeys buffer
+	If        ( cmd == "push" ) { 									; Push one key to the lastKeys buffer
 		lastKeys.Push( chr )
 		lastKeys.RemoveAt( 1 )
 	} else if ( cmd == "pop1" ) { 									; Remove the last entry in lastKeys (after Backspace presses)
