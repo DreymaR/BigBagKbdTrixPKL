@@ -569,7 +569,8 @@ VERSION HISTORY:
 		- InkScape v1.3 (2023-07) had a bug affecting batch export. Fixed in later versions. The HIG works w/ the standalone v1.2.1 install.
 	- Tweaked the dialog GUI and several settings' names for the HIG, to hopefully be a little more descriptive.
 	- Reworked Ext-tap DK layers. The URL and BBC tags weren't universally useful, somewhat unintuitive and better solved as sequences anyway.
-		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around. Still uncertain about symbols for these layers, due to ToM timing.
+		- Still not happy with symbols for these layers, due to ToM timing. The only symbol kept for now is the hard-to-reach exclamation mark.
+		- Instead, added Ctrl+W/S/etc shortcuts, and moved some old shortcuts around.
 		- Added WheelUp/Dn to Ext-tap, on the same keys as on Ext (Cmk W/R). Moves on Cmk: `Cap` Pp → Ll, `^w` Ww → Pp, `w³?` L → U.
 			- This is handy for scrolling (web) pages, in conjunction with the other Ext/Ext-Tap MouseWheel and PgUp/Dn mappings.
 	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.
