@@ -541,7 +541,7 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.4.2: Layout/Settings enhancements. Ext mapping format. Ext-tap rework.
+* EPKL v1.4.2: Layout/Settings enhancements. Key mapping reworks.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
@@ -586,3 +586,5 @@ VERSION HISTORY:
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
+	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
+	

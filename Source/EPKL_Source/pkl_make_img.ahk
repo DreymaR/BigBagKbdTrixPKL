@@ -131,7 +131,7 @@ for the current layout, or only the main state images?
 	delTmpFiles := ( HIG.Brute >= 1 ) ? 2 : delTmpFiles
 	If        ( delTmpFiles == 2 ) {
 		FileRemoveDir   % HIG.ImgDirs["raw"], 1 				; Recurse = 1 to remove files inside dir
-	} else if ( delTmpFiles == 1 ) {
+	} Else If ( delTmpFiles == 1 ) {
 		FileRecycle     % HIG.ImgDirs["raw"]
 	}
 	If ( HIG.Brute >= 1 ) {
@@ -162,7 +162,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	For CO, SC in HIG.PngDic
 	{
 		rel := ""   											; Release mapping
-		tag := ""
+		mrk := ""   											; Mark for special releases
 		idKey   := shSt . CO
 		If ( SC == "SC056" && getLayInfo( "Ini_KbdType" ) != "ISO" ) {
 			Continue 											; Ignore the ISO key on non-ISO images
@@ -170,54 +170,57 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 															;;  ################################################################
 		If ( stateImg ) {   								;;  ################  MainLayout shift state image  ################
 															;;  ################################################################
-			ent     :=       getKeyInfo( SC . shSt       )  	; Current layout key/state main entry
-			ents    := ent . getKeyInfo( SC . shSt . "s" )  	; Two-part key/state entry
+			dicName := SC . shSt    							; Current layout key/state dictionary key
+			ent     :=       getKeyInfo( dicName       )    	; Main entry/prefix
+			ents    := ent . getKeyInfo( dicName . "s" )    	; Two-part key/state entry
+			HIG.Tag :=       getKeyInfo( dicName . "Ħ" )    	; HIG «» tag, if present
 			If ( not ent ) {
 				Continue
-			} else if ( ent == "@" ) { 							; Entry is a DeadKey; was "dk"
+			} Else If ( ent == "@" ) { 							; Entry is a DeadKey; was "dk"
 				dkName := getKeyInfo( ents ) 					; Get the true name of the dead key
 				HIG.DKNames[ ents ] := dkName 					; eD TODO: Support chained DK. How? By using a DK list instead of this?
 				rel := dkName
-				tag := "DK_Key"
-			} else if RegExMatch( ents, "i).*(space|spc).*" ) { 	; Note: As Spc is stored as 32, this isn't needed for normal entries.
+				mrk := "DK_Key"
+			} Else If RegExMatch( ents, "i).*(space|spc).*" ) { 	; Note: As Spc is stored as 32, this isn't needed for normal entries.
 				rel := 32 										; Space may be stored as (&)spc or ={space}; if so, show it as a space
-			} else if ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", shSt ) ) {
+			} Else If ( getKeyInfo( SC . "tom" ) ) && ( InStr( "0:1", shSt ) ) {
 				rel := ent
-				tag := HIG.MkTpMod  							; Mark Tap-or-Mod keys, for state 0:1
-			} else if ( ent == -2 ) { 							; VKey state entry
+				mrk := HIG.MkTpMod  							; Mark Tap-or-Mod keys, for state 0:1
+			} Else If ( ent == -2 ) { 							; VKey state entry
 				key := GetKeyName( SubStr( ents, 3 ) )
 				fmt := ( shSt == 1 ) ? "{:U}" : "{:L}"  		; Upper/Lower case
 				rel := Ord( Format( fmt , key ) ) 				; Use the glyph's ordinal number as entry
-				tag := ""
-			} else if ( ent == "®" ) {  						; Repeat key
+				mrk := ""
+			} Else If ( ent == "®" ) {  						; Repeat key
 				rel := Chr( HIG.ChRepet )
-				tag := HIG.MkRepet
-			} else if ( ent == "©" ) {  						; Compose/Context key
+				mrk := HIG.MkRepet
+			} Else If ( ent == "©" ) {  						; Compose/Context key
 				dkName := getKeyInfo( "@co0" )  				; Special Compose-Deadkey (CoDeKey) DK, if used. By default dk_CoDeKey_0.
 				If ( dkName )
 					HIG.DKNames[ "co0" ] := dkName  			; Add it to the DK list so its help images are generated.
 				rel := Chr( HIG.ChComps )
-				tag := HIG.MkComps
-			} else {
-				rel := hig_parseEntry( HIG, ents )  			; Prepare the entry for display vis-a-vis HIG «» tags
-				tag := ""
+				mrk := HIG.MkComps
+			} Else {
+				rel := hig_parseEntry( HIG, ents )  			; Prepare the entry for display vis-a-vis HIG «» and prefix tags
+				mrk := ""
 			}
 															;;  ################################################################
-		} else { 											;;  ################   Dead key shift state image   ################
+		} Else { 											;;  ################   Dead key shift state image   ################
 															;;  ################################################################
 			ent     := HIG.ImgDic[ idKey ]  					; Here, the entry is the base for the DK entry
-			rel     := DeadKeyValue( dkName, ent )  			; Get the DeadKeyValue for the current state/key...
+			rel     := DeadKeyValue( dkName, ent )  			; Get the DeadKeyValue for the current state/key, whether pre-read or not
+			HIG.Tag := getKeyInfo( "DKval_" . dkName . "_" . ent . "Ħ" )
 			If ( not ent || not rel )
 				Continue
-			tag     := DkMk.HasKey( hig_aChr(rel) ) 
+			mrk     := DkMk.HasKey( hig_aChr(rel) ) 
 						? "MrkdDK" : "" 						; The DKVal is in the base/mark list, so mark it for display
-			rel     := hig_parseEntry( HIG, rel )   			; Prepare the entry for display vis-a-vis HIG «» tags
+			rel     := hig_parseEntry( HIG, rel )   			; Prepare the entry for display vis-a-vis HIG «» and prefix tags
 			idKey   := dkName . "_" . idKey
 		}	; end if imgName
 		HIG.Empty   := ( rel ) ? false : HIG.Empty  			; If rel is something, the layer isn't empty anymore
 		HIG.ImgDic[ idKey       ]  := rel   					; Store the release value for this (DK/)state/key
-		HIG.ImgDic[ idKey . "¤" ]  := tag   					; Store the tag            --"--
-	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nidKey: " . idKey . "`nent: " . ent . "`nents: " . ents . "`nrel: " . rel . "`ntag: " . tag . "`nChr: " Chr(rel), 6 )  ; eD DEBUG
+		HIG.ImgDic[ idKey . "¤" ]  := mrk   					; Store the display mark  --"--
+	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nidKey: " . idKey . "`nent: " . ent . "`nents: " . ents . "`nrel: " . rel . "`nmark: " . mrk . "`nChr: " Chr(rel), 6 )  ; eD DEBUG
 	}	; end For CO, SC
 	
 	If ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
@@ -229,14 +232,14 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 	If ( HIG.Empty ) {
 		pklSplash( HIG.Title, "Layout " . HIG.imgMake . "`n" . preName . "state" . shSt . "`nempty - skipping.", 1.5 )
 		Return
-	} else {
+	} Else {
 		pklSplash( HIG.Title, "Making " . HIG.imgMake . " image for:`n`n" . preName . "state" . shSt . "`n", 2.0 )
 	}
 	
 	If ( stateImg ) {
 		indx    := shSt
 		imgName := HIG.imgName . shSt
-	} else { 													; e.g., "dk_breve"
+	} Else { 													; e.g., "dk_breve"
 		dkName  := HIG.imgName
 		indx    := dkName . "_" . shSt
 		imgName := dkName . getLayInfo( "dkImgSuf" ) . shSt 	; DK image state suffix, e.g., "breve_s0"
@@ -258,15 +261,15 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 		size    := false    									; Don't resize all entries (such as spc-padded ones)
 		idKey   := indx . CO
 		chrVal  := HIG.ImgDic[ idKey       ]
-		chrTag  := HIG.ImgDic[ idKey . "¤" ] 					; Tags such as "DK_Key" for a Dead Key
+		chrMrk  := HIG.ImgDic[ idKey . "¤" ] 					; Tags such as "DK_Key" for a Dead Key
 		If ( not chrVal ) { 									; Empty entry
 			aChr := "" 											; Alpha layer char
 			dChr := "" 											; DKey layer char (mark, by default bold yellow)
-		} else if ( chrTag == "DK_Key" ) {  					; Dead key (full dk Name, or classic name if used)
+		} Else If ( chrMrk == "DK_Key" ) {  					; Dead key (full dk Name, or classic name if used)
 			dkD1 := DeadKeyValue( chrVal, "disp0" ) 			; There may be a display tag entry
 			If ( dkD1 ) {
 				aChr := SubStr( dkD1, 2, -1 )   				; A display entry will be enclosed in, e.g., «».
-			} else {
+			} Else {
 				dkD1 := DeadKeyValue( chrVal, "disp1" ) 			; Get the display base char for the dead key
 				dkD1 := ( dkD1 ) ? dkD1 : DeadKeyValue( chrVal, "base1" ) 	; Fallback is the usual base char
 				comb := hig_combAcc( dkD1 ) ? " " : "" 				; Pad combining accents w/ a space for better display
@@ -278,23 +281,23 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 				}
 			} 	; end if display tag
 			dChr := aChr
-		} else if ( chrTag == "MrkdDK" ) {  					; Marked dead key base/accent char (marked in pdic)
+		} Else If ( chrMrk == "MrkdDK" ) {  					; Marked dead key base/accent char (marked in pdic)
 			mark := hig_combAcc( chrVal ) ? HIG.MkDkCmb : HIG.MkDkBas
 			aChr := hig_makeChr( chrVal )
 			dChr := Chr( mark ) 								; Mark for DK base chars: Default U+2B24 Black Large Circle
-		} else if ( InStr( chrTag, "0x" ) == 1 ) {  			; Direct Unicode point tag
+		} Else If ( InStr( chrMrk, "0x" ) == 1 ) {  			; Direct Unicode point mark
 			aChr := hig_makeChr( chrVal )
-			dChr := hig_makeChr( chrTag )
-;		} else if ( chrTag == "--" ) {
+			dChr := hig_makeChr( chrMrk )
+;		} Else If ( chrMrk == "--" ) {
 ;			aChr := Chr( HIG.MkNaChr )   						; Replace nonprintables (marked in pdic) 	; NOTE: I don't do this anymore
 ;			dChr := ""
-		} else { ; eD TODO: Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
+		} Else { ; eD TODO: Make an exception for letter keys, to avoid marking, e.g., greek mu on M? Or specify exceptions in Settings?!
 			aChr := hig_makeChr( chrVal )
 			dChr := ""  										; The dead key layer entry is empty for non-DK keys
 			size := true    									; Allow resizing generic entries by number of characters
 		}
 		( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nImage: " . ImgName 
-			. "`nidKey: " . idKey . "`nVal: " . chrVal . "`nTag: " . chrTag . "`naChr: " . aChr . "`ndChr: " . dChr, 6 ) 	; eD DEBUG
+			. "`nidKey: " . idKey . "`nVal: " . chrVal . "`nTag: " . chrMrk . "`naChr: " . aChr . "`ndChr: " . dChr, 6 ) 	; eD DEBUG
 		CO      := RegExReplace( CO, "_(\w\w)", "${1}" ) 		; Co _## entries are missing the underscore in the SVG template
 		fsSz    := ( size ) ? HIG.fontSiz[ StrLen( aChr ) ] 	; If applicable...
 							: fsDf  							; ...tabulate font size based on number of characters in the entry
@@ -323,22 +326,19 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 }
 
 hig_aChr( ent ) {   											; Get a single-character entry in various formats (number, hex, prefix syntax)
-	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
+	psp     := hig_parsePrefix( ent )   						; Check for a HIG tag or prefix-entry syntax, without sending
 	If ( not ent + 0 )  										; Non-numeric entry
 		ent := ( StrLen(ent) == 1 ) ? Ord(ent) : "" 			; Convert single-char literals to their ordinal value
 	Return  ent 												; Longer entries would be converted to ""
 }
 
-hig_ParsePrefix( ByRef ent ) {  					  			; Check for tag or prefix-entry syntax, without sending
+hig_parsePrefix( ByRef ent ) {  					  			; Check for prefix-entry syntax, without sending
 	psp     := pkl_ParseSend( ent, "HIG" )  					; Will return a prefix only if one is recognized
 	ntry    := SubStr( ent, 2 ) 								; This function may change the value of ent
-	If        hig_tag( ent ) {  								; Specified `«#»` HIG tag for display
-		psp := "Ħ"
-		ent := hig_tag( ent )
-	} else if InStr( "~†", psp ) {  							; ~ : Hex Unicode point U+####
+	If        InStr( "~†", psp ) {  							; ~ : Hex Unicode point U+####
 		psp := ""
 		ent := "0x" . ntry  									; No need for Format( "{:i}", "0x" . ntry ) here
-	} else if InStr( "%→$§", psp ) { 							; Literals can have these prefixes, or be unprefixed
+	} Else If InStr( "%→$§", psp ) { 							; Literals can have these prefixes, or be unprefixed
 		psp := ""
 		ent := ntry
 	}
@@ -348,16 +348,22 @@ hig_ParsePrefix( ByRef ent ) {  					  			; Check for tag or prefix-entry syntax
 
 hig_parseEntry( ByRef HIG, ent ) {  							; Parse a state or DK mapping for help image display
 	naChr   := Chr( HIG.MkNaChr )   							; Not-a-char mark, default U+25AF Rect.
-	psp     := hig_ParsePrefix( ent )   						; Check for a tag or prefix-entry syntax, without sending
-	If ( psp && psp != "Ħ" ) {  ;InStr( "*α=β@Ð&¶", psp ) { 	; AHK string(*α), Blind send(=β), DK(@Ð), PwrString(&¶)
+	If ( HIG.Tag ) { 
+		ent := HIG.Tag
+		psp := ""
+	} Else {
+		psp := hig_parsePrefix( ent )   						; Check for prefix-entry syntax, without sending
+	}
+	intEnt  := isInt(ent)   									; Integer entry
+	If ( psp ) {    											; Prefix detected
 		ent := "·" . psp . "·"  								; Show untagged prefix-entries as the prefix between dots
 ;	} 	; end if psp 		; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
-	} else if ( not isInt(ent) ) {  							; eD WIP: Must not mark "dc_" keys here! Add if else to the above?
+	} Else If ( not intEnt ) {  								; eD WIP: Must not mark "dc_" keys here! Add if else to the above?
 		maxLen := HIG.fontSiz.Length()  						; The number of specified font sizes; ellipse out anything longer
 		ent := ( StrLen(ent) > maxLen ) ? HIG.MkEllip : ent 	; Entry is a string, like {Home}+{End}. Marked as a (midline) ellipse.
 																; eD WIP: Do this in the image generating fn instead?!
 	}
-	ent     := isInt( ent ) && ( ent < 32 ) ? naChr : ent   	; Replace control characters (ASCII < 0x20)
+	ent     := intEnt && ( ent < 32 ) ? naChr : ent 			; Replace control characters (ASCII < 0x20)
 	Return ent
 }
 
@@ -411,24 +417,22 @@ hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
 	Return ch
 }
 
-hig_tag( ent, retur := "tag" ) {    							; Detect and sort an entry HIG tag of the form «#»[  ]‹entry› 	; eD WIP
-	tag := false
+hig_deTag( byref ent, dicName = "" ) {  						; Detect and sort out an entry HIG tag of the form «#»[  ]‹entry›
+	tag := false    											; eD WIP: Use ent byref, and always return tag (which may be `false`)?
 	pre := SubStr( ent, 1, 1 )
 	If ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images
 		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`
-		If ( pos ) {
+		If ( pos ) {    										; HIG tag confirmed
 			tag :=       SubStr( ent, 2, pos - 2 )
 			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
-		} else {
-			ent := "%" . ent    								; If there is no properly formed tag, interpret entry as a string [not necessary?]
+			If dicName
+				setKeyInfo( dicName . "Ħ", tag )    			; Save the HIG tag separately (entry is saved through byref)
+;		} Else {
+;			ent := "%" . ent    								; If there is no properly formed tag, interpret entry as a string [not necessary?]
 		}
 ;	( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  ; eD DEBUG
 	} 	; end if HIG tag
-	Return ( retur == "tag" ) ? tag : ent
-}
-
-hig_untag( ent ) {  											; Convenient call to hig_tag to return the entry
-	Return hig_tag( ent, "entry" )
+	Return
 }
 
 ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or state images

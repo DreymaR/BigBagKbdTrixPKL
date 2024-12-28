@@ -401,27 +401,22 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			If ( entr2 < 0 )
 				numEntr := 2    											; If the key is VK/SC/Mod, ignore any extra entries
 			Loop % numEntr - 2 {    										; Loop through all entries for the key, starting at #3
-				ks      := shStats[ A_Index ]   							; This shift state for this key
+				dicName := key . shStats[ A_Index ] 						; Dictionary key name for this key/state
 				ksE     := entry[ A_Index + 2 ] 							; The value/entry for that state
 				If        ( StrLen( ksE ) == 0 ) {  						; Empty entry; ignore
 					Continue
 				} else if ( StrLen( ksE ) == 1 ) {  						; Single character entry:
-;					setKeyInfo( key . ks . "s", "+" )   			; eD WIP: Mark set states as '+' and empty as '-', to read the LayStack top-down? No, mark the keys.
-					setKeyInfo( key . ks , Ord(ksE) )   					; Convert to ASCII/Unicode ordinal number; was Asc()
+					setKeyInfo( dicName , Ord(ksE)   )  					; Convert to ASCII/Unicode ordinal number; was Asc()
 				} else if ( ksE == "--" ) || ( ksE == -1 ) { 				; --: Disabled state entry (MSKLC uses -1)
-					setKeyInfo( key . ks      , "" ) 						; "key<state>" empty
+					setKeyInfo( dicName , ""         )  					; "key<state>" empty
 				} else if ( ksE == "##" ) {
-					setKeyInfo( key . ks , -2 ) 							; Send this state {Blind} as its VK##
-					setKeyInfo( key . ks . "s", mpdVK ) 					; Use the remapped VK## code found above
+					setKeyInfo( dicName      , -2    )  					; Send this state {Blind} as its VK##
+					setKeyInfo( dicName . "s", mpdVK )  					; Use the remapped VK## code found above
 				} else if RegExMatch( ksE, "i)^(spc|=.space.)" ) {  		; 'Spc' or '={Space}': Special entry. &Spc for instance, works differently.
-					setKeyInfo( key . ks , 32 ) 							; The ASCII/Unicode ordinal number for Space; lets a space release DKs
+					setKeyInfo( dicName , 32         )  					; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 				} else {
 					ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-					tag := hig_tag( ksE )   								; Any mapping may start with a HIG display tag for help images
-					If ( tag ) {    										; This tag is formatted `«#»` w/ # any character(s) except `»`
-						setKeyInfo( key . ks . "Ħ", tag )   				; The display tag is kept so the HIG can find it if necessary
-						ksE := hig_untag( ksE ) 							; eD WIP: Just do this in ParseSend so DKs etc may use it too? Or both?
-					} 	; end if HIG tag
+					hig_deTag( ksE, dicName )   							; Remove any `«#»` tag, and save it separately for the HIG
 					ks2 := SubStr( ksE, 2 )
 					If InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
 						If ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
@@ -430,8 +425,8 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					} else {    											; * : Omit {Text}; use special +^!#{} AHK syntax
 						ksP := "%"  										; %$: Literal/ligature (Unicode/ASCII allowed)
 					}														; @&: Dead keys and named literals/strings
-					setKeyInfo( key . ks      , ksP )   					; "key<state>"  is the entry prefix
-					setKeyInfo( key . ks . "s", ksE )   					; "key<state>s" is the entry itself
+					setKeyInfo( dicName      , ksP )    					; "key<state>"  is the entry prefix
+					setKeyInfo( dicName . "s", ksE )    					; "key<state>s" is the entry itself
 				}	; end if prefix
 			}	; end loop entries
 		}	; end loop (parse layMap)
@@ -457,7 +452,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 				If ( map.Length() == 0 )  								; If this map layer is empty, go on
 					Continue
 				For ix, row in map {
-					pklIniKeyVal( row , key, extMapping )   			; Read the Extend mapping for this SC
+					pklIniKeyVal( row, key, extMapping )    			; Read the Extend mapping for this SC
 					KLM := _mapKLM( key, "SC" )  						; Co/QW-2-SC KLM remapping, if applicable
 					key := upCase( key )
 					If ( hardLayers[ extN ] ) {
@@ -465,13 +460,14 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					} else {
 						key := scMapLay[ key ] ? scMapLay[ key ] : key 	; If applicable, soft remap entry
 					}
-					If ( getKeyInfo( key . "ext" . extN ) != "" )   	; Skip mapping if already defined
+					dicName := key . "ext" . extN
+					If ( getKeyInfo( dicName ) != "" )  				; Skip mapping if already defined
 						Continue
 					If ( InStr( extMapping, "©" ) == 1 )
 						cmpKeys.Push( SubStr( extMapping, 2 ) ) 		; Register Compose key for initialization
 					tmp := extMapping
-					extMapping := hig_untag( extMapping )   			; Lop off any HIG tag   	; eD TODO: We don't yet generate Extend images. Could we?
-					setKeyInfo( key . "ext" . extN , extMapping )
+;					hig_deTag( extMapping, dicName )    		; Lop off any HIG tag   	; eD TODO: We don't yet generate Extend images. Could we?
+					setKeyInfo( dicName, extMapping )
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#
 		}	; end For stckFile (parse extStck)

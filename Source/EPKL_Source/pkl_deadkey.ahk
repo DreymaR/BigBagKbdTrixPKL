@@ -6,7 +6,8 @@
 
 DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It's a name now. Release character = rChr.
 {   																	; NOTE: Entries 0-31, if used, are named "s#" as pklIniRead can't read a "0" key
-	val := getKeyInfo( "DKval_" . dkName . "_" . rChr )
+	dicName := "DKval_" . dkName . "_" . rChr
+	val := getKeyInfo( dicName )
 	If ( not val ) {
 		dkStck  := getPklInfo( "DkListStck" )
 		chr := Chr( rChr )
@@ -16,14 +17,14 @@ DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkStck, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
 		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
 		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
-;		val := hig_untag( val ) 										; If the entry has a `«##»` HIG image tag, remove it.
+		hig_deTag( val, dicName )   									; If the entry has a `«##»` HIG image tag, remove and store it.
 		val := ( val == "--" ) ? -1 : val   							; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		If val is integer
 			val := Format( "{:i}", val ) 								; Converts hex to decimal so it's always treated as the same number (could've used a +0 trick)
-		setKeyInfo( "DKval_" . dkName . "_" . rChr, val)				; The DK info pdic is filled in gradually with use
+		setKeyInfo( dicName, val)   									; The DK info pdic is filled in gradually with use
 	}
-;	If ( rChr == 960 )  											; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
+;	If ( rChr == 960 )  												; eD DEBUG: Only for one key ( 97 = 'a'; 960 = 'π' ) ...
 ;		pklDebug( "DK: " dkName "`nBase: " rChr " (" Chr(rChr) ")`nVal: " val, 6 ) 	; --"--     Check DK value functionality
 	val := ( val == "--" ) ? 0 : val 									; Store any empty entry so it isn't reread, but return it as 0
 	Return val

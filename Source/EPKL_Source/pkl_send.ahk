@@ -135,7 +135,6 @@ pkl_CheckForDKs( ch ) {
 pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/DKs/Strings w/ prefix
 ;	Critical    												; eD WIP: Causes hangs after DKs etc?
 	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
-	entry   := hig_untag( entry )   							; If there is an initial HIG tag of the form «#», lop it off 	; eD WIP
 	psp     := SubStr( entry, 1, 1 )    						; Look for a Parse syntax prefix
 	If not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's less readable.
 		Return false
