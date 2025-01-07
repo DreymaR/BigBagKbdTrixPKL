@@ -44,11 +44,11 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 		If ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
 		If        ( key == "__List" ) { 								; Use key = __List for a section list
-			IniRead, val, %theFile% 									; (AHK v1.0.90+)
+			val := IniRead( theFile )   								; (AHK v1.0.90+)
 		} else if ( key == "__Sect" ) { 								; Use key = __Sect to read a whole section
-			IniRead, val, %theFile%, %section% 							; (AHK v1.0.90+)
+			val := IniRead( theFile, section )  						; (AHK v1.0.90+)
 		} else {
-			IniRead, val, %theFile%, %section%, %key%, %A_Space%		; IniRead uses a Space for blank defaults
+			val := IniRead( theFile, section, key, " " )    			; IniRead uses a Space for blank defaults
 		}
 		If ( val ) 														; Once a value is found, break the for loop
 			Break
@@ -74,12 +74,13 @@ pklIniCSVs( key, default := "", iniFile := "PklSet", section := "pkl"
 ;;  ========================================================================================================================================================
 ;;  Helper functions for .ini and other file handling
 ;
-pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1 ) { 	; Because PKL doesn't always use IniRead? Why though?
+pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1, quo := 0 ) {   	; Because PKL doesn't always use IniRead? Why though?
 	pos := InStr( row, "= " )   							; Spc after `=` is enforced. Avoids ambiguity vis-a-vis `<=> = ‹entry›` etc.
-	key := Trim( SubStr( row, 1, pos-1 ))
+	key := Trim( SubStr( row, 1, pos-1 ))   				; Trim() removes surrounding WhiteSpace
 	val := Trim( SubStr( row,    pos+1 ))
-	val := ( com ) ? strCom( val ) : val 					; Comment stripping
-	val := ( esc ) ? strEsc( val ) : val 					; Character escapes
+	val := ( com ) ? strCom( val ) : val    				; Comment stripping
+	val := ( quo ) ? Trim( val, "'""" ) : val   			; Single+double quote stripping
+	val := ( esc ) ? strEsc( val ) : val    				; Character escapes
 	If ( StrLen( row ) == 0 || SubStr( row, 1, 1 ) == ";" ) {
 		key := "<Blank>"
 	} else if ( pos == 0 ) {
@@ -87,8 +88,8 @@ pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1 ) { 	; Because PKL d
 	}
 }
 
-strCom( str ) { 											; Remove end-of-line comments (whitespace then semicolon)
-	str := RegExReplace( str, "m)[ `t]+;.*$" )				; Multiline option for matching single lines
+strCom( str ) { 											; Remove end-of-line comments (whitespace, then semicolon, then anything)
+	str := RegExReplace( str, "m)[ `t]+;.*$" )  			; Multiline option for matching single lines
 	Return str
 }
 

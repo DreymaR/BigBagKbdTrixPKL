@@ -62,8 +62,6 @@ WIPs: "Add Layout" functionality in GUI, to select multiple active layouts witho
 
 WIPs: In the Janitor timer: Update the OS dead keys and OEM VKs as necessary. Register current LID and check for changes.
 
-WIPs: Arabic phonetic layout!
-
 WIPs: Revisit the ISO key for several locale variants as the new Compose key is so powerful. Spanish? Probably not Scandi/German? Or?
 
 WIPs: Make README.md for the main layout and layout variant folders, so they may be showcased on the GitHub site.
@@ -85,7 +83,7 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 ;;  ========================================================================================================================================================
 ;;  eD 2FIX:
 
-2FIX: Repeat (and indeed, Compose?) doesn't work on DK output?
+2FIX: Repeat/Compose don't work on DK output?
 		- Example: Typing {CoDeKey, [, Repeat} outputs`å[`.
 		- Repeat works after composes. Not from OS DKs: Repeats the last non-DK press w/ Cmk-eD2VK. `ää` `áá` as it should w/ Cmk-eD.
 		- Could be solved by adding DK output to the Compose queue. Might cause some trouble w/ how Back handles the queue then, but that's minor?
@@ -196,6 +194,16 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 ;;  ========================================================================================================================================================
 ;;  eD TONEXT:
 
+NEXT: Arabic phonetic layout! Also, check the Hebrew one.
+		- Hebmak: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971
+		- Arabic: ./Layouts/Colemak/Cmk-eD-Ara
+		- Write in each ReadMe about the benefits of special DKs - even if you don't care about niqqud/dagesh/etc.
+
+NEXT: Files override?!
+		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
+		- Each supersection could have an entry specifying which file it overrides: _eD_Compose, _eD_DeadKeys, _eD_Extend, _eD_PwrStrings.
+		- Not _eD_Remap in this file, as it is already taken care of in the LayStack files?
+
 NEXT: Instead of *etLayInfo("ExtendKey"), an array of mod keys?
 		- In the case of more than one, say, SwiSh or Ext keys, could number them? Have each mod entry be an array.
 		- { "Extend" : [ "SC###", "SC###" ], "SwiSh" : [ "SC###" ] }, for instance
@@ -242,16 +250,11 @@ NEXT: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even
 NEXT: Custom Send syntax, allowing other AHK commands to be "sent"!
 		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
 		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
-		- For instance, use a syntax like `¢[[Sleep(500)]]` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
+		- For instance, use smth like `¢[Sleep(500)]¢` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
 			- May need a custom exec() fn for this, wrapping any and all commands we want to "send" this way (sleep, run, etc).
 			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
 			- Could use dynamic fn calling for the wrapper functions?
 			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
-
-NEXT: Files override?!
-		- Maybe just one file to override all files in Files? Maybe place it in root? Have supersections to separate the files.
-		- Each supersection could have an entry specifying which file it overrides: _eD_Compose, _eD_DeadKeys, _eD_Extend, _eD_PwrStrings.
-		- Not _eD_Remap in this file, as it is already taken care of in the LayStack files?
 
 TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
 
@@ -437,7 +440,6 @@ TODO: A help fn to make layout images? Make the image large and opaque, then mak
 TODO: AHK2Exe update from AutoHotKey v1.1.26.1 to v1.1.30.03 (released April 5, 2019) or whatever is current now. 	;eD WIP: Problem w/ AltGr?
 		- New Text send mode for PowerStrings, if desired. Should handle line breaks without the brkMode setting.
 TODO: Make the Japanese layout now, since dead keys support literals/ligatures and DK tables in Layout.ini are possible.
-TODO: Hebrew layout. Eventually, Arabic too.
 TODO: Mirrored one-hand typing as Remap, Extend or other layer?
 		- For Extend, would need a separate Ext modifier for it? E.g., NumPad0 or Down for foot or right-arm switching. But is that too clunky?
 		- SGCaps could work, but would require each layout to have SGC mappings to allow mirroring then. And a separate SGC modifier.

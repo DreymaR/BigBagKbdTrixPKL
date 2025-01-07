@@ -381,7 +381,7 @@ inArray( haystack, needle, case := true ) {     			; Check if an array object ha
 	Return false
 }
 
-joinArr( array, sep := "`r`n" ) {   						; Join an array by a separator to a string
+array2Str( array, sep := "`r`n" ) { 						; Join an array by a separator to a string
 	For ix, el in array
 		out .= sep . el
 	Return SubStr( out, 1+StrLen(sep) ) 					; Lop off the initial separator (faster than checking in the loop)
@@ -492,7 +492,7 @@ menuIconList() {    										; Taken from the AHK_MenuIconList.ahk script
 	Loop {                              					; Load the ImageList with a series of icons from the DLL
 		 IconCount := Image             					; Number of icons found
 		 Image := IL_Add(ImageListID, iconFile, A_Index) 	; Omits the DLL's path so that it works on Windows 9x too
-		 If (Image = 0)                 					; When we run out of icons
+		 If (Image == 0)                					; When we run out of icons
 		   Break
 	   }
 	Loop % IconCount {                  					; Add rows to the ListView (for demonstration purposes, one for each icon)
@@ -515,8 +515,8 @@ Return
 ;;      https://www.autohotkey.com/docs/v2/v2-changes.htm
 ;
 ;;  Blow-by-blow:
-;;    - All `var = value` has to go (replace with `:=`), and `=` in conditions too (replace with `==`)?
-;;    - Normal variable references are never enclosed in percent signs
+;;    - All `var = value` assignments have to go (replace with `:=`). Also ` = ` in conditions (replace with `==`).
+;;    - Normal variable references are never enclosed in percent signs (%variable%)
 ;;    - All old `if` are gone; `if expression` stays
 ;;    - Super-globals are gone
 ;;    - Gosub is gone. What to use for it?
@@ -524,6 +524,11 @@ Return
 ;;        - It's because functions can be called without parentheses if the return value is not needed (except when called within an expression).
 ;
 
-Sleep( delay ) {    										; This is part of the transition to AHK v2, replacing commands (`Sleep % #` and `Sleep, #`) with functions
+Sleep( delay ) {    																	; Wrapper function, pending AHK v2 transition: Sleep
 	Sleep % delay
+}
+
+IniRead( Filename, Section := "", Key := "", Default := "ERROR" ) { 					; Wrapper function, pending AHK v2 transition: IniRead
+	IniRead, val, % Filename, % Section, % Key, % Default   							; Reading only a section (list) should work with this one
+	Return val
 }

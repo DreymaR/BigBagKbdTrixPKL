@@ -190,7 +190,7 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	Return psp  												; Return the recognized prefix
 }
 
-pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α entries.
+pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α/β entries.
 	Critical 													; eD WIP: Try to improve timing for OSMs
 	OSM := false , OSMs  := []
 	While InStr( enty, " OSM}" ) {  							; OneShotMod syntax: `{<mod> OSM}` activates <mod> as OSM once.
@@ -209,6 +209,11 @@ pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax addit
 		}
 		Return true
 	} 	; end if osm
+;	sendIn  := InString( enty, "¢[" )   						; eD WIP: Special send-command syntax. Only works for Sleep so far.
+;	If sendIn
+;		sendOut := InString( enty, "]¢" )
+;		If sendOut
+;			Return true
 	Return false
 }
 
@@ -263,27 +268,33 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 	static strFile
 	static strMode
 	static brkMode
+	static strDic       := {}
 	static initialized  := false
 	
 	If ( not initialized ) {
 		strFile := getPklInfo( "StringFile" )   				; The file containing named string tables
 		strMode := pklIniRead( "strMode", "Message", strFile ) 	; Mode for sending strings: "Input", "Message", "Paste"
 		brkMode := pklIniRead( "brkMode", "+Enter" , strFile ) 	; Mode for handling line breaks: "+Enter", "n", "rn"
+		strSect := pklIniSect( strFile, "strings", true )   	; The actual PwrString section (limited to 65533 characters?)
+		For ix, line in strSect {   							; Note: IniRead is a bit faster than pklIniRead() (1-2 s on a 34 line str)
+			pklIniKeyVal( line, key, val, 1, 1, 1 )     		; Replace escapes, remove comments and trim quotes
+			if ( key == "<NoKey>" )
+				Continue
+			strDic[key] := hig_deTag( val )
+		}
 		initialized := true
 	}
 	
 	Critical    												; eD WIP: Is Critical right here?
-	theString := pklIniRead( strName, , strFile, "strings" ) 	; Read the named string's entry (w/ comment stripping)
-	If pkl_ParseSend( theString ) 								; Unified prefix-entry syntax; only for single line entries
+	theString := strDic[ strName ]  							; PowerStrings are preread above, at first fn() init
+	If pkl_ParseSend( theString )   							; Unified prefix-entry syntax; only for single line entries
 		Return
 	If ( SubStr( theString, 1, 11 ) == "<Multiline>" ) { 		; Multiline string entry
-		Loop % SubStr( theString, 13 ) {
-			IniRead, val, %strFile%, strings, % strName . "-" . Format( "{:02}", A_Index )
-			mltString .= val 									; IniRead is a bit faster than pklIniRead() (1-2 s on a 34 line str)
+		Loop % SubStr( theString, 13 ) {    					; The <MultiLine> tag is followed by the number of lines
+			mltString .= strDic[ strName . "-" . Format( "{:02}", A_Index ) ]
 		}
 		theString := mltString
 	}
-	theString := strEsc( theString ) 							; Replace \# escapes
 	If ( strMode == "Text" ) {
 		SendInput {Text}%theString%
 	} else if ( brkMode == "+Enter" ) {
@@ -295,8 +306,8 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 			If ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
 				Break
 		}	; end Loop Parse
-	} else { 													; Send string as a single block with line break characters
-		StrReplace( theString, "`r`n", "`n" ) 					; Ensure that any existing `r`n are kept as single line breaks
+	} else {    												; Send string as a single block with line break characters
+		StrReplace( theString, "`r`n", "`n" )   				; Ensure that any existing `r`n are kept as single line breaks
 		If ( brkMode == "rn" )
 			StrReplace( theString, "`n", "`r`n" )
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method

@@ -17,7 +17,7 @@ DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It
 		val := ( val ) ? val : pklIniRead( "<" . cha . ">" . upp  ,, dkStck, "dk_" . dkName ) 	;     as <#> character (UTF-8 Unicode allowed)
 		val := ( val ) ? val : pklIniRead( Format("0x{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as 0x#### hex Unicode point
 		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
-		hig_deTag( val, dicName )   									; If the entry has a `«##»` HIG image tag, remove and store it.
+		val := hig_deTag( val, dicName )    							; If the entry has a `«##»` HIG image tag, remove and store it.
 		val := ( val == "--" ) ? -1 : val   							; A '-1' or '--' value means unmapping, to be used in the LayStack
 		val := ( val ) ? val : "--"
 		If val is integer
@@ -75,7 +75,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
 	If ( CurrBaseKey != 0 ) { 								; If a BaseKey is set, use that. Otherwise, use the inKey input directly.
 		relChr  := CurrBaseKey
-;		inKey   := Chr( relChr ) 							; The chr symbol for the current base key (e.g., 65 = A) 				; eD WIP: This isn't used – is it?!?
+;		inKey   := Chr( relChr ) 							; The chr symbol for the current base key (e.g., 65 := A)   	; eD WIP: Not used?!?
 	} else {
 		relChr  := Ord( inKey ) 							; The ASCII/Unicode ordinal number for the pressed key; was Asc()
 	} 	; end if CurrBaseKey

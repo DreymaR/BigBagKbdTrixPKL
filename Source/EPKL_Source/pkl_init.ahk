@@ -216,21 +216,16 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	mainOvr := layFiPa . "_Override.ini" 								; Layout_Override.ini, if present
 	setPklInfo( "Dir_LayIni"        , mainDir )
 	setPklInfo( "File_LayIni"       , mainLay )
-;	kbdType := pklIniRead( "KbdType", getLayInfo("Ini_KbdType") ,"LayIni" ) 	; eD WIP: BaseLayout is unified for KbdType, so this isn't necessary now?!
-;	setLayInfo( "Ini_KbdType", _AnsiAns( kbdType ) ) 					; A KbdType setting in Layout.ini overrides the first Layout_ setting
-;	basePath        := pklIniRead( "baseLayout",, "LayIni" ) 			; Read a base layout then augment/replace it
-;	basePath        := atKbdType( basePath ) 							; Replace '@K' w/ KbdType 	; eD WIP: Unnecessary w/ unified BaseLayout
-	IniRead, basePath, %mainOvr%, % "pkl", % "baseLayout", %A_Space% 	; Read the base layout. Note that pklIniRead() adds .\ to ..\ so we don't use it here.
-;	( basePath != "" ) ? pklDebug( "" basePath, 2 )  ; eD DEBUG
+	basePath    := IniRead( mainOvr, "pkl", "baseLayout", " " ) 		; Read the BaseLayout. Since pklIniRead() adds `.\` to `..\`, we don't use it here.
 	If ( basePath == "" )
-		IniRead, basePath, %mainLay%, % "pkl", % "baseLayout", %A_Space%
-	basePath        := StrCom( basePath )   							; Strip comments, like in pklIniRead()
+		basePath    := IniRead( mainLay, "pkl", "baseLayout", " " ) 	; If basePath isn't found, the main layout becomes base(?)
+	basePath        := StrCom( basePath )   							; Strip comments, like pklIniRead() does
 	SplitPath, basePath, baseLay, baseDir   							; eD WIP: Manage to use pklIniRead() for this?! It should handle ..\ too.
 	useDots         := ( InStr( basePath, "..\" ) == 1 ) ? true : false
 	baseDir         := ( useDots ) ? mainDir . "\.."         : laysDir . baseDir
 	baseLay         := ( useDots ) ? baseDir . "\" . baseLay : laysDir . basePath
 	baseLay         .= ".ini"
-;	pklDebug( "basePath: " . basePath . "`nbaseDir: " . baseDir . "`nbaseLay:    " . baseLay . "`n`nmainDir: " . mainDir . "`nmainLay:    " . mainLay, 30 )  ; eD DEBUG
+;	pklDebug( "basePath: " basePath "`nbaseDir: " baseDir "`nbaseLay:    " baseLay "`n`nmainDir: " mainDir "`nmainLay:    " mainLay, 30 )  ; eD DEBUG
 	If FileExist( baseLay ) {
 		setPklInfo( "Dir_BasIni"    , baseDir )
 		setPklInfo( "File_BasIni"   , baseLay ) 						; The base layout file path
@@ -239,13 +234,14 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 		setPklInfo( "File_BasIni"   , "" )
 		pklWarning( "File '" . baseLay . "' not found!" )   			; "File not found" iff base is defined but not present
 	}
-	pklLays := getPklInfo( "pklLaysFiles" ) 							; EPKL_Layouts_Default and Override
-	pklLays := [ mainOvr, mainLay, baseLay, pklLays[1], pklLays[2] ] 	; Could also concatenate w/, e.g., pklStck.push( pklLays* )?
-	pklDirs := [ mainDir, mainDir, baseDir, "."       , "."        ]
+	pklLays := getPklInfo( "pklLaysFiles" ) 							; EPKL_Layouts_Default (2) and its _Override (1)
+	pklDirs := [ ".", "." ] 											; The two EPKL_Layouts files are found in the EPKL root dir
+	pklLays := [ mainOvr, mainLay, baseLay, pklLays[1], pklLays[2] ] 	; Concatenate w/ [ mainOvr, ... ].push(pklLays*)? Tried; it didn't work.
+	pklDirs := [ mainDir, mainDir, baseDir, pklDirs[1], pklDirs[2] ]
 	layStck := []   													; The LayStack is the stack of layout info files
 	dirStck := []   													; eD WIP: Allow a BaseStack, where any BaseLayout can include others? SubBase?
 	For ix, file in pklLays {
-		If FileExist( file ) {  										; If the file exists...
+		If FileExist( file ) && ! inArray( layStck, file ) {    		; If the file exists and isn't already added...
 			layStck.push( file ) 										; ...add it to the LayStack
 			dirStck.push( pklDirs[ix] )
 		}
@@ -416,7 +412,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					setKeyInfo( dicName , 32         )  					; The ASCII/Unicode ordinal number for Space; lets a space release DKs
 				} else {
 					ksP := SubStr( ksE, 1, 1 )  							; Multi-character entries may have a single-character prefix
-					hig_deTag( ksE, dicName )   							; Remove any `«#»` tag, and save it separately for the HIG
+					ksE := hig_deTag( ksE, dicName )    					; Remove any `«#»` tag, and save it separately for the HIG
 					ks2 := SubStr( ksE, 2 )
 					If InStr( "%→$§*α=β~†@Ð&¶®©", ksP ) {   				; Prefix-Entry syntax
 						If ( ksP == "©" )   								; ©### entry: Named Compose/Completion key – compose previous key(s)
@@ -466,7 +462,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					If ( InStr( extMapping, "©" ) == 1 )
 						cmpKeys.Push( SubStr( extMapping, 2 ) ) 		; Register Compose key for initialization
 					tmp := extMapping
-;					hig_deTag( extMapping, dicName )    		; Lop off any HIG tag   	; eD TODO: We don't yet generate Extend images. Could we?
+					extMapping := hig_deTag( extMapping, dicName )  	; Lop off any HIG tag 	; eD TODO: We don't yet generate Extend images. Could we?
 					setKeyInfo( dicName, extMapping )
 				}	; end for row (parse extMappings)
 			}	; end Loop ext#

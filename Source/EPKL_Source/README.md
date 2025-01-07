@@ -589,4 +589,5 @@ VERSION HISTORY:
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
+	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	

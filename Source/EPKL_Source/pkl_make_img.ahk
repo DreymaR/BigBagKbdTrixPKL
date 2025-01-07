@@ -378,7 +378,7 @@ hig_callInkscape( ByRef HIG ) {
 		maxInx  := ( maxInx > numFils ) ? numFils : maxInx
 		inkFils := ""
 		Loop % 1 + maxInx - minInx {
-			inkFils .= " " . HIG.inkFile[ minInx + A_Index - 1 ] 	; Precede and join by spaces 	;	inkFils := " " . joinArr( HIG.inkFile, " " )
+			inkFils .= " " . HIG.inkFile[ minInx + A_Index - 1 ] 	; Precede and join by spaces 	;	inkFils := " " . array2Str( HIG.inkFile, " " )
 		}
 		pklSplash( HIG.Title, "Calling Inkscape with files " . minInx . "-" . maxInx . " of " . numFils . " [batch " . turn . "/" . turns . "] ...", 8 )
 		try {   													; Call Inkscape w/ cmd line options
@@ -417,25 +417,21 @@ hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
 	Return ch
 }
 
-hig_deTag( byref ent, dicName = "" ) {  						; Detect and sort out an entry HIG tag of the form «#»[  ]‹entry›
+hig_deTag( ent, dicName := false ) {    						; Detect and sort out an entry HIG tag of the form «#»[  ]‹entry›
 	tag := false    											; eD WIP: Use ent byref, and always return tag (which may be `false`)?
-	pre := SubStr( ent, 1, 1 )
-	If ( pre == "«" ) { 										; Any mapping may start with a HIG display tag for help images
-		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`
+	If ( SubStr( ent,1,1 ) == "«" ) {   						; Any mapping may start with a HIG display tag for help images
+		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`. Zero if not found.
 		If ( pos ) {    										; HIG tag confirmed
 			tag :=       SubStr( ent, 2, pos - 2 )
-			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (but it can't be used in layout entries!)
+			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (WS ^$ can't be used in layout entries)
 			If dicName
 				setKeyInfo( dicName . "Ħ", tag )    			; Save the HIG tag separately (entry is saved through byref)
-;		} Else {
-;			ent := "%" . ent    								; If there is no properly formed tag, interpret entry as a string [not necessary?]
 		}
-;	( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  ; eD DEBUG
 	} 	; end if HIG tag
-	Return
+	Return ent  									;( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  	; eD DEBUG
 }
 
-ChangeButtonNamesHIG: 											; For the MsgBox asking whether to make full or state images
+ChangeButtonNamesHIG:   										; For the MsgBox asking whether to make full or state images
 	IfWinNotExist, Make Help Images?
 		Return  												; Keep waiting for the message box if it isn't ready
 	SetTimer, ChangeButtonNamesHIG, Off
