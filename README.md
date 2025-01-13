@@ -416,6 +416,10 @@ The layouts and setup files may take a little tweaking to get what you want. The
 |      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.        |
 |      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |
 |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |
+|  - Special α/β prefixed syntax: In addition to standard AHK code, a few extra directives are allowed.                 |
+|      OSM      : A modifier can be sent as a One-Shot-Mod with this. {Shift OSM} capitalizes the next letter.          |
+|      Sleep()  : ¢[Sleep(200)]¢ in α/β code pauses Send for 200 ms. Useful when a wait is needed between string parts. |
+|      Run()    : ¢[Run(".")]¢   in α/β code runs or opens any valid target, like the 'Open app/folder' menu choice.    |
 #=======================================================================================================================#
 ```
 
@@ -528,7 +532,7 @@ KNOWN ISSUES
 * Running EPKL with other key mapping programs may be problematic due to _hook competition_.
     - When keyboard hooks compete, it becomes uncertain which hook gets which key press, with unpredictable results.
     - Unfortunately, this includes some of the functionality of the popular [Microsoft PowerToys](https://apps.microsoft.com/detail/xp89dcgq3k6vld) tool suite.
-    - It also includes other AutoHotkey scripts using hotkeys.
+    - It also includes [other AutoHotkey scripts using hotkeys](https://www.autohotkey.com/boards/viewtopic.php?t=127074).
     - To some extent, you could include other scripts into EPKL if you know how to, or replicate their functionality within EPKL.
 * The AHK `Send` command used by some EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
     - This does produce a key press with the desired character/key.

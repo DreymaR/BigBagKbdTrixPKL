@@ -50,7 +50,7 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 		} else {
 			val := IniRead( theFile, section, key, " " )    			; IniRead uses a Space for blank defaults
 		}
-		If ( val ) 														; Once a value is found, break the for loop
+		If ( val )  													; Once a value is found, break the for loop
 			Break
 	}	; end For theFile
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
@@ -79,7 +79,7 @@ pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1, quo := 0 ) {   	; B
 	key := Trim( SubStr( row, 1, pos-1 ))   				; Trim() removes surrounding WhiteSpace
 	val := Trim( SubStr( row,    pos+1 ))
 	val := ( com ) ? strCom( val ) : val    				; Comment stripping
-	val := ( quo ) ? Trim( val, "'""" ) : val   			; Single+double quote stripping
+	val := ( quo ) ? Trim( val, "'""" ) : val   			; Single+double quote stripping (preserves any whitespace within quotes)
 	val := ( esc ) ? strEsc( val ) : val    				; Character escapes
 	If ( StrLen( row ) == 0 || SubStr( row, 1, 1 ) == ";" ) {
 		key := "<Blank>"

@@ -29,7 +29,7 @@ For a detailed version history, look further down.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
 * EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
-* EPKL v1.4.2: Layout/Settings enhancements. Ext mapping format. Ext-tap rework.
+* EPKL v1.4.2: Layout/Settings enhancements. Mapping reworks.
 ```
 <br>
 
@@ -541,7 +541,7 @@ VERSION HISTORY:
 		- KeyUp was put on a 1 ms timer like KeyDn had, to ensure it doesn't sneak past a last KeyDown of a repeating key.
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
-* EPKL v1.4.2: Layout/Settings enhancements. Key mapping reworks.
+* EPKL v1.4.2: Layout/Settings enhancements. Mapping additions and reworks.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
@@ -552,12 +552,14 @@ VERSION HISTORY:
 		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
-	- Using the NewLayout template framework, a few more modern layouts were added; Semimak-JQ and Canary were already in place.
+	- Using the NewLayout template framework, a few more modern layouts were added. Semimak(-JQ) and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
 		- The Sturdy layout by Oxey, with an Angle ergo mod. Wide and Sym ergo mods are WIP for Sturdy (and Graphite), for now.
 		- The Graphite layout by Richard Davison alias 'stronglytyped'. Also a keymap-friendly Graphite-HB variant (no shift state changes).
 		- The very similiar Gallium layout by Bryson James alias 'GalileoBlues'.
 		- With the Gallium & Graphite layouts, "Galliard" and "Gralmak" variants w/ symbol key mappings as in Cmk-CAWS.
+	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
+		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
 	- The SymMn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
@@ -586,8 +588,10 @@ VERSION HISTORY:
 	- A `runTarget` hotkey that by default opens or focuses on the main EPKL folder. Ctrl+Shift+7 was available, by moving the MoveImage Hotkey.
 		- Any location, file or app can be set as the `openMenuTarget`. Files and folders are opened by their default programs.
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
-	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
-		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
+	- A `¢[Cmd()]¢` syntax useable within α/β AHK code. Sends the first part of the string, executes the specified command and then proceeds sending.
+		- The pkl_exec() fn governs specified commands for sent strings; it could be expanded with several new AHK commands.
+		- For now, Sleep() and Run() are what I felt were most needed. Sleep() helps timing string parts, while Run() adds new mapping options.
+		- Using these new syntax possibilities, some Ext-tap mappings were added or improved.
 	

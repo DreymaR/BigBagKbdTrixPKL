@@ -140,7 +140,7 @@ for the current layout, or only the main state images?
 		FileCopyDir % HIG.ImgDirs["dkey"] ,  % layDir . dksDir, flg
 		FileRemoveDir   % HIG.ImgDirs["root"], 1 				; Recurse = 1 to remove files inside dir
 	}
-	pklInfo( "Help Image Generator: Done!", 2.0 ) 				; pklSplash() lingers too long?
+	pklInfo( "Help Image Generator: Done!", 1.5 ) 				; pklSplash() lingers too long?
 	VarSetCapacity( HIG, 0 ) 									; Clean up the big variables after use; not necessary?
 }
 

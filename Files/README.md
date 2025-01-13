@@ -32,6 +32,10 @@ Overview over the EPKL Prefix-Entry and other advanced syntax for mappings, usea
 |      ®® |  ®# : Repeat the previous character. `#` may be a hex number. Nice for avoiding same-finger bigrams.        |
 |      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |
 |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |
+|  - Special α/β prefixed syntax: In addition to standard AHK code, a few extra directives are allowed.                 |
+|      OSM      : A modifier can be sent as a One-Shot-Mod with this. {Shift OSM} capitalizes the next letter.          |
+|      Sleep()  : ¢[Sleep(200)]¢ in α/β code pauses Send for 200 ms. Useful when a wait is needed between string parts. |
+|      Run()    : ¢[Run(".")]¢   in α/β code runs or opens any valid target, like the 'Open app/folder' menu choice.    |
 #=======================================================================================================================#
 ```
 

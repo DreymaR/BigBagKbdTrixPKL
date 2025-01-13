@@ -136,7 +136,7 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 ;	Critical    												; eD WIP: Causes hangs after DKs etc?
 	higMode := ( mode == "HIG" ) ? true : false 				; "HIG" Parse Only mode returns prefixes without sending
 	psp     := SubStr( entry, 1, 1 )    						; Look for a Parse syntax prefix
-	If not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But it's less readable.
+	If not InStr( "%→$§*α=β~†@Ð&¶®©", psp )     				; eD WIP: Could use pos := InStr( etc, then if pos ==  1 etc – faster? But less readable.
 		Return false
 	If ( StrLen( entry ) < 2 )  								; The entry must have at least a prefix plus something to qualify
 		Return false
@@ -154,11 +154,12 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := ""
-		If pkl_ParseAHK( enty, pfix )   						;      Special EPKL-AHK syntax additions
+		If ! higMode && pkl_ParseAHK( enty, pfix )  			;      Special EPKL-AHK syntax additions (only do if not higMode)
 			Return psp
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
+		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := "{Blind}"
-		If pkl_ParseAHK( enty, pfix )
+		If ! higMode && pkl_ParseAHK( enty, pfix )
 			Return psp
 	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
@@ -209,11 +210,17 @@ pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax addit
 		}
 		Return true
 	} 	; end if osm
-;	sendIn  := InString( enty, "¢[" )   						; eD WIP: Special send-command syntax. Only works for Sleep so far.
-;	If sendIn
-;		sendOut := InString( enty, "]¢" )
-;		If sendOut
-;			Return true
+	cmdIn  := InStr( enty, "¢[" )   							; eD WIP: Special send-command syntax. Only for Sleep and Run so far.
+	If cmdIn {
+		cmdUt := InStr( enty, "]¢" )
+		If cmdUt {
+			pkl_Send( "", pfix . SubStr( enty, 1, cmdIn-1 ) ) 	; Send the entry part up to the command
+			cmdStr  := SubStr( enty, cmdIn+2, cmdUt-cmdIn-2 )
+			pkl_exec( cmdStr )  								; Execute the command
+			enty := SubStr( enty, cmdUt+2 ) 					; Because of ByRef, this changes enty
+			pkl_ParseAHK ( enty, pfix ) 						; Iterate in case of multiple commands in one entry
+		}
+	}
 	Return false
 }
 

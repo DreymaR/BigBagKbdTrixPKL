@@ -17,6 +17,51 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ========================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+WIPs: Formatting, again...
+		- Too long ::  ====...====, still? 156 now; 148 enough?
+			- Yes, some rows are longer than that, but it's annoying on some screens
+			- The EPKL_ files mostly stay within col 149 (length 148), apart from some long definitions.
+		- `}	; end ` and `} 	; end ` -> `}   ; <- `, throughout
+		- `img_MainDir` comments on the same line, in files that have it (like Cmk-Epo)
+
+WIPs: Send fn() antics study. Can we make a SendInput call separate of the Key event?
+		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
+		- Second example:
+			b := Buffer(16 + A_PtrSize * 3, 0)
+			NumPut(
+			  "UInt" ,  1,      ; type = INPUT_KEYBOARD
+			  "UInt" ,  0,      ; padding
+			  "Short",  0,      ; wVK
+			  "Short",  0x03B1, ; wSC
+			  "UInt" ,  4,      ; dwFlags = KEYEVENTF_UNICODE
+			  "UInt" ,  0,      ; time
+			  "UPtr" ,  0,      ; dwExtraInfo = NULL
+			  b
+			)
+			DllCall("SendInput", "UInt", 1, "Ptr", b, "Int", 16 + A_PtrSize*3)
+		- https://discord.com/channels/115993023636176902/653362249687105536/1327235887553314838
+		- Example:
+			MySendInput() {
+				INPUT_KEYBOARD  := 1
+				KEYEVENTF_KEYUP := 0x02
+				cbSize          := 40
+				cInputs         := 80
+				inputs          := Buffer(cbSize * cInputs, 0)
+				
+				loop cInputs {
+					NumPut(
+						"UInt"  ,   INPUT_KEYBOARD, ; type
+						"UInt"  ,   0,              ; padd
+						"UShort",   0x41,           ; wVk (VK_A)
+						"UShort",   0,              ; wScan
+						"UInt"  ,   Mod(A_Index, 2) == 0 ? KEYEVENTF_KEYUP : 0, ; dwFlags
+						inputs,
+						(A_Index-1) * cbSize) ; offset
+				}
+				
+				DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
+			}
+
 NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
 		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
 		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
@@ -194,6 +239,11 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 ;;  ========================================================================================================================================================
 ;;  eD TONEXT:
 
+NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
+		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
+		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+
 NEXT: Arabic phonetic layout! Also, check the Hebrew one.
 		- Hebmak: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971
 		- Arabic: ./Layouts/Colemak/Cmk-eD-Ara
@@ -241,20 +291,6 @@ NEXT: Move the text for the Settings UI help text to the language files?!
 		- Make a separate .ini file section for it. Then read in the whole section and process it?
 NEXT: Flesh out menu entries in the Settings UI? For instance, ANS ⇒ ANS(I), AWide ⇒ AWide (Angle+Wide) etc. Use a dictionary of string replacements?
 NEXT: In preparation of AHK v2, rework the Gosub-based routines in the pkl_gui_settings.ahk file.
-
-NEXT: Maybe I can emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts?!?
-		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
-		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
-		- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
-
-NEXT: Custom Send syntax, allowing other AHK commands to be "sent"!
-		- A custom Send function could have escape syntax for special needs such as sending a "sleep()".
-		- It could even have an escape for running other programs, or any command really, specified in .ini file entries (if that's deemed safe).
-		- For instance, use smth like `¢[Sleep(500)]¢` within an AHK-syntax string for sending? Split the string, and send the parts with this inbetween.
-			- May need a custom exec() fn for this, wrapping any and all commands we want to "send" this way (sleep, run, etc).
-			- pkl_exec() could take a comma-delimited string of recognized commands and arguments. Syntax: exec( "cmd1 args1, cmd2 args2, ..." ).
-			- Could use dynamic fn calling for the wrapper functions?
-			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
 
 TODO: Auto-hide help images!? Set a timer for idle time with the Janitor. Inspired by the on-screen keyboard app OverKeys.
 
@@ -453,6 +489,16 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 
 ;;  ========================================================================================================================================================
 ;;  eD ONHOLD:
+
+HOLD: More `¢[]¢` syntax?
+		- Use Eval() on arg; will that allow for instance "str" to be read as a string without the quotes?
+			- No, eval() doesn't exist, and its principle is regarded evil in the AHK/coding communities.
+		- Add  RunWait()? No: That waits until the program exits, which we don't want.
+		- With the new power of Run(), add more handy Ext-tap mappings? Which would be most handy?
+		- https://superuser.com/questions/217504/is-there-a-list-of-windows-special-directories-shortcuts-like-temp
+		- https://www.autohotkey.com/docs/v1/misc/CLSID-List.htm
+		- Could I use dynamic fn calling for wrapper functions in exec()? The original AHK example uses Goto labels (bad), but dynamic fn() could work?
+			- https://www.autohotkey.com/boards/viewtopic.php?t=75956
 
 HOLD: Default positional special DK mappings are messed up for non-Cmk layouts. Should there be a DK remap possibility?
 		- This affects primarily the CoDeKey (@co0) and Ext-tap (@ex0/1) layers.

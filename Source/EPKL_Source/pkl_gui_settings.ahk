@@ -408,12 +408,16 @@ UIhlpShow:  													; Help button: Show the KeyMapper and other info Help G
 			. "`n  |      β  |  =  : Send {Blind}‹entry›, keeping the current modifier state                                               |"
 			. "`n  |      †  |  ~  : Send the hex Unicode point U+<entry> (normally but not necessarily 4-digit)                           |"
 			. "`n  |      Ð  |  @  : Send the current layout's dead key named ‹entry› (often a 3-character code)                           |"
-			. "`n  |      ¶  |  &&  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &&Esc, &&Tab…          |" 	; Need && escape for &amp;
+			. "`n  |      ¶  |  &&  : Send the current layout's powerstring named ‹entry›; some are abbreviations like &&Esc, &&Tab…          |" 	; Escape & as &&
 			. "`n  |  - Any entry may start with «#»: '#' is one or more characters to display on help images for the following mapping.   |"
 			. "`n  |  - Other advanced state mappings:                                                                                     |"
 			. "`n  |      ®® |  ®# : Repeat the previous character. '#' may be a hex number. Nice for avoiding same-finger bigrams.        |"
 			. "`n  |      ©‹name›  : Named Compose key, replacing the last written character sequence with something else.                 |"
 			. "`n  |      ##       : Send the active system layout's Virtual Key code. Good for OS shortcuts, but EPKL can't see it.       |"
+			. "`n  |  - Special α/β prefixed syntax: In addition to standard AHK code, a few extra directives are allowed.                 |"
+			. "`n  |      OSM      : A modifier can be sent as a One-Shot-Mod with this. {Shift OSM} capitalizes the next letter.          |"
+			. "`n  |      Sleep()  : ¢[Sleep(200)]¢ in α/β code pauses Send for 200 ms. Useful when a wait is needed between string parts. |"
+			. "`n  |      Run()    : ¢[Run(""."")]¢   in α/β code runs or opens any valid target, like the 'Open app/folder' menu choice.    |" 	; Escape " as ""
 			. "`n  #=======================================================================================================================#"
 	klmHelp :=  ""
 			.   "•   K E Y   C O D E S   A N D   R E M A P S"

@@ -447,8 +447,30 @@ dllMapVK( VK, mode := "chr" ) { 														; Call the MapVirtualKey DLL to de
 	Return map
 }
 
-runTarget( target := "." ) {    							; Run/open a target (default: This program's folder, in File Explorer)
-	Run % target    										; Run the target in its default way - e.g., File Explorer - or focus on it if already open
+runTarget( targ := "." ) {  								; Run/open a target (default: This program's folder, in File Explorer)
+	Try
+		Run % targ  										; Run the target in its default way - e.g., File Explorer - or focus on it if already open
+	Catch
+		pklWarning( "ERROR: Couldn't run this target:`n  " . targ )
+}
+
+pkl_exec( cmdStr := "" ) {  								; Execute certain commands, e.g., inside strings with α/β prefixes. For now, only Sleep() and Run().
+	Static cmdDic  := [ "Sleep(", "Slp(", "Run(" ]  		; Dictionary of command headers
+	For ix, cmdHead in cmdDic {
+		headLen := StrLen( cmdHead )
+		theCmd  := (  InStr( cmdStr, cmdHead ) ==  1  ) 	; InStr is by default case insensitive
+				&& ( SubStr( cmdStr, 0       ) == ")" ) 	; For now at least, ")" is the tail instead of a specified one
+				?  cmdHead : false
+		arg := SubStr( cmdStr, headLen+1, -1 )  			; Get the command argument in the `Cmd(arg)` string
+;		arg := Trim( arg, "'"" " )  						; Remove surrounding spaces and quotes. But this is done automatically by Run in AHK v1.1+.
+;		theCmd ? pklDebug( "Str:  " cmdStr "`nHead: " SubStr( cmdStr, 1,headLen ) "`nTail: " SubStr( cmdStr, 0 ) "`nIsIt: " cmdHead, 10 )
+		If          ( theCmd == "Sleep("    ) 
+			||      ( theCmd == "Slp("      ) {
+			Sleep( arg )
+		} Else If   ( theCmd == "Run("      ) {
+			runTarget( arg )
+		}
+	}   ; <- For cmdHead
 }
 
 pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
