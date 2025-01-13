@@ -38,7 +38,7 @@ LowLevelKeyboardProc(nCode, wParam, lParam) {
 			log .= "`nChar [" theChar "]"   											; ...log it.
 			Tooltip % log
 		}
-	} 	; end if physical input
+	}   ; <-- if physical input
 	
 	Return DllCall("CallNextHookEx", "uint", hKbdHook, "int", nCode, "uint", wParam, "uint", lParam)
 }

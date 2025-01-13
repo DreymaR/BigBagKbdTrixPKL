@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL tray menu/GUI module
 ;;  - Handles the EPKL tray menu, and its About... GUI window
 ;
@@ -144,7 +144,7 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 					Break   											; Use the first (partial) match found.
 				}
 			}
-		} 	; end if item
+		}   ; <-- if item
 		try {
 			Menu, Tray, Default, %def%
 		} catch {
@@ -157,7 +157,7 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 			itmList.Push( item ) 										; Stores the full string   of item N
 			posList.Push( inx  ) 										; Stores the real position of item N
 		}
-	} 	; end if mode
+	}   ; <-- if mode
 }
 
 pkl_about()
@@ -254,7 +254,7 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 		} else {
 			icoFil%ix%  := "EPKL_Resources\" . icon 			; If all else fails, look for a Resources\ .ico file
 		}
-	}	; end For icon
+	}   ; <-- For icon
 	Return { Fil1 : icoFil1, Num1 : icoNum1, Fil2 : icoFil2, Num2 : icoNum2 }
 }
 

@@ -1,9 +1,9 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Ini read module
 ;;  - Functions for reading and preprocessing sections and values from .ini data files
 ;
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  Read a section of an .ini file
 ;;      Strips away blank and comment lines but not end-of-line comments by default
 ;;      Able to read UTF-8 files, as AHK's IniRead can only handle UTF-16(?)
@@ -20,7 +20,7 @@ pklIniSect( file, section := "pkl", strip := 0 ) {  				; Read an .ini section a
 	Return StrSplit( secTxt, "`n", "`r" )   						; Return an array of lines
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  Read a (pkl).ini value
 ;;      Usage: val := pklIniRead( <key>, [default], [inifile(s)|shortstr], [section], [stripcomments] )
 ;;      Special key values return a section list or the contents of a section
@@ -52,7 +52,7 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 		}
 		If ( val )  													; Once a value is found, break the for loop
 			Break
-	}	; end For theFile
+	}   ; <-- For theFile
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
 	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR; EPKL uses "")
 	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
@@ -71,7 +71,7 @@ pklIniCSVs( key, default := "", iniFile := "PklSet", section := "pkl"
 	Return StrSplit( val, splch, ignch ) 									; Split by splch, ignore ignch
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  Helper functions for .ini and other file handling
 ;
 pklIniKeyVal( row, ByRef key, ByRef val, esc := 0, com := 1, quo := 0 ) {   	; Because PKL doesn't always use IniRead? Why though?

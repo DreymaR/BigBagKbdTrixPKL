@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL initialization
 ;;  - Load 1) general settings and layout choice, 2) the layout itself, 3) other stuff.
 ;
@@ -7,7 +7,7 @@
 initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Settings ########################
 													;   ###############################################################
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Before we start... Initialize former globals, now included in the get/set info framework:
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
@@ -20,7 +20,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
 	setPklInfo( "osmN", 1 )  											; OSM number counter
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Find and read from the Settings file(s)
 	;
 	setFile := getPklInfo( "File_PklSet" )  							; The default file name will still be available.
@@ -29,7 +29,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		file := setFile . type . ".ini"
 		If FileExist( file ) 											; If the file exists...
 			setStck.push( file ) 										; ...add it to the SetStack
-	}	; end For type
+	}   ; <-- For type
 	If ( setStck.Length() == 0 ) {
 		MsgBox, %setFile% file NOT FOUND.`nEPKL cannot run without this file.`n`n• EPKL.exe must be run inside its home folder.`n• This folder must be uncompressed/extracted.
 		ExitApp
@@ -76,7 +76,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		For needle, newtxt in shorthand 								; C/X/[T] matches by window Class/Exe/Title
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
-	}	; end For suspApp
+	}   ; <-- For suspApp
 	_pklSetInf( "suspendingMode", "--" )    							; Window TitleMatchMode to use for suspendingApps
 	_pklSetInf( "suspendingLIDs", "--" )    							; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
@@ -90,7 +90,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	_pklSetInf( "tapModTime", 200 )         							; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: Its side effect ruins OS DKs.  	; eD FIXED
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Find and read from the EPKL_Layouts file(s)
 	;
 	shortLays   := pklIniCSVs( "shortLays", "Colemak/Cmk", "PklDic" )
@@ -122,8 +122,8 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		harmLID := StrReplace( LVars, "/" ) 							; The Harmonized Locale ID is a compound of its components, like BeCaFr
 		For ix, var in StrSplit( LVars, "/" ) { 						; The Tables file entry is a CSV list of slash-separated variants
 			polyLID["-" . var] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
-		}	; end For LVar
-	}	; end For LVars
+		}   ; <-- For LVar
+	}   ; <-- For LVars
 	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari 		;   (can be a single locale of a harmonized layout like BeCaFr)
 	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, ISO/ANS(I)/etc
 	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl/DH mod
@@ -163,7 +163,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		theName := ( nameParts.Length() > 1 ) ? nameParts[2] : theCode
 		setLayInfo( "layout" . A_Index . "code", theCode )
 		setLayInfo( "layout" . A_Index . "name", theName )
-	} 	; end for thisLay
+	}   ; <-- for thisLay
 	
 	If ( layoutFromCommandLine ) {										; The cmd line layout could be not in theLays?
 		thisLay   := layoutFromCommandLine
@@ -190,13 +190,13 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	}
 	nextLayoutIndex := ( nextLayoutIndex > numLayouts ) ? 1 : nextLayoutIndex
 	setLayInfo( "NextLayout", getLayInfo( "layout" . nextLayoutIndex . "code" ) )
-}	; end fn initPklIni()
+}   ; <-- fn initPklIni()
 
 													;   ###############################################################
 initLayIni() {  									;   ######################### Layout.ini  #########################
 													;   ###############################################################
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Find and read from the Layout.ini file and, if applicable, BaseLayout/LayStack
 	;
 	static initialized  := false
@@ -245,7 +245,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			layStck.push( file ) 										; ...add it to the LayStack
 			dirStck.push( pklDirs[ix] )
 		}
-	}	; end For file
+	}   ; <-- For file
 	setPklInfo( "LayStack", layStck )   								; Layout_Override.ini, Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
 	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
@@ -282,7 +282,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
 			%mapType% := ReadRemaps( mapList,            remStck )  	; Parse the map list into a list of base cycles
 			%mapType% := ReadCycles( mapType, %mapType%, cycStck )  	; Parse the cycle list into a pdic of mappings
-		}	; end For mapType
+		}   ; <-- For mapType
 		setPklInfo( "scMapLay", scMapLay )
 ;		SCVKdic := ReadKeyLayMapPDic( "SC", "VK", mapFile ) 			; Make a code dictionary for SC-2-VK mapping below
 		QWSCdic := ReadKeyLayMapPDic( "QW", "SC", mapFile ) 	; KLM code dictionary for QW-2-SC mapping 	; eD WIP. Make these only on demand, allowing for other code tables?
@@ -336,7 +336,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 				setKeyInfo( key . "ToM", tapMod )
 			} else {
 				tapMod  := ""
-			}	; end if ToM
+			}   ; <-- if ToM
 			keyVK   := "VK" . Format( "{:X}", GetKeyVK( key ) ) 			; Find the right VK code for the key's SC, from the active layout.
 			noStr   := "i)^(--|disabled)$"      							; -1; RegEx needle for disabled keys. MSKLC uses `-1` for state entries.
 			vkStr   := "i)^(vk|vkey|virtualkey)$"   						; -2; RegEx needle for VK entries, ignoring case. Don't use `-2` as entry.
@@ -358,7 +358,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 								|| ( InStr(entr2,";") == 1 )    			;   ... also if the 2nd entry is a comment.
 								|| RegExMatch( entr1, unStr) {  			; (Explicit unmapping with unStr is only needed if there are more entries.)
 				Continue    												; This key is to be left unmapped. Since isSet is now set, it will be.
-			}	; end if Single-Entry
+			}   ; <-- if Single-Entry
 			
 			If ( InStr( "modifier", loCase(entr2) ) == 1 ) { 				; Entry 2 is either the Cap state (0-5), 'Modifier', 'VKey' or 'SKey'
 				entr1   := _checkModName( entr1 )   						; Modifiers are stored as their AHK names, e.g., "RShift", "AltGr"...
@@ -393,7 +393,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 			} else {
 				Hotkey, *%key%   ,  keypressDown 							; Set state mapped keys; these use AHK Send (Down/Up)
 				Hotkey, *%key% Up,  doNothing   							; eD WIP: Only Down needed? Or is this an advantage?
-			}	; end if entries
+			}   ; <-- if entries
 			If ( entr2 < 0 )
 				numEntr := 2    											; If the key is VK/SC/Mod, ignore any extra entries
 			Loop % numEntr - 2 {    										; Loop through all entries for the key, starting at #3
@@ -423,19 +423,19 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					}														; @&: Dead keys and named literals/strings
 					setKeyInfo( dicName      , ksP )    					; "key<state>"  is the entry prefix
 					setKeyInfo( dicName . "s", ksE )    					; "key<state>s" is the entry itself
-				}	; end if prefix
-			}	; end loop entries
-		}	; end loop (parse layMap)
+				}   ; <-- if prefix
+			}   ; <-- loop entries
+		}   ; <-- loop (parse layMap)
 		If ( extKey ) && ( ! getLayInfo("ExtendKey") ) { 					; Found an Extend key, and it wasn't already set higher in the LayStack
 			setLayInfo( "ExtendKey", extKey ) 								; The extendKey LayInfo is used by ExtendIsPressed  	; eD WIP: Use a modKeys[] array instead?!
-		}	; end For row in map
-	}	; end For layFile (parse layoutFiles)
+		}   ; <-- For row in map
+	}   ; <-- For layFile (parse layoutFiles)
 	
 													;   ###############################################################
 ;initOtherInfo() 									;   ####################### Other settings  #######################
 													;   ###############################################################
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Read and set Extend mappings and help image info
 	;
 	If getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
@@ -464,20 +464,20 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 					tmp := extMapping
 					extMapping := hig_deTag( extMapping, dicName )  	; Lop off any HIG tag 	; eD TODO: We don't yet generate Extend images. Could we?
 					setKeyInfo( dicName, extMapping )
-				}	; end for row (parse extMappings)
-			}	; end Loop ext#
-		}	; end For stckFile (parse extStck)
+				}   ; <-- for row (parse extMappings)
+			}   ; <-- Loop ext#
+		}   ; <-- For stckFile (parse extStck)
 		setPklInfo( "extReturnTo", StrSplit( pklIniRead( "extReturnTo"
 							, "1/2/3/4", extStck ), "/", " " ) )    	; ReturnTo layers for each Extend layer
 		Loop % 4 {
 			setLayInfo( "extImg" . A_Index  							; Extend images
 				  , fileOrAlt( pklIniRead( "img_Extend" . A_Index ,, "LayStk" ), mainDir . "\extend.png" ) ) 	; eD WIP: Allow imgDir instead
-		}	; end loop ext#
-	}	; end if ( ExtendKey )
+		}   ; <-- loop ext#
+	}   ; <-- if ( ExtendKey )
 	
 	init_Composer( cmpKeys ) 											; Initialise the EPKL Compose tables once for all ©-keys
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Read and set the deadkey name list and help image info, and the string table file
 	;;
 	;;  - NOTE: Any file in the LayStack may contain named DK sections with extra or overriding DK mappings.
@@ -504,7 +504,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "dkImgDir", dkImDir )
 	setLayInfo( "dkImgSuf", pklIniRead( "img_DKStateSuf",,, "hig" ) ) 	; DK help img state suffix. "" is the old ""/"sh" style.
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Read and set layout on/off icons, initialize the tray menu and the Settings GUI
 	;
 	ico := readLayoutIcons( "LayStk" )
@@ -514,7 +514,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	setLayInfo( "Ico_OffNum_", ico.Num2 )
 	pkl_set_tray_menu() 							; Initialize the Tray menu
 	init_Settings_UI()  							; Initialize the Settings GUI
-}	; end fn initLayIni()
+}   ; <-- fn initLayIni()
 
 activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	SetCapsLockState, Off 							; Remedy those pesky CapsLock hangups at restart
@@ -548,7 +548,7 @@ activatePKL() { 									; Activate EPKL single-instance, with a tray icon etc
 	}
 	_pklJanitorLocaleVK( true ) 					; Force the first janitor locale update by calling it with `true`
 ;	Gosub pklJanitorTic 							; Do the first janitor sweep right away
-}	; end fn
+}   ; <-- fn
 
 changeLayout( nextLayout ) { 						; Rerun EPKL with a specified layout
 	Menu, Tray, Icon,,, 1 							; Freeze the tray icon
@@ -629,11 +629,11 @@ _checkModName( key ) {  							; Mod keys need only the first letters of their n
 	For modName, aliases in modAlias {
 		If RegExMatch( key, "i)^(?:vc)?([LR]?)(?:" . aliases . ")$", mat )
 			key := mat1 . modName   				; Is key an alias for a mod name (e.g., `LCONTROL`, `RWIN` or `vcLSH`)?
-	}	; end For modName (aliases)
+	}   ; <-- For modName (aliases)
 	For ix, modName in modNames {
 		If ( InStr( modName, key, 0 ) == 1 ) 		; Case insensitive match: Does modName start with key?
 			key := modName
-	}	; end For modName
+	}   ; <-- For modName
 	If ( getLayInfo( "LayHasAltGr" ) && key == "RAlt" ) {
 		Return "AltGr"  							; RAlt as AltGr
 	} else {

@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Send functions
 ;;  - Parse and send key presses and strings
 ;
@@ -71,7 +71,7 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 		chs .= chr
 		kys .= "_U" . formatUnicode( chr )  					; Format n single-char keys as a n×[_U####] hex string (4+ digits).
 ;		debug   .= " , " . chr
-	} 	; end for chr in lastKeys
+	}   ; <-- for chr in lastKeys
 	uni := false
 	If ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
 		uni := 5
@@ -109,9 +109,9 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 				lastKeys( "null" )  							; Reset the last-keys-pressed buffer 	; eD WIP: If the output is single-char, push it instead!
 				}
 				Return  										; If a longer match is found, don't look for shorter ones
-			} 	; end if keyArr
-		} 	; end for sections
-	} 	; end for seqLengths
+			}   ; <-- if keyArr
+		}   ; <-- for sections
+	}   ; <-- for seqLengths
 	If inArray( CoDeKeys, compKey ) { 							; If this Compose key is a CoDeKey...
 		pkl_DeadKey( "co0" )    								; ...use it whenever a sequence isn't recognized.
 	}
@@ -209,7 +209,7 @@ pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax addit
 			setOneShotMod( mod )
 		}
 		Return true
-	} 	; end if osm
+	}   ; <-- if osm
 	cmdIn  := InStr( enty, "¢[" )   							; eD WIP: Special send-command syntax. Only for Sleep and Run so far.
 	If cmdIn {
 		cmdUt := InStr( enty, "]¢" )
@@ -267,7 +267,7 @@ _strSendMode( string, strMode ) {
 	} else {
 		pklWarning( "Send mode '" . strMode . "' unknown.`nString '" . string . "' not sent." )
 		Return false
-	}	; end if strMode
+	}   ; <-- if strMode
 	Return true
 }
 
@@ -312,13 +312,13 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 				Sleep % 50  									; Wait so the Enter gets time to work. Need ~50 ms?
 			If ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
 				Break
-		}	; end Loop Parse
+		}   ; <-- Loop Parse
 	} else {    												; Send string as a single block with line break characters
 		StrReplace( theString, "`r`n", "`n" )   				; Ensure that any existing `r`n are kept as single line breaks
 		If ( brkMode == "rn" )
 			StrReplace( theString, "`n", "`r`n" )
 		_strSendMode( theString , strMode ) 					; Try to send by the chosen method
-	}	; end if brkMode
+	}   ; <-- if brkMode
 }
 
 pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of times, for the ®# key

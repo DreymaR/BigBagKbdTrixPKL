@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Image module
 ;;  - Displays main and dead key help images by shift state, and Extend layers
 ;;  - Separate background image and Shift/AltGr indicator overlay, configurable in Layout.ini
@@ -75,7 +75,7 @@ pkl_showHelpImage( activate := 0 )
 ;		im.Mrg.Push( 0 ) 													; [5]: The horz. push zone in px will be set/rescaled later
 		scaleImage  := 1 													; Request an image scaling before drawing it below
 		initialized := true
-	}	; end first-time initialization
+	}   ; <-- first-time initialization
 	
 	If ( activate == 2 ) 												; Toggle image
 		activate    := 1 - 2 * im.Active

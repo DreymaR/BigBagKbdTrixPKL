@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Get/Set ###Info module
 ;;  - Read and set global variables without having to declare them
 ;;  - Static associative dictionaries are used instead of most globals
@@ -63,7 +63,7 @@ getPklInfo( key, val := "", set := 0 )
 	Return pdic[key]
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL locale module
 ;;      Functions to set up locale strings
 ;;      Used by initPklIni() in pkl_init.ahk
@@ -79,7 +79,7 @@ pkl_locale_load( lang )
 				pklIniKeyVal( row, key, val, 1 ) 				; Extraction with \n escape replacement
 				setPklInfo( key, val )
 			}
-		}	; end For
+		}   ; <-- For
 		initialized := true
 	}
 	
@@ -94,17 +94,17 @@ pkl_locale_load( lang )
 					? SubStr("00" . key, -1) : key 				; If key is #, zero pad it to 0# instead
 			setPklInfo( "LocStr_" . key , val ) 				; pklLocaleStrings( key, val, 1 )
 		}
-	}	; end For
+	}   ; <-- For
 	
 	For ix, row in pklIniSect( file, "detectDeadKeys" ) { 		; Read the locale strings for DK detection  	; eD WIP: Phase this out? Use getWinLayDKs().
 		pklIniKeyVal( row, key, val, 1 )
 		setPklInfo( "DetecDK_" . key, val ) 					; detectDeadKeys_SetLocaleTxt(
-	}	; end For
+	}   ; <-- For
 	
 	For ix, row in pklIniSect( file, "keyNames" ) { 			; Read the list of keys and mouse buttons
 		pklIniKeyVal( row, key, val, 0 ) 						; Read without character escapes
 		_setHotkeyText( key, val )
-	}	; end For
+	}   ; <-- For
 }
 
 _setHotkeyText( hk, localehk )
@@ -154,7 +154,7 @@ getReadableHotkeyString( str ) 									; Replace hard-to-read, hard-to-print pa
 	Return str
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL Composer module
 ;;      Set up compose string tables from a file
 ;;      The tables are used by pkl_Composer() in pkl_send.ahk
@@ -203,7 +203,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 			}
 			For ix, len in seqLens { 								; Look for sequences of length for instance 1–4
 				keyArr%len% := {}   								; These reside in their own arrays, to reduce lookup time etc.
-			} 	; end for seqLens
+			}   ; <-- for seqLens
 			For ix, mapFile in cmpStck { 							; Read from the LayStack+1
 				For ix, row in pklIniSect( mapFile, "compose_" . sct ) {
 					If ( row == "" )
@@ -217,26 +217,26 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 								cht := upCase( chr ) 					; Also make an entry for the Titlecase version of the string key (if different)
 							} else {
 								cht := chr
-							} 	; end if ch1
+							}   ; <-- if ch1
 							kyt .= "_U" . formatUnicode( cht )
 							kys .= "_U" . formatUnicode( chr )
-						} 	; end for chr
+						}   ; <-- for chr
 						kyt := ( kyt == kys ) ? false : SubStr( kyt, 2 )
 						key := SubStr( kys, 2 )
-					} 	; end if string
+					}   ; <-- if string
 					dum := StrReplace( key, "U",, len ) 				; Trick to count the number of "0x", i.e., the pattern length (could count _ +1)
 					keyArr%len%[key] := val
 					If ( kyt && keyArr%len%[kyt] == "" ) 				; Only write the Titlecase entry if previously undefined.
 						keyArr%len%[kyt] := val
-				} 	; end for row
-			} 	; end for mapFile
+				}   ; <-- for row
+			}   ; <-- for mapFile
 			For ix, len in seqLens { 								; Look for sequences of length for instance 1–4
 				setLayInfo( "comps_" . sct . len, keyArr%len% )
-			} 	; end for seqLens
-		} 	; end for sct in tables
+			}   ; <-- for seqLens
+		}   ; <-- for sct in tables
 		cmpKeyTabs[ cmpKey ] := tables  							; For each named key, specify its required tables
 		tmp := ""
-	} 	; end for cmpKey in compKeys
+	}   ; <-- for cmpKey in compKeys
 	setLayInfo( "composeKeys"   , cmpKeyTabs ) 						; At this point, the tables don't contain "+" signs
 	setLayInfo( "composeTables" , usedTables )
 }
@@ -256,7 +256,7 @@ lastKeys( cmd, chr := "" ) {    									; Manipulate the LastKeys array of prev
 ;	setKeyInfo( "LastKeys", lastKeys )  							; Since we're editing the actual LastKeys array, this isn't needed
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL other Get/Set functions
 ;
 

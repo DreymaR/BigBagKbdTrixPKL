@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL dead key functions
 ;;  - Handle EPKL's DKs
 ;;  - Detect OS (Windows Layout) DKs
@@ -78,7 +78,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 ;		inKey   := Chr( relChr ) 							; The chr symbol for the current base key (e.g., 65 := A)   	; eD WIP: Not used?!?
 	} else {
 		relChr  := Ord( inKey ) 							; The ASCII/Unicode ordinal number for the pressed key; was Asc()
-	} 	; end if CurrBaseKey
+	}   ; <-- if CurrBaseKey
 ;	pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey "`ninKey: " inKey "`nrelChr: " relChr, 4 ) 	; eD DEBUG
 
 	setKeyInfo( "CurrNumOfDKs", --CurrNumOfDKs ) 			; Pop one DK from the queue. Note: ++ and -- have the Input between them.
@@ -108,9 +108,9 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 		} else {
 			PDKVs := DeadKeyChar  . " " . PDKVs 			; Add DK base char to space separated DK queue
 			setKeyInfo( "PressedDKVs", PDKVs )  			; eD WIP: Try to clear up the DK code? Unsure what it does...
-		} 	; end if CurrNumOfDKs
+		}   ; <-- if CurrNumOfDKs
 		pkl_Send( relChr )  								; Send the release key's char
-	} 	; end if dkEnt
+	}   ; <-- if dkEnt
 }
 
 resetDeadKeys( ) {  													; Tidy up and reset all global DK info parameters
@@ -137,13 +137,13 @@ getWinLayDKs() {    													; Detect all DeadKeys of the active Windows lay
 			If ( DK == -1 ) ;{
 				dkS := dkS . ":" . ShSt
 ;			( SC == 0x003 && ShSt == 6 ) ? pklDebug( "SC/VK/ShSt: " . SC . "/" . VK . "/" . ShSt . "`nDK: " . DK . "`ndkS: " . dkS . "`nchr: [" . chr . "]", 3 )  ; eD DEBUG
-		}	; end For states
+		}   ; <-- For states
 		If ( dkS != "" ) {
 			sSC := Format("SC{:03X}",SC)    							; Reformat SC to scMap's "SC###" notation
 			mSC := scMap.HasKey(sSC) ? scMap[sSC] : sSC 				; Use the "SC###" string as key
 			winDKs[mSC] := SubStr( dkS, 2 )  							; Map from decimal SC value to state string, e.g., `6` for AltGr, `0:1` for normal+Shift
 		}
-	} 	; end Loop SCs
+	}   ; <-- Loop SCs
 	setPklInfo( "WinLayDKs", winDKs )
 	Return winDKs
 }

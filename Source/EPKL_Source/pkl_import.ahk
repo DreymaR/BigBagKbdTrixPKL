@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Layout Import module: Turn any MSKLC (or other format?) file into an EPKL layout.
 ;;    - Works from the Layouts\_Import directory, turning any .klc files in _Inbox into layouts.
 ;;    - WIP: Just use an _Inbox under layouts, and generate directly into the Layout dir? Check if existing then.
@@ -64,7 +64,7 @@ _importOneLayout( LIM )								; Function to import one layout via a template .i
 }
 
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL Compose Import module: Turn any X11-libs Compose file into an EPKL Compose table.
 ;;    - It doesn't have a menu entry. I've run it using the Debug hotkey definable in _PKL_main.
 ;;    - It works from the EPKL_Composer directory, making an .ini file from a Compose.h file in _Inbox.
@@ -113,7 +113,7 @@ Large files may take some time.
 			row := ( SubStr( row, 1, 1 ) == a_SC ) ? row
 				 : padStr( row, 28, "=" ) 						; Pad the key with spaces
 			tempStr .= row . CRLF
-		} 	; end for KeySym
+		}   ; <-- for KeySym
 		fileStr := RegExReplace( tempStr, "\R+$", "`r`n" ) 		; Strip off the last CRLF
 		If not pklFileWrite( fileStr, CIM.SymFile )
 			Return false
@@ -133,7 +133,7 @@ Large files may take some time.
 				Break
 		}
 		fileStr := StrReplace( fileStr, "[" . key . "]", padStr( ky2, 12 ) )
-	} 	; end for KeySyms
+	}   ; <-- for KeySyms
 	tempStr  := ""
 	For ix, row in StrSplit( fileStr, "`n", "`r" ) {
 		If ( InStr( row, "U" ) == 1 ) { 						; Used to be 0x####; now it's U####.
@@ -146,9 +146,9 @@ Large files may take some time.
 				mat := SubStr( mat, 2, -1 ) 					; Strip the [] from the U####
 				row := SubStr( row, 1, pos -1 ) . padStr( mat, 12 ) . SubStr( row, pos + StrLen( mat ) + 2 ) 	; len(mat) -2 +1 ?
 			}
-		} 	; end if ^U####
+		}   ; <-- if ^U####
 		tempStr .= row . CRLF
-	} 	; end for row in fileStr
+	}   ; <-- for row in fileStr
 	fileStr := RegExReplace( tempStr, "\R+$", "`r`n" ) 			; Strip off the last CRLF
 	If not pklFileWrite( fileStr, CIM.CmpFile )
 		Return false
@@ -156,7 +156,7 @@ Large files may take some time.
 }
 
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL Import Module Process: Import a file and convert it using a specified set of regular expressions.
 ;
 
@@ -166,7 +166,7 @@ imp_convertFile( IMP, inFile, outFile, regExSect, title := "Imported EPKL file",
 	} else {
 		FileDelete % outFile 									; FileWrite appends to files, so delete any outFile. Remove this eventually? It's mostonly here for debugging
 		pklSplash( IMP.Title, "Deleted "  . inFile . " first...", 2.5 )
-	} 	; end if FileExist outFile
+	}   ; <-- if FileExist outFile
 	ini     := ".ini"
 	CRLF    := "`r`n"
 	a_SC    := "`;"
@@ -195,7 +195,7 @@ imp_convertFile( IMP, inFile, outFile, regExSect, title := "Imported EPKL file",
 			fileStr := RegExReplace( fileStr, needle, repTxt )
 		}
 		rExLog  .= COMM . key . val_1 . " → " . val_2 . CRLF
-	} 	; end for row in regExSection
+	}   ; <-- for row in regExSection
 	header  := getPklInfo( "pklHdrA" ) . title . CRLF 
 			 . COMM . "This file was imported and converted from " . inFile . getPklInfo( "pklHdrB" )
 	header  .= rExLog . a_SC . CRLF . CRLF
@@ -208,7 +208,7 @@ imp_convertFile( IMP, inFile, outFile, regExSect, title := "Imported EPKL file",
 	} else {
 		Return fileStr
 	}
-} 	; end convertFile
+}   ; <-- convertFile
 
 padStr( str, padTo, sep := false , out := false ) { 			; Pads a key with spaces up to a desired length. If it's longer, leave it.
 	SPCX    := "          " . "          " 						; 20 spaces for easier counting below

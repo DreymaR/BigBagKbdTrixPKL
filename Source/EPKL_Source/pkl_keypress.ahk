@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL key press functions
 ;;  - Process various key presses, mostly called from hotkey event labels in PKL_main.
 ;
@@ -12,7 +12,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		_osmClearAll()  										; ...clear any sticky mods, then...
 		extendKeyPress( HKey )  								; ...process the Extend key press.
 		Return
-	}	; end if ExtPressed
+	}   ; <-- if ExtPressed
 	
 	If ( capHK < -1 ) { 										; The key is VK or SC mapped, so just send its VK## and/or SC### code.
 		If ( capHK == -2 ) && inArray( [ "VK2D", "VK2E"  		; [PgUp,PgDn,End ,Home,Left,Up ,Right,Down,Ins ,Del ] are sent as their NumPad versions by AHK, as...
@@ -20,7 +20,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 				, "VK25", "VK26", "VK27", "VK28" ], vk_HK ) { 	; [049 ,051 ,04F ,047 ,04B ,048 ,04D ,050 ,052 ,053 ] are the NumPad SCs for the keys
 			SC  := GetKeySC(vk_HK) | 0x100  					; [149 ,151 ,14F ,147 ,14B ,148 ,14D ,150 ,152 ,153 ] are the normal SCs for the keys
 			vk_HK .= Format( "SC{:03X}", SC )   				; Send {vk##sc###} ensures that the normal key version is sent
-		} 	; end if capHK == VK
+		}   ; <-- if capHK == VK
 		delQStr := "VK1B-SC001" . "VK0D-SC01C"  				; Keys that wipe the LastKeys queue: Esc(1B), Enter(0D), 
 				.  "VK2E-SC153" . "VK09-SC00F"  				;                                    Del(2E), Tab(09; not usually mapped)   	; eD WIP: Some Extend mappings too?
 		If        InStr( "VK08-SC00E", vk_HK ) { 				; Backspace was pressed, so...
@@ -39,7 +39,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		Send {Blind}{%vk_HK% DownR} 							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
 		_osmClearAll()  										; Clear any sticky mods after sending
 		Return
-	}	; end if VK/SC
+	}   ; <-- if VK/SC
 																; The part below might be a separate fn, e.g., sendKeyWithMods( HKey, CapHK )
 	modif := ""
 	state := 0
@@ -69,7 +69,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		} else {
 			_pkl_CtrlState( HKey, capHK, state, modif ) 		; Ctrl is down
 		}
-	}	; end if LayHasAltGr
+	}   ; <-- if LayHasAltGr
 	If ( getKeyState("LWin") || getKeyState("RWin") )   		; Win is down
 		modif .= "#"
 ;	If ( getKeyState("LShift") || getKeyState("RShift") )   	; Shift is down 	; eD WIP: Get Shift+keys working. Would it mess with anything else?
@@ -94,9 +94,9 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		Ent := ( Ent == "" ) ? getKeyInfo( HKey . "0s" ) : Ent	; Default to ShiftState 0 if entry is empty
 		If pkl_ParseSend( Pri . Ent, "SendThis" )   			; Unified prefix-entry syntax
 			Return  											; Skip osmClearAll in this case
-	}	; end if Pri
+	}   ; <-- if Pri
 	_osmClearAll()  											; If another key is pressed while a OSM is active, cancel the OSM
-}	; end fn keyPressed 										; eD WIP: Should _osmClearAll() be used more places above?
+}   ; <-- fn keyPressed 										; eD WIP: Should _osmClearAll() be used more places above?
 
 extendKeyPress( HKey ) {    									; Process an Extend modified key press
 	Critical
@@ -133,13 +133,13 @@ extendKeyPress( HKey ) {    									; Process an Extend modified key press
 			If getKeyState( HKey, "P" ) {
 				pref .= modList[mod]
 			}
-		}	; end For
+		}   ; <-- For
 		Send {Blind}%pref%{%xVal%}  							; By default, take modifiers into account 	; eD WIP: Use normal plkSend instead?!
-	} 	; end if
+	}   ; <-- if
 	For HKey, mod in extMods {
 		If ( not getKeyState( HKey, "P" ) )
 			extMods.Delete( HKey )
-	}	; end For
+	}   ; <-- For
 	setLayInfo( "extendUsed", true )    						; Mark the Extend press as used (to avoid dual-use as ToM key etc)
 	Critical, Off   											; eD WIP: Is this necessary? Or will AHK always go non-critical after each fn?
 }
@@ -167,7 +167,7 @@ _composeVK( HKey, vk_HK ) { 									; If the output is a single, printable char
 	}
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  Set/get modifier key ShiftStates
 ;;      Process states of mods. Used in PKL_main; #etAltGrState() also in PKL_send.
 ;
@@ -298,7 +298,7 @@ AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
 ExtendIsPressed() { 										; Determine whether the Extend key is pressed. Used in keyPressed() and pkl_gui_image
 	ext := getLayInfo( "ExtendKey" ) 						; eD WIP: Here, the ExtendKey info is used. Replace it with a generic mod key array/fn? ModIsPressed()
 	Return ( ext && getKeyState( ext, "P" ) ) ? true : false
-}	; end fn
+}   ; <-- fn
 
 _setExtendState( set := 0 ) {   							; Called from setModState. This function handles Extend key tap or hold.
 	static extMod1      := ""
@@ -323,9 +323,9 @@ _setExtendState( set := 0 ) {   							; Called from setModState. This function 
 ;		Send {Shift Up}{Ctrl Up}{Alt Up} 					; ...remove physical modifiers to clean up. 	; eD WIP: Can we do without this now?
 															; eD WIP: Extend Up can get interrupted if it's a ToM key, so this doesn't get done?
 		extHeld := 0
-	}	; end if
+	}   ; <-- if
 	setLayInfo( "extendUsed", false )   					; Mark this as a fresh Extend key press (for ToM etc)
-}	; end fn _setExtendState
+}   ; <-- fn _setExtendState
 
 setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrModDown/Up labels. Handles tap-or-mod (ToM) aka dual-role modifier (DRM) keys.
 	static tomHeld  := {}   								; Is this key held down? Or check KeyState instead?
@@ -374,7 +374,7 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 		setLayInfo( "extendUsed", false )
 		setTapOrModState( -1 )  							; Clear any ToM key settings
 	}
-}	; end fn
+}   ; <-- fn
 
 tomTimer:   												; There's only one timer as you won't be activating several ToM at once
 ;	pklDebug( "ToM: " HKey " > " getPklInfo( "tomMod" ) ) 	; eD DEBUG

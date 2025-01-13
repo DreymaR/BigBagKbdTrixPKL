@@ -1,8 +1,8 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPiKaL PKL - EPKL
 ;;  Portable Keyboard Layout (Máté Farkas, -2010)   [https://github.com/Portable-Keyboard-Layout]
 ;;  edition DreymaR    (Øystein Bech-Aase, 2015-)   [https://github.com/DreymaR/BigBagKbdTrixPKL]
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;
 
 /*
@@ -14,15 +14,8 @@ NEXT: Improvements I'd really like to get around to soon
 TODO: Improvements that are deemed worthy and useful, sometime
 HOLD: Thoughts and suggestions that weren't that good after all, or currently infeasible
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
-
-WIPs: Formatting, again...
-		- Too long ::  ====...====, still? 156 now; 148 enough?
-			- Yes, some rows are longer than that, but it's annoying on some screens
-			- The EPKL_ files mostly stay within col 149 (length 148), apart from some long definitions.
-		- `}	; end ` and `} 	; end ` -> `}   ; <- `, throughout
-		- `img_MainDir` comments on the same line, in files that have it (like Cmk-Epo)
 
 WIPs: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
@@ -125,7 +118,7 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Make a stack of active ToM keys? Ensuring that they get popped correctly. Nah...?
 		- Should I support multi-ToM or not? Maybe two, but would need another timer then like with OSM.
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  eD 2FIX:
 
 2FIX: Repeat/Compose don't work on DK output?
@@ -236,7 +229,7 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 2FIX: If a layout have fewer states (e.g., missing state2) the BaseLayout fills in empty mappings in the last state! Hard to help? Mark the states right in the layout.
 2FIX: Pressing a DK twice should release basechar1 (s1) but basechar0 (s0) is still released. Not sure why.
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  eD TONEXT:
 
 NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
@@ -400,7 +393,7 @@ TODO: Harmonize Ext and folder mod names? And/or make a shorthand for the @E=@C@
 TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. 
 		- Maybe that should be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM KbdTypes?
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  eD TODO:
 
 TODO: Could the [layout] section be composed from includes of other sections? Such as [Numbers], [Symbols], [Letters], [Others]?
@@ -487,7 +480,7 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 		- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 		- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  eD ONHOLD:
 
 HOLD: More `¢[]¢` syntax?
@@ -609,7 +602,7 @@ initLayIni()    											; Read settings from Layout.ini and layout part files
 activatePKL()
 ;pklDebug( "Time since init start: " . A_TickCount - getPklInfo( "initStart" ) . " ms", 1 ) 	; eD DEBUG
 
-Return  													; end of main
+Return  													; <--«  main code
 
 ;;  ########################    labels      ########################
 
@@ -783,7 +776,7 @@ Return
 	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 2 )  ; eD DEBUG
 ;	importLayouts() 									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
-} 	; end debug#
+}   ; <-- debug#
 
 ;;  ########################    includes    ########################
 

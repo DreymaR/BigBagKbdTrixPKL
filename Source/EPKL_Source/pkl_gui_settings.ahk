@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Settings UI module
 ;;  - Handles the EPKL Layout/Settings... menu, consisting of several settings tabs
 ;;  - It writes your choices to the right EPKL Override files, generating these first as necessary.
@@ -39,9 +39,9 @@ init_Settings_UI() {    										; Initialize UI globals (run once by pkl_init;
 		keyRow  := ( row == 1 ) ? keyRow . "BSP|" : keyRow 		; The KLM map has Backspace on row 0 beyond the ||.
 		If ( row > 0 )  										; Only show row 1-4 in the DDLs
 			ui.KLMs[ row ] := keyRow 	;StrSplit( keyRow, "|", " `t" ) 	; Split by pipe
-	}	; end For KLM codes
+	}   ; <-- For KLM codes
 	ui.SEnt := "System|VKey|Disabled|Unmapped|" 				; Single-Entry key mappings
-} 	; end init
+}   ; <-- init
 
 pklSetUI() { 													; EPKL Settings GUI
 	pklAppName  := getPklInfo( "pklName" )
@@ -61,7 +61,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Tab3, vUI_Tab gUIhitTab +AltSubmit 			; Multi-tab GUI. AltSubmit gets tab # not name.
 			, % "Layout||Settings|Special Keys|Key Mapper"  	; The tab followed by double pipes is default
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Layout Picker UI
 	;
 	GUI, UI:Add, Text, section  								; 'section' stores the x value for later
@@ -108,7 +108,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn1  gUIsubLaySel, &Submit Layout Choice
 	GUI, UI:Add, Button, xs+244 yp          gUIrevLay   , %SP%&Reset%SP% 	; Note: Using absolute pos., specify both x & y
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  General Settings UI
 	;
 	GUI, UI:Tab, 2
@@ -131,7 +131,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn2  gUIsubSetSel, &Submit Setting%SP%
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSet   , %SP%&Reset%SP%
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Special Keys UI
 	;
 	GUI, UI:Tab, 3
@@ -174,7 +174,7 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSpc   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
 	
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  Key Mapper UI [advanced]
 	;
 	GUI, UI:Tab, 4
@@ -228,9 +228,9 @@ pklSetUI() { 													; EPKL Settings GUI
 	Gosub UIselSet  											; ...then, Settings...
 	Gosub UIselLay  											; ...then, Layout
 	Gosub UIhitTab
-} 	; end fn pklSetUI
+}   ; <-- fn pklSetUI
 
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  UI Control sections
 	;
 UIhitTab:   													; When a tab is selected, make its button the default.
@@ -263,7 +263,7 @@ UIselLay:   													; Handle UI Layout selections
 ;				tmp .= "`n" . dirPart[2] . "  -->  " . dirPart[3]   	; eD DEBUG
 			}
 		}
-	} 	; end For LayDirs
+	}   ; <-- For LayDirs
 ;	( 1 ) ? pklDebug( "Listing for " . main . "`n" . tmp, 5 )   		; eD DEBUG
 	layTyps     := _uiCheckLaySet( layDirs, 1, 2, mNidl  )  	; Get the available Layout Types for the chosen Main Layout
 	If inArray( layTyps, "eD" )
@@ -308,7 +308,7 @@ _setValDefCom( setting ) {  									; Get value/default/commentaries for a Sett
 	set.Com := RegExReplace( set.Com, "[`t]+"   , "  " )
 	set.Com := RegExReplace( set.Com, "[ ]{3,}" , "  " ) 		; Compactify whitespace
 	Return set
-} 	; end fn
+}   ; <-- fn
 
 UIselSpc:   													; Handle UI Special Key selections
 	GUI, UI:Submit, Nohide
@@ -489,7 +489,7 @@ UIrevKey:   													; Revert UI setting(s)
 	           , _uiGetParams( "KeyAll" ) ], "Key" )
 Return
 
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;;  UI functions
 	;
 _uiControl( var, values ) { 									; Update an UI Control with new values and, if applicable, choice
@@ -539,7 +539,7 @@ _uiPipeIt( listArr, sort := 0, clear := 1 ) {   				; Convert an array to a pipe
 	For ix, elem in listArr {   								; eD WIP: Use IfObject to make it more robust?
 		pipe        := ( listStr ) ? "|" : ""
 		listStr     .= pipe . elem
-	}	; end For
+	}   ; <-- For
 	If sort
 		Sort, listStr, D| U 									; Sort options: U - Unique, D# - use # as delimiter
 	listStr := ( clear ) ? "|" . listStr : listStr 				; Prepend "|" if replacing the list
@@ -556,10 +556,10 @@ _uiCheckLaySet( dirList, splitUSn, splitMNn := 0, needle := "" ) {
 		If ( needle ) { 										; Check if this match works with the other chosen ones
 			If not RegExMatch( item, needle ) 					; InStr( item, needle ) for a simple search
 				Continue
-		} 	; end if needle
+		}   ; <-- if needle
 		If not inArray( theList, match ) 						; Add the match if it isn't added yet
 			theList.Push( match )
-	}	; end For
+	}   ; <-- For
 	Return theList  											; Return an array of the relevant layout settings
 }
 
@@ -589,7 +589,7 @@ _uiSubmit( parset ) {   										; WriteOverride calls for several sets of the 
 	ui.Written  := false
 	For ix, pr in parset {
 		_uiWriteOverride( pr[1], pr[2], pr[3], pr[4], pr[5] ) 	; key_entry, module, section, ovrFile, ovrPath
-	}	; end For pars
+	}   ; <-- For pars
 	If ( ui.Written )
 		_uiMsg_RefreshPKL()
 }
@@ -622,12 +622,12 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 					Return false
 			} else {
 				Return false
-			} 	; end if makeFile
+			}   ; <-- if makeFile
 		} else {
 			pklInfo( "Override file not found:`n`n" . ovrPath, 3 )
 			Return false
-		} 	; end if tplFile
-	} 	; end if not FileExist ovrPath
+		}   ; <-- if tplFile
+	}   ; <-- if not FileExist ovrPath
 	pklIniKeyVal( key_entry, key, entry )   					; Split the "key = entry" line
 	makeLine := false   										; Make the new line and tidy up old ones, ...
 	If revert { 												; ...or revert all previous changes.
@@ -638,7 +638,7 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 		ms1 := "Write Override line?"
 		ms2 := "Submit"
 		ms3 := "Write this setting override:`n`n" . key . " = " . entry
-	} 	; end if revert
+	}   ; <-- if revert
 	If not _uiMsg_Override( ms1, ms2, ms3, section, ovrFile ) 	; Write override, if desired and possible
 		Return false
 	If not tmpFile := pklFileRead( ovrPath . ini )  			; The standard IniWrite writes to the end of the section. We want the start.
@@ -660,10 +660,10 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 				If ( count++ >= maxEntr ) 						; Only count UI generated lines with the same key
 					Continue 									; Delete/skip old lines if too many
 				row := ( SubStr( row, 1, 1 ) == a_SC ) ? row : a_SC . row 	; Comment out old submitted lines
-			} 	; end if InStr
-		} 	; end if inSect
+			}   ; <-- if InStr
+		}   ; <-- if inSect
 		rows := rows . "`r`n" . row
-	}	; end For row
+	}   ; <-- For row
 	tmpFile := SubStr( rows, 3 ) 								; Lop off the initial line break from 'rows =' above
 	If not revert {
 		entry   := key . " = " . entry . " `t`t" . comText . thisMinute()
@@ -672,7 +672,7 @@ _uiWriteOverride( key_entry, module := "Settings"   			; Write a line to Overrid
 	}
 	If pklFileWrite( tmpFile, ovrPath . ini )   				; Write/revert the override
 		ui.Written  := true  									; Files were changed, so ask whether to refresh EPKL
-} 	; end fn UI WriteOverride
+}   ; <-- fn UI WriteOverride
 
 _uiMsg_MakeFile( module, ovrFile, tplFile ) {
 	MsgBox, 0x021, Make Override file?, 						;  0x000: 1st button default. 0x20: Exclamation. 0x1: OK/Cancel
@@ -719,4 +719,4 @@ or by the Refresh hotkey (default Ctrl+Shift+5).
 )
 	IfMsgBox, OK
 		gosub rerunSameLayout
-} 	; end fn UI RefreshPKL
+}   ; <-- fn UI RefreshPKL

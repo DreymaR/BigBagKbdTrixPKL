@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Help Image Generator: Generate help images from the active layout
 ;;  - Calls Inkscape with a .SVG template to generate a set of .PNG help images
 ;;  - Edits the SVG template using a lookup dictionary of KLD(Co) key names; see the Remap file
@@ -96,7 +96,7 @@ for the current layout, or only the main state images?
 			pklErrorMsg( "Couldn't create folders." )
 			Return
 		}
-	} 	; end if Debug
+	}   ; <-- if Debug
 	shiftStates := getLayInfo( "shiftStates" )  				; may skip some, e.g., state 2 (Ctrl), by imgStates
 	HIG.imgMake := ( onlyMakeDK ) ? "--" : "shift state" 		; If refreshing one DK, don't render state images
 	HIG.destDir := HIG.ImgDirs[ "root" ]
@@ -156,7 +156,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 ;			If dkV
 ;				dkMk[ hig_aChr( dkV ) ] := true 				; Base char and comb. accents will be marked
 ;	( dkV == 180 ) ? pklDebug( "`ndkV: " . dkV . "`nrel: " . rel . "`nChr: " Chr(dkV) . "`n1Ch: " hig_aChr(dkV), 6 )  ; eD DEBUG
-;		}	; end For release
+;		}   ; <-- For release
 	}
 	HIG.Empty   := true 										; Keep track of whether a state layer is empty
 	For CO, SC in HIG.PngDic
@@ -216,16 +216,16 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 						? "MrkdDK" : "" 						; The DKVal is in the base/mark list, so mark it for display
 			rel     := hig_parseEntry( HIG, rel )   			; Prepare the entry for display vis-a-vis HIG «» and prefix tags
 			idKey   := dkName . "_" . idKey
-		}	; end if imgName
+		}   ; <-- if imgName
 		HIG.Empty   := ( rel ) ? false : HIG.Empty  			; If rel is something, the layer isn't empty anymore
 		HIG.ImgDic[ idKey       ]  := rel   					; Store the release value for this (DK/)state/key
 		HIG.ImgDic[ idKey . "¤" ]  := mrk   					; Store the display mark  --"--
 	( HIG.Debug && idKey == HIG.ShowKey ) ? pklDebug( "`nidKey: " . idKey . "`nent: " . ent . "`nents: " . ents . "`nrel: " . rel . "`nmark: " . mrk . "`nChr: " Chr(rel), 6 )  ; eD DEBUG
-	}	; end For CO, SC
+	}   ; <-- For CO, SC
 	
 	If ( HIG.imgMake == "--" )  								; Sometimes we just need the dictionary, like for single DK.
 		Return
-	;;  ====================================================================================================================================================
+	;;  ============================================================================================================================================
 	;:  _makeOneSVG( ByRef HIG, shSt ) 							; Generate a vector graphics (.SVG) help image from a template
 	;
 	preName := ( stateImg ) ? "" : HIG.imgName . " "
@@ -279,7 +279,7 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 					comb := hig_combAcc( dkD2 ) ? " " : ""  		; Note: Padding works well for some but not others.
 					aChr := aChr . comb . hig_makeChr( dkD2 )
 				}
-			} 	; end if display tag
+			}   ; <-- if display tag
 			dChr := aChr
 		} Else If ( chrMrk == "MrkdDK" ) {  					; Marked dead key base/accent char (marked in pdic)
 			mark := hig_combAcc( chrVal ) ? HIG.MkDkCmb : HIG.MkDkBas
@@ -313,9 +313,9 @@ hig_makeImgDicThenImg( ByRef HIG, shSt ) {  					; Function to create a help ima
 ;			endStr  := SubStr( tempImg, psEo )  				; The file-string after the CO entry
 			tempImg := StrReplace( tempImg, fsDf . midStr . CO
 										  , fsSz . midStr . chr,, 1 )   	; It all comes together again.
-		}	; end For chr
+		}   ; <-- For chr
 ;;		tmp := ( aChr ) ? tmp . "`n" . CO . " - " . fsSz . ": '" . aChr . "'" : tmp
-	}	; end For CO,SC in PngDic
+	}   ; <-- For CO,SC in PngDic
 ;;		( 1 ) ? pklDebug( "" . tmp, 30 )  ; eD DEBUG
 	If ( HIG.Debug >= 3 )   	; eD DEBUG: Don't make files
 		Return
@@ -357,7 +357,7 @@ hig_parseEntry( ByRef HIG, ent ) {  							; Parse a state or DK mapping for hel
 	intEnt  := isInt(ent)   									; Integer entry
 	If ( psp ) {    											; Prefix detected
 		ent := "·" . psp . "·"  								; Show untagged prefix-entries as the prefix between dots
-;	} 	; end if psp 		; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
+;	}   ; <-- if psp 		; eD WIP: Move this to the write svg section? 1) Use hig_aChr() 2) Mark prefix 3) Long literals (w/ or w/o %→ prefix) ".."
 	} Else If ( not intEnt ) {  								; eD WIP: Must not mark "dc_" keys here! Add if else to the above?
 		maxLen := HIG.fontSiz.Length()  						; The number of specified font sizes; ellipse out anything longer
 		ent := ( StrLen(ent) > maxLen ) ? HIG.MkEllip : ent 	; Entry is a string, like {Home}+{End}. Marked as a (midline) ellipse.
@@ -427,7 +427,7 @@ hig_deTag( ent, dicName := false ) {    						; Detect and sort out an entry HIG
 			If dicName
 				setKeyInfo( dicName . "Ħ", tag )    			; Save the HIG tag separately (entry is saved through byref)
 		}
-	} 	; end if HIG tag
+	}   ; <-- if HIG tag
 	Return ent  									;( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  	; eD DEBUG
 }
 

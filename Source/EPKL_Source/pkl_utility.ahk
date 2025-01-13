@@ -1,4 +1,4 @@
-﻿;;  ========================================================================================================================================================
+﻿;;  ================================================================================================================================================
 ;;  EPKL Remap module
 ;;  - Functions to read and parse remap cycles for ergo mods and suchlike
 ;;  - Used primarily in pkl_init.ahk
@@ -17,11 +17,11 @@ ReadRemaps( mapList, mapStck ) { 								; Parse a remap string to a CSV list of
 				theMap  := ""
 			}
 			tmpCycle    := tmpCycle . ( ( tmpCycle ) ? ( " + " ) : ( "" ) ) . theMap 	; re-attach by +
-		}	; end For list
+		}   ; <-- For list
 		mapCycList  := mapCycList . ( ( mapCycList ) ? ( ", " ) : ( "" ) ) . tmpCycle 	; re-attach by CSV
-	}	; end For alist
+	}   ; <-- For alist
 	Return mapCycList
-}	; end fn
+}   ; <-- fn
 
 ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
 	mapFile := IsObject( mapStck ) ? mapStck[mapStck.Length()] : mapStck 		; Use a file stack, or just one file
@@ -41,7 +41,7 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 ;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
 			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and wrapping pipes
 			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
-		}	; end For plist
+		}   ; <-- For plist
 		If ( mapType == "SC" )									; Remap pdic from thisType to SC
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
 		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) { 	; Parse cycle to minicycles:  | a | b / c | d | e |
@@ -53,25 +53,25 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 					thisCycle[ A_Index ] := mapDic[ this ]
 				} else if ( mapType == "VK" )  { 				; Remap from VK name/code to VK code
 					thisCycle[ A_Index ] := getVKnrFromName( this ) 	; VK maps use VK## format codes
-				}	; end if
-			}	; end loop
+				}   ; <-- if
+			}   ; <-- loop
 			Loop % numSteps { 									; Loop to (re)write remap pdic
 				this := thisCycle[ A_Index ] 					; This key's code gets remapped to...
 				this := ( mapType == "SC" ) ? rdic[ this ] : this 	; When chaining maps, map the remapped key ( a→b→c )
 				that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
 				pdic[ this ] := that 							; Map the (remapped?) code to the next one
 				tdic[ that ] := this 							; Keep the reverse mapping for later cycles
-			}	; end Loop (remap one full cycle)
+			}   ; <-- Loop (remap one full cycle)
 			For key, val in tdic 
 				rdic[ key ] := val 								; Activate the lookup dict for the next cycle
-		}	; end For minicycle
-	}	; end For clist (parse CSV)
+		}   ; <-- For minicycle
+	}   ; <-- For clist (parse CSV)
 ;; eD remapping cycle notes:
 ;; Need this:    ( a | b | c , b | d )                           => 2>:[ a:b:d, b:c, c:a, d:b   ]
 ;; With rdic: 1<:[ b:a, c:b, a:c, d:d ] => 2>:[ r[b]:d, r[d]:b ] => 2>:[ a:d  , b:c, c:a, d:b   ]
 ;; Note that:    ( b | d , a | b | c )                           => 2>:[ a:b  , b:d, c:a, d:b:c ] - so order matters!
 	Return pdic
-}	; end fn
+}   ; <-- fn
 
 ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of KLMaps in a remap.ini file
 	pdic    := {}
@@ -88,12 +88,12 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 			val := upCase( valRow[ ix ] )
 			val := ( valType == "VK" ) ? getVKnrFromName( val ) : val
 			pdic[ key ] := val  								; e.g., pdic[ "SC001" ] := "VK1B"
-		}	; end For key
-	}	; end Loop KLM rows
+		}   ; <-- For key
+	}   ; <-- Loop KLM rows
 	Return pdic
-}	; end fn
+}   ; <-- fn
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  EPKL janitor/activity module
 ;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app, perform cleanup etc.
 ;
@@ -178,14 +178,14 @@ _pklJanitorCleanup() {
 			} else {
 				Send % "{" . mod . " Up}" 						; ...send key up in case it's stuck (doesn't help if it's registered as physically down)
 			}
-		}	; end For mod 	; eD WIP: Try to do without the keyup spam now, as stuck mods aren't prevalent after the Extend mod rework? But I've still had it happen.
+		}   ; <-- For mod 	; eD WIP: Try to do without the keyup spam now, as stuck mods aren't prevalent after the Extend mod rework? But I've still had it happen.
 		setPklInfo( "cleanupDone", true )
 	} else if ( A_TimeIdlePhysical < timeOut ) { 				; Sending the up mods above resets TimeIdle but not TimeIdlePhysical
 		setPklInfo( "cleanupDone", false ) 						; Recent keyboard activity reactivates the cleanup timer
 	}
 }
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  Utility functions
 ;;      These are minor utility functions used by other parts of EPKL
 ;
@@ -221,8 +221,8 @@ pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) { 				; Set a menu hotkey (used
 		Hotkey, %hkey%, %gotoLabel%
 		If ( ix == 1 )
 			setPklInfo( pklInfoTag, hkey )
-	}	; end For hkey
-}	; end fn
+	}   ; <-- For hkey
+}   ; <-- fn
 
 getWinInfo() { 												; Get match info for the active window
 	WinGetClass, awClass, A 								; This info is useful for setting SuspendingApps
@@ -247,7 +247,7 @@ getWinLayVKs() {    										; Find the VK values for the current Win layout's 
 		ovk := Format( "VK{:02X}", GetKeyVK( qsc ) ) 		; VK## format
 		oemDic[qvk]  := ovk 								; GetKey##(key) gets current Name/VK/SC from a SC or VK
 ;	( key == "_GR" ) ? pklDebug( "OEM: " . key . "`nSC: " . qSCdic[key] . "`nQVK: " . qvk . "`nOVK: " . oemDic[qvk], 6 )  ; eD DEBUG
-	} 	; end for key
+	}   ; <-- for key
 	setPklInfo( "oemVKdic", oemDic )
 	Return oemDic 											; eD WIP: Map from SC instead, so we can keep track of how OEM keys should be mapped? Also, VK aren't as robust.
 }
@@ -433,7 +433,7 @@ pklModState( mode := "get", ShSt := 0 ) {   											; Get/Set a &ModState 256
 		If ( modDown )  																; The modifier is pressed (if using GetKeyState(), "P" is for physical)
 			NumPut( 0x80, ModState, modVK + 0, "UChar" )
 ;		( ShSt == 6 ) ? pklDebug( "mod: " . mod . " (" . modVK . ")`nShSt: " . ShSt . "`nmodDn: " . modDown , 2 )  ; eD DEBUG
-	} 	; end for
+	}   ; <-- for
 ;	VarSetCapacity( ModState, 256, 0 ), NumPut( 0x80, ModState, 0x11, "UChar" ), NumPut( 0x80, ModState, 0x12, "UChar" ) 	; eD DEBUG
 	Return &ModState
 }
@@ -470,7 +470,7 @@ pkl_exec( cmdStr := "" ) {  								; Execute certain commands, e.g., inside str
 		} Else If   ( theCmd == "Run("      ) {
 			runTarget( arg )
 		}
-	}   ; <- For cmdHead
+	}   ; <-- For cmdHead
 }
 
 pklDebugCustomRoutine() {   								; eD DEBUG: debugShowCurrentWinLayKeys() – Display the VK values for the current Win layout's OEM keys
@@ -530,7 +530,7 @@ MenuIconNum:
 	Msgbox % "'" . Clipboard . "'`n     added to Clipboard!"
 Return
 
-;;  ========================================================================================================================================================
+;;  ================================================================================================================================================
 ;;  AHK v1 --> v2 Transition
 ;;      The transition from AHK v1 to v2 seems very promising, but needs some work.
 ;;      One thing that may ease it, would be to make some deprecated commands into temporary functions.
