@@ -154,12 +154,12 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := ""
-		If ! higMode && pkl_ParseAHK( enty, pfix )  			;      Special EPKL-AHK syntax additions (only do if not higMode)
+		If pkl_ParseAHK( enty, pfix, higMode )  				;      Special EPKL-AHK syntax additions (only performed if not higMode)
 			Return psp
 	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := "{Blind}"
-		If ! higMode && pkl_ParseAHK( enty, pfix )
+		If pkl_ParseAHK( enty, pfix, higMode )
 			Return psp
 	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
@@ -191,8 +191,10 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	Return psp  												; Return the recognized prefix
 }
 
-pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α/β entries.
+pkl_ParseAHK( ByRef enty, pfix := "", abort := false ) {    	; Special EPKL-AHK syntax additions. Allows even more fancy stuff in α/β entries.
 	Critical 													; eD WIP: Try to improve timing for OSMs
+	If ( abort == true )
+		Return true
 	OSM := false , OSMs  := []
 	While InStr( enty, " OSM}" ) {  							; OneShotMod syntax: `{<mod> OSM}` activates <mod> as OSM once.
 		OSM := true
@@ -210,17 +212,16 @@ pkl_ParseAHK( ByRef enty, pfix := "" ) {    					; Special EPKL-AHK syntax addit
 		}
 		Return true
 	}   ; <-- if osm
-	cmdIn  := InStr( enty, "¢[" )   							; eD WIP: Special send-command syntax. Only for Sleep and Run so far.
-	If cmdIn {
-		cmdUt := InStr( enty, "]¢" )
-		If cmdUt {
-			pkl_Send( "", pfix . SubStr( enty, 1, cmdIn-1 ) ) 	; Send the entry part up to the command
+	If (     cmdIn := InStr( enty, "¢[" ) ) {   				; Special send-command syntax. Only for Sleep and Run so far.
+		If ( cmdUt := InStr( enty, "]¢" ) ) {
+			If ( cmdIn > 1 )    								; Send any partial entry up to the command
+				pkl_Send( "", pfix . SubStr( enty, 1, cmdIn-1 ) )
 			cmdStr  := SubStr( enty, cmdIn+2, cmdUt-cmdIn-2 )
 			pkl_exec( cmdStr )  								; Execute the command
 			enty := SubStr( enty, cmdUt+2 ) 					; Because of ByRef, this changes enty
-			pkl_ParseAHK ( enty, pfix ) 						; Iterate in case of multiple commands in one entry
+			pkl_ParseAHK( enty, pfix )  						; Iterate in case of multiple commands in one entry
 		}
-	}
+	}   ; <-- if Cmd()
 	Return false
 }
 
