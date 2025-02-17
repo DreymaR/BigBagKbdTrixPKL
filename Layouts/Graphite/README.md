@@ -136,15 +136,18 @@ _The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever yo
 Gralmak
 -------
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
-- Thus, I made a "Gralmak" variant with sym key placements like, e.g., Colemak-CAWS.
-- The name plays on Graphite-Gallium, and how we're questing for the mythical "Holy Gra(i)l" of layouts!
-- It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
+- Thus, I made the "Gralmak" variant with sym key placements like, e.g., Colemak-CAWS.
+- The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Gra(i)l" of layouts!
+<br>
+
+- It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
 - In this capacity, it can be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
 <br>
 
-- Like the [Gallium][GalPKL] layout and Colemak, I want the J in the middle and Quote on pinky.
-- Like Graphite-HB, I don't want to change Shift states between keys.
+- Like the [Gallium][GalPKL] layout and Colemak, I want the J in the middle and a symbol (Quote) on pinky.
+- Like Graphite-HB and most other layouts, I don't want to change the Shift states of keys.
+- Note that there are others who have reached nearly the same variant as this one, such as [Galite][Galite].
 - Also see the README for the similar [Galliard][Gallrd] Gallium variant.
 
 #### Graphite AWS-ISO "Gralmak":
@@ -177,6 +180,7 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [StrPKL]: ../Sturdy/                                                (The Sturdy layout in EPKL)
 [GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
 [Gallrd]: ../Gallium/README.md#galliard                             (The Galliard Gallium layout variant)
+[Galite]: https://github.com/almk-dev/galite/                       (The Galite layout variant, nearly equal to Gralmak)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)

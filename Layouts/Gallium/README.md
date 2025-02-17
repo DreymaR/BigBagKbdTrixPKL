@@ -102,6 +102,8 @@ Galliard
 - For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
 - Thus, I made a "Galliard" variant with sym key placements like, e.g., Colemak-CAWS.
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
+<br>
+
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Gallium! Learn Galliard first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
