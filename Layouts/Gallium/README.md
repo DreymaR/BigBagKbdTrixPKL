@@ -99,14 +99,15 @@ sw + ws: 0.07%    ( sw: 0.03% , ws: 0.04% )
 
 Galliard
 --------
-- For my own uses, I wanted a mod variant with traditional symbol/punctuation placements.
-- Thus, I made a "Galliard" variant with sym key placements like, e.g., Colemak-CAWS.
+- Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
+- Thus came about the "Galliard" variant that's easily ergo modified like, e.g., Colemak-CAWS.
+- In this variant, I also kept the Q-X arrangement, as discussed above.
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
 <br>
 
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Gallium! Learn Galliard first, then decide whether to proceed.
-- This incurs some worse punctuation bigrams. Since I use my [CoDeKey][CoDeKy] for most punctuation, I don't care.
+- This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
 <br>
 
 - The `O'` bigram is better this way, but the more common `I'` bigram is worse. Using a CoDeKey solves that.
@@ -141,6 +142,7 @@ _The Gallium layout, Rowstag version. Image taken from its own [web page][GalGit
 [GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
 [GraPKL]: ../Graphite/                                              (The Graphite layout in EPKL)
+[Gallrd]: #galliard                                                 (The Galliard Gallium layout variant)
 [Gralmk]: ../Graphite/README.md#gralmak                             (The Gralmak Graphite layout variant)
 [GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5          (GitHub issue on adding Gallium to EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
