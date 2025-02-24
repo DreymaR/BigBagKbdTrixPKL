@@ -145,7 +145,7 @@ Gralmak
 - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
 <br>
 
-- Like the [Gallium][GalPKL] layout and Colemak, I want the J in the middle and a symbol (Quote) on pinky.
+- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
 - Like most other layouts (and Graphite-HB), I don't want to change the Shift states of keys.
 - Note that there are others who have reached nearly the same variant as this one, such as [Galite][Galite].
 - Also see the README for the similar [Galliard][Gallrd] Gallium variant.
@@ -172,7 +172,7 @@ _The Gralmak (Graphite-AWS-ISO) layout. The © key can be a Compose key, or what
 - As shown, the differences consist of swapping J and QU, and swapping Z and Q.
 - All overall stat differences are so small that I don't think they can be considered significant.
 - The J-QU swap makes 2-key rolls more outwards; this is okay with me. One-hand 3-key rolls are less affected.
-- The Q-Z swap keeps a little more QWERTY/Colemak familiarity, at a very low stat cost but with no other benefits.
+- The [Q-Z swap][Gal-QZ] keeps a little more QWERTY/Colemak familiarity, at a very low stat cost but with no other benefits.
 - There is a small increase in same-finger skipgrams, but only for alternating ones which I think is okay.
 - Non-SFS alternation, accordingly, goes down by a fairly insignificant amount (from 33.85% to 33.80%).
 
@@ -205,6 +205,7 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
 [NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/ (Graphite comment in the Nerps post on Reddit)
 [GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors (The Graphite README on Scissors)
+[CmkPKL]: ../Colemak/                                               (The Colemak layout in EPKL)
 [StrPKL]: ../Sturdy/                                                (The Sturdy layout in EPKL)
 [GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
 [Gallrd]: ../Gallium/README.md#galliard                             (The Galliard Gallium layout variant)
@@ -215,3 +216,4 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
 [BBTSeq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)
 [CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
+[Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
