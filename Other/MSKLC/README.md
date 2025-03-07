@@ -101,6 +101,31 @@ Technicalities
 	- Make sure the line endings and encoding are right.
 	- If you get `UTF-8` encoding and Linux endings as is native for GitHub, set them right using, e.g., the Notepad++ program.
 - By downloading the repo as a .zip file you should get the right `.klc` file formats, with correct encoding and line endings.
+<br>
+
+Compiling your own klc
+----------------------
+- Beware: I'm no expert at this, and it's only for the most tech savvy people with special layout needs. Here be dragons.
+- Compiling your own myLayout.dll from a myLayout.klc can be useful if, say, you want to move or repurpose a non-glyph key.
+- MSKLC is actually [just a front-end for a C compiler, resource compiler and a linker][LevKLC], included in its i386 folder.
+- First, `kbdutool.exe` generates C source files (.c, .def, .h, .rc). Then, it compiles and links these into an installer for the DLL.
+- I think you'll need a Windows `cmd` shell with admin rights, or a PowerShell, to run it.
+- You'll want to add the `-u` switch for Unicode `.klc` files (nearly all files these days), and `-m` if you have an AMD processor.
+```
+Usage: KbdUTool [-v] [-n] [-w] [-k] [-n] [-u|a] [-i|x] file
+
+	[-?] display this message
+	[-a] Uses non-Unicode source files (default)
+	[-i] Builds for IA64
+	[-m] Builds for AMD64
+	[-n] no logo or normal build information displayed
+	[-u] Uses Unicode source files
+	[-v] verbose diagnostics (and warnings, with -w)
+	[-w] display extended warnings
+	[-x] Builds for x86 (default)
+```
+- Is the `-s` switch needed to produce source files, in newer versions?
+- Apparently, by setting your generated/edited [source files to read-only][CmkKLC], you can then [use kbdutool to compile them][BepKLC]!
 
 
 [MyCAWS]: ./Cmk-CAWS-eD-ISO.klc (DreymaR's MSKLC Colemak-CAWS layout file)
@@ -117,3 +142,8 @@ Technicalities
 [CmkeDr]: https://github.com/DreymaR/BigBagKbdTrixPKL/raw/master/Other/MSKLC/Cmk-eD.klc          (KLC file for vanilla Colemak-eD)
 [CAWSAr]: https://github.com/DreymaR/BigBagKbdTrixPKL/raw/master/Other/MSKLC/Cmk-CAWS-eD-ANS.klc (KLC file for Colemak-CAWS-eD-ANSI)
 [CAWSIr]: https://github.com/DreymaR/BigBagKbdTrixPKL/raw/master/Other/MSKLC/Cmk-CAWS-eD-ISO.klc (KLC file for Colemak-CAWS-eD-ISO)
+
+[LevKLC]: https://levicki.net/articles/2006/09/29/HOWTO_Build_keyboard_layouts_for_Windows_x64.php  (Levicky on kbdutool++ workings)
+[CmkKLC]: https://forum.colemak.com/topic/870-hacked-msklc-to-enable-remapping-capslock/p2/#p23010  (Cmk Forum on kbdutool tips)
+[BepKLC]: https://bepo.fr/wiki/Utilisateur:LeBret/Remplacer_AltGr_par_Kana                          (Bépo on changing a key using kbdutool)
+[ARMKLC]: https://learn.microsoft.com/en-au/answers/questions/2151451/microsoft-keyboard-layout-creator-(msklc)-for-wind (Building .dll for ARM)

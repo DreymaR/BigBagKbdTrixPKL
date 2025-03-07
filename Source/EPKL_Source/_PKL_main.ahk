@@ -84,7 +84,8 @@ WIPs: With SC remaps, can we now actually remap the System layout? For instance,
 WIPs: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
 WIPs: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
 WIPs: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
-		- May not work with WinSet, Transparent; I'm using that with the Help Images.
+		- "Reduce Flicker dramatically (Double Buffer)" for constant GUI updates, like the EPKL help images.
+		- May not work with WinSet, Transparent? I'm using that with the Help Images now.
 
 WIPs: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
 WIPs: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
@@ -173,7 +174,9 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Problem: Once the queue is full, normal keypresses/letters start to occur. Occurs after ~2 s of Extend-mousing holding down the keys.
 		- Is there a way of purging the actual AHK hotkey buffer? Or could changing its settings help?
 
-2FIX: Somehow, the MSKLC Colemak[eD] does ð but not Đ? Others are okay it appears. Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
+2FIX: Somehow, the MSKLC Colemak-eD does ð but not Đ? Others are okay it appears.
+		- Affects key mapped (eD2VK, System…) layouts. All other mappings seem okay.
+		- The similar Gralmak-eD .klc doesn't have this problem?
 
 2FIX: System mapping the QWP_# keys makes them ignore NumLock state?! Not sure how that works, but it's a tricky issue when one SC caters to two VK codes.
 

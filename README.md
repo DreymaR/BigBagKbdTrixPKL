@@ -622,3 +622,5 @@ _Øystein "DreymaR" Bech-Aase_
 [DKsIni]: ./Files/_eD_DeadKeys.ini (EPKL DeadKeys file)
 [CmpIni]: ./Files/_eD_Compose.ini (EPKL Compose file)
 [SrcPMn]: ./Source/EPKL_Source/_PKL_main.ahk
+
+[KLFC39]: https://github.com/39aldo39/klfc (Aldo Gunsing-s Keyboard Layout Files Creator/Converter)
