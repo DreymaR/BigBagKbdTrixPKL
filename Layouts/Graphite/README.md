@@ -9,7 +9,7 @@ _The default Graphite layout (using the Angle mod) on an ANSI keyboard_
 <br><br>
 
 The Graphite layout
---------------------
+-------------------
 - This layout was made by Richard Davison alias 'stronglytyped', 2022-12, as a development from [Sturdy][StrPKL].
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
@@ -135,22 +135,14 @@ _The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever yo
 Gralmak
 -------
 - Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
+- Like most other layouts (and Graphite-HB), I don't want to change the Shift states of keys.
 - Thus came about the "Gralmak" variant that's easily ergo modified like, e.g., Colemak-CAWS.
+- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 <br>
 
-- It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
-- In this capacity, it can be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
-- This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-<br>
-
-- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
-- Like most other layouts (and Graphite-HB), I don't want to change the Shift states of keys.
-- Note that there are others who have reached nearly the same variant as this one, such as [Galite][Galite].
-- Also see the README for the similar [Galliard][Gallrd] Gallium variant.
-
-#### Graphite AWS-ISO "Gralmak":
+#### Gralmak AWS-ISO:
 ```
 +----------------------------+
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
@@ -161,15 +153,26 @@ Gralmak
 ```
 <br>
 
+- It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
+- In this capacity, it can be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
+- This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
+<br>
+
+- Similar to Colemak, this layout manages to be well optimized and still keep some similarity to well-known layouts.
+- For instance, only `L N M` and `F A E` swap hands from QWERTY; `L N M` and `F A P` from Colemak.
+- The familiar `QW RT ZX CV` bigrams are (semi-)preserved in Gralmak, also aiding learning and recognition.
+- Also see the README for the similar [Galliard][Gallrd] Gallium variant.
+<br>
+
 ![Gralmak ISO help image](./Gralmak_ISO-AWS_EPKL.png)
 
-_The Gralmak (Graphite-AWS-ISO) layout. The © key can be a Compose key, or whatever you wish._
+_The Gralmak (AWS-ISO) layout. The © key can be a Compose key, or whatever you wish._
 
 <br>
 
-- Below is a comparison of the Graphite layout and the Gralmak variant.
+- Below is a comparison of the Graphite layout and the Gralmak variant, disregarding most punctuation.
 - It's made by the 'cmini' analyzer at the AKL Discord, with thumb-key for common punctuation.
-- As shown, the differences consist of swapping J and QU, and swapping Z and Q.
+- As shown, the differences consist of swapping `J` and `QU`, and swapping `Z` and `Q`.
 - All overall stat differences are so small that I don't think they can be considered significant.
 - The J-QU swap makes 2-key rolls more outwards; this is okay with me. One-hand 3-key rolls are less affected.
 - The [Q-Z swap][Gal-QZ] keeps a little more QWERTY/Colemak familiarity, at a very low stat cost but with no other benefits.
@@ -210,7 +213,7 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
 [Gallrd]: ../Gallium/README.md#galliard                             (The Galliard Gallium layout variant)
 [Gralmk]: #gralmak                                                  (The Gralmak Graphite layout variant)
-[Galite]: https://github.com/almk-dev/galite/                       (The Galite layout variant, nearly equal to Gralmak)
+[Galite]: https://github.com/almk-dev/galite/                       (The Galite layout variant, nearly equal to Gralmak - but then removed)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)

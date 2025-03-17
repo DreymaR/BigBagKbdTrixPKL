@@ -9,7 +9,7 @@ _The default Gallium layout for a Colstag/Ortho keyboard_
 <br><br>
 
 The Gallium layout
---------------------
+------------------
 - This layout was made by Bryson James alias 'GalileoBlues', 2022-12.
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
@@ -62,7 +62,7 @@ _The Gallium layout (using the Angle mod) on an ANSI keyboard_
 <br><br>
 
 Gallium variants
-------------------
+----------------
 - As seen above, Gallium has Colstag and Rowstag standard variants. These differ only in `F Y P` on the right index finger.
 <br>
 
@@ -105,6 +105,17 @@ Galliard
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
 <br>
 
+#### Galliard AWS-ISO:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  b l d c v [ j f o u ' -   |
+|  n r t s g ] y h a e i ;   |
+| q x m w z _ / k p , .      |
++----------------------------+
+```
+<br>
+
 - It's easier to learn for someone coming from QWERTY, Colemak, or other layouts that leave sym keys alone.
 - In this capacity, it can be a stepping-stone to full Gallium! Learn Galliard first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
@@ -114,17 +125,6 @@ Galliard
 - The `YOU'` tetragram is actually an outward roll on Galliard, albeit with a lateral stretch. Whee!
 - I asked GalileoBlues on his [Gallium repo on GitHub][GalIs5], and got a go for publishing this variant.
 - Also see the README for the similar [Gralmak][Gralmk] Graphite variant.
-<br>
-
-#### Gallium AWS-ISO "Galliard":
-```
-+----------------------------+
-| 1 2 3 4 5 6 \ 7 8 9 0 =    |
-|  b l d c v [ j f o u ' -   |
-|  n r t s g ] y h a e i ;   |
-| q x m w z _ / k p , .      |
-+----------------------------+
-```
 <br>
 
 ![Gallium (C)AWS-ISO help image](./Gallium_ISO-AWS_EPKL.png)
