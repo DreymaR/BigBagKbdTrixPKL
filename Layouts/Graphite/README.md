@@ -82,7 +82,7 @@ Graphite-HB
 | • • • • •   • • • " <      |
 +----------------------------+
 ```
-<br><br>
+<br>
 
 Graphite Wide and Sym variants
 ------------------------------
@@ -102,16 +102,6 @@ Graphite Wide and Sym variants
 - The solution for ANSI seems to be to bring Comma back to the lower row, and with that the `E,` same-finger bigram. Let me know if you have a better suggestion.
 <br>
 
-#### Graphite AWS-ISO proposal:
-```
-+----------------------------+
-| 1 2 3 4 5 6 \ 7 8 9 0 =    |
-|  b l d w z [ ' f o u j -   |
-|  n r t s g ] y h a e i ,   |
-| q x m c v _ / k p . ;      |
-+----------------------------+
-```
-
 #### Graphite AWS-ANSI proposal, with the comma under UE:
 ```
 +----------------------------+
@@ -121,14 +111,38 @@ Graphite Wide and Sym variants
 |   x m c v q / k p . ,      |
 +----------------------------+
 ```
+
+#### Graphite AWS-ISO proposal, with comma on pinky:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  b l d w z [ ' f o u j -   |
+|  n r t s g ] y h a e i ,   |
+| q x m c v _ / k p . ;      |
++----------------------------+
+```
+
+The details of Graphite WideSym modding aren't up to me alone, of course. I asked Richard Davison for his thoughts on it, and got [an insightful reply][GraPct].
+
+He thinks that at least one of period and comma should be on a strong finger, so putting comma on the pinky may not be great. In fact, he suggests keeping period and comma in their old QWERTY positions for Wide modders, to keep things simple! This is what my Gralmak variant (described in the next section) does.
 <br>
 
-The details of Graphite WideSym modding aren't up to me alone, of course. I've asked Richard Davison for his thoughts on it.
-<br>
+#### Graphite AWS-ISO proposal, with more traditional punctuation:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  b l d w z [ ' f o u j -   |
+|  n r t s g ] y h a e i ;   |
+| q x m c v _ / k p , .      |
++----------------------------+
+```
+
+In sum, if you want to Wide/-Sym mod Graphite there are several options. I advise reading about Gralmak below, as it provides one ready-made option – with a couple of key swaps thrown in for good measure.
+<br><br>
 
 ![Graphite (C)AWS-ISO help image](./Graphite_ISO-AWS_EPKL.png)
 
-_The Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
+_Suggested Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 
@@ -200,7 +214,7 @@ SHAI:
 
 ![Graphite image from its web site](./_Res/Graphite_Web.png)
 
-_The Graphite layout. Image taken from its own [web page][GraGit]._
+_The Graphite layout, as depicted on its own [web page][GraGit]._
 
 
 [GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
@@ -220,3 +234,4 @@ _The Graphite layout. Image taken from its own [web page][GraGit]._
 [BBTSeq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)
 [CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
 [Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
+[GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)

@@ -29,7 +29,7 @@ For a detailed version history, look further down.
 * EPKL v1.3.1: Compose/Completion developments. Folder/file restructuring. Cmk Heb/Epo/BrPt/Nl variants, Ortho kbd types, Boo layout, Dvk-Sym.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
 * EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
-* EPKL v1.4.2: Layout/Settings enhancements. Mapping reworks.
+* EPKL v1.4.2: Layout/Settings enhancements. Mapping additions and reworks.
 ```
 <br>
 
@@ -543,7 +543,7 @@ VERSION HISTORY:
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
 * EPKL v1.4.2: Layout/Settings enhancements. Mapping additions and reworks.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
-		- Also made an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
+		- Also register an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
 	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now delete the queue.
@@ -560,7 +560,7 @@ VERSION HISTORY:
 		- With the Gallium & Graphite layouts, "Galliard" and "Gralmak" variants w/ symbol key mappings as in Cmk-CAWS.
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
-	- The SymMn (only the MN loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
+	- The SymMn (only the MINUS key loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
 		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
 		- Fixed a Layout Selector bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
@@ -582,7 +582,7 @@ VERSION HISTORY:
 		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
 		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
 	- Rewrote the Kaomoji mappings as PowerStrings, so they are easily and consistently useable both for Kaomoji DK mappings and Compose sequences.
-	- Tested whether GitHub Markdown can support `style="background-color:white;"` or similar html/MD 
+	- Tested whether GitHub Flavored Markdown can support `style="background-color:white;"` or similar html/MD 
 		- This could make EPKL layer images work with dark browser themes. Today those are shown as black-on-dark.
 		- Unfortunately, the result was negative. I found no solutions online; only plenty of complaints about this shortcoming of GF Markdown.
 	- A `runTarget` hotkey that by default opens or focuses on the main EPKL folder. Ctrl+Shift+7 was available, by moving the MoveImage Hotkey.
