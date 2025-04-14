@@ -195,8 +195,8 @@ pkl_about()
 	layLang  := pklIniRead( SubStr( lLocale, -3 ), "", "PklDic", "LangStrFromLangID" )
 	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
 	hardMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
-	layFile  := StrReplace( getPklInfo( "File_LayIni" ), "Layout.ini", "" )
-	basFile  :=             getPklInfo( "File_BasIni" )
+	layFile  := StrReplace( getPklInfo( "LayIni_File" ), "Layout.ini", "" )
+	basFile  :=             getPklInfo( "BasIni_File" )
 	menuSep  := "............................................................................................"
 	
 	If WinActive( aboutTitle ) {    							; Toggle the GUI off if it's the active window
@@ -218,7 +218,7 @@ pkl_about()
 	GUI, AW:Add, Text, , % menuSep  	; ——————————————————————————————————————————————————————
 	text := locActLayout . ": " . layName . "`n"
 	text .= locVersion   . ": " . layVers . "`n"
-	text .= locLanguage  . ": " . layLang . " (++?)`n"
+	text .= locLanguage  . ": " . layLang . "`n"
 	text .= locCopyright . ": " . layCopy . "`n"
 	text .= locCompany   . ": " . layComp
 	GUI, AW:Add, Text, , %text% 								; Layout info
@@ -228,7 +228,7 @@ pkl_about()
 		text :=   "Compiled with AutoHotKey version: " . A_AhkVersion               . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"  	; eD WIP: Remove this? Or replace it? It's hard to see anyway.
-		text .= "`nLayout/BaseLayout file paths:`n- " . layFile . "`n- " . basFile
+		text .= "`nLayout file paths:`nMain: " . layFile . "`nBase: " . basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	GUI, AW:Show
@@ -238,10 +238,10 @@ readLayoutIcons( layIni ) 										; Read On/Off icons for a specified layout
 {
 	layIni  := StrReplace( layIni, "2VK" )  					; Remove the to-VK tag if present
 	SplitPath, layIni, , layDir 								; The icon files may be in the layout dir
-	layDir  := ( layIni == "LayStk" ) ? getPklInfo( "Dir_LayIni" ) : layDir
+	layDir  := ( layIni == "LayStk" ) ? getPklInfo( "LayIni_Dir" ) : layDir
 	For ix, icon in [ "on.ico", "off.ico" ] {
 		dirIco  := layDir . "\" . icon
-		iniIco  := fileOrAlt( pklIniRead( "icons_OnOff",, layIni ) . icon
+		iniIco  := fileOrAlt( pklIniPath( "icons_OnOff",, layIni ) . icon
 							, "Files\ImgIcons\Gray_" . icon ) 	; If not specified in layout file or in dir, use this
 		icoNum%ix%  := 1
 		If FileExist( dirIco ) {

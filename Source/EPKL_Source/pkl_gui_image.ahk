@@ -39,8 +39,8 @@ pkl_showHelpImage( activate := 0 )
 	static initialized  := false
 	
 	If ( not initialized ) { 			; First-time initialization
-		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default Dir_LayIni
-		im.DK1Dir   := getPklInfo( "Dir_LayIni" ) . "\DeadkeyImg" 			; The 1st DK img dir is local, if found
+		im.LayDir   := getPklInfo( "Dir_LayImg" ) 							; The dir for state etc images; by default LayIni_Dir
+		im.DK1Dir   := getPklInfo( "LayIni_Dir" ) . "\DeadkeyImg" 			; The 1st DK img dir is local, if found
 		im.DK2Dir   := getLayInfo( "dkImgDir" )  							; The 2nd DK img dir, if set
 		im.BgPath   := fileOrAlt( pklIniRead( "img_bgImage"  ,,  "LayStk" ) 
 								, im.LayDir . "\backgr.png"              ) 	; BG image, if found

@@ -17,7 +17,17 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-WIPs: Send fn() antics study. Can we make a SendInput call separate of the Key event?
+WIPs: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
+		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
+		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
+		- Just the Variant level, for now? Or could two more levels be nice? For instance, one locale plus one with, e.g., extra composes?
+		- If going with multi-level, guard against infinite recursion (if already in stack, Continue). Limit LayStack depth to a few more layers?
+		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
+
+WIPs: Make a common useDots() fn for use by both pklIniRead() and _seekBaseLayout().
+
+
+NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
 		- Second example:
 			b := Buffer(16 + A_PtrSize * 3, 0)
@@ -54,13 +64,6 @@ WIPs: Send fn() antics study. Can we make a SendInput call separate of the Key e
 				
 				DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 			}
-
-NEXT: Allow a BaseLayout stack: Variant,Options/Script,Base... ?
-		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
-		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
-		- Just the Variant level, for now? Or could two more levels be nice? For instance, one locale plus one with, e.g., extra composes?
-		- If going with multi-level, guard against infinite recursion (if already in stack, Continue). Limit LayStack depth to a few more layers?
-		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?
 
 WIPs: Galliard/Gralmak ortho, w/o AngleWide.
 

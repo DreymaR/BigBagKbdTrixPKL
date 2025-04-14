@@ -282,6 +282,17 @@ fileOrAlt( file, altFile, errMsg := "", errDur := 2 ) { 	; Find a file/dir, or u
 	Return altFile
 }
 
+dotPath( path, sameDir, mainDir := false ) {    			; Use dot syntax for file/dir paths, from a specified dir
+	If        ( SubStr( path, 1, 3 ) == "..\" ) {   		; "..\" for the dir above
+		path := sameDir . "\.." . SubStr( path, 3 ) 		; eD WIP: Better to split sameDir here, instead of just concatenating?!?
+	} Else If ( SubStr( path, 1, 2 ) == ".\"  ) {   		; ".\"  for the sameDir itself
+		path := sameDir .         SubStr( path, 2 )
+	} Else If ( mainDir ) {
+		path := mainDir . "\" . path    					; Use a default dir if no dot syntax, if specified
+	}
+	Return path
+}
+
 atKbdType( str ) { 							; Replace '@K' in layout file entries with the proper KbdType (ANS/ISO...)
 	Return StrReplace( str, "@K", getLayInfo( "Ini_KbdType" ) )
 }

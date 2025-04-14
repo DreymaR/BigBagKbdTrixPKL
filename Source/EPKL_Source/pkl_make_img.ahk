@@ -16,7 +16,7 @@ makeHelpImages() {
 	HIG.Title   :=  "EPKL Help Image Generator"
 	remapFile   := getPklInfo( "RemapsFile" )   					; _eD_Remap.ini
 	HIG.PngDic  := ReadKeyLayMapPDic( "Co", "SC", remapFile ) 		; PDic from the Co codes of the SVG template to SC
-	layDir      := getPklInfo( "Dir_LayIni" )
+	layDir      := getPklInfo( "LayIni_Dir" )
 	dksDir      := "\DeadkeyImg"
 	imgRoot     := layDir . "\ImgGen_" . thisMinute()
 	HIG.ImgDirs := { "root" : imgRoot , "raw" : imgRoot . "\RawFiles_Tmp" , "dkey" : imgRoot . dksDir }

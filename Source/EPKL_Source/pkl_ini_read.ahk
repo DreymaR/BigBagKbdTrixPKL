@@ -26,7 +26,7 @@ pklIniSect( file, section := "pkl", strip := 0 ) {  				; Read an .ini section a
 ;;      Special key values return a section list or the contents of a section
 ;;      Note: AHK IniRead trims off whitespace and a pair of quotes if present, but not comments.
 ;
-pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 1 ) { 
+pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 1, dots := 0 ) { 
 	If ( not key )
 		Return
 	If ( layStck := ( iniFile == "LayStk" ) ? true : false ) {  		; The LayStack is a special case,
@@ -39,7 +39,7 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 		iniFile := [ iniFile ]
 	For ix, theFile in iniFile { 										; Read from iniFile. Failing that, altFile.
 		SplitPath, theFile, , hereDir
-;		hereDir := ( theFile == "LayIni" ) ? getPklInfo( "Dir_LayIni" ) : 	; eD WIP: This somehow made layouts lose their tray icons?!
+;		hereDir := ( theFile == "LayIni" ) ? getPklInfo( "LayIni_Dir" ) : 	; eD WIP: This somehow made layouts lose their tray icons?!
 		hereDir := ( layStck ) ? iniDirs[ix] : hereDir  				; LayStack files may use own home dirs
 		If ( ( not InStr(theFile, ".") ) && FileExist(getPklInfo("File_" . theFile)) )	; Special files
 			theFile := getPklInfo( "File_" . theFile )					; (These include PklSet, PklLay, PklDic)
@@ -54,21 +54,21 @@ pklIniRead( key, default := "", iniFile := "PklSet", section := "pkl", strip := 
 			Break
 	}   ; <-- For theFile
 	val := convertToUTF8( val ) 										; Convert string to enable UTF-8 files (not UTF-16)
-	val := ( val ) ? val : default										; (IniRead's std. default is the word ERROR; EPKL uses "")
-	val := ( strip ) ? strCom( val ) : val								; Strip end-of-line comments
-	If        ( SubStr( val, 1, 3 ) == "..\" ) {						; "..\" syntax for layout dirs
-		val := hereDir . "\.." . SubStr( val, 3 )
-	} else if ( SubStr( val, 1, 2 ) == ".\"  ) {						; ".\"  syntax --"--
-		val := hereDir .         SubStr( val, 2 )
-	}
-;	MsgBox, '%val%', '%theFile%', '%section%', '%key%', '%default%'		; eD DEBUG
+	val := ( val   ) ?  val : default   								; (IniRead's std. default is the word ERROR; EPKL uses "")
+	val := ( strip ) ?  strCom( val ) : val 							; Strip end-of-line comments
+	val := ( dots  ) ?  dotPath( val, hereDir ) : val   				; Allow relative paths (default: false)
+;	MsgBox, '%val%', '%theFile%', '%section%', '%key%', '%default%' 	; eD DEBUG
 	Return val
 }
 
 pklIniCSVs( key, default := "", iniFile := "PklSet", section := "pkl"
 		  , splch := ",", ignch := " `t" ) {    						; Read a CSV-type .ini entry into an array
 	val := pklIniRead( key, default, iniFile, section ) 				; The default could be, e.g., "400,300"
-	Return StrSplit( val, splch, ignch ) 									; Split by splch, ignore ignch
+	Return StrSplit( val, splch, ignch )    							; Split by splch, ignore ignch
+}
+
+pklIniPath( key, default := "", iniFile := "PklSet", section := "pkl", strip := 1 ) { 
+	Return pklIniRead( key, default, iniFile, section, strip, 1 )   	; Read a path, with relative path ("path dots") handling
 }
 
 ;;  ================================================================================================================================================
