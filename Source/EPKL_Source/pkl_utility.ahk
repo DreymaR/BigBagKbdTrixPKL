@@ -277,18 +277,19 @@ fileOrAlt( file, altFile, errMsg := "", errDur := 2 ) { 	; Find a file/dir, or u
 	file := atKbdType( file )   							; Replace '@K' w/ KbdType
 	If FileExist( file )
 		Return file
-	If ( errMsg ) && ( not FileExist( altFile ) ) 			; Issue a warning if neither file is found and errMsg is set
+	If ( errMsg ) && ( not FileExist( altFile ) )   		; Issue a warning if neither file is found and errMsg is set
 		pklWarning( errMsg, errDur )
 	Return altFile
 }
 
 dotPath( path, sameDir, mainDir := false ) {    			; Use dot syntax for file/dir paths, from a specified dir
-	If        ( SubStr( path, 1, 3 ) == "..\" ) {   		; "..\" for the dir above
-		path := sameDir . "\.." . SubStr( path, 3 ) 		; eD WIP: Better to split sameDir here, instead of just concatenating?!?
+	If        ( SubStr( path, 1, 3 ) == "..\" ) {   		; "..\" for the dir above (was: `sameDir . "\.." . `)
+		SplitPath, sameDir, , overDir
+		path := overDir . SubStr( path, 3 )
 	} Else If ( SubStr( path, 1, 2 ) == ".\"  ) {   		; ".\"  for the sameDir itself
-		path := sameDir .         SubStr( path, 2 )
+		path := sameDir . SubStr( path, 2 )
 	} Else If ( mainDir ) {
-		path := mainDir . "\" . path    					; Use a default dir if no dot syntax, if specified
+		path := mainDir "\" path    						; Use a default dir if no dot syntax, if specified
 	}
 	Return path
 }

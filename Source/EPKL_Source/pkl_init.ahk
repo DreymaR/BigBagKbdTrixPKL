@@ -12,6 +12,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	;
 	setPklInfo( "File_PklSet", "EPKL_Settings"         ) 				; Used globally (used to be in pkl.ini)
 	setPklInfo( "File_PklLay", "EPKL_Layouts"          ) 				; --"--
+	setPklInfo( "LaysDirName", "Layouts"               ) 				; --"--
 	setPklInfo( "LayFileName", "Layout"                ) 				; --"--
 	setPklInfo( "File_PklDic", "Files\EPKL_Tables.ini" ) 				; Info dictionary file, mostly from internal tables
 	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
@@ -105,18 +106,18 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	
 	theLays :=  pklIniRead( "layout", "", pklLays ) 					; Read the layouts string from EPKL_Layouts. May contain @# shorthand.
 	layMain := _pklLayRead( "LayMain", "Colemak" )  					; Main Layout: Colemak, Tarmak, Dvorak etc.; now the same as LayName
-	If InStr( layMain, "/" ) { 											; The LayMain may be on the form 'LayName/3LA' already...
+	If InStr( layMain, "/" ) {  										; The LayMain may be on the form 'LayName/3LA' already...
 		split   := StrSplit( layMain, "/" )
 		layMain := split[1]
 		lay3LA  := split[2]
-	} else { 															; ...or not, in which case we look up or generate the 3LA.
+	} else {    														; ...or not, in which case we look up or generate the 3LA.
 		lay3LA  := shortLayDic[ layMain ]   	; Was layName
 		lay3LA  := ( lay3LA ) ? lay3LA : SubStr( layMain, 1, 3 )    	; If not specified in shortLayDic, the 3LA is the first 3 letters.
 	}
 	layPath := _pklLayRead( "LayPath", "@L\@3-@T@V" )   				; Path to layout folders: @L\<subfolder>. Simple layouts just have `@L`.
 ;	split   := StrSplit( layMain, "\" ), layName := split[1]    		; LayMain can also contain a subfolder.
 	layType := _pklLayRead( "LayType", "eD"         )   				; Layout type, mostly eD or VK
-	layVari := _pklLayRead( "LayVari",      , "-"   ) 					; Locale ID, e.g., "-Pl", or other variant such as Tarmak steps
+	layVari := _pklLayRead( "LayVari",      , "-"   )   				; Locale ID, e.g., "-Pl", or other variant such as Tarmak steps
 	polyLID := {}
 	For ix, LVars in pklIniCSVs( "multiLocs",, "pklDic" ) { 			; For layouts with compound Locale IDs, any component can be used alone
 		harmLID := StrReplace( LVars, "/" ) 							; The Harmonized Locale ID is a compound of its components, like BeCaFr
@@ -124,30 +125,30 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 			polyLID["-" . var] := "-" . harmLID 						; Example: Both "-Dk" and "-No" point to the "-DkNo" layout
 		}   ; <-- For LVar
 	}   ; <-- For LVars
-	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari 		;   (can be a single locale of a harmonized layout like BeCaFr)
-	kbdType := _pklLayRead( "KbdType", "ISO"        ) 					; Keyboard type, ISO/ANS(I)/etc
-	curlMod := _pklLayRead( "CurlMod"               ) 					; --, Curl/DH mod
-	hardMod := _pklLayRead( "HardMod"               ) 					; --, Hard mod - Angle, AWide...
-	othrMod := _pklLayRead( "OthrMod"               ) 					; --, Other mod suffix like Sym
+	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari    	;   (can be a single locale of a harmonized layout like BeCaFr)
+	kbdType := _pklLayRead( "KbdType", "ISO"        )   				; Keyboard type, ISO/ANS(I)/etc
+	curlMod := _pklLayRead( "CurlMod"               )   				; --, Curl/DH mod
+	hardMod := _pklLayRead( "HardMod"               )   				; --, Hard mod - Angle, AWide...
+	othrMod := _pklLayRead( "OthrMod"               )   				; --, Other mod suffix like Sym
 	
-	theLays := StrReplace( theLays, "@Ʃ",   "@P-@T@V"  ) 				; Shorthand .ini notation for main layout path, type and variant
-	theLays := StrReplace( theLays, "@Ç",   "@K@C@H@O" ) 				; Shorthand .ini notation for KbdType[_]ErgoMods; not in use?
-	theLays := StrReplace( theLays, "@E",     "@C@H@O" ) 				; Shorthand .ini notation for the full ergomods battery
+	theLays := StrReplace( theLays, "@Ʃ",   "@P-@T@V"  )    			; Shorthand .ini notation for main layout path, type and variant
+	theLays := StrReplace( theLays, "@Ç",   "@K@C@H@O" )    			; Shorthand .ini notation for KbdType[_]ErgoMods; not in use?
+	theLays := StrReplace( theLays, "@E",     "@C@H@O" )    			; Shorthand .ini notation for the full ergomods battery
 	theLays := StrReplace( theLays, "@P",   layPath "\@3" ) 			; Replaces @P w/ LayPath\3LA in layout paths, as in 'Colemak\Cmk'
-	theLays := StrReplace( theLays, "@L",   layMain    ) 				; Replaces @L w/ LayName
+	theLays := StrReplace( theLays, "@L",   layMain    )    			; Replaces @L w/ LayName
 	theLays := StrReplace( theLays, "@3",   lay3LA     )
 	theLays := StrReplace( theLays, "@T",   layType    )
-	theLays := StrReplace( theLays, "@V",   localID    ) 				; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
+	theLays := StrReplace( theLays, "@V",   localID    )    			; NOTE: Any one locale in a compound locale (like BrPt) can be used alone.
 	kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : "" 			; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
-	theLays := StrReplace( theLays, "@K@","@K" kbdTypJ "@" ) 			; --"--
-	theLays := StrReplace( theLays, "@K",   kbdType    ) 				; Later on, EPKL will use atKbdType() for layout files instead of this one 	; . "_"
+	theLays := StrReplace( theLays, "@K@","@K" kbdTypJ "@" )    		; --"--
+	theLays := StrReplace( theLays, "@K",   kbdType    )    			; Later on, EPKL will use atKbdType() for layout files instead of this one 	; . "_"
 	theLays := StrReplace( theLays, "@C",   curlMod    )
 	theLays := StrReplace( theLays, "@H",   hardMod    )
 	theLays := StrReplace( theLays, "@O",   othrMod    )
 	layouts := StrSplit( theLays, ",", " `t" )  						; Split the CSV layout list
 	numLayouts := layouts.Length()
-	setLayInfo( "NumOfLayouts", numLayouts ) 							; Store the number of listed layouts
-	For ix, thisLay in layouts { 										; Store the layout dir names and menu names
+	setLayInfo( "NumOfLayouts", numLayouts )    						; Store the number of listed layouts
+	For ix, thisLay in layouts {    									; Store the layout dir names and menu names
 ;		kbdTypJ := ( curlMod || hardMod || othrMod ) ? "_" : ""
 ;		needle  := kbdType .           curlMod . hardMod . othrMod 		; Use "KbdType_Mods" with a joiner character iff any ergoMods are active
 ;		newtxt  := kbdType . kbdTypJ . curlMod . hardMod . othrMod
@@ -156,7 +157,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		theCode := nameParts[1]
 		theCode := RegExReplace( theCode, "_$"       )  				; If the layout code ends with the KbdType, the trailing underscore is omitted
 		theCode := RegExReplace( theCode, "_\\", "\" )  				; The trailing underscore may also figure in subpaths
-		If ( not theCode ) { 											; Empty entries cause an error, but any other layouts still work
+		If ( not theCode ) {    										; Empty entries cause an error, but any other layouts still work
 			theCode := "<N/A>"
 			pklWarning( "At least one layout entry is empty" )
 		}
@@ -165,9 +166,9 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		setLayInfo( "layout" . A_Index . "name", theName )
 	}   ; <-- for thisLay
 	
-	If ( layoutFromCommandLine ) {										; The cmd line layout could be not in theLays?
+	If ( layoutFromCommandLine ) {  									; The cmd line layout could be not in theLays?
 		thisLay   := layoutFromCommandLine
-		If ( SubStr( thisLay, 1, 10 ) == "UseLayPos_" ) {				; Use layout # in list instead of full path
+		If ( SubStr( thisLay, 1, 10 ) == "UseLayPos_" ) {   			; Use layout # in list instead of full path
 			thePos      := SubStr( thisLay, 11 )
 			thePos      := ( thePos > numLayouts ) ? 1 : thePos
 			thisLay   := getLayInfo( "layout" . thePos . "code" )
@@ -176,12 +177,12 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		thisLay := getLayInfo( "layout1code" )
 	}
 	If ( thisLay == "" ) {
-		pklMsgBox( "01", "layouts .ini" ) 								; "You must set a layout file in the EPKL_Layouts .ini!"
+		pklMsgBox( "01", "layouts .ini" )   							; "You must set a layout file in the EPKL_Layouts .ini!"
 		ExitApp
 	}
 	setLayInfo( "ActiveLay", thisLay )
 	
-	nextLayoutIndex := 1												; Determine the next layout's index
+	nextLayoutIndex := 1    											; Determine the next layout's index
 	Loop % numLayouts {
 		If ( thisLay == getLayInfo( "layout" . A_Index . "code") ) {
 			nextLayoutIndex := A_Index + 1
@@ -201,17 +202,17 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	;
 	static initialized  := false
 	
-	laysDir := "Layouts"    											; The top-level Layouts folder, starting from EPKL root.
-	thisLay := getLayInfo( "ActiveLay" ) 								; From initPklIni(). For example, Colemak\Cmk-eD\Cmk-eD_ANS.
+	laysDir := getPklInfo( "LaysDirName" )  							; The top-level "Layouts" folder, starting from EPKL root.
+	thisLay := getLayInfo( "ActiveLay" )    							; From initPklIni(). For example, Colemak\Cmk-eD\Cmk-eD_ANS.
 	layType := getLayStrInfo( thisLay )[4]  							; Returns layName as [1], L3A as [2] and L3A-from-string as [3]
 	st2VK   := InStr( layType, "2VK" ) ? true : false   				; ##2VK layType: The (eD) BaseLayout is read as VK, Layout.ini as usual.
 	layType := st2VK ? SubStr(layType,1,-3) : layType   				; Make layType reflect actual layType, and set St2VK as necessary.
 	thisLay := StrReplace( thisLay, layType . "2VK", layType )
 	setLayInfo( "St2VK", st2VK )    									; This is tested for each layFile below
 	mainDir := bool( pklIniRead("compactMode") ) ? "." 
-			 : laysDir . "\" . thisLay  								; If in compact mode, use the EPKL root dir as mainDir
+			 : laysDir "\" thisLay  									; If in compact mode, use the EPKL root dir as mainDir
 	layFiNa := getPklInfo( "LayFileName" )
-	layFiPa := mainDir . "\" . layFiNa  								; Path to "Layout" .ini file(s)
+	layFiPa := mainDir "\" layFiNa  									; Path to "Layout" .ini file(s)
 	mainLay := layFiPa . ".ini" 										; The path of the main layout .ini file
 	mainOvr := layFiPa . "_Override.ini" 								; Layout_Override.ini, if present
 	setPklInfo( "LayIni_Dir"        , mainDir )
@@ -219,7 +220,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	pklLays := [ mainOvr, mainLay ] 									; Start building names for the LayStack
 	pklDirs := [ mainDir, mainDir ] 									; Also, building names for the DirStack
 	
-	baseArr := _seekBaseLayout( pklLays, mainDir, laysDir ) 			; Look for a BaseLayout, as [ file, dir ]
+	baseArr := _seekBaseLayout( pklLays, mainDir, laysDir ) 			; Look for a BaseLayout, as [ files[], dirs[] ]
 	If ( baseArr ) {
 		baseLay := baseArr[1]   										; An array of baseLayout files
 		baseDir := baseArr[2]   										; An array of baseLayout dirs
@@ -233,20 +234,20 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	dirStck := []   													; The DirStack is the stack of layout info file dirs
 	For ix, file in pklLays {
 		If FileExist( file ) && ! inArray( layStck, file ) {    		; If the file exists and isn't already added...
-			layStck.push( file ) 										; ...add it to the LayStack
+			layStck.push( file )    									; ...add it to the LayStack
 			dirStck.push( pklDirs[ix] )
 		}
 	}   ; <-- For pklLays
 	setPklInfo( "LayStack", layStck )   								; Layout_Override.ini, Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
-	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" ) 				; This time, look for a KbdType down the whole LayStack
+	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" )    			; This time, look for a KbdType down the whole LayStack
 	kbdType := _AnsiAns( kbdType )
-	setLayInfo( "Ini_KbdType", kbdType ) 								; A KbdType setting in Layout.ini overrides the first Layout_ setting
+	setLayInfo( "Ini_KbdType", kbdType )    							; A KbdType setting in Layout.ini overrides the first Layout_ setting
 	
 	imgsDir := pklIniPath( "img_MainDir", mainDir, "LayStk" )   		; Help imgs are in the main layout folder, unless otherwise specified. Allow path dots.
 	setPklInfo( "Dir_LayImg", atKbdType( imgsDir ) )
 	
-	feD := "Files\_eD_", LSt := "LayStk" 								; Read and set layout support files. Often read at the bottom of a LayStack+1.
+	feD := "Files\_eD_", LSt := "LayStk"    							; Read and set layout support files. Often read at the bottom of a LayStack+1.
 	mapFile := pklIniRead( "remapsFile", feD "Remap.ini"      , LSt ) 	; Layout remapping for ergo mods, ANSI/ISO conversion etc.
 	extFile := pklIniRead( "extendFile", feD "Extend.ini"     , LSt ) 	; Extend mappings used to be in pkl.ini (now EPKL_Settings)
 	dksFile := pklIniRead( "dkListFile", feD "DeadKeys.ini"   , LSt ) 	; DeadKeys
@@ -259,15 +260,15 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	           _pklStckUp( "Cmposr", cmpFile, 1 )   					; No stack variable needed, as the won't be called below here but elsewhere from PklInfo
 	setPklInfo( "StringFile", strFile ) 								; This file should contain the string tables. As discussed above, it can't be a LayStack+1 (now).
 	
-	If ( not initialized ) && ( FileExist( mapFile ) ) { 				; Read/set remap dictionaries. Ensure the tables are read only once.
+	If ( not initialized ) && ( FileExist( mapFile ) ) {    			; Read/set remap dictionaries. Ensure the tables are read only once.
 		secList := ""
 		For ix, file in layStck {
 			secList .= pklIniRead( "__List", , layStck[ ix ] )  		; Check all section names in the LayStack
 		}
 		remStck := InStr( secList, "Remaps"      ) ? mapStck : mapFile 	; Only check the LayStack if [Remaps] is in secList, to save startup time.
 		cycStck := InStr( secList, "RemapCycles" ) ? mapStck : mapFile 	; InStr() is case insensitive.
-		mapTypes    := [ "scMapLay"    , "scMapExt"    , "vkMapMec"     ] 	; Map types: Main remap, Extend/"hard" remap, VK remap
-		mapSects    := [ "mapSC_layout", "mapSC_extend", "mapVK_mecSym" ] 	; Section names in the .ini file
+		mapTypes := [ "scMapLay"    ,"scMapExt"    ,"vkMapMec"     ] 	; Map types: Main remap, Extend/"hard" remap, VK remap
+		mapSects := [ "mapSC_layout","mapSC_extend","mapVK_mecSym" ] 	; Section names in the .ini file
 		For ix, mapType in mapTypes {
 			mapList := pklIniRead( mapSects[ A_Index ],, "LayStk" ) 	; First, get the name of the map list
 			mapList := atKbdType( mapList ) 							; Replace '@K' w/ KbdType
@@ -557,48 +558,32 @@ _pklSetInf( pklInfo, def := "" ) {  				; Simple setting for EPKL_Settings entri
 	setPklInfo( pklInfo, val )
 }
 
-;;  eD WIP: Allow a BaseStack, where any BaseLayout can include others, to facilitate variants.
-;;  eD WIP: Make this fn output an array of arrays, [ BaseLays, BaseDirs ]. Hopefully, this will work as a BaseStack. Use pointers?
-;;  NOTE: Not yet working for stacked base layouts! Trying with Graphite-HB first. Maybe it's the `.\` relative path? Try testing an absolute one.
-_seekBaseLayout( layPath, sameDir, laysDir ) {  						; Look for a BaseLayout file in a specified file path
+_seekBaseLayout( layPath, sameDir, laysDir ) {  						; Look for a BaseLayout file in a specified file path. Return [[baseLays],[baseDirs]].
 	static baseIx   := 0
 	static baseLays := []
 	static baseDirs := []
 	
-	basePath    := pklIniRead( "baseLayout", " ", layPath,,1,0 )    	; Read the BaseLayout, with comment stripping, without path dots handling.
-;	basePath    := IniRead( mainOvr, "pkl", "baseLayout", " " ) 		; Read the BaseLayout. Since pklIniRead() adds `.\` to `..\`, we don't use it here.
-;	If ( basePath == "" )
-;		basePath    := IniRead( mainLay, "pkl", "baseLayout", " " ) 	; If basePath isn't found, the main layout becomes base(?)
-;	basePath        := StrCom( basePath )   							; Strip comments, like pklIniRead() does
-	SplitPath, basePath, baseLay, baseDir   							; 
-;	baseDir         := dotPath( baseDir, sameDir, laysDir ) 			; Dot syntax; default to Layouts dir
-;	baseLay         := baseDir . "\" . baseLay
-	useDots         := ( InStr( basePath, "..\" ) == 1 ) ? true : false 	; eD WIP: Use dotPath() instead!
-	baseDir         := ( useDots ) ? sameDir . "\.."         : laysDir . "\" . baseDir
-	baseLay         := ( useDots ) ? baseDir . "\" . baseLay : laysDir . "\" . basePath
-	
-	baseLay         .= ".ini"
-;	pklDebug( "basePath: " basePath "`nbaseDir: " baseDir "`nbaseLay:    " baseLay "`n`nmainDir: " sameDir, 30 )    ; eD DEBUG
-	(baseIx > 0 ) ? pklDebug( "Sub-BasePath: " basePath "`nlayPath: " layPath, 10 )    ; eD DEBUG
+	basePath    := pklIniRead( "baseLayout",, layPath,,1,0 )    		; Read the BaseLayout, with comment stripping, without path dots handling.
+	basePath    := dotPath( basePath, sameDir, laysDir )    			; Dot syntax; default to Layouts dir. Done separately to handle layPath vs mainDir.
+	SplitPath, basePath, baseLay, baseDir   							; There's no AHK v1 fn for SplitPath; could probably use SplitStr().
+	baseLay         := basePath ".ini"
+;	(baseIx >= 0 ) ? pklDebug( "basePath: " basePath "`n`nbaseDir: " baseDir "`n`nbaseLay: " baseLay, 24 )    ; eD DEBUG
 	If FileExist( baseLay ) && not inArray( baseLays, baseLay ) {
 		dummyIx     := baseLays.push( baseLay )
 		dummyIx     := baseDirs.push( baseDir )
-		setPklInfo( "BasIni_File"   , baseLay ) 						; This is only kept for display in the PKL GUI menu.
-		setPklInfo( "BasIni_Dir"    , baseDir ) 						; The base layout file path.
-		If ( ++baseIx < 4 ) {   										; Put a cap on stack depth, for sanity
-			newSeek := _seekBaseLayout( baseLay, baseDir, laysDir ) 	; Look for a multi-level BaseStack
-			
-		}
+		If ( ++baseIx == 1 )    										; Increment the base layout index
+			setPklInfo( "VarIni_File"   , baseLay ) 					; The "Variant" base layout file path. Only for display in the About menu.
+		setPklInfo( "BasIni_File"   , baseLay ) 						; The "Deepest" base layout file path. --"--
+		If (   baseIx <  4 )    										; Put a cap on stack depth, for sanity. This value is arbitrarily set.
+			newSeek := _seekBaseLayout( baseLay, baseDir, laysDir ) 	; Look for a multi-level BaseStack.
 		Return [ baseLays, baseDirs ]   								; Returns an array of arrays for [BaseLays,BaseDirs].
-	} Else If ( basePath != " " ) {
+	} Else If ( basePath != laysDir . "\" ) {
 		setPklInfo( "BasIni_File"   , "" )
-		setPklInfo( "BasIni_Dir"    , "" )
 		pklWarning( "The specified BaseLayout file`n'" . baseLay 
 					. "'`nwas not found!" ) 							; "File not found" iff base is defined but not present
-		Return false
 	}
+	Return false
 }
-
 
 _pklStckUp( The, theFile, at1 := 0 ) {  			; Add a support file to the bottom of a LayStack clone
 	theStck := getPklInfo( "LayStack" ).Clone() 	; Use a clone, or we'll edit the actual LayStack array

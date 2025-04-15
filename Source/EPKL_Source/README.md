@@ -542,15 +542,28 @@ VERSION HISTORY:
 		- Eventually though, the whole timer system was removed to make EPKL timerless.
 	- Fixed: NumPadDot was state mapped as an explicit dot/comma key. This behavior is unintuitive, so it's been relegated to `EPKL_Layouts_Override_Example`.
 * EPKL v1.4.2: Layout/Settings enhancements. Mapping additions and reworks.
-	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
-		- Also register an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
-		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
+	- A `¢[Cmd()]¢` syntax useable within α/β AHK code. Sends the first part of the string, executes the specified command and then proceeds sending.
+		- The pkl_exec() fn governs specified commands for sent strings; it could be expanded with several new AHK commands.
+		- For now, Sleep() and Run() are what I felt were most needed. Sleep() helps timing string parts, while Run() adds new mapping options.
+		- Using these new syntax possibilities, some Ext-tap mappings were added or improved.
+	- The BaseLayout can now be a stack. for instance a "Variant" BaseLayout pointing to a main or "Deepest" BaseLayout.
+		- The BaseStack should be mostly safe from self-reference and recursion. It has an arbitrary max depth of 3, for now.
+		- Reworked Graphite-HB, Gralmak, ... to utilize the BaseStack, removing the need to duplicate variant changes in several Layout.ini files.
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
 	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now delete the queue.
 		- This fixes a problem with using powerstrings for Delete Word, as they would leave undesired characters in the lastKeys queue.
 	- ToM mappings required a VK code before the slash but an AHK modifier name after. Now, you can use any modifier alias (VK or KLM name).
 		- `[LR]?(SHIFT|CONTROL|MENU|WIN)`, `vc(SHF|CTL|ALT|WIN)` and `vc[LR](SH|CT|AL|WI) should all work now.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/discussions/64
+	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.
+		- The main purpose of `Unmapped` is to allow an Override file such as `Layout_Override.ini` to instruct EPKL to leave a key untouched.
+		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
+		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
+	- The SymMn (only the MINUS key loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
+		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
+	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
+		- Also register an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
+		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
 	- A template for implementing new layouts, under `Layouts\_Template`. See its `README` file for more info.
 	- Using the NewLayout template framework, a few more modern layouts were added. Semimak(-JQ) and Canary were already in place.
 		- The APT(v3) layout by Apsu, with Angle, Wide and Sym ergo mods.
@@ -560,8 +573,6 @@ VERSION HISTORY:
 		- With the Gallium & Graphite layouts, "Galliard" and "Gralmak" variants w/ symbol key mappings as in Cmk-CAWS.
 	- Added Ukrainian "Ukromak" (Cmk-Ukr), based on a commit by Grenudi (https://github.com/DreymaR/BigBagKbdTrixPKL/pull/92).
 		- Switched all Kyr script locale codes from 2-letter to 3-letter ISO codes (ISO 639-1 to 639-2): Ru-Rus, Uk-Ukr, Bg-Bul.
-	- The SymMn (only the MINUS key loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
-		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
 	- Fixed: Several Layout Selector GUI bugs.
 		- Fixed a Layout Selector bug for Cmk (which uses a subdir), causing the loss of a backslash in the layout path.
 			- It was broken in commit "Reworked Settings GUI initalization " (12d964a) 2023-07-13, in the file `pkl_gui_settings.ahk`.
@@ -577,10 +588,6 @@ VERSION HISTORY:
 		- The NEIO `!,.?` Ext-tap mappings were unused: They work a lot better on CoDeKey due to Ext-tap ToM timing issues.
 			- Considered something arrow-based like Ctrl(+Shift)+Arrows/Delete, but none of it felt really useful.
 			- Kept `!` for now, as it's the most unaccessible symbol. Moved `^a #e #i +↓` etc around, added `⌫ʷ` and left less accessible keys empty.
-	- Reworked Single-Entry key mapping. In addition to `vk|vkey` and `sc|skey|system`, `--|disabled` disables a key and `<>|unmapped` leaves it alone.
-		- The main purpose of `Unmapped` is to allow an Override file such as `Layout_Override.ini` to instruct EPKL to leave a key untouched.
-		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
-		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
 	- Rewrote the Kaomoji mappings as PowerStrings, so they are easily and consistently useable both for Kaomoji DK mappings and Compose sequences.
 	- Tested whether GitHub Flavored Markdown can support `style="background-color:white;"` or similar html/MD 
 		- This could make EPKL layer images work with dark browser themes. Today those are shown as black-on-dark.
@@ -590,8 +597,12 @@ VERSION HISTORY:
 	- The menuIconList function from Source\Extras was internalized, callable as the "debug" function. It shows icons and their positions in any file.
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
-	- A `¢[Cmd()]¢` syntax useable within α/β AHK code. Sends the first part of the string, executes the specified command and then proceeds sending.
-		- The pkl_exec() fn governs specified commands for sent strings; it could be expanded with several new AHK commands.
-		- For now, Sleep() and Run() are what I felt were most needed. Sleep() helps timing string parts, while Run() adds new mapping options.
-		- Using these new syntax possibilities, some Ext-tap mappings were added or improved.
-	
+	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
+
+WIPs:
+	- Allow a BaseLayout stack: Variant,Options/Script,Base....
+		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
+		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
+		- Just the Variant level, for now? Or could two more levels be nice? For instance, one locale plus one with, e.g., extra composes?
+		- If going with multi-level, guard against infinite recursion (if already in stack, Continue). Limit LayStack depth to a few more layers.
+		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?

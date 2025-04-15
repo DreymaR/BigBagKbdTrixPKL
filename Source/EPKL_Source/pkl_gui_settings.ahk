@@ -523,7 +523,7 @@ _uiAddSel( iTxt, var, opts, listArr, pos := "", typ := "DDL" ) {    	; Add a Dro
 }
 
 _uiGetLayDirs() {   											; Get a list of all Layouts directories, as an array
-	layDir  := "Layouts"
+	layDir  := getPklInfo( "LaysDirName" )  					; Usually "Layouts"
 	layFiNa := getPklInfo( "LayFileName" ) . ".ini" 			; Usually "Layout.ini"
 	dirs := []
 	Loop, Files, % layDir . "\*", DR    						; Recursively find all subdirectories of layDir

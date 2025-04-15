@@ -196,7 +196,9 @@ pkl_about()
 	kbdType  := getLayInfo( "Ini_KbdType" ) . " " . getLayInfo( "Ini_LayType" )
 	hardMod  := getLayInfo( "Ini_CurlMod" ) . " " . getLayInfo( "Ini_ErgoMod" ) . " " . getLayInfo( "Ini_OthrMod" )
 	layFile  := StrReplace( getPklInfo( "LayIni_File" ), "Layout.ini", "" )
-	basFile  :=             getPklInfo( "BasIni_File" )
+	varFile  :=             getPklInfo( "VarIni_File" ) 		; "Variant" base layout (the first one)
+	basFile  :=             getPklInfo( "BasIni_File" ) 		; "Deepest" base layout (the last  one)
+	varFile  := ( varFile == basFile ) ? "--" : varFile
 	menuSep  := "............................................................................................"
 	
 	If WinActive( aboutTitle ) {    							; Toggle the GUI off if it's the active window
@@ -228,7 +230,7 @@ pkl_about()
 		text :=   "Compiled with AutoHotKey version: " . A_AhkVersion               . "`n"
 		text .= "`nCurrent Windows Locale / Language ID: "  . msLID . " / " . wLang
 		text .= "`nDead keys set for this Windows layout: " . dkStr                 . "`n"  	; eD WIP: Remove this? Or replace it? It's hard to see anyway.
-		text .= "`nLayout file paths:`nMain: " . layFile . "`nBase: " . basFile
+		text .= "`nLayout dir/file paths:`nMain: " layFile "`nBase↑: " varFile "`nBase↓: " basFile
 		GUI, AW:Add, Text, , %text% 							; Win Locale ID and OS layout DKs
 	}
 	GUI, AW:Show
