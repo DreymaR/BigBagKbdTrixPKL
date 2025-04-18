@@ -2,8 +2,8 @@
 ========================================================
 <br>
 
-- Version:  1.4.2α
-- Compiled: 2024-09 from GitHub/DreymaR/BigBagKbdTrixPKL
+- Version:  1.4.2β
+- Compiled: 2025-04 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
 
@@ -546,9 +546,10 @@ VERSION HISTORY:
 		- The pkl_exec() fn governs specified commands for sent strings; it could be expanded with several new AHK commands.
 		- For now, Sleep() and Run() are what I felt were most needed. Sleep() helps timing string parts, while Run() adds new mapping options.
 		- Using these new syntax possibilities, some Ext-tap mappings were added or improved.
-	- The BaseLayout can now be a stack. for instance a "Variant" BaseLayout pointing to a main or "Deepest" BaseLayout.
+	- The BaseLayout can now be a stack. for instance a "Variant" or "Top" BaseLayout pointing to a main or "Deepest" BaseLayout.
 		- The BaseStack should be mostly safe from self-reference and recursion. It has an arbitrary max depth of 3, for now.
-		- Reworked Graphite-HB, Gralmak, ... to utilize the BaseStack, removing the need to duplicate variant changes in several Layout.ini files.
+		- Reworked Graphite-HB, Gralmak, Cmk-Epo and Cmk-Kyr to utilize the BaseStack. Most locale variants were left alone, for now.
+		- This removes the need to replicate relevant changes in all Layout.ini files for a variant. These could ideally hold mostly ergo remaps.
 	- Instead of an array of Compose sequence lengths, now there's just `bufSize` for max length. Sequences are processed from longest to shortest.
 	- More ways to reset the Composer queue. Backspace pops the last key as before. Del/Enter/Esc Ctrl+Back and AHK syntax (α prefix) now delete the queue.
 		- This fixes a problem with using powerstrings for Delete Word, as they would leave undesired characters in the lastKeys queue.
@@ -598,11 +599,3 @@ VERSION HISTORY:
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
-
-WIPs:
-	- Allow a BaseLayout stack: Variant,Options/Script,Base....
-		- Make BaseVariants so we don't have to repeat ourselves for locales. The Layout.ini could just hold the ergo remaps.
-		- The Cmk-Bul and Cmk-Ukr BaseVariants could for instance base itself on the Cmk-Kyr BaseLayout.
-		- Just the Variant level, for now? Or could two more levels be nice? For instance, one locale plus one with, e.g., extra composes?
-		- If going with multi-level, guard against infinite recursion (if already in stack, Continue). Limit LayStack depth to a few more layers.
-		- Figure out a way to sort out the img_ entries too, without manually editing all of them? Soft/hard? Extend(@X)/Geometric(@H)?

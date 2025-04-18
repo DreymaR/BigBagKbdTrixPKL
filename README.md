@@ -195,7 +195,7 @@ There are two main ways EPKL handles key presses intercepted by its keyboard hoo
     - The mapping format for state mapped keys is described in the [State Mapping Syntax](#state-mapping-syntax) section below.
 * Any key may be key or state mapped. Layouts will generally contain one or the other type, but may contain a mix.
     - Wherever there is an eD-type layout available, you can use it as a key mapped one with the **eD2VK** type.
-    - The eD2VK layout type will read its BaseLayout only as key mapped. Any overriding mappings are read as-is.
+    - The eD2VK layout type will read its BaseLayout(s) only as key mapped. Any overriding mappings are read as-is.
 * Note that key mapped and state mapped input events are sent differently. See the next section.
 <br><br>
 
@@ -303,9 +303,9 @@ More Know-How
 * **PowerStrings** are shortcuts to text strings. These may be multiline, and may contain AutoHotKey syntax.
     - As an Example, try Extend+End in a text editor. It should produce an editable 'Yours truly' message footer.
 * **LayStack** is the stack of files that may hold layout definitions. From top to bottom priority:
-    - Layout_Override in your chosen layout folder, if present, holds personal key mappings and such
+    - Layout_Override in your layout folder, if present, holds personal changes such as key mappings
     - Layout, that is, the `Layout.ini` main layout file in your chosen layout folder
-    - BaseLayout, which may be pointed to and overridden by the Layout file
+    - BaseLayout(s), which may be pointed to and overridden by the Layout file
     - Layouts_Override, which may hold your personal layout settings and mappings
     - Layouts_Default, found in the root folder, holds default layout settings/mappings
     - Special dedicated files for Extend, DeadKeys, PowerStrings, Remaps etc etc.
@@ -438,9 +438,9 @@ The layouts and setup files may take a little tweaking to get what you want. The
 * Here's the "LayStack" for layout info priority. Mappings/settings at higher levels take precedence:
     1. A `Layout_Override.ini` file in the chosen Layout folder will get the last word about everything.
     2. The `Layout.ini` file in the chosen Layout folder typically defines names, remaps and key overrides.
-    3. The `BaseLayout` .ini file usually found under each layout type may define most of the layout
-    4. The [EPKL_Layouts_Override][LayOvr], if present, overrides default layout choices
-    5. The [EPKL_Layouts_Default][LayDef] holds default and common layout settings/mappings
+    3. The `BaseLayout` .ini file(s) usually found under each layout type may define most of the layout.
+    4. The [EPKL_Layouts_Override][LayOvr], if present, overrides default layout choices.
+    5. The [EPKL_Layouts_Default][LayDef] holds default and common layout settings/mappings.
     6. Beyond this, specialized files may hold settings, info, Extend or DeadKey mappings etc. See below.
 <br>
 

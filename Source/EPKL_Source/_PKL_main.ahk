@@ -17,6 +17,9 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+WIPs: Galliard/Gralmak ortho, w/o AngleWide.
+	- When done, release v1.4.2: Layout/Settings enhancements.
+
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
 		- Second example:
@@ -54,8 +57,6 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 				
 				DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 			}
-
-WIPs: Galliard/Gralmak ortho, w/o AngleWide.
 
 2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
 		- Could it be because some key combos change system layout now? (How?)
@@ -228,6 +229,10 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 ;;  ================================================================================================================================================
 ;;  eD TONEXT:
 
+NEXT: Sort out layout img_ entries for easier mod combo generation, without manually editing their individual names?
+		- Settings for Soft/Hard image versions? Extend(@X - `CAWS`)/Geometric(@H - `AWide`)?
+		- Example: `Files\ImgExtend\@K-CAWS_Ext#.png` files could be `Files\ImgExtend\@K@X_Ext#.png`.
+
 NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
 		- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
 		- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
@@ -274,7 +279,6 @@ NEXT: Toggle-type modifiers.
 
 NEXT: Actual settings shown in the Layout Picker and Special Keys tabs.
 		- https://github.com/DreymaR/BigBagKbdTrixPKL/issues/80
-		- When done, release v1.4.2: Layout/Settings enhancements? Or add some other GUI stuff first (see below)?
 NEXT: Add a Help button with a more generic help screen for the first Settings UI panel?
 NEXT: Move the text for the Settings UI help text to the language files?!
 		- Make a separate .ini file section for it. Then read in the whole section and process it?
@@ -478,6 +482,10 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 
 ;;  ================================================================================================================================================
 ;;  eD ONHOLD:
+
+HOLD: Further developments for the BaseLayout stack: Variant,Options/Script,Base....?
+		- Make BaseVariants for all locales? Their Layout.ini files could mostly hold ergo remaps.
+		- Use just the Variant/Top level, for now? Or could more levels be nice? E.g., one locale plus one with, e.g., extra composes?
 
 HOLD: More `¢[]¢` syntax?
 		- Use Eval() on arg; will that allow for instance "str" to be read as a string without the quotes?
