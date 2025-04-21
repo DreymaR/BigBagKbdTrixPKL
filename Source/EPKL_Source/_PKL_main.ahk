@@ -18,13 +18,7 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  eD WIPs/2FIX:
 
 WIPs:
-	✔ Rework Gralmak BaseLayout, as override of Graphite instead of remap of Gallium
-		✔ Remove remaps in Layout.ini files, accordingly.
-		✔ Remove the CoDeKey/Ext-tap remaps. Keep only Z and Q.
-	✔ Galliard/Gralmak ortho, w/o AngleWide.
-	✔ Checked eD2VK integrity w/ the BaseStack
-	✔ Rework AWS for layouts (SymMnW_@K,AWide_@K -> AWS_@K; also Angle_ISO,SymMnW_ISO,Wide_ISO and _ANS for Sturdy)
-	- When done, release v1.4.2: Layout/Settings enhancements.
+
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050

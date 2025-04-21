@@ -2,7 +2,7 @@
 ========================================================
 <br>
 
-- Version:  1.4.2β
+- Version:  1.4.2
 - Compiled: 2025-04 from GitHub/DreymaR/BigBagKbdTrixPKL
 - Compiler: AutoHotKey v1.1.27.07 Unicode 32 bit
 <br>
@@ -561,7 +561,7 @@ VERSION HISTORY:
 		- Added a `Single-Entry` mapping type in the KeyMapper, with these four "Map to..." flavors.
 		- Changed the Special Keys CapsLock entry in the Settings GUI to `Unmapped`. This makes reclaiming the CapsLock key (at the user's loss) easier.
 	- The SymMn (only the MINUS key loop) partial mod is now a named Remap. Fits layouts with no symbol in the QWERTY `P` position.
-		- This includes Semimak, APTv3 and several other alternative keyboard layouts.
+		- This includes Semimak, APTv3 and other alternative keyboard layouts. Also, the AWS_@K remap now uses SymMn.
 	- Reworked Settings GUI globals. Now these are initialized at startup, hopefully making GUI creation a bit faster.
 		- Also register an array of layout folders: Subfolders under "Layouts" contaning a "Layout.ini" file and fulfilling certain naming criteria.
 		- This way, no layout folder read nor FileExist checks are necessary at GUI creation/selection time.
@@ -599,3 +599,5 @@ VERSION HISTORY:
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
+* EPKL v1.4.3: WIP
+	- 
