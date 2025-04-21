@@ -17,7 +17,13 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-WIPs: Galliard/Gralmak ortho, w/o AngleWide.
+WIPs:
+	✔ Rework Gralmak BaseLayout, as override of Graphite instead of remap of Gallium
+		✔ Remove remaps in Layout.ini files, accordingly.
+		✔ Remove the CoDeKey/Ext-tap remaps. Keep only Z and Q.
+	✔ Galliard/Gralmak ortho, w/o AngleWide.
+	✔ Checked eD2VK integrity w/ the BaseStack
+	✔ Rework AWS for layouts (SymMnW_@K,AWide_@K -> AWS_@K; also Angle_ISO,SymMnW_ISO,Wide_ISO and _ANS for Sturdy)
 	- When done, release v1.4.2: Layout/Settings enhancements.
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
@@ -57,6 +63,8 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 				
 				DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 			}
+
+2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 
 2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
 		- Could it be because some key combos change system layout now? (How?)
@@ -569,7 +577,7 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 ;;  ########################    main code   ########################
 
 ;#Requires AutoHotkey 1.1.27     							; This will be important when transitioning to AHK v2 in the future. At that point, use `2.0+` here.
-;#Warn                   									; This AHK directive is handy for spotting global/local variable conflicts etc. May give a lot of warnings though.
+;#Warn                   									; This AHK directive is handy for spotting global/local variable conflicts etc. May give a lot of warnings.
 #NoEnv
 #Persistent
 #NoTrayIcon
@@ -580,19 +588,19 @@ HOLD: Even More Modern Alt Keyboard Layouts?
 #MaxHotkeysPerInterval  300
 #MaxThreads             32
 #MaxMem                 128 								; Default 64 Mb. We need more than that for HIG image generation in its search-n-replace loop.
-#KeyHistory             24  								; NOTE: If you're concerned about the security risk of the AutoHotKey KeyHistory log, set this to 0 and recompile.
+#KeyHistory             24  								; NOTE: If you're concerned about the security risk of the AHK KeyHistory log, set this to 0 and recompile.
 
 SendMode Event
 SetKeyDelay,    -1  										; The Send key delay wasn't set in PKL, defaulted to 10. AHK direct key remapping uses -1. What's most robust?
 SetBatchLines,  -1  										; This script never sleeps (default is every 10 ms)
 Process, Priority, , R  									; Real-time process priority (default is N for Normal; H for High in old PKL; R for Realtime is max)
-SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: Make a separate user working dir, so users can have their settings elsewhere?
-StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: But InStr() is still caseless by def.?
+SetWorkingDir,  %A_ScriptDir%   							; Should "ensure consistency" 	; eD WIP: A separate user working dir, so user settings can be kept elsewhere?
+StringCaseSense, On 										; All string comparisons are case sensitive (AHK default is Off) 	; eD WIP: InStr() still starts caseless?!
 
 setPklInfo( "pklName", "EPiKaL Portable Keyboard Layout" )  				; EPKL Name
-setPklInfo( "pklVers", "1.4.2α" )       									; EPKL Version
-setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; URL - used to be http://pkl.sourceforge.net/
-setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Import Module
+setPklInfo( "pklVers", "1.4.2" )        									; EPKL Version
+setPklInfo( "pklHome", "https://github.com/DreymaR/BigBagKbdTrixPKL" )  	; EPKL URL
+setPklInfo( "pklHdrA", ";`r`n;;  " ) 										; A header used when generating EPKL files  	; eD WIP: Make an Import Module
 setPklInfo( "pklHdrB", "`r`n"
 		. ";;  for EPiKaL Portable Keyboard Layout (EPKL) by Øystein ""DreymaR"" Bech-Aase (2015-), based on PKL by Máté Farkas (2008-2010).`r`n"
 		. ";`r`n" )
