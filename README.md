@@ -135,6 +135,20 @@ The Settings dialog holds some useful info points for each tab, and the KeyMappe
 
 <br><br>
 
+"My Shift key is behaving oddly!"
+---------------------------------
+By default, EPKL's Shift keys are [sticky modifiers](https://en.wikipedia.org/wiki/Sticky_keys). 
+Many, including myself, find this handy since it allows you to type with less [chording][BBTseq]. 
+Typing champions like Sean Wrona have recommended Shift sequencing at high speeds, as it helps against the DOuble CApitalization ISsue.
+
+Most OSes can make at least the Shift keys sticky, but usually that makes them like dead keys: Waiting forever for a key to modify. 
+EPKL's sticky mods use a timer instead. If you don't act within the sticky time set (usually around half a second), the modifier is reset.
+
+Should you find the sticky mods feature bothersome, it's easy enough to tweak or remove. 
+Just go to the **Settings** tab of the **Layout/Settings** menu. There, you'll find a setting for **stickyMods** which you can set to `--` to disable it. 
+Or you could try tweaking the **stickyTime** setting to see if another timer delay could work for you.
+<br><br>
+
 "Can I map the Caps key to Backspace?"
 --------------------------------------
 Sure you can! But may I suggest you do something much better with it and use **[Extend][BBText]** for a lot more power? 
@@ -534,7 +548,7 @@ KNOWN ISSUES
     - Unfortunately, this includes some of the functionality of the popular [Microsoft PowerToys](https://apps.microsoft.com/detail/xp89dcgq3k6vld) tool suite.
     - It also includes [other AutoHotkey scripts using hotkeys](https://www.autohotkey.com/boards/viewtopic.php?t=127074).
     - To some extent, you could include other scripts into EPKL if you know how to, or replicate their functionality within EPKL.
-* The AHK `Send` command used by some EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
+* The AHK `Send` command used by most EPKL mappings, sends a `KeyDown` shortly followed by a `KeyUp`.
     - This does produce a key press with the desired character/key.
     - However, when holding down a key for a while Windows really sends repeated `KeyDown` events and `KeyUp` only on key release.
     - This discrepancy often messes with games. The `KeyUp` events tend to interrupt held-down keys, resulting in choppy game controls.
@@ -594,6 +608,7 @@ _Øystein "DreymaR" Bech-Aase_
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTawi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
 [BBT_eD]: https://dreymar.colemak.org/layers-colemaked.html (about Colemak-eD layers, in DreymaR's Big Bag of Keyboard Tricks)
+[BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences (about sequencing vs chording modifiers)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)

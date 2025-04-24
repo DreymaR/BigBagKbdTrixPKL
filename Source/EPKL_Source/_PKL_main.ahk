@@ -58,6 +58,9 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 				DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 			}
 
+WIPs: Should a stickyTime of 0 make sticky keys work like on Windows, without a timer?
+		- Or maybe with a very long timer instead, for simplicity but also robustness (Shift isn't stuck on forever)...?
+
 2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 
 2FIX: The Shift key is often lost now, forcing a refresh? Only for Ext-Shift?
