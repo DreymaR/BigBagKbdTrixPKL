@@ -77,9 +77,9 @@ Graphite-HB
 | n r t s g   y h a e i  , \ |
 | q x m c v   k p . - /      |
 +----------------------------+
-| • • • • •   _ • • • •  • • |
-| • • • • •   • • • • •  ? • |
-| • • • • •   • • • " <      |
+| · · · · ·   _ · · · ·  · · |
+| · · · · ·   · · · · ·  ? · |
+| · · · · ·   · · · " <      |
 +----------------------------+
 ```
 <br>
@@ -142,7 +142,7 @@ In sum, if you want to Wide/-Sym mod Graphite there are several options. I advis
 
 ![Graphite (C)AWS-ISO help image](./Graphite_ISO-AWS_EPKL.png)
 
-_Suggested Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
+_One possible Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 
@@ -155,6 +155,16 @@ Gralmak
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 <br>
+
+#### Gralmak on an ortho board (J-' and Z-Q swaps; trad. punctuation):
+```
++----------------------------+
+| 1 2 3 4 5   6 7 8 9 0  - = |
+| b l d w q   j f o u '  [ ] |
+| n r t s g   y h a e i  ; \ |
+| z x m c v   k p , . /      |
++----------------------------+
+```
 
 #### Gralmak AWS-ISO:
 ```
@@ -188,10 +198,12 @@ _The Gralmak (AWS-ISO) layout. The © key can be a Compose key, or whatever you 
 - It's made by the 'cmini' analyzer at the AKL Discord, with thumb-key for common punctuation.
 - As shown, the differences consist of swapping `J` and `QU`, and swapping `Z` and `Q`.
 - All overall stat differences are so small that I don't think they can be considered significant.
-- The J-QU swap makes 2-key rolls more outwards; this is okay with me. One-hand 3-key rolls are less affected.
-- The [Q-Z swap][Gal-QZ] keeps a little more QWERTY/Colemak familiarity, at a very low stat cost but with no other benefits.
-- There is a small increase in same-finger skipgrams, but only for alternating ones which I think is okay.
-- Non-SFS alternation, accordingly, goes down by a fairly insignificant amount (from 33.85% to 33.80%).
+
+- The J-QU swap makes 2-key rolls more outwards by 0.4%; this is okay with me.
+- One-hand 3-key rolls are not significantly affected.
+- The [Q-Z swap][Gal-QZ] retains a little more QWERTY/Colemak familiarity, at a very low stat cost.
+- There is a small increase in alternating same-finger skipgrams, which I think is okay.
+- Non-SFS alternation, accordingly, goes down by an insignificant amount (from 33.85% to 33.80%).
 
 ```
 gralmak-thumb(new) - graphite-thumb(old)

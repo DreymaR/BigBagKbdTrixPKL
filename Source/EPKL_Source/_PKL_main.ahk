@@ -19,6 +19,29 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs:
 
+NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
+		- I think the bulgarian =+ position should house Ѝ ѝ
+		- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
+		- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
+		- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
+NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
+		- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
+		    (not used in the official orthography, but used in the still-popular 1918 orthography)
+		- Russian letters should also be accessible seeing how belarus is officially bilingual
+		- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
+		- The national layout uses `'` so the current mapping may suffice
+		- Maybe put ’ on the iso key instead of double acute?
+		- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
+WIPs: Ukromak revision?
+		- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
+
+
+NEXT: Make a matrix/ortho image template. Use it for Curl variants w/o Angle and other ortho variants.
+		- Could the DIY keyboard image be of help for the background?
+		- Do we want the same keys as row-stag, but 1u? If so, only a little space is saved. Otherwise, could save (1+2)u.
+		- Delete the Space/Modifier row as well?!? If so, add Space to the right.
+		- One column to the right, with Grave - Enter(ISO?) - Shift/Ext layer marker - Space. Saves 2u and one row.
+		- Actually, the RShift key being 2u there's room for 5 keys then. Or Space next to Shift/Layer – but w/o Grave/ISO?!
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 		- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
@@ -188,6 +211,10 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 		- Just detect every single VK code from the OS layout: It'd fix all our VK troubles, and account for such things as my CAWS OS layout.
 
 2FIX: Hiding a DK image triggered by an AltGr+<key> DK fails: The AltGr help image gets stuck instead if it happens too fast. Affects hiding 'DKs'.
+		- To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
+		- Would destroying the GUI on DK activation help at all?
+		- If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
+		- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
 
 2FIX: Some new DK sequences don't work, like `~22A2   =  ~22AC	; ⊢ ⇒ ⊬` {DK_/,DK_=,g}. Others like `~2228   =  ~22BD	; ∨ ⇒ ⊽` {DK_/,DK_=,v} work. What gives?
 		- Also iota/upsilon with dialytika and tonos don't work...?
@@ -196,9 +223,6 @@ WIPs: Dual-role modifiers. Allow home row modifiers like for instance Dusty from
 
 2FIX: Win+V can't paste when using ergo-modded layouts like AWide. However, with CAWS and Vanilla it works.
 		- Is this because of the VK detection making an error? The ones that work both have V in its old place.
-
-TEST: To avoid DK images stuck in the AltGr state, use a slight delay before showing the image if it's DK? It's a dirty hack, but could it help?
-		- Would destroying the GUI on DK activation help at all?
 
 2FIX: Every now and then (while using Extend?) EPKL becomes unresponsive to hotkeys and, e.g., changing tabs. Sometimes needs a menu Refresh/Restart.
 		- No good ideas what causes this! It's annoying and happens too often.
@@ -212,8 +236,6 @@ TEST: To avoid DK images stuck in the AltGr state, use a slight delay before sho
 FIXED: Removed pressing LCtrl for AltGr (as in pkl_keypress.ahk now!). And changed to {Text} send.
 		- Does it fix the problem with upgrading to a newer AHK version?!? No! LCtrl still gets stuck upon AltGr in AHK v1.1.28+.
 2FIX: Setting a hotkey to, e.g., <^<+6 (LeftCtrl & LeftShift & 6) doesn't work.
-2FIX: If a DK is selected very fast, the AltGr DK state image may get stuck until release. This happened after adding the DK img refresh-once timer?
-		- Renamed any state6 DK images that contained only a base key release on Spc, to miminize this issue. DKs like Ogonek still have it.
 2FIX: The ToM MoDK Ext doesn't always take when tapped quickly. Say I have period on {Ext-tap,i}. I'll sometimes get i and/or a space instead.
 		- Seems that {tap-Ext,i} very fast doesn't take (producing i or nothing instead of ing)? Unrelated to the ToM term.
 2FIX: Mapping a key to a modifier makes it one-shot?!
@@ -305,20 +327,6 @@ NEXT: Further getWinLayDKs() development
 		- getCurrentWinLayDeadKeys() is checked in pkl_Send(). It's chr based though. Make another dic based on chars, in getWinLayDKs()? But ToAscii doesn't give them?
 		- What about pkl_CheckForDKs() in pkl_send.ahk?
 
-NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
-		- I think the bulgarian =+ position should house Ѝ ѝ
-		- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
-		- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
-		- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
-NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
-		- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
-		    (not used in the official orthography, but used in the still-popular 1918 orthography)
-		- Russian letters should also be accessible seeing how belarus is officially bilingual
-		- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
-		- The national layout uses `'` so the current mapping may suffice
-		- Maybe put ’ on the iso key instead of double acute?
-		- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
-
 NEXT: A debug hotkey to generate a set of help images on the fly using default settings? Just call the make image fn() then sleep 600 then hit Enter, basically.
 
 NEXT: Since Compose tables can be case sensitive now, do the same for DKs? Then scrap the silly `<K>+`-type DK entry syntax - keep <#> syntax?
@@ -395,8 +403,6 @@ TODO: Harmonize Ext and folder mod names? And/or make a shorthand for the @E=@C@
 		- Could expand, e.g., CurlAWide to CurlAngleWide for the layout name only? Or use long names like CurlAWideSym consistently?
 		- Make long names more consistent? Like 4 letters per mod, CurlAnglWideSyms ? Nah, too anal. Better to keep with CurlAWideSym, and that's long enough really.
 		- Use CAngle or CA--, etc? CAngle is more intuitive, but CA more consistent with CAW(S). 
-TODO: Make a matrix image template, and use it for the Curl variants w/o Angle. 
-		- Maybe that should be a separate KbdType, but we also need ANS/ISO info for the VK conversions. ASM/ISM KbdTypes?
 
 ;;  ================================================================================================================================================
 ;;  eD TODO:
@@ -487,6 +493,9 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 
 ;;  ================================================================================================================================================
 ;;  eD ONHOLD:
+
+HOLD: Should ortho/matrix be a separate KbdType?
+		- But we also need ANS/ISO info for VK conversions. Make ASM/ISM KbdTypes, then? Nah, that's too complex.
 
 HOLD: Further developments for the BaseLayout stack: Variant,Options/Script,Base....?
 		- Make BaseVariants for all locales? Their Layout.ini files could mostly hold ergo remaps.
