@@ -98,14 +98,6 @@ ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of
 ;;      Check for idleness (no clicks/keypresses), suspend EPKL by time/app, perform cleanup etc.
 ;
 
-pklJanitorTic:
-	_pklSuspendByApp()
-	_pklSuspendByLID()
-	_pklJanitorActivity()
-	_pklJanitorLocaleVK()
-;	_pklJanitorCleanup() 	; eD WIP: Testing EPKL without the idle keyups
-Return
-
 _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 	static suspendedByApp := false  							; (Their attributes are in the Settings file)
 	
@@ -203,18 +195,18 @@ pklErrorMsg( text ) {
 }
 
 pklWarning( text, time := 5 ) {
-	MsgBox, 0x30, EPKL WARNING, %text%, %time%					; Warning type message box
+	MsgBox, 0x30, EPKL WARNING, %text%, %time%  				; Warning type message box
 }
 
 pklInfo( text, time := 4 ) {
-	MsgBox, 0x40, EPKL INFO: , %text%, %time%					; Info type message box (asterisk)
+	MsgBox, 0x40, EPKL INFO: , %text%, %time%   				; Info type message box (asterisk)
 }
 
 pklDebug( text, time := 2 ) {
-	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%					; Info type message box (asterisk)
+	MsgBox, 0x40, EPKL DEBUG: , %text%, %time%  				; Info type message box (asterisk)
 }
 
-pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) { 				; Set a menu hotkey (used in pkl_init)
+pklSetHotkey( hkIniName, gotoLabel, pklInfoTag ) {  			; Set a menu hotkey (used in pkl_init)
 	For ix, hkey in pklIniCSVs( hkIniName ) {
 		If ( hkey == "" || hkey == "--" )
 			Break
@@ -308,18 +300,10 @@ pklSplash( title, text, dur := 4.0 ) {  	; Default display duration in seconds
 	SetTimer, KillSplash, % -1000 * dur
 }
 
-KillSplash:
-	Gui, pklSp: Destroy 					;TrayTip 	;SplashTextOff
-Return
-
 pklTooltip( text, dur := 4.0 ) {    		; Default display duration in seconds
 	ToolTip % text
 	SetTimer, KillToolTip, % -1000 * dur
 }
-
-KillToolTip:
-	ToolTip
-Return
 
 getPriority( procName := "" ) { 			; Utility function to get process priority, by SKAN from the AHK forums
 	;;  https://autohotkey.com/board/topic/7984-ahk-functions-incache-cache-list-of-recent-items/page-3#entry75675
@@ -512,12 +496,12 @@ menuIconList() {    										; Taken from the AHK_MenuIconList.ahk script
 	;;          https://autohotkey.com/docs/commands/ListView.htm#IL
 	;;  Script Function:
 	;;          Explore and select icons from any Windows file which embeds icon images (.exe, .dll, etc.)
-	global iconFile                     					; Global so MenuIconNum can see it
-	iconFile    := ""                   					; Needs to be reset each run
+;	iconFile    := ""                   					; Reset each run (when it used to be a global)
 	defIcoPath  := "C:\Windows\System32\shell32.dll"
 	FileSelectFile, iconFile, 32, %defIcoPath%, Pick a file to check icons., *.*
 	If ( iconFile == "" )
 		Return
+	setPklInfo( "iconListFile", iconFile )  				; Was `global iconFile` so the MenuIconNum label could see it
 	GUI, MIL:Font, s20
 	GUI, MIL:Add, ListView, h415 w150 gMenuIconNum, Icons 	; Uses a ListView GUI (https://www.autohotkey.com/docs/v1/lib/ListView.htm)
 	GUI, MIL:Default                    					; Necessary for LV_ commands, it seems
@@ -535,34 +519,4 @@ menuIconList() {    										; Taken from the AHK_MenuIconList.ahk script
 	LV_ModifyCol("Hdr")                 					; Auto-adjust the column widths
 	GUI, MIL:Show
 	Return
-}
-
-MenuIconNum:
-	Clipboard := iconFile . ", " . A_EventInfo
-	Msgbox % "'" . Clipboard . "'`n     added to Clipboard!"
-Return
-
-;;  ================================================================================================================================================
-;;  AHK v1 --> v2 Transition
-;;      The transition from AHK v1 to v2 seems very promising, but needs some work.
-;;      One thing that may ease it, would be to make some deprecated commands into temporary functions.
-;;      https://www.autohotkey.com/docs/v2/v2-changes.htm
-;
-;;  Blow-by-blow:
-;;    - All `var = value` assignments have to go (replace with `:=`). Also ` = ` in conditions (replace with `==`).
-;;    - Normal variable references are never enclosed in percent signs (%variable%)
-;;    - All old `if` are gone; `if expression` stays
-;;    - Super-globals are gone
-;;    - Gosub is gone. What to use for it?
-;;    - Sleep: No changes necessary? They say that all commands have become functions but the old syntax is still described on its help page for v2.
-;;        - It's because functions can be called without parentheses if the return value is not needed (except when called within an expression).
-;
-
-Sleep( delay ) {    																	; Wrapper function, pending AHK v2 transition: Sleep
-	Sleep % delay
-}
-
-IniRead( Filename, Section := "", Key := "", Default := "ERROR" ) { 					; Wrapper function, pending AHK v2 transition: IniRead
-	IniRead, val, % Filename, % Section, % Key, % Default   							; Reading only a section (list) should work with this one
-	Return val
 }

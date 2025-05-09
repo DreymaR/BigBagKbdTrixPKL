@@ -430,12 +430,3 @@ hig_deTag( ent, dicName := false ) {    						; Detect and sort out an entry HIG
 	}   ; <-- if HIG tag
 	Return ent  									;( tag ) ? pklDebug( "«» tag found!`ntag: '" . tag . "'`nent: '" . ent . "'", 1.5 )  	; eD DEBUG
 }
-
-ChangeButtonNamesHIG:   										; For the MsgBox asking whether to make full or state images
-	IfWinNotExist, Make Help Images?
-		Return  												; Keep waiting for the message box if it isn't ready
-	SetTimer, ChangeButtonNamesHIG, Off
-	WinActivate
-	ControlSetText, Button1, &Full
-	ControlSetText, Button2, &Main
-Return

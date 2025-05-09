@@ -223,22 +223,6 @@ setOneShotMod( theMod ) {   								; Activate a One-Shot Mod (OSM).
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . osmN . " set:`n" . theMod . "`n`n" . osmTime . " ms", 0.5 )  ; eD DEBUG
 }
 
-osmTimer1:  												; Timer label for the sticky mods
-	_osmClear( 1 )
-Return
-
-osmTimer2:  												; Timer label for the sticky mods
-	_osmClear( 2 )
-Return
-
-osmTimer3:  												; Timer label for the sticky mods
-	_osmClear( 3 )
-Return
-
-osmTimer4:  												; Timer label for the sticky mods 	; eD WIP: Should we use this, or is 3 enough?
-	_osmClear( 4 )
-Return
-
 _osmClear( osmN ) { 										; Clear a specified sticky mod
 	Critical
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
@@ -375,12 +359,6 @@ setTapOrModState( HKey, set := 0 ) {    					; Called from the PKL_main tapOrMod
 		setTapOrModState( -1 )  							; Clear any ToM key settings
 	}
 }   ; <-- fn
-
-tomTimer:   												; There's only one timer as you won't be activating several ToM at once
-;	pklDebug( "ToM: " HKey " > " getPklInfo( "tomMod" ) ) 	; eD DEBUG
-	_setModState( getPklInfo( "tomMod" ), 1 ) 				; When the timer goes off, set the ModState for the ToM key
-	setTapOrModState( -1 )  								; Clear any ToM key settings
-Return
 
 _pkl_CtrlState( HKey, capState, ByRef state, ByRef modif ) { 	; Handle ShiftState/modif vs Ctrl(+Shift)
 	If getKeyState("Ctrl") {
