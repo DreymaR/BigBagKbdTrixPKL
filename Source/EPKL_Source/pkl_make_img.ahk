@@ -47,7 +47,12 @@ makeHelpImages() {
 	imXY        := pklIniCSVs( "imgPos" . getLayInfo( "Ini_KbdType" ) ,     ,, "hig" )
 	imWH        := pklIniCSVs( "imgSizeWH"                            ,     ,, "hig" )
 	imgDPI      := pklIniRead( "imgResDPI"                            , 96  ,, "hig" )
-	areaStr     := imXY[1] . ":" . imXY[2] . ":" . imXY[1]+imWH[1] . ":" . imXY[2]+imWH[2]	; --export-area=x0:y0:x1:y1
+	If ( InStr( getLayInfo( "Ini_GeoType" ), "Orth" ) == 1 ) {  		; All geometric keyboard types starting with "Orth" are considered Ortho.
+		imX := imXY[3], imY := imXY[4], imW := imWH[3], imH := imWH[4]
+	} Else {
+		imX := imXY[1], imY := imXY[2], imW := imWH[1], imH := imWH[2]
+	}
+	areaStr     := imX . ":" . imY . ":" . imX+imW . ":" . imY+imH  	; --export-area=x0:y0:x1:y1
 	HIG.inkOpts := " --export-type=""png""" 							; Prior to Inkscape v1.0, the export command was "--export-png=" . pngFile for each file
 				.  " --export-area=" . areaStr . " --export-dpi=" . imgDPI
 	HIG.inkFile := []   												; Array of the .SVG image file paths used to call Inkscape with
@@ -78,15 +83,15 @@ for the current layout, or only the main state images?
 		Return
 	IfMsgBox, No 					; Make only the state images, not the full set with deadkey images
 		stateImgOnly := true
-	stateImgOnly := ( onlyMakeDK ) ? false : stateImgOnly 		; StateImgOnly overrides DK images, unless DK only is set
+	stateImgOnly := ( onlyMakeDK ) ? false : stateImgOnly   	; StateImgOnly overrides DK images, unless DK only is set
 	If not FileExist( HIG.InkPath ) {
 		pklErrorMsg( "You must set a path to a working copy of Inkscape in the Settings file!" )
 		Return
 	}
-	pklSplash( HIG.Title, "Starting...", 2.5 ) 					;MsgBox, 0x41, %HIG.Title%, Starting..., 2.0
+	pklSplash( HIG.Title, "Starting...", 2.5 )  				;MsgBox, 0x41, %HIG.Title%, Starting..., 2.0
 	If ( HIG.Debug < 3 ) {
 		try {
-			For dirTag, theDir in HIG.ImgDirs 						; Make directories
+			For dirTag, theDir in HIG.ImgDirs   					; Make directories
 			{
 				If ( dirTag == "dkey" && ( stateImgOnly || onlyMakeDK ) )
 					Continue
@@ -118,7 +123,7 @@ for the current layout, or only the main state images?
 	If ( HIG.Debug >= 2 ) 		; eD DEBUG: Don't call Inkscape
 		Return
 	hig_callInkscape( HIG ) 									; Call Inkscape with all the SVG files at once now
-	sleepTime := 3 												; Time to wait between each file check, in s
+	sleepTime := 3  											; Time to wait between each file check, in s
 	Loop % 6 {
 		If ( A_Index >= 0 ) 	; eD WIP Check whether the last .PNG file has been made yet; how about full DK set?
 			Break

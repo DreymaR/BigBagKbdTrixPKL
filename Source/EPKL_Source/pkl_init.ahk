@@ -126,7 +126,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 		}   ; <-- For LVar
 	}   ; <-- For LVars
 	localID := ( polyLID[layVari] ) ? polyLID[layVari] : layVari    	;   (can be a single locale of a harmonized layout like BeCaFr)
-	kbdType := _pklLayRead( "KbdType", "ISO"        )   				; Keyboard type, ISO/ANS(I)/etc
+	kbdType := _pklKbdType( "Lays" )    								; Keyboard type - ISO/ANS(I)/etc - from pklLays
 	curlMod := _pklLayRead( "CurlMod"               )   				; --, Curl/DH mod
 	hardMod := _pklLayRead( "HardMod"               )   				; --, Hard mod - Angle, AWide...
 	othrMod := _pklLayRead( "OthrMod"               )   				; --, Other mod suffix like Sym
@@ -240,9 +240,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	}   ; <-- For pklLays
 	setPklInfo( "LayStack", layStck )   								; Layout_Override.ini, Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
-	kbdType := pklIniRead( "KbdType", kbdType,"LayStk" )    			; This time, look for a KbdType down the whole LayStack
-	kbdType := _AnsiAns( kbdType )
-	setLayInfo( "Ini_KbdType", kbdType )    							; A KbdType setting in Layout.ini overrides the first Layout_ setting
+	kbdType := _pklKbdType( "LayStk", kbdType ) 						; This time, a kbd type found in the whole LayStack overrides the first one from pklLays.
 	
 	imgsDir := pklIniPath( "img_MainDir", mainDir, "LayStk" )   		; Help imgs are in the main layout folder, unless otherwise specified. Allow path dots.
 	setPklInfo( "Dir_LayImg", atKbdType( imgsDir ) )
@@ -602,15 +600,25 @@ _pklStckUp( The, theFile, at1 := 0 ) {  			; Add a support file to the bottom of
 _pklLayRead( type, def := "--", prefix := "" ) { 	; Read kbd type/mods (used in pkl_init) and set Lay info
 	pklLays := getPklInfo( "pklLaysFiles" )
 	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
-	val := ( type == "KbdType" ) ? _AnsiAns( val ) : val
-	setLayInfo( "Ini_" . type, val )    			; Stores KbdType etc for use with other parts
+	setLayInfo( "Ini_" . type, val )    			; Stores layout info for use with other parts
 	val := ( val == "--" ) ? "" : prefix . val  	; Replace -- with nothing, otherwise use prefix
 ;	val := ( InStr( val, "<", 0 ) ) ? false : val 	; If the value is <N/A> or similar, return boolean false 	; eD WIP: Don't use that anymore
 	Return val
 }
 
-_AnsiAns( kbdt ) {  								; You're allowed to use ANSI as a more well-known synonym to the ANS KbdType
-	Return ( kbdt == "ANSI" ) ? "ANS" : kbdt
+_pklKbdType( files := "Lays", def := "ISO" ) {  	; Read and set kbd type(s) from Layout(s) files
+	If ( files == "Lays" )
+		files   := getPklInfo( "pklLaysFiles" ) 	; EPKL_Layouts and its override is the default
+	kbd := pklIniRead( "KbdType", def, files )  	; Read from the layout .ini file(s)
+	If ( mn := InStr( kbd, "-" ) ) {    			; Tried `split := StrSplit( kbd, "-",, 2 )`. NB: The MaxParts arg used here needs AHK v1.1.28+.
+		geo := SubStr( kbd,     mn + 1 )    		; Geometric  board type (RowStagger/Ortho/etc)
+		kbd := SubStr( kbd, 1,  mn - 1 )    		; Logical keyboard type (ISO/ANS/ANSI/etc)
+	}
+	kbd := ( kbd == "ANSI"  ) ? "ANS"   : kbd   	; You can use ANSI as a better-known synonym to the ANS type
+	setLayInfo( "Ini_KbdType", kbd )
+	geo := ( geo == ""      ) ? "RowS"  : geo   	; RowStag is the default geometry
+	setLayInfo( "Ini_GeoType", geo )
+	Return kbd
 }
 
 _mapKLM( ByRef key, type ) {

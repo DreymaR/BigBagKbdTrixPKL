@@ -42,36 +42,37 @@ NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591
 WIPs: Ukromak revision?
 	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
 
-WIPs: Split KbdType into KbdLogType (ANS/ISO) and KbdGeoType (Row/Orth; Row is default) in init.
+WIPs: Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init.
 	- In the files, can use a type like `ANS-Orth`. StrSplit by `-` when reading.
 	- Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
 		- Could keep everything in kbdType and adjust the reading of it to use the first and second substring.
 		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in Layout.ini anyway.
 
-WIPs: Make a matrix/ortho image template. Use it for Curl variants w/o Angle and other ortho variants.
-	- Could the DIY keyboard image be of help for the background?
+WIPs: Make a matrix/ortho image template. Use it for ortho variants such as Curl w/o Angle.
 	- I might want to use this, as a more compact help image. How to get that for my AWS layout? 
-		- Make a Wide-Ortho background. And a WideSym-Ortho mod combo.
-		- 6 vs 7 problem! Make a Wide-Ortho remap. Shouldn't just cheat on the image, as people may need this one!
-	- Do we want the same keys as row-stag, but 1u? If so, only a little space is saved. Otherwise, could save (1+2)u.
-	- Delete the Space/Modifier row as well?!? If so, add Space to the right. Make it yellow then?!
-	- One column to the right, with Grave - Enter(ISO?) - Shift/Ext layer marker - Space. Saves 2u and one row.
-	- Actually, the RShift key being 2u there's room for 5 keys then. Or Space next to Shift/Layer – but w/o Grave/ISO?!
-	- Maybe we need to use SP instead of SPC in the image template after all, then? Could make a replacement check in code.
-	
-		+-----------------------------+
-		|   ` 1 2 3 4 5 6 7 8 9 0 - = |
-		| Ext q w f p b j l u y ; [ ] |     	Colemak template
-		| Shf a r s t d h n e i o ' \ |     	13 columns
-		| AGr z x c v b k m , . / _ ␣ |
-		+-----------------------------+
-	- The AltGr and Space keys are in yellow, creating an aesthetic symmetry. All keys are still 1u. Misses Enter/Back.
-		+-----------------------------+
-		|   ` 1 2 3 4 5 \ 6 7 8 9 0 = |
-		| Ext b l d w q [ j f o u ' - |     	Gralmak_Ortho-WideSym
-		| Shf n r t s g ] y h a e i ; |
-		| AGr z x m c v / k p , . _ ␣ |
-		+-----------------------------+
+		- Make an Ortho-Wide background. And an Ortho-WideSym mod combo.
+		- 6 vs 7 problem! Make an Ortho-Wide remap. Can't just cheat on the image, as people may want this one.
+		- I'd like to put 6-on-left for my purposes. It'll put some people off, though... Need both, then.
+		- Made a 6-7 remap that people can easily add to remedy any such issues (e.g., `mapSC_# = AWS_@K,6-7`).
+	- All the same keys as row-stag, but all of them 1u would only save a little space. Otherwise, could save (1+2)u.
+	- Delete the Space/Modifier row as well. Add Space and AltGr at the lower right.
+	- One extra column, then, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
+	- Added two values to imgPos/imgSize settings, for the Ortho geometries. These are used in make_img based on Ini_GeoType.
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
+		| ISO q w f p b j l u y ; [ ]   |   	Colemak template
+		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282)
+		| Shf z x c v b k m , . / ␣ AGr |
+		+-------------------------------+
+	- The AltGr and Space keys are yellow. All keys are 1u. Back & Enter are missing.
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
+		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym
+		| Ext n r t s g ] y h a e i ;   |
+		| Shf z x m c v / k p , . ␣ AGr |
+		+-------------------------------+
+
+WIPs: Could @K cover geo as well? Should it?
 
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
