@@ -240,7 +240,7 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	}   ; <-- For pklLays
 	setPklInfo( "LayStack", layStck )   								; Layout_Override.ini, Layout.ini, BaseLayout.ini, Layouts_Override, Layouts_Default
 	setPklInfo( "DirStack", dirStck )
-	kbdType := _pklKbdType( "LayStk", kbdType ) 						; This time, a kbd type found in the whole LayStack overrides the first one from pklLays.
+	kbdType := _pklKbdType( "LayStk", kbdType ) 						; This time, a kbd type found in the whole LayStack overrides the first one from pklLaFi.
 	
 	imgsDir := pklIniPath( "img_MainDir", mainDir, "LayStk" )   		; Help imgs are in the main layout folder, unless otherwise specified. Allow path dots.
 	setPklInfo( "Dir_LayImg", atKbdType( imgsDir ) )
@@ -598,9 +598,9 @@ _pklStckUp( The, theFile, at1 := 0 ) {  			; Add a support file to the bottom of
 }
 
 _pklLayRead( type, def := "--", prefix := "" ) { 	; Read kbd type/mods (used in pkl_init) and set Lay info
-	pklLays := getPklInfo( "pklLaysFiles" )
-	val := pklIniRead( type, def, pklLays ) 		; Read from the EPKL_Layouts .ini file(s)
-	setLayInfo( "Ini_" . type, val )    			; Stores layout info for use with other parts
+	pklLays := getPklInfo( "pklLaysFiles" ) 		; Read from the EPKL_Layouts .ini file(s)
+	val := pklIniRead( type, def, pklLays ) 		; 
+	setLayInfo( "Ini_" . type, val )    			; Store layout info for use with other parts
 	val := ( val == "--" ) ? "" : prefix . val  	; Replace -- with nothing, otherwise use prefix
 ;	val := ( InStr( val, "<", 0 ) ) ? false : val 	; If the value is <N/A> or similar, return boolean false 	; eD WIP: Don't use that anymore
 	Return val

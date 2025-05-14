@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1012"
-   height="1266"
+   width="1800"
+   height="1200"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="CmkKbdFig_PKL_Resources.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
    style="display:inline;enable-background:new"
-   inkscape:export-filename="G:\Colemak\ColemakImages\Colemak-BoardFigs\CmkIBM-base.png"
-   inkscape:export-xdpi="60"
-   inkscape:export-ydpi="60">
+   inkscape:export-filename="C:\Colemak\ColemakImages\Colemak-BoardFigs\CmkIBM-base.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
      id="title4296">Colemak keyboard figure (IBM inspired)</title>
   <defs
@@ -60,26 +60,15 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter1936"
-       x="-0.21"
-       width="1.42"
-       y="-0.28"
-       height="1.56">
+       x="-0.23593566"
+       width="1.4718713"
+       y="-0.31458088"
+       height="1.6291618">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="3.5"
+         stdDeviation="3.9322609"
          id="feGaussianBlur1938" />
     </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient1951"
-       id="radialGradient1943"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1,0,0,0.79338839,-1.0042191e-5,821.15704)"
-       cx="137"
-       cy="296"
-       fx="137"
-       fy="296"
-       r="24.200001" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1934"
@@ -94,14 +83,62 @@
     <filter
        inkscape:collect="always"
        id="filter9421"
-       x="-0.17358696"
+       x="-0.17358695"
        width="1.3471739"
-       y="-0.21569006"
-       height="1.4313802">
+       y="-0.21569005"
+       height="1.4313801">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="4.7492167"
          id="feGaussianBlur9423" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1934"
+       id="radialGradient2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.75,0,0,0.79338839,1573.2502,61.157224)"
+       cx="137"
+       cy="296"
+       fx="137"
+       fy="296"
+       r="24.200001" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter2"
+       x="-0.26964075"
+       y="-0.26964075"
+       width="1.5392815"
+       height="1.5392815">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.3705094"
+         id="feGaussianBlur2" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1951"
+       id="radialGradient3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.75,0,0,0.79338839,1573.2502,561.15717)"
+       cx="137"
+       cy="296"
+       fx="137"
+       fy="296"
+       r="24.200001" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1"
+       x="-0.26964075"
+       y="-0.26964075"
+       width="1.5392815"
+       height="1.5392815">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.3705094"
+         id="feGaussianBlur1" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -114,14 +151,14 @@
      objecttolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.671406"
-     inkscape:cx="-54.861381"
-     inkscape:cy="633"
+     inkscape:zoom="0.81047382"
+     inkscape:cx="901.94154"
+     inkscape:cy="599.03231"
      inkscape:document-units="px"
-     inkscape:current-layer="g2263"
+     inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-height="1129"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      showguides="false"
@@ -136,7 +173,8 @@
      showborder="true"
      inkscape:showpageshadow="false"
      borderlayer="false"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -199,7 +237,7 @@
     <g
        id="g15992"
        style="fill:#333333;fill-opacity:1"
-       transform="translate(0,600)">
+       transform="translate(0,499.99994)">
       <rect
          style="fill:#333333;fill-opacity:1;stroke:none"
          id="rect3832"
@@ -210,11 +248,11 @@
          rx="4"
          ry="4"
          inkscape:export-filename="/home/mrfys/Dropbox/Keyboards/ColemakImages/Colemak-BoardFigs/Cmk-ISO_90d-FingerShui.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <rect
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="/home/mrfys/Dropbox/Keyboards/ColemakImages/Colemak-BoardFigs/Cmk-ISO_90d-FingerShui.png"
          ry="4"
          rx="4"
@@ -234,8 +272,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="/home/mrfys/Dropbox/Keyboards/ColemakImages/Colemak-BoardFigs/Cmk-ISO_90d-FingerShui.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <rect
          style="fill:#333333;fill-opacity:1;stroke:none"
          id="rect3839"
@@ -246,8 +284,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="/home/mrfys/Dropbox/Keyboards/ColemakImages/Colemak-BoardFigs/Cmk-ISO_90d-FingerShui.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <rect
        inkscape:export-ydpi="96"
@@ -263,7 +301,7 @@
        style="fill:#333333;fill-opacity:1;stroke:none" />
     <path
        style="display:inline;opacity:1;fill:#663366;fill-opacity:0.6;stroke:none;stroke-width:1;enable-background:new"
-       d="m 62,1314.3621 v 58 h 56 v -26 H 88 v -32 z"
+       d="m 62,1214.362 v 58 h 56 v -26 H 88 v -32 z"
        id="rect15263"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />
@@ -273,12 +311,30 @@
        width="812"
        height="282"
        x="62"
-       y="906.36212"
+       y="806.36206"
        rx="4"
        ry="4"
        inkscape:export-filename="../Colemak-BoardFigs/CmkIBM_temp.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="../Colemak-BoardFigs/CmkIBM_temp.png"
+       ry="4"
+       rx="3.9999998"
+       y="306.36212"
+       x="962"
+       height="226"
+       width="704"
+       id="rect112"
+       style="fill:#333333;fill-opacity:1;stroke:none;stroke-width:1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect112"
+       id="use218"
+       transform="translate(0,499.99994)" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -294,7 +350,7 @@
        id="use15998"
        width="100%"
        height="100%"
-       transform="translate(0,3e-6)" />
+       transform="translate(0,6e-5)" />
     <rect
        style="display:inline;opacity:1;fill:#333333;fill-opacity:1;stroke:none;enable-background:new"
        id="rect3245"
@@ -305,20 +361,38 @@
        rx="4"
        ry="4"
        inkscape:export-filename=".\bitmap.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
        inkscape:export-filename="../Colemak-BoardFigs/CmkIBM_temp.png"
-       ry="4"
+       ry="4.0000005"
        rx="4"
-       y="906.36218"
+       y="806.3623"
        x="62"
-       height="226"
+       height="282"
        width="812"
        id="rect4750"
-       style="display:inline;opacity:1;fill:#333333;fill-opacity:1;stroke:none;enable-background:new" />
+       style="display:inline;opacity:1;fill:#333333;fill-opacity:1;stroke:none;stroke-width:1;enable-background:new" />
+    <rect
+       style="display:inline;opacity:1;fill:#333333;fill-opacity:1;stroke:none;stroke-width:1;enable-background:new"
+       id="rect217"
+       width="704"
+       height="226"
+       x="962"
+       y="306.36212"
+       rx="4"
+       ry="4"
+       inkscape:export-filename="Example_KLM-Co_Template_Ortho1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect217"
+       id="use219"
+       transform="translate(0,500)" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -330,8 +404,8 @@
     <g
        id="g15506">
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          ry="4"
          rx="4"
@@ -342,8 +416,8 @@
          id="rect3377"
          style="fill:#eeeeee;fill-opacity:1;stroke:none" />
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          ry="4"
          rx="4"
@@ -354,8 +428,8 @@
          id="rect3379"
          style="fill:#eeeeee;fill-opacity:1;stroke:none" />
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          id="rect3335"
@@ -366,8 +440,8 @@
          rx="4"
          ry="4" />
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          ry="4"
          rx="4"
@@ -379,8 +453,8 @@
          style="fill:#eeeeee;fill-opacity:1;stroke:none" />
       <g
          style="display:inline;fill:#eeeeee;fill-opacity:1"
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          inkscape:tile-y0="328.09448"
          inkscape:tile-x0="40"
@@ -793,15 +867,6 @@
          inkscape:tiled-clone-of="#g4247"
          y="0"
          x="0" />
-      <use
-         height="744.09448"
-         width="1052.3622"
-         id="use4355"
-         transform="translate(608,168)"
-         xlink:href="#g4247"
-         inkscape:tiled-clone-of="#g4247"
-         y="0"
-         x="0" />
       <g
          transform="translate(0,-20)"
          id="g5267">
@@ -815,8 +880,8 @@
            id="rect3402"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect3405"
@@ -827,8 +892,8 @@
            rx="4"
            ry="4"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect3410"
@@ -839,8 +904,8 @@
            rx="4"
            ry="4"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            ry="4"
            rx="4"
@@ -851,8 +916,8 @@
            id="rect3435"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect5168"
@@ -863,8 +928,8 @@
            rx="4"
            ry="4"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect5170"
@@ -875,8 +940,8 @@
            rx="4"
            ry="4"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            ry="4"
            rx="4"
@@ -887,8 +952,8 @@
            id="rect5449"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
         <rect
            ry="4"
            rx="4"
@@ -899,13 +964,23 @@
            id="rect4379"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-           inkscape:export-xdpi="33"
-           inkscape:export-ydpi="33" />
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
       </g>
     </g>
+    <use
+       height="744.09448"
+       width="1052.3622"
+       id="use4355"
+       transform="translate(608,168)"
+       xlink:href="#g4247"
+       inkscape:tiled-clone-of="#g4247"
+       y="0"
+       x="0"
+       style="display:inline;enable-background:new" />
     <g
        id="g15445"
-       transform="translate(0,600)">
+       transform="translate(0,499.99994)">
       <rect
          style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
          id="rect3785"
@@ -916,8 +991,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          height="744.09448"
          width="1052.3622"
@@ -1041,7 +1116,7 @@
     </g>
     <g
        id="g4870"
-       transform="translate(0,600)">
+       transform="translate(0,499.99994)">
       <rect
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          id="rect4752"
@@ -1052,8 +1127,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <rect
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          id="rect4754"
@@ -1064,8 +1139,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <rect
          ry="4"
          rx="4"
@@ -1076,8 +1151,8 @@
          id="rect4756"
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <rect
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          id="rect4758"
@@ -1088,8 +1163,8 @@
          rx="4"
          ry="4"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <g
          id="g4762"
          transform="translate(22,58.2677)"
@@ -1100,8 +1175,8 @@
          inkscape:tile-x0="40"
          inkscape:tile-y0="328.09448"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          style="display:inline;fill:#eeeeee;fill-opacity:1">
         <rect
            ry="4"
@@ -1519,8 +1594,8 @@
          id="g4868"
          transform="translate(0,-20)">
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect4852"
@@ -1531,8 +1606,8 @@
            rx="4"
            ry="4" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            ry="4"
            rx="4"
@@ -1543,8 +1618,8 @@
            id="rect4854"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            ry="4"
            rx="4"
@@ -1555,8 +1630,8 @@
            id="rect4856"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect4858"
@@ -1567,8 +1642,8 @@
            rx="4"
            ry="4" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            ry="4"
            rx="4"
@@ -1579,8 +1654,8 @@
            id="rect4860"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            ry="4"
            rx="4"
@@ -1591,8 +1666,8 @@
            id="rect4862"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect4864"
@@ -1603,8 +1678,8 @@
            rx="4"
            ry="4" />
         <rect
-           inkscape:export-ydpi="33"
-           inkscape:export-xdpi="33"
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
            inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
            style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
            id="rect4866"
@@ -1619,10 +1694,10 @@
     <g
        style="display:inline;enable-background:new"
        id="g15589"
-       transform="translate(0,360)">
+       transform="translate(0,259.99994)">
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          ry="4"
          rx="4"
@@ -1633,8 +1708,8 @@
          id="rect3373"
          style="fill:#eeeeee;fill-opacity:1;stroke:none" />
       <rect
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          style="fill:#eeeeee;fill-opacity:1;stroke:none"
          id="rect3375"
@@ -1645,8 +1720,8 @@
          rx="4"
          ry="4" />
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          ry="4"
          rx="4"
@@ -1680,8 +1755,8 @@
          id="rect3361"
          style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33" />
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
       <use
          x="0"
          y="0"
@@ -1707,12 +1782,12 @@
          d="m 797,364.36218 c -2.216,0 -4,1.784 -4,4 v 46 c 0,2.216 1.784,4 4,4 h 6 c 2.216,0 4,1.784 4,4 v 22 24 2 c 0,2.216 1.784,4 4,4 h 57 c 2.216,0 4,-1.78402 4,-4 v -56 -46 c 0,-2.216 -1.784,-4 -4,-4 z"
          id="rect3626"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-         inkscape:export-xdpi="33"
-         inkscape:export-ydpi="33"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
          inkscape:connector-curvature="0" />
       <rect
-         inkscape:export-ydpi="33"
-         inkscape:export-xdpi="33"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
          inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
          style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
          id="rect3628"
@@ -1726,15 +1801,513 @@
     <rect
        ry="4"
        rx="4"
-       y="1312.3622"
+       y="1212.3621"
        x="281"
        height="54"
        width="306"
        id="rect1308"
        style="display:inline;fill:#eeeeee;fill-opacity:1;stroke:none;enable-background:new"
        inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
-       inkscape:export-xdpi="33"
-       inkscape:export-ydpi="33" />
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g112"
+       transform="translate(900)">
+      <g
+         style="display:inline;fill:#eeeeee;fill-opacity:1"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="C:\Documents and Settings\UUS Mobilkontor\Skrivebord\ØBG_Bærbart\Cmk-BoardFigs\CmkBoardFigIBM-.png"
+         inkscape:tile-y0="328.09448"
+         inkscape:tile-x0="40"
+         inkscape:tile-h="56"
+         inkscape:tile-w="54"
+         inkscape:tile-cy="356.09448"
+         inkscape:tile-cx="67"
+         transform="translate(22,58.2677)"
+         id="g62">
+        <rect
+           inkscape:tile-y0="330.09448"
+           inkscape:tile-x0="42"
+           inkscape:tile-h="54"
+           inkscape:tile-w="52"
+           inkscape:tile-cy="357.09448"
+           inkscape:tile-cx="68"
+           style="fill:#eeeeee;fill-opacity:1;stroke:none"
+           id="rect62"
+           width="52"
+           height="54"
+           x="42"
+           y="250.09448"
+           rx="4"
+           ry="4" />
+      </g>
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use62"
+         transform="translate(54)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use63"
+         transform="translate(108)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use64"
+         transform="translate(0,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use65"
+         transform="translate(0,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use66"
+         transform="translate(162)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use67"
+         transform="translate(54,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use68"
+         transform="translate(54,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use69"
+         transform="translate(0,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use70"
+         transform="translate(216)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use71"
+         transform="translate(108,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use72"
+         transform="translate(108,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use73"
+         transform="translate(54,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use74"
+         transform="translate(270)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use75"
+         transform="translate(162,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use76"
+         transform="translate(162,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use77"
+         transform="translate(108,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use78"
+         transform="translate(324)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use79"
+         transform="translate(216,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use80"
+         transform="translate(216,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use81"
+         transform="translate(162,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use82"
+         transform="translate(378)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use83"
+         transform="translate(270,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use84"
+         transform="translate(270,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use85"
+         transform="translate(216,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use86"
+         transform="translate(432)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use87"
+         transform="translate(324,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use88"
+         transform="translate(324,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use89"
+         transform="translate(270,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use90"
+         transform="translate(486)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use91"
+         transform="translate(378,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use92"
+         transform="translate(378,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use93"
+         transform="translate(324,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use94"
+         transform="translate(540)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use95"
+         transform="translate(432,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use96"
+         transform="translate(432,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use97"
+         transform="translate(378,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use98"
+         transform="translate(594)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use99"
+         transform="translate(486,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use100"
+         transform="translate(486,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use101"
+         transform="translate(432,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use102"
+         transform="translate(648)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use103"
+         transform="translate(540,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use104"
+         transform="translate(540,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use112"
+         transform="translate(594,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use113"
+         transform="translate(648,56)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use114"
+         transform="translate(594,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use115"
+         transform="translate(648,112)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use116"
+         transform="translate(594,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use117"
+         transform="translate(648,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use118"
+         transform="translate(486,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+      <use
+         height="744.09448"
+         width="1052.3622"
+         id="use119"
+         transform="translate(540,168)"
+         xlink:href="#g4247"
+         inkscape:tiled-clone-of="#g4247"
+         y="0"
+         x="0" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g112"
+       id="use220"
+       transform="translate(0,499.99994)" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -1745,7 +2318,7 @@
      sodipodi:insensitive="true">
     <text
        id="text4407"
-       y="1228.2402"
+       y="1129.938"
        x="1294.1693"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.2507px;line-height:100%;font-family:'Microsoft Sans Serif';-inkscape-font-specification:'Microsoft Sans Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none;enable-background:new"
        xml:space="preserve"
@@ -1753,17 +2326,30 @@
          sodipodi:role="line"
          id="tspan15327"
          x="1294.1693"
-         y="1228.2402">Colemak keyboard image, IBM style</tspan><tspan
+         y="1129.938">Colemak keyboard image, IBM style</tspan><tspan
          sodipodi:role="line"
          id="tspan15329"
          x="1294.1693"
-         y="1244.4908">© Øystein “DreymaR” Gadmar, 2009–</tspan></text>
+         y="1146.1887">© Øystein “DreymaR” Gadmar, 2009–</tspan><tspan
+         sodipodi:role="line"
+         x="1294.1693"
+         y="1162.4393"
+         id="tspan241" /><tspan
+         sodipodi:role="line"
+         x="1294.1693"
+         y="1178.6901"
+         id="tspan242" /><tspan
+         sodipodi:role="line"
+         x="1294.1693"
+         y="1194.9408"
+         id="tspan243">Row stagger (1u = 54 px): 27, 41, 14</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="Cmk_PKL (32px) StateMarkers"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <rect
        ry="20.900002"
        rx="20.307692"
@@ -1772,9 +2358,9 @@
        height="30"
        width="40"
        id="rect9218"
-       style="display:inline;fill:url(#radialGradient1396);fill-opacity:1;stroke:none;stroke-width:0.729827;filter:url(#filter1936);enable-background:new" />
+       style="display:inline;fill:url(#radialGradient1396);stroke:none;stroke-width:0.729827;filter:url(#filter1936);enable-background:new" />
     <use
-       transform="translate(26,600)"
+       transform="translate(26,499.99994)"
        style="display:inline;enable-background:new"
        x="0"
        y="0"
@@ -1791,24 +2377,45 @@
        transform="translate(524,56.000002)"
        width="1488.189"
        height="1052.3622" />
-    <rect
-       style="display:inline;fill:url(#radialGradient1943);fill-opacity:1;stroke:none;stroke-width:0.729827;filter:url(#filter1936);enable-background:new"
-       id="rect1941"
-       width="40"
-       height="30"
-       x="117"
-       y="1041"
-       rx="20.307692"
-       ry="20.900002" />
     <use
        height="1052.3622"
        width="1488.189"
-       transform="translate(524,656)"
+       transform="translate(524,555.99994)"
        id="use1311"
        xlink:href="#rect9218"
        y="0"
        x="0"
        style="display:inline;enable-background:new" />
+    <rect
+       ry="20.900002"
+       rx="20.307692"
+       y="281.00018"
+       x="1661.0002"
+       height="30"
+       width="30"
+       id="rect2"
+       style="display:inline;mix-blend-mode:normal;fill:url(#radialGradient2);fill-opacity:1;stroke:none;stroke-width:0.729827;filter:url(#filter1);enable-background:new" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect2"
+       id="use2"
+       transform="translate(-648.00019,-1.8709914e-4)" />
+    <rect
+       ry="20.900002"
+       rx="20.307692"
+       y="781.00012"
+       x="1661.0002"
+       height="30"
+       width="30"
+       id="rect3"
+       style="display:inline;mix-blend-mode:normal;fill:url(#radialGradient3);stroke:none;stroke-width:0.729827;filter:url(#filter2);enable-background:new" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect3"
+       id="use3"
+       transform="translate(-648.00019,-1.8261719e-4)" />
   </g>
   <g
      style="display:inline"
@@ -2349,7 +2956,7 @@
        y="0"
        xlink:href="#text1979"
        id="use2265"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2357,7 +2964,7 @@
        y="0"
        xlink:href="#text1983"
        id="use2267"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2365,7 +2972,7 @@
        y="0"
        xlink:href="#text1987"
        id="use2269"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2373,7 +2980,7 @@
        y="0"
        xlink:href="#text1991"
        id="use2271"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2381,7 +2988,7 @@
        y="0"
        xlink:href="#text1995"
        id="use2273"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2389,7 +2996,7 @@
        y="0"
        xlink:href="#text1999"
        id="use2275"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2397,7 +3004,7 @@
        y="0"
        xlink:href="#text2003"
        id="use2277"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2405,7 +3012,7 @@
        y="0"
        xlink:href="#text2007"
        id="use2279"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2413,7 +3020,7 @@
        y="0"
        xlink:href="#text2011"
        id="use2281"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2421,7 +3028,7 @@
        y="0"
        xlink:href="#text2015"
        id="use2283"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2429,7 +3036,7 @@
        y="0"
        xlink:href="#text2019"
        id="use2285"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2437,7 +3044,7 @@
        y="0"
        xlink:href="#text2023"
        id="use2287"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2445,7 +3052,7 @@
        y="0"
        xlink:href="#text2027"
        id="use2289"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2453,7 +3060,7 @@
        y="0"
        xlink:href="#text2031"
        id="use2291"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2461,7 +3068,7 @@
        y="0"
        xlink:href="#text2035"
        id="use2293"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2469,7 +3076,7 @@
        y="0"
        xlink:href="#text2039"
        id="use2295"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2477,7 +3084,7 @@
        y="0"
        xlink:href="#text2043"
        id="use2297"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2485,7 +3092,7 @@
        y="0"
        xlink:href="#text2047"
        id="use2299"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2493,7 +3100,7 @@
        y="0"
        xlink:href="#text2051"
        id="use2301"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2501,7 +3108,7 @@
        y="0"
        xlink:href="#text2055"
        id="use2303"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2509,7 +3116,7 @@
        y="0"
        xlink:href="#text2059"
        id="use2305"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2517,7 +3124,7 @@
        y="0"
        xlink:href="#text2063"
        id="use2307"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2525,7 +3132,7 @@
        y="0"
        xlink:href="#text2067"
        id="use2309"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2533,7 +3140,7 @@
        y="0"
        xlink:href="#text2071"
        id="use2311"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2541,7 +3148,7 @@
        y="0"
        xlink:href="#text2075"
        id="use2313"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2549,7 +3156,7 @@
        y="0"
        xlink:href="#text2079"
        id="use2315"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2557,7 +3164,7 @@
        y="0"
        xlink:href="#text2083"
        id="use2317"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2565,7 +3172,7 @@
        y="0"
        xlink:href="#text2087"
        id="use2319"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2573,7 +3180,7 @@
        y="0"
        xlink:href="#text2091"
        id="use2321"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2581,7 +3188,7 @@
        y="0"
        xlink:href="#text2095"
        id="use2323"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2589,7 +3196,7 @@
        y="0"
        xlink:href="#text2099"
        id="use2325"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2597,7 +3204,7 @@
        y="0"
        xlink:href="#text2103"
        id="use2327"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2605,7 +3212,7 @@
        y="0"
        xlink:href="#text2107"
        id="use2329"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2613,7 +3220,7 @@
        y="0"
        xlink:href="#text2111"
        id="use2331"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2621,7 +3228,7 @@
        y="0"
        xlink:href="#text2115"
        id="use2333"
-       transform="translate(41.000125,544.09993)"
+       transform="translate(41.000125,444.09987)"
        width="100%"
        height="100%" />
     <use
@@ -2629,7 +3236,7 @@
        y="0"
        xlink:href="#text2119"
        id="use2335"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2637,7 +3244,7 @@
        y="0"
        xlink:href="#text2123"
        id="use2337"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2645,7 +3252,7 @@
        y="0"
        xlink:href="#text2127"
        id="use2339"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2653,7 +3260,7 @@
        y="0"
        xlink:href="#text2131"
        id="use2341"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2661,7 +3268,7 @@
        y="0"
        xlink:href="#text2135"
        id="use2343"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2669,7 +3276,7 @@
        y="0"
        xlink:href="#text2139"
        id="use2345"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2677,7 +3284,7 @@
        y="0"
        xlink:href="#text2143"
        id="use2347"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2685,7 +3292,7 @@
        y="0"
        xlink:href="#text2147"
        id="use2349"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2693,7 +3300,7 @@
        y="0"
        xlink:href="#text2151"
        id="use2351"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2701,7 +3308,7 @@
        y="0"
        xlink:href="#text2155"
        id="use2353"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2709,7 +3316,7 @@
        y="0"
        xlink:href="#text2159"
        id="use2355"
-       transform="translate(0,600)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <use
@@ -2717,21 +3324,12 @@
        y="0"
        xlink:href="#text2163"
        id="use2357"
-       transform="translate(0,600)"
-       width="100%"
-       height="100%" />
-    <use
-       style="display:inline;enable-background:new"
-       x="0"
-       y="0"
-       xlink:href="#rect10699"
-       id="use1115"
-       transform="translate(-5.9999999e-6,600.00006)"
+       transform="translate(0,499.99994)"
        width="100%"
        height="100%" />
     <rect
-       transform="matrix(0.74611219,0,0,0.71389721,474.36432,402.06339)"
-       style="display:inline;enable-background:new;fill:#bbcc33;fill-opacity:0.8;stroke:none;filter:url(#filter9421)"
+       transform="matrix(0.74611219,0,0,0.71389721,474.36432,902.06334)"
+       style="display:inline;fill:#bbcc33;fill-opacity:0.8;stroke:none;filter:url(#filter9421);enable-background:new"
        id="rect10699"
        width="65.662308"
        height="52.844902"
@@ -2739,6 +3337,643 @@
        y="476.36218"
        rx="27.780207"
        ry="29.064697" />
+    <text
+       id="text1"
+       y="773.28094"
+       x="471.99219"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;line-height:125%;font-family:Sans;-inkscape-font-specification:Sans;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;display:inline;opacity:1;vector-effect:none;fill:#bbcc33;fill-opacity:1;stroke:#bbcc33;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
+       xml:space="preserve"><tspan
+         y="773.28094"
+         x="471.99219"
+         id="tspan1"
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;line-height:125%;font-family:Sans;-inkscape-font-specification:Sans;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:middle;white-space:normal;shape-padding:0;vector-effect:none;fill:#bbcc33;fill-opacity:1;stroke:#bbcc33;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1">SPC</tspan></text>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2071"
+       id="use143"
+       transform="translate(859.6459)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2075"
+       id="use144"
+       transform="translate(859.6459)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2079"
+       id="use145"
+       transform="translate(859.6459)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2083"
+       id="use146"
+       transform="translate(859.6459)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2087"
+       id="use147"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2091"
+       id="use148"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2095"
+       id="use149"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2099"
+       id="use150"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2103"
+       id="use151"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2107"
+       id="use152"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2111"
+       id="use153"
+       transform="translate(859.00001)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2115"
+       id="use154"
+       transform="translate(858.0001,0.09993)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2119"
+       id="use155"
+       transform="translate(832.64589)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2123"
+       id="use156"
+       transform="translate(832.64589)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2127"
+       id="use157"
+       transform="translate(832.64589)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2131"
+       id="use158"
+       transform="translate(832.64589)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2135"
+       id="use159"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2139"
+       id="use160"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2143"
+       id="use161"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2147"
+       id="use162"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2151"
+       id="use163"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2155"
+       id="use164"
+       transform="translate(832)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1"
+       id="use215"
+       transform="translate(1149.0078,-59.999945)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2167"
+       id="use216"
+       transform="translate(831.99996,-111.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use143"
+       id="use244"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use144"
+       id="use245"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use145"
+       id="use246"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use146"
+       id="use247"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use147"
+       id="use248"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use148"
+       id="use249"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use149"
+       id="use250"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use150"
+       id="use251"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use151"
+       id="use252"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use152"
+       id="use253"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use153"
+       id="use254"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use154"
+       id="use255"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use155"
+       id="use256"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use156"
+       id="use257"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use157"
+       id="use258"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use158"
+       id="use259"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use159"
+       id="use260"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use160"
+       id="use261"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use161"
+       id="use262"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use162"
+       id="use263"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use163"
+       id="use264"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use164"
+       id="use265"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use215"
+       id="use268"
+       transform="translate(0.9919,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1979"
+       id="use27"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1983"
+       id="use28"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1987"
+       id="use29"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1991"
+       id="use30"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1995"
+       id="use31"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1999"
+       id="use32"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2003"
+       id="use33"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2007"
+       id="use34"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2011"
+       id="use35"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2015"
+       id="use36"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2019"
+       id="use37"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2023"
+       id="use38"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2027"
+       id="use39"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1979"
+       id="use53"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1983"
+       id="use54"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1987"
+       id="use55"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1991"
+       id="use56"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1995"
+       id="use57"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text1999"
+       id="use58"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2003"
+       id="use59"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2007"
+       id="use60"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2011"
+       id="use61"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2015"
+       id="use105"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2019"
+       id="use106"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2023"
+       id="use107"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2027"
+       id="use108"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2031"
+       id="use165"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2035"
+       id="use166"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2039"
+       id="use168"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2043"
+       id="use169"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2047"
+       id="use170"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2051"
+       id="use171"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2055"
+       id="use172"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2059"
+       id="use173"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2063"
+       id="use174"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2067"
+       id="use175"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2159"
+       id="use176"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2163"
+       id="use177"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2031"
+       id="use190"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2035"
+       id="use212"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2039"
+       id="use213"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2043"
+       id="use221"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2047"
+       id="use222"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2051"
+       id="use223"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2055"
+       id="use224"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2059"
+       id="use225"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2063"
+       id="use226"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2067"
+       id="use227"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2159"
+       id="use228"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text2163"
+       id="use229"
+       transform="translate(873.00001,500.00006)" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -3279,7 +4514,7 @@
        y="0"
        xlink:href="#text7701"
        id="use1438"
-       transform="translate(41.00025,544)"
+       transform="translate(41.00025,443.99994)"
        width="100%"
        height="100%" />
     <use
@@ -3289,7 +4524,7 @@
        y="0"
        xlink:href="#text7557"
        id="use1440"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3297,7 +4532,7 @@
        y="0"
        xlink:href="#text7561"
        id="use1442"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3305,7 +4540,7 @@
        y="0"
        xlink:href="#text7565"
        id="use1444"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3313,7 +4548,7 @@
        y="0"
        xlink:href="#text7569"
        id="use1446"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3321,7 +4556,7 @@
        y="0"
        xlink:href="#text7573"
        id="use1448"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3329,7 +4564,7 @@
        y="0"
        xlink:href="#text7577"
        id="use1450"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3337,7 +4572,7 @@
        y="0"
        xlink:href="#text7581"
        id="use1452"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3345,7 +4580,7 @@
        y="0"
        xlink:href="#text7585"
        id="use1454"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3353,7 +4588,7 @@
        y="0"
        xlink:href="#text7589"
        id="use1456"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3361,7 +4596,7 @@
        y="0"
        xlink:href="#text7593"
        id="use1458"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3369,7 +4604,7 @@
        y="0"
        xlink:href="#text7597"
        id="use1460"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3377,7 +4612,7 @@
        y="0"
        xlink:href="#text7601"
        id="use1462"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3385,7 +4620,7 @@
        y="0"
        xlink:href="#text7605"
        id="use1464"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3393,7 +4628,7 @@
        y="0"
        xlink:href="#text7609"
        id="use1466"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3401,7 +4636,7 @@
        y="0"
        xlink:href="#text7613"
        id="use1468"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3409,7 +4644,7 @@
        y="0"
        xlink:href="#text7617"
        id="use1470"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3417,7 +4652,7 @@
        y="0"
        xlink:href="#text7621"
        id="use1472"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3425,7 +4660,7 @@
        y="0"
        xlink:href="#text7625"
        id="use1474"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3433,7 +4668,7 @@
        y="0"
        xlink:href="#text7629"
        id="use1476"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3441,7 +4676,7 @@
        y="0"
        xlink:href="#text7633"
        id="use1478"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3449,7 +4684,7 @@
        y="0"
        xlink:href="#text7637"
        id="use1480"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3457,7 +4692,7 @@
        y="0"
        xlink:href="#text7641"
        id="use1482"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3465,7 +4700,7 @@
        y="0"
        xlink:href="#text7645"
        id="use1484"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3473,7 +4708,7 @@
        y="0"
        xlink:href="#text7657"
        id="use1486"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3481,7 +4716,7 @@
        y="0"
        xlink:href="#text7661"
        id="use1488"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3489,7 +4724,7 @@
        y="0"
        xlink:href="#text7665"
        id="use1490"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3497,7 +4732,7 @@
        y="0"
        xlink:href="#text7669"
        id="use1492"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3505,7 +4740,7 @@
        y="0"
        xlink:href="#text7673"
        id="use1494"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3513,7 +4748,7 @@
        y="0"
        xlink:href="#text7677"
        id="use1496"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3521,7 +4756,7 @@
        y="0"
        xlink:href="#text7681"
        id="use1498"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3529,7 +4764,7 @@
        y="0"
        xlink:href="#text7685"
        id="use1500"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3537,7 +4772,7 @@
        y="0"
        xlink:href="#text7689"
        id="use1502"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3545,7 +4780,7 @@
        y="0"
        xlink:href="#text7693"
        id="use1504"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3553,7 +4788,7 @@
        y="0"
        xlink:href="#text7697"
        id="use1506"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3561,7 +4796,7 @@
        y="0"
        xlink:href="#text7705"
        id="use1508"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3569,7 +4804,7 @@
        y="0"
        xlink:href="#text7709"
        id="use1510"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3577,7 +4812,7 @@
        y="0"
        xlink:href="#text7713"
        id="use1512"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3585,7 +4820,7 @@
        y="0"
        xlink:href="#text7717"
        id="use1514"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3593,7 +4828,7 @@
        y="0"
        xlink:href="#text7721"
        id="use1516"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3601,7 +4836,7 @@
        y="0"
        xlink:href="#text7729"
        id="use1518"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3609,7 +4844,7 @@
        y="0"
        xlink:href="#text7733"
        id="use1520"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3617,7 +4852,7 @@
        y="0"
        xlink:href="#text7737"
        id="use1522"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3625,7 +4860,7 @@
        y="0"
        xlink:href="#text7741"
        id="use1524"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3633,7 +4868,7 @@
        y="0"
        xlink:href="#text7745"
        id="use1526"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3641,7 +4876,7 @@
        y="0"
        xlink:href="#text7649"
        id="use1528"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <use
        height="100%"
        width="100%"
@@ -3649,7 +4884,7 @@
        y="0"
        xlink:href="#text7653"
        id="use1530"
-       transform="translate(0,600)" />
+       transform="translate(0,499.99994)" />
     <text
        id="text10703"
        y="773.38275"
@@ -3666,8 +4901,637 @@
        y="0"
        xlink:href="#text10703"
        id="use1117"
-       transform="translate(-5.9999999e-6,600.00006)"
+       transform="translate(-5.9999999e-6,500)"
        width="100%"
        height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7701"
+       id="use167"
+       transform="translate(858.0003)"
+       width="100%"
+       height="100%" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7657"
+       id="use191"
+       transform="translate(859.6459)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7661"
+       id="use192"
+       transform="translate(859.6459)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7665"
+       id="use193"
+       transform="translate(859.6459)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7669"
+       id="use194"
+       transform="translate(859.6459)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7673"
+       id="use195"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7677"
+       id="use196"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7681"
+       id="use197"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7685"
+       id="use198"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7689"
+       id="use199"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7693"
+       id="use200"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7697"
+       id="use201"
+       transform="translate(859.00001)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7705"
+       id="use202"
+       transform="translate(832.64589)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7709"
+       id="use203"
+       transform="translate(832.64589)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7713"
+       id="use204"
+       transform="translate(832.64589)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7717"
+       id="use205"
+       transform="translate(832.64589)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7721"
+       id="use206"
+       transform="translate(832)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7729"
+       id="use207"
+       transform="translate(832)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7733"
+       id="use208"
+       transform="translate(832)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7737"
+       id="use209"
+       transform="translate(832)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7741"
+       id="use210"
+       transform="translate(832)" />
+    <use
+       height="100%"
+       width="100%"
+       x="0"
+       y="0"
+       xlink:href="#text7745"
+       id="use211"
+       transform="translate(832)" />
+    <use
+       style="display:inline;enable-background:new"
+       x="0"
+       y="0"
+       xlink:href="#text10703"
+       id="use214"
+       transform="translate(1149.0078,-59.999885)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7725"
+       id="use217"
+       transform="translate(831.99996,-111.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use167"
+       id="use270"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use191"
+       id="use294"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use192"
+       id="use295"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use193"
+       id="use296"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use194"
+       id="use297"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use195"
+       id="use298"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use196"
+       id="use299"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use197"
+       id="use300"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use198"
+       id="use301"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use199"
+       id="use302"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use200"
+       id="use303"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use201"
+       id="use304"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use202"
+       id="use305"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use203"
+       id="use306"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use204"
+       id="use307"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use205"
+       id="use308"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use206"
+       id="use309"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use207"
+       id="use310"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use208"
+       id="use311"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use209"
+       id="use312"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use210"
+       id="use313"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use211"
+       id="use314"
+       transform="translate(0,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use214"
+       id="use317"
+       transform="translate(0.99189,499.99994)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7557"
+       id="use40"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7561"
+       id="use41"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7565"
+       id="use42"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7569"
+       id="use43"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7573"
+       id="use44"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7577"
+       id="use45"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7581"
+       id="use46"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7585"
+       id="use47"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7589"
+       id="use48"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7593"
+       id="use49"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7597"
+       id="use50"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7601"
+       id="use51"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7605"
+       id="use52"
+       transform="translate(900.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7557"
+       id="use109"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7561"
+       id="use110"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7565"
+       id="use111"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7569"
+       id="use120"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7573"
+       id="use121"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7577"
+       id="use122"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7581"
+       id="use123"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7585"
+       id="use124"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7589"
+       id="use125"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7593"
+       id="use126"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7597"
+       id="use127"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7601"
+       id="use128"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7605"
+       id="use129"
+       transform="translate(900.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7609"
+       id="use178"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7613"
+       id="use179"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7617"
+       id="use180"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7621"
+       id="use181"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7625"
+       id="use182"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7629"
+       id="use183"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7633"
+       id="use184"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7637"
+       id="use185"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7641"
+       id="use186"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7645"
+       id="use187"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7649"
+       id="use188"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7653"
+       id="use189"
+       transform="translate(873.00001)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7609"
+       id="use230"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7613"
+       id="use231"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7617"
+       id="use232"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7621"
+       id="use233"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7625"
+       id="use234"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7629"
+       id="use235"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7633"
+       id="use236"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7637"
+       id="use237"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7641"
+       id="use238"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7645"
+       id="use239"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7649"
+       id="use240"
+       transform="translate(873.00001,500.00006)" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#text7653"
+       id="use241"
+       transform="translate(873.00001,500.00006)" />
   </g>
 </svg>

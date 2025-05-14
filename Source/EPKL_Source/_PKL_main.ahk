@@ -17,6 +17,13 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
+		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym
+		| Ext n r t s g ] y h a e i ;   |
+		| Shf z x m c v / k p , . ␣ AGr |
+		+-------------------------------+
+
 WIPs: Learn to digitally sign the realease .exe, if that can help with OS warnings.
 	- When I've got ortho images and Kyrillic variant updates in place, I could make a new, signed release 1-4-3.
 	- You can use the MS SignTool program, part of their Visual Studio SDK, to sign an app. It requires a certificate to sign with.
@@ -41,38 +48,6 @@ NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591
 	- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
 WIPs: Ukromak revision?
 	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
-
-WIPs: Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init.
-	- In the files, can use a type like `ANS-Orth`. StrSplit by `-` when reading.
-	- Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
-		- Could keep everything in kbdType and adjust the reading of it to use the first and second substring.
-		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in Layout.ini anyway.
-
-WIPs: Make a matrix/ortho image template. Use it for ortho variants such as Curl w/o Angle.
-	- I might want to use this, as a more compact help image. How to get that for my AWS layout? 
-		- Make an Ortho-Wide background. And an Ortho-WideSym mod combo.
-		- 6 vs 7 problem! Make an Ortho-Wide remap. Can't just cheat on the image, as people may want this one.
-		- I'd like to put 6-on-left for my purposes. It'll put some people off, though... Need both, then.
-		- Made a 6-7 remap that people can easily add to remedy any such issues (e.g., `mapSC_# = AWS_@K,6-7`).
-	- All the same keys as row-stag, but all of them 1u would only save a little space. Otherwise, could save (1+2)u.
-	- Delete the Space/Modifier row as well. Add Space and AltGr at the lower right.
-	- One extra column, then, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
-	- Added two values to imgPos/imgSize settings, for the Ortho geometries. These are used in make_img based on Ini_GeoType.
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
-		| ISO q w f p b j l u y ; [ ]   |   	Colemak template
-		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282)
-		| Shf z x c v b k m , . / ␣ AGr |
-		+-------------------------------+
-	- The AltGr and Space keys are yellow. All keys are 1u. Back & Enter are missing.
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
-		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym
-		| Ext n r t s g ] y h a e i ;   |
-		| Shf z x m c v / k p , . ␣ AGr |
-		+-------------------------------+
-
-WIPs: Could @K cover geo as well? Should it?
 
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
@@ -113,8 +88,14 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 			DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 		}
 
-WIPs: Should a stickyTime of 0 make sticky keys work like on Windows, without a timer?
+NEXT: Should a stickyTime of 0 make sticky keys work like on Windows, without a timer?
 	- Or maybe with a very long timer instead, for simplicity but also robustness (Shift isn't stuck on forever)...?
+
+2FIX: Ext-tap twice outputs four spaces. It might be better to make it cancel the DK (Esc?)!
+	- At the moment, it's linked to the output for < > (Space).
+	- Do we have a separate entry for DK double-taps? Yes, the `base1` mapping should be it. But it isn't working?
+	- Talking with Casuanoob at the Cmk Discord, about layer keys and QMK/ZMK implementations.
+	- https://discord.com/channels/409502982246236160/548799170765389834/1371832911182958683
 
 2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 
@@ -525,6 +506,8 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 
 ;;  ================================================================================================================================================
 ;;  eD ONHOLD:
+
+TODO: Could @K cover geo as well? Should it? Nah for now, as there aren't that many Ortho files to handle.
 
 HOLD: Further developments for the BaseLayout stack: Variant,Options/Script,Base....?
 	- Make BaseVariants for all locales? Their Layout.ini files could mostly hold ergo remaps.
