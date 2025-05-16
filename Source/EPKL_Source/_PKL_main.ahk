@@ -49,7 +49,6 @@ NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591
 WIPs: Ukromak revision?
 	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
 
-
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event?
 	- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
 	- Second example:
@@ -96,6 +95,7 @@ NEXT: Should a stickyTime of 0 make sticky keys work like on Windows, without a 
 	- Do we have a separate entry for DK double-taps? Yes, the `base1` mapping should be it. But it isn't working?
 	- Talking with Casuanoob at the Cmk Discord, about layer keys and QMK/ZMK implementations.
 	- https://discord.com/channels/409502982246236160/548799170765389834/1371832911182958683
+	- Actually, a generic CancelState key mapping might be great! Could use a `¢[Release()]¢` formalism? Remove Ext/Caps/etc states.
 
 2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 
@@ -110,24 +110,21 @@ NEXT: Should a stickyTime of 0 make sticky keys work like on Windows, without a 
 	- Only Composer respects case now, since it uses pklIniSect()?
 	- For now, circumvented the problem by renaming the capitalized PowerString like `¶say-Pkl`.
 
-WIPs: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
+NEXT: Detect OS VK codes for all keys instead of just a select subset, so OS layouts like AZERTY and Colemak-CAWS work as they should.
 
-WIPs: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
+NEXT: With SC remaps, can we now actually remap the System layout? For instance, passthrough the OS layout but add AngleWideSym to it?!?
 	- No, doesn't work; the SC don't get remapped at all. Ah well.
 	- Consider which System mods to support. It may not make sense to add Curl there? But I want the right Extend etc.
 
 WIPs: The CoDeKey sends repeated spaces when held down. Is this desirable? Could we specify no output by default for a DK?
 WIPs: Ensure PrtScn is sent right for the CoDeKey and other DKs. Need PrtScn (all active windows), Alt+PrtScn (active window) and Win+PrtScn (full screen)
+
 WIPs: Check out https://www.autohotkey.com/boards/viewtopic.php?f=6&t=77668&sid=15853dc42db4a0cc45ec7f6ce059c2dc about image flicker.
 	- "Reduce Flicker dramatically (Double Buffer)" for constant GUI updates, like the EPKL help images.
 	- May not work with WinSet, Transparent? I'm using that with the Help Images now.
 
-WIPs: Add "What about gaming?" to README. Explain send method vs VK (also Compose etc). Mention MSKLC CAWS and SharpKeys.
 WIPs: Introduce the marvelous Compose key in the README! Need more documentation on its merits. Also the new CoDeKey (dual-role Compose/Dead Key).
 	- Become a Great Composer!
-
-WIPs: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
-	- This would allow the use of all @ codes in all LayStack files
 
 WIPs: "Add Layout" functionality in GUI, to select multiple active layouts without editing files manually.
 	- Use the ComboBox functionality, that lets you have a DDL with a manually editable field on top.
@@ -268,6 +265,9 @@ TEST: ToM Ctrl on a letter key? Shift may be too hard to get in flow, but Ctrl o
 
 ;;  ================================================================================================================================================
 ;;  eD TONEXT:
+
+NEXT: Instead of doing the atKbdType() this-and-that routine, make a fn to interpret all @ codes and add it as a switch for pklIniRead()?
+	- This would allow the use of all @ codes in all LayStack files
 
 NEXT: Sort out layout img_ entries for easier mod combo generation, without manually editing their individual names?
 	- Settings for Soft/Hard image versions? Extend(@X - `CAWS`)/Geometric(@H - `AWide`)?
@@ -507,7 +507,13 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 ;;  ================================================================================================================================================
 ;;  eD ONHOLD:
 
-TODO: Could @K cover geo as well? Should it? Nah for now, as there aren't that many Ortho files to handle.
+HOLD: Now that we have ortho layout images, how about a really compact version?
+	- Technically, it'd be easily to use the existing ortho template and just use a smaller export area for "OrthCpt" GeoType.
+	- Could forgo the Ext/Shf/AGr indicators. Also misses the ISO key then; OK? But saving only one column isn't it.
+	- With or without num row? I think the num row's probably integral to EPKL goodness and complexity. But so are symbols?
+	- So either make it barebones 3×10u and save a lot of space an the cost of useful info, or drop it. Dropping it for now.
+
+HOLD: Could @K cover geo as well? Should it? Nah for now, as there aren't that many Ortho files to handle.
 
 HOLD: Further developments for the BaseLayout stack: Variant,Options/Script,Base....?
 	- Make BaseVariants for all locales? Their Layout.ini files could mostly hold ergo remaps.

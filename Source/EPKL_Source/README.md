@@ -600,27 +600,31 @@ VERSION HISTORY:
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
 * EPKL v1.4.3: WIP
-	- 
-
-	- Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init.
-	- In the files, can use a type like `ANS-Orth`. StrSplit by `-` when reading.
-	- Make @K a compound (ANS/ISO-Trad/Orth/Splt/etc)? ANS/ISO is needed for VK codes, and the form factor for images and layout subvariants. kbdType vs kbdForm?
-		- Could keep everything in kbdType and adjust the reading of it to use the first and second substring.
-		- However, it may not be necessary at all. Using a kbdType like ANS-Orth seems to work just fine for now. The VK-related kbdType is in Layout.ini anyway.
+	- Swapped NumPad `* -` on the Ext2 layer. It just feels more natural and NumPad-like now.
+		- The NumPad layer didn't feel good w/ respect to the traditional top-row `/ * -`. The `+ ↵` were okay.
+		- NumPads sometimes have minus above one-row plus. (These may have Backspace in the corner spot.)
+		- Now, `* /` are on the same column, and right above each other on ISO/Ortho-Wide setups.
+		+-----------+
+		| 7 8 9 - * |   	Was: * -
+		| 4 5 6 + / |
+		| 1 2 3 ↵ ' |
+		| 0 0 ,     |
+		+-----------+
+	- Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init, by the first hyphen.
+		- Can use a KbdType like `ANS-Orth` in Layout files.
+	- Made a matrix/ortho image template, for ortho variants such as Curl w/o Angle, and more compact help images.
+		- Removed the Space/Modifier row. Added Space and AltGr at the lower right, in yellow. No Backspace nor Enter.
+		- One extra column, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
+		- Added values for the Ortho geometries to imgPos/imgSize settings. Used in make_img based on Ini_GeoType.
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
+		| ISO q w f p b j l u y ; [ ]   |   	Colemak template
+		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282 px)
+		| Shf z x c v b k m , . / ␣ AGr |
+		+-------------------------------+
 
 	- I might want to use this, as a more compact help image. How to get that for my AWS layout? 
 		- Make an Ortho-Wide background. And an Ortho-WideSym mod combo.
 		- 6 vs 7 problem! Make an Ortho-Wide remap. Can't just cheat on the image, as people may want this one.
 		- I'd like to put 6-on-left for my purposes. It'll put some people off, though... Need both, then.
 		- Made a 6-7 remap that people can easily add to remedy any such issues (e.g., `mapSC_# = AWS_@K,6-7`).
-	- Made a matrix/ortho image template, for ortho variants such as Curl w/o Angle.
-		- All the same keys as row-stag, but all of them 1u would only save a little space. Otherwise, could save (1+2)u.
-		- Delete the Space/Modifier row as well. Add Space and AltGr at the lower right, in yellow. No Backspace nor Enter.
-		- One extra column, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
-	- Added two values to imgPos/imgSize settings, for the Ortho geometries. These are used in make_img based on Ini_GeoType.
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
-		| ISO q w f p b j l u y ; [ ]   |   	Colemak template
-		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282)
-		| Shf z x c v b k m , . / ␣ AGr |
-		+-------------------------------+
