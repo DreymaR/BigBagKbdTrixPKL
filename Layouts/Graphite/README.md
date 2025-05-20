@@ -148,8 +148,8 @@ _One possible Graphite-(C)AWS-ISO layout. The © key can be a Compose key, or wh
 
 Gralmak
 -------
-- Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
-- Like most other layouts (and Graphite-HB), I don't want to change the Shift states of keys.
+- I wanted to make a Graphite variant with traditional symbol/punctuation placements.
+- Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Thus came about the "Gralmak" variant that's easily ergo modified like, e.g., Colemak-CAWS.
 - Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.

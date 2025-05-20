@@ -30,6 +30,7 @@ For a detailed version history, look further down.
 * EPKL v1.4.0: Better Send for key mapping. ScanCode key mapping. Dual-function CoDeKey (Compose+Dead key).
 * EPKL v1.4.1: Timerless EPKL! State-2-VK mapping types. SwiSh & FliCK modifiers. Layout_Override.
 * EPKL v1.4.2: Layout/Settings enhancements. Mapping additions and reworks.
+* EPKL v1.4.3: Ortho help images. WIP.
 ```
 <br>
 
@@ -599,7 +600,7 @@ VERSION HISTORY:
 	- Reworked HIG image tags. Now, any `«##» ` tag in a state/DK/Ext mapping is cut off and stored before the mapping is processed.
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
-* EPKL v1.4.3: WIP
+* EPKL v1.4.3: Ortho help images. WIP.
 	- Swapped NumPad `* -` on the Ext2 layer. It just feels more natural and NumPad-like now.
 		- The NumPad layer didn't feel good w/ respect to the traditional top-row `/ * -`. The `+ ↵` were okay.
 		- NumPads sometimes have minus above one-row plus. (These may have Backspace in the corner spot.)
@@ -622,9 +623,15 @@ VERSION HISTORY:
 		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282 px)
 		| Shf z x c v b k m , . / ␣ AGr |
 		+-------------------------------+
-
-	- I might want to use this, as a more compact help image. How to get that for my AWS layout? 
-		- Make an Ortho-Wide background. And an Ortho-WideSym mod combo.
-		- 6 vs 7 problem! Make an Ortho-Wide remap. Can't just cheat on the image, as people may want this one.
-		- I'd like to put 6-on-left for my purposes. It'll put some people off, though... Need both, then.
-		- Made a 6-7 remap that people can easily add to remedy any such issues (e.g., `mapSC_# = AWS_@K,6-7`).
+	- Some may prefer Ortho help images as they're more compact. For this, we need to account for Wide mods.
+		- Made an Ortho-Wide background, and a WideSym (WS) mod combo.
+		- The 6 vs 7 problem: I put 6-on-left for my purposes. Real Ortho users will want it on right.
+		- Made a 6-7 remap that can easily be added to remedy any such issues, e.g., `mapSC_# = AWS_@K,6-7`.
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
+		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym (w/ the 6-7 remap, it'd be `5 \ 6 7`)
+		| Ext n r t s g ] y h a e i ;   |
+		| Shf z x m c v / k p , . ␣ AGr |
+		+-------------------------------+
+		- For an ISO-Ortho-Wide variant, don't use an Angle mod and decide on the 6-7 issue.
+			- Then, in your Layout_Override you can turn on the Angle mod again to use the ortho images with a normie board.

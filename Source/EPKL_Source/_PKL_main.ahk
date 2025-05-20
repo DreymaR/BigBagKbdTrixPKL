@@ -17,12 +17,11 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
-		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym
-		| Ext n r t s g ] y h a e i ;   |
-		| Shf z x m c v / k p , . ␣ AGr |
-		+-------------------------------+
+WIPs: Remake remaining Ortho variants with proper images:
+	- APT-Orth, Can-Orth, Cmk/Gra-ANS-Orth-(C)WS...?
+		- Done: Gra, Gra-HB, Gal, Stu
+	- Also reinstate the @K-Orth variants with RowStag imgs in them (Cmk/Gra), as @K <none>. Having both is good.
+		- Cmk-@K-Orth_Curl/Sym/CurlSym? No, these are kept w/o their row-stag unangled counterparts for paedagogic purposes... ;-)
 
 WIPs: Learn to digitally sign the realease .exe, if that can help with OS warnings.
 	- When I've got ortho images and Kyrillic variant updates in place, I could make a new, signed release 1-4-3.
