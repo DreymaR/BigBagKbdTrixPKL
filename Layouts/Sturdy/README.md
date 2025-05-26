@@ -17,9 +17,9 @@ The Sturdy layout
 - If you're interested in further developments, also see the [Graphite][GraPKL] and [Gallium][GalPKL] layout Readmes.
 <br>
 
-![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
+![Sturdy ortho help image](./Sturdy_Ortho_EPKL.png)
 
-_The Sturdy layout. Image taken from its own [homepage][LayHom]._
+_The Sturdy layout on an ortho keyboard_
 
 <br>
 
@@ -123,6 +123,12 @@ _The Sturdy-AWS-ISO layout. The © key can be a Compose key, or whatever you wis
 _The Sturdy-AWS-ANSI layout. Note the changed J and Z positions._
 
 <br><br>
+
+![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
+
+_The Sturdy layout. Image taken from its own [homepage][LayHom]._
+
+<br>
 
 ![Oxey profile logo](./_Res/Oxey_GitHub.png)
 

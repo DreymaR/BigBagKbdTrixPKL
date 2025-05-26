@@ -601,6 +601,33 @@ VERSION HISTORY:
 	- PwrStrings are now pre-read into memory at the first use of a PwrString. Hopefully, this will aid speed and reduce disk access.
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
 * EPKL v1.4.3: Ortho help images. WIP.
+	- Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init, by the first hyphen.
+		- Can use a KbdType like `ANS-Orth` in layout files.
+	- Made a matrix/ortho image template, for ortho variants such as Curl w/o Angle, and more compact help images.
+		- Removed the Space/Modifier row. Added Space and AltGr at the lower right, in yellow. No Backspace nor Enter.
+		- One extra column, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
+		- Added values for the Ortho geometries to imgPos/imgSize settings. Used in make_img based on GeoType.
+		+-------------------------------+
+		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
+		| ISO q w f p b j l u y ; [ ]   |   	Colemak ortho template
+		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282 px)
+		| Shf z x c v b k m , . / ␣ AGr |
+		+-------------------------------+
+		- Several layout variants are now premade both as ISO/ANS and ISO/ANS-Orth, for `<none>` ergo mods.
+		- Cmk-Curl doesn't get a premade `<none>` option, as it should use Angle w/ row-stag. If you really want it, use `-Orth`.
+	- Some may prefer Ortho help images as they're more compact. For this, we need to account for Wide mods.
+		- Made an Ortho-Wide background, and a WideSym (WS) mod combo.
+		- The 6 vs 7 problem: I put 6-on-left for my row-stag boards. Real Ortho users will want it on right.
+		- Made a 6-7 remap that can easily be added to remedy any such issues, e.g., `mapSC_# = AWS_@K,6-7`.
+		+-------------------------------+
+		|  `  1 2 3 4 5 \ 6 7 8 9 0 =   |
+		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-WideSym; w/o the 6-7 remap, it'd be `5 6 \ 7`
+		| Ext n r t s g ] y h a e i ;   |
+		| Shf z x m c v / k p , . ␣ AGr |
+		+-------------------------------+
+		- For an Ortho-Wide variant, don't use an Angle mod. Decide what you wish to do with the 6-7 issue.
+			- Then, in a Layout_Override you can turn on the Angle mod again to use the ortho images with a normie board.
+			- Another tack is to use your normal layout and in its Layout_Override use `img_` settings; see the example file.
 	- Swapped NumPad `* -` on the Ext2 layer. It just feels more natural and NumPad-like now.
 		- The NumPad layer didn't feel good w/ respect to the traditional top-row `/ * -`. The `+ ↵` were okay.
 		- NumPads sometimes have minus above one-row plus. (These may have Backspace in the corner spot.)
@@ -611,27 +638,4 @@ VERSION HISTORY:
 		| 1 2 3 ↵ ' |
 		| 0 0 ,     |
 		+-----------+
-	- Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init, by the first hyphen.
-		- Can use a KbdType like `ANS-Orth` in Layout files.
-	- Made a matrix/ortho image template, for ortho variants such as Curl w/o Angle, and more compact help images.
-		- Removed the Space/Modifier row. Added Space and AltGr at the lower right, in yellow. No Backspace nor Enter.
-		- One extra column, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
-		- Added values for the Ortho geometries to imgPos/imgSize settings. Used in make_img based on Ini_GeoType.
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 7 8 9 0 - =   |
-		| ISO q w f p b j l u y ; [ ]   |   	Colemak template
-		| Ext a r s t d h n e i o ' \   |   	13 columns, 4 rows = 704,226 px (70% of 812,282 px)
-		| Shf z x c v b k m , . / ␣ AGr |
-		+-------------------------------+
-	- Some may prefer Ortho help images as they're more compact. For this, we need to account for Wide mods.
-		- Made an Ortho-Wide background, and a WideSym (WS) mod combo.
-		- The 6 vs 7 problem: I put 6-on-left for my purposes. Real Ortho users will want it on right.
-		- Made a 6-7 remap that can easily be added to remedy any such issues, e.g., `mapSC_# = AWS_@K,6-7`.
-		+-------------------------------+
-		|  `  1 2 3 4 5 6 \ 7 8 9 0 =   |
-		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-Wide(6)Sym (w/ the 6-7 remap, it'd be `5 \ 6 7`)
-		| Ext n r t s g ] y h a e i ;   |
-		| Shf z x m c v / k p , . ␣ AGr |
-		+-------------------------------+
-		- For an ISO-Ortho-Wide variant, don't use an Angle mod and decide on the 6-7 issue.
-			- Then, in your Layout_Override you can turn on the Angle mod again to use the ortho images with a normie board.
+	- A DeadkeyImg folder specified as img_DKeyDir is now prioritized over a local one.

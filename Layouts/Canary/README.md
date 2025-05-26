@@ -18,6 +18,12 @@ The Canary layout
 - For more info, see [the Canary layout repo on GitHub][CanGit].
 <br>
 
+![Canary Ortho help image](./Canary_Ortho_EPKL.png)
+
+_The Canary layout on an Ortho keyboard_
+
+<br>
+
 Here's a quote from Colby regarding the Canary layout [somewhat edited for brevity]:
 > Canary was designed by oxey, semi, whorf, apsu, ec0vid, kathy, smudge, <3, and myself. \[...\] <br>
 > The goal with Canary was not to be cutting-edge, but rather it was to create a layout that could \[act\] as a go-to first alt layout.

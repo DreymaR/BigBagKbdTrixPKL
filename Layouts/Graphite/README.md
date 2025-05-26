@@ -20,6 +20,12 @@ The Graphite layout
 
 - Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats [scissors][GraSci]".
 - Its standard variant changes some shifted mappings; see below.
+<br><br>
+
+![Graphite Ortho help image](./Graphite_Orth-Cpt_EPKL.png)
+
+_The Graphite layout on an Ortho keyboard_
+
 <br>
 
 #### The Graphite layout on a ortho/matrix board, showing base and shifted mappings:
@@ -154,6 +160,12 @@ Gralmak
 - Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
+<br><br>
+
+![Gralmak Ortho help image](./Gralmak_Orth-Cpt_EPKL.png)
+
+_The Gralmak layout variant on an Ortho keyboard_
+
 <br>
 
 #### Gralmak on an ortho board (J-' and Z-Q swaps; trad. punctuation):

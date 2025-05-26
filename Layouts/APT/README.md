@@ -4,7 +4,7 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 
 ![APTv3 Angle-ANSI help image](./APTv3_ANS-A_EPKL.png)
 
-_The APT layout (using the Angle mod) on an ANSI keyboard_
+_The APTv3 layout (using the Angle mod) on an ANSI keyboard_
 
 <br><br>
 
@@ -14,6 +14,12 @@ The APT layout
 - It uses the [**Curl**][ErgCrl] principle, as the lateral index stretches hold rare letters (`J` and `K`).
 - An [**Angle**][ErgAWi] ergo mod is strongly recommended for this layout on row-staggered boards.
 - For more info, see [the APT layout repo on GitHub][APTGit].
+<br>
+
+![APTv3 Ortho help image](./APTv3_Ortho_EPKL.png)
+
+_The APTv3 layout on an Ortho keyboard_
+
 <br>
 
 Quote from the APT GitHub page:

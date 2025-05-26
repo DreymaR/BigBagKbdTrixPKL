@@ -14,12 +14,11 @@ The Colemak layout
 - It's my main layout, and highly recommended if you're considering which layout to switch to!
 - You really should read more about it on its [main site][CmkCom] and/or [other sites][CmkOrg].
 - With EPKL, you can get Cmk with several [ergonomic mods][BB_Erg] and [locale variants][BB_Loc].
-
 <br>
 
-|![EPKL help image for Colemak on an ANSI board](./Cmk-eD/Cmk-eD_ANS/state0.png)|
-|   :---:   |
-|_The unmodified Colemak layout on an ANSI board_|
+![Colemak Ortho help image](./Colemak-Ortho_s0_EPKL.png)
+
+_The Colemak layout on an Ortho keyboard_
 
 <br>
 
@@ -29,12 +28,17 @@ Ergonomic mods
     - NOTE: You should use an Angle mod with Curl(DH) for traditional row-staggered boards.
     - Make sure you read and understand the relevant parts of the [BigBag Ergonomy page][BB_Erg].
     - For Ortho/matrix boards (ISO-Orth and ANS-Orth) there are non-Angle versions available.
+<br>
+
+![Colemak-DH Ortho help image](./Colemak-Ortho-Curl_s0_EPKL.png)
+
+_The Colemak-Curl-DH layout variant on an Ortho keyboard_
 
 <br>
 
 ![EPKL help image for Colemak-CurlAWideSym on an ISO board](Colemak-ISO-CAWS_s0_EPKL.png)
 
-_The Colemak-CurlAngleWideSym layout, alias Colemak-CAWS, on an ISO keyboard_
+_The Colemak-CurlAngleWideSym layout variant, alias Colemak-CAWS, on an ISO keyboard_
 
 <br>
 

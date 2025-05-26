@@ -2,9 +2,9 @@ DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br><br>
 
-![Gallium Rowstag help image](./Gallium_Ortho_EPKL.png)
+![Gallium Ortho help image](./Gallium-v1_Orth-Cpt_EPKL.png)
 
-_The default Gallium layout for a Colstag/Ortho keyboard_
+_The Gallium "v1" layout on an Ortho keyboard_
 
 <br><br>
 
@@ -16,14 +16,15 @@ The Gallium layout
 - For more info, see [the Gallium repo on GitHub][GalGit].
 - Gallium is similar to other recent layouts, like [Nerps (by Smudge)][NrpRed] and [Graphite (by strongly-typed)][GraGit].
 - It is, in fact, amazing how Gallium and [Graphite][GraPKL] are virtually the same layout, albeit developed independently!
-- I like that Gallium has J in its Colemak position (for English, at least), and a symbol on pinky top-row.
-- Both Bryson and I favor the Rowstag version, used in the BaseLayout. Getting to the Colstag version is a simple remap.
-- The `PHY` trigram is better alt-fingerable on the Rowstag version. The `SC` bigram seems nicely altable, too.
+- I like that Gallium has J and a symbol in the same positions as Colemak's top row.
+- Some bigrams like `SC`, albeit same-finger, are nicely altable on Gallium.
+- Both Bryson and I favor the v2/"Rowstag" version, used in the BaseLayout. Getting to the Colstag version is a simple remap.
+- The `PHY` trigram is better alt-fingerable on the Rowstag version.
 <br>
 
 ![Gallium Angle-ANSI help image](./Gallium_ANS-A_EPKL.png)
 
-_The Gallium layout (using the Angle mod) on an ANSI keyboard_
+_The Gallium "v2" layout using the Angle mod, on an ANSI keyboard_
 <br>
 
 - The question of whether Q-X or X-Q works best for the two bottom-left positions, is discussed below.
@@ -101,9 +102,15 @@ Galliard
 --------
 - Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
 - Thus came about the "Galliard" variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- In this variant, I also kept the Q-X arrangement, as discussed above.
+- In this variant, I also kept the Q-X arrangement, as discussed above. [ZXMCV is tempting][Gralmk] ...
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
-<br>
+<br><br>
+
+![Galliard help image](./Galliard_Orth-Cpt_EPKL.png)
+
+_The Galliard layout variant on an Ortho keyboard_
+
+<br><br>
 
 #### Galliard AWS-ISO:
 ```
@@ -135,7 +142,7 @@ _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or w
 
 ![Gallium image from its web site](./_Res/Gallium-RowStag_Web.png)
 
-_The Gallium layout, Rowstag version. Image taken from its own [web page][GalGit]._
+_The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][GalGit]._
 
 
 [GalGit]: https://github.com/GalileoBlues/Gallium                   (The Gallium layout on GitHub)

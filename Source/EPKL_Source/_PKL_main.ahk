@@ -17,12 +17,6 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-WIPs: Remake remaining Ortho variants with proper images:
-	- APT-Orth, Can-Orth, Cmk/Gra-ANS-Orth-(C)WS...?
-		- Done: Gra, Gra-HB, Gal, Stu
-	- Also reinstate the @K-Orth variants with RowStag imgs in them (Cmk/Gra), as @K <none>. Having both is good.
-		- Cmk-@K-Orth_Curl/Sym/CurlSym? No, these are kept w/o their row-stag unangled counterparts for paedagogic purposes... ;-)
-
 WIPs: Learn to digitally sign the realease .exe, if that can help with OS warnings.
 	- When I've got ortho images and Kyrillic variant updates in place, I could make a new, signed release 1-4-3.
 	- You can use the MS SignTool program, part of their Visual Studio SDK, to sign an app. It requires a certificate to sign with.
