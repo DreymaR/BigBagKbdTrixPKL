@@ -17,7 +17,10 @@ The foalproof Foalmak April's Foals layout
     - "FOALS NEIGH" on the homerow
 - April's Foal! Gallop over text pages like a herd of mustangs! Listen to the neighsayers!
 - Your rolls will turn into trots, and your redirects into voltes.
-- This layout is recommended for typists who are horsing around. Also try rocking with QUARTZ.
+- This layout is recommended for typists who are horsing around. Also try rocking hard with [QUARTZ][LayQua].
 <br>
 
 ￣(=⌒ᆺ⌒=)￣
+
+[LayFoa]: /Layouts/Foalmak                                          (The Foalmak layout in EPKL)
+[LayQua]: /Layouts/QUARTZ                                           (The QUARTZ layout in EPKL)

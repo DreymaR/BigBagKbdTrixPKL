@@ -37,13 +37,13 @@ In this folder are some files that aren't needed to run EPKL but may still be us
 - Also worth mentioning to the keyboard modder, is the KbdEdit program which is commercial but quite powerful.
 	- KbdEdit has a nice [online manual][KbdEdt] too. There's a VK code table there and much more.
 
-[MapIni]: ../Files/_eD_Remap.ini (EPKL Remap file)
-[KbdEvt]: https://w3c.github.io/uievents/tools/key-event-viewer.html (Keyboard Event Viewer on GitHub Pages)
-[ShrpKy]: https://www.randyrants.com/category/sharpkeys/ (RandyRants' SharpKeys program)
-[ShrpMS]: https://apps.microsoft.com/store/detail/sharpkeys/XPFFCG7M673D4F (SharpKeys at the Microsoft Store)
-[MSPTKM]: https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager (info on Microsoft PowerToys Keyboard Manager)
-[MSKLCg]: https://msklc-guide.github.io/ (Henri's MSKLC Guide)
-[KMonad]: https://github.com/kmonad/kmonad
-[QMKdoc]: https://docs.qmk.fm
-[KbdEdt]: http://www.kbdedit.com/manual/manual_index.html (KbdEdit online manual)
-[BBTMod]: https://dreymar.colemak.org/ergo-mods.html#modifiers
+[MapIni]: /Files/_eD_Remap.ini                                                  (EPKL Remap file)
+[KbdEvt]: https://w3c.github.io/uievents/tools/key-event-viewer.html            (Keyboard Event Viewer on GitHub Pages)
+[ShrpKy]: https://www.randyrants.com/category/sharpkeys/                        (RandyRants' SharpKeys program)
+[ShrpMS]: https://apps.microsoft.com/store/detail/sharpkeys/XPFFCG7M673D4F      (SharpKeys at the Microsoft Store)
+[MSPTKM]: https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager  (info on Microsoft PowerToys Keyboard Manager)
+[MSKLCg]: https://msklc-guide.github.io/                                        (Henri's MSKLC Guide)
+[KMonad]: https://github.com/kmonad/kmonad                                      (The KMonad remapping tool)
+[QMKdoc]: https://docs.qmk.fm                                                   (QMK docs)
+[KbdEdt]: http://www.kbdedit.com/manual/manual_index.html                       (KbdEdit online manual)
+[BBTMod]: https://dreymar.colemak.org/ergo-mods.html#modifiers                  (DreymaR's BigBag on modifiers)

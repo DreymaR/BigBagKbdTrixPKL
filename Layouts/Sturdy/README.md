@@ -135,8 +135,8 @@ _The Sturdy layout. Image taken from its own [homepage][LayHom]._
 
 [LayHom]: https://o-x-e-y.github.io/layouts/sturdy/                 (The Sturdy layout home page)
 [AnaHom]: https://github.com/O-X-E-Y/oxeylyzer                      (The Oxeylyzer layout analyzer home page)
-[GraPKL]: ../Graphite/                                              (The Graphite layout in EPKL)
-[GalPKL]: ../Gallium/                                               (The Gallium layout in EPKL)
+[GraPKL]: /Layouts/Graphite/                                        (The Graphite layout in EPKL)
+[GalPKL]: /Layouts/Gallium/                                         (The Gallium layout in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)

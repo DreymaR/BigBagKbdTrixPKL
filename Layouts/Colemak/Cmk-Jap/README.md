@@ -34,6 +34,6 @@ Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\i8042prt\Parameter
 - Also, see this [Colemak Forum post][JapCmk] on the topic.
 
 [IMEreg]: https://www.reddit.com/r/Colemak/comments/9rq7vv/how_to_colemak_for_japanese_chinese_and_other/ (Reddit – How to: Colemak for ... IMEs)
-[CmkCom]: https://www.colemak.com (The Colemak official site)
-[PklKLC]: ../../../Other/MSKLC     (EPKL's Microsoft Keyboard Layout Creator folder)
+[CmkCom]: https://www.colemak.com                                   (The Colemak official site)
+[PklKLC]: /Other/MSKLC                                              (EPKL's Microsoft Keyboard Layout Creator folder)
 [JapCmk]: https://forum.colemak.com/topic/2630-japanese-colemak-keyboard-windows/#p25027 (Colemak Forum post on Japanese Colemak IME by registry, 2023-08-20)

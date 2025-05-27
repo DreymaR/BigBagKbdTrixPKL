@@ -44,8 +44,6 @@ Similarity to Dvorak
 
 _Dvorak image showing conserved keys (yellow) and close displacements (arrows) going to the Boo layout._
 
-[BooLay]: https://ballerboo.github.io/boolayout/ (The Boo layout page on github.io)
-[Dvk-ID]: ../Dvorak#the-dvorak-curl-id-ergo-mod (DreymaR's Dvorak Curl-ID ergo mod)
 
 <br><br>
 
@@ -66,4 +64,6 @@ Armed with this knowledge, one could make a set of transitional "TarBoo" layouts
 In the above, <kbd>K</kbd> is [the rarest key][SymMod] in the first loop and <kbd>Z</kbd> in the second loop.
 
 
+[BooLay]: https://ballerboo.github.io/boolayout/                    (The Boo layout page on github.io)
+[Dvk-ID]: /Layouts/Dvorak#the-dvorak-curl-id-ergo-mod               (DreymaR's Dvorak Curl-ID ergo mod)
 [SymMod]: https://forum.colemak.com/topic/2598-symbol-key-modding-for-enthusiasts/ (DreymaR's Sym mod topic on the Colemak Forum)
