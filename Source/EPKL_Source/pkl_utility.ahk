@@ -4,15 +4,15 @@
 ;;  - Used primarily in pkl_init.ahk
 ;
 
-ReadRemaps( mapList, mapStck ) { 								; Parse a remap string to a CSV list of cycles (used in pkl_init)
-	mapCycList  := "" 											; Name -> actual list, or literal list
-	For ix, alist in pklIniCSVs( mapList, mapList, mapStck, "Remaps" ) { 	; mapFile
-		tmpCycle    := "" 							; Above, mapList is default to use a map unless it refers to another
-		For ix, list in StrSplit( alist, "+", " `t" ) { 		; Parse merges by plus sign
-			If ( SubStr( list, 1, 1 ) == "^" ) { 				; A cycle reference...
-				theMap  := SubStr( list, 2 ) 					; ...adds the cycle the list refers to directly
-			} else if ( alist != mapList ) { 					; This should safeguard against infinite loops
-				theMap  := ReadRemaps( list, mapStck ) 			; Refers to another map -> Self recursion
+ReadRemaps( mapList, mapStck ) {    								; Parse a remap string to a CSV list of cycles (used in pkl_init)
+	mapCycList  := ""   											; Name -> actual list, or literal list
+	For ix, alist in pklIniCSVs( mapList, mapList, mapStck, "Remaps" ) {    	; mapFile
+		tmpCycle    := ""   										; Above, mapList is default to use a map unless it refers to another
+		For ix, list in StrSplit( alist, "+", " `t" ) { 			; Parse merges by plus sign
+			If ( SubStr( list, 1, 1 ) == "^" ) {    				; A cycle reference...
+				theMap  := SubStr( list, 2 )    					; ...adds the cycle the list refers to directly
+			} else if ( alist != mapList ) {    					; This should safeguard against infinite loops
+				theMap  := ReadRemaps( list, mapStck )  			; Refers to another map -> Self recursion
 			} else {
 				theMap  := ""
 			}
@@ -23,47 +23,47 @@ ReadRemaps( mapList, mapStck ) { 								; Parse a remap string to a CSV list of
 	Return mapCycList
 }   ; <-- fn
 
-ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. of remaps (used in pkl_init)
-	mapFile := IsObject( mapStck ) ? mapStck[mapStck.Length()] : mapStck 		; Use a file stack, or just one file
-	mapType := upCase( SubStr( mapType, 1, 2 ) ) 				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
+ReadCycles( mapType, mapList, mapStck ) {   						; Parse a remap string to a dict. of remaps (used in pkl_init)
+	mapFile := IsObject( mapStck ) ? mapStck[mapStck.Length()] : mapStck    	; Use a file stack, or just one file
+	mapType := upCase( SubStr( mapType, 1, 2 ) )    				; MapTypes: (sc|vk)map(Lay|Ext|Mec) => SC|VK
 	pdic    := {}
-	If ( mapType == "SC" )										; Create a fresh SC pdic from mapFile KeyLayMap
+	If ( mapType == "SC" )  										; Create a fresh SC pdic from mapFile KeyLayMap
 		pdic := ReadKeyLayMapPDic( "SC", "SC", mapFile )
-	rdic    := pdic.Clone()										; Reverse dictionary (instead of if loop)?
-	tdic	:= {}												; Temporary dictionary used while mapping loops
-	For ix, clist in StrSplit( mapList, ",", " `t" ) { 			; Parse cycle list by comma
+	rdic    := pdic.Clone() 										; Reverse dictionary (instead of if loop)?
+	tdic	:= {}   												; Temporary dictionary used while mapping loops
+	For ix, clist in StrSplit( mapList, ",", " `t" ) {  			; Parse cycle list by comma
 		fullCycle := ""
-		For ix, plist in StrSplit( clist, "+", " `t" ) { 		; Parse and merge composite cycles by plus sign
-			thisCycle := pklIniRead( plist , "", mapStck, "RemapCycles" ) 	; mapFile
+		For ix, plist in StrSplit( clist, "+", " `t" ) {    		; Parse and merge composite cycles by plus sign
+			thisCycle := pklIniRead( plist , "", mapStck, "RemapCycles" )   	; mapFile
 			If ( not thisCycle )
 				pklWarning( "Remap element '" . plist . "' not found", 3 )
-			thisType  := SubStr( thisCycle, 1, 2 )				; KLM map type, such as TC for TMK-like Colemak
-;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1		; eD TODO: R(>) or L(<) cycle?
-			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )	; Strip defs and wrapping pipes
-			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle	; Merge cycles
+			thisType  := SubStr( thisCycle, 1, 2 )  			; KLM map type, such as TC for TMK-like Colemak
+;			rorl      := ( SubStr( thisCycle, 3, 1 ) == "<" ) ? -1 : 1  		; eD TODO: R(>) or L(<) cycle?
+			thisCycle := RegExReplace( thisCycle, "^.*?\|(.*)\|$", "$1" )   	; Strip defs and wrapping pipes
+			fullCycle := fullCycle . ( ( fullCycle ) ? ( " | " ) : ( "" ) ) . thisCycle 	; Merge cycles
 		}   ; <-- For plist
-		If ( mapType == "SC" )									; Remap pdic from thisType to SC
+		If ( mapType == "SC" )  									; Remap pdic from thisType to SC
 			mapDic  := ReadKeyLayMapPDic( thisType, "SC", mapFile )
-		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) { 	; Parse cycle to minicycles:  | a | b / c | d | e |
-			thisCycle   := StrSplit( minCycl, "|", " `t" ) 		; Parse cycle by pipe, and create mapping pdic
+		For ix, minCycl in StrSplit( fullCycle, "/", " `t" ) {  	; Parse cycle to minicycles:  | a | b / c | d | e |
+			thisCycle   := StrSplit( minCycl, "|", " `t" )  		; Parse cycle by pipe, and create mapping pdic
 			numSteps    := thisCycle.Length()
-			Loop % numSteps { 									; Loop to get proper key codes
+			Loop % numSteps {   									; Loop to get proper key codes
 				this := thisCycle[ A_Index ]
-				If ( mapType == "SC" ) { 						; Remap from thisType to SC
+				If ( mapType == "SC" ) {    						; Remap from thisType to SC
 					thisCycle[ A_Index ] := mapDic[ this ]
-				} else if ( mapType == "VK" )  { 				; Remap from VK name/code to VK code
+				} else if ( mapType == "VK" )  {    				; Remap from VK name/code to VK code
 					thisCycle[ A_Index ] := getVKnrFromName( this ) 	; VK maps use VK## format codes
 				}   ; <-- if
 			}   ; <-- loop
-			Loop % numSteps { 									; Loop to (re)write remap pdic
-				this := thisCycle[ A_Index ] 					; This key's code gets remapped to...
-				this := ( mapType == "SC" ) ? rdic[ this ] : this 	; When chaining maps, map the remapped key ( a→b→c )
+			Loop % numSteps {   									; Loop to (re)write remap pdic
+				this := thisCycle[ A_Index ]    					; This key's code gets remapped to...
+				this := ( mapType == "SC" ) ? rdic[ this ] : this   	; When chaining maps, map the remapped key ( a→b→c )
 				that := ( A_Index == numSteps ) ? thisCycle[ 1 ] : thisCycle[ A_Index + 1 ]	; ...next code
-				pdic[ this ] := that 							; Map the (remapped?) code to the next one
-				tdic[ that ] := this 							; Keep the reverse mapping for later cycles
+				pdic[ this ] := that    							; Map the (remapped?) code to the next one
+				tdic[ that ] := this    							; Keep the reverse mapping for later cycles
 			}   ; <-- Loop (remap one full cycle)
 			For key, val in tdic 
-				rdic[ key ] := val 								; Activate the lookup dict for the next cycle
+				rdic[ key ] := val  								; Activate the lookup dict for the next cycle
 		}   ; <-- For minicycle
 	}   ; <-- For clist (parse CSV)
 ;; eD remapping cycle notes:
@@ -73,21 +73,21 @@ ReadCycles( mapType, mapList, mapStck ) { 			; Parse a remap string to a dict. o
 	Return pdic
 }   ; <-- fn
 
-ReadKeyLayMapPDic( keyType, valType, mapFile ) { 	; Create a pdic from a pair of KLMaps in a remap.ini file
+ReadKeyLayMapPDic( keyType, valType, mapFile ) {    				; Create a pdic from a pair of KLMaps in a remap.ini file
 	pdic    := {}
-	Loop % 5 {  												; Loop through KLM rows 0-4
+	Loop % 5 {  													; Loop through KLM rows 0-4
 		keyRow := pklIniCSVs( keyType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; Split by pipe
 		valRow := pklIniCSVs( valType . ( A_Index - 1 ), "", mapFile, "KeyLayoutMap", "|" ) 	; --"--
-		For ix, key in keyRow { 								; (Robust against keyRow shorter than valRow)
-			If ( ix > valRow.Length() ) 						; End of val row
+		For ix, key in keyRow { 									; (Robust against keyRow shorter than valRow)
+			If ( ix > valRow.Length() ) 							; End of val row
 				Break
-			If ( not key )  									; Empty key entry (e.g., double pipes)
+			If ( not key )  										; Empty key entry (e.g., double pipes)
 				Continue
-			key := ( keyType == "SC" ) ? upCase( key ) : key 	; ensure caps for SC### key
+			key := ( keyType == "SC" ) ? upCase( key ) : key    	; ensure caps for SC### key
 			key := ( keyType == "VK" ) ? getVKnrFromName( key ) : key
 			val := upCase( valRow[ ix ] )
 			val := ( valType == "VK" ) ? getVKnrFromName( val ) : val
-			pdic[ key ] := val  								; e.g., pdic[ "SC001" ] := "VK1B"
+			pdic[ key ] := val  									; e.g., pdic[ "SC001" ] := "VK1B"
 		}   ; <-- For key
 	}   ; <-- Loop KLM rows
 	Return pdic
@@ -443,7 +443,9 @@ dllMapVK( VK, mode := "chr" ) { 														; Call the MapVirtualKey DLL to de
 	Return map
 }
 
-runTarget( targ := "." ) {  								; Run/open a target (default: This program's folder, in File Explorer)
+runTarget( targ := "ŁayÐir" ) { 							; Run/open a target (def.: This layout's folder, in File Explorer. "." = this program's folder.)
+	If ( targ == "ŁayÐir" )
+		targ := getPklInfo("LayIni_Dir")    				; Special syntax for the active layout's folder.
 	Try
 		Run % targ  										; Run the target in its default way - e.g., File Explorer - or focus on it if already open
 	Catch
@@ -451,7 +453,7 @@ runTarget( targ := "." ) {  								; Run/open a target (default: This program's
 }
 
 pkl_exec( cmdStr := "" ) {  								; Execute certain commands, e.g., inside strings with α/β prefixes. For now, only Sleep() and Run().
-	Static cmdDic  := [ "Sleep(", "Slp(", "Run(" ]  		; Dictionary of command headers
+	Static cmdDic  := [ "Sleep(", "Slp(", "Run(" ]  		; Dictionary of command headers. In mappings, these look like, say,`¢[Run(".")]¢`.
 	For ix, cmdHead in cmdDic {
 		headLen := StrLen( cmdHead )
 		theCmd  := (  InStr( cmdStr, cmdHead ) ==  1  ) 	; InStr is by default case insensitive

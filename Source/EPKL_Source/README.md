@@ -639,3 +639,5 @@ VERSION HISTORY:
 		| 0 0 ,     |
 		+-----------+
 	- A DeadkeyImg folder specified as img_DKeyDir is now prioritized over a local one.
+	- The "Open app/folder" menu & hotkey now opens the active layout's folder by default, instead of EPKL root (target ".").
+		- Made a `ŁayÐir` special run-target syntax for the active layout's folder. This is now the default for runTarget().

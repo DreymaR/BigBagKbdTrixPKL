@@ -66,10 +66,10 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	setCurrentWinLayDeadKeys( pklIniRead( "systemDeadKeys" ) )  		; eD WIP: Better DK detection fn!
 	setKeyInfo( "CtrlAltIsAltGr", bool(pklIniRead("ctrlAltIsAltGr")) )
 	
-	_pklSetInf( "openMenuTarget", "." ) 								; Target to open by menu/HK; default A_ScriptDir
-	_pklSetInf( "cleanupTimeOut", 4 )   								; Time idle (sec) before mods etc are cleaned up
-	_pklSetInf( "suspendTimeOut", 0 )   								; Time idle (min) before program suspends itself
-	_pklSetInf( "exitAppTimeOut", 0 )   								; Time idle (min) before program exits itself
+	_pklSetInf( "openMenuTarget", "ŁayÐir"  )   						; Target to open by menu/HK; "." = A_ScriptDir; "ŁayÐir" = LayIni_Dir.
+	_pklSetInf( "cleanupTimeOut", 4         )   						; Time idle (sec) before mods etc are cleaned up
+	_pklSetInf( "suspendTimeOut", 0         )   						; Time idle (min) before program suspends itself
+	_pklSetInf( "exitAppTimeOut", 0         )   						; Time idle (min) before program exits itself
 	For ix,suspApp in pklIniCSVs( "suspendingApps" ) { 					; Programs that suspend EPKL when active
 		If ( suspApp == "--" )
 			Break
@@ -78,17 +78,17 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 			suspApp := RegExReplace( suspApp, "^" . needle, newtxt )
 		GroupAdd, SuspendingApps, %suspApp% 							;     Used by pklJanitor
 	}   ; <-- For suspApp
-	_pklSetInf( "suspendingMode", "--" )    							; Window TitleMatchMode to use for suspendingApps
-	_pklSetInf( "suspendingLIDs", "--" )    							; Layouts that suspend EPKL when active (actually CSV, but it's okay)
+	_pklSetInf( "suspendingMode", "--"      )   						; Window TitleMatchMode to use for suspendingApps
+	_pklSetInf( "suspendingLIDs", "--"      )   						; Layouts that suspend EPKL when active (actually CSV, but it's okay)
 	
-	_pklSetInf( "stickyMods", "LShift" )    							; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
-	_pklSetInf( "stickyTime", 600 )         							; --"--
+	_pklSetInf( "stickyMods", "LShift"      )   						; Sticky/One-Shot modifiers (actually CSV, but store it as a string)
+	_pklSetInf( "stickyTime", 600           )   						; --"--
 	
 	extMods := pklIniCSVs( "extendMods" )								; Multi-Extend w/ tap-release
 	setPklInfo( "extendMod1", ( extMods[1] ) ? extMods[1] : "" )
 	setPklInfo( "extendMod2", ( extMods[2] ) ? extMods[2] : "" )
-;	_pklSetInf( "extendTaps" )  										; --"--
-	_pklSetInf( "tapModTime", 200 )         							; Tap-or-Mod time
+;	_pklSetInf( "extendTaps"                )   						; --"--
+	_pklSetInf( "tapModTime", 200           )   						; Tap-or-Mod time
 ;	setPklInfo( "unicodeVKs", bool(pklIniRead("unicodeVKs")) )  		; Whether to Compose w/ ToUnicode for VK/SC mappings: Its side effect ruins OS DKs.  	; eD FIXED
 	
 	;;  ============================================================================================================================================

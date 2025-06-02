@@ -7,24 +7,24 @@ pkl_set_tray_menu()
 {
 	ShowMoreInfo    := getPklInfo( "AdvancedMode" ) 	; Show extra technical info and the Reset hotkey
 	
-	layoutsMenu     := getPklInfo( "LocStr_19" ) 		; Menu text for the Layouts menu
-	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]		; Dummy legend menu item
-					,   "aboutMe" : [ "09"        , ""             ]		; ---
-					,   "keyHist" : [ "AHKeyHist" , ""             ]		; ---
-					,   "deadKey" : [ "12"        , ""             ]		; --- - Don't show this to avoid clutter
-					,   "makeImg" : [ "MakeImage" , ""             ]		; ---
-					,   "showImg" : [ "15"        , "ShowHelpImg"  ]		; ^+1
-					,   "chngLay" : [ "18"        , "ChangeLayout" ]		; ^+2
-					,   "suspend" : [ "10"        , "Suspend"      ]		; ^+3/`
-					,   "exitApp" : [ "11"        , "ExitApp"      ]		; ^+4
-					,   "refresh" : [ "RefreshMe" , "Refresh"      ]		; ^+5
-					,   "setting" : [ "LaysSetts" , "SettingsUI"   ]		; ^+6
-					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]		; ^+7
-					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]		; ^+8 - Don't show this to avoid clutter
-					,   "openApp" : [ "RunTarget" , "OpenTarget"   ]		; ^+? - Don't show this to avoid clutter
-					,   "winInfo" : [ ""          , "AhkWinInfo"   ]		; ^+0 - Don't show this to avoid clutter
-					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]		; ^+? - Don't show this to avoid clutter
-					,   "debugMe" : [ ""          , "DebugUtil"    ] } 		; ^+= - Don't show the Debug/Utility hotkey
+	layoutsMenu     := getPklInfo( "LocStr_19" )    	; Menu text for the Layouts menu
+	menuItems   :=  {   "menuItm" : [ "LocStr_##" , "HK_#########" ]    	; Dummy legend menu item
+					,   "aboutMe" : [ "09"        , ""             ]    	; ---
+					,   "keyHist" : [ "AHKeyHist" , ""             ]    	; ---
+					,   "deadKey" : [ "12"        , ""             ]    	; --- - Don't show this to avoid clutter
+					,   "makeImg" : [ "MakeImage" , ""             ]    	; ---
+					,   "showImg" : [ "15"        , "ShowHelpImg"  ]    	; ^+1
+					,   "chngLay" : [ "18"        , "ChangeLayout" ]    	; ^+2
+					,   "suspend" : [ "10"        , "Suspend"      ]    	; ^+3/`
+					,   "exitApp" : [ "11"        , "ExitApp"      ]    	; ^+4
+					,   "refresh" : [ "RefreshMe" , "Refresh"      ]    	; ^+5
+					,   "setting" : [ "LaysSetts" , "SettingsUI"   ]    	; ^+6
+					,   "zoomImg" : [ "ZoomImage" , "ZoomHelpImg"  ]    	; ^+7
+					,   "opaqImg" : [ "OpaqImage" , "OpaqHelpImg"  ]    	; ^+8 - Don't show this to avoid clutter
+					,   "openApp" : [ "RunTarget" , "OpenTarget"   ]    	; ^+? - Don't show this to avoid clutter
+					,   "winInfo" : [ ""          , "AhkWinInfo"   ]    	; ^+0 - Don't show this to avoid clutter
+					,   "moveImg" : [ "MoveImage" , "MoveHelpImg"  ]    	; ^+? - Don't show this to avoid clutter
+					,   "debugMe" : [ ""          , "DebugUtil"    ] }  	; ^+= - Don't show the Debug/Utility hotkey
 	For item, val in menuItems
 	{
 		%item%MenuItem  := getPklInfo( "LocStr_" . val[1] ) 	; Menu item text - hotkey text is added on the next lines
@@ -37,10 +37,10 @@ pkl_set_tray_menu()
 	activeLayout    := getLayInfo( "ActiveLay" )
 	activeLayName   := ""
 	numOfLayouts    := getLayInfo( "NumOfLayouts" )
-	Loop % numOfLayouts { 										; Layouts menu list w/ icons
-		layName := getLayInfo( "layout" . A_Index . "name" )	; Layout menu name
-		layCode := getLayInfo( "layout" . A_Index . "code" )	; Layout dir name
-		If ( layCode == "<N/A>" ) 								; Empty name entries cause an icon error below
+	Loop % numOfLayouts {   									; Layouts menu list w/ icons
+		layName := getLayInfo( "layout" . A_Index . "name" ) 	; Layout menu name
+		layCode := getLayInfo( "layout" . A_Index . "code" ) 	; Layout dir name
+		If ( layCode == "<N/A>" )   							; Empty name entries cause an icon error below
 			Continue
 		Menu, changeLayout, add, %layName%, changeLayoutMenu
 		If ( layCode == activeLayout ) {
@@ -64,32 +64,32 @@ pkl_set_tray_menu()
 		Menu, Tray, Icon,  8&, %A_AhkPath%          ,   3   	; Suspend
 		Menu, Tray, Icon,  9&, %A_AhkPath%          ,   4   	; Pause
 		Menu, Tray, Icon, 10&, shell32.dll          ,  28   	; Exit
-		Menu, Tray, add, 										; (separator)
+		Menu, Tray, add,    									; (separator)
 	}
 	
-	_pklMenuAdd( aboutMeMenuItem, "showAbout"       ) 				; About
-	_pklMenuAdd( settingMenuItem, "changeSettings"  ) 				; Layouts/Settings UI
-	_pklMenuAdd( openAppMenuItem, "openTarget"      ) 				; Open (or focus on) the app folder
+	_pklMenuAdd( aboutMeMenuItem, "showAbout"       )   			; About
+	_pklMenuAdd( settingMenuItem, "changeSettings"  )   			; Layouts/Settings UI
+	_pklMenuAdd( openAppMenuItem, "openTarget"      )   			; Open (or focus on) the app folder
 	If ( ShowMoreInfo ) {
-		_pklMenuAdd( keyHistMenuItem, "keyHistory"      ) 				; Key history
+		_pklMenuAdd( keyHistMenuItem, "keyHistory"      )   			; Key history
 ;		_pklMenuAdd( deadKeyMenuItem, "detectCurrentWinLayDeadKeys" ) 	; Detect OS DKs (old PKL module)
-;		_pklMenuAdd( importsMenuItem, "importLayouts"   ) 				; Import Module
-		_pklMenuAdd( makeImgMenuItem, "makeHelpImages"  ) 				; Help Image Generator
+;		_pklMenuAdd( importsMenuItem, "importLayouts"   )   			; Import Module
+		_pklMenuAdd( makeImgMenuItem, "makeHelpImages"  )   			; Help Image Generator
 		_pklMenuAdd( ,, "sep" ) 										; --------
 	}
-	_pklMenuAdd( showImgMenuItem, "toggleHelpImage" ) 				; Show image
-	_pklMenuAdd( zoomImgMenuItem, "zoomHelpImage"   ) 				; Zoom image
-;	_pklMenuAdd( moveImgMenuItem, "moveHelpImage"   ) 				; Move image
-;	_pklMenuAdd( opaqImgMenuItem, "opaqHelpImage"   ) 				; Opaque/transparent image
+	_pklMenuAdd( showImgMenuItem, "toggleHelpImage" )   			; Show image
+	_pklMenuAdd( zoomImgMenuItem, "zoomHelpImage"   )   			; Zoom image
+;	_pklMenuAdd( moveImgMenuItem, "moveHelpImage"   )   			; Move image
+;	_pklMenuAdd( opaqImgMenuItem, "opaqHelpImage"   )   			; Opaque/transparent image
 	If ( numOfLayouts > 1 ) {
 		_pklMenuAdd( ,, "sep" ) 										; --------
 		_pklMenuAdd( layoutsMenu    , ":changeLayout"    )  			; Layouts submenu (denoted by a leading colon)
 		_pklMenuAdd( chngLayMenuItem, "rerunNextLayout" ) 				; Change/cycle layout
 	}
 	_pklMenuAdd( ,, "sep" ) 										; --------
-	_pklMenuAdd( refreshMenuItem, "rerunSameLayout" ) 				; Refresh
-	_pklMenuAdd( suspendMenuItem, "toggleSuspend"   ) 				; Suspend
-	_pklMenuAdd( exitAppMenuItem, "exitPKL"         ) 				; Exit
+	_pklMenuAdd( refreshMenuItem, "rerunSameLayout" )   			; Refresh
+	_pklMenuAdd( suspendMenuItem, "toggleSuspend"   )   			; Suspend
+	_pklMenuAdd( exitAppMenuItem, "exitPKL"         )   			; Exit
 	
 	pklAppName := getPklInfo( "pklName" )
 	pklVersion := getPklInfo( "pklVers" )
@@ -139,7 +139,7 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 			def := num . "&"
 		} else {
 			For ix, line in itmList {
-				If InStr( line, item ) { 								; Partial text matching is allowed.
+				If InStr( line, item ) {    							; Partial text matching is allowed.
 					def := itmList[ ix ]
 					Break   											; Use the first (partial) match found.
 				}
@@ -154,15 +154,15 @@ _pklMenuAdd( item := "", label := "", mode := "add" ) { 				; Add a Tray menu it
 		inx += 1
 		Menu, Tray, Add, %item%, %label%
 		If ( item != "" ) { 											; No item/label means a separator line
-			itmList.Push( item ) 										; Stores the full string   of item N
-			posList.Push( inx  ) 										; Stores the real position of item N
+			itmList.Push( item )    									; Stores the full string   of item N
+			posList.Push( inx  )    									; Stores the real position of item N
 		}
 	}   ; <-- if mode
 }
 
 pkl_about()
 {
-	msLID := getWinLocaleID() 									; The 4-xdigit Windows Locale ID (usually decimal)
+	msLID := getWinLocaleID()   								; The 4-xdigit Windows Locale ID (usually decimal)
 	wLang := A_Language 										; The 4-xdigit Language code (often same as LID)
 	dkStr := getCurrentWinLayDeadKeys() 						; The Windows layout's dead key string
 	dkStr := dkStr ? dkStr : "<none>"
