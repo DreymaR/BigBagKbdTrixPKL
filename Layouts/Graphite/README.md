@@ -1,12 +1,14 @@
 DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
-<br><br>
-
-![Graphite Angle-ANSI help image](./Graphite_ANS-A_EPKL.png)
-
-_The default Graphite layout (using the Angle mod) on an ANSI keyboard_
+_For info on my Graphite variant, [see the Gralmak section below](#gralmak)_
 
 <br><br>
+
+![Graphite Ortho help image](./Graphite_Orth-Cpt_EPKL.png)
+
+_The Graphite layout on an Ortho keyboard_
+
+<br>
 
 The Graphite layout
 -------------------
@@ -22,9 +24,9 @@ The Graphite layout
 - Its standard variant changes some shifted mappings; see below.
 <br><br>
 
-![Graphite Ortho help image](./Graphite_Orth-Cpt_EPKL.png)
+![Graphite Angle-ANSI help image](./Graphite_ANS-A_EPKL.png)
 
-_The Graphite layout on an Ortho keyboard_
+_The default Graphite layout (using the Angle mod) on an ANSI keyboard_
 
 <br>
 
@@ -156,8 +158,8 @@ Gralmak
 -------
 - I wanted to make a Graphite variant with traditional symbol/punctuation placements.
 - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
-- Thus came about the "Gralmak" variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want the J in the middle and a symbol (Quote) on pinky.
+- Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
+- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 <br><br>
@@ -194,15 +196,15 @@ _The Gralmak layout variant on an Ortho keyboard_
 - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
 <br>
 
-- Similar to Colemak, this layout manages to be well optimized and still keep some similarity to well-known layouts.
+- This layout manages to satisfy newer analyzers and still keep some similarity to well-known layouts like Colemak.
 - For instance, only `L N M` and `F A E` swap hands from QWERTY; `L N M` and `F A P` from Colemak.
 - The familiar `QW RT ZX CV` bigrams are (semi-)preserved in Gralmak, also aiding learning and recognition.
 - Also see the README for the similar [Galliard][Gallrd] Gallium variant.
 <br>
 
-![Gralmak ISO help image](./Gralmak_ISO-AWS_EPKL.png)
+![Gralmak-WS help image](./Gralmak_Orth-WS_EPKL.png)
 
-_The Gralmak (AWS-ISO) layout. The © key can be a Compose key, or whatever you wish._
+_Gralmak-WideSym on an Ortho keyboard._
 
 <br>
 
@@ -233,6 +235,11 @@ SHAI:
   SFB:    0.00%
   SFS:    0.06%   (Red/Alt: 0.01% | 0.05%)
 ```
+<br>
+
+![Gralmak ISO help image](./Gralmak_ISO-AWS_EPKL.png)
+
+_Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 

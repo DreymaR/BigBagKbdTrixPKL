@@ -17,6 +17,8 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
+
 NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 	- I think the bulgarian =+ position should house Ѝ ѝ
 	- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
@@ -33,14 +35,20 @@ NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591
 WIPs: Ukromak revision?
 	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
 
-WIPs: Learn to digitally sign the realease .exe, if that can help with OS warnings.
-	- When I've got ortho images and Kyrillic variant updates in place, I could make a new, signed release 1-4-3.
+WIPs: Learn to digitally sign the release .exe, if that can help with OS warnings.
 	- You can use the MS SignTool program, part of their Visual Studio SDK, to sign an app. It requires a certificate to sign with.
+	- The certificate should be a "code signing" (purpose) one.
 	- You can get an EV (Electronically Verified) certificate; this costs money but trusted verification makes things simpler.
 	- You can instead use a self-signed local certificate. This gives no other trust than people's confidence in you already did.
-	- The certificate needs to be installed by users, from your web page? I could do that, from dreymar.colemak.org.
-	- Can people install the certificate on their machine once it's in the program? Check this with testers!
-	- Keep the certificate in the EPKL repo, and point to it from the page? No, then people could misuse the certificate I think.
+		- This, apparently, is often used for test purposes. But it's possible to distribute a self-signed certificate.
+	- The certificate will be generated in my cert store. It can then be exported as a .PFX file.
+		- The certificate needs to be installed by users, from your web page? I could do that, from dreymar.colemak.org.
+		- Can people install the certificate on their machine once it's in the program? Check this with testers!
+		- Keep the certificate in the EPKL repo, and point to it from the page? No, then people could misuse the certificate I think.
+	- https://stackoverflow.com/questions/252226/signing-a-windows-exe-file
+		- https://www.pantaray.com/signcode.html (download link didn't work, but good explanation)
+		- https://learn.microsoft.com/en-us/powershell/module/pki/new-selfsignedcertificate?view=windowsserver2025-ps
+	- Running (#r) `certmgr.exe` lets you view certificates.
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event, or at least specifying KeyDown only?
 	- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
