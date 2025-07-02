@@ -1,4 +1,4 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKLn
+DreymaR's Big Bag Of Keyboard Tricks - EPKL
 ===========================================
 <br>
 
@@ -9,8 +9,9 @@ _The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO boar
 
 The MTGAP layout
 ----------------
-- The [MTGAP][MTGAPm] layout designed by [Michael Dickens][MTGaPp], 2010–2012, scores well in modern analysis.
+- The [MTGAP][MTGAPm] layout designed by [Michael Dickens][MTGaPp], 2010–2012, scores reasonably well in modern analysis.
 - It's a more radical layout than Colemak, changing everything around – even shift layers.
+- All in all, I'd recommend looking at some even newer and less radical layouts rather than jumping on this one.
 - There are actually several variants of it for different board configurations.
 - EPKL comes with the minimal 30-key version that only moves the main letter block of keys.
 - This layout can be used with the usual BigBag Angle and Sym ergonomic mods added, as seen above.
