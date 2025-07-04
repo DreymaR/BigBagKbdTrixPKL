@@ -641,3 +641,8 @@ VERSION HISTORY:
 	- A DeadkeyImg folder specified as img_DKeyDir is now prioritized over a local one.
 	- The "Open app/folder" menu & hotkey now opens the active layout's folder by default, instead of EPKL root (target ".").
 		- Made a `ŁayÐir` special run-target syntax for the active layout's folder. This is now the default for runTarget().
+	- Made ortho naming more consistent. There were some layouts using `Orth`, and others `Ortho`. Now all are `Orth`.
+		- Technically, you can use both as KbdType. But it's inconsistent to say `ANS-Ortho`, instead of `ANS-Orth` or `ANSI-Ortho`.
+	- Minor CoDeKey rework. Swapped `^`/`~` to Cmk J/B, and added triple-backtick to Cmk Shift+P.
+		- On ortho boards at least,`^` now sits right under 6. And the fancy 3-`` PowerString doesn't work on Discord.
+	
