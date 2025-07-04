@@ -17,10 +17,8 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-????: {CoDeKey,j} could be `^` (it's below 6 on ortho, which makes sense), and the extra tilde put to better use? But for what?
-	- {CoDeKey,q} is freed, then. Might move `~ to q if something better can occupy w.
-	- Double quote can be hard to use in flow; in complex texts like ("this one"), or just "this," for instance. 
-		- But it's not so hard to type now? Also, quotes may be associated with symbols which could make the CoDeKey confused.
+2FIX: ###-Orth layouts, w/o Angle, have CoDeKey on ISO(non-Z) and V on V(non-B). Didn't expect that... Is it as expected?
+	- It is, isn't it? People who want a thumb CoDeKey with an ortho board probably won't be using my Angle-mod-related tack.
 
 WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 
