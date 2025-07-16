@@ -32,7 +32,7 @@ DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It
 
 inputDK() { 												; Input the release key for a DK.
 	static endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
-			.  "{Left}{Right}{Up}{Down}{BS}{Esc}"
+			.  "{Left}{Right}{Up}{Down}{BS}{Esc}{Enter}"
 			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; Note: These 6 keys don't work here if their NumPad VK is sent (AHK default).
 	Input, inKey, L1, %endDKs%  							; L1: Length 1. The EndKeys string contains ending keys that return an error.
 	IfInString, ErrorLevel, EndKey  						; The return is on the form "EndKey:Escape" etc.

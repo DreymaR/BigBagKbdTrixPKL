@@ -646,3 +646,5 @@ VERSION HISTORY:
 	- Minor CoDeKey rework. Swapped `^`/`~` to Cmk J/B, and added triple-backtick to Cmk Shift+P.
 		- On ortho boards at least,`^` now sits right under 6. And the fancy 3-`` PowerString doesn't work on Discord.
 	
+	- Fixed: Hitting Enter when any DK was active would output Ctrl+Shift+J, which opens the Parent Process Browser Console in Firefox.
+		- Adding `{Enter}` to `endDKs` (the list of keys that cancel DKs) solved the issue.

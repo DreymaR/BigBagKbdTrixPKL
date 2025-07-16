@@ -17,9 +17,6 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-2FIX: ###-Orth layouts, w/o Angle, have CoDeKey on ISO(non-Z) and V on V(non-B). Didn't expect that... Is it as expected?
-	- It is, isn't it? People who want a thumb CoDeKey with an ortho board probably won't be using my Angle-mod-related tack.
-
 WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 
 NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
