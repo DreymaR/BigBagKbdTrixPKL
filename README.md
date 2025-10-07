@@ -198,8 +198,8 @@ There are two main ways EPKL handles key presses intercepted by its keyboard hoo
     - The mapping format for key mapping is `<KEY SC> = <VK CODE> VKey` (or `<SC> SKey`).
 * **Single-Entry mapping** can be handy for some special use cases.
     - A `System` (or `SKey`) entry simply SC maps the key onto itself, allowing EPKL to see that key.
-    - A `Disabled` (or `--`) single-entry mapping does just that: Renders a key disabled and useless.
-    - A `Unmapped` (or `<>`) entry can be used by an override file to tell EPKL to leave that key alone.
+    - A `Disabled` (or `--`) single-entry mapping renders the key disabled and useless.
+    - A `Unmapped` (or `<>`) entry can be used by an override file. It tells EPKL to leave that key alone.
     - The mapping format for these commands is simply `<KEY SC> = <SINGLE ENTRY>`.
 * **State mapping** means that EPKL sends a character event onwards to the OS based on the current shift state.
     - The shift state is affected by Shift (held or on a Sticky Mod timer), AltGr and other layer modifiers.

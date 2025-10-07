@@ -19,6 +19,12 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 
+WIPs: Parentheses and quotes with the CoDeKey are nice, but especially parentheses are problematic whenever followed by non-space.
+	- Add CoDeKey mappings for `(` `)` without spaces, to avoid stretches to the number row and reduce mental load?
+	- It'd have to be the shifted mappings, displacing () and []. I've never used those. They could be on AltGr instead.
+	- Verdict: Not a great solution, but may feel a bit easier on the brain when you're in a "CoDeKey state of mind"?
+	- More testing is probably required. On one hand, it's not a common thing. On the other, nor are the () [] (for me atm).
+
 NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 	- I think the bulgarian =+ position should house Ѝ ѝ
 	- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
@@ -49,6 +55,11 @@ WIPs: Learn to digitally sign the release .exe, if that can help with OS warning
 		- https://www.pantaray.com/signcode.html (download link didn't work, but good explanation)
 		- https://learn.microsoft.com/en-us/powershell/module/pki/new-selfsignedcertificate?view=windowsserver2025-ps
 	- Running (#r) `certmgr.exe` lets you view certificates.
+
+NEXT: Caps Word? It seems to be a popular ZMK/QMK feature.
+	- It's a one-shot kind of thing. Make it a special output? Would need a special function/state to keep it on until the next space.
+	- E.g., `¢[Cap()]¢`? (Specify # of words to cap? Nah.)
+	- What should negate it? Space, Esc, Shift?
 
 NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event, or at least specifying KeyDown only?
 	- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
@@ -509,11 +520,15 @@ TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 ;;  ================================================================================================================================================
 ;;  eD ONHOLD:
 
+HOLD: Unmapped and Disabled keys produce weird output, unless a « » prefix is used. Fix this?
+	- Problem: These keys are simply skipped in pkl_init. They'd need some kind of tag for the HIG to mark them specifically.
+	- What to use? Nothing, or some marking? For now, it's probably okay to leave this issue to the « » HIG tag.
+
 HOLD: Now that we have ortho layout images, how about a really compact version?
 	- Technically, it'd be easily to use the existing ortho template and just use a smaller export area for "OrthCpt" GeoType.
 	- Could forgo the Ext/Shf/AGr indicators. Also misses the ISO key then; OK? But saving only one column isn't it.
 	- With or without num row? I think the num row's probably integral to EPKL goodness and complexity. But so are symbols?
-	- So either make it barebones 3×10u and save a lot of space an the cost of useful info, or drop it. Dropping it for now.
+	- So either make it barebones 3×10u and save a lot of space at the cost of useful info, or drop it. Dropping it for now.
 
 HOLD: Could @K cover geo as well? Should it? Nah for now, as there aren't that many Ortho files to handle.
 
