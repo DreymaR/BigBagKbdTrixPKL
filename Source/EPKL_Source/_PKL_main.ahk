@@ -19,12 +19,6 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 
-WIPs: Parentheses and quotes with the CoDeKey are nice, but especially parentheses are problematic whenever followed by non-space.
-	- Add CoDeKey mappings for `(` `)` without spaces, to avoid stretches to the number row and reduce mental load?
-	- It'd have to be the shifted mappings, displacing () and []. I've never used those. They could be on AltGr instead.
-	- Verdict: Not a great solution, but may feel a bit easier on the brain when you're in a "CoDeKey state of mind"?
-	- More testing is probably required. On one hand, it's not a common thing. On the other, nor are the () [] (for me atm).
-
 NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
 	- I think the bulgarian =+ position should house Ѝ ѝ
 	- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts

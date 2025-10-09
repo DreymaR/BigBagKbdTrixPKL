@@ -92,6 +92,82 @@ QWCLK   = Disabled                  ; The CapsLock key will stop working while E
 Entries are any-whitespace delimited.
 <br><br>
 
+Layout_Override example
+-----------------------
+With a layout override file, you can do some neat customizations. I'll show you mine.
+
+* The EPKL `Layout/Settings` `Key Mapper` tab has a "`Submit to Layout`" button. 
+* Instead of writing to the main `EPKL_Layouts_Override` `.ini` file, this button creates a `Layout_Override` in your current layout folder. 
+    - (Tip: Opening the current layout folder is the default setting for the `Open app/folder` menu choice.) 
+* This file can override anything a layout file can do. And it's at the top of the `LayStack` so it can't be overridden itself.
+* Below is the first part of my `Graphite\Gra-eD-Gralmak_ISO_AWideSym` override file.
+* As usual, an initial semicolon disables that line, so the original or default value is used.
+
+```
+[information]
+layoutName      = Gralmak-eD-AWS OeBeAa 							; Long layout name for display in menus etc.
+
+[pkl]
+;KbdType         = ISO-Orth-W    									; @K below: ANS (ANSI 101/104 key), ISO (Intl. 102/105 key)
+;baseLayout      = ..\BaseLayout_Gralmak-eD      					; This layout has a Variant BaseLayout, which uses yet another.
+;mapSC_layout    = AWS_@K    										; Angle_@K, AWide_@K, Cmk-CAW-_@K etc - see _eD_Remap.ini
+;mapSC_extend    = AWide_@K  										; As _layout but only "hard" (non-letter) mods
+
+img_sizeWH      = 704,226   										; DreymaR's IBM-style help images @96dpi (1u/r = 54,56 px: 15u/5r = 812,282; 13u/4r = 704,226)
+img_MainDir     = ..\Gra-eD-Gralmak_ANS-Orth_WideSym\   			; Help images are in the main layout folder, unless specified in img_MainDir.
+img_bgImage     = Files\ImgBackground\Bg_FingerShui_Ortho-Wide.png
+
+img_Extend1     = Files\ImgExtend\@K-Ortho-W_Ext1.png   			; @K-AWide_Ext1.png
+img_Extend2     = Files\ImgExtend\@K-Ortho-W_Ext2.png
+img_Extend3     = Files\ImgExtend\@K-Ortho-W_Ext3.png   			; "Soft" mnemonic layers follow letters
+img_DKeyDir     = ..\Gra-eD-Gralmak_ISO-Orth_WideSym\DeadkeyImg 	; .\DeadkeyImg
+img_ModsDir     = Files\ImgModStates\MagBlob-Ortho  				; GrnBlob
+```
+
+* The long layout name (shown in the About EPKL dialog) is changed from its `Layout.ini` file value.
+* Other info is left untweaked, as are the KbdType, BaseLayout and remap-SC settings.
+* I use row-staggered keyboards, but I like the compact ortho help images. 
+    - So I've set the image size, MainDir/DKeyDir and background/Extend images accordingly.
+    - I can thus use an AWide modded row-stag layout with ortho images. 
+    - The `6\7 vs 5\6` Wide issue may need resolving to your liking. 
+* For fun, I've changed the Shift/AltGr indicator from its default green to the MagBlob variant.
+
+Here's the rest of my `Layout_Override`:
+```
+[layout]
+;;  Override keys from the base layout with mappings here. A "VK" entry resets that key.
+
+[dk_CoDeKey_0]
+;;  These are mappings used by the EPKL CoDeKey through the @co0 dead key.
+
+[dk_Ext_Special]
+;;  Some useful symbols and commands are found in this DK table. By default it's used with unmodified Extend-tap if you have a MoDK Extend key set.
+;<g>     = «Ʃ»   α¢[Run("https://numpad.io/")]¢¢[Slp(800)]¢^{End}    										; g ⇒ Run Calculator
+<G>+    = «🗒»   α¢[Run("C:\Portables\PortableApps\Notepad++Portable\Notepad++Portable.exe")]¢   			; G ⇒ Run Notepad++ (was "Notepad")
+
+[compose_strings]
+;;  Additions to the string (and X11) sequences defined in the Compose file.
+'loke   = →ᛚᚮᚴᛂ   													; Loki's name in medieval runes. I happen to be a fan. 🤘
+'Loke   = →ᛚᚬᚴᛅ   													; Loke in Younger Futhark runes (or ᛚᚮᚴᛁ – LOKI).
+1er     = 1ᵉʳ   													; Nice for the French?
+
+[compose_adding]
+;;  Completion sequences that are added to, not replaced like normal Compose. To use, enable a Compose key using the `adding` table.
+;i       = j  														; An ij completion should be useful for Dutch typists using a Nl variant!
+;I       = J  														;   [Note: The ĳ digraph isn't so compatible these days.]
+```
+* Some of this could've been in the `EPKL_Layouts_Override.ini` in the root folder. But some mappings are layout specific.
+* For the most part, I simply tend to plop some tweaks I use into the layout I'm using. It's handy and easy to find.
+* Currently there are no tweaks to the main layout mappings, nor the `CoDeKey (@co0)` dead key mappings.
+* For the `Ext_Special` (Extend-tap) DeadKey, I decided to keep the default that opens the Windows Calculator app on `g`.
+* On capital `G` though, I feel better served by opening Notepad++ than the default Windows Notepad.
+    - Note the nifty `¢[]¢`-wrapped special syntax for the `Run()` and `Sleep()` functions.
+* The Compose strings could be in the root file instead of here, as long as nothing further up in the LayStack overrides them.
+* But the (disabled) Compose adding mappings are examples of layout customization. If typing Dutch, you might want to use these.
+
+So there you have it. There are lots of nifty things you can make EPKL do for you, if you ask the right way!
+<br><br>
+
 Layout variant tutorial
 -----------------------
 You can make your own version of, say, a locale layout variant – for instance, using an ergonomic mod combo that isn't provided out-of-the-box:
