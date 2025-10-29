@@ -242,7 +242,7 @@ init_Composer( compKeys ) { 									; Initialize EPKL Compose tables for all de
 }
 
 lastKeys( cmd, chr := "" ) {    									; Manipulate the LastKeys array of previously sent characters for Compose
-	lastKeys := getKeyInfo( "LastKeys" )  							; A link to the actual LastKeys array (not a copy)
+	lastKeys := getKeyInfo( "LastKeys" )  							; This links to the actual LastKeys array, not a copy
 	If        ( cmd == "push" ) { 									; Push one key to the lastKeys buffer
 		lastKeys.Push( chr )
 		lastKeys.RemoveAt( 1 )
@@ -250,10 +250,9 @@ lastKeys( cmd, chr := "" ) {    									; Manipulate the LastKeys array of prev
 		lastKeys.Pop()  											; (We aren't using the pop value for anything)
 		lastKeys.InsertAt( 1, "" )
 	} else if ( cmd == "null" ) { 									; Reset the last-keys-pressed buffer.
-		setKeyInfo( "LastKeys", getKeyInfo( "NullKeys" ).Clone() ) 	; Note: Use Clone() here, or you'll make a link to NullKeys
+		setKeyInfo( "LastKeys", getKeyInfo( "NullKeys" ).Clone() ) 	; Note: Use Clone() here, or you'll make a link to NullKeys instead
 		Return
 	}
-;	setKeyInfo( "LastKeys", lastKeys )  							; Since we're editing the actual LastKeys array, this isn't needed
 }
 
 ;;  ================================================================================================================================================
