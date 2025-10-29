@@ -74,7 +74,7 @@ Graphite-HB
 - Consequently, I added a keymap-friendly variant, the `Graphite-HB` ("**HB**" for "Hardware Bound" – and for fun!).
 - You can select your preferred variant using the `Variant/Locale` setting in the `Layout Selector` GUI.
 - The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
-- However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTSeq] options.
+- However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTseq] options.
 - Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead, or [Gralmak][gralmk]. These, like Colemak, relegate the `J` key to that awkward position.
 <br>
 
@@ -247,6 +247,107 @@ _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 _The Graphite layout, as depicted on its own [web page][GraGit]._
 
+<br><br>
+
+GralQwest
+---------
+- Some [Colemak][CmkPKL] learners have used my [Tarmak][BBTtmk] transitional layouts to learn the layout in smaller steps.
+- Some even said they couldn't have done it all at once. Others strongly prefer going all the way at once, cold turkey.
+- Learning Gralmak from QWERTY is a longer way since Colemak(-DH) moves only 17(18) keys and Gralmak 24.
+- It's still possible to construct learning loops for users who want to learn 3–6 keys at a time.
+
+Here's a way of splitting up a QWERTY-to-Gralmak transition into five steps, roughly sorted by key frequencies:
+```
+Big loop of 18 keys:
+    S → F → U → O → I → ; → 
+    P → M → C → V → B → Q → 
+    T → D → E → L → W → R
+
+Miniloops of 3 keys:
+    A → K → N
+    Y → H → J
+
+Not moved – 3 keys:
+    G   Z   X
+```
+
+- It makes sense to misplace less common keys during the big loop steps: `;` in step 1, `Q` in step 2.
+- The rationale for postponing the common `E` and `T` is to avoid misplacing the common `R`.
+- It's up to the user whether miniloops should go before or after the big loop. The `Y` miniloop gives less benefit.
+- the semicolon can be swapped with the apostrophe in the 2nd part of the big loop, when it finds its place.
+- For now, I'm doing this mostly as a mental exercise. 
+- If someone really wants to use such a set of transitional layouts, I could help implement them.
+
+Thus, five "GralQwest" QWERTY-to-Gralmak transitional layouts might look as follows:
+```
+GralQwest 0, alias QWERTY:
+q w e r t    y u i o p
+a s d f g    h j k l ; '
+z x c v b    n m , . /
+
+GralQwest 1 (big loop 1/3):
+q w e r t    y F O U p
+a ; d S g    h j k l I '                S → F → U → O → I → (;)
+z x c v b    n m
+
+GralQwest 2 (big loop 2/3):
+B w e r t    y f o u '
+a q d s g    h j k l i ;                P → M → C → V → B → (Q)
+z x M C V    n P
+
+GralQwest 3 (big loop 3/3):
+b L D W Q    y f o u '
+a R T s g    h j k E i ;                T → D → E → L → W → R
+z x m c v    n p
+
+GralQwest 4 (A miniloop):
+b l d w q    y f o u '
+N r t s g    h j A e i ;                A → K → N
+z x m c v    K p
+
+GralQwest 5 (Y miniloop), alias Gralmak:
+b l d w q    J f o u '
+n r t s g    Y H a e i ;                Y → H → J
+z x m c v    k p , . /
+```
+
+This progression prioritizes getting the big loop over with, to avoid "limbo" keys in neither-QWERTY-nor-Gralmak positions.
+
+Alternatively, here are five "GralQwest" QWERTY-to-Gralmak transitional layouts with miniloops first:
+```
+GralQwest 0, alias QWERTY:
+q w e r t    y u i o p
+a s d f g    h j k l ;
+z x c v b    n m , . /
+
+GralQwest 1 (A miniloop):
+q w e r t    y u i o p
+N s d f g    h j A l ;                  A → K → N
+z x c v b    K m
+
+GralQwest 2 (Y miniloop):
+q w e r t    J u i o p
+n s d f g    Y H a l ;                  Y → H → J
+z x c v b    k m
+
+GralQwest 3 (big loop 1/3):
+q w e r t    j F O U p
+n ; d S g    y h a l I                  S → F → U → O → I → (;)
+z x c v b    k m
+
+GralQwest 4 (big loop 2/3):
+B w e r t    j f o u '
+n q d s g    y h a l i ;                P → M → C → V → B → (Q)
+z x M C V    k P
+
+GralQwest 5 (big loop 3/3), alias Gralmak:
+b L D W Q    j f o u '
+n R T s g    y h a E i ;                T → D → E → L → W → R
+z x m c v    k p , . /
+```
+
+This progression might be useful if you wish to practice some smaller loops first. After step 3, you may want to jump to the finish.
+
 
 [GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium                   (The Gallium layout on GitHub)
@@ -262,7 +363,8 @@ _The Graphite layout, as depicted on its own [web page][GraGit]._
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
-[BBTSeq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)
+[BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences    (DreymaR's BigBag on sequencing)
+[BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html             (DreymaR's Big Bag on Tarmak transitions)
 [CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
 [Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
 [GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)

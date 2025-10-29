@@ -22,7 +22,7 @@
     - That is, my many layout mods and tweaks and bells and whistles. 
 * It's mostly centered around the brilliant Colemak keyboard layout,…
 * … with or without my own `[eD]` AltGr layers and dead keys,…
-* … **ergonomic mods** both for **Colemak**, the **Tarmak** learning layouts and **other layouts**,…
+* … **ergonomic mods** both for [**Colemak**][CmkCom], the [**Tarmak**][BBTtmk] learning layouts and **other layouts**,…
 * … and the incredibly useful [**Extend**][BBText] layers which work with any layout.
 * **DreymaR's Big Bag of Keyboard Tricks** at [**dreymar.colemak.org**][orgBBT] is my main info site.
     - On those pages, you can choose the Windows (flag icon) platform to see more about EPKL/Windows.
@@ -606,6 +606,7 @@ _Øystein "DreymaR" Bech-Aase_
 [CmkOrg]: https://www.colemak.org (The Colemak Community site)
 [orgBBT]: https://dreymar.colemak.org/ (DreymaR's Big Bag of Keyboard Tricks)
 [BBText]: https://dreymar.colemak.org/layers-extend.html (about Extend, in DreymaR's Big Bag of Keyboard Tricks)
+[BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html  (about Tarmak, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTawi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
 [BBT_eD]: https://dreymar.colemak.org/layers-colemaked.html (about Colemak-eD layers, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences (about sequencing vs chording modifiers)
