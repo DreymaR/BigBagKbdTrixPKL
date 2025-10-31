@@ -17,6 +17,11 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+TODO: Pre-hoc Compose instead of post-hoc?!?
+	- This could help the CoDeKey avoid misunderstandings whenever accidentally typing a composeable sequence beforehand.
+		- However, how would the CoDeKey distinguish between composes and dead keys then?
+		- It'd probably need a compose-this key: A mapping to the actual © key? But that'd be less smooth and efficient.
+
 WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 
 NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
