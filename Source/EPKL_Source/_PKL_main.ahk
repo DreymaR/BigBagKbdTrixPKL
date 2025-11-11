@@ -17,6 +17,9 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+2FIX: U#### doesn't compose Unicode points anymore? How come?
+	- Checked: I wasn't using a VK-number BaseLayout at the time. Also, the compose key `1234` composes fine.
+
 TODO: Pre-hoc Compose instead of post-hoc?!?
 	- This could help the CoDeKey avoid misunderstandings whenever accidentally typing a composeable sequence beforehand.
 		- However, how would the CoDeKey distinguish between composes and dead keys then?
@@ -418,7 +421,12 @@ TODO: Look into this Github README template? https://github.com/Louis3797/awesom
 TODO: Make key presses involving the Win key send VK codes. This'll preserve Win+‹key› shortcuts without using ## mappings.
 TODO: Rework the GUI submit to allow multi-submit/reset on tabs that have more than one submit. 
 	- Maybe make the submit routine callable with arrays so it loops before asking for a restart?
-TODO: IPA Compose sequences, based on my old IPA DK ideas. Vowels with numbers according to position?
+TODO: A set of IPA dk, maybe on AltGr+Shift symbol keys? Based on my old IPA DK ideas. Could be chained from a MoDK? Or solved as composes.
+		- IPA Compose sequences? Vowels with numbers according to position?
+		- The Keyman solution, for inspiration: https://help.keyman.com/keyboard/sil_ipa/2.0.2/sil_ipa
+		- Vowel DKs: Front/mid/back, with capitalisation distinguishing unrounded vs rounded?
+		- Consonant DKs: Bilabial/labiodental/dental/alveolar/postalveolar, retroflex/palatal, velar/uvular, pharyngeal/glottal?
+			- If composing, use these letters then: `b l d a (pa) r p v u f g` for consonants, 1–6 for vowels?
 TODO: Make a "base compose output" that a Compose key releases whenever no sequence is recognized? Like the Basechar of a DK. Useful for locale layouts?
 TODO: Personal override files for extend, compose, powerstrings etc? One override file with sections? Some overrides (remaps, DKs) in layouts.
 TODO: Is the main README still too long? Put the layout tutorial in a Layouts README? Also make a tutorial for simply using the CkAWS remap or something.
@@ -511,7 +519,6 @@ TODO: Mirrored one-hand typing as Remap, Extend or other layer?
 	- Layout switching is usually done by restarting EPKL which is too clunky. But if we could have a switch modifier that temporarily activates the next layout...?
 	- This would require preloading more than one layout which takes a bit of reworking. Possibly... Allow an alt-set of the remap only, remapping on the fly w/ a mod?
 	- Mirroring as a remap can now use minicycles of many two-key loops. For instance, |  QU |  SC /  MN |  SL | for two separate swaps.
-TODO: A set of IPA dk, maybe on AltGr+Shift symbol keys? Could also be chained from a MoDK?
 TODO: Lose CompactMode from the Settings file. The LayStack should do it.
 	- Instead of a setting in Settings, allow all of the layout to reside in EPKL_Layouts_Default (or Override). If detected, use root images if available.
 	- If no Layout.ini is found, give a short Debug message on startup explaining that the root level default/override layout, if defined, will be used. Or just do it?

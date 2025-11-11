@@ -9,7 +9,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 	capHK := getKeyInfo( HKey . "ent2" ) 						; CapsState (0-5 as MSKLC; -1 Mod; -2 VK; -3 SC)
 	
 	If ExtendIsPressed() {  									; If there is an Extend key and it's pressed...
-		_osmClearAll()  										; ...clear any sticky mods, then...
+		osmClearAll()   										; ...clear any sticky mods, then...
 		extendKeyPress( HKey )  								; ...process the Extend key press.
 		Return
 	}   ; <-- if ExtPressed
@@ -37,7 +37,7 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 ;		If inArray( [ "SC001","SC01C","SC153", "SC00F" ], HKey )
 ;			pklTooltip( "HKey kc_HK capHK: " HKey " " kc_HK " " capHK ), Return 	; eD DEBUG
 		Send {Blind}{%kc_HK% DownR} 							; Send the down press as DownR so other Send won't be affected, like AHK remaps.
-		_osmClearAll()  										; Clear any sticky mods after sending
+		osmClearAll()   										; Clear any sticky mods after sending
 		Return
 	}   ; <-- if VK/SC
 																; The part below might be a separate fn, e.g., sendKeyWithMods( HKey, CapHK )
@@ -95,8 +95,8 @@ keyPressed( HKey ) { 											; Executes a HotKey press – the actual process
 		If pkl_ParseSend( Pri . Ent, "SendThis" )   			; Unified prefix-entry syntax
 			Return  											; Skip osmClearAll in this case
 	}   ; <-- if Pri
-	_osmClearAll()  											; If another key is pressed while a OSM is active, cancel the OSM
-}   ; <-- fn keyPressed 										; eD WIP: Should _osmClearAll() be used more places above?
+	osmClearAll()   											; If another key is pressed while a OSM is active, cancel the OSM
+}   ; <-- fn keyPressed 										; eD WIP: Should osmClearAll()  be used more places above?
 
 extendKeyPress( HKey ) {    									; Process an Extend modified key press
 	Critical
@@ -232,13 +232,13 @@ _osmClear( osmN ) { 										; Clear a specified sticky mod
 		setModifierState( theMod, 0 )   					; Release the modifier
 }
 
-_osmClearAll() {    										; Clear all active sticky mods
+osmClearAll() { 											; Clear all active sticky mods
 	Critical
 	Loop % getPklInfo( "osmMax" ) {
 		If ( getPklInfo( "osmKeyN" . A_Index ) != "" )
 			_osmClear( A_Index )
 	}
-;	( 1 ) ? pklDebug( "OSMs cleared", 0.3 )  ; eD DEBUG  	; eD WIP: Doesn't this get called after all?
+;	( 1 ) ? pklDebug( "OSMs cleared", 0.3 )  ; eD DEBUG  	; eD WIP: Doesn't this get called after all? Or does Critical affect it?
 }
 
 AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image
@@ -296,7 +296,7 @@ _setExtendState( set := 0 ) {   							; Called from setModState. This function 
 		initialized     := true
 	}
 	
-;	_osmClearAll() 											; eD WIP: Don't mix ToM and Extend? Nope, this didn't work and landed us with a stuck Caps key!
+;	osmClearAll()   										; eD WIP: Don't mix ToM and Extend? Nope, this didn't work and landed us with a stuck Caps key!
 	If ( set == 1 ) && ( ! extHeld ) { 						; Determine multi-Extend layer w/ extMods
 		xLvl  := getKeyState( extMod1, "P" ) ? 2 : 1 		; ExtMod1 -> ExtLvl +1
 		xLvl  += getKeyState( extMod2, "P" ) ? 2 : 0 		; ExtMod2 -> ExtLvl +2

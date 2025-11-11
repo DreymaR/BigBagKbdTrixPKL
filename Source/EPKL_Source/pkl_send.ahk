@@ -83,7 +83,7 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 		If isHex( chs ) {
 			chr := chr( "0x" . chs )
 			uni += 1
-			SendInput {Backspace %uni%}
+			SendInput {Backspace %uni%} 						; eD WIP: Is this working now? If not, why?!?
 			SendInput {Text}%chr%
 			lastKeys( "push", chr )
 			Return
@@ -325,6 +325,8 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 pkl_RepeatKey( num ) {  										; Repeat the last key a specified number of times, for the ®# key
 	lks := getKeyInfo( "LastKeys" ) 							; The LastKeys array for the Compose method
 	lky := lks[lks.Length()] 									; The last entry in LastKeys is the previous key.
+	If ( lky == "" )
+		osmClearAll()   										; If the LastKeys entry is empty, clear the OneShotMod queue instead.
 	num := ( num == "®" ) ? 1 : Round( "0x" . num ) 			; # of repeats may be any hex number without "0x", or just ® for num=1
 	Loop % num {
 		SendInput {Text}%lky%   	;keyPressed( getKeyInfo( "LastKey" ) ) ; NOTE: Holding down modifiers affect this. Sticky mods won't.

@@ -11,6 +11,7 @@ The EPKL Compose Import Module
 - It uses a keysymdef file to translate keysym names into Unicode points.
 - Note: The usual X11 keysymdef.h doesn't always use Unicode! It's fine for normal characters.
 - Instead, I used the keysyms.txt file by [Dr Markus Kuhn](https://www.cl.cam.ac.uk/~mgk25/) .
+- Of note is also the repo at https://github.com/kragen/xcompose
 <br><br>
 
 Manual Edits

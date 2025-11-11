@@ -648,3 +648,5 @@ VERSION HISTORY:
 	
 	- Fixed: Hitting Enter when any DK was active would output Ctrl+Shift+J, which opens the Parent Process Browser Console in Firefox.
 		- Adding `{Enter}` to `endDKs` (the list of keys that cancel DKs) solved the issue.
+	- Tapping Repeat with the LastKeys queue empty, now clears all OneShotMod timers.
+		- This helps when, say, the CoDeKey has sent punctuation-space-capitalization and you don't want the capitalization.
