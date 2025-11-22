@@ -145,6 +145,7 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	theLays := StrReplace( theLays, "@C",   curlMod    )
 	theLays := StrReplace( theLays, "@H",   hardMod    )
 	theLays := StrReplace( theLays, "@O",   othrMod    )
+	setLayInfo( "CurrLayLine", theLays )    							; Store the full layout line for the Layout/Settings GUI
 	layouts := StrSplit( theLays, ",", " `t" )  						; Split the CSV layout list
 	numLayouts := layouts.Length()
 	setLayInfo( "NumOfLayouts", numLayouts )    						; Store the number of listed layouts

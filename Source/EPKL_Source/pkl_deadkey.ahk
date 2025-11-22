@@ -19,7 +19,7 @@ DeadKeyValue( dkName, rChr ) 											; In old PKL, 'dk' was just a number. It
 		val := ( val ) ? val : pklIniRead( Format( "~{:04X}",rChr),, dkStck, "dk_" . dkName ) 	;     as  ~#### hex Unicode point
 		val := hig_deTag( val, dicName )    							; If the entry has a `«##»` HIG image tag, remove and store it.
 		val := ( val == "--" ) ? -1 : val   							; A '-1' or '--' value means unmapping, to be used in the LayStack
-		val := ( val ) ? val : "--"
+		val := ( val ) ? val : "--" 									; ???
 		If val is integer
 			val := Format( "{:i}", val ) 								; Converts hex to decimal so it's always treated as the same number (could've used a +0 trick)
 		setKeyInfo( dicName, val)   									; The DK info pdic is filled in gradually with use
@@ -56,6 +56,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	
 	If ( CurrNumOfDKs > 0 && DK == CurrNameOfDK ) { 		; Pressed the deadkey twice - release DK base char
 		pkl_Send( DeadKeyChr1 ) 							; eD WIP: Pressing the dead key twice now releases entry 1 (or does it? Seems the s0 entry is still sent...?!)
+;		pklDebug( "DK: " DK "`nNumOfDKs: " CurrNumOfDKs "`nBaseKey: " CurrBaseKey "`nDKchar: '" DeadKeyChar "'`nDKchr1: '" DeadKeyChr1 "'", 4 ) 	; eD DEBUG
 		resetDeadKeys() 									; Note: Resetting before sending would output both base chars.
 		Return
 	}
@@ -72,7 +73,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	inKey := inputDK()
 	If ( inKey == "€ɳđḲëý" )    							; eD WIP: The syntax `if( inKey := inputDK() == "` etc, failed somehow, so take care.
 		Return
-	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled somehow?!?
+	CurrBaseKey     := getKeyInfo( "CurrBaseKey"  ) 		; Current base/release key, set by pkl_CheckForDKs() via pkl_Send() 	; eD WIP: This gets nulled below?!?
 	If ( CurrBaseKey != 0 ) { 								; If a BaseKey is set, use that. Otherwise, use the inKey input directly.
 		relChr  := CurrBaseKey
 ;		inKey   := Chr( relChr ) 							; The chr symbol for the current base key (e.g., 65 := A)   	; eD WIP: Not used?!?

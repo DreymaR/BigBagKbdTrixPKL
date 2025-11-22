@@ -12,7 +12,7 @@ setUIGlobals:   												; Declare globals (from PKL_main; can't use a functi
 	global UI_LayMain, UI_LayType, UI_LayKbTp, UI_LayVari, UI_LayMods   				; Layout Selector    UI variables
 	global UI_SetThis, UI_SetDefs, UI_SetComm, UI_SetLine   							; General Settings   UI variables
 	global UI_KeyRowS, UI_KeyCodS, UI_KeyRowV, UI_KeyCodV, UI_KeyModL, UI_KeyModN, UI_KeyType
-	global UI_KeyThis, UI_KeyLine, UI_LayFile, UI_LayMenu   							; KeyMapper & Layout UI variables
+	global UI_KeyThis, UI_KeyLine, UI_LayFile, UI_LayMenu, UI_CurrLay   				; KeyMapper & Layout UI variables
 	global UI_SpcExtS, UI_SpcExLn, UI_SpcCmpS, UI_SpcCoLn, UI_SpcCDLn ;, UI_SpcCDCo   	; Special Keys       UI variables
 Return
 
@@ -83,30 +83,35 @@ pklSetUI() { 													; EPKL Settings GUI
 	chosen      := inArray( choices, "Colemak" ) ? "Colemak" : choices[1]
 	GuiControl, ChooseString, UI_LayMain, % chosen  						; Colemak is the default. We may have layouts before it in the alphabet.
 	GUI, UI:Add, Text,      , % "Layout type:"
-	GUI, UI:Add, Text, x+92 , % "Keyboard type:" 							; Unsure how this works at other resolutions?
+	GUI, UI:Add, Text, x+94 , % "Keyboard type:" 							; Unsure how this works at other resolutions?
 	choices     := [ "eD"   , "VK"  ]   									; LayType starting values
 	_uiAddSel(  ""  	;"Layout type:" 									; Place at the x value of the previous section
 			,       "LayType"   , "Choose1"     , choices   , "xs y+m"  )
 	choices     := [ "ANS"  , "ISO" ]   									; KbdType starting values
 	_uiAddSel(  ""  	;"Keyboard type:"   								; Place to the right of the previous control
 			,       "LayKbTp"   , "Choose2"     , choices   , "x+30"    )
-	_uiAddSel(  "Variant/Locale, if any: "
+	GUI, UI:Add, Text, xs   , % "Variant/Locale, if any:"
+	GUI, UI:Add, Text, x+48 , % "Mods, if any:" 							; Unsure how this works at other resolutions?
+	_uiAddSel(  ""  	;"Variant/Locale, if any:"
 			,       "LayVari"   , "Choose1"     , [ ui.NA ] , "xs y+m"  )
-	_uiAddSel( "Mods, if any: " 											; Make a box wider than the previous one: "wp+100"
-			,       "LayMods"   , "Choose1"     , [ ui.NA ]             ) 	; (A default here may fail on the first selection if a nonexisting combo is chosen)
+	_uiAddSel(  ""  	;"Mods, if any: "   								; Make a box wider than the previous one: "wp+100"
+			,       "LayMods"   , "Choose1"     , [ ui.NA ] , "x+30"    ) 	; (A default here may fail on first selection if chosen combo is nonexisting)
 	_uiAddEdt( "`nIn the Layout(s)_Override [pkl] section: layout = " 		; eD WIP: Replace this with a ComboBox?
-			,       "LayFile"   , ""            , ui.WideTxt            )
+			,       "LayFile"   , ""            , ui.WideTxt, "xs y+m"  )
 	layFiles    := [ "--"   , "<add layout>" ]  							; Default entry for the LayFile ComboBox
-;	_uiAddSel( "`nIn the Layouts_Override [pkl] section: layout = " 		; eD WIP: For multi-layout select, make this a ComboBox? Use AltSubmit for position selection?
+;	_uiAddSel( "`nIn the Layouts_Override [pkl] section: layout = " 		; eD WIP: For multi-layout select, make this a ComboBox? Use AltSubmit for position selection? (Likely better to just add a button for `Add another`?)
 ;			,       "LayFile"   , "Choose1 w350"     , layFiles         )
 	_uiAddEdt( "`nEPKL Layouts menu name. Edit it if you wish:"
 			,       "LayMenu"   , ""            , ui.WideTxt            )
+	_uiAddEdt( "`nCurrently active layout line:"
+			,       "CurrLay"   , ""            , ui.WideTxt, "xs y+m"  ) 	; "Disabled"
 	GUI, UI:Add, Text,, % footText
 						. "`n* VK layouts only move the keys around, eD maps each shift state."
-						. "`n* To get multiple layouts, submit twice then join the entries"
-						. "`n    in the Override file on one ""layout ="" line with a comma." . "`n"
-	GUI, UI:Add, Button, xs y%BL% vUI_Btn1  gUIsubLaySel, &Submit Layout Choice
-	GUI, UI:Add, Button, xs+244 yp          gUIrevLay   , %SP%&Reset%SP% 	; Note: Using absolute pos., specify both x & y
+						. "`n* To get multiple layouts, use the second button." . "`n"
+;			. "`n* For multiple layouts, submit again then join the entries" . "`n    in the Override file on one ""layout ="" line with a comma."
+	GUI, UI:Add, Button, xs y%BL% vUI_Btn1  gUIsubLaySel, &Change Layout
+	GUI, UI:Add, Button, x+14   yp          gUIsubLayAdd, &Add Layout
+	GUI, UI:Add, Button, xs+244 yp          gUIrevLay   , %SP%&Reset%SP% 	; Note: When using absolute pos., specify both x & y
 	
 	;;  ============================================================================================================================================
 	;;  General Settings UI
@@ -124,10 +129,10 @@ pklSetUI() { 													; EPKL Settings GUI
 			,       "SetComm"   , "Disabled"       , ui.WideTxt, "xs y+m" ) 	; "cGray" lets you select/view the whole line
 	_uiAddEdt( "`n`nSubmit this to the Settings_Override [pkl] section:"
 			,       "SetLine"   , ""            , ui.WideTxt, "xs y+m" )
-	GUI, UI:Add, Text,   xs y390, % footText    				; Make the text position as in the previous tab
+	GUI, UI:Add, Text,   xs y402, % footText    				; Make the text position as in the previous tab (was 390)
 						. "`n* For Yes/No settings you may also use y/n, true/false or 1/0."
 						. "`n* There are even more settings in the Settings_Default file."
-						. "`n* Also, settings are explained somewhat better in that file."     . "`n`n"
+						. "`n* Also, settings are explained better in that file." . "`n"
 	GUI, UI:Add, Button, xs y%BL% vUI_Btn2  gUIsubSetSel, &Submit Setting%SP%
 	GUI, UI:Add, Button, xs+244 yp          gUIrevSet   , %SP%&Reset%SP%
 	
@@ -209,15 +214,15 @@ pklSetUI() { 													; EPKL Settings GUI
 	GUI, UI:Add, Text,, % "`n"
 						. "`n* Default settings map CapsLock to Backspace-on-tap, Extend-on-hold."
 						. "`n* Press the Help button for useful info including a key code table."
-						. "`n* The ""Submit to Layout"" button overrides (base) layout key mappings."
-						. "`n* The ""For All"" button only works for keys not mapped in the (base) layout."
+						. "`n* The ""This Layout"" button overrides all other mappings for that key."
+						. "`n* The ""All Layouts"" button only works for keys not mapped in the (base) layout."
 						. "`n"
 						. "`n* VKey mappings simply move keys around. Modifier mappings are Shift-type."
 						. "`n* State mappings specify the output for each modifier state, e.g., Shift + AltGr."
 						. "`n* Tap-or-Mod and MoDK keys are a key press on tap and a modifier on hold."
 ;						. "`n* Ext alias Extend is a wonderful special modifier! Read about it elsewhere."
 						. "`n"
-	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyLay, &Submit to Layout
+	GUI, UI:Add, Button, xs y%BL% vUI_Btn4  gUIsubKeyLay, For &This Layout
 	GUI, UI:Add, Button, x+14   yp          gUIsubKeyAll, For &All Layouts
 	GUI, UI:Add, Button, xs+244 yp          gUIrevKey   , %SP%&Reset%SP%
 	GUI, UI:Add, Button, xs+310 yp          gUIhlpShow  , %SP%&Help%SP%
@@ -288,6 +293,7 @@ UIselLay:   													; Handle UI Layout selections
 	_uiControl( "LayFile", UI_LayMain . "\" . layPath . layDir1 . UI_LayType . layDir3 ) 	; eD WIP: Make this update the right line in LayFile ComboBox?
 	layMenuName := UI_LayMain . "-" . UI_LayType . layVariName . " " . layModsName . "(" . UI_LayKbTp . ")"
 	_uiControl( "LayMenu", layMenuName )
+	_uiControl( "CurrLay", getLayInfo( "CurrLayLine" ) )
 Return
 
 UIselSet:   													; Handle UI Settings selections
@@ -445,32 +451,36 @@ UIhlpHide:  													; Remove the Help GUI
 	GUI, UI_KEYHLP:Destroy
 Return
 
-UIsubLaySel: 													; Submit Layout Override button pressed
+UIsubLaySel:    												; Submit Layout Override button pressed
 	_uiSubmit( [ _uiGetParams( "LaySel" ) ] )   				; Note: The parameters are sent as a 1×n array of vectors
 Return
 
-UIsubSetSel: 													; Submit Settings button pressed
+UIsubLayAdd:    												; Submit Layout Addition button pressed
+	_uiSubmit( [ _uiGetParams( "LayAdd" ) ] )
+Return
+
+UIsubSetSel:    												; Submit Settings button pressed
 	_uiSubmit( [ _uiGetParams( "SetSel" ) ] )
 Return
 
-UIsubSpcExt: 													; Submit Special Key Extend button pressed
+UIsubSpcExt:    												; Submit Special Key Extend button pressed
 	_uiSubmit( [ _uiGetParams( "SpcExt" ) ] )
 Return
 
-UIsubSpcCmp: 													; Submit Special Key Compose button pressed
+UIsubSpcCmp:    												; Submit Special Key Compose button pressed
 	_uiSubmit( [ _uiGetParams( "SpcCmp" ) 
 	           , _uiGetParams( "SpcCm2" ) ] )
 Return
 
-UIsubKeyLay: 													; Submit Key Mapping to Layout.ini button pressed
+UIsubKeyLay:    												; Submit Key Mapping to Layout.ini button pressed
 	_uiSubmit( [ _uiGetParams( "KeyLay" ) ] )
 Return
 
-UIsubKeyAll: 													; Submit Key Mapping to EPKL_Layouts button pressed
+UIsubKeyAll:    												; Submit Key Mapping to EPKL_Layouts button pressed
 	_uiSubmit( [ _uiGetParams( "KeyAll" ) ] )
 Return
 
-UIrevLay: 														; Revert UI setting(s) by deleting any matching UI entries
+UIrevLay:   													; Revert UI setting(s) by deleting any matching UI entries
 	_uiRevert( [ _uiGetParams( "LaySel" ) ], "Lay" )
 Return
 
@@ -567,21 +577,24 @@ _uiGetParams( which ) { 										; Provide UI parameters for WriteOverride
 	GUI, UI:Submit, Nohide  									; Refresh UI parameter values
 	layDir  := StrReplace( getLayInfo("ActiveLay"), "2VK" ) 	; Account for st2VK layTypes such as eD2VK
 	layDir  := "Layouts\" . layDir . "\"
-	case    := inArray( [ "LaySel", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyLay", "KeyAll" ], which )
-	Return      ( case == 1 ) ? [ "layout = " . UI_LayFile . ":" . UI_LayMenu   , "LayoutPicker"
-		, "pkl"     , getPklInfo( "File_PklLay" )   ] 							;  LaySel
-			:   ( case == 2 ) ? [ UI_SetThis . " = " . UI_SetLine               , "Settings"    
-		, "pkl"     , getPklInfo( "File_PklSet" )   ] 							;  SetSel
-			:   ( case == 3 ) ? [ UI_SpcExLn                                    , "SpecialKeys" 
-		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  SpcExt
-			:   ( case == 4 ) ? [ UI_SpcCoLn                                    , "SpecialKeys" 
-		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  SpcCmp
-			:   ( case == 5 ) ? [ "CoDeKeys" . " = " . UI_SpcCDLn               , "SpecialKeys" 
-		, "pkl"     , getPklInfo( "File_PklSet" )   ] 							;  SpcCm2
-			:   ( case == 6 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , getPklInfo( "LayFileName" )   , layDir    ] 				;  KeyLay   	; Layout.ini file path is specified; its override template is at program root
-			:   ( case == 7 ) ? [ UI_KeyThis . " = " . UI_KeyLine               , "KeyMapper"   
-		, "layout"  , getPklInfo( "File_PklLay" )   ] 							;  KeyAll
+	case    := inArray( [ "LaySel", "LayAdd", "SetSel", "SpcExt", "SpcCmp", "SpcCm2", "KeyLay", "KeyAll" ], which )
+	Return      ( case == 1 ) ? [ "layout = "      UI_LayFile ":" UI_LayMenu    , "LayoutPicker"
+		, "pkl"     , getPklInfo( "File_PklLay" )               ]   			;  LaySel
+			:   ( case == 2 ) ? [ "layout = "      UI_CurrLay ", "
+												.  UI_LayFile ":" UI_LayMenu    , "LayoutPicker"
+		, "pkl"     , getPklInfo( "File_PklLay" )               ]   			;  LayAdd
+			:   ( case == 3 ) ? [ UI_SetThis " = " UI_SetLine                   , "Settings"    
+		, "pkl"     , getPklInfo( "File_PklSet" )               ]   			;  SetSel
+			:   ( case == 4 ) ? [ UI_SpcExLn                                    , "SpecialKeys" 
+		, "layout"  , getPklInfo( "File_PklLay" )               ]   			;  SpcExt
+			:   ( case == 5 ) ? [ UI_SpcCoLn                                    , "SpecialKeys" 
+		, "layout"  , getPklInfo( "File_PklLay" )               ]   			;  SpcCmp
+			:   ( case == 6 ) ? [ "CoDeKeys = "    UI_SpcCDLn                   , "SpecialKeys" 
+		, "pkl"     , getPklInfo( "File_PklSet" )               ]   			;  SpcCm2
+			:   ( case == 7 ) ? [ UI_KeyThis " = " UI_KeyLine                   , "KeyMapper"   ; Layout.ini file path is specified;
+		, "layout"  , getPklInfo( "LayFileName" ), layDir       ]   			;  KeyLay   	;   its override template is at program root
+			:   ( case == 8 ) ? [ UI_KeyThis " = " UI_KeyLine                   , "KeyMapper"   
+		, "layout"  , getPklInfo( "File_PklLay" )               ]   			;  KeyAll
 			:   []
 }
 

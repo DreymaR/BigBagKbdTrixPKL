@@ -602,7 +602,7 @@ VERSION HISTORY:
 	- Made a common useDots() fn to sort out relative file/dir paths, for use both by pklIniRead() and the new _seekBaseLayout().
 * EPKL v1.4.3: Ortho help images. WIP.
 	- Split KbdType into KbdType (ANS/ISO) and GeoType (RowS/Orth; RowS is default) in init, by the first hyphen.
-		- Can use a KbdType like `ANS-Orth` in layout files.
+		- Can then use a KbdType like `ANS-Orth` in layout files.
 	- Made a matrix/ortho image template, for ortho variants such as Curl w/o Angle, and more compact help images.
 		- Removed the Space/Modifier row. Added Space and AltGr at the lower right, in yellow. No Backspace nor Enter.
 		- One extra column, with Grave - ISO - Ext marker - Shift. Saves 2u (15u -> 13u) and one row (5r -> 4r).
@@ -621,19 +621,19 @@ VERSION HISTORY:
 		- Made a 6-7 remap that can easily be added to remedy any such issues, e.g., `mapSC_# = AWS_@K,6-7`.
 		+-------------------------------+
 		|  `  1 2 3 4 5 \ 6 7 8 9 0 =   |
-		| ISO b l d w q [ j f o u ' -   |   	Gralmak_Ortho-WideSym; w/o the 6-7 remap, it'd be `5 6 \ 7`
+		| ISO b l d w q [ j f o u ' -   |       Gralmak_Ortho-WideSym; w/o the 6-7 remap, it'd be `5 6 \ 7`
 		| Ext n r t s g ] y h a e i ;   |
 		| Shf z x m c v / k p , . ␣ AGr |
 		+-------------------------------+
 		- For an Ortho-Wide variant, don't use an Angle mod. Decide what you wish to do with the 6-7 issue.
-			- Then, in a Layout_Override you can turn on the Angle mod again to use the ortho images with a normie board.
-			- Another tack is to use your normal layout and in its Layout_Override use `img_` settings; see the example file.
-	- Swapped NumPad `* -` on the Ext2 layer. It just feels more natural and NumPad-like now.
+			- To use the ortho images with a normie board, you can turn on the Angle mod again in your Layout_Override.
+			- Another tack is to use your normie layout and in its Layout_Override use `img_` settings; see the example file.
+	- Swapped NumPad `* -` on the Ext2 layer. It just feels more natural and NumPad-like.
 		- The NumPad layer didn't feel good w/ respect to the traditional top-row `/ * -`. The `+ ↵` were okay.
 		- NumPads sometimes have minus above one-row plus. (These may have Backspace in the corner spot.)
 		- Now, `* /` are on the same column, and right above each other on ISO/Ortho-Wide setups.
 		+-----------+
-		| 7 8 9 - * |   	Was: * -
+		| 7 8 9 - * |       Was: * -
 		| 4 5 6 + / |
 		| 1 2 3 ↵ ' |
 		| 0 0 ,     |
@@ -643,10 +643,12 @@ VERSION HISTORY:
 		- Made a `ŁayÐir` special run-target syntax for the active layout's folder. This is now the default for runTarget().
 	- Made ortho naming more consistent. There were some layouts using `Orth`, and others `Ortho`. Now all are `Orth`.
 		- Technically, you can use both as KbdType. But it's inconsistent to say `ANS-Ortho`, instead of `ANS-Orth` or `ANSI-Ortho`.
-	- Minor CoDeKey rework. Swapped `^`/`~` to Cmk J/B, and added triple-backtick to Cmk Shift+P.
+	- Minor CoDeKey rework. Swapped `^`/`~` to Cmk J/B, added ` ... ` on `.` and triple-backtick on Cmk Shift+P.
 		- On ortho boards at least,`^` now sits right under 6. And the fancy 3-`` PowerString doesn't work on Discord.
-	
 	- Fixed: Hitting Enter when any DK was active would output Ctrl+Shift+J, which opens the Parent Process Browser Console in Firefox.
 		- Adding `{Enter}` to `endDKs` (the list of keys that cancel DKs) solved the issue.
+	- Shift/AltGr+Repeat now repeats 2–4 times (2:Sh,3:AGr,4:Sh+AGr).
 	- Tapping Repeat with the LastKeys queue empty, now clears all OneShotMod timers.
 		- This helps when, say, the CoDeKey has sent punctuation-space-capitalization and you don't want the capitalization.
+	- "Add Layout" button in the Layout Selector GUI. Appends the selected layout to the current layout line.
+		- Also a field showing the currently active layout line. For the advanced, this is editable if you want full control.
