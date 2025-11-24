@@ -652,3 +652,4 @@ VERSION HISTORY:
 		- This helps when, say, the CoDeKey has sent punctuation-space-capitalization and you don't want the capitalization.
 	- "Add Layout" button in the Layout Selector GUI. Appends the selected layout to the current layout line.
 		- Also a field showing the currently active layout line. For the advanced, this is editable if you want full control.
+	- DK escape keys except Back/Esc/Del now send their key output. If you press Enter or arrow keys etc. with a DK active, they work.

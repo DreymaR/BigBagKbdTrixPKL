@@ -35,10 +35,13 @@ inputDK() { 												; Input the release key for a DK.
 			.  "{Left}{Right}{Up}{Down}{BS}{Esc}{Enter}"
 			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; Note: These 6 keys don't work here if their NumPad VK is sent (AHK default).
 	Input, inKey, L1, %endDKs%  							; L1: Length 1. The EndKeys string contains ending keys that return an error.
-	IfInString, ErrorLevel, EndKey  						; The return is on the form "EndKey:Escape" etc.
-	{   													; Note that an OTB style ` {` is incompatible with this command
+	If ( InStr( ErrorLevel, "EndKey" ) ) {  				; The return is on the form "EndKey:Escape" etc.
 		resetDeadKeys() 									; A DK-ending input cancels all existing DKs
-		Return % "€ɳđḲëý"
+		endKey  := SubStr( ErrorLevel, 8 )  				; Lop off the initial "EndKey:"
+		nonSent := "Backspace|Delete|Escape"    			; Some end keys (BS/Del/Esc) are considered spent canceling the DK. Others are sent.
+		If ( not InStr( nonSent, endKey ) )
+			pkl_SendThis( "{" endKey "}" )
+		Return % "€ɳđḲëý"!
 	} else {
 		Return % inKey
 	}
