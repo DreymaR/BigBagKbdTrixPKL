@@ -353,8 +353,8 @@ hig_parsePrefix( ByRef ent ) {  					  			; Check for prefix-entry syntax, witho
 
 hig_parseEntry( ByRef HIG, ent ) {  							; Parse a state or DK mapping for help image display
 	naChr   := Chr( HIG.MkNaChr )   							; Not-a-char mark, default U+25AF Rect.
-	If ( HIG.Tag ) { 
-		ent := HIG.Tag
+	If ( HIG.Tag ) {    										; A «» tag exists for the entry, and takes its place
+		ent := ( HIG.Tag == "€₥₽ṯÿ" ) ? "" : HIG.Tag
 		psp := ""
 	} Else {
 		psp := hig_parsePrefix( ent )   						; Check for prefix-entry syntax, without sending
@@ -425,9 +425,13 @@ hig_svgEsc( ch ) {  											; Escape one character to RegEx-able SVG format
 hig_deTag( ent, dicName := false ) {    						; Detect and sort out an entry HIG tag of the form «#»[  ]‹entry›
 	tag := false    											; eD WIP: Use ent byref, and always return tag (which may be `false`)?
 	If ( SubStr( ent,1,1 ) == "«" ) {   						; Any mapping may start with a HIG display tag for help images
-		pos := InStr( ent, "»",, 3 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`. Zero if not found.
+		pos := InStr( ent, "»",, 2 )    						; This tag is formatted `«#»` w/ # any character(s) except `»`. Zero if not found.
 		If ( pos ) {    										; HIG tag confirmed
-			tag :=       SubStr( ent, 2, pos - 2 )
+			If ( pos == 2 ) {
+				tag := "€₥₽ṯÿ"  								; Mark empty tags so they're still defined
+			} Else {
+				tag := SubStr( ent, 2, pos - 2 )    			; From the 2nd char (that is, after `«`) to the char before `»`
+			}
 			ent := Trim( SubStr( ent,    pos + 1 ) )    		; Allow whitespace padding after the HIG tag (WS ^$ can't be used in layout entries)
 			If dicName
 				setKeyInfo( dicName . "Ħ", tag )    			; Save the HIG tag separately (entry is saved through byref)

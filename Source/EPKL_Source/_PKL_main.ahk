@@ -27,7 +27,7 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 
 WIPs: Could the CoDeKey cancel itself when pressed again? Or something else?
 	- Might use the `α¢[]¢` syntax to specify special output like clearing status – or doing nothing ... Sleep(0)?
-	- Currently, it releases Enter, as that's its space entry.
+	- Currently, it releases Enter, as that's its space entry. Making the Space entry nothing is a temporary fix.
 
 2FIX: U#### doesn't compose Unicode points anymore? How come?
 	- Checked: I wasn't using a VK-number BaseLayout at the time. Also, the compose key `1234` composes fine.
@@ -534,7 +534,7 @@ HOLD: Should a stickyTime of 0 make sticky keys work like on Windows, without a 
 
 HOLD: Unmapped and Disabled keys produce weird output, unless a « » prefix is used. Fix this?
 	- Problem: These keys are simply skipped in pkl_init. They'd need some kind of tag for the HIG to mark them specifically.
-	- What to use? Nothing, or some marking? For now, it's probably okay to leave this issue to the « » HIG tag.
+	- What to use? Nothing, or some marking? For now, it's probably okay to leave this issue to the «» HIG tag.
 	- There's a similar issue with DK entries unmapped with `--`.
 
 HOLD: Now that we have ortho layout images, how about a really compact version?
