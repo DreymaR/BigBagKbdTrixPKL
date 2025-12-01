@@ -102,7 +102,7 @@ Galliard
 --------
 - Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
 - Thus came about the "Galliard" variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- In this variant, I also kept the Q-X arrangement, as discussed above. [ZXMCV is tempting][Gralmk] ...
+- In this variant, I also kept the Q-X arrangement, as discussed above. [ZXMCV is tempting though.][Gralmk]
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
 <br><br>
 
@@ -145,14 +145,14 @@ _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or w
 _The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][GalGit]._
 
 
-[GalGit]: https://github.com/GalileoBlues/Gallium                   (The Gallium layout on GitHub)
-[GraGit]: https://github.com/rdavison/graphite-layout               (The Graphite layout on GitHub)
-[NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/ (The Nerps layout on Reddit)
-[GraPKL]: /Layouts/Graphite/                                        (The Graphite layout in EPKL)
-[Gallrd]: #galliard                                                 (The Galliard Gallium layout variant)
-[Gralmk]: /Layouts/Graphite/README.md#gralmak                       (The Gralmak Graphite layout variant)
-[GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5          (GitHub issue on adding Gallium to EPKL)
-[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's BigBag on Angle+Wide ergo mods)
-[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh        (DreymaR's BigBag on the Curl-DH ergo mod)
-[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols        (DreymaR's BigBag on the Symbols ergo mod)
+[GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
+[GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
+[NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
+[GraPKL]: /Layouts/Graphite/                                                            (The Graphite layout in EPKL)
+[Gallrd]: #galliard                                                                     (The Galliard Gallium layout variant)
+[Gralmk]: /Layouts/Graphite/README.md#gralmak                                           (The Gralmak Graphite layout variant)
+[GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5                              (GitHub issue on adding Gallium to EPKL)
+[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
+[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
+[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)
 [CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)

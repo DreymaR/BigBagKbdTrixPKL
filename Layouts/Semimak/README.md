@@ -13,7 +13,7 @@ The Semimak layout
 - This layout was made by Semilin alias Semi based on novel analysis techniques, 2021-07.
 - Among other things, it uses his finger speeds for modeling instead of subjective weights.
 - It also models some new factors like skipgrams (disjointed SFBs).
-- For more info, see [the Semimak page on github.io][SemGit]
+- For more info, see the web pages for [Semimak][SemGit] and [Semi's Genkey analyzer][SemGen].
 - Also, here's an interesting [reflection on Semimak by Semilin][Sem200] after hitting 200 WPM with it.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - I moved the Semimak-eD `‚‘’` quotes so their relative positions match Colemak-eD.
@@ -105,6 +105,7 @@ _Semimak AngleWideSym on an ISO keyboard. The © key can be a Compose key, or wh
 
 
 [SemGit]: https://semilin.github.io/semimak/                    (Semimak on GitHub.io)
+[SemGen]: https://www.semilin.dev/genkey/                       (Semi's Genkey analyzer)
 [Sem_JQ]: https://semilin.github.io/semimak/#org0e746fb         (Semimak-JQ)
 [Sem200]: https://semilin.github.io/blog/hitting_200wpm.html    (Semilin on hitting 200 WPM)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
