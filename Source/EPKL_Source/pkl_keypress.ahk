@@ -209,11 +209,15 @@ getModState( theMod ) { 									; This is needed for virtual modifiers. Returns
 	Return getKeyInfo( "ModState_" . theMod )   			; Physical ones are simply depressed in _setModState().
 }
 
-setOneShotMod( theMod ) {   								; Activate a One-Shot Mod (OSM).
+setOneShotMod( theMod := 0 ) {  							; Activate a One-Shot Mod (OSM). Use 0 to clear all OSMs.
 	Critical
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . theMod, 0.3 )  ; eD DEBUG 	; eD WIP
 	static osmN := 0    									; OSM number counter
 	
+	if ( theMod == 0 ) {
+		osmClearAll()
+		Return
+	}
 	osmTime := getPklInfo( "stickyTime" )   				; StickyMod/OSM wait time
 	osmN    := Mod( osmN, getPklInfo("osmMax") )+1  		; Switch between the OSM timers to allow multiple concurrent OSMs
 	setPklInfo( "osmN"          , osmN   )
@@ -238,7 +242,6 @@ osmClearAll() { 											; Clear all active sticky mods
 		If ( getPklInfo( "osmKeyN" . A_Index ) != "" )
 			_osmClear( A_Index )
 	}
-;	( 1 ) ? pklDebug( "OSMs cleared", 0.3 )  ; eD DEBUG  	; eD WIP: Doesn't this get called after all? Or does Critical affect it?
 }
 
 AltGrIsPressed() {  										; Used in pkl_keypress and pkl_gui_image

@@ -452,19 +452,21 @@ runTarget( targ := "ŁayÐir" ) { 							; Run/open a target (def.: This layout'
 		pklWarning( "ERROR: Couldn't run this target:`n  " . targ )
 }
 
-pkl_exec( cmdStr := "" ) {  								; Execute certain commands, e.g., inside strings with α/β prefixes. For now, only Sleep() and Run().
-	Static cmdDic  := [ "Sleep(", "Slp(", "Run(" ]  		; Dictionary of command headers. In mappings, these look like, say,`¢[Run(".")]¢`.
+pkl_exec( cmdStr := "" ) {  								; Execute certain commands, e.g., Sleep() or Run(), inside strings with α/β prefixes.
+	Static cmdDic  := [ "Sleep(", "Slp(", "Run(", "OSM(" ] 	; Dictionary of command headers. In mappings, these look like, say,`¢[Run(".")]¢`.
 	For ix, cmdHead in cmdDic {
 		headLen := StrLen( cmdHead )
 		theCmd  := (  InStr( cmdStr, cmdHead ) ==  1  ) 	; InStr is by default case insensitive
 				&& ( SubStr( cmdStr, 0       ) == ")" ) 	; For now at least, ")" is the tail instead of a specified one
 				?  cmdHead : false
 		arg := SubStr( cmdStr, headLen+1, -1 )  			; Get the command argument in the `Cmd(arg)` string
-;		arg := Trim( arg, "'"" " )  						; Remove surrounding spaces and quotes. But this is done automatically by Run in AHK v1.1+.
-;		theCmd ? pklDebug( "Str:  " cmdStr "`nHead: " SubStr( cmdStr, 1,headLen ) "`nTail: " SubStr( cmdStr, 0 ) "`nIsIt: " cmdHead, 10 )
+		arg := Trim( arg, "'"" " )  						; Remove surrounding spaces and quotes. This is done automatically by Run in AHK v1.1+.
+;		theCmd ? pklDebug( "Str:  " cmdStr "`nHead: " cmdHead "`narg: '" arg "'", 10 )
 		If          ( theCmd == "Sleep("    ) 
 			||      ( theCmd == "Slp("      ) {
 			Sleep( arg )
+		} Else If   ( theCmd == "OSM("      ) {
+			setOneShotMod( arg )
 		} Else If   ( theCmd == "Run("      ) {
 			runTarget( arg )
 		}

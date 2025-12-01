@@ -17,6 +17,10 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+TODO: In addition to OSM, OWS: One-Word Shift. It's seemingly quite popular with the QMK/ZMK crowd.
+	- This one's not on a timer but sets a state that's annulled by Esc or any end-of-word key.
+	- This means whitespace (Space, Enter, Tab etc) and punctuation – which needs to be de-shifted in time, too.
+
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
 2FIX: The base1 entry ought to be used when double-tapping a DK. Instead, the entry for space takes precedence.
@@ -26,8 +30,7 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 	- The CoDeKey sends repeated space entries when held down. Is this desirable? Could we specify no output by default for a DK?
 
 WIPs: Could the CoDeKey cancel itself when pressed again? Or something else?
-	- Might use the `α¢[]¢` syntax to specify special output like clearing status – or doing nothing ... Sleep(0)?
-	- Currently, it releases Enter, as that's its space entry. Making the Space entry nothing is a temporary fix.
+	- Making the Space entry nothing (or clear OSM or whatever) is a temporary fix.
 
 2FIX: U#### doesn't compose Unicode points anymore? How come?
 	- Checked: I wasn't using a VK-number BaseLayout at the time. Also, the compose key `1234` composes fine.

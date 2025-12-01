@@ -655,3 +655,4 @@ VERSION HISTORY:
 		- Also a field showing the currently active layout line. For the advanced, this is editable if you want full control.
 	- DK escape keys except Back/Esc/Del now send their key output. If you press Enter or arrow keys etc. with a DK active, they work.
 	- Allowed empty HIG tags («») to display nothing on help images for a key entry
+	- `α¢[OSM(<Mod>)]¢` allows sending a OneShotMod akin to `{<Mod> OSM}` syntax. Also, `α¢[OSM(0)]¢` clears all OSMs.
