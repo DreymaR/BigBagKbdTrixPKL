@@ -158,7 +158,7 @@ Gralmak
 -------
 - I wanted to make a Graphite variant with traditional symbol/punctuation placements.
 - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
-- Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
+- Thus came about the [Gralmak][Gralmk] variant that's easily ergo modified like, e.g., Colemak-CAWS.
 - Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
@@ -215,13 +215,15 @@ _Gralmak-WideSym on an Ortho keyboard._
 
 _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 <br><br>
 
 ![Graphite image from its web site](./_Res/Graphite_Web.png)
 
 _The Graphite layout, as depicted on its own [web page][GraGit]._
-
-<br><br>
 
 
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)

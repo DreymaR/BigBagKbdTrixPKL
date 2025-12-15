@@ -10,9 +10,9 @@ _The Gralmak layout on an Ortho keyboard_
 The Gralmak layout
 ------------------
 - This layout was made by me (DreymaR), 2024-11.
-- I consider it a variant of [Graphite][GraGit] and [Gallium (by GalileoBlues)][GalGit]. These layouts are very similar.
-- Gralmak is also similar to other recent layouts, like [Nerps (by Smudge)][NrpGra] and [Sturdy][StrPKL].
-- It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
+- I consider it a variant of [Graphite][GraGit] (by StronglyTyped) and [Gallium][GalGit] (by GalileoBlues). These layouts are very similar.
+- Gallium/Graphite are in turn related to other recent layouts, like [Sturdy][StrPKL] (by Oxey) and [Nerps][NrpGra] (by Smudge).
+- Gralmak may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see [the Gralmak repository on GitHub][GrlGit].
 <br>
@@ -161,11 +161,6 @@ SHAI:
   SFB:    0.00%
   SFS:    0.06%   (Red/Alt: 0.01% | 0.05%)
 ```
-<br>
-
-![Gralmak ISO help image](./Gralmak_ISO-AWS_EPKL.png)
-
-_Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 <br><br>
 
@@ -267,6 +262,15 @@ z x m c v    k p , . /
 ```
 
 This progression might be useful if you wish to practice some smaller loops first. After step 3, you may want to jump to the finish.
+<br><br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
+<br><br>
+
+![Gralmak ISO help image](./Gralmak_ISO-AWS_EPKL.png)
+
+_Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)

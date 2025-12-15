@@ -17,6 +17,9 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+TODO: Find a neat something to put between the end of a layout readme and the final picture (layout or symbol). Just a line, maybe? Or a keyboard graphic of sorts?
+	- `⌨ ⌨ ⌨ ⌨ ⌨ ⌨ ⌨` maybe? But centered.
+
 WIPs: On the CoDeKey layers, I've found room for number row symbols, except for two: `* +`. However, I do have both backtick and ~.
 	- Would the missing symbols be more natural and maybe useful? I'll also have to keep it intuitive, for low mental load.
 	- Could do one on CDK,g? I don't think the bullet point is seeing much use, but on the other hand the OneShotShift needs speed.
