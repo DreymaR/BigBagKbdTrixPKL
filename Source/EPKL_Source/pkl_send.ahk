@@ -37,11 +37,11 @@ pkl_SendThis( this, modif := "" ) {     						; Actually send a char/string. Als
 	If        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
 	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
-		tht := "{" . SubStr( this, len+1 ) . "}"
+		tht := "{" . SubStr( this, len+1 ) . "}"    			; Enclose this in {}
 	}
 	thtLen  := StrLen( tht )
 	If ( thtLen == 3 )  										; Single-char keys are on the form "{¤}"
-		lastKeys( "push", SubStr( tht, 2, 1 ) )
+		lastKeys( "push", SubStr( tht, 2, 1 ) ) 				; Add this to the LastKeys queue
 ;	If ( SubStr( tht, 0 ) == "}" ) { 							; Is this test ever necessary, or is everything on {] form?
 ;		tht := SubStr( tht, 1, -1 ) . " DownR}" 				; eD WIP: Send characters too with DownR !? Nope, the KeyUp is still sent. Why?
 ;		pklToolTip( "tht: " . tht ) 	; eD DEBUG

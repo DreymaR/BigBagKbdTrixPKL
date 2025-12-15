@@ -17,9 +17,96 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
-TODO: In addition to OSM, OWS: One-Word Shift. It's seemingly quite popular with the QMK/ZMK crowd.
-	- This one's not on a timer but sets a state that's annulled by Esc or any end-of-word key.
-	- This means whitespace (Space, Enter, Tab etc) and punctuation – which needs to be de-shifted in time, too.
+WIPs: On the CoDeKey layers, I've found room for number row symbols, except for two: `* +`. However, I do have both backtick and ~.
+	- Would the missing symbols be more natural and maybe useful? I'll also have to keep it intuitive, for low mental load.
+	- Could do one on CDK,g? I don't think the bullet point is seeing much use, but on the other hand the OneShotShift needs speed.
+		- Could that be on Ext-tap instead? Then, both backtick and tilde might be on the `g` key. No, timing is still too inferior.
+	- Plus on Gralmak `p` is kind of cool. On Colemak, `*` would be more intuitive. But that's also nice on `,` (same finger as `8`).
+
+WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just out of place. And put ``` on Ext-tap `;`.
+		- Also the delete-word Ext-tap `i/o` mapping. Not used, nor useful. Bring the `#i` one down from `'`.
+		- Move select line around to a more intuitive/consistent spot then? Cmk Ext-tap A (Ctrl+A) vs I.
+		- What to put on `'` now, then?
+
+TODO: Make a separate Github repo for Gralmak.
+	- It'll look more serious than having it tucked away in corners of the EPKL repo.
+	- Add .klc files, images and descriptions.
+	- Get it linked to from MonkeyType, Cyanophage, AKL disco, ???
+	- It's also time to add it as a separate layout in EPKL.
+		- It would still point to the Graphite BaseLayout, but from its own folder.
+		- Not necessary for Galliard, I think, as I don't use/recommend that one as strongly now.
+	- Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod for optimal punctuation without a thumb key.
+		- I suppose Gallium's or Graphite's punctuation is fine then? They both have awkward quirks while solving the period+comma issues.
+		- Main issues according to Cyanophage are the `E.` SFB (0.14%) and the `O_,` s1-SFB (0.07%).
+		- Gralmak-pct uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
+		- The big question is whether it's useful though. Might instead recommend using either Gallium or Graphite punctuation.
+			- Gallium punctuation has lower SFB% according to cmini. People will care about that. The period is the key to that.
+			- At the same time, Gallium achieves that by loading the pinky with both comma and period. Maybe some dislike that?
+		Graphite:
+		           ' f o u j ;
+		           y h a e i ,
+		           k p . - /
+		
+		Gallium:
+		           j f o u , 
+		           y h a e i 
+		           k p ' ; .
+		
+		Gralmak:
+		b l d w q  j f o u ' -
+		n r t s g  y h a e i ;
+		z x m c v  k p , . /
+		
+		Gralmak-pct:
+		b l d w q  j f o u ' -
+		n r t s g  y h a e i ;
+		z x m c v  k p . / ,
+		Remap: . , /
+		
+		Gralmak-thumb:
+		b l d w q  j f o u '
+		n r t s g  y h a e i
+		z x m c v  k p     /
+		           ! , . ; -
+		
+	- Analyzeable layout at Cyanophage, with `, . /` unmodified:
+		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%3Bzxmcvkp%2C.%2F%5C%3D&mode=ergo&lan=english&thumb=l
+		bldwqjfou'-nrtsgyhaei;zxmcvkp,./
+	- Analyzeable layout at Cyanophage (link then import string), with `\ =` for the `, .` keys to avoid bad analysis:
+		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%2Czxmcvkp%5C%3D%2F%3B.&mode=ergo&lan=english&thumb=l
+		bldwqjfou'-nrtsgyhaei,zxmcvkp\=/;.
+
+TODO: Add the Canarda variant
+		canary-ortho (Eve)
+		  w l y p b  z f o u '
+		  c r s t g  m n e i a
+		  q j v d k  x h / , .
+		
+		canarda (Dreymar)
+		  w l y p b  j f o u '
+		  c r s t g  m n e i a
+		  z x v d k  q h / , .
+		It cycles j z q x, leading to very minor changes in efficiency – maybe even slightly on the positive side overall?
+		
+		canarda(new) - canary-ortho(old)
+		  w l y p b  ~ f o u '
+		  c r s t g  m n e i a
+		  ~ ~ v d k  ~ h / , .
+		
+		SHAI:
+		+   Alt:  0.01%
+		+   Rol:  0.02%   (In/Out: -0.09% |  0.11%)
+		+   One:  0.05%   (In/Out: -0.00% |  0.05%)
+		+   Rtl:  0.07%   (In/Out: -0.09% |  0.16%)
+		+   Red: -0.04%   (Bad:     0.00%)
+		-   SFB:  0.01%
+		+   SFS: -0.06%   (Red/Alt: -0.02% | -0.04%)
+		0   LH/RH: 0.04% | -0.04%
+		
+		Note: A further k-q swap looks tempting, but it'd take SFB up from 0.9% to 1.0% which is overmuch.
+	
+	- Name: Canarda (Porta Canarda is a place in Ventimiglia, Italy)? Canardy? Candory?
+	- Should also add Canary-Ortho Sym
 
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
@@ -70,7 +157,9 @@ WIPs: Learn to digitally sign the release .exe, if that can help with OS warning
 
 TODO: QMK's repeat key can repeat actions such as Ctrl+Shift+Left to select multiple words. Would that be useful in EPKL?
 
-NEXT: Caps Word? It seems to be a popular ZMK/QMK feature.
+TODO: In addition to OSM, OWS: One-Word Shift. It's seemingly quite popular with the QMK/ZMK crowd.
+	- This one's not on a timer but sets a state that's annulled by Esc or any end-of-word key.
+	- This means whitespace (Space, Enter, Tab etc) and punctuation – which needs to be de-shifted in time, too.
 	- It's a one-shot kind of thing. Make it a special output? Would need a special function/state to keep it on until the next space.
 	- E.g., `¢[Cap()]¢`? (Specify # of words to cap? Nah.)
 	- What should negate it? Space, Esc, Shift?
@@ -111,6 +200,11 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 			}
 			DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 		}
+
+NEXT: Check out Keyman. It used to cost money but is now open-source and free, and owned by SIL?!
+	- https://keyman.com/developer/
+	- https://superuser.com/questions/527349/cross-operating-system-custom-keyboard-layouts
+	- https://help.keyman.com/keyboard/sil_ipa/
 
 2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 

@@ -92,7 +92,7 @@ pkl_DeadKey( dkCode ) { 									; Handle DK presses. Dead key names are given a
 	If ( dkEnt && (dkEnt + 0) == "" ) { 					; Entry is a special string, like {Home}+{End} or prefix-entry
 		psp := pkl_ParseSend( dkEnt )
 		If ( not psp )  				 					; If not a recognized prefix-entry...
-			SendInput {Text}%dkEnt% 						; ...just send the entry as text by default.
+			pkl_SendThis( "{Text}" dkEnt )  				; ...just send the entry as text by default. (Was `SendInput {Text}%dkEnt%`.)
 ;		If ( PDKVs && psp != "@" ) { 						; eD WIP: Allow chained DKs too! This means not erasing the DK queue.
 ;		}
 		resetDeadKeys()
