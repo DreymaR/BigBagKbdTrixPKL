@@ -17,8 +17,15 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+TODO: It'd be more precise to have DK input remove a Sticky modifier.
+	- It'd improve the @co1 DK, allowing different output instead of having to duplicate it. E.g., {`."`,Enter} for @co1, Shift+D.
+		- On the other hand, maybe that is overmuch after all? Mental load already feels substantial. But it'd still be cool to at least have those extra states.
+		- The shifted states could be used for `!"` and `?"` without extra mental load. That'd be nice. Keep in mind that the Shift key may be held down then.
+	- It'd remove the interesting timing-based Kaomoji selection, necessitating an extra Shift tap to get the shifted Kaomoji. But that's just a trick, really.
+
 TODO: Find a neat something to put between the end of a layout readme and the final picture (layout or symbol). Just a line, maybe? Or a keyboard graphic of sorts?
-	- `⌨ ⌨ ⌨ ⌨ ⌨ ⌨ ⌨` maybe? But centered.
+	- Trying out `⌨ ⌨ ⌨ ⌨ ⌨ ⌨ ⌨`, centered.
+	- Also, preface each folder README with a simple heading so it's easier to link to the actual readme instead of the folder contents. E.g., `/Layouts/Gralmak#gralmak`.
 
 WIPs: On the CoDeKey layers, I've found room for number row symbols, except for two: `* +`. However, I do have both backtick and ~.
 	- Would the missing symbols be more natural and maybe useful? I'll also have to keep it intuitive, for low mental load.
@@ -46,14 +53,14 @@ TODO: Make a separate Github repo for Gralmak.
 			- Gallium punctuation has lower SFB% according to cmini. People will care about that. The period is the key to that.
 			- At the same time, Gallium achieves that by loading the pinky with both comma and period. Maybe some dislike that?
 		Graphite:
-		           ' f o u j ;
-		           y h a e i ,
-		           k p . - /
+		           '         ;
+		                     ,
+		               . - /
 		
 		Gallium:
-		           j f o u , 
-		           y h a e i 
-		           k p ' ; .
+		                   , [
+		                     /
+		               ' ; .
 		
 		Gralmak:
 		b l d w q  j f o u ' -

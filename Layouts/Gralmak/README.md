@@ -1,20 +1,15 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
+<h1 align=center line-height=1.6>Gralmak</h1><br><br>
 
-![Gralmak Ortho help image](./Gralmak_Orth-Cpt_EPKL.png)
-
-_The Gralmak layout on an Ortho keyboard_
-
-<br>
+<div align="center"><img alt="The Gralmak layout on an Ortho keyboard" src="./Gralmak_Orth-Cpt_EPKL.png"></div><br>
 
 The Gralmak layout
 ------------------
 - This layout was made by me (DreymaR), 2024-11.
-- I consider it a variant of [Graphite][GraGit] (by StronglyTyped) and [Gallium][GalGit] (by GalileoBlues). These layouts are very similar.
-- Gallium/Graphite are in turn related to other recent layouts, like [Sturdy][StrPKL] (by Oxey) and [Nerps][NrpGra] (by Smudge).
+- It is a variant of [Graphite][GraGit] by StronglyTyped and [Gallium][GalGit] by GalileoBlues. These layouts are very similar.
+- Gallium/Graphite are in turn related to other recent layouts, like [Sturdy][StrPKL] by Oxey and [Nerps][NrpGra] by Smudge.
 - Gralmak may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- For more info, see [the Gralmak repository on GitHub][GrlGit].
+- For more info, see [the Gralmak repository][GrlGit].
 <br>
 
 ![Gralmak Angle-ANSI help image](./Gralmak_ANS-A_EPKL.png)

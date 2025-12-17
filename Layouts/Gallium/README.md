@@ -1,12 +1,8 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br><br>
+<h1 align=center line-height=1.6>Gallium</h1><br><br>
 
-![Gallium Ortho help image](./Gallium-v1_Orth-Cpt_EPKL.png)
+<div align="center"><img alt="The Gallium "v1" layout on an Ortho keyboard" src="./Gallium-v1_Orth-Cpt_EPKL.png"></div><br>
 
-_The Gallium "v1" layout on an Ortho keyboard_
-
-<br><br>
+<p align="center"><i>See also my <a href="../Gralmak#gralmak">Gralmak</a></i> Graphite-Gallium variant</p><br>
 
 The Gallium layout
 ------------------
