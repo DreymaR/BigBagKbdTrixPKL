@@ -1,10 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>QUARTZ</h1><br><br>
 
-![QUARTZ help image](./QUARTZ_ISO_EPKL.png)
-
-<br>
+<div align=center ><img src="./QUARTZ_ISO_EPKL.png" 
+                        alt="The QUARTZ layout, rocking an ISO keyboard"></div><br>
 
 The rock solid QUARTZ Perfect Pangram layout
 --------------------------------------------

@@ -1,6 +1,7 @@
 <h1 align=center line-height=1.6>Graphite</h1><br><br>
 
-<div align="center"><img alt="The Graphite layout on an Ortho keyboard" src="./Graphite_Orth-Cpt_EPKL.png"></div><br>
+<div align=center ><img src="./Graphite_Orth-Cpt_EPKL.png" 
+                        alt="The Graphite layout on an Ortho keyboard"></div><br>
 
 <p align="center"><i>See also my <a href="../Gralmak#gralmak">Gralmak</a></i> Graphite-Gallium variant</p><br>
 
@@ -9,9 +10,9 @@ The Graphite layout
 - This layout was made by Richard Davison alias 'stronglytyped', 2022-12, as a development from [Sturdy][StrPKL].
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- For more info, see [the Graphite repo on GitHub][GraGit].
 - Graphite is similar to other recent layouts, like [Nerps (by Smudge)][NrpGra] and [Gallium (by GalileoBlues)][GalGit].
 - It is, in fact, amazing how Graphite and [Gallium][GalPKL] are virtually the same layout, albeit developed independently!
+- For more info, see [the Graphite repo on GitHub][GraGit].
 <br>
 
 - Fun quote on why it's called Graphite: "...because it is a rock used for writing, and also rock beats [scissors][GraSci]".
@@ -69,7 +70,7 @@ Graphite-HB
 - You can select your preferred variant using the `Variant/Locale` setting in the `Layout Selector` GUI.
 - The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
 - However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTseq] options.
-- Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead, or [Gralmak][gralmk]. These, like Colemak, relegate the `J` key to that awkward position.
+- Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead, or [Gralmak][Gralmk]. These, like Colemak, relegate the `J` key to that awkward position.
 <br>
 
 #### Graphite's altered shift state mappings, from its [web page][GraGit]:
@@ -88,7 +89,6 @@ Graphite-HB
 
 Graphite Wide and Sym variants
 ------------------------------
-
 - [**W**ide][ErgAWi] ergo mods (moving right-hand keys one position to the right) usually place the two bracket keys in the middle.
 - For a Wide modded Graphite variant, some special remaps from standard key positions are necessary.
 - The base Graphite layout already moves its bracket keys to the top row, putting SC(;) and PL(=) in their places.
@@ -96,7 +96,7 @@ Graphite Wide and Sym variants
 
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
 - Graphite already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod.
-- As seen below though, the [Gralmak][gralmk] variant is in itself a Sym (UnSym) mod, making for familiar AngleWideSym combos.
+- As seen below though, the [Gralmak][Gralmk] variant is in itself a Sym (UnSym) mod, making for familiar AngleWideSym combos.
 - I advise moving the Quote key to be even more accessible. Especially if using the `HB` (keymap friendly) variant!
 - For Wide variants, a Sym mod is beneficial. I've proposed Graphite WideSym variants similar to my other WideSym layout variants.
 - I prefer the hyphen on the upper row instead of the lower row. Seems this is a matter of individual preference.
@@ -153,7 +153,7 @@ Gralmak
 - I wanted to make a Graphite variant with traditional symbol/punctuation placements.
 - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Thus came about the [Gralmak][Gralmk] variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- Like the [Gallium][GalPKL] and [Colemak][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
+- Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 - For more info, see the [Gralmak][Gralmk] layout folder and [the Gralmak repository][GrlGit].
@@ -186,15 +186,10 @@ _The Gralmak layout variant on an Ortho keyboard_
 ```
 <br>
 
-- It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
-- In this capacity, it can also be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
-- This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-<br>
-
-- This layout manages to satisfy newer analyzers and still keep some similarity to well-known layouts like Colemak.
-- For instance, only `L N M` and `F A E` swap hands from QWERTY; `L N M` and `F A P` from Colemak.
-- The familiar `QW RT ZX CV` bigrams are (semi-)preserved in Gralmak, also aiding learning and recognition.
-- Also see the README for the similar [Galliard][Gallrd] Gallium variant.
+> - It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
+> - In this capacity, it can also be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
+> - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
+> - If you don't use punctuation solutions, you may modify Gralmak with a Sym ergo mod instead; see the [Gralmak readme][Gralmk].
 <br>
 
 ![Gralmak-WS help image](../Gralmak/Gralmak_Orth-WS_EPKL.png)

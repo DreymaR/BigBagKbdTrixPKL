@@ -60,17 +60,17 @@ Return
 
 keypressUp:     		; *SC### UP
 	Critical
-	Send % "{Blind}{" . getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ) . "  UP}"  	; Send the remapped key up
+	Send % "{Blind}{" getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) "ent1" ) "  UP}"    	; Send the remapped key up
 Return
 
 modifierDown:   		; *SC###    (call fn as HKey to translate to modifier name)
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2     ) . "ent1" ), 1 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2     ) "ent1" ), 1 )
 Return
 
 modifierUp:
 	Critical
-	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) . "ent1" ), 0 )
+	setModifierState( getKeyInfo( SubStr( A_ThisHotkey, 2, -3 ) "ent1" ), 0 )
 Return
 
 tapOrModDown:   		; *SC###
@@ -131,14 +131,14 @@ rerunSameLayout:    										; Menu "Refresh EPKL"
 	activeLay   := getLayInfo( "ActiveLay" )    			; Layout code (path) of the active layout
 	numLayouts  := getLayInfo( "NumOfLayouts" ) 			; The number of listed layouts
 	Loop % numLayouts { 									; Use the layout # instead of its code, to reflect any PKL Settings list changes
-		theLayout   := getLayInfo( "layout" . A_Index . "code", theCode )
+		theLayout   := getLayInfo( "layout" A_Index "code", theCode )
 		actLayNum   := ( theLayout == activeLay ) ? A_Index : actLayNum
 	}
-	changeLayout( "UseLayPos_" . actLayNum )    			; Rerun the same layout, telling pkl_init to use position.
+	changeLayout( "UseLayPos_" actLayNum )    			; Rerun the same layout, telling pkl_init to use position.
 Return
 
 changeLayoutMenu:   										; Menu "Layouts"
-	changeLayout( getLayInfo( "layout" . A_ThisMenuItemPos . "code" ) )
+	changeLayout( getLayInfo( "layout" A_ThisMenuItemPos "code" ) )
 Return
 
 suspendOn:
@@ -183,7 +183,7 @@ Return
 
 epklDebugUtil:  										; eD DEBUG/UTILITY/WIP: This entry is activated by the Debug hotkey
 	nr  := pklIniRead( "whichUtility", 1 )
-	pklToolTip( "Running Debug/Utility routine " . nr . "`n(specified in Settings)", 1.5 )
+	pklToolTip( "Running Debug/Utility routine " nr "`n(specified in Settings)", 1.5 )
 	debug%nr%() 										; Run the specified debug# routine
 Return
 
@@ -205,7 +205,7 @@ Return
 	detectCurrentWinLayDeadKeys()   					; The old PKL DeadKey detection routine                         (hidden)
 } debug9() {
 	getWinLayDKs()  									; eD WIP: Improved WinLayDK detection
-	pklDebug( "getWinLayDKs:`n" . getPklInfo("WinLayDKs")[0x10], 2 )  ; eD DEBUG
+	pklDebug( "getWinLayDKs:`n" getPklInfo("WinLayDKs")[0x10], 2 )  ; eD DEBUG
 ;	importLayouts()  									; eD TODO: Import a MSKLC layout file to EPKL format
 ;	importComposer() 									; eD DONE: Import an X11 Compose file to EPKL format
 }   ; <-- debug#
@@ -263,8 +263,8 @@ KillToolTip:
 Return
 
 MenuIconNum:
-	Clipboard := getPklInfo( "iconListFile" ) . ", " . A_EventInfo
-	pklInfo( "'" . Clipboard . "'`n     added to Clipboard!", 8 )   	; Msgbox % 
+	Clipboard := getPklInfo( "iconListFile" ) ", " A_EventInfo
+	pklInfo( "'" Clipboard "'`n     added to Clipboard!", 8 )   	; Msgbox % 
 Return
 
 ;;  ################    labels - end                ################

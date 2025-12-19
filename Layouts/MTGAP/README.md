@@ -1,11 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>MTGAP</h1><br><br>
 
-![EPKL help image for MTGAP-AngleSym on an ISO board](./MTGAP_ISO-AS_EPKL.png)
-
-_The MTGAP layout with the [Angle and Sym ergonomic mods][BB_Erg] on an ISO board_
-<br><br>
+<div align=center ><img src="./MTGAP_ISO-AS_EPKL.png" 
+                        alt="The MTGAP layout w/ Angle and Sym ergo mods, on an ISO keyboard"></div><br>
 
 The MTGAP layout
 ----------------

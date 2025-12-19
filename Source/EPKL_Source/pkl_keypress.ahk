@@ -173,7 +173,7 @@ _composeVK( HKey, kc_HK ) { 									; If the output is a single, printable char
 ;
 
 setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or with an AHK mod key name. Handles OneShotMods (OSM) too.
-	Critical
+;	Critical
 	osmKeys := getPklInfo( "stickyMods" )   				; One-Shot mods (CSV, but stored as a string)
 	osmLast := getPklInfo( "osmKeyN" . getPklInfo("osmN") ) ; The last set OSM
 	If ( keyDown ) {    																; eD WIP: Avoid the OSM if already held?
@@ -190,7 +190,7 @@ setModifierState( theMod, keyDown := 0 ) {  				; Can be called from a hotkey or
 }
 
 _setModState( theMod, keyDown := 1 ) {  					; Using 1/0 for true/false here.
-	Critical
+;	Critical
 	If ( theMod == "Extend" ) { 							; Extend
 		_setExtendState( keyDown )
 ;	} else if ( theMod == "AltGr" ) {
@@ -210,7 +210,7 @@ getModState( theMod ) { 									; This is needed for virtual modifiers. Returns
 }
 
 setOneShotMod( theMod := 0 ) {  							; Activate a One-Shot Mod (OSM). Use 0 to clear all OSMs.
-	Critical
+;	Critical
 ;	( theMod == "Shift" ) ? pklDebug( "OSM " . theMod, 0.3 )  ; eD DEBUG 	; eD WIP
 	static osmN := 0    									; OSM number counter
 	
@@ -228,7 +228,7 @@ setOneShotMod( theMod := 0 ) {  							; Activate a One-Shot Mod (OSM). Use 0 to
 }
 
 _osmClear( osmN ) { 										; Clear a specified sticky mod
-	Critical
+;	Critical    											; eD WIP: There's a risk using Critical here. EPKL easily gets stuck, especially using DKs.
 	SetTimer, osmTimer%osmN%, Off   						; A -%time% one-shot timer could be used instead...
 	theMod := getPklInfo( "osmKeyN" . osmN )    			; ...but this is also called from elsewhere.
 	setPklInfo( "osmKeyN" . osmN , "" )
@@ -237,7 +237,7 @@ _osmClear( osmN ) { 										; Clear a specified sticky mod
 }
 
 osmClearAll() { 											; Clear all active sticky mods
-	Critical
+;	Critical
 	Loop % getPklInfo( "osmMax" ) {
 		If ( getPklInfo( "osmKeyN" . A_Index ) != "" )
 			_osmClear( A_Index )

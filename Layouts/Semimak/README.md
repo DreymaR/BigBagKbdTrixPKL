@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br><br>
+<h1 align=center line-height=1.6>Semimak</h1><br><br>
 
-![Semimak AngleSym-ANSI help image](./Semimak_ANS-AS_EPKL.png)
-
-_Semimak AngleSym on an ANSI keyboard_
-
-<br><br>
+<div align=center ><img src="./Semimak_ANS-AS_EPKL.png" 
+                        alt="Semimak AngleSym on an ANSI keyboard"></div><br>
 
 The Semimak layout
 ------------------

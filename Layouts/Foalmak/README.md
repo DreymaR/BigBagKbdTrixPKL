@@ -1,10 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>FOALMAK</h1><br><br>
 
-![Foalmak help image](./Foalmak_EPKL.png)
-
-<br>
+<div align=center ><img src="./Foalmak_EPKL.png" 
+                        alt="The Foalmak layout, keys all a-galloping!"></div><br>
 
 The foalproof Foalmak April's Foals layout
 ------------------------------------------
@@ -18,6 +15,8 @@ The foalproof Foalmak April's Foals layout
 - April's Foal! Gallop over text pages like a herd of mustangs! Listen to the neighsayers!
 - Your rolls will turn into trots, and your redirects into voltes.
 - This layout is recommended for typists who are horsing around. Also try rocking hard with [QUARTZ][LayQua].
+
+- Disclaimer: If at any point you were foaled by this foalish layout, remember: Foal me once, shame on you. ...
 <br>
 
 ￣(=⌒ᆺ⌒=)￣

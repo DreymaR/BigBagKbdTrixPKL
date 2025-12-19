@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br><br>
+<h1 align=center line-height=1.6>Canary</h1><br><br>
 
-![Canary Angle-ANSI help image](./Canary_ANS-A_EPKL.png)
-
-_The default Canary layout (using the Angle mod) on an ANSI keyboard_
-
-<br><br>
+<div align=center ><img src="./Canary_ANS-A_EPKL.png" 
+                        alt="The Canary layout w/ the Angle mod on an ANSI keyboard"></div><br>
 
 The Canary layout
 ------------------

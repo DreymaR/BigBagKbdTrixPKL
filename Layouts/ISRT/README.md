@@ -1,9 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>ISRT</h1><br><br>
 
-![EPKL help image for ISRT-eD-CAS on an ANSI board](./NotGate-ISRT_ANS-CAS_EPKL.png)
-<br><br>
+<div align=center ><img src="./NotGate-ISRT_ANS-CAS_EPKL.png" 
+                        alt="The ISRT-eD-CAS layout on an ANSI keyboard"></div><br>
 
 NotGate's ISRT alias the "IndyRad" layout
 -----------------------------------------

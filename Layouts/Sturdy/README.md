@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br><br>
+<h1 align=center line-height=1.6>Sturdy</h1><br><br>
 
-![Sturdy Angle-ANSI help image](./Sturdy_ANS-A_EPKL.png)
-
-_The default Sturdy layout (using the Angle mod) on an ANSI keyboard_
-
-<br><br>
+<div align=center ><img src="./Sturdy_ANS-A_EPKL.png" 
+                        alt="The Sturdy layout w/ the Angle mod on an ANSI keyboard"></div><br>
 
 The Sturdy layout
 -----------------

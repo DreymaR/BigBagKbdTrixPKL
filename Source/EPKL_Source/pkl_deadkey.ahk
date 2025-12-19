@@ -34,6 +34,9 @@ inputDK() { 												; Input the release key for a DK.
 	static endDKs  := "{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}"
 			.  "{Left}{Right}{Up}{Down}{BS}{Esc}{Enter}"
 			.  "{Home}{End}{PgUp}{PgDn}{Del}{Ins}"  		; Note: These 6 keys don't work here if their NumPad VK is sent (AHK default).
+;	osmClearAll()   										; Don't allow Sticky mods to carry over here.   	; eD WIP: This gets EPKL stuck when using a DK! Why?!?
+;	Send {Shift Up} 										; setModifierState() or _setModState( "Shift", 0 ) got EPKL stuck here. This is a cheap workaround, for now.    	; eD WIP
+;	pklTooltip( "DK debug: '" getModState( "Shift" ) "'", 0.6 )
 	Input, inKey, L1, %endDKs%  							; L1: Length 1. The EndKeys string contains ending keys that return an error.
 	If ( InStr( ErrorLevel, "EndKey" ) ) {  				; The return is on the form "EndKey:Escape" etc.
 		resetDeadKeys() 									; A DK-ending input cancels all existing DKs

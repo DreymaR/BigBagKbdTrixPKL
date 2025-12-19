@@ -1,6 +1,7 @@
 <h1 align=center line-height=1.6>Gallium</h1><br><br>
 
-<div align="center"><img alt="The Gallium "v1" layout on an Ortho keyboard" src="./Gallium-v1_Orth-Cpt_EPKL.png"></div><br>
+<div align=center ><img src="./Gallium-v1_Orth-Cpt_EPKL.png" 
+                        alt="The Gallium "v1" layout on an Ortho keyboard"></div><br>
 
 <p align="center"><i>See also my <a href="../Gralmak#gralmak">Gralmak</a></i> Graphite-Gallium variant</p><br>
 
@@ -9,13 +10,13 @@ The Gallium layout
 - This layout was made by Bryson James alias 'GalileoBlues', 2022-12.
 - It may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- For more info, see [the Gallium repo on GitHub][GalGit].
 - Gallium is similar to other recent layouts, like [Nerps (by Smudge)][NrpRed] and [Graphite (by strongly-typed)][GraGit].
 - It is, in fact, amazing how Gallium and [Graphite][GraPKL] are virtually the same layout, albeit developed independently!
 - I like that Gallium has J and a symbol in the same positions as Colemak's top row.
 - Some bigrams like `SC`, albeit same-finger, are nicely altable on Gallium.
 - Both Bryson and I favor the v2/"Rowstag" version, used in the BaseLayout. Getting to the Colstag version is a simple remap.
 - The `PHY` trigram is better alt-fingerable on the Rowstag version.
+- For more info, see [the Gallium repo on GitHub][GalGit].
 <br>
 
 ![Gallium Angle-ANSI help image](./Gallium_ANS-A_EPKL.png)
@@ -133,6 +134,10 @@ _The Galliard layout variant on an Ortho keyboard_
 ![Gallium (C)AWS-ISO help image](./Gallium_ISO-AWS_EPKL.png)
 
 _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or whatever you wish._
+
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 <br><br>
 

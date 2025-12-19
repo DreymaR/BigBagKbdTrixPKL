@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br><br>
+<h1 align=center line-height=1.6><<NewLayout>></h1><br><br>
 
-![<<NewLayout>> Angle-ANSI help image](./<<NewLayout>>_ANS-A_EPKL.png)
-
-_The default <<NewLayout>> layout (using the Angle mod) on an ANSI keyboard_
-
-<br><br>
+<div align=center ><img src="./<<NewLayout>>_ANS-A_EPKL.png" 
+                        alt="The default <<NewLayout>> layout (using the Angle mod) on an ANSI keyboard"></div><br>
 
 The <<NewLayout>> layout
 --------------------

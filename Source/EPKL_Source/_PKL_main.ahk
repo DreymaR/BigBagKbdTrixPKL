@@ -45,7 +45,8 @@ TODO: Make a separate Github repo for Gralmak.
 	- It's also time to add it as a separate layout in EPKL.
 		- It would still point to the Graphite BaseLayout, but from its own folder.
 		- Not necessary for Galliard, I think, as I don't use/recommend that one as strongly now.
-	- Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod for optimal punctuation without a thumb key.
+
+WIPs: Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod for optimal punctuation without a thumb key.
 		- I suppose Gallium's or Graphite's punctuation is fine then? They both have awkward quirks while solving the period+comma issues.
 		- Main issues according to Cyanophage are the `E.` SFB (0.14%) and the `O_,` s1-SFB (0.07%).
 		- Gralmak-pct uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.

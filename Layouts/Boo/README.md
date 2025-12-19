@@ -1,10 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>Boo</h1><br><br>
 
-![Boo-AngleSym Layout help image with finger coloring, ANSI board](./BooLayout_ANS-AS_EPKL.png)
-
-<br>
+<div align=center ><img src="./BooLayout_ANS-AS_EPKL.png" 
+                        alt="The Boo-AngleSym layout on an ANSI keyboard"></div><br>
 
 The Boo layout
 --------------

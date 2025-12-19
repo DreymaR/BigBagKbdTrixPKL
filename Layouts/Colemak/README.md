@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>Colemak</h1><br><br>
 
-![EPKL help image for Colemak on an ISO board](./Colemak-ISO-Angle_s0_EPKL.png)
-
-_The Colemak layout with the [Angle ergonomic mod][BB_AWi] on an ISO board_
-
-<br>
+<div align=center ><img src="./Colemak-ISO-Angle_s0_EPKL.png" 
+                        alt="The Colemak layout w/ the Angle ergo mod on an ISO keyboard"></div><br>
 
 The Colemak layout
 ------------------

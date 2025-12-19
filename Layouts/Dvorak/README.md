@@ -1,12 +1,7 @@
-DreymaR's Big Bag Of Keyboard Tricks - EPKL
-===========================================
-<br>
+<h1 align=center line-height=1.6>Dvorak</h1><br><br>
 
-![EPKL help image for Dvorak-AWide on an ANSI board](./_Res/Dvorak_ANS-AWide_EPKL.png)
-
-_The Dvorak layout with [Angle+Wide ergonomic mods][BB_AWi] on an ANSI board_
-
-<br>
+<div align=center ><img src="./_Res/Dvorak_ANS-AWide_EPKL.png" 
+                        alt="The Dvorak layout w/ Angle+Wide ergo mods on an ANSI keyboard"></div><br>
 
 The Dvorak layout
 -----------------
