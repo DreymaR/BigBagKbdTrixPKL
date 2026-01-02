@@ -69,9 +69,14 @@ The <<NewLayout>> layout
 
 _The <<NewLayout>>-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 <br><br>
 
-![<<NewLayout>> logo](./_Res/<<NewLayout>>Logo.png)
+<div align=center ><img src="./_Res/<<NewLayout>>Logo.png" 
+                        alt="<<NewLayout>> logo"></div>
 
 
 [LayGit]: https://github.com/<<Creator>>/<<NewLayout>> (The <<NewLayout>> layout on GitHub)

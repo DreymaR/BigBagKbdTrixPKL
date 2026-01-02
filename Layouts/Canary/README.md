@@ -96,9 +96,14 @@ Non-Wide, you may use the same Sym mod as Colemak and other layouts that don't c
 
 _The Canary-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 <br><br>
 
-![Canary logo](./_Res/CanaryBlue.png)
+<div align=center ><img src="./_Res/CanaryBlue.png" 
+                        alt="Canary logo"></div>
 
 
 [CanGit]: https://github.com/Apsu/Canary                        (The Canary layout on GitHub)

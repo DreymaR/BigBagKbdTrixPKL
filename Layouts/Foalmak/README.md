@@ -1,4 +1,4 @@
-<h1 align=center line-height=1.6>FOALMAK</h1><br><br>
+<h1 align=center line-height=1.6>Foalmak</h1><br><br>
 
 <div align=center ><img src="./Foalmak_EPKL.png" 
                         alt="The Foalmak layout, keys all a-galloping!"></div><br>
@@ -20,6 +20,11 @@ The foalproof Foalmak April's Foals layout
 <br>
 
 ￣(=⌒ᆺ⌒=)￣
+
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [LayFoa]: /Layouts/Foalmak                                          (The Foalmak layout in EPKL)
 [LayQua]: /Layouts/QUARTZ                                           (The QUARTZ layout in EPKL)

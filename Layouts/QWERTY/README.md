@@ -18,3 +18,7 @@
 <br>
 
 _This image shows some EPKL possibilities: Angle/Wide/Sym ergo mods, and a Compose key in the middle of an ISO keyboard._
+
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>

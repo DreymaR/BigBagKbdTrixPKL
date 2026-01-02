@@ -3,15 +3,15 @@
 <div align=center ><img src="./NotGate-ISRT_ANS-CAS_EPKL.png" 
                         alt="The ISRT-eD-CAS layout on an ANSI keyboard"></div><br>
 
-NotGate's ISRT alias the "IndyRad" layout
------------------------------------------
-- Discord user [NotGate's ISRT - or as I call it, IndyRad][NotGte] - layout, implemented as a Cmk mod.
+The ISRT layout
+---------------
+- Discord user [NotGate's ISRT (alias IndyRad)][NotGte] layout, implemented as a Cmk mod.
     - ISRT isn't really a mod of Cmk, but a sibling layout that turned out quite similar to Cmk-DH.
     - Because of said similiarity, it was practically implemented here as a Cmk-DH "mod".
     - ISRT includes the [**C**url][ErgCrl] principle insofar as it uses the same D and H positions as Cmk-DH.
     - On a row-staggered board it should also include an [**A**ngle][ErgAWi] mod.
     - It's also compatible with the standard Wide and [**S**ym][ErgSym] mods I've used elsewhere, so they're added.
-- About naming: NotGate simply named the layout ISRT but I found that boring. So I searched, and found:
+- Naming: NotGate simply named the layout ISRT but I found that boring. So I searched, and found:
     - [http://www.isrt.org.in/][IndSRT] - the Indian Society of Radiographers & Technologists! IndyRad!  (✿◠‿◠)
     - No one seem to be using that name though. Too bad, as I see the layout's name misspelled as IRST instead...
 <br>
@@ -63,6 +63,11 @@ Remaps from Cmk-DH:
 |![EPKL help image for IndyRad-eD-CAWS on an ISO board](./ISR-eD_ISO_CurlAWideSym/state0.png)|
 |   :---:   |
 |_EPKL help image for the ISRT-CAWS layout on an ISO board_|
+
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [NotGte]: https://notgate.github.io/layout/ (NotGate's layout page, home of the ISRT layout)
 [IndSRT]: http://www.isrt.org.in/ (Indian Society of Radiographers & Technologists)

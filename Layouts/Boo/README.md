@@ -60,6 +60,9 @@ Armed with this knowledge, one could make a set of transitional "TarBoo" layouts
 ```
 In the above, <kbd>K</kbd> is [the rarest key][SymMod] in the first loop and <kbd>Z</kbd> in the second loop.
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 [BooLay]: https://ballerboo.github.io/boolayout/                    (The Boo layout page on github.io)
 [Dvk-ID]: /Layouts/Dvorak#the-dvorak-curl-id-ergo-mod               (DreymaR's Dvorak Curl-ID ergo mod)

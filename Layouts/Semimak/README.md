@@ -98,6 +98,10 @@ The same goes for the [**S**ym(bol)][ErgSym] mod to prioritize the common QU (<k
 
 _Semimak AngleWideSym on an ISO keyboard. The © key can be a Compose key, or whatever you wish._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [SemGit]: https://semilin.github.io/semimak/                    (Semimak on GitHub.io)
 [SemGen]: https://www.semilin.dev/genkey/                       (Semi's Genkey analyzer)

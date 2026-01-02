@@ -117,15 +117,20 @@ _The Sturdy-AWS-ISO layout. The © key can be a Compose key, or whatever you wis
 
 _The Sturdy-AWS-ANSI layout. Note the changed J and Z positions._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 <br><br>
 
 ![Sturdy layout image from its web site](./_Res/Sturdy_Web.png)
 
 _The Sturdy layout. Image taken from its own [homepage][LayHom]._
 
-<br>
+<br><br>
 
-![Oxey profile logo](./_Res/Oxey_GitHub.png)
+<div align=center ><img src="./_Res/Oxey_GitHub.png" 
+                        alt="Oxey's profile logo"></div>
 
 
 [LayHom]: https://o-x-e-y.github.io/layouts/sturdy/                 (The Sturdy layout home page)

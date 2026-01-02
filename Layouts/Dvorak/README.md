@@ -87,6 +87,10 @@ The Boo Layout
 - The Boo layout keeps several keys from Dvorak, notably AOE and the right-hand punctuation keys.
 - Other similarities and improvements are discussed in the Boo layout README.
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [BB_Erg]: https://dreymar.colemak.org/ergo-mods.html                (DreymaR's Big Bag of Tricks on ergo mods)
 [BB_AWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide     (DreymaR's Big Bag of Tricks on Angle+Wide ergo mods)

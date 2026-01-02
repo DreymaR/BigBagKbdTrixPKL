@@ -17,6 +17,11 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.
+
+WIPs: Kanata files for Cmk, Cmk-CA, Cmk-CAWS for ISO and ANSI.
+	- Eventually, also Extend layers.
+
 TODO: It'd be more precise to have DK input remove a Sticky modifier.
 	- It'd improve the @co1 DK, allowing different output instead of having to duplicate it. E.g., {`."`,Enter} for @co1, Shift+D.
 		- On the other hand, maybe that is overmuch after all? Mental load already feels substantial. But it'd still be cool to at least have those extra states.

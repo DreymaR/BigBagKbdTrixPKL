@@ -45,6 +45,10 @@ alternation (notice the positions of TH, NE, ST and the fairly unusual feature o
 |   :---:   |
 |_Shifted MTGAP help image on an ANSI board_|
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [MTGAPm]: https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/ (The MTGAP project)
 [MTGaPp]: https://mdickens.me/ (*M*ichael "*T*he *G*lorious *A*nd *P*owerful")

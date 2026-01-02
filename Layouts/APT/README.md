@@ -83,9 +83,14 @@ The [**S**ym(bol)][ErgSym] mod should have <kbd>'</kbd> and <kbd>-</kbd> in good
 
 _The APT-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you wish._
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 <br><br>
 
-![Apsu logo](./_Res/Apsu_GitHub.jpg)
+<div align=center ><img src="./_Res/Apsu_GitHub.jpg" 
+                        alt="Apsu's logo"></div>
 
 
 [APTGit]: https://github.com/Apsu/APT                           (The APTv3 layout on GitHub)

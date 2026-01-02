@@ -105,8 +105,8 @@ The ER/RE pinky bigrams contribute to the poor NFB score. The strongest fingers 
 
 <br><br>
 
-"IS COLEMAK-???/<YourLayoutHere> THE BEST LAYOUT?"
-==================================================
+"IS (YourLayoutHere) THE BEST LAYOUT?"
+======================================
 
 No, it isn't. The best layout in all likelihood isn't made yet. And ultimately, the question is wrong.
 

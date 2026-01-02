@@ -20,5 +20,9 @@ The EPKL System layout
 |   :---:   |
 |_Sample state0 help image: A Vim help sheet (for Colemak), included in this layout's base folder._|
 
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [BB_Ext]: https://dreymar.colemak.org/layers-extend.html (DreymaR's Big Bag of Tricks – Extend page)

@@ -48,7 +48,9 @@ Colemak[eD]: Colemak - edition DreymaR
 
 _Colemak-CAWS-ISO as above, showing the AltGr layer with dead keys marked in yellow_
 
+<br>
 
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 
 [CmkCom]: https://colemak.com/ (The main Colemak site)

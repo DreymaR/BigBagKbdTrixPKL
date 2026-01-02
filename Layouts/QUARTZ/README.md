@@ -12,9 +12,15 @@ The rock solid QUARTZ Perfect Pangram layout
 <br>
 
 ￣(=⌒ᆺ⌒=)￣
+
 <br>
 
 ![QUARTZ help image with finger coloring, ANSI board](./QUARTZ_ANS_EPKL-FShui.png)
+
+<br>
+
+<h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
+
 
 [WikPan]: https://en.wikipedia.org/wiki/Pangram (Wikipedia on pangrams)
 [LayFoa]: /Layouts/Foalmak                                          (The Foalmak layout in EPKL)
