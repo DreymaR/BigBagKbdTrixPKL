@@ -26,5 +26,5 @@ The foalproof Foalmak April's Foals layout
 <h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 
-[LayFoa]: /Layouts/Foalmak                                          (The Foalmak layout in EPKL)
-[LayQua]: /Layouts/QUARTZ                                           (The QUARTZ layout in EPKL)
+[LayFoa]: /Layouts/Foalmak#foalmak                                  (The Foalmak layout in EPKL)
+[LayQua]: /Layouts/QUARTZ#quartz                                    (The QUARTZ layout in EPKL)

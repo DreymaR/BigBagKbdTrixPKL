@@ -20,8 +20,8 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 <br>
 
 - I wanted to make a Graphite-Gallium variant with traditional symbol/punctuation placements.
-- Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
+- Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
 - I decided to keep the apostrophe in the letter block, as I like that a lot.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
@@ -51,7 +51,7 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 - It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
 - In this capacity, it can also be a stepping-stone to full Graphite or Gallium! Learn Gralmak first, then decide whether to proceed.
 - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-- If you don't use punctuation solutions, you may modify Gralmak with a Sym ergo mod instead; see below.
+- If you don't use punctuation solutions, you may modify Gralmak with symbol ergo mods; see the [Gralmak readme][Gralmk].
 <br>
 
 - This layout manages to satisfy newer analyzers and still keep some similarity to well-known layouts like Colemak.
@@ -75,16 +75,19 @@ Gralmaks and Sym
 - Standard Gralmak keeps punctuation unmoved from QWERTY, like Colemak and some other layouts do.
     - This makes it easier to learn and transition to.
     - Another reason, as mentioned above, is that I can use a special thumb [CoDeKey][CoDeKy] for most punctuation.
+    - The one exception is the apostrophe/quote (QU) key, which I kept in the letter block like Graphite does.
 - However, if you type text with punctuation with Gralmak and don't have access to such a special key, there will be some issues.
 - The main issues according to Cyanophage's analyzer are the `E.` SFB (0.14%) and the `O ,` skip-1-gram (0.07%).
 <br>
 
-- Gralmaks is a mod variant that simply remaps the `. / ,` keys while keeping other punctuation unchanged as before.
+- Gralmaks is a mod variant that at its heart remaps the `. / ,` keys while keeping other punctuation unchanged as before.
 - It uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
 - You'll have to decide whether that's useful for you.
     - You could also use either Gallium or Graphite punctuation, should you wish to.
     - Gallium punctuation has somewhat lower SFB% according to cmini analysis. Its period placement is most of the reason.
-    - At the same time, Gallium achieves this by loading the pinky with both comma and period. Maybe that's too much for some?
+    - At the same time, Gallium achieves this by loading the pinky with both comma and period. That may not be ideal.
+<br>
+
 - Unfortunately, this mod doesn't play well with a Wide ergo configuration since that'd displace the comma. You may have to choose one.
 
 ```
@@ -96,12 +99,12 @@ Gralmak:
 | z x m c v   k p , . /      |
 +----------------------------+
 
-Gralmaks:
+GralmakS (full non-Wide Sym mod):
 +----------------------------+
-|                        - = |
-|                 o u '  [ ] |
-|               h a e i  ; \ |
-|                 . / ,      |
+| 1 2 3 4 5   6 7 8 9 0  [ ] |
+| b l d w q   j f o u '  - = |
+| n r t s g   y h a e i  ; \ |
+| z x m c v   k p . / ,      |
 +----------------------------+
 
 Graphite:
@@ -123,16 +126,6 @@ Gallium:
 
 - My [**S**ym(bol)][ErgSym] ergo mods move the hyphen to a better position. Gralmak(s) deserves that.
 - The brackets go up to the number row, as on Graphite. The `= [` and `- ]` version would be another option.
-
-```
-Gralmaks-Sym:
-+----------------------------+
-| 1 2 3 4 5   6 7 8 9 0  [ ] |
-| b l d w q   j f o u '  - = |
-| n r t s g   y h a e i  ; \ |
-| z x m c v   k p . / ,      |
-+----------------------------+
-```
 
 <br>
 
@@ -191,12 +184,12 @@ _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/     (Graphite comment in the Nerps post on Reddit)
 [GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors   (The Graphite README on Scissors)
-[CmkPKL]: /Layouts/Colemak/                                                             (The Colemak layout in EPKL)
-[StrPKL]: /Layouts/Sturdy/                                                              (The Sturdy layout in EPKL)
-[GalPKL]: /Layouts/Gallium/                                                             (The Gallium layout in EPKL)
-[Gallrd]: /Layouts/Gallium/README.md#galliard                                           (The Galliard Gallium layout variant)
-[GraPKL]: /Layouts/Graphite/                                                            (The Graphite layout in EPKL)
-[Gralmk]: #gralmak                                                                      (The Gralmak Graphite layout variant)
+[CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
+[StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
+[GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
+[Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
+[GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
+[Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
 [Galite]: https://github.com/almk-dev/galite/                                           (The Galite variant, nearly equal to Gralmak - now removed)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)

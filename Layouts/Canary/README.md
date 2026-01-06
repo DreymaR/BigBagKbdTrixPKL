@@ -106,7 +106,7 @@ _The Canary-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you 
                         alt="Canary logo"></div>
 
 
-[CanGit]: https://github.com/Apsu/Canary                        (The Canary layout on GitHub)
+[CanGit]: https://github.com/Apsu/Canary#canary                 (The Canary layout on GitHub)
 [CanOrt]: https://github.com/Apsu/Canary#ortho                  (Canary layout Readme, Ortho section)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)

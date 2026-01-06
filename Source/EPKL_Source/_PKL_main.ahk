@@ -28,10 +28,6 @@ TODO: It'd be more precise to have DK input remove a Sticky modifier.
 		- The shifted states could be used for `!"` and `?"` without extra mental load. That'd be nice. Keep in mind that the Shift key may be held down then.
 	- It'd remove the interesting timing-based Kaomoji selection, necessitating an extra Shift tap to get the shifted Kaomoji. But that's just a trick, really.
 
-TODO: Find a neat something to put between the end of a layout readme and the final picture (layout or symbol). Just a line, maybe? Or a keyboard graphic of sorts?
-	- Trying out `⌨ ⌨ ⌨ ⌨ ⌨ ⌨ ⌨`, centered.
-	- Also, preface each folder README with a simple heading so it's easier to link to the actual readme instead of the folder contents. E.g., `/Layouts/Gralmak#gralmak`.
-
 WIPs: On the CoDeKey layers, I've found room for number row symbols, except for two: `* +`. However, I do have both backtick and ~.
 	- Would the missing symbols be more natural and maybe useful? I'll also have to keep it intuitive, for low mental load.
 	- Could do one on CDK,g? I don't think the bullet point is seeing much use, but on the other hand the OneShotShift needs speed.
@@ -69,15 +65,15 @@ WIPs: Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod fo
 		               ' ; .
 		
 		Gralmak:
-		b l d w q  j f o u ' -
+		b l d w q  j f o u ' [
 		n r t s g  y h a e i ;
 		z x m c v  k p , . /
 		
-		Gralmak-pct:
+		GralmakS:
 		b l d w q  j f o u ' -
 		n r t s g  y h a e i ;
 		z x m c v  k p . / ,
-		Remap: . , /
+		Remap: . , / and Sym
 		
 		Gralmak-thumb:
 		b l d w q  j f o u '
@@ -92,7 +88,7 @@ WIPs: Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod fo
 		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%2Czxmcvkp%5C%3D%2F%3B.&mode=ergo&lan=english&thumb=l
 		bldwqjfou'-nrtsgyhaei,zxmcvkp\=/;.
 
-TODO: Add the Canarda variant
+TODO: Add the Canarda variant of Canary Ortho; also as a variant of non-Ortho?
 		canary-ortho (Eve)
 		  w l y p b  z f o u '
 		  c r s t g  m n e i a
@@ -121,7 +117,7 @@ TODO: Add the Canarda variant
 		
 		Note: A further k-q swap looks tempting, but it'd take SFB up from 0.9% to 1.0% which is overmuch.
 	
-	- Name: Canarda (Porta Canarda is a place in Ventimiglia, Italy)? Canardy? Candory?
+	- Name: Canarda (Porta Canarda is a place in Ventimiglia, Italy). In French, 'Canarder' means to snipe at someone, hehe.
 	- Should also add Canary-Ortho Sym
 
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
