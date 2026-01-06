@@ -23,6 +23,7 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
 - Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
+- I decided to keep the apostrophe in the letter block, as I like that a lot.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 <br>
@@ -69,19 +70,22 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 
 <br><br>
 
-GralmakS
---------
-- Standard Gralmak keeps punctuation unmoved from QWERTY, like Colemak and some other layouts do. This makes it easier to learn and transition to.
-- Another reason for it, as mentioned above, is that I can use a special thumb [CoDeKey][CoDeKy] for most punctuation.
+Gralmaks and Sym
+----------------
+- Standard Gralmak keeps punctuation unmoved from QWERTY, like Colemak and some other layouts do.
+    - This makes it easier to learn and transition to.
+    - Another reason, as mentioned above, is that I can use a special thumb [CoDeKey][CoDeKy] for most punctuation.
 - However, if you type text with punctuation with Gralmak and don't have access to such a special key, there will be some issues.
-- The main issues according to Cyanophage's analyzer are the `E.` SFB (0.14%) and the `O_,` skip-1-gram (0.07%).
-- Thus, Gralmak-Sym or simply "GralmakS" is a variant that simply remaps the `. / ,` keys while keeping other punctuation unchanged as before.
-- GralmakS thus uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
-- You'll have to decide whether that's useful though. You could also use either Gallium or Graphite punctuation, should you wish to.
-    - Gallium punctuation has lower SFB% according to cmini analysis. The period is literally the key to that.
-    - At the same time, Gallium achieves that by loading the pinky with both comma and period. Maybe some dislike that?
-- Moving the hyphen to a better position is also recommended for all my Sym mods. It deserves that. The brackets go up, as on Graphite.
-- Unfortunately, this sym mod doesn't play well with a Wide ergo configuration, since that'd displace the comma. You have to choose one.
+- The main issues according to Cyanophage's analyzer are the `E.` SFB (0.14%) and the `O ,` skip-1-gram (0.07%).
+<br>
+
+- Gralmaks is a mod variant that simply remaps the `. / ,` keys while keeping other punctuation unchanged as before.
+- It uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
+- You'll have to decide whether that's useful for you.
+    - You could also use either Gallium or Graphite punctuation, should you wish to.
+    - Gallium punctuation has somewhat lower SFB% according to cmini analysis. Its period placement is most of the reason.
+    - At the same time, Gallium achieves this by loading the pinky with both comma and period. Maybe that's too much for some?
+- Unfortunately, this mod doesn't play well with a Wide ergo configuration since that'd displace the comma. You may have to choose one.
 
 ```
 Gralmak:
@@ -92,28 +96,41 @@ Gralmak:
 | z x m c v   k p , . /      |
 +----------------------------+
 
-GralmakS:
+Gralmaks:
 +----------------------------+
-| · · · · ·   · · · · ·  [ ] |
-| · · · · ·   · · · · '  - = |
-| · · · · ·   · · · · ·  ; \ |
-| · · · · ·   · · . / ,      |
+|                        - = |
+|                 o u '  [ ] |
+|               h a e i  ; \ |
+|                 . / ,      |
 +----------------------------+
 
 Graphite:
 +----------------------------+
-| · · · · ·   · · · · ·  [ ] |
-| · · · · ·   ' · · · ·  ; = |
-| · · · · ·   · · · · ·  , \ |
-| · · · · ·   · · . - /      |
+|                        [ ] |
+|             '   o u    ; = |
+|               h a e i  , \ |
+|                 . - /      |
 +----------------------------+
 
 Gallium:
 +----------------------------+
-| · · · · ·   · · · · ·  - = |
-| · · · · ·   · · · · ,  [ ] |
-| · · · · ·   · · · · ·  /   |
-| · · · · ·   · · ' ; .      |
+|                        - = |
+|                 o u ,  [ ] |
+|               h a e i  /   |
+|                 ' ; .      |
++----------------------------+
+```
+
+- My [**S**ym(bol)][ErgSym] ergo mods move the hyphen to a better position. Gralmak(s) deserves that.
+- The brackets go up to the number row, as on Graphite. The `= [` and `- ]` version would be another option.
+
+```
+Gralmaks-Sym:
++----------------------------+
+| 1 2 3 4 5   6 7 8 9 0  [ ] |
+| b l d w q   j f o u '  - = |
+| n r t s g   y h a e i  ; \ |
+| z x m c v   k p . / ,      |
 +----------------------------+
 ```
 
@@ -126,6 +143,7 @@ Gralmak WideSym
 <br>
 
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
+- I've already included the hyphen-semicolon swap into standard Gralmak. Feel free to reverse it if you wish, though.
 - For Wide variants, a Sym mod is beneficial. I've implemented Gralmak WideSym variants.
 - I prefer the hyphen on the upper row instead of the lower row. Seems this is a matter of individual preference.
 <br>
@@ -136,7 +154,7 @@ Gralmak WideSym
 | 1 2 3 4 5 6 \ 7 8 9 0 =    |
 |  b l d w q [ j f o u ' - ; |
 |  n r t s g ] y h a e i     |
-|   z x m c v / k p , .      |
+|   x m c v z / k p , .      |
 +----------------------------+
 ```
 

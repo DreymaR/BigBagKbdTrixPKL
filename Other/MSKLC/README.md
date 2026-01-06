@@ -101,6 +101,12 @@ Technicalities
 	- Make sure the line endings and encoding are right.
 	- If you get `UTF-8` encoding and Linux endings as is native for GitHub, set them right using, e.g., the Notepad++ program.
 - By downloading the repo as a .zip file you should get the right `.klc` file formats, with correct encoding and line endings.
+
+- Some users have experienced technical difficulties with MSKLC.
+	- One such problem is a blank window instead of a keyboard graphic at startup.
+	- Sometimes, this can be solved by resetting Custom Scaling to 100% in Windows System > Display > Scale Settings.
+		- https://discord.com/channels/409502982246236160/1002128319770271834/1442180781551259829
+		- This settings comes with a warning to only use it if necessary. So there's that.
 <br>
 
 Compiling your own klc

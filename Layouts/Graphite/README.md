@@ -154,6 +154,7 @@ Gralmak
 - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
 - Thus came about the [Gralmak][Gralmk] variant that's easily ergo modified like, e.g., Colemak-CAWS.
 - Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
+- I decided to keep the apostrophe in the letter block, as I like that a lot.
 - Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
 - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 - For more info, see the [Gralmak][Gralmk] layout folder and [the Gralmak repository][GrlGit].
