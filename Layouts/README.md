@@ -100,7 +100,7 @@ With a layout override file, you can do some neat customizations. I'll show you 
 * Instead of writing to the main `EPKL_Layouts_Override` `.ini` file, this button creates a `Layout_Override` in your current layout folder. 
     - (Tip: Opening the current layout folder is the default setting for the `Open app/folder` menu choice.) 
 * This file can override anything a layout file can do. And it's at the top of the `LayStack` so it can't be overridden itself.
-* Below is the first part of my `Graphite\Gra-eD-Gralmak_ISO_AWideSym` override file.
+* Below is the first part of my `Gralmak\Gmk-eD_ISO_AWideSym` override file.
 * As usual, an initial semicolon disables that line, so the original or default value is used.
 
 ```
@@ -114,13 +114,13 @@ layoutName      = Gralmak-eD-AWS OeBeAa 							; Long layout name for display in
 ;mapSC_extend    = AWide_@K  										; As _layout but only "hard" (non-letter) mods
 
 img_sizeWH      = 704,226   										; DreymaR's IBM-style help images @96dpi (1u/r = 54,56 px: 15u/5r = 812,282; 13u/4r = 704,226)
-img_MainDir     = ..\Gra-eD-Gralmak_ANS-Orth_WideSym\   			; Help images are in the main layout folder, unless specified in img_MainDir.
+img_MainDir     = ..\Gmk-eD_ANS-Orth_WideSym\   					; Help images are in the main layout folder, unless specified in img_MainDir.
 img_bgImage     = Files\ImgBackground\Bg_FingerShui_Ortho-Wide.png
 
 img_Extend1     = Files\ImgExtend\@K-Ortho-W_Ext1.png   			; @K-AWide_Ext1.png
 img_Extend2     = Files\ImgExtend\@K-Ortho-W_Ext2.png
 img_Extend3     = Files\ImgExtend\@K-Ortho-W_Ext3.png   			; "Soft" mnemonic layers follow letters
-img_DKeyDir     = ..\Gra-eD-Gralmak_ISO-Orth_WideSym\DeadkeyImg 	; .\DeadkeyImg
+img_DKeyDir     = ..\Gmk-eD_ISO-Orth_WideSym\DeadkeyImg 			; .\DeadkeyImg
 img_ModsDir     = Files\ImgModStates\MagBlob-Ortho  				; GrnBlob
 ```
 

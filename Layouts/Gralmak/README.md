@@ -11,6 +11,7 @@ The Gralmak layout
 - Gralmak may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
 - For more info, see [the Gralmak repository on GitHub][GrlGit].
+- If you're interested, also have a look at the README for the similar [Galliard][Gallrd] Gallium variant.
 <br>
 
 ![Gralmak Angle-ANSI help image](./Gralmak_ANS-A_EPKL.png)
@@ -19,16 +20,16 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 
 <br>
 
-- I wanted to make a Graphite-Gallium variant with traditional symbol/punctuation placements.
-- Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
-- Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
-- I decided to keep the apostrophe in the letter block, as I like that a lot.
-- Eventually, I also brought Z back to its familiar spot where QWERTY and Colemak has it.
-- The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
+> - I wanted to make a Graphite-Gallium variant with traditional symbol/punctuation placements.
+> - Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
+> - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
+> - Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
+> - I decided to have the apostrophe/quote in the letter block, as I like that a lot.
+> - I also brought Z back to its familiar spot where QWERTY and Colemak has it.
+> - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
 <br>
 
-#### Gralmak on an ortho board (w/ trad. punctuation):
+#### Gralmak on an ortho board:
 ```
 +----------------------------+
 | 1 2 3 4 5   6 7 8 9 0  - = |
@@ -48,47 +49,39 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 ```
 <br>
 
-- It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
-- In this capacity, it can also be a stepping-stone to full Graphite or Gallium! Learn Gralmak first, then decide whether to proceed.
-- This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-- If you don't use punctuation solutions, you may modify Gralmak with symbol ergo mods; see the [Gralmak readme][Gralmk].
+> - It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
+> - In this capacity, it can also be a stepping-stone to full Graphite or Gallium! Learn Gralmak first, then decide whether to proceed.
+> - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
+> - If you don't use punctuation solutions, you may instead use a symbol mod of your choice; see the [Gralmak readme][Gralmk].
 <br>
 
-- This layout manages to satisfy newer analyzers and still keep some similarity to well-known layouts like Colemak.
-- For instance, only `L N M` and `F A E` swap hands from QWERTY; `L N M` and `F A P` from Colemak.
-- The familiar `QW RT ZX CV` bigrams are (semi-)preserved in Gralmak, also aiding learning and recognition.
-- Also see the README for the similar [Galliard][Gallrd] Gallium variant.
-<br>
-
-|![EPKL help image for Gralmak-eD on an ANSI board, unshifted layer](./Gra-eD-Gralmak_ANS/state0.png)|
+|![EPKL help image for Gralmak-eD on an ANSI board, unshifted layer](./Gmk-eD_ANS/state0.png)|
 |   :---:   |
 |_The Gralmak-eD layout on an ANSI board, unshifted layer_|
 
-|![EPKL help image for Gralmak-eD on an ANSI board, AltGr+Shift layer](./Gra-eD-Gralmak_ANS/state7.png)|
+|![EPKL help image for Gralmak-eD on an ANSI board, AltGr+Shift layer](./Gmk-eD_ANS/state7.png)|
 |   :---:   |
 |_The Gralmak-eD layout on an ANSI board, AltGr+Shift layer_|
 
 <br><br>
 
-Gralmaks and Sym
-----------------
+GralmakS - Sym mod
+------------------
 - Standard Gralmak keeps punctuation unmoved from QWERTY, like Colemak and some other layouts do.
-    - This makes it easier to learn and transition to.
-    - Another reason, as mentioned above, is that I can use a special thumb [CoDeKey][CoDeKy] for most punctuation.
     - The one exception is the apostrophe/quote (QU) key, which I kept in the letter block like Graphite does.
+    - Not moving the symbol keys makes it easier to learn and transition to, and adds flexibility.
+    - Another reason is that I can use a special thumb [CoDeKey][CoDeKy] for most punctuation.
 - However, if you type text with punctuation with Gralmak and don't have access to such a special key, there will be some issues.
 - The main issues according to Cyanophage's analyzer are the `E.` SFB (0.14%) and the `O ,` skip-1-gram (0.07%).
 <br>
 
-- Gralmaks is a mod variant that at its heart remaps the `. / ,` keys while keeping other punctuation unchanged as before.
+- GralmakS is a mod variant that at its heart remaps the `. / ,` keys while keeping other punctuation unchanged as before.
 - It uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
 - You'll have to decide whether that's useful for you.
     - You could also use either Gallium or Graphite punctuation, should you wish to.
-    - Gallium punctuation has somewhat lower SFB% according to cmini analysis. Its period placement is most of the reason.
-    - At the same time, Gallium achieves this by loading the pinky with both comma and period. That may not be ideal.
+    - Gallium punctuation has somewhat lower SFB% according to [cmini][Acmini] analysis. Its period placement is most of the reason.
+    - At the same time, Gallium achieves this by placing both comma and period on off-home-row pinky keys. That may be overmuch.
 <br>
-
-- Unfortunately, this mod doesn't play well with a Wide ergo configuration since that'd displace the comma. You may have to choose one.
 
 ```
 Gralmak:
@@ -99,7 +92,7 @@ Gralmak:
 | z x m c v   k p , . /      |
 +----------------------------+
 
-GralmakS (full non-Wide Sym mod):
+GralmakS (non-Wide Sym mod):
 +----------------------------+
 | 1 2 3 4 5   6 7 8 9 0  [ ] |
 | b l d w q   j f o u '  - = |
@@ -107,7 +100,7 @@ GralmakS (full non-Wide Sym mod):
 | z x m c v   k p . / ,      |
 +----------------------------+
 
-Graphite:
+Graphite symbols:
 +----------------------------+
 |                        [ ] |
 |             '   o u    ; = |
@@ -115,7 +108,7 @@ Graphite:
 |                 . - /      |
 +----------------------------+
 
-Gallium:
+Gallium symbols:
 +----------------------------+
 |                        - = |
 |                 o u ,  [ ] |
@@ -123,9 +116,11 @@ Gallium:
 |                 ' ; .      |
 +----------------------------+
 ```
+<br>
 
 - My [**S**ym(bol)][ErgSym] ergo mods move the hyphen to a better position. Gralmak(s) deserves that.
 - The brackets go up to the number row, as on Graphite. The `= [` and `- ]` version would be another option.
+- Unfortunately, this mod doesn't play well with a Wide ergo configuration since that'd displace the comma. You may have to choose one.
 
 <br>
 
@@ -136,9 +131,9 @@ Gralmak WideSym
 <br>
 
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
-- I've already included the hyphen-semicolon swap into standard Gralmak. Feel free to reverse it if you wish, though.
 - For Wide variants, a Sym mod is beneficial. I've implemented Gralmak WideSym variants.
-- I prefer the hyphen on the upper row instead of the lower row. Seems this is a matter of individual preference.
+- The quote-semicolon (QU-SC) swap is already a part of standard Gralmak. Feel free to reverse it if you wish, though.
+- I prefer the hyphen on the upper row. Seems this is a matter of individual preference.
 <br>
 
 #### Gralmak AWS-ANSI:
@@ -178,24 +173,24 @@ _Gralmak-WideSym on an Ortho keyboard._
 _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 
+[NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/     (Graphite comment in the Nerps post on Reddit)
+[GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors   (The Graphite README on Scissors)
+[Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
+[GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)
+
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
 [GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
-[NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/     (Graphite comment in the Nerps post on Reddit)
-[GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors   (The Graphite README on Scissors)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
 [StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
 [GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
 [Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
 [GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
 [Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
-[Galite]: https://github.com/almk-dev/galite/                                           (The Galite variant, nearly equal to Gralmak - now removed)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)
 [BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences                        (DreymaR's BigBag on sequencing)
 [BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html                                 (DreymaR's Big Bag on Tarmak transitions)
-[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
-[Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
-[GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)
+[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey (The EPKL README on the CoDeKey)

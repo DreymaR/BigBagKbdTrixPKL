@@ -164,7 +164,7 @@ _The Gralmak layout variant on an Ortho keyboard_
 > - It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
 > - In this capacity, it can also be a stepping-stone to full Graphite! Learn Gralmak first, then decide whether to proceed.
 > - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-> - If you don't use punctuation solutions, you may modify Gralmak with symbol ergo mods ...
+> - If you don't use punctuation solutions, you may instead use a symbol mod (...)
 <br>
 
 ![Gralmak AWS-ISO help image](../Gralmak/Gralmak_ISO-AWS_EPKL.png)
@@ -182,12 +182,15 @@ _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 _The Graphite layout, as depicted on its own [web page][GraGit]._
 
 
+[NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/     (Graphite comment in the Nerps post on Reddit)
+[GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors   (The Graphite README on Scissors)
+[Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
+[GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)
+
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
 [GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
-[NrpGra]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/comment/jck98z6/     (Graphite comment in the Nerps post on Reddit)
-[GraSci]: https://github.com/rdavison/graphite-layout/blob/main/README.md#on-scissors   (The Graphite README on Scissors)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
 [StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
 [GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
@@ -199,6 +202,4 @@ _The Graphite layout, as depicted on its own [web page][GraGit]._
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)
 [BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences                        (DreymaR's BigBag on sequencing)
 [BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html                                 (DreymaR's Big Bag on Tarmak transitions)
-[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
-[Gal-QZ]: https://github.com/GalileoBlues/Gallium/issues/6#issuecomment-2665066910      (Discussing a Q-Z swap w/ almk on the Gallium repo)
-[GraPct]: https://github.com/rdavison/graphite-layout/issues/2#issuecomment-2787752575  (Discussing Graphite punctuation and Wide mods on its repo)
+[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey (The EPKL README on the CoDeKey)

@@ -146,8 +146,11 @@ _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or w
 _The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][GalGit]._
 
 
-[GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
+[GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5                              (GitHub issue on adding Gallium to EPKL)
+
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
+[GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
+[GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
 [StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
@@ -155,8 +158,9 @@ _The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][G
 [Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
 [GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
 [Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
-[GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5                              (GitHub issue on adding Gallium to EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)
-[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey  (The EPKL README on the CoDeKey)
+[BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences                        (DreymaR's BigBag on sequencing)
+[BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html                                 (DreymaR's Big Bag on Tarmak transitions)
+[CoDeKy]: https://github.com/DreymaR/BigBagKbdTrixPKL/blob/master/README.md#advanced-composecodekey (The EPKL README on the CoDeKey)

@@ -98,7 +98,6 @@ TODO: Add the Canarda variant of Canary Ortho; also as a variant of non-Ortho?
 		  w l y p b  j f o u '
 		  c r s t g  m n e i a
 		  z x v d k  q h / , .
-		It cycles j z q x, leading to very minor changes in efficiency – maybe even slightly on the positive side overall?
 		
 		canarda(new) - canary-ortho(old)
 		  w l y p b  ~ f o u '
@@ -106,19 +105,19 @@ TODO: Add the Canarda variant of Canary Ortho; also as a variant of non-Ortho?
 		  ~ ~ v d k  ~ h / , .
 		
 		SHAI:
-		+   Alt:  0.01%
-		+   Rol:  0.02%   (In/Out: -0.09% |  0.11%)
+		0   Alt:  0.01%
+		0   Rol:  0.02%   (In/Out: -0.09% |  0.11%)
 		+   One:  0.05%   (In/Out: -0.00% |  0.05%)
 		+   Rtl:  0.07%   (In/Out: -0.09% |  0.16%)
 		+   Red: -0.04%   (Bad:     0.00%)
-		-   SFB:  0.01%
+		0   SFB:  0.01%
 		+   SFS: -0.06%   (Red/Alt: -0.02% | -0.04%)
 		0   LH/RH: 0.04% | -0.04%
-		
-		Note: A further k-q swap looks tempting, but it'd take SFB up from 0.9% to 1.0% which is overmuch.
 	
+	- It cycles j z q x, leading to very minor changes in efficiency – maybe even slightly on the positive side overall?
 	- Name: Canarda (Porta Canarda is a place in Ventimiglia, Italy). In French, 'Canarder' means to snipe at someone, hehe.
-	- Should also add Canary-Ortho Sym
+	- Note: A further k-q swap looks tempting, but it'd take SFB up from 0.9% to 1.0% which I think is overmuch.
+	- Should also add Canary-Ortho Sym then.
 
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
