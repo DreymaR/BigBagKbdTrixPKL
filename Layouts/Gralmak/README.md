@@ -52,7 +52,7 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 > - It's easier to learn for someone coming from QWERTY, Colemak, and other layouts that leave the symbol keys unchanged.
 > - In this capacity, it can also be a stepping-stone to full Graphite or Gallium! Learn Gralmak first, then decide whether to proceed.
 > - This incurs some worse punctuation bigrams. Since I use my thumb [CoDeKey][CoDeKy] for most punctuation, I don't care.
-> - If you don't use punctuation solutions, you may instead use a symbol mod of your choice; see the [Gralmak readme][Gralmk].
+> - If you don't use punctuation solutions, you may instead use a symbol mod of your choice; see the [Gralmak readme][GmkPKL].
 <br>
 
 |![EPKL help image for Gralmak-eD on an ANSI board, unshifted layer](./Gmk-eD_ANS/state0.png)|
@@ -187,7 +187,7 @@ _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 [GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
 [Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
 [GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
-[Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
+[GmkPKL]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)

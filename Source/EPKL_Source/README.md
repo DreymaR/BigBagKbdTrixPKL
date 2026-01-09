@@ -657,3 +657,4 @@ VERSION HISTORY:
 	- Allowed empty HIG tags («») to display nothing on help images for a key entry
 	- `α¢[OSM(<Mod>)]¢` allows sending a OneShotMod akin to `{<Mod> OSM}` syntax. Also, `α¢[OSM(0)]¢` clears all OSMs.
 	- Fixed: DK single-character output wasn't sent to the LastKeys queue. It was sent directly with AHK SendInput in pkl_deadkey.
+	- Added my Canarda variant of the Canary layout. It's more similar to other layouts, but seems just as good to me.

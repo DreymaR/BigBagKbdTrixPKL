@@ -88,37 +88,6 @@ WIPs: Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod fo
 		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%2Czxmcvkp%5C%3D%2F%3B.&mode=ergo&lan=english&thumb=l
 		bldwqjfou'-nrtsgyhaei,zxmcvkp\=/;.
 
-TODO: Add the Canarda variant of Canary Ortho; also as a variant of non-Ortho?
-		canary-ortho (Eve)
-		  w l y p b  z f o u '
-		  c r s t g  m n e i a
-		  q j v d k  x h / , .
-		
-		canarda (Dreymar)
-		  w l y p b  j f o u '
-		  c r s t g  m n e i a
-		  z x v d k  q h / , .
-		
-		canarda(new) - canary-ortho(old)
-		  w l y p b  ~ f o u '
-		  c r s t g  m n e i a
-		  ~ ~ v d k  ~ h / , .
-		
-		SHAI:
-		0   Alt:  0.01%
-		0   Rol:  0.02%   (In/Out: -0.09% |  0.11%)
-		+   One:  0.05%   (In/Out: -0.00% |  0.05%)
-		+   Rtl:  0.07%   (In/Out: -0.09% |  0.16%)
-		+   Red: -0.04%   (Bad:     0.00%)
-		0   SFB:  0.01%
-		+   SFS: -0.06%   (Red/Alt: -0.02% | -0.04%)
-		0   LH/RH: 0.04% | -0.04%
-	
-	- It cycles j z q x, leading to very minor changes in efficiency – maybe even slightly on the positive side overall?
-	- Name: Canarda (Porta Canarda is a place in Ventimiglia, Italy). In French, 'Canarder' means to snipe at someone, hehe.
-	- Note: A further k-q swap looks tempting, but it'd take SFB up from 0.9% to 1.0% which I think is overmuch.
-	- Should also add Canary-Ortho Sym then.
-
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
 2FIX: The base1 entry ought to be used when double-tapping a DK. Instead, the entry for space takes precedence.
