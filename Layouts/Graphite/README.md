@@ -70,7 +70,7 @@ Graphite-HB
 - You can select your preferred variant using the `Variant/Locale` setting in the `Layout Selector` GUI.
 - The `HB` variant does make the common double quote hard to reach on this layout, especially on row-staggered boards.
 - However, with EPKL it's possible to get around such problems elegantly by using a [CoDeKey][CoDeKy] or other [sequencing][BBTseq] options.
-- Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead, or [Gralmak][Gralmk]. These, like Colemak, relegate the `J` key to that awkward position.
+- Another option for quote key fans, is to use a [Gallium][GalPKL] variant instead, or [Gralmak][GmkPKL]. These, like Colemak, relegate the `J` key to that awkward position.
 <br>
 
 #### Graphite's altered shift state mappings, from its [web page][GraGit]:
@@ -96,7 +96,7 @@ Graphite Wide and Sym variants
 
 - [**S**ym(bol)][ErgSym] mods usually prioritize the common <kbd>'"</kbd> (Apostrophe/Quote) and <kbd>-_</kbd> (Hyphen/Underscore) keys.
 - Graphite already moves most of the symbol keys around in its own fashion, so not everyone may want a further Sym mod.
-- As seen below though, the [Gralmak][Gralmk] variant is in itself a Sym (UnSym) mod, making for familiar AngleWideSym combos.
+- As seen below though, the [Gralmak][GmkPKL] variant is in itself a Sym (UnSym) mod, making for familiar AngleWideSym combos.
 - I advise moving the Quote key to be even more accessible. Especially if using the `HB` (keymap friendly) variant!
 - For Wide variants, a Sym mod is beneficial. I've proposed Graphite WideSym variants similar to my other WideSym layout variants.
 - I prefer the hyphen on the upper row instead of the lower row. Seems this is a matter of individual preference.
@@ -152,7 +152,7 @@ Gralmak
 -------
 - I wanted to make a Graphite variant with traditional symbol/punctuation placements.
 - Thus came about the **Gralmak** variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- For more info, see the [Gralmak layout folder][Gralmk] and [the Gralmak repository][GrlGit].
+- For more info, see the [Gralmak layout folder][GmkPKL] and [the Gralmak repository][GrlGit].
 <br><br>
 
 ![Gralmak Ortho help image](../Gralmak/Gralmak_Orth-Cpt_EPKL.png)
@@ -190,13 +190,14 @@ _The Graphite layout, as depicted on its own [web page][GraGit]._
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
 [GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
+[Sturdy]: https://oxey.dev/sturdy/                                                      (The Sturdy layout's home page)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
 [StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
 [GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
 [Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
 [GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
-[Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
+[GmkPKL]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)

@@ -57,6 +57,30 @@ This layout gets special mention in [Getreuer's Alt Keyboard Layout guide][GetAK
 
 <br><br>
 
+Canarda
+-------
+I feel that Canary may have gone just a little too far in disregarding familiarity, for being launched as "The New Colemak". 
+So I fiddled with it a bit, and found this interesting variant. 
+I'd consider using it both for row-staggered and ortho boards, with an Angle mod for rowstag.
+
+- Cycling `j z q x` from Canary-Ortho leads to very minor changes in efficiency – maybe even slightly on the positive side overall?
+- This variant has a greater similarity to [Colemak-DH][CmkPKL], but also to for instance [Gralmak][GmkPKL] (my Graphite-Gallium variant).
+- According to a simple [cmini][Acmini] analysis, Canarda scores practically the same as Canary-Ortho on alternation, SFBs and hand balance.
+- See the [Appendix](./README_APP.md#canarda) for more details, if you're interested.
+
+- The 'Canarda' name is obviously a play on 'Canary'.
+	- In French, 'Canarder' means to snipe at someone.
+	- So the name may mean that I took a "snipe" at the Canary!
+	- ... or just that I'm a quack (as "canard" means a duck)!
+	- There's also a Porta Canarda in Ventimiglia, Italy.
+<br>
+
+![Canarda Ortho help image](./Canarda_Orth-Cpt_EPKL.png)
+
+_The Canarda layout variant_
+
+<br><br>
+
 Canary Wide and (C)AWS variants
 -------------------------------
 As mentioned, the Canary layout on standard keyboards already contains a [**C**url][ErgCrl] mod as the letters <kbd>D</kbd> and <kbd>H</kbd> are easily accessible on the good lower row positions while less common letters are on the lateral inwards positions, and an [**A**ngle][ErgAWi] mod is standard on row-staggered boards as well. So the default layout for standard boards may technically be described as **Canary-(C)A**. But what about the **W**ide and **S**ymbol mods that some alt-layout users have grown fond of?
@@ -106,9 +130,13 @@ _The Canary-(C)AWS-ISO layout. The © key can be a Compose key, or whatever you 
                         alt="Canary logo"></div>
 
 
-[CanGit]: https://github.com/Apsu/Canary#canary                 (The Canary layout on GitHub)
-[CanOrt]: https://github.com/Apsu/Canary#ortho                  (Canary layout Readme, Ortho section)
-[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (DreymaR's BigBag on Angle+Wide ergo mods)
-[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh    (DreymaR's BigBag on the Curl-DH ergo mod)
-[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols    (DreymaR's BigBag on the Symbols ergo mod)
-[GetAKL]: https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn (Pascal Getreuer's Alt Keyboard Layout guide)
+[CanGit]: https://github.com/Apsu/Canary#canary                                 (The Canary layout on GitHub)
+[CanOrt]: https://github.com/Apsu/Canary#ortho                                  (Canary layout Readme, Ortho section)
+[ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                 (DreymaR's BigBag on Angle+Wide ergo mods)
+[ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                    (DreymaR's BigBag on the Curl-DH ergo mod)
+[ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                    (DreymaR's BigBag on the Symbols ergo mod)
+[GetAKL]: https://getreuer.info/posts/keyboards/alt-layouts/index.html#which-alt-keyboard-layout-should-i-learn 
+                                                                                (Pascal Getreuer's Alt Keyboard Layout guide)
+[Acmini]: https://github.com/Apsu/cmini                                         (Apsu's cmini layout analyzer)
+[CmkPKL]: /Layouts/Colemak#colemak                                              (The Colemak layout in EPKL)
+[GmkPKL]: /Layouts/Gralmak#gralmak                                              (The Gralmak Graphite layout variant in EPKL)

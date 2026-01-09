@@ -99,7 +99,7 @@ Galliard
 --------
 - Out of interest, I wanted to make a mod variant with traditional symbol/punctuation placements.
 - Thus came about the "Galliard" variant that's easily ergo modified like, e.g., Colemak-CAWS.
-- In this variant, I also kept the Q-X arrangement, as discussed above. [ZXMCV is tempting though.][Gralmk]
+- In this variant, I also kept the Q-X arrangement, as discussed above. [ZXMCV is tempting though.][GmkPKL]
 - The name is a play on "Gallium", but it's also a Renaissance dance. "Galliard" means "brisk, lively".
 <br><br>
 
@@ -128,7 +128,7 @@ _The Galliard layout variant on an Ortho keyboard_
 - The `O'` bigram is better this way, but the more common `I'` bigram is worse. Using a CoDeKey solves that.
 - The `YOU'` tetragram is actually an outward roll on Galliard, albeit with a lateral stretch. Whee!
 - I asked GalileoBlues on his [Gallium repo on GitHub][GalIs5], and got a go for publishing this variant.
-- Also see the README for the similar [Gralmak][Gralmk] Graphite variant.
+- Also see the README for the similar [Gralmak][GmkPKL] Graphite variant.
 <br>
 
 ![Gallium (C)AWS-ISO help image](./Gallium_ISO-AWS_EPKL.png)
@@ -151,13 +151,14 @@ _The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][G
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
 [GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
+[Sturdy]: https://oxey.dev/sturdy/                                                      (The Sturdy layout's home page)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)
 [StrPKL]: /Layouts/Sturdy#sturdy                                                        (The Sturdy layout in EPKL)
 [GalPKL]: /Layouts/Gallium#gallium                                                      (The Gallium layout in EPKL)
 [Gallrd]: /Layouts/Gallium#galliard                                                     (The Galliard Gallium layout variant in EPKL)
 [GraPKL]: /Layouts/Graphite#graphite                                                    (The Graphite layout in EPKL)
-[Gralmk]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
+[GmkPKL]: /Layouts/Gralmak#gralmak                                                      (The Gralmak Graphite layout variant in EPKL)
 [ErgAWi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide                         (DreymaR's BigBag on Angle+Wide ergo mods)
 [ErgCrl]: https://dreymar.colemak.org/ergo-mods.html#curl-dh                            (DreymaR's BigBag on the Curl-DH ergo mod)
 [ErgSym]: https://dreymar.colemak.org/ergo-mods.html#symbols                            (DreymaR's BigBag on the Symbols ergo mod)
