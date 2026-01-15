@@ -63,10 +63,11 @@ I feel that Canary may have gone just a little too far in disregarding familiari
 So I fiddled with it a bit, and found this interesting variant. 
 I'd consider using it both for row-staggered and ortho boards, with an Angle mod for rowstag.
 
-- Cycling `j z q x` from Canary-Ortho leads to very minor changes in efficiency – maybe even slightly on the positive side overall?
+- Cycling `J Z Q X` from Canary-Ortho leads to very minor changes in efficiency – maybe even slightly on the positive side overall?
 - This variant has a greater similarity to [Colemak-DH][CmkPKL], but also to for instance [Gralmak][GmkPKL] (my Graphite-Gallium variant).
 - According to a simple [cmini][Acmini] analysis, Canarda scores practically the same as Canary-Ortho on alternation, SFBs and hand balance.
-- See the [Appendix](./README_APP.md#canarda) for more details, if you're interested.
+- I like its `ZXCV` cluster. Compact, and close enough to familiar positions for easy one-handed Undo-Cut-Copy-Paste.
+- See the [Appendix](./README_APP.md#canarda) for more details if you wish.
 
 - The 'Canarda' name is obviously a play on 'Canary'.
 	- In French, 'Canarder' means to snipe at someone.
