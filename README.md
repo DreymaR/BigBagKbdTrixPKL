@@ -608,7 +608,7 @@ _Øystein "DreymaR" Bech-Aase_
 [BBTtmk]: https://dreymar.colemak.org/tarmak-intro.html  (about Tarmak, in DreymaR's Big Bag of Keyboard Tricks)
 [BBTawi]: https://dreymar.colemak.org/ergo-mods.html#angle-wide (about the Angle/Wide ergo mods, in DreymaR's Big Bag of Keyboard Tricks)
 [BBT_eD]: https://dreymar.colemak.org/layers-colemaked.html (about Colemak-eD layers, in DreymaR's Big Bag of Keyboard Tricks)
-[BBTseq]: https://dreymar.colemak.org/layers-main.html#sequences (about sequencing vs chording modifiers)
+[BBTseq]: https://dreymar.colemak.org/layers-main.html#sequencing (about sequencing vs chording modifiers)
 [CmkBBT]: https://forum.colemak.com/topic/2315-dreymars-big-bag-of-keyboard-tricks-main-topic/ (BigBagOfKbdTrix on the Colemak forums)
 [CmkPKL]: https://forum.colemak.com/topic/1467-dreymars-big-bag-of-keyboard-tricks-pklwindows-edition/ (BigBag-PKL on the Colemak forums)
 [StrtUp]: https://support.microsoft.com/en-us/help/4558286/windows-10-add-an-app-to-run-automatically-at-startup (Windows Startup folder)
