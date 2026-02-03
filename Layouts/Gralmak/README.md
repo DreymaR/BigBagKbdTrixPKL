@@ -5,12 +5,14 @@
 
 The Gralmak layout
 ------------------
-- This layout was made by DreymaR (that's me!), 2024-11.
+- This layout was made by me (DreymaR), 2024-11.
 - It is a variant of [Graphite][GraGit] by StronglyTyped and [Gallium][GalGit] by GalileoBlues. These layouts are very similar.
 - Gallium/Graphite are in turn related to other recent layouts, like [Sturdy][StrPKL] by Oxey and [Nerps][NrpGra] by Smudge.
+<br>
+
 - Gralmak may be said to use the [**Curl**][ErgCrl] principle, by reducing lateral stretches to the middle home row positions.
 - An [**Angle**][ErgAWi] ergo mod is recommended for this layout on row-staggered boards.
-- For more info, see [the Gralmak repository on GitHub][GrlGit].
+- For more info, see [the Gralmak repository on GitHub][GmkGit].
 - If you're interested, also have a look at the README for the similar [Galliard][Gallrd] Gallium variant.
 <br>
 
@@ -21,12 +23,12 @@ _The Gralmak layout (using the Angle mod) on an ANSI keyboard_
 <br>
 
 > - I wanted to make a Graphite-Gallium variant with traditional symbol/punctuation placements.
-> - Thus came about the Gralmak variant that's easily ergo modified like, e.g., Colemak-CAWS.
+> - Thus came about the Gralmak layout that's easily ergo modified like, e.g., Colemak-CAWS.
 > - Like most other layouts (and Graphite-HB), I didn't want to change the Shift states of keys.
-> - Like the [Gallium][GalPKL] and [Colemak(-Sym)][CmkPKL] layouts, I want J in the middle and a symbol (Quote) on pinky.
+> - Like the Gallium and Colemak(-Sym) layouts, I want J in the middle and a symbol on pinky.
 > - I decided to have the apostrophe/quote in the letter block by default, as I like that a lot.
 > - I also brought Z back to its familiar spot where QWERTY and Colemak has it.
-> - The name is a play on Graphite-Gallium-Colemak, and our quest for the mythical "Holy Grail" of layouts!
+> - The name is a play on [Graphite][GraPKL]-[Gallium][GalPKL]-[Colemak][CmkPKL], and our quest for the mythical "Holy Grail" of layouts.
 <br>
 
 #### Gralmak on an ortho keyboard
@@ -149,7 +151,7 @@ _Gralmak-AWS-ISO. The © key can be a Compose key, or whatever you wish._
 
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
-[GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
+[GmkGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
 [Sturdy]: https://oxey.dev/sturdy/                                                      (The Sturdy layout's home page)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)

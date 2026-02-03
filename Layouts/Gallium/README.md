@@ -150,7 +150,7 @@ _The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][G
 
 [GraGit]: https://github.com/rdavison/graphite-layout#graphite-keyboard-layout          (The Graphite layout on GitHub)
 [GalGit]: https://github.com/GalileoBlues/Gallium#gallium                               (The Gallium layout on GitHub)
-[GrlGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
+[GmkGit]: https://github.com/DreymaR/Gralmak#gralmak                                    (The Gralmak layout on GitHub)
 [Sturdy]: https://oxey.dev/sturdy/                                                      (The Sturdy layout's home page)
 [NrpRed]: https://www.reddit.com/r/KeyboardLayouts/comments/tpwyjc/                     (The Nerps layout on Reddit)
 [CmkPKL]: /Layouts/Colemak#colemak                                                      (The Colemak layout in EPKL)

@@ -22,6 +22,6 @@ The rock solid QUARTZ Perfect Pangram layout
 <h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 
-[WikPan]: https://en.wikipedia.org/wiki/Pangram (Wikipedia on pangrams)
+[WikPan]: https://en.wikipedia.org/wiki/Pangram#Perfect_pangrams    (Wikipedia on perfect pangrams)
 [LayFoa]: /Layouts/Foalmak#foalmak                                  (The Foalmak layout in EPKL)
 [LayQua]: /Layouts/QUARTZ#quartz                                    (The QUARTZ layout in EPKL)
