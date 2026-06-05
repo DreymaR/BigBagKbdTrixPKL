@@ -47,16 +47,21 @@ In this folder are some files that aren't needed to run EPKL but may still be us
 - Also worth mentioning to the keyboard modder, is the [KbdEdit][KbdEdt] program which is commercial but quite powerful.
 	- KbdEdit has a nice [online manual][KbEdMn] too. There's a VK code table there and much more.
 
-[MapIni]: /Files/_eD_Remap.ini                                                      (EPKL Remap file)
-[KbdEvt]: https://w3c.github.io/uievents/tools/key-event-viewer.html                (Keyboard Event Viewer on GitHub Pages)
-[ShrpKy]: https://www.randyrants.com/category/sharpkeys/                            (RandyRants' SharpKeys program)
-[ShrpMS]: https://apps.microsoft.com/store/detail/sharpkeys/XPFFCG7M673D4F          (SharpKeys at the Microsoft Store)
-[MSKLCd]: https://www.microsoft.com/en-us/download/details.aspx?id=102134           (Microsoft Keyboard Layout Creator download)
-[MSKLCg]: https://msklc-guide.github.io/                                            (Henri's MSKLC Guide)
-[Kanata]: https://github.com/jtroo/kanata                                           (The Kanata remapping tool)
-[QMKdoc]: https://docs.qmk.fm                                                       (QMK docs)
-[KMonad]: https://github.com/kmonad/kmonad                                          (The KMonad remapping tool)
-[MSPTKM]: https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager      (info on Microsoft PowerToys Keyboard Manager)
-[KbdEdt]: http://www.kbdedit.com/                                                   (The KbdEdit remapping tool)
-[KbEdMn]: http://www.kbdedit.com/manual/manual_index.html                           (KbdEdit online manual)
-[BBTMod]: https://dreymar.colemak.org/ergo-mods.html#modifiers                      (DreymaR's BigBag on modifiers)
+## TinyTask
+- [TinyTask][TinyTask] isn't a remapping tool but a compact automation tool that I've found useful. See its [README](TinyTask/README.md) for info.
+
+
+[MapIni]:   /Files/_eD_Remap.ini                                                    (EPKL Remap file)
+[KbdEvt]:   https://w3c.github.io/uievents/tools/key-event-viewer.html              (Keyboard Event Viewer on GitHub Pages)
+[ShrpKy]:   https://www.randyrants.com/category/sharpkeys/                          (RandyRants' SharpKeys program)
+[ShrpMS]:   https://apps.microsoft.com/store/detail/sharpkeys/XPFFCG7M673D4F        (SharpKeys at the Microsoft Store)
+[MSKLCd]:   https://www.microsoft.com/en-us/download/details.aspx?id=102134         (Microsoft Keyboard Layout Creator download)
+[MSKLCg]:   https://msklc-guide.github.io/                                          (Henri's MSKLC Guide)
+[Kanata]:   https://github.com/jtroo/kanata                                         (The Kanata remapping tool)
+[QMKdoc]:   https://docs.qmk.fm                                                     (QMK docs)
+[KMonad]:   https://github.com/kmonad/kmonad                                        (The KMonad remapping tool)
+[MSPTKM]:   https://learn.microsoft.com/en-us/windows/powertoys/keyboard-manager    (info on Microsoft PowerToys Keyboard Manager)
+[KbdEdt]:   http://www.kbdedit.com/                                                 (The KbdEdit remapping tool)
+[KbEdMn]:   http://www.kbdedit.com/manual/manual_index.html                         (KbdEdit online manual)
+[BBTMod]:   https://dreymar.colemak.org/ergo-mods.html#modifiers                    (DreymaR's BigBag on modifiers)
+[TinyTask]: https://https://tinytask.net/                                           (TinyTask automation tool web page)

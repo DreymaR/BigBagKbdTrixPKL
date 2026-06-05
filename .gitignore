@@ -21,3 +21,6 @@ EPKL_*xecutable*.zip
 *Notepad*_Session*
 **/_Inbox/*
 KeyboardVerify.log
+*/TinyTask/tinytask.ini
+*/TinyTask/*.rec
+*/TinyTask/TT_*.exe
