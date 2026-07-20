@@ -1,0 +1,2078 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="599"
+   height="165"
+   viewBox="0 0 599 165"
+   class="keymap"
+   version="1.1"
+   id="svg62"
+   sodipodi:docname="Gallium_Rowstag.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   inkscape:export-filename="Gallium_Rowstag3-1.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xml:space="preserve"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs62"><linearGradient
+       id="linearGradient93-9"
+       inkscape:collect="always"><stop
+         style="stop-color:#1e1e2f;stop-opacity:1;"
+         offset="0.28695655"
+         id="stop93-7" /><stop
+         style="stop-color:#10161e;stop-opacity:1;"
+         offset="0.59782612"
+         id="stop95-7" /><stop
+         style="stop-color:#121721;stop-opacity:1;"
+         offset="0.9173913"
+         id="stop96-6" /><stop
+         style="stop-color:#141824;stop-opacity:1;"
+         offset="1"
+         id="stop94-7" /></linearGradient><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient1"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient2"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient3"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient4"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient5"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient6"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient7"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient8"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient9"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient10"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient11"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient12"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient13"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient14"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient15"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient16"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient17"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient18"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient19"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient20"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient21"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient22"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient23"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient24"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient25"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient26"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient27"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient28"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient29"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /><linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient93-9"
+       id="linearGradient30"
+       gradientUnits="userSpaceOnUse"
+       x1="-18.738329"
+       y1="-18.738329"
+       x2="18.738329"
+       y2="18.738329" /></defs><sodipodi:namedview
+     id="namedview62"
+     pagecolor="#000000"
+     bordercolor="#ffffff"
+     borderopacity="0"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#313131"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="298.75262"
+     inkscape:cy="284.96404"
+     inkscape:window-width="2560"
+     inkscape:window-height="1412"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g62"
+     inkscape:export-bgcolor="#ffffff00"><inkscape:page
+       x="0"
+       y="0"
+       width="599"
+       height="165"
+       id="page2"
+       margin="0"
+       bleed="0" /></sodipodi:namedview><style
+     id="style1">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><g
+     transform="translate(-85.5,-113.5)"
+     class="layer-L0"
+     id="g62"><g
+       transform="translate(0,56)"
+       id="g61"><g
+         id="g121"><g
+           transform="translate(112,84)"
+           class="key keypos-16"
+           id="g17"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect17"
+             style="fill:url(#linearGradient1);fill-opacity:1;fill-rule:nonzero;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.36479649"
+             y="1.1458901"
+             class="key tap"
+             id="text17"
+             style="font-size:17.5789px;fill:#ffffff;fill-opacity:1;stroke-width:1.25563"
+             transform="scale(1.031819,0.96916223)">B</text></g><g
+           transform="translate(168,84)"
+           class="key keypos-17"
+           id="g18"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect18"
+             style="fill:url(#linearGradient2);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.47119746"
+             y="1.164905"
+             class="key tap"
+             id="text18"
+             style="font-size:17.8706px;fill:#ffffff;fill-opacity:1;stroke-width:1.27648"
+             transform="scale(1.0489421,0.95334147)">L</text></g><g
+           transform="translate(224,84)"
+           class="key keypos-18"
+           id="g19"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect19"
+             style="fill:url(#linearGradient3);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.24970868"
+             y="1.1495211"
+             class="key tap"
+             id="text19"
+             style="font-size:17.6346px;fill:#ffffff;fill-opacity:1;stroke-width:1.25962"
+             transform="scale(1.035088,0.96610144)">D</text></g><g
+           transform="translate(280,84)"
+           class="key keypos-19"
+           id="g20"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect20"
+             style="fill:url(#linearGradient4);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.11080405"
+             y="1.1421343"
+             class="key tap"
+             id="text20"
+             style="font-size:17.4559px;fill:#ffffff;fill-opacity:1;stroke-width:1.24685"
+             transform="scale(1.0300376,0.97083835)">C</text></g><g
+           transform="translate(336,84)"
+           class="key keypos-20"
+           id="g21"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect21"
+             style="fill:url(#linearGradient5);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0042023924"
+             y="1.1220388"
+             class="key tap"
+             id="text21"
+             style="font-size:17.213px;fill:#ffffff;fill-opacity:1;stroke-width:1.22951"
+             transform="scale(1.0103427,0.98976317)">V</text></g><g
+           transform="translate(392,84)"
+           class="key keypos-21"
+           id="g22"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect22"
+             style="fill:url(#linearGradient6);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.29434037"
+             y="1.0851054"
+             class="key tap"
+             id="text22"
+             style="font-size:17.9943px;fill:#ffffff;fill-opacity:1;stroke-width:1.28532"
+             transform="scale(1.0590282,0.94426191)">J</text></g><g
+           transform="translate(448,84)"
+           class="key keypos-22"
+           id="g23"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect23"
+             style="fill:url(#linearGradient7);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.21728514"
+             y="1.1603025"
+             class="key tap"
+             id="text23"
+             style="font-size:17.8px;fill:#ffffff;fill-opacity:1;stroke-width:1.27144"
+             transform="scale(1.0448012,0.95711988)">F</text></g><g
+           transform="translate(504,84)"
+           class="key keypos-23"
+           id="g24"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect24"
+             style="fill:url(#linearGradient8);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0042640381"
+             y="1.1427624"
+             class="key tap"
+             id="text24"
+             style="font-size:17.4655px;fill:#ffffff;fill-opacity:1;stroke-width:1.24753"
+             transform="scale(1.0306044,0.97030441)">O</text></g><g
+           transform="translate(560,84)"
+           class="key keypos-24"
+           id="g25"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect25"
+             style="fill:url(#linearGradient9);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0086202146"
+             y="1.0645965"
+             class="key tap"
+             id="text25"
+             style="font-size:17.6542px;fill:#ffffff;fill-opacity:1;stroke-width:1.26102"
+             transform="scale(1.0390118,0.96245297)">U</text></g><g
+           transform="translate(616,84)"
+           class="key keypos-25"
+           id="g26"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect26"
+             style="fill:url(#linearGradient10);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="1.4710011"
+             y="-0.78766441"
+             class="key tap"
+             id="text26"
+             style="font-size:21.7517px;fill:#ffffff;fill-opacity:1;stroke-width:1.5537"
+             transform="scale(1.0775587,0.92802367)">,</text></g><g
+           transform="translate(126,140)"
+           class="key keypos-30"
+           id="g31"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect31"
+             style="fill:url(#linearGradient11);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0043380125"
+             y="1.1582495"
+             class="key tap"
+             id="text31"
+             style="font-size:17.7685px;fill:#ffffff;fill-opacity:1;stroke-width:1.26919"
+             transform="scale(1.0429495,0.9588192)">N</text></g><g
+           transform="translate(182,140)"
+           class="key keypos-31"
+           id="g32"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect32"
+             style="fill:url(#linearGradient12);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.4707388"
+             y="1.1426116"
+             class="key tap"
+             id="text32"
+             style="font-size:17.5286px;fill:#ffffff;fill-opacity:1;stroke-width:1.25204"
+             transform="scale(1.0288641,0.97194567)">R</text></g><g
+           transform="translate(238,140)"
+           class="key keypos-32"
+           id="g33"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect33"
+             style="mix-blend-mode:normal;fill:url(#linearGradient13);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0042522219"
+             y="1.1353433"
+             class="key tap"
+             id="text33"
+             style="font-size:17.4171px;fill:#ffffff;fill-opacity:1;stroke-width:1.24408"
+             transform="scale(1.0223194,0.97816788)">T</text></g><g
+           transform="translate(294,140)"
+           class="key keypos-33"
+           id="g34"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect34"
+             style="fill:url(#linearGradient14);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.093560696"
+             y="1.1397392"
+             class="key tap"
+             id="text34"
+             style="font-size:17.4193px;fill:#ffffff;fill-opacity:1;stroke-width:1.24423"
+             transform="scale(1.0278774,0.97287867)">S</text></g><g
+           transform="translate(350,140)"
+           class="key keypos-34"
+           id="g35"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect35"
+             style="fill:url(#linearGradient15);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.055644825"
+             y="1.1471395"
+             class="key tap"
+             id="text35"
+             style="font-size:17.5324px;fill:#ffffff;fill-opacity:1;stroke-width:1.25231"
+             transform="scale(1.0345545,0.96659962)">G</text></g><g
+           transform="translate(406,140)"
+           class="key keypos-35"
+           id="g36"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect36"
+             style="fill:url(#linearGradient16);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0042206789"
+             y="1.1269211"
+             class="key tap"
+             id="text36"
+             style="font-size:17.2879px;fill:#ffffff;fill-opacity:1;stroke-width:1.23485"
+             transform="scale(1.0147367,0.9854773)">Y</text></g><g
+           transform="translate(462,140)"
+           class="key keypos-36"
+           id="g37"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect37"
+             style="fill:url(#linearGradient17);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0043380125"
+             y="1.1582495"
+             class="key tap"
+             id="text37"
+             style="font-size:17.7685px;fill:#ffffff;fill-opacity:1;stroke-width:1.26919"
+             transform="scale(1.0429495,0.9588192)">H</text></g><g
+           transform="translate(518,140)"
+           class="key keypos-37"
+           id="g38"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect38"
+             style="fill:url(#linearGradient18);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0041957763"
+             y="1.1202725"
+             class="key tap"
+             id="text38"
+             style="font-size:17.1859px;fill:#ffffff;fill-opacity:1;stroke-width:1.22757"
+             transform="scale(1.0087508,0.99132511)">A</text></g><g
+           transform="translate(574,140)"
+           class="key keypos-38"
+           id="g39"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect39"
+             style="fill:url(#linearGradient19);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.23687194"
+             y="1.1499057"
+             class="key tap"
+             id="text39"
+             style="font-size:17.6405px;fill:#ffffff;fill-opacity:1;stroke-width:1.26004"
+             transform="scale(1.035435,0.96577767)">E</text></g><g
+           transform="translate(630,140)"
+           class="key keypos-39"
+           id="g40"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect40"
+             style="fill:url(#linearGradient20);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0087796384"
+             y="1.1720817"
+             class="key tap"
+             id="text40"
+             style="font-size:17.9807px;fill:#ffffff;fill-opacity:1;stroke-width:1.28434"
+             transform="scale(1.0554054,0.9475032)">I</text></g><g
+           transform="translate(686,140)"
+           class="key keypos-40"
+           id="g41" /><g
+           transform="translate(777,140)"
+           class="key keypos-41"
+           id="g42" /><g
+           transform="translate(63,196)"
+           class="key keypos-42"
+           id="g43" /><g
+           transform="translate(154,196)"
+           class="key keypos-43"
+           id="g44"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect44"
+             style="fill:url(#linearGradient21);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="6.1062266e-15"
+             y="1.12683"
+             class="key tap"
+             id="text44"
+             style="font-size:17.2865px;fill:#ffffff;fill-opacity:1;stroke-width:1.23476"
+             transform="scale(1.0146566,0.98555512)">X</text></g><g
+           transform="translate(210,196)"
+           class="key keypos-44"
+           id="g45"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect45"
+             style="fill:url(#linearGradient22);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.041809082"
+             y="-0.41390991"
+             class="key tap"
+             id="text45"
+             style="font-size:17.125px;fill:#ffffff;fill-opacity:1;stroke-width:1.22321"
+             transform="scale(1.048587,0.95366432)">Q</text></g><g
+           transform="translate(266,196)"
+           class="key keypos-45"
+           id="g46"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect46"
+             style="fill:url(#linearGradient23);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0043017333"
+             y="1.1485626"
+             class="key tap"
+             id="text46"
+             style="font-size:17.6199px;fill:#ffffff;fill-opacity:1;stroke-width:1.25857"
+             transform="scale(1.0342262,0.96690647)">M</text></g><g
+           transform="translate(322,196)"
+           class="key keypos-46"
+           id="g47"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect47"
+             style="fill:url(#linearGradient24);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0041957763"
+             y="1.1202725"
+             class="key tap"
+             id="text47"
+             style="font-size:17.1859px;fill:#ffffff;fill-opacity:1;stroke-width:1.22757"
+             transform="scale(1.0087508,0.99132511)">W</text></g><g
+           transform="translate(378,196)"
+           class="key keypos-47"
+           id="g48"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect48"
+             style="fill:url(#linearGradient25);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.0042496826"
+             y="1.1346655"
+             class="key tap"
+             id="text48"
+             style="font-size:17.4067px;fill:#ffffff;fill-opacity:1;stroke-width:1.24334"
+             transform="scale(1.0217125,0.97874891)">Z</text></g><g
+           transform="translate(434,196)"
+           class="key keypos-48"
+           id="g49"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect49"
+             style="fill:url(#linearGradient26);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.6811133"
+             y="1.136608"
+             class="key tap"
+             id="text49"
+             style="font-size:17.4365px;fill:#ffffff;fill-opacity:1;stroke-width:1.24547"
+             transform="scale(1.023458,0.97707966)">K</text></g><g
+           transform="translate(490,196)"
+           class="key keypos-49"
+           id="g50"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect50"
+             style="fill:url(#linearGradient27);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="-0.22404051"
+             y="1.1503619"
+             class="key tap"
+             id="text50"
+             style="font-size:17.6475px;fill:#ffffff;fill-opacity:1;stroke-width:1.26054"
+             transform="scale(1.0358447,0.96539568)">P</text></g><g
+           transform="translate(546,196)"
+           class="key keypos-50"
+           id="g51"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect51"
+             style="fill:url(#linearGradient28);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.006266797"
+             y="3.7117736"
+             class="key tap"
+             id="text51"
+             style="font-size:25.6688px;fill:#ffffff;fill-opacity:1;stroke-width:1.83349"
+             transform="scale(1.2576898,0.79510862)">'</text></g><g
+           transform="translate(602,196)"
+           class="key keypos-51"
+           id="g52"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect52"
+             style="fill:url(#linearGradient29);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.44131666"
+             y="0.88356984"
+             class="key tap"
+             id="text52"
+             style="font-size:19.8641px;fill:#ffffff;fill-opacity:1;stroke-width:1.41887"
+             transform="scale(1.1799524,0.84749182)">;</text></g><g
+           transform="translate(658,196)"
+           class="key keypos-52"
+           id="g53"><rect
+             rx="6"
+             ry="6"
+             x="-26"
+             y="-26"
+             width="52"
+             height="52"
+             class="key"
+             id="rect53"
+             style="fill:url(#linearGradient30);fill-opacity:1;stroke:#0b0e14;stroke-width:1;stroke-opacity:1" /><text
+             x="0.014406201"
+             y="-1.7242317"
+             class="key tap"
+             id="text53"
+             style="font-size:29.5039px;fill:#ffffff;fill-opacity:1;stroke-width:2.10742"
+             transform="scale(1.0651455,0.93883886)">.</text></g></g></g></g><style
+     id="style1-6">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-4">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-5">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-6-5">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-4-1">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-2">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-6-9">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style><style
+     id="style1-4-6">/* inherit to force styles through use tags */
+svg path {
+    fill: inherit;
+}
+
+/* font and background color specifications */
+svg.keymap {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 14px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    fill: #24292e;
+}
+
+/* default key styling */
+rect.key {
+    fill: #f6f8fa;
+}
+
+rect.key, rect.combo {
+    stroke: #c9cccf;
+    stroke-width: 1;
+}
+
+/* default key side styling, only used is draw_key_sides is set */
+rect.side {
+    filter: brightness(90%);
+}
+
+/* color accent for combo boxes */
+rect.combo, rect.combo-separate {
+    fill: #cdf;
+}
+
+/* color accent for held keys */
+rect.held, rect.combo.held {
+    fill: #fdd;
+}
+
+/* color accent for ghost (optional) keys */
+rect.ghost, rect.combo.ghost {
+    stroke-dasharray: 4, 4;
+    stroke-width: 2;
+}
+
+text {
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* styling for layer labels */
+text.label {
+    font-weight: bold;
+    text-anchor: start;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for optional footer */
+text.footer {
+    text-anchor: end;
+    dominant-baseline: auto;
+    stroke: white;
+    stroke-width: 4;
+    paint-order: stroke;
+}
+
+/* styling for combo tap, and key non-tap label text */
+text.combo, text.hold, text.shifted, text.left, text.right, text.tl, text.tr, text.bl, text.br {
+    font-size: 11px;
+}
+
+text.hold, text.bl, text.br {
+    text-anchor: middle;
+    dominant-baseline: auto;
+}
+
+text.shifted, text.tl, text.tr {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+}
+
+text.left, text.tl, text.bl {
+    text-anchor: start;
+}
+
+text.right, text.tr, text.br {
+    text-anchor: end;
+}
+
+text.layer-activator {
+    text-decoration: underline;
+}
+
+/* styling for hold/shifted label text in combo box */
+text.combo.hold, text.combo.shifted, text.combo.left, text.combo.right {
+    font-size: 8px;
+}
+
+/* lighter symbol for transparent keys */
+text.trans {
+    fill: #7b7e81;
+}
+
+/* styling for combo dendrons */
+path.combo {
+    stroke-width: 1;
+    stroke: gray;
+    fill: none;
+}
+
+/* Start Tabler Icons Cleanup */
+/* cannot use height/width with glyphs */
+.icon-tabler &gt; path {
+    fill: inherit;
+    stroke: inherit;
+    stroke-width: 2;
+}
+/* hide tabler's default box */
+.icon-tabler &gt; path[stroke=&quot;none&quot;][fill=&quot;none&quot;] {
+    visibility: hidden;
+}
+/* End Tabler Icons Cleanup */
+
+@media (prefers-color-scheme: dark) {
+svg.keymap { fill: #d1d6db; }
+rect.key { fill: #3f4750; }
+rect.key, rect.combo { stroke: #60666c; }
+rect.combo, rect.combo-separate { fill: #1f3d7a; }
+rect.held, rect.combo.held { fill: #854747; }
+text.label, text.footer { stroke: black; }
+text.trans { fill: #7e8184; }
+path.combo { stroke: #7f7f7f; }
+
+}</style></svg>

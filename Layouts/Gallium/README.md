@@ -1,7 +1,7 @@
 <h1 align=center line-height=1.6>Gallium</h1><br><br>
 
 <div align=center ><img src="./Gallium-v1_Orth-Cpt_EPKL.png" 
-                        alt="The Gallium "v1" layout on an Ortho keyboard"></div><br>
+                        alt="The Gallium v1-"Colstag" layout on an Ortho keyboard"></div><br>
 
 <p align="center"><i>See also my <a href="../Gralmak#gralmak">Gralmak</a></i> Graphite-Gallium variant</p><br>
 
@@ -14,14 +14,14 @@ The Gallium layout
 - It is, in fact, amazing how Gallium and [Graphite][GraPKL] are virtually the same layout, albeit developed independently!
 - I like that Gallium has J and a symbol in the same positions as Colemak's top row.
 - Some bigrams like `SC`, albeit same-finger, are nicely altable on Gallium.
-- Both Bryson and I favor the v2/"Rowstag" version, used in the BaseLayout. Getting to the Colstag version is a simple remap.
-- The `PHY` trigram is better alt-fingerable on the Rowstag version.
+- Both Bryson and I favor the v2-"Rowstag" version, used in the BaseLayout. Getting to the "Colstag" version is a simple remap.
+- The `PHY` trigram is better alt-fingerable on the "Rowstag" version.
 - For more info, see [the Gallium repo on GitHub][GalGit].
 <br>
 
 ![Gallium Angle-ANSI help image](./Gallium_ANS-A_EPKL.png)
 
-_The Gallium "v2" layout using the Angle mod, on an ANSI keyboard_
+_The Gallium v2-"Rowstag" layout using the Angle mod, on an ANSI keyboard_
 <br>
 
 - The question of whether Q-X or X-Q works best for the two bottom-left positions, is discussed below.
@@ -30,7 +30,7 @@ _The Gallium "v2" layout using the Angle mod, on an ANSI keyboard_
 - It's quite easy to remove the "GalQX" swap in the `Layout.ini` files. Help images would have to be remade.
 <br>
 
-#### The Gallium layout on a ortho/matrix board (Colstag version):
+#### The Gallium v1-"Colstag" version on a ortho/matrix board:
 ```
 +----------------------------+
 | b l d c v   j y o u ,  [ ] |
@@ -39,7 +39,7 @@ _The Gallium "v2" layout using the Angle mod, on an ANSI keyboard_
 +----------------------------+
 ```
 
-#### The Gallium Rowstag version on an ANSI board, with an Angle(Q) mod:
+#### The Gallium v2-"Rowstag" version on an ANSI board, with an Angle(Q) mod:
 ```
 +-----------------------------+
 | b l d c v   j f o u , [ ] \ |
@@ -61,7 +61,8 @@ _The Gallium "v2" layout using the Angle mod, on an ANSI keyboard_
 
 Gallium variants
 ----------------
-- As seen above, Gallium has Colstag and Rowstag standard variants. These differ only in `F Y P` on the right index finger.
+- As seen above, Gallium has Colstag (v1) and Rowstag (v2) standard variants. These differ only in `F Y P` on the right index finger.
+- Despite their naming and EPKL providing v1 for Ortho and v2 for ISO/ANSI out-of-the-box, both could be used on either geometry.
 <br>
 
 - Another question is whether the lower left should be Q-X or X-Q.
@@ -141,9 +142,9 @@ _The Gallium-(C)AWS-ISO "Galliard" layout. The © key can be a Compose key, or w
 
 <br><br>
 
-![Gallium image from its web site](./_Res/Gallium-RowStag_Web.png)
+![Gallium image from its web site](./_Res/Gallium_Rowstag.svg)
 
-_The Gallium layout, v2/"Rowstag" version. Image taken from its own [web page][GalGit]._
+_The Gallium layout, v2-"Rowstag" version. Image taken from its own [web page][GalGit]._
 
 
 [GalIs5]: https://github.com/GalileoBlues/Gallium/issues/5                              (GitHub issue on adding Gallium to EPKL)

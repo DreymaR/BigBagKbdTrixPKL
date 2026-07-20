@@ -17,16 +17,27 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+2FIX: Separate auto-suspend state from manual suspend state. The latter should take precedence.
+	- After using the suspend hotkey, the help image is sometimes hidden and EPKL unsuspends itself.
+		- That's just EPKL autosuspending for another app (A Steam one) then un-autosuspending afterwards.
+		- It should instead remember and respect a manually suspended state. To do this, introduce a separate auto-suspend state.
+	2FIX: Help image doesn't come back on when leaving hard suspend! Nor does the hotkey work for leaving suspend anymore?!?
+		- The "Suspend" command without parameters is very finicky. Has to be first in the routine to work.
+
+WIPs: When I've got ortho images, Kyrillic variant and ??? updates in place, I could make a new, self-signed(?!?) release 1-4-3.
+	- With a new pklSendUnicodeDown(), release v1.5 at least. It'll be huge. Worth a v2.0 maybe?
+
+WIPs: No need to hook KeyUp at all? Let the Up events handle themselves? No, then only the unremapped key gets released?
+
+WIPs: Remove the Ext1 = etc part from Extend, and just call it extend plus ["","_2","_3","_4"]. But will that work?
+
+2FIX: Calling the [Ext_NavEdit] section [extend] works fine – but somehow, [Ext_StrFaces] -> [extend_3] isn't working?
+	- Same with ext4, but ext2 still works. So it's a problem with the Mod2 (RShift) maybe? Or with the one-shot functionality?
+
 WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.
 
 WIPs: Kanata files for Cmk, Cmk-CA, Cmk-CAWS for ISO and ANSI.
 	- Eventually, also Extend layers.
-
-TODO: It'd be more precise to have DK input remove a Sticky modifier.
-	- It'd improve the @co1 DK, allowing different output instead of having to duplicate it. E.g., {`."`,Enter} for @co1, Shift+D.
-		- On the other hand, maybe that is overmuch after all? Mental load already feels substantial. But it'd still be cool to at least have those extra states.
-		- The shifted states could be used for `!"` and `?"` without extra mental load. That'd be nice. Keep in mind that the Shift key may be held down then.
-	- It'd remove the interesting timing-based Kaomoji selection, necessitating an extra Shift tap to get the shifted Kaomoji. But that's just a trick, really.
 
 WIPs: On the CoDeKey layers, I've found room for number row symbols, except for two: `* +`. However, I do have both backtick and ~.
 	- Would the missing symbols be more natural and maybe useful? I'll also have to keep it intuitive, for low mental load.
@@ -38,55 +49,6 @@ WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just ou
 		- Also the delete-word Ext-tap `i/o` mapping. Not used, nor useful. Bring the `#i` one down from `'`.
 		- Move select line around to a more intuitive/consistent spot then? Cmk Ext-tap A (Ctrl+A) vs I.
 		- What to put on `'` now, then?
-
-TODO: Make a separate Github repo for Gralmak.
-	- It'll look more serious than having it tucked away in corners of the EPKL repo.
-	- Add .klc files, images and descriptions.
-	- Get it linked to from MonkeyType, Cyanophage, AKL disco, ???
-	- It's also time to add it as a separate layout in EPKL.
-		- It would still point to the Graphite BaseLayout, but from its own folder.
-		- Not necessary for Galliard, I think, as I don't use/recommend that one as strongly now.
-
-WIPs: Make a Gralmak-PCT (Period/Comma Thumbless – or just Punctuation) mod for optimal punctuation without a thumb key.
-		- I suppose Gallium's or Graphite's punctuation is fine then? They both have awkward quirks while solving the period+comma issues.
-		- Main issues according to Cyanophage are the `E.` SFB (0.14%) and the `O_,` s1-SFB (0.07%).
-		- Gralmak-pct uses Graphite's period on the OA column. Both Gallium and Graphite have comma placed with I on the pinky.
-		- The big question is whether it's useful though. Might instead recommend using either Gallium or Graphite punctuation.
-			- Gallium punctuation has lower SFB% according to cmini. People will care about that. The period is the key to that.
-			- At the same time, Gallium achieves that by loading the pinky with both comma and period. Maybe some dislike that?
-		Graphite:
-		           '         ;
-		                     ,
-		               . - /
-		
-		Gallium:
-		                   , [
-		                     /
-		               ' ; .
-		
-		Gralmak:
-		b l d w q  j f o u ' [
-		n r t s g  y h a e i ;
-		z x m c v  k p , . /
-		
-		GralmakS:
-		b l d w q  j f o u ' -
-		n r t s g  y h a e i ;
-		z x m c v  k p . / ,
-		Remap: . , / and Sym
-		
-		Gralmak-thumb:
-		b l d w q  j f o u '
-		n r t s g  y h a e i
-		z x m c v  k p     /
-		           ! , . ; -
-		
-	- Analyzeable layout at Cyanophage, with `, . /` unmodified:
-		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%3Bzxmcvkp%2C.%2F%5C%3D&mode=ergo&lan=english&thumb=l
-		bldwqjfou'-nrtsgyhaei;zxmcvkp,./
-	- Analyzeable layout at Cyanophage (link then import string), with `\ =` for the `, .` keys to avoid bad analysis:
-		https://cyanophage.github.io/playground.html?layout=bldwqjfou%27-nrtsgyhaei%2Czxmcvkp%5C%3D%2F%3B.&mode=ergo&lan=english&thumb=l
-		bldwqjfou'-nrtsgyhaei,zxmcvkp\=/;.
 
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
@@ -102,49 +64,45 @@ WIPs: Could the CoDeKey cancel itself when pressed again? Or something else?
 2FIX: U#### doesn't compose Unicode points anymore? How come?
 	- Checked: I wasn't using a VK-number BaseLayout at the time. Also, the compose key `1234` composes fine.
 
-WIPs: When I've got ortho images and Kyrillic variant updates in place, I could make a new, self-signed(?!?) release 1-4-3.
-
-NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
-	- I think the bulgarian =+ position should house Ѝ ѝ
-	- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
-	- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
-	- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
-NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
-	- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
-		(not used in the official orthography, but used in the still-popular 1918 orthography)
-	- Russian letters should also be accessible seeing how belarus is officially bilingual
-	- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
-	- The national layout uses `'` so the current mapping may suffice
-	- Maybe put ’ on the iso key instead of double acute?
-	- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
-WIPs: Ukromak revision?
-	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
-
-WIPs: Learn to digitally sign the release .exe, if that can help with OS warnings.
-	- You can use the MS SignTool program, part of their Visual Studio SDK, to sign an app. It requires a certificate to sign with.
-	- The certificate should be a "code signing" (purpose) one.
-	- You can get an EV (Electronically Verified) certificate; this costs money but trusted verification makes things simpler.
-	- You can instead use a self-signed local certificate. This gives no other trust than people's confidence in you already did.
-		- This, apparently, is often used for test purposes. But it's possible to distribute a self-signed certificate.
-	- The certificate will be generated in my cert store. It can then be exported as a .PFX file.
-		- The certificate needs to be installed by users, from your web page? I could do that, from dreymar.colemak.org.
-		- Can people install the certificate on their machine once it's in the program? Check this with testers!
-		- Keep the certificate in the EPKL repo, and point to it from the page? No, then people could misuse the certificate I think.
-	- https://stackoverflow.com/questions/252226/signing-a-windows-exe-file
-		- https://www.pantaray.com/signcode.html (download link didn't work, but good explanation)
-		- https://learn.microsoft.com/en-us/powershell/module/pki/new-selfsignedcertificate?view=windowsserver2025-ps
-	- Running (#r) `certmgr.exe` lets you view certificates.
-
-TODO: QMK's repeat key can repeat actions such as Ctrl+Shift+Left to select multiple words. Would that be useful in EPKL?
-
-TODO: In addition to OSM, OWS: One-Word Shift. It's seemingly quite popular with the QMK/ZMK crowd.
-	- This one's not on a timer but sets a state that's annulled by Esc or any end-of-word key.
-	- This means whitespace (Space, Enter, Tab etc) and punctuation – which needs to be de-shifted in time, too.
-	- It's a one-shot kind of thing. Make it a special output? Would need a special function/state to keep it on until the next space.
-	- E.g., `¢[Cap()]¢`? (Specify # of words to cap? Nah.)
-	- What should negate it? Space, Esc, Shift?
-
-NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key event, or at least specifying KeyDown only?
+NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
+	- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
+	- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
+	- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
+	
+	- AHK Disco answer by Florence, 2026-04:
+		- https://discord.com/channels/115993023636176902/653362249687105536/1492168740207460482
+		InstallKeybdHook
+		KeyHistory
+		
+		pklSend_Unicode_Down(char) {
+			UTF16_len := StrLen(char)
+			INPUT_SIZE := A_PtrSize*3+0x10
+			LPINPUT := Buffer(INPUT_SIZE * UTF16_len, 0)
+			p := LPINPUT.Ptr
+			loop UTF16_len {
+				NumPut("UInt", 1, p)    												; type,       1 = INPUT_KEYBOARD
+				NumPut("Short", Ord(SubStr(char, A_Index, 1)), p + A_PtrSize+0x2)   	; ki.wScan
+				NumPut("Short", 4, p + A_PtrSize+0x4)   								; ki.dwFlags, 4 = KEYEVENTF_UNICODE
+				p += INPUT_SIZE
+			}
+			DllCall("SendInput", "UInt", UTF16_len, "Ptr", LPINPUT, "Int", INPUT_SIZE)
+		}
+		
+		$a::pklSend_Unicode_Down("α")
+		
+		This is a more general version (supports surrogates by default)
+		I tested with KeyHistory and it produces
+		VK  SC    Type    Up/Dn    Elapsed    Key        Window
+		-----------------------------------------------
+		41  01E    h    d    4.31    a                  
+		E7 03B1    U    d    0.00    α                      [repeatedly]
+		
+		https://github.com/AutoHotkey/AutoHotkey/blob/af54e12e71ad2bba24e5a8a4ce8e4e5c1024240b/source/keyboard_mouse.cpp#L103-L104
+		Autohotkey does hαrdcode a KEYEVENTF_KEYUP:
+				PutKeybdEventIntoArray(0, 0, aChar, KEYEVENTF_UNICODE, KEY_IGNORE_LEVEL(g->SendLevel));
+				PutKeybdEventIntoArray(0, 0, aChar, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP, KEY_IGNORE_LEVEL(g->SendLevel));
+	
+	- Send fn() antics study. Can we make a SendInput call separate of the Key event, or at least specifying KeyDown only?
 	- https://discord.com/channels/115993023636176902/653362249687105536/1326675189353943050
 	- Second example:
 		b := Buffer(16 + A_PtrSize * 3, 0)
@@ -180,6 +138,62 @@ NEXT: Send fn() antics study. Can we make a SendInput call separate of the Key e
 			}
 			DllCall("SendInput", "UInt", cInputs, "Ptr", inputs, "Int", cbSize)
 		}
+
+NEXT: Bg update according to Kharlamov: Lose duplicate ъ (one on y and one on =+)
+	- I think the bulgarian =+ position should house Ѝ ѝ
+	- It's a precomposed letter used for homophone distinctions and is present on newer bulgarian layouts
+	- Also, there seems to be no ё in bulmak (for russian), even though there's still the russian ы э
+	- (The ё could be on `AltGr+/`, since that only houses a duplicate slash and the non-cyrillic ¿)? No, breaks the Latin layer?
+NEXT: Belarus/Ukrainia variants? Kharlamov in Mods-n-Layers (messID 961236439591432222 ff):
+	- Belarusian can use russian with И и changed to І і, Щ щ changed to Ў ў, and Ъ ъ changed to Ґ ґ
+		(not used in the official orthography, but used in the still-popular 1918 orthography)
+	- Russian letters should also be accessible seeing how belarus is officially bilingual
+	- The ’ [Cmk-eD AltGr+F] apostrophe too, it's a letter in belarusian
+	- The national layout uses `'` so the current mapping may suffice
+	- Maybe put ’ on the iso key instead of double acute?
+	- For better phonetic mapping, Ў ў should be mapped to W w due to making the same sound
+WIPs: Ukromak revision?
+	- Kharlamov: ’₴ on `~, їЇ on =+, and ґҐ on AltGr+7 looks good to me.
+
+WIPs: Learn to digitally sign the release .exe, if that can help with OS warnings.
+	- You can use the MS SignTool program, part of their Visual Studio SDK, to sign an app. It requires a certificate to sign with.
+	- The certificate should be a "code signing" (purpose) one.
+	- You can get an EV (Electronically Verified) certificate; this costs money but trusted verification makes things simpler.
+	- You can instead use a self-signed local certificate. This gives no other trust than people's confidence in you already did.
+		- This, apparently, is often used for test purposes. But it's possible to distribute a self-signed certificate.
+	- The certificate will be generated in my cert store. It can then be exported as a .PFX file.
+		- The certificate needs to be installed by users, from your web page? I could do that, from dreymar.colemak.org.
+		- Can people install the certificate on their machine once it's in the program? Check this with testers!
+		- Keep the certificate in the EPKL repo, and point to it from the page? No, then people could misuse the certificate I think.
+	- Okay, if I post the certificate SHA on my page people can verify that they have my copy. Example:
+		https://github.com/dessalines/thumb-key#verifying-fingerprints
+	- https://stackoverflow.com/questions/252226/signing-a-windows-exe-file
+		- https://www.pantaray.com/signcode.html (download link didn't work, but good explanation)
+		- https://learn.microsoft.com/en-us/powershell/module/pki/new-selfsignedcertificate?view=windowsserver2025-ps
+	- Running (#r) `certmgr.exe` lets you view certificates.
+
+TODO: Record/Play Macro hotkeys? To make an on-the-fly macro. Or, even store a set of such macros?
+	- Could potentially have one for each key, Vim-like.
+	- Store a default set in Settings, and write to its Override?
+	- Limit macro length to 1023 characters, the standard limit for .ini file values.
+	- Can use the Composer queue. Let it write to an array as long as the Recording state is set (up to max length).
+
+TODO: Use a ReadIniStat routine for reading in all static info such as DKs, Extend mappings etc. Today, it's mostly done in separate routines.
+
+TODO: It'd be more precise to have DK input remove a Sticky modifier.
+	- It'd improve the @co1 DK, allowing different output instead of having to duplicate it. E.g., {`."`,Enter} for @co1, Shift+D.
+		- On the other hand, maybe that is overmuch after all? Mental load already feels substantial. But it'd still be cool to at least have those extra states.
+		- The shifted states could be used for `!"` and `?"` without extra mental load. That'd be nice. Keep in mind that the Shift key may be held down then.
+	- It'd remove the interesting timing-based Kaomoji selection, necessitating an extra Shift tap to get the shifted Kaomoji. But that's just a trick, really.
+
+TODO: QMK's repeat key can repeat actions such as Ctrl+Shift+Left to select multiple words. Would that be useful in EPKL?
+
+TODO: In addition to OSM, OWS: One-Word Shift. It's seemingly quite popular with the QMK/ZMK crowd.
+	- This one's not on a timer but sets a state that's annulled by Esc or any end-of-word key.
+	- This means whitespace (Space, Enter, Tab etc) and punctuation – which needs to be de-shifted in time, too.
+	- It's a one-shot kind of thing. Make it a special output? Would need a special function/state to keep it on until the next space.
+	- E.g., `¢[Cap()]¢`? (Specify # of words to cap? Nah.)
+	- What should negate it? Space, Esc, Shift?
 
 NEXT: Check out Keyman. It used to cost money but is now open-source and free, and owned by SIL?!
 	- https://keyman.com/developer/
@@ -256,9 +270,8 @@ WIPs: Dual-role modifiers, continued.
 	- It'd be nice to make an Extend key KeyUp deactivate any MoDK layers. But how to deactivate DK layers like that?
 
 2FIX: The `Ctrl+Shift+3` shortcut doesn't always suspend EPKL.
-	- Seems it works after the first suspension.
-	- Try to suspend/unsuspend EPKL once at startup then? Is that possible?
-	- But WHY would this be the case?
+	- Seems it works after the first suspension. But WHY would this be the case?
+	- Tried suspending then unsuspending EPKL once at startup; didn't work?
 
 2FIX: Releasing an Ext# layer leaves it active for a ToM timer duration.
 	- With a dual-function Ext key, activate first Ext2 then quickly Ext1. Ext2 will stay active for one ToM timer.
@@ -362,11 +375,6 @@ NEXT: Instead of doing the atKbdType() this-and-that routine, make a fn to inter
 NEXT: Sort out layout img_ entries for easier mod combo generation, without manually editing their individual names?
 	- Settings for Soft/Hard image versions? Extend(@X - `CAWS`)/Geometric(@H - `AWide`)?
 	- Example: `Files\ImgExtend\@K-CAWS_Ext#.png` files could be `Files\ImgExtend\@K@X_Ext#.png`.
-
-NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
-	- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
-	- Ask around at the AHK forums as to what Send really does, and whether there's an existing workaround for KeyUp. Or at the AHK Discord!
-	- One possibility might be to send keys for simple letters, but that's not robust vis-a-vis the OS layout? There's the ## mappings for that, too.
 
 NEXT: Arabic phonetic layout! Also, check the Hebrew one.
 	- Hebmak: https://forum.colemak.com/topic/1458-locale-colemak-variants-for-several-countries-the-edreymar-way/#p19971
