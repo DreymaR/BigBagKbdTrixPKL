@@ -7,7 +7,7 @@ The rock solid QUARTZ Perfect Pangram layout
 --------------------------------------------
 - This layout is based on a [perfect pangram][WikPan]. Therefore, it is a perfect layout!
 - Somehow, I felt it's best used with AngleWide hand positions, as seen on the colored image below.
-- It should be perfectly suited for typists who want to write about quartz glyph jobs.
+- It should be perfectly suited for typists who want to write about quartz glyph jobs and/or [cwm](https://en.wikipedia.org/wiki/Cirque) finks.
 - If you want to horse around instead of rocking hard, try the [Foalmak][LayFoa] layout?
 
 ￣(=⌒ᆺ⌒=)￣
