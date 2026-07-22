@@ -1,0 +1,1579 @@
+#|
+This is a sample configuration file that showcases every feature in kanata.
+A more detailed and less terse configuration guide is found here:
+
+    https://github.com/jtroo/kanata/blob/main/docs/config.adoc
+
+Other configuration samples are found here:
+
+    https://github.com/jtroo/kanata/tree/main/cfg_samples
+
+If anything is confusing or hard to discover, please file an issue or
+contribute a pull request to help improve the document.
+
+Since it may be important for you to know, pressing and holding all of the
+three following keys together at the same time will cause kanata to exit:
+
+  Left Control, Space, Escape
+
+This is for the physical key input rather than after any remappings
+that are done by kanata.
+
+|#
+
+;; Single-line comments are prefixed by double-semicolon. A single semicolon
+;; is parsed as the keyboard key. Comments are ignored for the configuration
+;; file.
+
+#|
+A multi-line comment block begin with an octothorphe followed by a pipe: `#|`.
+To end the multi-line comment block, have a pipe followed by an octothorpe,
+like the following sequence with the colon removed: `|:#`. The actual two
+character sequence is not used because it would end this multi-line comment
+block and cause a parsing error.
+
+This configuration language is Lisp-like and uses S-Expression syntax.
+If you're unfamiliar with Lisp, don't be alarmed. The maintainer jtroo is
+also unfamiliar with Lisp. You don't need to know Lisp in-depth to
+be able to configure kanata.
+
+If you follow along with the examples, you should be fine. Kanata should
+also hopefully have helpful error messages in case something goes wrong.
+If you need help, please feel welcome to ask in the GitHub discussions.
+|#
+
+;; One defcfg entry may be added if desired. This is used for configuration
+;; key-value pairs that change kanata's behaviour at a global level.
+;; All defcfg options are optional.
+(defcfg
+  ;; Your keyboard device will likely differ from this. I believe /dev/input/by-id/
+  ;; is preferable; I recall reading that it's less likely to change names on you,
+  ;; but I didn't find any keyboard device in there in my VM. If you are on Linux
+  ;; and omit this entry, kanata will try to attach to every device found on your
+  ;; system that seems like a keyboard.
+  ;; linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
+
+  ;; If you want to read from multiple devices, separate them by `:`.
+  ;; linux-dev /dev/input/<dev1>:/dev/input/<dev2>
+  ;;
+  ;; If you have a colon in your device path, add a backslash before it so that
+  ;; kanata does not parse it as multiple devices.
+  ;; linux-dev /dev/input/path-to\:device
+
+  ;; Alternatively, you can use list syntax, where both backslashes and colons
+  ;; are parsed literally. List items are separated by spaces or newlines.
+  ;; Using quotation marks for each item is optional, and only required if an
+  ;; item contains spaces.
+  ;; linux-dev (
+  ;;   /dev/input/by-path/pci-0000:00:14.0-usb-0:1:1.0-event
+  ;;   /dev/input/by-id/usb-Dell_Dell_USB_Keyboard-event-kbd
+  ;; )
+
+  ;; The linux-dev-names-include entry is parsed identically to linux-dev. It
+  ;; defines a list of device names that should be included. This is only
+  ;; used if linux-dev is omitted.
+  ;; linux-dev-names-include device-1-name:device\:2\:name
+
+  ;; The linux-dev-names-exclude entry is parsed identically to linux-dev. It
+  ;; defines a list of device names that should be excluded. This is only
+  ;; used if linux-dev is omitted. This and linux-dev-names-include are not
+  ;; mutually exclusive but in practice it probably makes sense to only use
+  ;; one of them.
+  ;; linux-dev-names-exclude device-1-name:device\:2\:name
+
+  ;; By default, kanata will crash if no input devices are found. You can change
+  ;; this behaviour by setting `linux-continue-if-no-devs-found`.
+  ;;
+  ;; linux-continue-if-no-devs-found yes
+
+  ;; Kanata on Linux automatically detects and grabs input devices
+  ;; when none of the explicit device configurations are in use.
+  ;; In case kanata is undesirably grabbing mouse-like devices,
+  ;; you can use a configuration item to change detection behaviour.
+  ;;
+  ;; linux-device-detect-mode keyboard-only
+
+  ;; On Linux, you can ask kanata to run `xset r rate <delay> <rate>` on startup
+  ;; and on live reload via the config below. The first number is the delay in ms
+  ;; and the second number is the repeat rate in repeats/second.
+  ;;
+  ;; linux-x11-repeat-delay-rate 400,50
+
+  ;; On linux, you can ask kanata to label itself as a trackpoint. This has several
+  ;; effects on libinput including enabling middle mouse button scrolling and using
+  ;; a different acceleration curve. Otherwise, a trackpoint intercepted by kanata
+  ;; may not behave as expected.
+  ;;
+  ;; If using this feature, it is recommended to filter out any non-trackpoint
+  ;; pointing devices using linux-only-linux-dev-names-include,
+  ;; linux-only-linux-dev-names-exclude or linux-only-linux-dev to avoid changing
+  ;; their behavior as well.
+  ;;
+  ;; linux-use-trackpoint-property yes
+
+  ;; Unicode on Linux works by pressing Ctrl+Shift+U, typing the unicode hex value,
+  ;; then pressing Enter. However, if you do remapping in userspace, e.g. via
+  ;; xmodmap/xkb, the keycode "U" that kanata outputs may not become a keysym "u"
+  ;; after the userspace remapping. This will be likely if you use non-US,
+  ;; non-European keyboards on top of kanata. For unicode to work, kanata needs to
+  ;; use the keycode that outputs the keysym "u", which might not be the keycode
+  ;; "U".
+  ;;
+  ;; You can use `evtest` or `kanata --debug`, set your userspace key remapping,
+  ;; then press the key that outputs the keysym "u" to see which underlying keycode
+  ;; is sent. Then you can use this configuration to change kanata's behaviour.
+  ;;
+  ;; Example:
+  ;;
+  ;;   linux-unicode-u-code v
+
+  ;; Unicode on Linux terminates with the Enter key by default. This may not work in
+  ;; some applications. The termination is configurable with the following options:
+  ;;
+  ;; - `enter`
+  ;; - `space`
+  ;; - `enter-space`
+  ;; - `space-enter`
+  ;;
+  ;; Example:
+  ;;
+  ;;   linux-unicode-termination space
+
+  ;; Kanata on Linux creates an evdev output device named "kanata".
+  ;; This name can be changed with this linux-output-device-name.
+  ;;
+  ;; Examples:
+  ;;
+  ;;   linux-output-device-name kanata_laptop
+  ;;   linux-output-device-name "kanata output device"
+
+  ;; Kanata on Linux needs to declare a "bus type" for its evdev output device.
+  ;; The options are USB and I8042. The default is I8042.
+  ;; Using USB can break disable-touchpad-while-typing on Wayland.
+  ;; But using I8042 appears to break some other scenarios. Thus it is configurable.
+  ;;
+  ;; Examples:
+  ;;
+  ;;   linux-output-device-bus-type USB
+  ;;   linux-output-device-bus-type I8042
+
+  ;; There is an optional configuration entry for Windows to help mitigate strange
+  ;; behaviour of AltGr if your layout uses that. Uncomment one of the items below
+  ;; to change what kanata does with the key.
+  ;;
+  ;; For more context, see: https://github.com/jtroo/kanata/issues/55.
+  ;;
+  ;; windows-altgr cancel-lctl-press ;; remove the lctl press that comes as a combo with ralt
+  ;; windows-altgr add-lctl-release  ;; add an lctl release when ralt is released
+  ;;
+  ;; NOTE: even with these workarounds, putting lctl+ralt in your defsrc may
+  ;; not work too well with other applications that use WH_KEYBOARD_LL.
+  ;; Known applications with issues: GWSL/VcXsrv
+
+  ;; Enable kanata to execute commands.
+  ;;
+  ;; I consider this feature a hazard so it is conditionally compiled out of
+  ;; the default binary.
+  ;;
+  ;; This is dangerous because it allows kanata to execute arbitrary commands.
+  ;; Using a binary compiled with the cmd feature enabled, uncomment below to
+  ;; enable command execution:
+  ;;
+  ;; danger-enable-cmd yes
+
+  ;; Enable processing of keys that are not in defsrc.
+  ;; This is useful if you are only mapping a few keys in defsrc instead of
+  ;; most of the keys on your keyboard. Without this, the tap-hold-release and
+  ;; tap-hold-press actions will not activate for keys that are not in defsrc.
+  ;;
+  ;; The reason this is not enabled by default is because some keys may not
+  ;; work correctly if they are intercepted. E.g. rctl/altgr on Windows; see the
+  ;; windows-altgr configuration item above for context.
+  ;;
+  ;; process-unmapped-keys yes
+
+  ;; We need to set it to yes in this kanata.kbd example config to allow the use of __ and ___
+  ;; in the deflayer-custom-map example below in the file
+
+  ;; This also accepts a list parameter (all-except key1 ... keyN)
+  ;; which behaves like "yes" but excludes the keys within the list.
+  process-unmapped-keys (all-except f19)
+
+  ;; Disable all keys not mapped in defsrc.
+  ;; Only works if process-unmapped-keys is also yes.
+  ;; block-unmapped-keys yes
+
+  ;; Intercept mouse buttons for a specific mouse device.
+  ;; The intended use case for this is for laptops such as a Thinkpad, which have
+  ;; mouse buttons that may be useful to activate kanata actions with. This only
+  ;; works with the Interception driver.
+  ;;
+  ;; To know what numbers to put into the string, you can run the
+  ;; kanata-wintercept variant with this defcfg item defined with random numbers.
+  ;; Then when a button is first pressed on the mouse device, kanata will print
+  ;; its hwid in the log; you can then copy-paste that into this configuration
+  ;; entry. If this defcfg item is not defined, the log will not print.
+  ;;
+  ;; windows-interception-mouse-hwid "70, 0, 90, 0, 20"
+
+  ;; There is also a list version of windows-interception-mouse-hwid:
+  ;;
+  ;; windows-interception-mouse-hwids (
+  ;;   "70, 0, 60, 0"
+  ;;   "71, 0, 62, 0"
+  ;; )
+
+  ;; List configuration for kanata-wintercept variants
+  ;; that allows intercepting only some connected keyboards.
+  ;; Use similarly to mouse-hwid above.
+  ;;
+  ;; windows-interception-keyboard-hwids (
+  ;;   "90, 80, 11, 34"
+  ;;   "99, 88, 77, 66"
+  ;; )
+
+  ;; There are also exclude variants of the wintercept device configurations.
+  ;; These cannot be defined at the same time as the non-exclude variants.
+  ;;
+  ;; windows-interception-keyboard-hwids-exclude (
+  ;;   "90, 80, 11, 34"
+  ;;   "99, 88, 77, 66"
+  ;; )
+  ;;
+  ;; windows-interception-mouse-hwids-exclude (
+  ;;   "70, 0, 60, 0"
+  ;;   "71, 0, 62, 0"
+  ;; )
+
+  ;; Transparent keys on layers will delegate to the corresponding defsrc key
+  ;; when found on a layer activated by `layer-switch`. This config entry
+  ;; changes the behaviour to delegate to the action of the first layer,
+  ;; which is the layer active upon startup, that is in the same position.
+  ;;
+  ;; delegate-to-first-layer yes
+
+  ;; This config entry alters the behavior of movemouse-accel actions.
+  ;; By default, this setting is disabled - vertical and horizontal
+  ;; acceleration are independent. Enabling this setting will emulate QMK mouse
+  ;; move acceleration behavior, i.e. the acceleration state of new mouse
+  ;; movement actions are inherited if others are already being pressed.
+  ;;
+  ;; movemouse-inherit-accel-state yes
+
+  ;; This config entry alters the behavior of movemouseaccel actions.
+  ;; This makes diagonal movements simultaneous to mitigate choppiness in
+  ;; drawing apps, if you're using kanata mouse movements to draw for
+  ;; whatever reason.
+  ;;
+  ;; movemouse-smooth-diagonals yes
+
+  ;; This configuration allows you to customize the length limit on dynamic macros.
+  ;; The default limit is 128 keys.
+  ;;
+  ;; dynamic-macro-max-presses 1000
+
+  ;; This configuration makes multiple tap-hold actions that are activated near
+  ;; in time expire their timeout quicker. Without this, the timeout for the 2nd
+  ;; tap-hold onwards will start from 0ms after the previous tap-hold expires.
+  ;;
+  concurrent-tap-hold yes
+
+  ;; This configuration makes the release of one-shot-press and of the tap in a tap-hold
+  ;; by the defined number of milliseconds (approximate).
+  ;; The default value is 5.
+  ;; While the release is delayed, further processing of inputs is also paused.
+  ;; This means that there will be a minor input latency impact in the mentioned scenarios.
+  ;; The reason for this configuration existing is that some environments
+  ;; do not process the scenarios correctly due to the rapidity of the release.
+  ;; Kanata does send the events in the correct order,
+  ;; so the fault is more in the environment, but kanata provides a workaround anyway.
+  rapid-event-delay 5
+
+  ;; This setting defaults to yes but can be configured to no to save on
+  ;; logging. However, if --log-layer-changes is passed as a command line
+  ;; argument, a "no" in the configuration file will be overridden and layer
+  ;; changes will be logged.
+  ;;
+  ;; log-layer-changes no
+
+  ;; This configuration will press and then immediately release the non-modifier key
+  ;; as soon as the override activates, meaning you are unlikely as a human to ever
+  ;; release modifiers first, which can result in unintended behaviour.
+  ;;
+  ;; The downside of this configuration is that the non-modifier key
+  ;; does not remain held which is important to consider for your use cases.
+  override-release-on-activation yes
+
+  ;; Accepts a single key name.
+  ;; When configured, whenever a mouse cursor movement is received,
+  ;; the configured key name will be "tapped" by Kanata, activating
+  ;; the key's action.
+  ;;
+  ;; This enables reporting of every relative mouse movement, which
+  ;; corresponds to standard mice, trackballs, trackpads and
+  ;; trackpoints. Absolute movements, which can be generated by
+  ;; touchscreens, drawing tablets and some mouse replacement or
+  ;; accessibility software, are ignored. Scrolling events and mouse
+  ;; buttons are also ignored.
+  ;;
+  ;; The intended use of these events is to provide a way to
+  ;; automatically enable a mouse keys layer while mousing, which can
+  ;; be disabled by a timeout or typing on other keys, rather than
+  ;; explicit toggling. see cfg_examples/automousekeys-*.kbd for more.
+  ;;
+  ;; The `mvmt` key name is specially intended for this purpose. It
+  ;; has no output key mapping and cannot be supplied as an action;
+  ;; however, any key may be used.
+  ;;
+  ;; Supports live reload on Linux, but with Windows-interception,
+  ;; this option must be present on startup to enable mouse movement
+  ;; event collection, so restart is required to enable it. Changing
+  ;; the key name is always supported, however.
+  ;;
+  ;; mouse-movement-key mvmt
+)
+
+;; deflocalkeys-* enables you to define and use key names that match your locale
+;; by defining OS code number mappings for that character.
+;;
+;; There are five variants of deflocalkeys-*:
+;; - deflocalkeys-win
+;; - deflocalkeys-winiov2
+;; - deflocalkeys-wintercept
+;; - deflocalkeys-linux
+;; - deflocalkeys-macos
+;;
+;; Only one of each deflocalkeys-* variant is allowed. The variants that are
+;; not applicable will be ignored, e.g. deflocalkeys-linux and deflocalkeys-wintercept
+;; are both ignored when using the default Windows kanata binary.
+;;
+;; The configuration item is parsed similarly to defcfg; it is composed of
+;; pairs of keys and values.
+;;
+;; You can check docs/locales.adoc for the mapping for your locale. If your
+;; locale is not there, please ask for help if needed, and add the mapping for
+;; your locale to the document.
+;;
+;; Web link for locales: https://github.com/jtroo/kanata/blob/main/docs/locales.adoc
+;;
+;; This example is for an Italian keyboard remapping in Linux. The numbers will
+;; unfortunately differ between Linux, Windows-hooks, and Windows-interception.
+;;
+;; To see how you can discover key mappings for yourself, see the "Non-US keyboards"
+;; section of docs/config.adoc.
+;;
+;; Web link or config: https://github.com/jtroo/kanata/blob/main/docs/config.adoc
+
+(deflocalkeys-win
+  ì 187
+)
+
+(deflocalkeys-wintercept
+  ì 187
+)
+
+(deflocalkeys-winiov2
+  ì 187
+)
+
+(deflocalkeys-linux
+  ì 13
+)
+
+(deflocalkeys-macos
+  ì 13
+)
+
+;; Only one defsrc is allowed.
+;;
+;; defsrc defines the keys that will be intercepted by kanata. The order of the
+;; keys matches the deflayer declarations and all deflayer declarations must
+;; have the same number of keys as defsrc.
+;;
+;; The visual/spatial positioning is *not* mandatory; it is done by convention
+;; for visual ease. These items are parsed as a long list with newlines being
+;; ignored.
+;;
+;; If you are looking for other keys, the file src/keys/mod.rs should hopefully
+;; provide some insight.
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; The first layer defined is the layer that will be active by default when
+;; kanata starts up. This layer is the standard QWERTY layout except for the
+;; backtick/grave key (@grl) which is an alias for a tap-hold key.
+(deflayer qwerty
+  @grl 1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; The dvorak layer remaps the keys to the dvorak layout. There are several
+;; tap-hold aliases configured on the left side.
+(deflayer dvorak
+  @grl 1    2    3    4    5    6    7    8    9    0    [    ]    bspc
+  tab  '    ,    @.ms p    y    f    g    c    r    l    /    =    \
+  @cap @anm @oar @ech @umc @ifk d    h    t    n    s    -    ret
+  lsft ;    q    j    k    x    b    m    w    v    z    rsft
+  lctl lmet lalt           spc           @ralt rmet @rcl
+)
+
+;; This is an alternative to deflayer and does not rely on defsrc.
+;; It has the advantage of simpler config if only remapping a few keys.
+;; You might still prefer the standard deflayer for its visual printing in
+;; the log as you are learning a new configuration.
+(deflayermap (custom-map-example)
+  caps esc
+  esc  caps
+
+  ;; You can use _ , __ or ___ instead of specifying a key name to map all
+  ;; keys that are not explicitly mapped in the layer.
+  ;; E.g. esc and caps above will not be overwritten.
+  ;;
+  ;; _    maps only keys that are in defsrc.
+  ;; __   excludes mapping keys that are in defsrc.
+  ;; ___  maps both, keys that are in `defsrc`, and keys that are not.
+  ;;
+  ;; The two- and three-underscore variants require
+  ;; "process-unmapped-keys yes" in defcfg to work.
+
+  ;; ___ XX ;; maps all keys that are not mapped explicitly in the layer
+  ;;          ;; (i.e. esc and caps above) to "no-op" to disable the key.
+  _ XX   ;; maps all keys that are in defsrc and are not mapped in the layer
+  __ XX  ;; maps all keys that are NOT in defsrc and are not mapped in the layer
+)
+
+;; defvar can be used to declare commonly-used values
+(defvar
+  tap-repress-timeout   100
+  hold-timeout          200
+  tt $tap-repress-timeout
+  ht $hold-timeout
+
+  ;; A list value in defvar that begins with concat behaves in a special manner
+  ;; where strings will be joined together.
+  ;;
+  ;; Below results in 100200
+  a "hello"
+  b "world"
+  ct (concat $a " " $b)
+)
+
+(defalias
+  th1 (tap-hold $tt $ht caps lctl)
+  th2 (tap-hold $tt $ht spc lsft)
+)
+
+;; defalias is used to declare a shortcut for a more complicated action to keep
+;; the deflayer declarations clean and aligned. The alignment in deflayers is not
+;; necessary, but is strongly recommended for ease of understanding visually.
+;;
+;; Aliases are referred to by `@<alias_name>`. Aliases can refer to each other,
+;; e.g. in the `anm` alias. However, an alias can only refer to another alias
+;; that has been defined before it in the file.
+(defalias
+  ;; aliases to change the base layer to qwerty or dvorak
+  dvk (layer-switch dvorak)
+  qwr (layer-switch qwerty)
+
+  ;; Aliases for layer "toggling". It's not quite toggling because the layer
+  ;; will be active while the key is held and deactivated when the key is
+  ;; released. An alternate action name you can use is layer-while-held.
+  ;; However, the rest of this document will use The term "toggle" for brevity.
+  num (layer-toggle numbers)
+  chr (layer-toggle chords)
+  arr (layer-toggle arrows)
+  msc (layer-toggle misc)
+  lay (layer-toggle layers)
+  mse (layer-toggle mouse)
+  fks (layer-while-held fakekeys)
+
+  ;; tap-hold aliases with tap for dvorak key, and hold for toggle layers
+  ;; WARNING(Linux only): key repeat with tap-hold can behave unexpectedly.
+  ;; For full context, see https://github.com/jtroo/kanata/discussions/422
+  ;;
+  ;; tap-hold parameter order:
+  ;; 1. tap repress timeout
+  ;; 2. hold timeout
+  ;; 3. tap action
+  ;; 4. hold action
+  ;;
+  ;; The hold timeout is the number of milliseconds after which the hold action
+  ;; will activate.
+  ;;
+  ;; The tap repress timeout is best explained in a roundabout way. When you press and
+  ;; hold a standard key on your keyboard (e.g. 'a'), your operating system will
+  ;; read that and keep sending 'a' to the active application. To be able to
+  ;; replicate this behaviour with a tap-hold key, you must press-release-press
+  ;; the key within the tap repress timeout window (number is milliseconds). Simply
+  ;; holding the key results in the hold action activating, which is why you
+  ;; need to double-press for the tap action to stay pressed.
+  ;;
+  ;; There are two additional versions of tap-hold available:
+  ;; 1. tap-hold-press: if there is a key press, the hold action is activated
+  ;; 2. tap-hold-release: if there is a press and release of another key, the
+  ;; hold action is activated
+  ;;
+  ;; These versions are useful if you don't want to wait for the whole hold
+  ;; timeout to activate, but want to activate the hold action immediately
+  ;; based on the next key press or press and release of another key. These
+  ;; versions might be great to implement home row mods.
+  ;;
+  ;; If you come from kmonad, tap-hold-press and tap-hold-release are similar
+  ;; to tap-hold-next and tap-hold-next-release, respectively. If you know
+  ;; the underlying keyberon crate, tap-hold-press is the HoldOnOtherKeyPress
+  ;; and tap-hold-release is the PermissiveHold configuration.
+  anm (tap-hold 200 200 a @num)   ;; tap: a      hold: numbers layer
+  oar (tap-hold 200 200 o @arr)   ;; tap: o      hold: arrows layer
+  ech (tap-hold 200 200 e @chr)   ;; tap: e      hold: chords layer
+  umc (tap-hold 200 200 u @msc)   ;; tap: u      hold: misc layer
+  grl (tap-hold 200 200 grv @lay) ;; tap: grave  hold: layers layer
+  .ms (tap-hold 200 200 . @mse)   ;; tap: .      hold: mouse layer
+  ifk (tap-hold 200 200 i @fks)   ;; tap: i      hold: fake keys layer
+
+  ;; There are additional variants of tap-hold-press and tap-hold-release that
+  ;; activate the timeout action (the 5th parameter) when the action times out
+  ;; as opposed to the hold action being activated by other keys.
+
+  ;; tap: o    hold: arrows layer    timeout: backspace
+  oat (tap-hold-press-timeout   200 200 o @arr bspc)
+  ;; tap: e    hold: chords layer    timeout: esc
+  ect (tap-hold-release-timeout 200 200 e @chr esc)
+  ;; If you add reset-timeout-on-press to tap-hold-release-timeout,
+  ;; the timeout will reset on a press to give you more time to release
+  ;; a key to activate the hold.
+  ect2 (tap-hold-release-timeout 200 200 e @chr esc reset-timeout-on-press)
+
+  ;; There is another variant of `tap-hold-release` that takes a 5th parameter
+  ;; that is a list of keys that will trigger an early tap when pressed.
+
+  ;; tap: u    hold: misc layer      early tap if any of: (a o e) are pressed
+  umk (tap-hold-release-keys 200 200 u @msc (a o e))
+
+  ;; A variant of tap-hold-release-keys accepts another parameter,
+  ;; which is a list of keys that activates the tap
+  ;; on a press->release of a listed key.
+  umk2 (tap-hold-release-tap-keys-release 200 200 u @msc (a o e) (' , .))
+
+  ;; tap: u    hold: misc layer      always tap if any of: (a o e) are pressed
+  uek (tap-hold-except-keys 200 200 u @msc (a o e))
+
+  ;; tap for capslk, hold for lctl
+  cap (tap-hold 200 200 caps lctl)
+
+  ;; Below is an alias for the `multi` action which executes multiple actions
+  ;; in order but at the same time.
+  ;;
+  ;; It may result in some incorrect/unexpected behaviour if combining complex
+  ;; actions, so be reasonable with it. One reasonable use case is this alias:
+  ;; press right-alt while also toggling to the `ralted` layer. The utility of
+  ;; this is better revealed if you go see `ralted` and its aliases.
+  ralt (multi ralt (layer-toggle ralted))
+)
+
+;; Wrapping a top-level configuration item in a list beginning with
+;; (environment (env-var-name env-var-value) ...configuration...)
+;; will make the configuration only active if the environment variable matches.
+(environment (LAPTOP lp1)
+  (defalias met @lp1met)
+)
+
+(environment (LAPTOP lp2)
+  (defalias met @lp2met)
+)
+
+;; NOTE: the configuration below is an older and less general variant
+;; of the environment configuration above.
+;;
+;; The defaliasenvcond variant of defalias is parsed similarly, but there must
+;; be a list parameter first. The list must contain two strings. In order,
+;; these strings are: an environment variable name, and the environment
+;; variable value. When the environment variable defined by name has the
+;; corresponding value when running kanata, the aliases within will be active.
+;; Otherwise, the aliases will be skipped.
+(defaliasenvcond (LAPTOP lp1)
+  met @lp1met
+)
+
+(defaliasenvcond (LAPTOP lp2)
+  met @lp2met
+)
+
+(defalias
+  ;; shifted keys
+  { S-[
+  } S-]
+  : S-;
+
+  ;; alias numbers as themselves for use in macro
+  8 8
+  0 0
+)
+
+(defalias
+  ;; For the multi action, all keys are pressed for the whole sequence
+  ;; but still in the listed order which may be undesirable, particularly
+  ;; for modifiers like shift. You probably want to use macro instead.
+  ;;
+  ;; Chording can be more succinctly described by the modifier prefixes
+  ;; `C-`, `A-`, `S-`, and `M-` for lctrl, lalt, lshift, lmeta, but are possible
+  ;; by using `multi` as well. The lmeta key is also known by some other
+  ;; names: "Windows", "GUI", "Command", "Super".
+  ;;
+  ;; For ralt/altgr, you can use either of: `RA-` or `AG-`. They both work the
+  ;; same and only one is allowed in a single chord. This chord can be useful for
+  ;; international layouts.
+  ;;
+  ;; A special behaviour of output chords is that if another key is pressed,
+  ;; all of the chord keys will be released. For the explanation about why
+  ;; this is the case, see the configuration guide.
+  ;;
+  ;; This use case for multi is typing an all-caps string.
+  alp (multi lsft a b c d e f g h i j k l m n o p q r s t u v w x y z)
+
+  ;; Within multi you can also include reverse-release-order to release keys
+  ;; from last-to-first order instead of first-to-last which is the default.
+  S-a-reversed (multi lsft a reverse-release-order)
+
+  ;; Chords using the shortcut syntax. These ones are used for copying/pasting
+  ;; from some Linux terminals.
+  csv C-S-v
+  csc C-S-c
+
+  ;; Windows shortcut for displaying all windows
+  win M-tab
+
+  ;; Accented e characters for France layout using altgr sequence. Showcases
+  ;; both of the shortcuts. You can just use one version of shortcut at your
+  ;; preference.
+  é AG-2
+  è RA-7
+  testmacro (macro AG-2 RA-7)
+  🙃 (unicode 🙃)
+
+  ;; macro accepts keys, chords, and numbers (a delay in ms). Note that numbers
+  ;; will be parsed as delays, so they will need to be aliased to be used.
+  lch (macro h t t p @: / / 100 l o c a l h o s t @: @8 @0 @8 @0)
+  tbm (macro A-(tab 200 tab 200 tab) 200 S-A-(tab 200 tab 200 tab))
+  hpy (macro S-i spc a m spc S-(h a p p y) spc m y S-f r S-i e S-n d @🙃)
+
+  rls (macro-release-cancel Digit1 500 bspc S-1 500 bspc S-2)
+  cop (macro-cancel-on-press Digit1 500 bspc S-1 500 bspc S-2)
+  rlpr (macro-release-cancel-and-cancel-on-press Digit1 500 bspc S-1 500 bspc S-2)
+
+  ;; repeat variants will repeat while held, once ALL macros have ended,
+  ;; including the held macro.
+  mr1 (macro-repeat mltp)
+  mr2 (macro-repeat-release-cancel mltp)
+  mr3 (macro-repeat-cancel-on-press mltp)
+  mr4 (macro-repeat-release-cancel-and-cancel-on-press mltp)
+
+  ;; Kanata also supports dynamic macros. Dynamic macros can be nested, but
+  ;; cannot recurse.
+  dms dynamic-macro-record-stop
+  dst (dynamic-macro-record-stop-truncate 3)
+  dr0 (dynamic-macro-record 0)
+  dr1 (dynamic-macro-record 1)
+  dr2 (dynamic-macro-record 2)
+  dp0 (dynamic-macro-play 0)
+  dp1 (dynamic-macro-play 1)
+  dp2 (dynamic-macro-play 2)
+
+  ;; unmod will release all modifiers temporarily and send the .
+  ;; So for example holding shift and tapping a @um1 key will still output 1.
+  um1 (unmod 1)
+  ;; dead keys é (as opposed to using AltGr) that outputs É when shifted
+  dké (macro (unmod ') e)
+
+  ;; unshift is like unmod but only releases shifts
+  ;; In ISO German QWERTZ, force unshifted symbols even if shift is held
+  de{ (unshift ralt 7)
+  de[ (unshift ralt 8)
+
+  ;; unmod can optionally take a list as the first parameter,
+  ;; and then will only temporarily remove
+  ;; the listed modifiers instead of all modifiers.
+  unalt-a (unmod (lalt ralt) a)
+
+  ;; unicode accepts a single unicode character. The unicode character will
+  ;; not be automatically repeated by holding the key down. The alias name
+  ;; is the unicode character itself and is referenced by @🙁 in deflayer.
+  🙁 (unicode 🙁)
+
+  ;; You may output parentheses or double quotes using unicode
+  ;; by quotes as well as special quoting syntax.
+  lp1 (unicode r#"("#)
+  rp1 (unicode r#")"#)
+  dq (unicode r#"""#)
+  lp2 (unicode "(")
+  rp2 (unicode ")")
+
+  ;; fork accepts two actions and a key list. The first (left) action will
+  ;; activate by default. The second (right) action will activate if any of
+  ;; the keys in the third parameter (right-trigger-keys) are currently active.
+  frk (fork @🙃 @🙁 (lsft rsft))
+
+  ;; switch accepts triples of keys check, action, and fallthrough|break.
+  ;; The default usage of keys check behaves similarly to fork.
+  ;; However, it also accepts boolean operators and|or to allow more
+  ;; complex use cases.
+  ;;
+  ;; The order of cases matters. If two different cases match the
+  ;; currently pressed keys, the case listed earlier in the configuration
+  ;; will activate first. If the early case uses break, the second case will
+  ;; not activate at all. Otherwise if fallthrough is used, the second case
+  ;; will also activate sequentially after the first case.
+  swt (switch
+
+    ;; translating this keys check to some other common languages
+    ;; this might look like:
+    ;;
+    ;;    (a && b && (c || d) && (e || f))
+    ((and a b (or c d) (or e f))) a break
+
+    ;; this case behaves like fork, i.e.
+    ;;
+    ;;    (or a b c)
+    ;;
+    ;; or for some other common languages:
+    ;;
+    ;;    a || b || c
+    (a b c) b fallthrough
+
+    ;; key-history evaluates to true if the n'th most recent typed key,
+    ;; {n | n ∈ [1, 8]}, matches the given key.
+    ((key-history a 1) (key-history b 8)) c break
+
+    ;; key-timing evaluates to true if the n'th most recent typed key,
+    ;; {n | n ∈ [1, 8]}, was typed at a time less-than/greater-than the
+    ;; given number of milliseconds.
+    ((key-timing 1 lt 3000)       (key-timing 2 gt 30000)        ) c break
+    ((key-timing 7 less-than 200) (key-timing 8 greater-than 500)) c break
+
+    ;; not means "not any of the list constituents".
+    ;; The example below behaves like:
+    ;;
+    ;;    !(a || b || c)
+    ;;
+    ;; and is equivalent to:
+    ;;
+    ;;    ((not (or a b c)))
+    ((not a b c)) c break
+
+    ;; input logic
+    ((input real lctl)) d break
+    ((input virtual sft)) e break
+    ((input-history real lsft 2)) f break
+    ((input-history virtual ctl 2)) g break
+
+    ;; layer evaluates to `true` if the active layer matches the given name
+    ((layer dvorak)) x break
+    ((layer qwerty)) y break
+
+    ;; base-layer evaluates to `true` if the base layer matches the given name
+    ;; The base layer is the most recent target of layer-switch.
+    ;; The base layer is not always the active layer.
+    ((base-layer dvorak)) x break
+    ((base-layer qwerty)) y break
+
+    ;; default case, empty list always evaluates to true.
+    ;; break vs. fallthrough doesn't matter here
+    () c break
+  )
+
+  ;; Having a cmd action in your configuration without explicitly enabling
+  ;; `danger-enable-cmd` **and** using the cmd-enabled executable will make
+  ;; kanata refuse to load your configuration. The aliases below are commented
+  ;; out since commands aren't allowed by this configuration file.
+  ;;
+  ;; Note that the parameters to `cmd` are executed directly as opposed to
+  ;; passed to a shell. So for example, `~` and `$HOME` would not refer
+  ;; to your home directory on Linux.
+  ;;
+  ;; You can use:
+  ;; `cmd bash -c "your_stuff_here"` to run your command inside of bash.
+  ;;
+  ;; cm1 (cmd bash -c "echo hello world")
+  ;; cm2 (cmd rm -fr /tmp/testing)
+
+  ;; One variant of `cmd` is `cmd-log`, which lets you control how
+  ;; running command, stdout, stderr, and execution failure are logged.
+  ;;
+  ;; The command takes two extra arguments at the beginning `<log_level>`,
+  ;; and `<error_log_level>`. `<log_level>` controls where the name
+  ;; of the command is logged, as well as the success message and command
+  ;; stdout and stderr.
+  ;;
+  ;; `<error_log_level>` is only used if there is a failure executing the initial
+  ;; command. This can be if there is trouble spawning the command, or
+  ;; the command is not found. This means if you use `bash -c "thisisntacommand"`, as
+  ;; long as bash starts up correctly, nothing would be logged to this channel, but
+  ;; something like `thisisntacommand` would be.
+  ;;
+  ;; The log level can be `debug`, `info`, `warn`, `error`, or `none`.
+  ;;
+  ;; cmd-log info error bash -c "echo these are the default levels"
+  ;; cmd-log none none bash -c "echo nothing back in kanata logs"
+  ;; cmd-log none error bash -c "only if command fails"
+  ;; cmd-log debug debug bash -c "echo log, but require changing verbosity levels"
+  ;; cmd-log warn warn bash -c "echo this probably isn't helpful"
+
+  ;; Another variant of `cmd` is `cmd-output-keys`. This reads the output
+  ;; of the command and treats it as an S-Expression, similarly to `macro`.
+  ;; However, only delays, keys, chords, and chorded lists are supported.
+  ;; Other actions are not.
+  ;;
+  ;; bash: type date-time as YYYY-MM-DD HH:MM
+  ;; cmd-output-keys bash -c "date +'%F %R' | sed 's/./& /g' | sed 's/:/S-;/g' | sed 's/\(.\{20\}\)\(.*\)/\(\1 spc \2\)/'"
+)
+
+;; The underscore _ means transparent. The key on the base layer will be used
+;; instead. XX means no-op. The key will do nothing.
+;;
+;; A similar concept to transparent, use-defsrc means the key will always
+;; behave as the key as defined by defsrc.
+(defalias src use-defsrc)
+(deflayer numbers
+  @src _    _    _    _    _    nlk  kp7  kp8  kp9  _    _    _    _
+  _    _    _    _    _    XX   _    kp4  kp5  kp6  -    _    _    _
+  _    _    C-z  _    _    XX   _    kp1  kp2  kp3  +    _    _
+  _    C-z  C-x  C-c  C-v  XX   _    kp0  kp0  .    /    _
+  _    _    _              _              _    _    _
+)
+
+;; The `lrld` action stands for "live reload".
+;;
+;; NOTE: live reload does not read changes to device-related configurations,
+;; such as `linux-dev`, `macos-dev-names-include`,
+;; or `windows-only-windows-interception-keyboard-hwids`.
+;;
+;; The variants `lrpv` and `lrnx` will cycle between multiple configuration files
+;; if they are specified in the startup arguments.
+;; The list action variant `lrld-num` takes a number parameter and
+;; reloads the configuration file specified by the number, according to the
+;; order passed into the arguments on kanata startup.
+;;
+;; Upon a successful reload, the kanata state will begin on the default base layer
+;; in the configuration. E.g. in this example configuration, you would start on
+;; the qwerty layer.
+(deflayer layers
+  _    @qwr @dvk lrld lrpv lrnx (lrld-num 1) _ _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+(defalias
+
+  ;; Alias for one-shot which will activate an action until either the timeout
+  ;; expires or a different key is pressed. The timeout is the first parameter
+  ;; and the action is the second parameter.
+  ;;
+  ;; The intended use cases are pressing a modifier for exactly one key or
+  ;; switching to another layer for exactly one key.
+  ;;
+  ;; If a one-shot key is held then it will act as a regular key. E.g. for os1
+  ;; below, holding an @os1 key will keep lsft held and holding an @os3 key
+  ;; will keep the layer set to misc.
+  os1 (one-shot 500 lsft)
+  os2 (one-shot 500 C-S-lalt)
+  os3 (one-shot 500 (layer-toggle misc))
+
+  ;; Another name for one-shot is one-shot-press, since it ends on the first
+  ;; press of another key.
+  ;;
+  ;; There is another variant one-shot-release which ends on the first release
+  ;; of another key.
+  ;;
+  ;; There are further variants of both of these:
+  ;; - one-shot-press-pcancel
+  ;; - one-shot-release-pcancel
+  ;;
+  ;; These will cancel the one-shot action and all other active one-shot actions
+  ;; if a one-shot key is repressed while already active.
+  osp (one-shot-press 500 lsft)
+  osr (one-shot-release 500 lsft)
+  opp (one-shot-press-pcancel 500 lsft)
+  orp (one-shot-release-pcancel 500 lsft)
+
+  ;; one-shot-pause-processing can be useful in some cases
+  ;; to preserve an activated one-shot state when it otherwise
+  ;; would get deactivated by some action that isn't intended
+  ;; to consume the one-shot.
+  ;; The unit is number of milliseconds.
+  ops (one-shot-pause-processing 5)
+
+  ;; Alias for tap-dance which will activate one of the actions in the action
+  ;; list depending on how many taps were done. Tapping once will output the
+  ;; first action and tapping N times will output the N'th action.
+  ;;
+  ;; The first parameter is a timeout. Tapping the same tap-dance key again
+  ;; within the timeout will reset the timeout and advance the tap-dance to the
+  ;; next key.
+  ;;
+  ;; The action activates either when any of the following happens:
+  ;; - the timeout expires
+  ;; - the tap sequence reaches the end
+  ;; - a different key is pressed
+  td (tap-dance 200 (a b c d spc))
+
+  ;; There is a variant of tap-dance — tap-dance-eager — that will activate
+  ;; every action tapped in the sequence rather than a single one. The example
+  ;; below is rather simple and behaves similarly to the original tap-dance.
+  td2 (tap-dance-eager 500 (
+    (macro a) ;; use macro to prevent auto-repeat of the key
+    (macro bspc b b)
+    (macro bspc bspc c c c)
+  ))
+
+  ;; arbitrary-code allows sending an arbitrary number as an OS code. This is
+  ;; not cross platform! This can be useful for testing keys that are not yet
+  ;; named or mapped in kanata. Please contribute findings with names and/order
+  ;; mappings, either in a GitHub issue or as a pull request! This is currently
+  ;; not supported with Windows using the interception driver.
+  ab1 (arbitrary-code 700)
+)
+
+(defalias
+  ;; caps-word will add an lsft to the active key list for all alphanumeric keys
+  ;; a-z, and the US layout minus key; meaning it will be converted to an
+  ;; underscore.
+  ;;
+  ;; The caps-word state will also be cleared if any key that doesn't get auto-
+  ;; capitalized and also doesn't belong in this list is pressed:
+  ;; - 0-9
+  ;; - kp0-kp9
+  ;; - bspc, del
+  ;; - up, down, left, rght
+  ;;
+  ;; The single parameter is a timeout in milliseconds after which the caps-word
+  ;; state will be cleared and lsft will not be added anymore. The timer is reset
+  ;; any time a capitalizable or extra non-terminating key is active.
+  cw (caps-word 2000)
+
+  ;; Like caps-word, but you get to choose the key lists where lsft gets added.
+  ;; This example is similar to the default caps-word behaviour but it moves the
+  ;; 0-9 keys to capitalized key list from the extra non-terminating key list.
+  cwc (caps-word-custom
+    2000
+    (a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9)
+    (kp0 kp1 kp2 kp3 kp4 kp5 kp6 kp7 kp8 kp9 bspc del up down left rght)
+  )
+)
+
+;; -toggle variants of caps-word will terminate caps-word on repress if it is
+;; currently active, otherwise caps-word will be activated.
+(defalias
+  cwt (caps-word-toggle 2000)
+  cct (caps-word-custom-toggle
+    2000
+    (a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9)
+    (kp0 kp1 kp2 kp3 kp4 kp5 kp6 kp7 kp8 kp9 bspc del up down left rght)
+  )
+)
+
+;; Can see a new action `rpt` in this layer. This repeats the most recently
+;; pressed key. Holding down the `rpt` key will not repeatedly send the key.
+;; The intended use case is to be able to use a different finger to repeat a
+;; double letter, as opposed to double-tapping a letter.
+;;
+;; The `rpt` action only repeats the last key output. For example, it won't
+;; output a chord like `ctrl+c` if the previous key pressed was `C-c` - it
+;; will only output `c`. There is a variant `rpt-any` which will repeat the
+;; previous action and would work for that use case.
+(deflayer misc
+  _    _    _    _    _    _    _    _    _    @é   @è   _    ì #|random custom key for testing|#   _
+  _    _    @ab1 _    _    _    ins  @{   @}   [    ]    _    _    +
+  @cw  _    _    _    C-u  _    del  bspc esc  ret  _    _    _
+  @cwc C-z  C-x  C-c  C-v  _    _    _    @td  @os1 @os2 @os3
+  rpt rpt-any _            _              _    _    _
+)
+
+
+(deflayer chords      ;; you can put list actions directly in deflayer but it's ugly, so prefer aliases.
+  _    _    _    _    _    _    _    _    _    _    @🙁  (unicode 😀) _    _
+  _    _    _    _    _    _    _    _    @csc @hpy @lch @tbm         _    _
+  _    @alp _    _    _    _    _    @ch1 @ch2 @ch4 @ch8 _            _
+  _    _    _    _    _    _    _    _    _    @csv _    _
+  _    _    _              _              _    _    _
+)
+
+(deflayer arrows
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
+  _    _    _    _    _    _    _    pgup up   pgdn _    _    _    _
+  _    _    _    _    _    _    home left down rght end  _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; In Windows, using mouse buttons on the kanata window seems to cause it to hang.
+;; Using the mouse on other windows seems to be fine though.
+;;
+;; The mouse buttons can be clicked using mlft, mrgt, mmid, mfwd and mbck, representing the
+;; left, right, middle, forward and backward mouse buttons respectively. If the key is held, the
+;; button press will also be held.
+;;
+;; If there are multiple mouse click actions within a single multi action, e.g.
+;; (multi mrgt mlft), then all the buttons except the last will be clicked then
+;; unclicked. The last button will remain held until key release. In the example
+;; given, the button sequence will be:
+;; press key->click right->unclick right->click left->release key->release left
+;;
+;; There are variants of the standard mouse buttons which "tap" the button.
+;; These are mltp, mrtp, and mmtp. Rather than holding until key release, this
+;; action will click and unclick the button once the key is pressed. Nothing
+;; happens on key release. The action (multi lctl mltp) will result in the
+;; sequence below:
+;; press key->press lctl->click left->unclick left->release key->release lctl
+;;
+;; One can also see mouse movement actions at the lower right side, with the
+;; arrow unicode characters.
+(deflayer mouse
+  _    @mwu @mwd @mwl @mwr _    _    _    _    _    @ma↑ _    _    _
+  _    pgup bck  _    fwd  _    _    _    _    @ma← @ma↓ @ma→ _    _
+  _    pgdn mlft _    mrgt mmid _    mbck mfwd _    @ms↑ _    _
+  @fms _    mltp _    mrtp mmtp _    mbtp mftp @ms← @ms↓ @ms→
+  _    _    _              _              _    _    _
+)
+
+(defalias
+  ;; Mouse wheel actions. The first number is the interval in milliseconds
+  ;; between scroll actions. The second number is the distance in some arbitrary
+  ;; unit. Play with the parameters to see what feels correct. Both numbers
+  ;; must be in the range 1-65535
+  ;;
+  ;; In both Windows and Linux, 120 distance units is equivalent to a single
+  ;; notch movement on a physical wheel. In Linux, not all desktop environments
+  ;; support the REL_WHEEL_HI_RES event so if you experience issues with `mwheel`
+  ;; actions in Linux, using a distance value that is multiple of 120 may help.
+  mwu (mwheel-up 50 120)
+  mwd (mwheel-down 50 120)
+
+  ;; Horizontal mouse wheel actions. Similar story to vertical mouse wheel.
+  mwl (mwheel-left 50 120)
+  mwr (mwheel-right 50 120)
+
+  ;; There are similar wheel actions with `-accel` that have
+  ;; accelerating/inertial scrolling.
+  ;; The parameters are:
+  ;; 1. initial velocity
+  ;; 2. maximum velocity
+  ;; 3. acceleration multiplier
+  ;; 4. deceleration multiplier
+  ;; The units are arbitrary.
+  ;; The author finds the values in the example below
+  ;; to be a decent-feeling starting paint.
+  ;; Experiment to find your preference.
+  mau (mwheel-accel-up   3 1200 1.15 0.93)
+  mad (mwheel-accel-down 3 1200 1.15 0.93)
+
+  ;; Mouse movement actions.The first number is the interval in milliseconds
+  ;; between mouse actions. The second number is the distance traveled per interval
+  ;; in pixels.
+
+  ms↑ (movemouse-up 1 1)
+  ms← (movemouse-left 1 1)
+  ms↓ (movemouse-down 1 1)
+  ms→ (movemouse-right 1 1)
+
+  ;; Mouse movement actions with linear acceleration. The first number is the
+  ;; interval in milliseconds between mouse actions. The second number is the time
+  ;; in milliseconds for the distance to linearly ramp up from the minimum distance
+  ;; to the maximum distance. The third number is the minimum distance traveled
+  ;; per interval in pixels. The fourth number is the maximum distance traveled
+  ;; per interval in pixels.
+
+  ma↑ (movemouse-accel-up 1 1000 1 5)
+  ma← (movemouse-accel-left 1 1000 1 5)
+  ma↓ (movemouse-accel-down 1 1000 1 5)
+  ma→ (movemouse-accel-right 1 1000 1 5)
+
+  ;; setmouse places the cursor at a specific pixel x-y position. This
+  ;; example puts it in the middle of the screen. The coordinates go from 0,0
+  ;; which is the upper-left corner of the screen to 65535,65535 which is the
+  ;; lower-right corner of the screen. If you have multiple monitors, they are
+  ;; treated as one giant screen, which may make it a bit confusing for how to
+  ;; set up the pixels. You will need to experiment.
+  sm (setmouse 32228 32228)
+
+  ;; movemouse-speed takes a percentage by which it then scales all of the
+  ;; mouse movements while held. You can have as many of these active at a
+  ;; given time as you would like, but be warned that some values, such as 33
+  ;; may not have correct pixel distance representations.
+  fms (movemouse-speed 200)
+)
+
+(defalias
+  lft (multi (release-key ralt) left) ;; release ralt if held and also press left
+  rgt (multi (release-key ralt) rght) ;; release ralt if held and also press rght
+  rlr (release-layer ralted)          ;; release layer-toggle of ralted
+)
+
+;; It's not clear what the practical use case is for the @rlr alias, but the
+;; combination of @ralt on the dvorak layer and this layer with @lft and @rgt
+;; results in the physical ralt key behaving mostly as ralt, **except** for
+;; holding it **then** pressing specific keys. These specific keys release the
+;; ralt because it would cause them to have undesired behaviour without the
+;; release.
+;;
+;; E.g. ralt+@lft will result in only left being pressed instead of ralt+left,
+;; while ralt(hold)+tab+tab+tab still works as intended.
+(deflayer ralted
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    @lft @rlr @rgt _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; Virtual key actions
+
+(defvirtualkeys
+  ;; Define some virtual keys that perform modifier actions
+  vkctl lctl
+  vksft lsft
+  vkmet lmet
+  vkalt lalt
+
+  ;; A virtual key that toggles all modifier virtual keys above
+  vktal (multi
+        (on-press toggle-virtualkey vkctl)
+        (on-press toggle-virtualkey vksft)
+        (on-press toggle-virtualkey vkmet)
+        (on-press toggle-virtualkey vkalt)
+      )
+
+  ;; Virtual key that activates a macro
+  vkmacro (macro h e l l o spc w o r l d)
+)
+
+(defalias
+  psfvk (on-press press-virtualkey   vksft)
+  rsfvk (on-press release-virtualkey vksft)
+
+  palvk (on-press tap-vkey vktal)
+  macvk (on-press tap-vkey vkmacro)
+
+  isfvk (on-idle 1000 tap-vkey vksft)
+  pisfvk (on-physical-idle 1000 tap-vkey vksft)
+)
+
+;; Press and release fake keys.
+;;
+;; Fake keys can't be pressed by any physical keyboard buttons and can only be
+;; acted upon by the actions:
+;; - on-press-fakekey
+;; - on-release-fakekey
+;; - on-idle-fakekey
+;;
+;; One use case of fake keys is for holding modifier keys
+;; for any number of keypresses and then releasing the modifiers when desired.
+;;
+;; The actions associated with fake keys in deffakekeys are parsed before
+;; aliases, so you can't use aliases within deffakekeys. Other than the lack
+;; of alias support, fake keys can do any action that a normal key can,
+;; including doing operations on previously defined fake keys.
+;;
+;; Operations on fake keys can occur either on press (on-press-fakekey),
+;; on release (on-release-fakekey), or on idle for a specified time
+;; (on-idle-fakekey).
+;;
+;; Fake keys are flexible in usage but can be obscure to discover how they
+;; can be useful to you.
+(deflayer fakekeys
+  _    @fcp @fsp @fmp @pal _    _    _    _    _    _    _    _    _
+  _    @fcr @fsr @fap @ral _    _    _    _    _    _    _    _    _
+  _    @fct @fst @rma _    _    _    _    _    _    _    _    _
+  _    @t1  _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+(deffakekeys
+  ctl lctl
+  sft lsft
+  lsft lsft
+  met lmet
+  alt lalt
+  mmid mmid
+  pal (multi
+        (on-press-fakekey ctl press)
+        (on-press-fakekey sft press)
+        (on-press-fakekey met press)
+        (on-press-fakekey alt press)
+      )
+  ral (multi
+        (on-press-fakekey ctl release)
+        (on-press-fakekey sft release)
+        (on-press-fakekey met release)
+        (on-press-fakekey alt release)
+      )
+)
+
+(defalias
+  fcp (on-press-fakekey ctl press)
+  fcr (on-press-fakekey ctl release)
+  fct (on-press-fakekey ctl tap)
+  fsp (on-release-fakekey sft press)
+  fsr (on-release-fakekey sft release)
+  fst (on-release-fakekey sft tap)
+  fsg (on-release-fakekey sft toggle)
+  fmp (on-press-fakekey met press)
+  fap (on-press-fakekey alt press)
+  rma (multi
+        (on-press-fakekey met release)
+        (on-press-fakekey alt release)
+      )
+  pal (on-press-fakekey pal tap)
+  ral (on-press-fakekey ral tap)
+  rdl (on-idle-fakekey ral tap 1000)
+  hfd (hold-for-duration 1000 met)
+
+  ;; Test of on-press-fakekey and on-release-fakekey in a macro
+  t1 (macro-release-cancel @fsp 5 a b c @fsr 5 c b a)
+
+  ;; If you find that an application isn't registering keypresses correctly
+  ;; with multi, you can try out:
+  ;; - on-press-fakekey-delay
+  ;; - on-release-fakekey-delay
+  ;;
+  ;; Do note that processing a fakekey-delay and even a sequence of delays will
+  ;; delay any other inputs from being processed until the fakekey-delays are
+  ;; all complete, so use with care.
+  stm (multi ;; Shift -> middle mouse with a delay
+    (on-press-fakekey lsft press)
+    (on-press-fakekey-delay 200)
+    (on-press-fakekey mmid press)
+    (on-release-fakekey mmid release)
+    (on-release-fakekey-delay 200)
+    (on-release-fakekey lsft release)
+  )
+)
+
+;; Vim-style leader-key sequences. Activate a fakekey-tap by pressing a "leader"
+;; key and then a sequence of characters.
+;; See: https://github.com/jtroo/kanata/issues/97
+;;
+;; You can add an entry to defcfg to change the sequence timeout (default is 1000):
+;;     sequence-timeout <number(ms)>
+;;
+;; If you want multiple timeouts with different leaders, you can also activate the
+;; sequence action:
+;;     (sequence <timeout>)
+;; This acts like `sldr` but uses a different timeout.
+;;
+;; There is also an option to customize the key sequence input mode. Its default
+;; value when not configured is `hidden-suppressed`.
+;;
+;; The options are:
+;;
+;; - `visible-backspaced`: types sequence characters as they are inputted. The
+;;   typed characters will be erased with backspaces for a valid sequence termination.
+;; - `hidden-suppressed`: hides sequence characters as they are typed. Does not
+;;   output the hidden characters for an invalid sequence termination.
+;; - `hidden-delay-type`: hides sequence characters as they are typed. Outputs the
+;;   hidden characters for an invalid sequence termination either after either a
+;;   timeout or after a non-sequence key is typed.
+;;
+;; For `visible-backspaced` and `hidden-delay-type`, a sequence leader input will
+;; be ignored if a sequence is already active. For historical reasons, and in case
+;; it is desired behaviour, a sequence leader input using `hidden-suppressed` will
+;; reset the key sequence.
+;;
+;; Example:
+;;     sequence-input-mode visible-backspaced
+(defseq git-status (g s t))
+(deffakekeys git-status (macro g i t spc s t a t u s))
+(defalias rcl (tap-hold-release 200 200 sldr rctl))
+
+(defseq
+    dotcom (. S-3)
+    dotorg (. S-4)
+)
+(deffakekeys
+    dotcom (macro . c o m)
+    dotorg (macro . o r g)
+)
+;; Enter sequence mode and input .
+(defalias dot-sequence (macro (sequence 250) 10 .))
+(defalias dot-sequence-inputmode (macro (sequence 250 hidden-delay-type) 10 .))
+
+;; There are special keys that you can assign in your actions which will
+;; never output events to your operating system, but which you can use
+;; in sequences. They are named: nop0-nop9.
+(defseq
+    dotcom (nop0 nop1)
+    dotorg (nop8 nop9)
+)
+
+;; A key list within O-(...) signifies simultaneous presses.
+(defseq
+    dotcom (O-(. c m))
+    dotorg (O-(. r g))
+)
+
+;; sequence-noerase
+;;
+;; When you have a keyboard locale that uses dead keys,
+;; you may be pressing two keys that only actually output one symbol.
+;; By default, when visible-backspaced does the backtracking backspace,
+;; it backspaces according to input count.
+;; With dead keys, this may result in too many backspaces.
+;;
+;; The sequence-noerase action is a no-output action
+;; that tells the sequences action to have one fewer backspace
+;; when backtracking with visible-backspaced.
+
+(deflayermap (base)
+  0 sldr
+  u (t! maybe-noerase u)
+)
+(deftemplate maybe-noerase (char)
+  (multi
+    (switch
+      ((key-history ' 1)) (sequence-noerase 1) fallthrough
+      () $char break
+   ))
+)
+(defvirtualkeys seq-output-1 (macro a b c d e f g))
+(defseq seq-output-1 (' u))
+
+;; Input chording.
+;;
+;; Not to be confused with output chords (like C-S-a or the chords layer
+;; defined above), these allow you to perform actions when a combination of
+;; input keys (a "chord") are pressed all at once (order does not matter).
+;; Each combination/chord can perform a different action, allowing you to bind
+;; up to `2^n - 1` different actions to just `n` keys.
+;;
+;; Each `defchords` defines a named group of such chord-action pairs.
+;; The 500 is a timeout after which a chord triggers if it isn't triggered by a
+;; key release or press of a non-chord key before the timeout expires.
+;; If a chord is not defined, no action will occur when it is triggered but the
+;; keys used to input it will be consumed regardless.
+;;
+;; Each pair consists of the keys that make up a given chord in the parenthesis
+;; followed by the action that should be executed when the given chord is
+;; pressed.
+;; Note that these keys do not directly correspond to real keys and are merely
+;; arbitrary labels that make sense within the context of the chord.
+;; They are mapped to real keys in layers by configuring the key in the layer to
+;; map to a `(chord name key)` action (like those in the `defalias` below) where
+;; `name` is the name of the chords group (here `binary`) and `key` is one of the
+;; arbitrary labels of the keys in a chord (here `1`, `2`, `4` and `8`).
+;;
+;; Note that it is perfectly valid to nest these `chord` actions that enter
+;; "chording mode" within other actions like `tap-dance` and that will work as
+;; one would expect.
+;; However, this only applies to the first key used to enter "chording mode".
+;; Once "chording mode" is active, all other keys will be directly handled by
+;; "chording mode" with no regard for wrapper actions; e.g. if a key is pressed
+;; and it maps to a tap-hold with a chord as the hold action within, that chord
+;; key will immediately activate instead of the key needing to be held for the
+;; timeout period.
+;;
+;; The action executed by a chord (the right side of the chord-action pairs) may
+;; be any regular or advanced action, including aliases. They currently cannot
+;; however contain a `chord` action.
+(defchords binary 500
+  (1      ) 1
+  (  2    ) 2
+  (1 2    ) 3
+  (    4  ) 4
+  (1   4  ) 5
+  (  2 4  ) 6
+  (1 2 4  ) 7
+  (      8) 8
+  (1     8) 9
+  (  2   8) (multi 1 0)
+  (1 2   8) (multi 1 1)
+  (    4 8) (multi 1 2)
+  (1   4 8) (multi 1 3)
+  (  2 4 8) (multi 1 4)
+  (1 2 4 8) (multi 1 5)
+)
+
+(defalias
+  ch1 (chord binary 1)
+  ch2 (chord binary 2)
+  ch4 (chord binary 4)
+  ch8 (chord binary 8)
+)
+
+;; The top-level action `include` will read a configuration from a new file.
+;; At the time of writing, includes can only be placed at the top level. The
+;; included files also cannot contain includes themselves.
+;;
+;; (include included-file.kbd)
+
+
+;; The top-level item `deftemplate` declares a template
+;; which can be expanded multiple times to reduce repetition.
+;;
+;; Expansion of a template is done via `expand-template`.
+
+;; This template defines a chord group and aliases that use the chord group.
+;; The purpose is to easily define the same chord position behaviour
+;; for multiple layers that have different underlying keys.
+(deftemplate left-hand-chords (chordgroupname k1 k2 k3 k4 alias1 alias2 alias3 alias4)
+  (defalias
+    $alias1 (chord $chordgroupname $k1)
+    $alias2 (chord $chordgroupname $k2)
+    $alias3 (chord $chordgroupname $k3)
+    $alias4 (chord $chordgroupname $k4)
+  )
+  (defchords $chordgroupname $chord-timeout
+    ($k1) $k1
+    ($k2) $k2
+    ($k3) $k3
+    ($k4) $k4
+    ($k1 $k2) lctl
+    ($k3 $k4) lsft
+  )
+)
+
+(defvar chord-timeout 200)
+
+(template-expand left-hand-chords qwerty a s d f qwa qws qwd qwf)
+;; You can use t! as a short form of template-expand
+(t! left-hand-chords dvorak a o e u dva dvo dve dvu)
+
+(deflayer template-example
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @qwa @qws @qwd @qwf _    _    _    _    _    _    _    _    _
+  _    @dva @dvo @dve @dvu _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+;; Within a deftemplate you can use if-equal to conditionally insert content
+;; into the template.
+
+(deftemplate home-row (version)
+  a s d f g h
+  (if-equal $version v1 j)
+  (if-equal $version v2 (tap-hold 200 200 j lctl))
+   k l ; '
+)
+
+(deftemplate common-overrides ()
+  (lctl 7) (lctl lsft tab)
+  (lctl 9) (lctl tab)
+  (lalt 7) (lalt lsft tab)
+  (lalt 9) (lalt tab)
+)
+
+;; Wrapping a top-level configuration item in a list beginning with
+;; (platform (applicable-platforms...) ...configuration...)
+;; will make the configuration only active on a specific platform.
+(platform (macos)
+  ;; Only on macos, use command arrows to jump/delete words
+  ;; because command is used for so many other things
+  ;; and it's weird that these cases use alt.
+  (defoverrides
+    (lmet bspc)  (lalt bspc)
+    (lmet left)  (lalt left)
+    (lmet right) (lalt right)
+    (template-expand common-overrides)
+  )
+)
+(platform (win winiov2 wintercept linux)
+  (defoverrides
+    (template-expand common-overrides)
+  )
+)
+
+#|
+
+Global input chords.
+
+Syntax (5-tuples):
+
+    (defchordsv2
+      (participating-keys1) action1 timeout1 release-behaviour1 (disabled-layers1)
+        ...
+      (participating-keysN) actionN timeoutN release-behaviourN (disabled-layersN)
+    )
+
+|#
+
+(defchordsv2
+  (a b c)   (macro a l p h a b e t)  200 all-released  (qwerty arrows)
+  (h l o)   (macro h e l l o)        250 first-release (qwerty arrows)
+  (g b y e) (macro g o o d b y e)    400 first-release (qwerty arrows)
+)
+
+#|
+
+Yet another chording implementation - zippychord:
+
+
+;; This is a sample for US international layout.
+(defzippy
+  zippy.txt
+  on-first-press-chord-deadline 500
+  idle-reactivate-time          500
+  smart-space-punctuation (? ! . , ; :)
+  output-character-mappings (
+    ! S-1
+    ? S-/
+    % S-5
+    "(" S-9
+    ")" S-0
+    : S-;
+    < S-,
+    > S-.
+    r#"""# S-'
+    | S-\
+    _ S--
+    ® AG-r
+    ;; In case you use dead keys or compose keys
+    ;; where multiple keys are pressed
+    ;; to produce a single backspaceable symbol,
+    ;; use no-erase or single-output
+    ’ (no-erase `)
+    é (single-output ' e)
+  )
+)
+
+Example file content of zippy.txt:
+---
+dy	day
+dy 1	Monday
+ abc	Alphabet
+r df	recipient
+ w  a	Washington
+rq	request
+rqa	request assistance
+---
+
+You can read about zippychord in more detail in the configuration guide.
+
+|#
+
+#|
+
+Clipboard actions allow you to manipulate the clipboard.
+To paste, you should manually output C-v,
+or whatever key output is necessary to paste.
+E.g. S-ins might also work.
+
+|#
+
+(deflayermap (clip)
+ a (clipboard-set       clip)
+ b (clipboard-save      0)
+ c (clipboard-restore   0)
+ d (clipboard-save-swap 0 65535)
+ #| actions with cmd only works with the compilation flags and defcfg enablement.
+ e (clipboard-cmd-set powershell.exe -c "echo 'hello world'")
+ f (clipboard-save-cmd-set 0 bash -c "echo 'goodbye'")
+ |#
+)

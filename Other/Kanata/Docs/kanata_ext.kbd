@@ -1,0 +1,57 @@
+(defcfg
+  ;; The keys that are not in defsrc will not be processed by kanata
+  process-unmapped-keys no
+)
+
+;; This is initial state of your keyboard ( you want this to match your keyboard )
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    ⌫
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+;; This is modified primary layer ( where fun begins )
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    ⌫
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @ext a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(defalias
+  ;; Extend layer
+  ext (layer-toggle extend)
+
+  ;; Mouse nav
+  msu (movemouse-up 4 4)
+  msl (movemouse-left 4 4)
+  msd (movemouse-down 4 4)
+  msr (movemouse-right 4 4)
+
+  ;; Mouse wheel
+  mwu (mwheel-up 50 120)
+  mwd (mwheel-down 50 120)
+  mwl (mwheel-left 50 120)
+  mwr (mwheel-right 50 120)
+
+  ;; Copy, paste etc... macros
+  cpy (macro C-c)
+  pst (macro C-v)
+  und (macro C-z)
+  cut (macro C-x)
+
+)
+
+;; This is the famous Extend layer ( You are free to change things up )
+;; If you do decide to change stuff, check the mappings for whatever keys you need here:
+;; https://github.com/jtroo/kanata/blob/main/parser/src/keys/mod.rs
+(deflayer extend
+  lrld f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  _
+  _    caps @mwu mbck mfwd @msu pgup home up   end  del  esc  ins  @mwr
+  _    lalt @mwd lsft lctl @msd pgdn lft  down rght ⌫    menu prnt
+  _    @und @cut @cpy @pst mlft mrgt mmid @msl @msr @mwl _
+  _    _    _             ret             _    _    _
+)

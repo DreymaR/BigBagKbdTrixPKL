@@ -107,11 +107,11 @@ _pklSuspendByApp() { 											; Suspend EPKL if certain windows are active
 	If WinActive( "ahk_group SuspendingApps" ) { 				; If a window specified in the group is active...
 		If ( not suspendedByApp ) { 							; ...and not already A_IsSuspended,...
 			suspendedByApp := true  							; ...then auto-suspend that window.
-			Gosub suspendOn
+			Gosub suspendOnSoft
 		}
 	} else if ( suspendedByApp ) {
 		suspendedByApp := false
-		Gosub suspendOff
+		Gosub suspendOffSoft
 	}
 	SetTitleMatchMode % getPklInfo("WinMatchDef")   			; Return to EPKL's default TitleMatchMode
 }
@@ -123,11 +123,11 @@ _pklSuspendByLID() { 											; Suspend EPKL if certain layouts are active
 	If InStr( suspendingLIDs, getWinLocaleID() ) { 				; If a specified layout is active...
 		If ( not suspendedByLID ) { 							; ...and not already A_IsSuspended...
 			suspendedByLID := true
-			Gosub suspendOn
+			Gosub suspendOnSoft
 		}
 	} else if ( suspendedByLID ) {
 		suspendedByLID := false
-		Gosub suspendOff
+		Gosub suspendOffSoft
 	}
 }
 

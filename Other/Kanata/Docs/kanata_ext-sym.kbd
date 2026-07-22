@@ -1,0 +1,111 @@
+(defcfg
+  process-unmapped-keys no
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    ⌫
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet rctl
+)
+
+(deflayer base
+  grv  1    2    3    4    5    6    \    7    8    9    0    =    ⌫
+  tab  q    w    f    p    b    [    j    l    u    y    '    -    ret
+  @ext a    r    s    t    g    ]    m    n    e    i    o    ;
+  lsft x    c    d    v    z    /    k    h    ,    .    rsft
+  lctl lmet lalt           spc            @sym rmet rctl
+)
+
+(defalias
+  ;; Extend layer
+  ext (layer-toggle extend)
+
+  ;; Mouse layer
+  mnl (layer-toggle mouse)
+
+  ;; Symbols layer
+  sym (layer-toggle symbols)
+
+  ;; Media layer
+  med (layer-toggle media)
+
+  ;; Mouse nav
+  msu (movemouse-up 4 4)
+  msl (movemouse-left 4 4)
+  msd (movemouse-down 4 4)
+  msr (movemouse-right 4 4)
+
+  ;; Mouse wheel
+  mwu (mwheel-up 50 120)
+  mwd (mwheel-down 50 120)
+  mwl (mwheel-left 50 120)
+  mwr (mwheel-right 50 120)
+  
+  ;; Mouse speed ( hold key )
+  fst (movemouse-speed 200)
+  slw (movemouse-speed 50)
+  vsl (movemouse-speed 25)
+
+  ;; Symbols
+  ! (macro S-1)
+  @ (macro S-2)
+  # (macro S-3)
+  $ (macro S-4)
+  % (macro S-5)
+  ^ (macro S-6)
+  & (macro S-7)
+  * (macro S-8)
+  ~ (macro S-`)
+  + (macro S-=)
+  lp (macro S-9)
+  rp (macro S-0)
+  lb (macro S-[)
+  rb (macro S-])
+  | (macro S-\)
+
+  ;; Copy/Paste macros
+  cpy (macro C-c)
+  pst (macro C-v)
+  und (macro C-z)
+  cut (macro C-x)
+
+  ;; Oneshot mods
+  osa (one-shot-press 2000 lalt)
+  osm (one-shot-press 2000 lmet)
+  oss (one-shot-press 2000 lsft)
+  osc (one-shot-press 2000 lctl)
+)
+
+(deflayer extend
+  lrld f1   f2   f3   f4   f5   f6   f12  f7   f8   f9   f10  f11  _
+  _    @mnl caps mbck mfwd _    _    pgup home up   end  del  esc  ins
+  _    @osa @osm @oss @osc _    _    pgdn lft  down rght ⌫    _
+  _    @cut @cpy esc  @pst @und _    _    @med _    _    _
+  _    _    _             ret             _    _    _
+)
+
+(deflayer mouse
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @vsl @slw @fst _    _    @mwu @mwl @msu @mwr _    _    _
+  _    _    mmid mlft mlft _    _    @mwd @msl @msd @msr _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)
+
+(deflayer symbols
+  _    _    _    _    _    _    _    _    _    _    _    _    _   _
+  _    @!   @@   @#   @$   @%   _    @^   7    8    9    _    _   _
+  _    \    @|   @lb  @lp  [    _    @*   4    5    6    .    ,
+  _    @&   @rb  @rp  ]    @~   _    0    1    2    3    _
+  _    _    _              _              _    _    _
+)
+
+(deflayer media
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    mute vold volu _    _    _    _    _    _    _    _    _
+  _    _    pp   prev next _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _
+)

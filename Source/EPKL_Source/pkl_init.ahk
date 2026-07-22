@@ -18,8 +18,9 @@ initPklIni( layoutFromCommandLine ) {   			;   ######################## EPKL Set
 	;setKeyInfo( "HotKeyBufDn", 0 ) 									; Hotkey buffer for pkl_keypress (was 'HotkeysBuffer')
 	setPklInfo( "WinMatchDef", 2                       ) 				; Default TitleMatchMode for window recognition; 2 = Match partial title
 	resetDeadKeys() 													; Resetting the DKs initializes them - necessary for function
-	setPklInfo( "osmMax", 3 )   										; Allow this many concurrent OneShot Modifiers (OSM)
-	setPklInfo( "osmN", 1 )  											; OSM number counter
+	setPklInfo( "osmMax"     , 3                       ) 				; Allow this many concurrent OneShot Modifiers (OSM)
+	setPklInfo( "osmN"       , 1                       ) 				; OSM number counter
+	setPklInfo( "HardSuspend", False                   ) 				; Whether EPKL was suspended by menu/hotkey, as opposed to by app or LID 	; eD WIP
 	
 	;;  ============================================================================================================================================
 	;;  Find and read from the Settings file(s)
@@ -432,6 +433,8 @@ initLayIni() {  									;   ######################### Layout.ini  #############
 	If getLayInfo( "ExtendKey" ) {  									; If there is an Extend key, set the Extend mappings.
 		hardLayers  := strSplit( pklIniRead( "extHardLayers", "1/1/1/1", extStck ), "/", " " ) 	; Array of hard layers
 		For ix, stckFile in extStck {  									; Parse the LayStack then the ExtendFile. Defined above.
+;			For ix, extLay in [ "", "_2", "_3", "_4" ] { 				; eD WIP: Instead of defining layers in Extend.ini, just use this naming convention
+;				thisSect := pklIniRead( "extend" extLay ,, extStck ) 	; ext1/ext2/ext3/ext4; compatible with PKL's [extend] in pkl.ini
 			Loop % 4 {  												; Loop the multi-Extend layers
 				extN := A_Index
 				thisSect := pklIniRead( "ext" . extN ,, extStck )  		; ext1/ext2/ext3/ext4 	; Deprecated: [extend] in pkl.ini

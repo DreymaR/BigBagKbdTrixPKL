@@ -141,26 +141,54 @@ changeLayoutMenu:   										; Menu "Layouts"
 	changeLayout( getLayInfo( "layout" A_ThisMenuItemPos "code" ) )
 Return
 
-suspendOn:
+suspendOn:      											; Hard suspend, by menu/hotkey or Janitor
+	setPklInfo( "HardSuspend", True )
 	Suspend, On
 	Goto afterSuspend
 Return
 
 suspendOff:
+	setPklInfo( "HardSuspend", False )
 	Suspend, Off
 	Goto afterSuspend
 Return
 
-toggleSuspend:  											; Menu "Suspend"
-	Suspend
+toggleSuspend:      										; Hard suspend (menu/hotkey)
+	Suspend 												; Call the command w/o parameters to toggle the state on/off
 	Goto afterSuspend
 Return
 
-afterSuspend:
+suspendOnSoft:  											; Soft suspend, by app or LID (OS layout) 	; eD WIP: Not yet working
+	if getPklInfo( "HardSuspend" )
+		Return
+	Suspend, On
+	Goto afterSuspend
+Return
+
+suspendOffSoft:
+	if getPklInfo( "HardSuspend" )
+		Return
+	Suspend, Off
+	Goto afterSuspend
+Return
+
+toggleSuspendNotWorking:      										; Hard suspend (menu/hotkey)    	; eD 2FIX
+;	Suspend 												; Call the command w/o parameters to toggle the state on/off
+	If ( A_IsSuspended ) {  								; NOTE: The Suspend command MUST be the first one in this routine!
+		Suspend, Off    									; Call the command w/o parameters to toggle the state on/off
+		setPklInfo( "HardSuspend", False )
+	} Else {
+		setPklInfo( "HardSuspend", True )
+		Suspend, On     									; Call the command w/o parameters to toggle the state on/off
+	}
+	Goto afterSuspend
+Return
+
+afterSuspend:       										; Update help image and tray icon display to reflect suspend state
 	If ( A_IsSuspended ) {
 		pkl_showHelpImage(  3 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_OffFile" ), % getLayInfo( "Ico_OffNum_" )
-	} else {
+	} Else {
 		pkl_showHelpImage( -3 )
 		Menu, Tray, Icon, % getLayInfo( "Ico_On_File" ), % getLayInfo( "Ico_On_Num_" )
 	}

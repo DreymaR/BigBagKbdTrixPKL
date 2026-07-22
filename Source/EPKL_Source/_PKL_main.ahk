@@ -23,6 +23,8 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 		- It should instead remember and respect a manually suspended state. To do this, introduce a separate auto-suspend state.
 	2FIX: Help image doesn't come back on when leaving hard suspend! Nor does the hotkey work for leaving suspend anymore?!?
 		- The "Suspend" command without parameters is very finicky. Has to be first in the routine to work.
+		- I'd ideally want to bypass that command completely, taking control over On/Off. But how to do that when suspended?!?
+		- MORE WORK/STUDY ON THIS IS REQUIRED!
 
 WIPs: When I've got ortho images, Kyrillic variant and ??? updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 	- With a new pklSendUnicodeDown(), release v1.5 at least. It'll be huge. Worth a v2.0 maybe?
