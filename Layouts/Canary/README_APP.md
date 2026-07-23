@@ -58,6 +58,18 @@ SHAI:
 - A `k q` swap for even more familiarity looks tempting, but it'd take SFB up from 0.9% to 1.0% which I think is overmuch.
 <br>
 
+#### Canarda AWS-ISO:
+```
++----------------------------+
+| 1 2 3 4 5 6 \ 7 8 9 0 =    |
+|  w l y p b [ j f o u ' -   |
+|  c r s t g ] m n e i a .   |
+| z x v d k _ / q h ; ,      |
++----------------------------+
+```
+
+<br>
+
 <h1 align=center>⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨&nbsp;&nbsp;&nbsp;⌨</h1>
 
 
