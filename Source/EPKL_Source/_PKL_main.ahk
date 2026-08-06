@@ -32,8 +32,7 @@ WIPs: When I've got ortho images, Kyrillic variant and ??? updates in place, I c
 WIPs: No need to hook KeyUp at all? Let the Up events handle themselves? No, then only the unremapped key gets released?
 
 WIPs: Remove the Ext1 = etc part from Extend, and just call it extend plus ["","_2","_3","_4"]. But will that work?
-
-2FIX: Calling the [Ext_NavEdit] section [extend] works fine – but somehow, [Ext_StrFaces] -> [extend_3] isn't working?
+	- Calling the [Ext_NavEdit] section [extend] works fine – but somehow, [Ext_StrFaces] -> [extend_3] isn't working?
 	- Same with ext4, but ext2 still works. So it's a problem with the Mod2 (RShift) maybe? Or with the one-shot functionality?
 
 WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.

@@ -62,6 +62,12 @@ Canarda
 I feel that Canary may have gone just a little too far in disregarding familiarity, for being launched as "The New Colemak". 
 So I fiddled with it a bit, and found this interesting variant. 
 I'd consider using it both for row-staggered and ortho boards, with an Angle mod for rowstag.
+<br><br>
+
+![Canarda Ortho help image](./Canarda_Orth-Cpt_EPKL.png)
+
+_The Canarda layout variant_
+<br><br>
 
 - Cycling `J Z Q X` from Canary-Ortho leads to very minor changes in efficiency – maybe even slightly on the positive side overall?
 - This variant has a greater similarity to [Colemak-DH][CmkPKL], but also to for instance [Gralmak][GmkPKL] (my Graphite-Gallium variant).
@@ -75,12 +81,6 @@ I'd consider using it both for row-staggered and ortho boards, with an Angle mod
 	- ... or just that I'm a quack (as "canard" means a duck)!
 	- There's also a Porta Canarda in Ventimiglia, Italy.
 <br>
-
-![Canarda Ortho help image](./Canarda_Orth-Cpt_EPKL.png)
-
-_The Canarda layout variant_
-
-<br><br>
 
 Canary Wide and (C)AWS variants
 -------------------------------
