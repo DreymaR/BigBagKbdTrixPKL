@@ -12,19 +12,19 @@ pkl_Send( ch, modif := "" ) {   								; Process a single char/str with mods fo
 		this    := "{" . char . "}" 							; Normal char
 	If InStr( getCurrentWinLayDeadKeys(), char ) 	; eD WIP: Improve this with real DK detection?! How does that work, really? A char may be both a DK release and not...!
 		this    .= "{Space}" 									; Send an extra space to release OS dead keys
-	} else if ( ch == 32 ) {
+	} Else If ( ch == 32 ) {
 		this    := "{Space}"
 		modif   := "{Blind}" 									; Space needs to be sent blind for Shift+Space to scroll up in browsers, etc.
-	} else if ( ch == 9 ) {
+	} Else If ( ch == 9 ) {
 		this    := "{Tab}"
-	} else if ( ch > 0 && ch <= 26 ) {
+	} Else If ( ch > 0 && ch <= 26 ) {
 		; http://en.wikipedia.org/wiki/Control_character#How_control_characters_map_to_keyboards
 		this    := "^" . Chr( ch + 64 ) 						; Send Ctrl char
-	} else if ( ch == 27 ) {
+	} Else If ( ch == 27 ) {
 		this    := "^{VKDB}" 					; Ctrl + [ (OEM_4) alias Escape 	; eD TODO: Is this robust with ANSI/ISO VK?
-	} else if ( ch == 28 ) {
+	} Else If ( ch == 28 ) {
 		this    := "^{VKDC}" 					; Ctrl + \ (OEM_5) alias File Separator(?)
-	} else if ( ch == 29 ) {
+	} Else If ( ch == 29 ) {
 		this    := "^{VKDD}" 					; Ctrl + ] (OEM_6) alias Group Separator(?)
 	}
 	If AltGrIsPressed()
@@ -36,7 +36,7 @@ pkl_SendThis( this, modif := "" ) {     						; Actually send a char/string. Als
 	tht := RegExReplace( this, "\{Space\}|\{Blind\}" )  		; Strip off any spaces sent to release OS deadkeys, and other such stuff
 	If        ( this == "{Space}" ) {   						; Replace space so it's recognizeable for LastKeys
 		tht := "{ }"
-	} else if ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
+	} Else If ( RegExMatch( this, "P)\{Text\}|\{Raw\}", len ) == 1 ) {
 		tht := "{" . SubStr( this, len+1 ) . "}"    			; Enclose this in {}
 	}
 	thtLen  := StrLen( tht )
@@ -73,10 +73,10 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 ;		debug   .= " , " . chr
 	}   ; <-- for chr in lastKeys
 	uni := false
-	If ( SubStr( chs, -5, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
-		uni := 5
-	} else if ( SubStr( chs, -4, 1 ) == "U" ) {
+	If ( SubStr( chs, -4, 1 ) == "U" ) { 						; U####[#] where # are hex digits composes to the corresponding Uniocde point
 		uni := 4
+	} Else If ( SubStr( chs, -5, 1 ) == "U" ) {
+		uni := 5
 	}
 	If ( uni ) {
 		chs := SubStr( chs, 1 - uni )
@@ -105,7 +105,7 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 				}
 				If ( StrLen( ent ) == 1 ) {
 					lastKeys( "push", ent ) 					; Push single-char Compose releases to the queue for further composing
-				} else {
+				} Else {
 				lastKeys( "null" )  							; Reset the last-keys-pressed buffer 	; eD WIP: If the output is single-char, push it instead!
 				}
 				Return  										; If a longer match is found, don't look for shorter ones
@@ -119,11 +119,11 @@ pkl_Composer( compKey := "" ) { 								; A post-hoc Compose method: Press a key
 }
 
 pkl_CheckForDKs( ch ) {
-	static SpaceWasSentForSystemDKs := false
+	Static SpaceWasSentForSystemDKs := false
 	
 	If ( getKeyInfo( "CurrNumOfDKs" ) == 0 ) {  				; No active DKs 	; eD WIP: Hang on... Are we talking about system or EPKL DKs here?!?
 		SpaceWasSentForSystemDKs := false   					; eD WIP: Because "CurrNumOfDKs" is for EPKL DKs, but this is for OS DKs?!?
-	} else {
+	} Else {
 		setKeyInfo( "CurrBaseKey" , ch ) 						; DK(s) active, so record the pressed key as Base key
 		If ( not SpaceWasSentForSystemDKs ) 					; If there is an OS dead key that needs a Spc sent, do it
 			Send {Space}
@@ -145,46 +145,46 @@ pkl_ParseSend( entry, mode := "Input" ) {   					; Parse & Send Keypress/Extend/
 	If        ( psp == "%" || psp == "→" ) { 					; %→ : Literal/string by SendInput {Text}
 		mode    := "Input"
 		pfix    := "{Text}"
-	} else if ( psp == "$" || psp == "§" ) { 					; $§ : Literal/string by EPKL SendMessage
+	} Else If ( psp == "$" || psp == "§" ) { 					; $§ : Literal/string by EPKL SendMessage
 		mode    := "SendMess"
 		pfix    := ""
-	} else if ( enty == "{CapsLock}" ) { 						; CapsLock toggle. Stops further entries from misusing Caps?
+	} Else If ( enty == "{CapsLock}" ) { 						; CapsLock toggle. Stops further entries from misusing Caps?
 		togCap  := getKeyState("CapsLock", "T") ? "Off" : "On"
 		SetCapsLockState % togCap
-	} else if ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
+	} Else If ( psp == "*" || psp == "α" ) { 					; *α : AHK special +^!#{} syntax, omitting {Text}
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := ""
 		If pkl_ParseAHK( enty, pfix, higMode )  				;      Special EPKL-AHK syntax additions (only performed if not higMode)
 			Return psp
-	} else if ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
+	} Else If ( psp == "=" || psp == "β" ) { 					; =β : Send {Blind} - as above w/ current mod state
 		lastKeys( "null" )  									; Delete the Composer LastKeys queue
 		pfix    := "{Blind}"
 		If pkl_ParseAHK( enty, pfix, higMode )
 			Return psp
-	} else if ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
+	} Else If ( psp == "~" || psp == "†" ) { 					; ~† : Hex Unicode point U+####
 		pfix    := ""
 		enty    := "{U+" . enty . "}"
-	} else if ( psp == "@" || psp == "Ð" ) { 					; @Ð : Named dead key (may vary between layouts!)
+	} Else If ( psp == "@" || psp == "Ð" ) { 					; @Ð : Named dead key (may vary between layouts!)
 		mode    := "DeadKey"
 		pfix    := ""
-	} else if ( psp == "&" || psp == "¶" ) { 					; &¶ : Named literal/powerstring (may vary between layouts!)
+	} Else If ( psp == "&" || psp == "¶" ) { 					; &¶ : Named literal/powerstring (may vary between layouts!)
 		mode    := "PwrString"
 		pfix    := ""
-	} else if ( psp == "®" ) {  								; ®® or ®# [# is hex] : Repeat previous key once or # times
+	} Else If ( psp == "®" ) {  								; ®® or ®# [# is hex] : Repeat previous key once or # times
 		pkl_RepeatKey( enty )
-	} else if ( psp == "©" ) {  								; ©### : Named Compose/Completion key – compose previous key(s)
+	} Else If ( psp == "©" ) {  								; ©### : Named Compose/Completion key – compose previous key(s)
 		pkl_Composer( enty )
 	}
 	If ( pfix != -1 && ! higMode ) {    						; Send if recognized and not ParseOnly/HIG
 		If ( enty && mode == "SendThis" ) { 
 			pkl_Send( "", pfix . enty ) 						; Used by keyPressed()
-		} else if ( mode == "SendMess"  ) {
+		} Else If ( mode == "SendMess"  ) {
 			pkl_SendMessage( enty )
-		} else if ( mode == "DeadKey"   ) {
+		} Else If ( mode == "DeadKey"   ) {
 			pkl_DeadKey( enty )
-		} else if ( mode == "PwrString" ) {
+		} Else If ( mode == "PwrString" ) {
 			pkl_PwrString( enty )
-		} else {
+		} Else {
 			SendInput % pfix . enty
 		}
 	}
@@ -259,13 +259,13 @@ _strSendMode( string, strMode ) {
 		Return true
 	If        ( strMode == "Input"     ) {  			; Send by the standard SendInput method. Used to be {Raw}.
 		SendInput {Text}%string% 						; - May take time, and any modifiers released meanwhile will get stuck!
-	} else if ( strMode == "Text"      ) {  			; Send by the SendInput {Text} method (AHK v1.1.27+)
+	} Else If ( strMode == "Text"      ) {  			; Send by the SendInput {Text} method (AHK v1.1.27+)
 		SendInput {Text}%string% 						; - More reliable? Only backtick characters are translated.
-	} else if ( strMode == "Message"   ) {  			; Send by SendMessage WM_CHAR system calls
+	} Else If ( strMode == "Message"   ) {  			; Send by SendMessage WM_CHAR system calls
 		pkl_SendMessage( string ) 						; - Robust as it waits for sending to finish, but a little slow.
-	} else if ( strMode == "Paste" ) {  				; Send by pasting from the Clipboard, preserving its content.
+	} Else If ( strMode == "Paste" ) {  				; Send by pasting from the Clipboard, preserving its content.
 		pkl_SendClipboard( string ) 					; - Quick, but may fail if the timing is off. Best for non-parsed send.
-	} else {
+	} Else {
 		pklWarning( "Send mode '" . strMode . "' unknown.`nString '" . string . "' not sent." )
 		Return false
 	}   ; <-- if strMode
@@ -273,11 +273,11 @@ _strSendMode( string, strMode ) {
 }
 
 pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring from a file
-	static strFile
-	static strMode
-	static brkMode
-	static strDic       := {}
-	static initialized  := false
+	Static strFile
+	Static strMode
+	Static brkMode
+	Static strDic       := {}
+	Static initialized  := false
 	
 	If ( not initialized ) {
 		strFile := getPklInfo( "StringFile" )   				; The file containing named string tables
@@ -305,7 +305,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 	}
 	If ( strMode == "Text" ) {
 		SendInput {Text}%theString%
-	} else if ( brkMode == "+Enter" ) {
+	} Else If ( brkMode == "+Enter" ) {
 		Loop, Parse, theString, `n, `r  						; Parse by lines, sending Enter key presses between them
 		{   													; - This is more robust since apps use different breaks
 			If ( A_Index > 1 )
@@ -314,7 +314,7 @@ pkl_PwrString( strName ) {  									; Send named literal/ligature/powerstring f
 			If ( not _strSendMode( A_LoopField , strMode ) ) 	; Try to send by the chosen method
 				Break
 		}   ; <-- Loop Parse
-	} else {    												; Send string as a single block with line break characters
+	} Else {    												; Send string as a single block with line break characters
 		StrReplace( theString, "`r`n", "`n" )   				; Ensure that any existing `r`n are kept as single line breaks
 		If ( brkMode == "rn" )
 			StrReplace( theString, "`n", "`r`n" )

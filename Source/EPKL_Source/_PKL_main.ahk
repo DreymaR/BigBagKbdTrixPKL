@@ -26,6 +26,14 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 		- I'd ideally want to bypass that command completely, taking control over On/Off. But how to do that when suspended?!?
 		- MORE WORK/STUDY ON THIS IS REQUIRED!
 
+WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just out of place. 
+	- Maybe a simple button click? That's often useful, and would fit this prominent mapping.
+	- Also the delete-word Ext-tap `i/o` mapping. Not used, nor useful. Bring the `#i` one down from `'`.
+	- Move select line around to a more intuitive/consistent spot then? Cmk Ext-tap A (Ctrl+A) vs I.
+	- Put ```/''' on Ext-tap `;`/`:`, in accordance with `…` there. Or, on `'` since they are quotes?
+
+WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.
+
 WIPs: When I've got ortho images, Kyrillic variant and ??? updates in place, I could make a new, self-signed(?!?) release 1-4-3.
 	- With a new pklSendUnicodeDown(), release v1.5 at least. It'll be huge. Worth a v2.0 maybe?
 
@@ -35,8 +43,6 @@ WIPs: Remove the Ext1 = etc part from Extend, and just call it extend plus ["","
 	- Calling the [Ext_NavEdit] section [extend] works fine – but somehow, [Ext_StrFaces] -> [extend_3] isn't working?
 	- Same with ext4, but ext2 still works. So it's a problem with the Mod2 (RShift) maybe? Or with the one-shot functionality?
 
-WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.
-
 WIPs: Kanata files for Cmk, Cmk-CA, Cmk-CAWS for ISO and ANSI.
 	- Eventually, also Extend layers.
 
@@ -45,11 +51,6 @@ WIPs: On the CoDeKey layers, I've found room for number row symbols, except for 
 	- Could do one on CDK,g? I don't think the bullet point is seeing much use, but on the other hand the OneShotShift needs speed.
 		- Could that be on Ext-tap instead? Then, both backtick and tilde might be on the `g` key. No, timing is still too inferior.
 	- Plus on Gralmak `p` is kind of cool. On Colemak, `*` would be more intuitive. But that's also nice on `,` (same finger as `8`).
-
-WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just out of place. And put ``` on Ext-tap `;`.
-		- Also the delete-word Ext-tap `i/o` mapping. Not used, nor useful. Bring the `#i` one down from `'`.
-		- Move select line around to a more intuitive/consistent spot then? Cmk Ext-tap A (Ctrl+A) vs I.
-		- What to put on `'` now, then?
 
 2FIX: Unmapped DK entries shouldn't produce an unprintable char on layout images.
 
@@ -61,9 +62,6 @@ WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just ou
 
 WIPs: Could the CoDeKey cancel itself when pressed again? Or something else?
 	- Making the Space entry nothing (or clear OSM or whatever) is a temporary fix.
-
-2FIX: U#### doesn't compose Unicode points anymore? How come?
-	- Checked: I wasn't using a VK-number BaseLayout at the time. Also, the compose key `1234` composes fine.
 
 NEXT: Try to emulate AHK Send in such a way that it doesn't send KeyUp even for state-mapped layouts!
 	- Just adding " DownR}" to the normal pkl_SendThis() didn't work; the KeyUp events are still sent.
