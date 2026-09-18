@@ -17,6 +17,33 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
+	- This is due to the "s#" DK entries now being `base1, base2, disp0, disp1, disp2, disp3, disp4`.
+	- The base1–2 tags are which characters are base releases. Does this get used except for images?
+	- The disp0 tag is supposed to replace the base1 tag as what to print on the help image, if it's present.
+	- The disp1–4 tags are what to mark (default yellow) on the images.
+	- Check that this works as intended! Do disp# tags have to be base 10 numbers?
+	- Will an entry like `disp1   = →©` (Ext_Special) work? Or is a number required there?
+	- Was the whole DkMk routine removed because it messed up the Greek? If so, make an exception instead.
+	- Add a dispX entry? No? I've marked mu in disp3 as negative to omit it; didn't that work?
+
+2FIX: Even though a layout may inherit its icon, the Layouts display doesn't pick up on it.
+	- This is because in pkl_gui_menu the call to readLayoutIcons() doesn't use the LayStk like it ought to.
+	- Should it generate a new tmp LayStk for each layout in the list?
+	- Single out the start of pkl_init as a fn() to accomplish this.
+	- But then we may have to re-call it after generating the list? Better to let the fn() use a separate array.
+
+2FIX: Release of DKs with Esc or other canceling key presses produce their base glyph. That shouldn't happen.
+	- Is it related to the Base1 entry not working as it should? On Ext-Tap, a Spc is sent if a Base1 is defined.
+		- And double-tapping Ext-Tap gives {Spc 4}?
+	- Some DKs need two Esc to escape? Not Tilde,Circumflex,Grave-Sub,RingAbove,Acute-Sup,Umlaut. These have noncombining base chars?
+	- If the release is combining, you'll typically get it on typing the next character.
+	- Check out how the DK is canceled, and if anything more needs to be cleaned out at that point.
+	- The resetDeadKeys() fn isn't doing its job properly?
+
+WIPs: Make updated DK images for Horn-Tail,Circumflex,Hook-Palatal...? (Just remake the lot to be sure, keeping a backup of the old ones?)
+	Acute-Sup,Caron,Ext_Special,Greek,Hook-Palatal,Horn-Tail,Macron,Stroke-Bar,Umlaut,Tilde
+
 2FIX: Separate auto-suspend state from manual suspend state. The latter should take precedence.
 	- After using the suspend hotkey, the help image is sometimes hidden and EPKL unsuspends itself.
 		- That's just EPKL autosuspending for another app (A Steam one) then un-autosuspending afterwards.
@@ -24,13 +51,9 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 	2FIX: Help image doesn't come back on when leaving hard suspend! Nor does the hotkey work for leaving suspend anymore?!?
 		- The "Suspend" command without parameters is very finicky. Has to be first in the routine to work.
 		- I'd ideally want to bypass that command completely, taking control over On/Off. But how to do that when suspended?!?
+		- Maybe keep track of a WasSuspended state, and if necessary reverse it as appropriate?
+		- Or just don't allow the Janitor to autosuspend when not applicable?
 		- MORE WORK/STUDY ON THIS IS REQUIRED!
-
-WIPs: Repurpose the Ext-tap `h/n` mapping! A lonely `!` on that layer is just out of place. 
-	- Maybe a simple button click? That's often useful, and would fit this prominent mapping.
-	- Also the delete-word Ext-tap `i/o` mapping. Not used, nor useful. Bring the `#i` one down from `'`.
-	- Move select line around to a more intuitive/consistent spot then? Cmk Ext-tap A (Ctrl+A) vs I.
-	- Put ```/''' on Ext-tap `;`/`:`, in accordance with `…` there. Or, on `'` since they are quotes?
 
 WIPs: A short README for the Layouts/Tarmak folder. Links to the BigBag Tarmak pages.
 
@@ -198,8 +221,6 @@ NEXT: Check out Keyman. It used to cost money but is now open-source and free, a
 	- https://keyman.com/developer/
 	- https://superuser.com/questions/527349/cross-operating-system-custom-keyboard-layouts
 	- https://help.keyman.com/keyboard/sil_ipa/
-
-2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 
 2FIX: The Shift key was often lost for a time, forcing a refresh? Only for Ext-Shift?
 	- Could it be because some key combos change system layout now? (How?)

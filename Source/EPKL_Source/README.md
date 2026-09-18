@@ -643,9 +643,10 @@ VERSION HISTORY:
 		- Made a `ŁayÐir` special run-target syntax for the active layout's folder. This is now the default for runTarget().
 	- Made ortho naming more consistent. There were some layouts using `Orth`, and others `Ortho`. Now all are `Orth`.
 		- Technically, you can use both as KbdType. But it's inconsistent to say `ANS-Ortho`, instead of `ANS-Orth` or `ANSI-Ortho`.
-	- Minor CoDeKey rework. Swapped `^`/`~` to Cmk J/B, added ` ... ` on `.` and triple-backtick on Cmk Shift+P.
+	- Minor CoDeKey and Ext-Tap rework. Swapped `^`/`~` to Cmk J/B, added ` ... ` on `.` and triple-backtick on Cmk Shift+P.
 		- On ortho boards at least,`^` now sits right under 6. And the fancy 3-`` PowerString doesn't work on Discord.
-		- Also added Enter+Shift and Enter-Bullet-Space-Shift mappings.
+		- Also added Enter+Shift and Enter-Bullet-Space-Shift mappings on CodeKey.
+		- Filled in the last missing mappings on Ext-Tap (the Ext_Special DK), making Colemak and Gralmak a little more consistent.
 	- Fixed: Hitting Enter when any DK was active would output Ctrl+Shift+J, which opens the Parent Process Browser Console in Firefox.
 		- Adding `{Enter}` to `endDKs` (the list of keys that cancel DKs) solved the issue.
 	- Shift/AltGr+Repeat now repeats 2–4 times (2:Sh,3:AGr,4:Sh+AGr).
