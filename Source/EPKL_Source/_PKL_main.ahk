@@ -17,11 +17,14 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 ;;  ================================================================================================================================================
 ;;  eD WIPs/2FIX:
 
+2FIX: On state6 imgs, the µ is wrongly depicted.
+	- (BTW: The ≠ symbol on state7 is now ugly and wrong, with the slash displaced right. A bug in newer Inkscape?)
+
 2FIX: HIG: Yellow marks for combining accents etc aren't working anymore?
 	- This is due to the "s#" DK entries now being `base1, base2, disp0, disp1, disp2, disp3, disp4`.
-	- The base1–2 tags are which characters are base releases. Does this get used except for images?
-	- The disp0 tag is supposed to replace the base1 tag as what to print on the help image, if it's present.
-	- The disp1–4 tags are what to mark (default yellow) on the images.
+	- The base1–2 tags are which characters are base releases. In addition to images, these are used in pkl_deadkey.ahk code.
+	- The disp0 tag replaces the base1 tag as what to print on the help image, if present.
+	- The disp1–4 tags specify what else to mark (default yellow) on the images.
 	- Check that this works as intended! Do disp# tags have to be base 10 numbers?
 	- Will an entry like `disp1   = →©` (Ext_Special) work? Or is a number required there?
 	- Was the whole DkMk routine removed because it messed up the Greek? If so, make an exception instead.
@@ -30,8 +33,7 @@ HOLD: Thoughts and suggestions that weren't that good after all, or currently in
 2FIX: Even though a layout may inherit its icon, the Layouts display doesn't pick up on it.
 	- This is because in pkl_gui_menu the call to readLayoutIcons() doesn't use the LayStk like it ought to.
 	- Should it generate a new tmp LayStk for each layout in the list?
-	- Single out the start of pkl_init as a fn() to accomplish this.
-	- But then we may have to re-call it after generating the list? Better to let the fn() use a separate array.
+	- Single out the start of pkl_init as a fn() to create a LayStk from a layout dir/name. Let it use and return a separate tmp array.
 
 2FIX: Release of DKs with Esc or other canceling key presses produce their base glyph. That shouldn't happen.
 	- Is it related to the Base1 entry not working as it should? On Ext-Tap, a Spc is sent if a Base1 is defined.
